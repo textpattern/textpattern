@@ -81,15 +81,75 @@
     </group>
 
     <group id="article" title="Panel yaz">
-        <item id="article_image" title="Makale görseli"><![CDATA[]]></item>
-        <item id="body" title="Gövde"><![CDATA[]]></item>
-        <item id="description" title="Açıklama"><![CDATA[]]></item>
-        <item id="excerpt" title="Pasaj"><![CDATA[]]></item>
-        <item id="expire_date" title="Sona erme tarihi"><![CDATA[]]></item>
-        <item id="keywords" title="Anahtar kelimeler"><![CDATA[]]></item>
-        <item id="override_form" title=""><![CDATA[]]></item>
-        <item id="publish_date" title=""><![CDATA[]]></item>
-        <item id="status" title="Durum"><![CDATA[]]></item>
+        <item id="article_image" title="Makale görseli"><![CDATA[
+<h2>Makale görseli</h2>
+<p>Bu makaleyle görseller ilişkilendirmek için buraya aşağıdakilerden birini yazın:</p>
+<ol>
+    <li>virgülle ayrılmış bir veya daha fazla Textpattern görsel kimliği (örneğin <code>12, 25, 18</code>)</li>
+    <li>virgülle ayrılmış bir veya daha fazla görece görsel URL'si (örneğin <code>/images/my_pic.jpg</code>)</li>
+    <li>virgülle ayrılmış bir veya daha fazla tam nitelikli URL (örneğin <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>İlk görsel, bir makale formunun içine <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> etiketi <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> yerleştirilerek görüntülenebilir. Varsayılan olarak, seçilen görsele yönelik tam bir HTML <code>&lt;img&gt;</code> etiketi çıktılar.</p>
+<p>Galeri görüntülemek için <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> etiketini <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanabilirsiniz.</p>
+        ]]></item>
+        <item id="body" title="Gövde"><![CDATA[
+<h2>Gövde</h2>
+<p>Bir makalenin ana içeriği, makale gövdesi içinde yer alır.</p>
+<p>Textpattern'de yayımlanmak üzere makale yazarken ya da hazırlarken, yazar makalenin üç görünümü arasında geçiş yapabilir: düz metin, HTML biçimlendirmesi (bir web tarayıcısının makaleyi görüntülemesini sağlayan kod) ve işlenmiş önizleme.</p>
+        ]]></item>
+        <item id="description" title="Açıklama"><![CDATA[
+<h2>Açıklama</h2>
+<p>Makale açıklaması, arama motorlarının ve web tarayıcılarının içeriği daha iyi tanımlamasına ve sıralamasına yardımcı olabilecek isteğe bağlı bir bileşendir.</p>
+<p>Makale açıklaması en fazla 255 karakterle sınırlıdır. Bazı arama motorlarının, arama sonuçları sayfalarında (SERP'ler) gösterim kolaylığı için bir sayfanın <code>meta description</code> uzunluğuna karakter sınırı koyduğunu ve bunun Textpattern'deki 255 karakter sınırından daha az olabileceğini unutmayın.</p>
+<p>Makale açıklamasının, benzer içerik kabul etseler de makale alıntısından farklı olduğunu unutmayın. Makale açıklaması öncelikle arama motorları ve tarayıcılar için kullanılmalıdır; makale alıntısı ise daha çok insan tarafından okunabilir, istenirse makalenin özetlenmesi için daha uygundur.</p>
+        ]]></item>
+        <item id="excerpt" title="Pasaj"><![CDATA[
+<h2>Alıntı</h2>
+<p>Makale alıntıları isteğe bağlıdır. Alıntılar, içindekiler tablosunda gösterilen kısa bir özet, sitenin RSS/Atom beslemelerinde tam makale gövdesi yerine kullanılan içerik ya da benzeri başka amaçlar için kullanılabilir.</p>
+        ]]></item>
+        <item id="expire_date" title="Sona erme tarihi"><![CDATA[
+<h2>Bitiş tarihi</h2>
+<p>Bir makalenin süresinin dolmuş olarak etiketlendiği zamandır. Zaman isteğe bağlıdır ve geçmişte ya da gelecekteki herhangi bir ana ayarlanabilir.</p>
+<p>Kutular aşağıdaki bilgilere karşılık gelir:</p>
+<ul>
+    <li>Yıl / Ay / Gün</li>
+    <li>Saat (24 saat biçimi) : Dakika : Saniye</li>
+</ul>
+<p>Zaman geldiğinde – ya da geçmişte bir zaman belirtilmişse – makalenin süresi dolar.</p>
+<p>Süresi dolmuş makaleleri gösterme seçeneği etkinleştirilmişse, makale görünür kalır. Süresi dolmuş makaleleri gösterme seçeneği devre dışı bırakılmışsa, makale sayfasını ziyaret edenlere makale içeriği yerine bir HTTP 410 hatası sunulur.</p>
+        ]]></item>
+        <item id="keywords" title="Anahtar kelimeler"><![CDATA[
+<h2>Anahtar sözcükler</h2>
+<p>Anahtar sözcükler, makaleler arasındaki ilişkileri, kategorilerin sağladıklarının ötesinde ayrıntılandırmak için kullanışlıdır.</p>
+<p>Anahtar sözcükler, virgülle ayrılmış tekil sözcükler olmalıdır.</p>
+        ]]></item>
+        <item id="override_form" title="Formu geçersiz kıl"><![CDATA[
+<h2>Formu geçersiz kıl</h2>
+<p>Bir makale, isteğe bağlı olarak varsayılan olarak atanandan farklı bir form kullanabilir; örneğin, makale gövdesi yerine <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ile makale gövdesi yerine <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanarak makale alıntısını göstermek için. Bu ayar burada yapılabilir.</p>
+        ]]></item>
+        <item id="publish_date" title="Yayın tarihi"><![CDATA[
+<h2>Yayın tarihi</h2>
+<p>Bir makalenin veya dosyanın yayımlandığı ya da en son ne zaman gözden geçirildiği zamandır. Zaman, içeriğin yayımlandığı ana veya geçmişte ya da gelecekteki herhangi bir ana ayarlanabilir.</p>
+<p>Kutular aşağıdaki bilgilere karşılık gelir:</p>
+<ul>
+    <li>Yıl / Ay / Gün</li>
+    <li>Saat (24 saat biçimi) : Dakika : Saniye</li>
+</ul>
+<p>Zaman damgası geçerli zamandan büyük (yani gelecekte) olan bir öğe, bu zaman gelene kadar ön yüzde ve RSS/Atom beslemelerinde görünmez.</p>
+        ]]></item>
+        <item id="status" title="Durum"><![CDATA[
+<h2>Durum</h2>
+<p>Bu Textpattern makalesinin yayımlama görünürlüğü durumunu tanımlar.</p>
+<p>Yayımlama durumu aşağıdakilerden biridir:</p>
+<ul>
+<li><strong>Taslak</strong>: devam eden bir çalışma olarak değerlendirilir ve Textpattern yönetim alanı dışında görüntülenemez (yani web sitesinde görünmez ve beslemelerde yayınlanmaz).</li>
+<li><strong>Gizli</strong>: makale Textpattern yönetim alanı dışında görüntülenemez. İçeriği silmek istemediğiniz hâlde siteden kaldırmak için kullanışlıdır.</li>
+<li><strong>Beklemede</strong>: yayımla için hazır ve onay bekliyor kabul edilir, ancak Textpattern yönetim alanı dışında görüntülenemez.</li>
+<li><strong>Yayında</strong>: genellikle Textpattern yönetim alanı dışında görüntülenebilir (yani web sitesinde görünür, tercih izin veriyorsa beslemelerde yayınlanır). Bir makale yayında ve bir bitiş tarihi varsa, bu tarih geçtikten sonra durumu Yayında olarak kalır ancak yalnızca süresi dolmuş makalelerin yayımlanmasına izin veriliyorsa yönetim alanı dışında görünür.</li>
+<li><strong>Yapışkan</strong>: ziyaretçiler tarafından görüntülenebilmesi açısından <strong>Yayında</strong> makaleye benzer, ancak ilgili <code>article</code> veya <code>article_custom</code> etiketi <code>sticky</code> değeriyle bir <code>status</code> özniteliği içermedikçe makale listelerinde <strong>görünmez</strong>.</li>
+</ul>
+<p>Not: Web sitesinde herkese açık olarak görüntülenemeyen içerik, oturum açmış kullanıcılar tarafından yine de önizlenebilir.</p>
+        ]]></item>
         <item id="title" title="Başlık"><![CDATA[
 <h2>Başlık</h2>
 <p>Bu makale için uygun bir başlık ekleyin.</p>
@@ -103,115 +163,499 @@
     </group>
 
     <group id="category" title="Kategoriler paneli">
-        <item id="article_category" title="Makaleler"><![CDATA[]]></item>
-        <item id="category_description" title="Açıklama"><![CDATA[]]></item>
+        <item id="article_category" title="Makaleler"><![CDATA[
+<h2>Makaleler</h2>
+<p>Bir sitenin gezinme yapısını tanımlayan bölümlerden farklı olarak, makale kategorileri makalelerin konularına göre düzenlenmesini sağlar. Kategoriler atandıktan sonra belirli kategorilere ait makaleler listeler halinde gezilebilir.</p>
+<p>Örneğin, yiyecek hakkında bir sitede olası makale kategorileri şunlar olabilir:</p>
+<ul>
+    <li>ham malzemeler</li>
+    <li>alışveriş</li>
+    <li>tarifler</li>
+    <li>sunum</li>
+    <li>restoranlar</li>
+    <li>aşçılar</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Açıklama"><![CDATA[
+<h2>Kategori açıklaması</h2>
+<p>Kategori açıklaması, arama motorlarının ve web tarayıcılarının içeriği daha iyi tanımlamasına ve sıralamasına yardımcı olabilecek isteğe bağlı bir bileşendir.</p>
+<p>Kategori açıklaması en fazla 255 karakterle sınırlıdır. Bazı arama motorlarının, arama sonuçları sayfalarında (SERP'ler) gösterim kolaylığı için bir sayfanın <code>meta description</code> uzunluğuna karakter sınırı koyduğunu ve bunun Textpattern'deki 255 karakter sınırından daha az olabileceğini unutmayın.</p>
+        ]]></item>
         <item id="file_category" title="Dosyalar"><![CDATA[
 <h2>Dosyalar</h2>
 <p>Dosya kategorileri opsiyoneldir ve aynı anda beraber yüklenmiş dosyaları gruplandırmak için kullanışlıdır.</p>
         ]]></item>
-        <item id="image_category" title="Görseller"><![CDATA[]]></item>
-        <item id="link_category" title="Linkler"><![CDATA[]]></item>
+        <item id="image_category" title="Görseller"><![CDATA[
+<h2>Görseller</h2>
+<p>Görsel kategorileri isteğe bağlıdır ve hem dahili düzenleme hem de <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> etiketi <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanılarak görüntülenebilen görsel kümelerini tanımlamak için kullanışlıdır.</p>
+        ]]></item>
+        <item id="link_category" title="Linkler"><![CDATA[
+<h2>Bağlantılar</h2>
+<p>Bağlantı kategorileri isteğe bağlıdır ve ‘Arkadaşlar’, ‘Romalılar’, ‘Yurttaşlar’ gibi farklı bağlantı gruplarını görüntülemek için kullanışlıdır.</p>
+<p>Bu tür seçili bağlantı listeleri, şu şekilde <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> etiketi <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ile çıktılanır:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Tanılama paneli">
-        <item id="clean_url_data_failed" title="Temiz URL veri hatası"><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Temiz URL deneme hatası"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Kişisel bilgileri gizlemek"><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Dizin yazılabilir değil"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title="DNS hataları"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Dosya yüklemeleri etkin değil"><![CDATA[]]></item>
-        <item id="htaccess_missing" title=".htaccess dosyası mevcut değil"><![CDATA[]]></item>
-        <item id="index_inaccessible" title="Site indeksi ulaşılamaz"><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Temiz URL veri hatası"><![CDATA[
+<h2>Temiz URL verisi başarısız</h2>
+<p>Görünüşe göre site URL'leri (örneğin <code>https://example.com/section/article</code>) şu anda çalışmıyor ya da web sunucusu, temiz URL'lerin çalışıp çalışmadığını belirlemek için kullanılan test prosedürünü desteklemiyor; sitedeki temiz URL'ler beklendiği gibi çalışıyorsa, bu ileti güvenle yok sayılabilir.</p>
+<p>Temiz URL'ler <em>çalışmıyorsa</em> bunun şu anlama gelmesi mümkündür:</p>
+<ul>
+    <li>‘Site URL'si’ ayarı yanlış ya da bu adresteki sayfa bu Textpattern örneği tarafından yönetilmiyor</li>
+    <li>sunucunun, temiz URL'leri çalıştırmak için <code>.htaccess</code> veya benzeri bir sunucu yönergesinde bazı değişikliklere ihtiyaç duyması</li>
+    <li>sunucunun hiç temiz URL desteği olmaması</li>
+</ul>
+<p>Temiz URL testi, tüm temiz URL parametrelerinin doğru çalıştığını denetlemek için ‘Site URL'si’ tercihinde belirtilen web adresinden bir sayfa almaya çalışır. Bu URL başka bir siteye aitse ya da statik bir sayfa vb. ile değiştirildiyse, test başarısız olur. Sorun çözülene kadar karışık URL'ler (örneğin <code>https://example.com?s=section&amp;id=4</code>) kullanılmalıdır. Yönetim Tercihleri'nde ‘Kalıcı bağlantı modu’nun buna göre ayarlandığından emin olun.</p>
+<p>Bir eklenti kullanarak siteyi ‘bakım moduna’ almak bu uyarıyı tetikleyebilir.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Temiz URL deneme hatası"><![CDATA[
+<h2>Temiz URL testi başarısız</h2>
+<p>Görünüşe göre site URL'leri (örneğin <code>https://example.com/section/article</code>) şu anda çalışmıyor ya da web sunucusu, temiz URL'lerin çalışıp çalışmadığını belirlemek için kullanılan test prosedürünü desteklemiyor; sitedeki temiz URL'ler beklendiği gibi çalışıyorsa, bu ileti güvenle yok sayılabilir.</p>
+<p>Temiz URL'ler <em>çalışmıyorsa</em> bunun şu anlama gelmesi mümkündür:</p>
+<ul>
+    <li>‘Site URL'si’ ayarı yanlış ya da bu adresteki sayfa bu Textpattern örneği tarafından yönetilmiyor</li>
+    <li>sunucunun, temiz URL'leri çalıştırmak için <code>.htaccess</code> veya benzeri bir sunucu yönergesinde bazı değişikliklere ihtiyaç duyması</li>
+    <li>sunucunun hiç temiz URL desteği olmaması</li>
+</ul>
+<p>Temiz URL testi, tüm temiz URL parametrelerinin doğru çalıştığını denetlemek için ‘Site URL'si’ tercihinde belirtilen web adresinden bir sayfa almaya çalışır. Bu URL başka bir siteye aitse ya da statik bir sayfa vb. ile değiştirildiyse, test başarısız olur. Sorun çözülene kadar karışık URL'ler (örneğin <code>https://example.com?s=section&amp;id=4</code>) kullanılmalıdır. Yönetim Tercihleri'nde ‘Kalıcı bağlantı modu’nun buna göre ayarlandığından emin olun.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Canlı sunucuda eş zamanlı oturumlar"><![CDATA[
+<h2>Canlı sunucuda eş zamanlı oturumlar</h2>
+<p>Kullanıcı hesabınızın birden fazla oturumdan giriş yapmasına izin verilmesi bir güvenlik riskidir ve önerilmez. Riskleri anlamadıkça ve kabul etmedikçe, lütfen bu özelliği gelişmiş tercihler panelinden devre dışı bırakın.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Özel bilgileri gizle"><![CDATA[
+<h2>Özel bilgileri gizle</h2>
+<p>Ek güvenlik için özel bilgileri gizleyin. Tanılama bilgileri herkese açık bir biçimde paylaşılacaksa, örneğin Textpattern destek forumunda, bu seçenek hassas sunucu bilgilerinin çıkarılması yoluyla güvenlik riskini azaltır.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Canlı sunucuda geliştirme kodu"><![CDATA[
+<h2>Canlı sunucuda geliştirme kodu</h2>
+<p>Geliştirme aşamasındaki Textpattern sürümlerinin üretim sitelerinde kullanılması önerilmez. Riskleri anladığınız ve kabul ettiğiniz sürece bu uyarı güvenle yok sayılabilir.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Dizin yazılabilir değil"><![CDATA[
+<h2>Dizin yazılabilir değil</h2>
+<p>Dosya ve görsel yükleme özelliklerini kullanmak için, bu dizinlerin PHP tarafından web sunucusu kullanıcısı aracılığıyla yazılabilir olması gerekir. Bu, bir (S)FTP istemcisiyle veya komut satırında <code>chmod 755 /path/to/dir</code> komutu verilerek yapılabilir.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS başarısız"><![CDATA[
+<h2>DNS araması başarısız</h2>
+<p>Site adresi olarak belirtilen URL’ye ulaşılamıyor gibi görünüyor.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Dosya yüklemeleri devre dışı"><![CDATA[
+<h2>Dosya yüklemeleri devre dışı</h2>
+<p>Mevcut sunucu yapılandırması, dosya yüklemelerinin devre dışı olduğunu gösteriyor. Lütfen <code>php.ini</code> içindeki <code>file_uploads</code> ayarını denetleyin ve değiştirin ya da yardım için sunucu barındırıcınıza danışın.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess dosyası eksik"><![CDATA[
+<h2>.htaccess dosyası eksik</h2>
+<p><code>.htaccess</code> dosyası gerektiren bir kalıcı bağlantı modu kullanılıyor ve bu dosya bulunamıyor. Dosya Textpattern ile birlikte gelir ve Textpattern kök dizininde, <code>index.php</code> ve <code>textpattern</code> diziniyle aynı yerde bulunur. Önerilen yönergeler şunlardır:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Site indeksi erişilemiyor"><![CDATA[
+<h2>Site indeksi erişilemiyor</h2>
+<p>Site için dizin dosyası olarak belirtilen kök <code>index.php</code> dosyası sunucu tarafından okunamıyor. Lütfen dosyanın varlığını ve izinlerini denetleyin.</p>
+        ]]></item>
         <item id="missing_files" title="Eksik dosyalar"><![CDATA[
 <h2>Eksik dosyalar</h2>
-<p>Bir ya da birkaç önemli dosya Textpattern'de eksik. Bütün listelenmiş dosyaların serverda olduğuna ve doğru yerlerde olduğuna emin olun.</p>
+<p>Textpattern'de bir veya daha fazla temel dosya eksik. Listelenen tüm dosyaların sunucuda bulunduğuna ve doğru konumlarda olduğuna emin olun.</p>
         ]]></item>
-        <item id="mod_rewrite_missing" title="Apache mod_rewrite bulunamadı"><![CDATA[
-<h2>Apache mod_rewrite bulunamadı</h2>
-<p>Apache'nin <code>mod_rewrite</code> modülü devre dışı bırakılmış ya da yüklenmemiş. Textpattern'ın düzgün işleyebilmesi için bu önerilir. Var olduğuna ve aktif durumda olduğuna emin olun, ya da site sahibiyle yardımcı olması için iletişime geçin.</p>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite eksik"><![CDATA[
+<h2>Apache mod_rewrite eksik</h2>
+<p>Apache'nin <code>mod_rewrite</code> modülü kurulu değil veya devre dışı. Textpattern'in düzgün çalışması için bunun etkin olması önerilir. Modülün var olduğundan ve etkinleştirildiğinden emin olun ya da yardım için sitenin barındırıcısıyla iletişime geçin.</p>
         ]]></item>
-        <item id="modified_files" title="Değiştirilmiş dosyalar"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Geçici dizin tanımlanamadı"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title="Site dizini okunamaz"><![CDATA[]]></item>
-        <item id="php_version_required" title="Minimum versiyon gereksinimleri"><![CDATA[]]></item>
-        <item id="setup_still_exists" title="Yükleme dizini hâlâ mevcut"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="modified_files" title="Değiştirilmiş dosyalar"><![CDATA[
+<h2>Değiştirilmiş dosyalar</h2>
+<p>Dosyalar, kendi sağlama toplamları, Textpattern ile birlikte verilen bilinen iyi sağlama toplamı listesiyle farklılık gösteriyorsa değiştirilmiş kabul edilir. Textpattern kurulumundaki dosyalar beklenenden farklıysa, bu dosyalar burada vurgulanır.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL tablo hataları"><![CDATA[
+<h2>MySQL tablo hataları</h2>
+<p>Textpattern'in MySQL veritabanında bozulma veya hasar olabilir. Etkilenen tablo(lar)ı, <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> veya <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> gibi bir MySQL erişim aracıyla onarmayı deneyin.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Geçici dizin tanımlanmamış"><![CDATA[
+<h2>Geçici dizin tanımlanmamış</h2>
+<p>Textpattern geçici dizin olmadan da çalışsa da, bu tercih ayarlanmadığında bazı işlevler beklendiği gibi çalışmayabilir. Lütfen Yönetim Tercihleri bölümüne gidin ve ‘Geçici dizin yolu’nu ayarlayın.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Bölüm bir dizinle aynı adı taşıyor"><![CDATA[
+<h2>Bölüm bir dizinle aynı adı taşıyor</h2>
+<p>Var olan dizin adları, makale kalıcı bağlantı şemasında kullanılan bölüm adlarıyla çakışabilir. Sorun yaşamamak için, güvenliyse çakışan dizin ad(lar)ını denetleyip silin ya da bölüm ad(lar)ını çakışmayacak şekilde değiştirin.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Site dizini okunamıyor"><![CDATA[
+<h2>Site dizini okunamıyor</h2>
+<p>Site için dizin dosyası olarak belirtilen kök <code>index.php</code> dosyasını içeren dizin sunucu tarafından okunamıyor. Lütfen izinleri denetleyin.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP betik çalıştırma etkin"><![CDATA[
+<h2>PHP betik çalıştırma etkin</h2>
+<p>Textpattern, bu özellikler etkinleştirildiğinde yazarların ve yöneticilerin makalelerin ve sayfa/formların içine PHP kodu gömmesine izin verir. Bu ciddi bir güvenlik endişesidir – her türlü PHP kodu yürütülebilir, buna kurulumunuzu yok edebilecek ya da üçüncü taraflara bilgi sızdırabilecek zararlı/tehlikeli kodlar da dâhildir – bu özelliğe kesinlikle ihtiyacınız olmadıkça, <a href="?event=prefs#prefs_group_publish">Tercihler panelinden</a> bu seçenekleri kapatmanız şiddetle tavsiye edilir.</p>
+<p>Daha önce Textpattern sitelerinde PHP kod parçaları gerektiren pek çok geliştirme, artık <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">çekirdek etiketler</a> kullanılarak gerçekleştirilebilir.</p>
+        ]]></item>
+        <item id="php_version_required" title="Asgari sürüm gereksinimleri"><![CDATA[
+<h2>Asgari sürüm gereksinimleri</h2>
+<p>Textpattern, PHP programlama dilinde ve MySQL veritabanı sunucusunda belirli işlevlerin mevcut olmasını gerektirir. Asgari sistem gereksinimlerini belirlemek için lütfen aşağıdaki tabloya bakın:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern sürümü</th>
+                <th scope="col">Asgari PHP sürümü</th>
+                <th scope="col">Asgari MySQL sürümü</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Yukarıdaki sistem gereksinimlerine ek olarak aşağıdaki PHP eklentileri gereklidir:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a></li>
+</ul>
+<p>Siteye ait <code>php.ini</code> dosyasında (genel veya yerel) bir <code>date.timezone</code> ayarı bulunmalıdır.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Kurulum dizini hâlâ mevcut"><![CDATA[
+<h2>Kurulum dizini hâlâ mevcut</h2>
+<p>Textpattern kurulduktan sonra <code>textpattern/setup</code> dizinine ve içeriğine artık ihtiyaç kalmaz ve güvenlik nedeniyle silinmelidir.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Site URL'si uyuşmazlığı"><![CDATA[
+<h2>Site URL'si uyuşmazlığı</h2>
+<p>‘Tercihler’ panelinde ayarlanan Site URL'si, siteyi ziyaret etmek için kullanılan gerçek URL ile eşleşmiyor.</p>
+<p>Siteye birden fazla farklı URL üzerinden erişilebiliyorsa ve site beklendiği gibi davranıyorsa, bu ileti güvenle yok sayılabilir.</p>
+<p>Aksi hâlde, lütfen Yönetim Tercihleri bölümünde ‘Site URL'si’ ayarını gerektiği şekilde denetleyip düzeltin. ‘Tanılama’ panelindeki uçuş öncesi uyarı iletisinde, doğru Site URL'si için tahmini bir öneri gösterilir.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Sunucunuzda PHP işlevleri [&#8230;] devre dışı"><![CDATA[
+<h2>Sunucunuzda PHP işlevleri [&#8230;] devre dışı</h2>
+<p>Site barındırıcısı veya sunucu yöneticisi bir veya daha fazla PHP işlevini devre dışı bırakmış; bunlardan bazıları Textpattern'in çalışmasını etkileyebilir.</p>
+<p>Daha fazla bilgi için lütfen <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern Kullanıcı Dokümantasyonu'na <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> bakın.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern sürüm güncellemesi"><![CDATA[
+<h2>Textpattern sürüm güncellemesi</h2>
+<p>Textpattern'in daha yeni bir sürümü mevcut. En son özelliklerden ve güvenlik iyileştirmelerinden yararlanmak için yükseltme yapmanız önerilir.</p>
+<p>Yükseltme işlemini olabildiğince sorunsuz ve sorunsuz hâle getirmeye çalışsak da:</p>
+<ul>
+    <li>Sürümünüzle yalnızca son basamak farklıysa, yükseltme büyük olasılıkla eklentiler ve temalarla geriye dönük uyumludur.</li>
+    <li>Son iki basamak sürümünüzden farklıysa, yükseltme bazı eklentiler ve/veya temalar için güncelleme gerektirebilir; her ne kadar sınırlı bir kapasitede de olsa büyük olasılıkla çalışmaya devam eder.</li>
+    <li>İlk basamak sürümünüzden farklıysa, yükseltme büyük olasılıkla çoğu eklenti ve tema için güncelleme gerektirir. Belirli bir eklenti veya tema özelliğine büyük ölçüde bağlıysanız, yükseltmeye başlamadan önce lütfen yazarla veya topluluk üyeleriyle görüşün.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern ön sürümü mevcut"><![CDATA[
+<h2>Textpattern ön sürüm güncellemesi mevcut</h2>
+<p>Textpattern'in daha yeni bir ön sürümü mevcut. Bu sürümü test edebileceğimiz, böylece son sürümü mümkün olduğunca sağlam çıkarabileceğimiz aktif gönüllüler arıyoruz. Beta kod için bile yükseltme deneyimini sorunsuz ve zahmetsiz yapmaya çalışıyoruz.</p>
+<p>Katılmaya karar verirseniz, lütfen şunlara dikkat edin:</p>
+<ul>
+    <li>Sitenizin dosyalarının ve veritabanının çalışan bir yedeğine sahip olmadıkça ve bu yedekleri nasıl kullanacağınızı bilmedikçe, bu beta sürümü üretim sitesinde kullanmayın.</li>
+    <li>Lütfen <a href="https://github.com/textpattern/textpattern/issues">karşılaştığınız sorunları bildirin</a> ve kullandığınız beta sürümünü belirtin. Bildirilen sorunlara bağlı olarak kararlı sürümden önce ek beta sürümleri gerekebilir.</li>
+    <li>Bu beta sürümü dağıtırsanız, yayımlandığında son sürüme de güncelleme yaptığınızdan emin olun.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Geçici ve Eklenti önbellek dizini yolları aynı olmamalıdır"><![CDATA[
+<h2>Geçici ve Eklenti önbellek dizini yolları aynı olmamalıdır</h2>
+<p>Eklentilerin kendi dizinleri olmalı ve geçici dizini paylaşmamalıdır. Bu, potansiyel bir güvenlik riskidir ve geçici dizin temizlenirse sitenizi olumsuz etkileyebilir. Lütfen geçici dizin yolunun, eklenti önbellek yolundan farklı olduğundan emin olun.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Güncelleme sunucusuna erişilemiyor"><![CDATA[
+<h2>Güncelleme sunucusuna erişilemiyor</h2>
+<p>Güncellemeleri denetleme işlemi başarısız oldu; bu genellikle ağ tıkanıklığı ya da bağlantı zaman aşımı nedeniyle gerçekleşir. Bu durum genellikle bir iki saat içinde kendiliğinden düzelir, bu yüzden bu panele daha sonra tekrar bakmayı deneyin.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="PHP kurulumunuzda mail() işlevi eksik"><![CDATA[
+<h2>PHP kurulumunuzda mail() işlevi eksik</h2>
+<p>PHP'nin <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> işlevi devre dışı. Bu nedenle, Textpattern e-posta gönderemez ve bazı işlevler kullanılabilir olmaz. Örneğin, yeni yorumlar için e-posta bildirimleri gönderilmez ve yeni kullanıcılar hoş geldiniz e-postası almaz. Yine de kullanıcı eklenebilir.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Dosyalar paneli">
-        <item id="file_reassign" title="Dosyayı yeniden ata"><![CDATA[]]></item>
-        <item id="file_replace" title="Dosyayı yeniden konumlandır"><![CDATA[]]></item>
-        <item id="timestamp_file" title=""><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
+        <item id="file_reassign" title="Dosyayı yeniden ata"><![CDATA[
+<h2>Dosyayı yeniden atama</h2>
+<p>‘Eksik’ olarak etiketlenmiş bir dosyanın yerine bir dosya yüklediğinizde, seçtiğiniz dosya sunucuya yüklenir ve veritabanındaki özgün dosya bilgisine bağlanır. Bu, özgün dosyanın dosya adının ve indirme sayısı, kategori gibi diğer ilişkili bilgilerin korunacağı anlamına gelir. Ancak dosya boyutu, yeni dosyayı yansıtacak şekilde güncellenir.</p>
+        ]]></item>
+        <item id="file_replace" title="Dosyayı yeniden konumlandır"><![CDATA[
+<h2>Dosyayı değiştir</h2>
+<p>Buraya bir dosya yüklemek, sunucudaki mevcut dosyanın içeriğinin değiştirilmesine yol açar ancak dosya adı eskisiyle aynı kalır. Dosyayla ilişkili indirme sayısı ve diğer bilgiler etkilenmez.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Yayın tarihi"><![CDATA[
+<h2>Yayın tarihi</h2>
+<p>Bir dosyanın yayımlandığı ya da en son ne zaman gözden geçirildiği zamandır. Zaman, içeriğin yayımlandığı ana veya geçmişte ya da gelecekteki herhangi bir ana ayarlanabilir.</p>
+<p>Kutular aşağıdaki bilgilere karşılık gelir:</p>
+<ul>
+    <li>Yıl / Ay / Gün</li>
+    <li>Saat (24 saat biçimi) : Dakika : Saniye</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Dosya yükle"><![CDATA[
+<h2>Dosya yükle</h2>
+<p>Sunucunuza dosya veya görsel yüklemek için bu formu kullanın.</p>
+<p>Makalelerin içinde görselleri işlemek için Textile kodunu, sayfa şablonlarınıza görsel yerleştirmek için Textpattern kodunu veya başka yerlerde görsel yerleştirmek için HTML kodunu kullanın.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="Biçimler paneli">
-        <item id="forms_overview" title="Biçimlere giriş"><![CDATA[]]></item>
+        <item id="forms_overview" title="Biçimlere giriş"><![CDATA[
+<h2>Formlara giriş</h2>
+<p>Textpattern'de bir form, içeriği görüntülemek için tekrar kullanılabilen bir metin, HTML ve Textpattern etiketlerinden oluşan bir kod parçasıdır.</p>
+<p>İşte <code>ordinary_list</code> olarak adlandırılabilecek örnek bir form:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Bunu ilişkili makalelerin HTML sırasız listesini görüntülemek için kullanabilirsiniz:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Bu formun rolü başlık listesini çıktılamak olduğundan, mevcut bölümden 20 makale göstermek gibi başka etiketlerin içinde de kullanılabilir:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Ayrıca, sayfa şablonlarınızda üstbilgi ve altbilgi gibi tekrarlanan içeriği görüntülemek için de bir form kullanmayı tercih edebilirsiniz. Bu, içeriğin yalnızca tek bir yerde bulunması ve değişiklik yapmak istediğinizde bunu yalnızca bir kez yapmanız gerektiği anlamına gelir. Bir formdan içerik görüntülemek genellikle şu şekilde yapılır:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Bir form en fazla 64 KB boyutunda olabilir. Altbilgi için bir örnek, başlıklar, paragraflar, bağlantılar, koşullu etiketler ve <code>ordinary_list</code> gibi diğer formlara yapılan başvuruları içerebilir.</p>
+        ]]></item>
     </group>
 
     <group id="image" title="Görseller paneli">
-        <item id="create_thumbnail" title="Küçük görsel (thumbnail) oluştur"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Görseli değiştir"><![CDATA[]]></item>
-        <item id="upload_image" title="Görsel yükle"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Küçük görsel (thumbnail) yükle"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Küçük görsel (thumbnail) oluştur"><![CDATA[
+<h2>Küçük görsel oluştur</h2>
+<p>Belirtilen boyutlardan tam boy görselden bir küçük görsel (yeniden) oluşturmanıza olanak tanır.</p>
+<p>Özel boyutlandırma için küçük görsel, ‘Kırp’ onay kutusunu işaretlemediğiniz sürece seçtiğiniz boyutlara sığacak şekilde ölçeklendirilir. Bu kutuyu işaretlerseniz küçük görsel, herhangi bir ölçeklendirme yapılmadan görselin merkezinden kırpılarak oluşturulur.</p>
+<p>Otomatik boyutlandırma için küçük görsel, geçerli yönetim temasındaki boyutlara ve (isteğe bağlı) kırpma ayarlarına göre ölçeklendirilir.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Görseli değiştir"><![CDATA[
+<h2>Görseli değiştir</h2>
+<p>Buraya yüklenen bir görsel, yalnızca veritabanındaki bu kayda ilişkilendirilmiş mevcut görselin yerini alır.</p>
+        ]]></item>
+        <item id="upload_image" title="Görsel yükle"><![CDATA[
+<h2>Görsel yükle</h2>
+<p>Sunucunuza bir ya da daha fazla görsel yükleyin.</p>
+<p><code>images</code> dizinine yüklemenin ardından, özgün görselinizin dosya adı yalnızca Textpattern veritabanında dahili olarak saklanır; görsel dosyasının kendisi ise artan bir sayı + dosya uzantısı ile yeniden adlandırılır.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Küçük görsel (thumbnail) yükle"><![CDATA[
+<h2>Küçük görsel yükle</h2>
+<p>Tam boy görsellere kendi küçük görselleri atanabilir. Bunlar, tam boy görsellere bağlantı vermek ve tam boy görsellerin dizinlenmesi için kullanışlıdır.</p>
+<p>Bir küçük görsele yapılan başvuru, tam boy görsele yapılan başvuruyla aynıdır; yalnızca dosya adına <code>t</code> eklenir. Örneğin, <code>/images/12.jpg</code> adresinde saklanan tam boy bir görselle ilişkilendirilmiş küçük görsele başvurmak için <code>/images/12t.jpg</code> kullanırsınız.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="Diller paneli">
-        <item id="get_textpack" title="Textpack yükle"><![CDATA[]]></item>
+        <item id="get_textpack" title="Textpack yükle"><![CDATA[
+<h2>Textpack yükle</h2>
+<p>Siteniz için ek dil dizilerini bu alana yapıştırın ve bunları yüklemek için ‘Yükle’yi seçin.</p>
+<p>Diziler çoğu zaman, bir eklentiyle birlikte dağıtılan ve eklentinin dil dizilerinin Textpattern içinde yerel olarak kullanılmasını sağlayan indirilebilir bir Textpack biçiminde gelir.</p>
+<p>Çevirmenler, gerekirse bu paketleri çevirebilir ve yerelleştirilmiş içeriği toplulukla paylaşabilir.</p>
+        ]]></item>
     </group>
 
     <group id="link" title="Bağlantılar paneli">
-        <item id="link_description" title="Açıklama"><![CDATA[]]></item>
-        <item id="link_sort" title="Sıralama değeri"><![CDATA[]]></item>
+        <item id="link_description" title="Açıklama"><![CDATA[
+<h2>Açıklama</h2>
+<p>Bağlantılar için açıklamalar isteğe bağlıdır ve bağlantılara altyazı eklemek, bağlantılar için <code>title=""</code> (ipuçları) öznitelikleri oluşturmak ya da yalnızca kendi dahili dokümantasyonunuzu tutmak için kullanışlıdır.</p>
+        ]]></item>
+        <item id="link_sort" title="Sıralama değeri"><![CDATA[
+<h2>Sıralama değeri</h2>
+<p>Bağlantı listelerini doğal dille sıralamak için kullanışlıdır; örneğin, bir kişinin ilk adı yerine soyadına göre ya da belirli/belirsiz artikel ile başlayan ifadeleri temel alarak.</p>
+        ]]></item>
         <item id="link_url" title="URL"><![CDATA[
 <h2>URL</h2>
 <p>Bağlantı adresi. Eğer bağlantı farklı bir siteyi gösteriyorsa, başına <code>http://</code> yada <code>https://</code> getirilmelidir.</p>
         ]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+        <item id="timestamp_link" title="Yayın tarihi"><![CDATA[
+<h2>Yayın tarihi</h2>
+<p>Bir bağlantının yayımlandığı ya da en son ne zaman gözden geçirildiği zamandır. Zaman, içeriğin yayımlandığı ana veya geçmişte ya da gelecekteki herhangi bir ana ayarlanabilir.</p>
+<p>Kutular aşağıdaki bilgilere karşılık gelir:</p>
+<ul>
+    <li>Yıl / Ay / Gün</li>
+    <li>Saat (24 saat biçimi) : Dakika : Saniye</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Oturum açma paneli">
-        <item id="remember_login" title="Bu tarayıcıda oturum açılmış olarak kalsın"><![CDATA[]]></item>
+        <item id="remember_login" title="Bu tarayıcıda oturum açılmış olarak kalsın"><![CDATA[
+<h2>Bu tarayıcıyla oturumu açık tut</h2>
+<p>Seçiliyse, çıkış yapmayı seçene kadar Textpattern hesabınızda mevcut web tarayıcısıyla oturumunuz açık kalır. Seçili değilse, bir süre işlem yapılmadığında oturumunuz otomatik olarak kapatılır.</p>
+<p>Tarayıcınızda çerezlerin etkin olmasını gerektirir.</p>
+        ]]></item>
     </group>
 
     <group id="plugin" title="Eklenti paneli">
-        <item id="install_plugin" title="Eklenti yükle"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Eklenti yükle"><![CDATA[]]></item>
+        <item id="install_plugin" title="Eklenti yükle"><![CDATA[
+<h2>Eklenti kur</h2>
+<p>Derlenmiş eklenti metin dosyasının içeriğini buraya yapıştırın ve kurulumu başlatmak için ‘Yükle’yi kullanın. Daha önce kurmuş olduğunuz bir eklentiyle aynı ada sahip bir eklenti yüklerseniz, eski sürüm, yüklediğiniz sürümle değiştirilir.</p>
+<p>Buraya yapıştırdığınız eklenti metni, ham PHP kodu <strong>değil</strong>, genellikle eklenti bilgilerini (eklenti adı, sürüm ve açıklama, yazar adı vb.) içeren bir üstbilginin eşlik ettiği Base64 kodlu metindir.</p>
+<p>Derlenmiş eklenti sürümlerini genellikle <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Eklentiler deposundan <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ya da bir eklenti yazarının web sitesi veya GitHub gibi belirlenmiş kanalından edinebilirsiniz.</p>
+<p>Textpattern derlenmiş bir metin dosyasına ait URL'yi, harici site buna izin veriyorsa, buraya yapıştırabilirsiniz.</p>
+<p>Yüklenen tüm eklentiler, kurulumdan önce eklenti kodunu ve içeriğini incelemenize izin veren bir doğrulama aşamasından geçer.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Eklenti yükle"><![CDATA[
+<h2>Eklenti yükle</h2>
+<p>Bir eklenti dosyası yüklemek için bu formu kullanın. Yüklenen eklentiler (ve varsa varlıkları) ‘plugins’ dizininde saklanır.</p>
+<p>Buradan yüklenebilecek eklenti türleri şunlardır:</p>
+<ul>
+<li>Eksiksiz kod, meta veri, Textpack dizileri ve yardım metni içeren Textpattern PHP Şablon dosyaları.</li>
+<li>Eksiksiz kod, meta veri, Textpack dizileri ve yardım metni içeren Textpattern derlenmiş metin dosyaları.</li>
+<li>Manifest bilgileri ile kod, meta veri, Textpack dizileri, yardım metni ve destekleyici dosyaları içeren Textpattern zip paketleri.</li>
+<li>Ham PHP dosyaları (ek meta verileri doldurmayacakları ve önerilmedikleri hâlde).</li>
+</ul>
+<p>Daha önce kurduğunuzla aynı ada sahip bir eklenti yüklerseniz, eski sürüm yüklediğiniz sürümle değiştirilir.</p>
+<p>Yüklenen tüm eklentiler, kurulumdan önce eklenti kodunu ve içeriğini incelemenize izin veren bir doğrulama aşamasından geçer.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Tercihler paneli">
-        <item id="admin_side_plugins" title="Yönetici (Admin) eklentilerini kullanmak istiyor musunuz?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Gelişmiş ayarlar"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Makalelerde PHP kullanımına izin verilsin mi?"><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Sayfalarda PHP olmasına izin verilsin mi?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Arşiv tarih biçimi"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Makale başlıklarında kalıcı bağlantılar kullanılsın mı?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Yaz Saati Uygulaması otomatik olarak ayarlansın mı?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Yorum eklendiğinde site güncellenmiş olarak kabul edilsin mi?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Yönetici (Admin) eklentilerini kullanmak istiyor musunuz?"><![CDATA[
+<h2>Yönetim tarafı eklentiler kullanılsın mı?</h2>
+<p>Yönetim tarafı eklentiler, yönetim arayüzünün işleyişini değiştirebilir. Makale düzenleme veya yayımlama gibi mevcut eylemlere bağlanabilir ya da ek/uzatılmış işlevler için yeni paneller ekleyebilirler.</p>
+<p>Yönetim tarafı eklentiler hakkında daha fazla bilgi edinmek isterseniz, lütfen <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Textpattern'i Genişletme <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> sayfasına ve <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern Kullanıcı Dokümantasyonu <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a>na bakın. Her türden eklenti <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Eklentileri <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> sitesinde listelenmiştir.</p>
+        ]]></item>
+        <item id="advanced_options" title="Gelişmiş ayarlar"><![CDATA[
+<h2>Gelişmiş seçenekler</h2>
+<p>Ek ayarların yapılandırılabildiği gelişmiş tercih grubunu gösterir, örneğin:</p>
+<ul>
+    <li><code>txp:evaluate</code> içinde etkinleştirilen PHP işlevleri.</li>
+    <li>Özel form şablonu türleri.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Makalelerde PHP kullanımına izin verilsin mi?"><![CDATA[
+<h2>Makalelerde PHP'ye izin verilsin mi?</h2>
+<p>Bu ayar etkinleştirildiğinde, makalelerde PHP kullanılmasına izin verir. Yazarın bunu yapmak için yeterli ayrıcalıklara sahip olması gerekir (varsayılan olarak yalnızca <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Yayıncılar’ <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Yönetici Editörler’ <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ve <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Editörler’ <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> bunu yapabilir).</p>
+<p><strong>Bu özelliğe kesinlikle ihtiyacınız olmadıkça bu seçeneği kapatmanız şiddetle tavsiye edilir</strong>. Web sitenizi yok edebilecek veya üçüncü taraflara bilgi sızdırabilecek her türlü potansiyel olarak zararlı/tehlikeli PHP kodu, herhangi bir yazar tarafından eklenebilir ve makaleyi görüntüleyen herkes tarafından çalıştırılabilir.</p>
+<p>PHP kodu, açılış ve kapanış PHP etiketlerini içermemeli ve ayrıca <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> etiketleri <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ile çevrelenmelidir.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Formun geçersiz kılınmasına izin verilsin mi?"><![CDATA[
+<h2>Formun geçersiz kılınmasına izin verilsin mi?</h2>
+<p>Bu ayar, makale yazarlarının makaleleri işlendiğinde kullanılacak formu geçersiz kılmalarına izin verir. Etkinleştirilirse, bir makaleyi düzenlerken ‘Formu geçersiz kıl’ açılır listesi kullanılabilir olur.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Sayfalarda PHP olmasına izin verilsin mi?"><![CDATA[
+<h2>Sayfalarda PHP'ye izin verilsin mi?</h2>
+<p>Bu ayar etkinleştirildiğinde, sayfa şablonları ve form şablonları içinde PHP koduna izin verir.</p>
+<p><strong>Bu özelliğe kesinlikle ihtiyacınız olmadıkça bu seçeneği kapatmanız şiddetle tavsiye edilir</strong>. Web sitenizi yok edebilecek veya üçüncü taraflara bilgi sızdırabilecek her türlü potansiyel olarak zararlı/tehlikeli PHP kodu, başka bir kullanıcı tarafından eklenebilir ve habersiz bir yönetici veya site ziyaretçisi tarafından çalıştırılabilir.</p>
+<p>PHP kodu açılış ve kapanış PHP etiketlerini içermemeli ve ayrıca <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> etiketleri <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ile çevrelenmelidir.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arşiv tarih biçimi"><![CDATA[
+<h2>Arşiv tarih biçimi</h2>
+<p>Sitenizdeki bölümlerde makaleler üzerindeki tarihlerin nasıl görüneceğini belirler.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Makale düzenleme sayfasında alıntı alanı gösterilsin mi?"><![CDATA[
+<h2>Makale düzenleme sayfasında alıntı alanı gösterilsin mi?</h2>
+<p>‘Hayır’ seçilirse, alıntı alanı makale düzenleme ekranında yazara gösterilmez.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Makale başlıklarında kalıcı bağlantılar kullanılsın mı?"><![CDATA[
+<h2>Kalıcı bağlantılara başlık ekle?</h2>
+<p>Bu ayar, makale başlığının otomatik olarak oluşturulmuş bir sürümünü URL'ye ekler. URL, otomatik olarak oluşturulur ya da bir makaleyi düzenlerken ‘Yalnızca URL başlığı’ alanında el ile geçersiz kılınabilir.</p>
+<p>Bu ayarın yalnızca temiz URL'ler kullanıldığında etkisi olur. Bazı diller için bu durum uzun ve çirkin URL'lerle sonuçlanabilir; bu durumda muhtemelen bunu ‘Kapalı’ olarak ayarlamak istersiniz.</p>
+        ]]></item>
+        <item id="auto_dst" title="Yaz Saati Uygulaması otomatik olarak ayarlansın mı?"><![CDATA[
+<h2>Yaz saati uygulaması otomatik ayarlansın mı?</h2>
+<p>Bu ayar, Textpattern'in bulunduğunuz yerde yaz saati uygulamasının (DST – Daylight Saving Time) ne zaman başlayacağını değiştirmesine izin verir. Bu ‘Hayır’ olarak ayarlanırsa, ‘DST etkin’ tercihlerini el ile değiştirebilirsiniz.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Yorum eklendiğinde site güncellenmiş olarak kabul edilsin mi?"><![CDATA[
+<h2>Yeni yorum site güncellendi anlamına gelsin mi?</h2>
+<p>Textpattern veritabanı, sitede en son ne zaman değişiklik yapıldığını takip eder. Bu ayar ‘Evet’ olarak ayarlandığında, yeni bir yorum bu değeri de günceller. Bu değer örneğin <code>"Last-Modified üstbilgisini gönder"</code> işlevselliğinde kullanılır.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Yorumlarda rel=&quot;nofollow&quot; uygulansın mı?"><![CDATA[
+<h2>Yorumlarda "rel=&quot;nofollow&quot;" uygulansın mı?</h2>
+<p>‘Evet’ olarak ayarlanırsa, yorumlarda yapılan bağlantılara ek bir öznitelik eklenir. Bu, yorum istenmeyen postalarını caydırmaya yönelik bir önlemdir ve çeşitli arama motorları ve yazılım geliştiriciler tarafından başlatılmıştır. Daha fazla bilgi için <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’ın duyurusunu <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> okuyabilirsiniz.</p>
+<p><strong>Not:</strong> Bu ayar sitenizin işlevselliğini etkilemez. Ancak bazı arama motorlarının, bu yorumlardan bağlantı verilen siteleri derecelendirirken yorumlarınızın etkisini engelleyebilir veya azaltabilir.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Yorumlar numaralandırılmış liste olarak sunulsun mu?"><![CDATA[
+<h2>Yorumlar numaralandırılmış liste olarak sunulsun mu?</h2>
+<p>Makale yorumlarının HTML <code>&lt;ol&gt;</code> etiketiyle, bireysel yorumların ise <code>&lt;li&gt;</code> etiketiyle (yorumların numaralandırılmış bir liste olarak sunulmasına neden olur) mi, yoksa yorumların <code>&lt;div&gt;</code> etiketiyle mi çevreleneceğini belirler.</p>
+<p>Her iki değerde de, kullanılan etiketleri, <code>comments_display</code> formunda bulunan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> etiketini <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> düzenleyerek form bazında geçersiz kılabilirsiniz.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Yorumlar otomatik olarak makalelere eklensin mi?"><![CDATA[
+<h2>Yorumlar otomatik olarak makalelere eklensin mi?</h2>
+<p>Bu ayar, yorumların ve yorum formunun tüm tekil makalelere otomatik olarak eklenip eklenmeyeceğini belirler (otomatik olarak <code>comments_display</code> formunun içeriğini dahil ederek).</p>
+<p>Çoğu zaman bunu ‘Hayır’ olarak ayarlamak istersiniz; çünkü bu, sitenizin tasarımında yorumların konumlandırılması konusunda size daha fazla esneklik sağlar. Yorumların görünmesini istediğiniz, makaleye dayalı her şablona <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> etiketini <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> el ile eklemeniz gerekir.</p>
+<p>Eğer bir makalede yorumların iki kez görüntülendiğini görüyorsanız, büyük olasılıkla şablonlarınızda <code>&lt;txp:comments /&gt;</code> etiketi yer alıyordur ve aynı zamanda ‘Yorumlar otomatik olarak makalelere eklensin mi?’ de ‘Evet’ olarak ayarlanmıştır.</p>
+        ]]></item>
         <item id="comments_dateformat" title="Yorumların tarihini gösterme biçimi"><![CDATA[
 <h2>Yorumların tarihini gösterme biçimi</h2>
 <p>Yorumların tarihi site ziyaretçilerine nasıl görünecek.</p>        ]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title="Yorumları denetle?"><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title="Yorum atmak için kullanıcının email adresi istensin mi?"><![CDATA[]]></item>
+        <item id="comments_default_invite" title="Varsayılan yorum daveti"><![CDATA[
+<h2>Varsayılan yorum daveti</h2>
+<p>Ziyaretçilerin sitenizde yorum yapmasına izin veriyorsanız, bu varsayılan davet metnidir. Örneğin:</p>
+<ul>
+    <li>Yorumlar</li>
+    <li>Yorum ekle</li>
+    <li>Geri bildirim</li>
+    <li>Açıklama ekle</li>
+</ul>
+<p>Davetiye metninin, makale bazında her zaman değiştirilebileceğini unutmayın.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Yorumlar şu süreden sonra kapatılsın"><![CDATA[
+<h2>Yorumlar şu süreden sonra kapatılsın</h2>
+<p>Bu ayar, makalelere yapılacak yorumların ne kadar süre sonra kapatılacağını belirlemek için kullanılır (yoruma süresiz izin vermek için ‘Asla’ olarak ayarlanabilir).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Yorumlarda kullanıcı görsellerine izin verilsin mi?"><![CDATA[
+<h2>Yorumlarda kullanıcı görsellerine izin verilsin mi?</h2>
+<p>Bu seçenek ‘Hayır’ olarak ayarlandığında, yorumlara eklenen tüm görseller kaldırılır.</p>
+        ]]></item>
+        <item id="comments_mode" title="Yorum modu"><![CDATA[
+<h2>Yorum modu</h2>
+<p>‘nopopup’ seçilirse (önerilir) mevcut pencere yenilenir ve yalnızca ilgili makale, altında yorumlarla birlikte görüntülenir.</p>
+<p>‘popup’ seçilirse, yorum bağlantısına tıklandığında yeni bir tarayıcı penceresi açılır (bu, <code>popup_comments</code> formunu kullanır).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Yorumları denetle?"><![CDATA[
+<h2>Yorumlar denetlensin mi?</h2>
+<p>Bu ayar ‘Evet’ olarak set edildiğinde, her yeni yorumun görünürlüğü incelenene kadar kapalı olur. Her bir yorumu el ile denetleyip görünür yapmanız gerekir (yeni bir yorum alındığında makale yazarına bir ileti e-posta ile gönderilir).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Yorumlar varsayılan olarak açık olsun mu?"><![CDATA[
+<h2>Yorumlar varsayılan olarak açık olsun mu?</h2>
+<p>Bu ayar ‘Evet’ olarak set edilirse, yayımlanan her makale için yorumlar otomatik olarak etkinleştirilir. ‘Hayır’ olarak ayarlanırsa, yorum kabul etmek istediğiniz her seferinde makalenin ‘Yaz’ panelinde yorumları etkinleştirmeniz gerekir.</p>
+<p>Yorumlar, makale bazında her zaman istenildiği anda etkinleştirilebilir/devre dışı bırakılabilir.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Yorum atmak için kullanıcının email adresi istensin mi?"><![CDATA[
+<h2>Yorumlarda kullanıcının e-posta adresi gerekli mi?</h2>
+<p>‘Evet’ olarak ayarlanırsa, makalenize yorum yapmak isteyen kişiler, yorum giriş formuna bir e-posta adresi girmek zorundadır. E-posta adresi belirtmedikleri sürece yorum göndermeleri mümkün olmayacaktır.</p>
+        ]]></item>
         <item id="comments_require_name" title="Yorumlarda kullanıcı adı gereksin mi?"><![CDATA[
 <h2>Yorumlarda kullanıcı adı gereksin mi?</h2>
 <p>Eğer 'Evet' olarak seçilirse makalenize yorum yapmak isteyen insanlar kullanıcı adı girmeleri gerekecektir. İsim belirtmedikleri sürece yorumlarını sunamayacaklar.</p>
@@ -220,71 +664,439 @@
 <h2>Yorum yapıldığında yazara email gönderilsin mi?</h2>
 <p>Eğer 'Evet' seçilirse, makaleye ne zaman bi yorum yapılırsa bu yorumun bi kopyası email üzerinden makalenin yazarına gönderilecek.</p>
         ]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Yorumlarda daha fazla Textile biçimlendirmeye izin verilsin mi?"><![CDATA[
+<h2>Yorumlarda daha fazla Textile biçimlendirmeye izin verilsin mi?</h2>
+<p>‘Evet’ olarak ayarlandığında, yorumlarda normalde düz metin olarak ele alınacak, aşağıdakiler gibi <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ögeleri bulunabilir:</p>
+<ul>
+    <li>başlıklar</li>
+    <li>sıralı ve sırasız listeler</li>
+    <li>dipnotlar</li>
+    <li>tablolar</li>
+    <li>kod</li>
+    <li>genişletilmiş blok sözdizimi (<code>bc..</code>, <code>bq..</code> vb.)</li>
+</ul>
+<p><strong>Not:</strong> Güvenlik nedeniyle, ham HTML normal metne dönüştürülür.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Eş zamanlı oturum açmaya izin verilen hesaplar"><![CDATA[
+<h2>Eş zamanlı oturum açmaya izin verilen hesaplar</h2>
+<p>Birden fazla tarayıcı/oturum üzerinden oturum açabilen hesap adlarının virgülle ayrılmış listesi. Bu, geliştirme sırasında müşterilerle bir oturumu paylaşmak için kullanışlıdır.</p>
+<p>Bu özelliği kullanmak bir güvenlik riskidir ve <strong>canlı sitelerde önerilmez</strong>. Kullanıcı hesabınız canlı bir web sitesinde eşzamanlılık için yapılandırılmışsa, Tanılama bir uyarı verir.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Özel form şablonu türleri"><![CDATA[
+<h2>Özel form şablonu türleri</h2>
+<p>Standart form şablonu türlerine (makale, dosya, çeşitli vb.) ek olarak, Yayıncılar özel türler tanımlayabilir. Özel form şablonu türlerinin amacı iki yönlüdür: form şablonlarını sınıflandırmayı kolaylaştırmak ve özel varlık tanımları oluşturmak.</p>
+<p>Tercihin biçimi, her bölümün bir form şablonu türüne karşılık geldiği <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> biçimindedir.</p>
+<p>Özel bir form türü tanımlamak için (örneğin <code>js</code>), ayrı bir satıra bir <code>[js]</code> bölümü eklemeniz gerekir. İlgili bölümde <code>title="Javascript"</code> girdisiyle varsayılan bir başlık ayarlanabilir. Gerekirse yerelleştirilmiş başlıklar da eklenebilir (örneğin, <code>ru="Скрипт"</code>).</p>
+<p>Ek olarak, form şablonu için bir <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">ortam türü <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> (eski adıyla MIME türü) belirtilebilir, örneğin <code>mediatype="application/javascript"</code>. Bu, bu türdeki form şablonlarını, veritabanından veya diskten (düz dosyalar) <code>&lt;txp:output_form /&gt;</code> etiketi aracılığıyla ayarlanmış ortam türünde sunulabilen özel varlıklar hâline getirir. Örneğin, <code>[js]</code> türünde ve ortam türü <code>application/javascript</code> olan <code>myscript.js</code> adlı bir form şablonu kodunuza şu şekilde eklenebilir:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Bu, aşağıdaki HTML <code>&lt;script&gt;</code> etiketini oluşturur:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Yalnızca ad uzantısı türleriyle eşleşen (örneğin <code>myscript.js</code>) form şablonları düz dosyalar olarak sunulabilir. Bu durumda, Textpattern tarafından hiç işlenmezler ve kendi URL'leri üzerinden erişilebilirler.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Özel alanlar"><![CDATA[
+<h2>Özel alanlar</h2>
+<p>Özel alanlar, ek makale verileri tutmak için kullanılır. Burada ad vererek en fazla on özel alan tanımlayabilirsiniz. Her biri, her makaleyle ilişkilendirilebilecek özel verileri girebilmeniz için Yaz panelinde ayrı bir alan olarak görünür.</p>
+<p>Alanları dilediğiniz gibi adlandırabilirsiniz; ancak aşağıdakilere dikkat edin:</p>
+<ul>
+<li>Boşluk kullanmak Yaz panelinde okunabilirliği artırır, ancak alanlar <code>article_custom</code> etiketinde sıralama veya filtreleme parametresi olarak <em>kullanılamaz</em>. Bu işlevi kullanmak istiyorsanız bunun yerine alt çizgi kullanmayı düşünün.</li>
+<li>Alanları adlandırırken, Textpattern içindeki ayrılmış alan adlarıyla çakışmadıklarından emin olun. Örneğin, <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> vb. adları kullanmayın; aksi takdirde garip sonuçlar veya bozuk sitelerle karşılaşabilirsiniz.</li>
+<li>Her bir alandaki veriler yalnızca 255 karakterlik metinle sınırlıdır.</li>
+</ul>
+        ]]></item>
         <item id="dateformat" title="Tarih biçimi"><![CDATA[
 <h2>Tarih biçimi</h2>
-<p>Bu seçenek makale tarihlerinin sadece sizin sitenin ön sayfasında nasıl görüneceği etkileyecek</p>
+<p>Bu seçenek, makale tarihlerinin yalnızca sitenizin ön sayfasında nasıl görüneceğini etkiler.</p>
         ]]></item>
-        <item id="default_event" title="Varsayılan panel"><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Kısa etiket desteğini etkinleştir?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="XML-RPC sunucusu etkinleştirilsin mi?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title="Kayıtlar kaç gün sonra silinsin?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Klasör yolu"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Maksimum dosya yükleme boyutu(byte olarak)"><![CDATA[]]></item>
-        <item id="gmtoffset" title="Saat dilimi"><![CDATA[]]></item>
-        <item id="img_dir" title="Görsel klasörü"><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title="Maksimum URL uzunluğu (karakter olarak)"><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title="Yorum yazanların e mail adresi gizlensin mi?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title="E-posta gönderirken ISO-8859-1 kodlama kullanılsın mı (varsayılan UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title="Üretim durumu"><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Süresi dolmuş makaleler yayınlansın mı?"><![CDATA[]]></item>
-        <item id="publisher_email" title="Bu e-posta adresinden giriş bilgilerini gönder"><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title="Site Sloganı"><![CDATA[]]></item>
-        <item id="sitename" title="Site adı"><![CDATA[]]></item>
-        <item id="siteurl" title="Site URL'si"><![CDATA[]]></item>
-        <item id="skin_dir" title="Tema klasörü"><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blocklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title="Yorumlara izin verilsin mi?"><![CDATA[
-<h2>Yorumlara izin verilsin mi?</h2>
-<p>Bu Textpattern'in yorum yapma işlevinin etkin olmalı mı ya da olmamalı mı ayarını düzenler.</p>
+        <item id="default_event" title="Varsayılan panel"><![CDATA[
+<h2>Varsayılan panel</h2>
+<p>Textpattern yönetim arayüzünde, birinin oturum açtığında ilk görünecek panelini tanımlar.</p>
         ]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="default_publish_status" title="Varsayılan yayın durumu"><![CDATA[
+<h2>Varsayılan yayın durumu</h2>
+<p>Yeni oluşturulan Textpattern makalelerinin yayımlama görünürlüğü durumunu tanımlar.</p>
+<p>Bu tercih ayarının, değişiklik yapılmadan önce oluşturulmuş veya düzenlenmiş makalelerin durumunu etkilemediğini unutmayın.</p>
+<p>Varsayılan yayın durumu aşağıdakilerden biridir:</p>
+<ul>
+    <li>Taslak</li>
+    <li>Gizli</li>
+    <li>Beklemede</li>
+    <li>Yayında</li>
+    <li>Yapışkan</li>
+</ul>
+<p><strong>Taslak</strong> bir makale, devam eden bir çalışma olarak kabul edilir ve Textpattern yönetim alanı dışında görüntülenemez (yani Textpattern'in ön yüzünde görünmez ve beslemelerde yayınlanmaz).</p>
+<p><strong>Gizli</strong> bir makale, Textpattern yönetim alanı dışında görüntülenemez.</p>
+<p><strong>Beklemede</strong> bir makale, yayımlanmaya hazır ve onay bekliyor kabul edilir, ancak Textpattern yönetim alanı dışında görüntülenemez.</p>
+<p><strong>Yayında</strong> bir makale, genellikle Textpattern yönetim alanı dışında görüntülenebilir (yani Textpattern ön yüzünde görünür, tercih izin veriyorsa beslemelerde yayınlanır). Bir makale yayında ve bir bitiş tarihi varsa, bu tarih geçtikten sonra durumu yayında olarak kalır; ancak yalnızca süresi dolmuş makalelerin yayımlanmasına izin veriliyorsa yönetim alanı dışında görünür.</p>
+<p><strong>Yapışkan</strong> bir makale, <strong>yayında</strong> bir makaleye benzer biçimde Textpattern yönetim alanı dışında görüntülenebilir, ancak ilgili <code>article</code> veya <code>article_custom</code> etiketi, değeri <code>sticky</code> olan bir <code>status</code> özniteliği içermedikçe makale listelerinde <strong>görünmez</strong>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Hangi HTML doctype'ını kullanmak istediğinizi seçin (HTML5 veya XHTML). Bu, yorum giriş formlarını, <code>&lt;abbr&gt;</code> veya <code>&lt;acronym&gt;</code> için Textile işleme biçimini ve <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> etiketinin <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> ürettiği <code>&lt;link&gt;</code> etiketlerini etkiler.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Geliştirme teması önizlemesi etkinleştirilsin mi?"><![CDATA[
+<h2>Geliştirme teması önizlemesi etkinleştirilsin mi?</h2>
+<p>Yeterli ayrıcalığa sahip kullanıcılar (varsayılan olarak Yayıncı ve Tasarımcı rolleri) yeni bir temayı güvenle geliştirebilir ve önizleyebilir; bu sırada diğer tüm kullanıcılar hâlâ eski temayı görür (yeni tema dağıtılana kadar).</p>
+<p>Bununla birlikte, tema geliştirmeye katılmak istemeyen ayrıcalıklı kullanıcılar, geliştirme teması önizlemesini devre dışı bırakabilir. Bu durumda, standart site ziyaretçileri gibi mevcut ‘genel’ tema ile karşılanırlar.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Kısa etiket desteği etkinleştirilsin mi?"><![CDATA[
+<h2>Kısa etiket desteği etkinleştirilsin mi?</h2>
+<p>Textpattern etiketleri <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code> biçimindedir. Bazı basit yönergeleri takip ederek <code>txp:</code> önekinin atlanabildiği bir kısaltma gösterimini etkinleştirerek yazım miktarını azaltmak mümkündür. Kavramı göstermek için bazı örnekler:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code>, <code>&lt;article::id /&gt;</code> hâline gelir</li>
+    <li><code>&lt;txp:recent_articles/&gt;</code>, <code>&lt;recent::articles /&gt;</code> hâline gelir</li>
+    <li><code>&lt;txp:file_download_list /&gt;</code>, <code>&lt;file::download_list /&gt;</code> hâline gelir</li>
+    <li><code>&lt;txp:smd_if /&gt;</code>, <code>&lt;smd::if /&gt;</code> hâline gelir</li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code>, <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> hâline gelir (eklenti önekinin <code>else</code> etiketi için de kullanılabileceğine dikkat edin).</li>
+</ul>
+<p>Bir etiket alt çizgi içeriyorsa ve kısa etiketleri etkinleştirirseniz, temel kavram şudur:</p>
+<ol>
+    <li><code>txp:</code> önekini kaldırın.</li>
+    <li>İlk alt çizgi kullanımını <code>::</code> ile değiştirin.</li>
+</ol>
+<p>Bu tercihin ayarlanmasının, form kod parçalarını işlemek için <code>&lt;txp:output_form /&gt;</code> kısa kodlarını kullanma becerisini etkilemediğini unutmayın. Hâlâ <code>&lt;txp::shortcode /&gt;</code> kullanabilirsiniz; bu, <code>&lt;txp:output_form form="shortcode" /&gt;</code> olarak yorumlanır.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="XML-RPC sunucusu etkinleştirilsin mi?"><![CDATA[
+<h2>XML-RPC sunucusu etkinleştirilsin mi?</h2>
+<p>Textpattern'i uzaktan kontrol etmek için (örneğin masaüstü veya mobil uygulamalardan) <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanmak istiyorsanız, bu ayarı ‘Evet’ olarak ayarlayarak XML-RPC sunucusunu açmanız gerekir.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Gelişmiş e-posta özelliklerini kullan"><![CDATA[
+<h2>Gelişmiş e-posta özelliklerini kullan</h2>
+<p>Bu ayarı ‘Hayır’ olarak set etmek, hesap parola sıfırlama istekleri ve com_connect gibi eklentilerden gelen e-posta dahil tüm e-postaları PHP'nin <code>mail()</code> işlevi üzerinden yönlendirir. ‘Evet’ seçmek ise, paketle gelen PHPMailer'ı kullanır; bu da e-postayı harici SMTP sunucuları üzerinden yönlendirmek için isteğe bağlı ayarların kullanılmasını sağlar.</p>
+<p>Özellikle Gmail, Outlook, Yahoo! vb. çevrimiçi sağlayıcılarda e-posta teslimatında sorun yaşıyorsanız, muhtemel sebep alan adınızın güvenilir bir kaynak olarak görülmemesidir. ‘Evet’e geçmek teslimatı iyileştirebilir. Ayrıca SMTP kullanımı, bazı e-posta sağlayıcılarıyla uyumluluğu artırabilir ve teslim edilebilirliği daha da iyileştirebilir.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Günlükler kaç gün sonra silinsin?"><![CDATA[
+<h2>Günlükler kaç gün sonra silinsin?</h2>
+<p>Textpattern günlüğe kaydı etkinleştirildiğinde, günlüklerin ne kadar süreyle (gün olarak) saklanacağını belirleyebilirsiniz. Örneğin ‘7’, günlüklerin yedi gün boyunca erişilebilir olmasını sağlar.</p>
+<p><strong>Not:</strong> Günlükler yalnızca ‘Ziyaretçi günlükleri’ panelini görüntülediğinizde kırpılır; aksi takdirde boyut olarak büyümeye devam ederler.</p>
+        ]]></item>
+        <item id="file_base_path" title="Dosya dizini yolu"><![CDATA[
+<h2>Dosya dizini yolu</h2>
+<p>Bu, dosya yüklemelerinin kalıcı olarak kaydedileceği dizinin <strong>mutlak yolunu</strong> ayarlar. PHP'nin bu dizine yazma erişimine sahip olması gerekir.</p>
+<p><strong>Not:</strong> Ek güvenlik için bu dizini sitenizin herkese açık docroot'unun dışına taşımayı düşünün.</p>
+        ]]></item>
+        <item id="file_download_header" title="Dosya indirme üstbilgisi"><![CDATA[
+<h2>Dosya indirme üstbilgisi</h2>
+<p>Dosya indirmelerin nasıl işleneceğini özelleştirmenize olanak tanır.</p>
+<p>Normalde, tüm indirmeler ek dosya (attachment) olarak ele alınır ve indirilir (tarayıcınızın bu dosya türünü nasıl işleyecek biçimde yapılandırıldığına bağlı olarak). Bazı ya da tüm dosya türlerinin nasıl ele alınmasını tercih ettiğiniz konusunda ipuçları vermek isterseniz, bunu yapmak için buraya etiket kodu sağlayabilirsiniz. Örneğin, Textpattern kategorisi 'inline-pdf' olan PDF dosyalarını indirmek yerine satır içi görüntülemek isteyebilirsiniz:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Yüklemelerin azami dosya boyutu (bayt olarak)"><![CDATA[
+<h2>Yüklemelerin azami dosya boyutu (bayt olarak)</h2>
+<p>Dosya yüklemeleri için azami boyutu (bayt cinsinden) sınırlayabilirsiniz. Bu değerin, PHP yapılandırması tarafından da sınırlandığını unutmayın. Textpattern, PHP yapılandırmanızın yükleme boyutunu daha düşük bir değere sınırladığını algılarsa, değeri otomatik olarak aşağıya çeker. Tarayıcıdan yükleme yoluyla daha büyük dosya yüklemelerine izin vermek istiyorsanız, barındırıcınızla iletişime geçin (ilgili <code>php.ini</code> değerleri <code>post_max_size</code>, <code>upload_max_filesize</code> ve <code>memory_limit</code>’tir).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Saat dilimi"><![CDATA[
+<h2>Saat dilimi</h2>
+<p>Tarihlerin yerel saat diliminizde görüntülenebilmesi için lütfen saat diliminizi seçin.</p>
+        ]]></item>
+        <item id="img_dir" title="Görsel dizini"><![CDATA[
+<h2>Görsel dizini</h2>
+<p>Görsel dizininizin adını özelleştirmek isterseniz, bunu burada yapabilirsiniz. Önce Textpattern kurulumunuzun kök dizininde bu dizini oluşturmalı ve PHP'nin bu dizine yazabildiğinden emin olmalısınız.</p>
+<p>Bu yol her zaman, Textpattern kurulumunuzun kök dizinine göre bir <strong>göreli yoldur</strong>.</p>
+<p>Varsayılan değer <code>images</code>’tır.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Atom beslemelerine e-posta adresi dahil edilsin mi?"><![CDATA[
+<h2>Atom beslemelerine e-posta adresi dahil edilsin mi?</h2>
+<p>Bu seçenek, bir makalenin yazarının (kullanıcı hesabında ayarlanan) e-posta adresinin, Atom beslemelerinizin <code>author</code> kısmına dahil edilmesine izin verir.</p>
+        ]]></item>
+        <item id="is_dst" title="Yaz saati uygulaması etkin mi?"><![CDATA[
+<h2>Yaz saati uygulaması etkin mi?</h2>
+<p>Bulunduğunuz saat diliminde yaz saati uygulamasının (DST – Daylight Saving Time) şu anda etkin olup olmadığını belirtir.</p>
+        ]]></item>
+        <item id="logging" title="Günlük tutma"><![CDATA[
+<h2>Günlük tutma</h2>
+<p>Textpattern'in ziyaretçi günlük tutma düzeyini seçebilirsiniz:</p>
+<ul>
+    <li><strong>Tüm isabetler:</strong> Textpattern sitenizdeki tüm sayfa görüntülemelerini günlüğe kaydeder</li>
+    <li><strong>Yalnızca yönlendirenler:</strong> Textpattern yalnızca diğer sitelerden yönlendirilen ziyaretleri günlüğe kaydeder</li>
+    <li><strong>Hiçbiri:</strong> Textpattern hiçbir sayfa görüntülemesini günlüğe kaydetmez</li>
+</ul>
+<p>Textpattern 4.7.0 sürümünden itibaren, ziyaretçi IP adresi bilgileri Textpattern tarafından toplanmaz veya saklanmaz. IP adreslerini Textpattern dışında topluyor veya saklıyorsanız, lütfen bu verileri <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> gibi yürürlükteki yasalara uygun biçimde saklamak ve/veya kullanmak için gerekli önlemleri alın ve bu verilerin tehlikeye girmesini önlemek için sunucunuzun ve Textpattern kurulumunuzun her yönünde güçlü güvenlik uygulayın.</p>
+<p>Bu ayarı, bu bilgiye mutlak surette ihtiyaç duymadığınız ve ayrıca kullanım amacınızı açıkça belirtmediğiniz sürece, varsayılan değer olan ‘Hiçbiri’nde bırakmanız şiddetle tavsiye edilir.</p>
+        ]]></item>
+        <item id="max_url_len" title="Azami URL uzunluğu (karakter olarak)"><![CDATA[
+<h2>Azami URL uzunluğu (karakter olarak)</h2>
+<p>Bu ayar, belirtilen uzunluktan daha uzun URL'lerin çalışmasını engeller. Zarar sınırlama ve site güvenliği açısından yardımcı olabilir.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Yönetim tarafında satır içi yardım bağlantılarını göster"><![CDATA[
+<h2>Yönetim tarafında satır içi yardım bağlantılarını göster</h2>
+<p>Sistem genelinde yönetim tarafı satır içi yardım bağlantılarını (Textpattern yardım açılır pencereleri) gizlemek isterseniz, bu ayarı ‘Hiçbiri’ olarak değiştirin.</p>
+        ]]></item>
+        <item id="never_display_email" title="Yorum yazanın e-posta adresi gizlensin mi?"><![CDATA[
+<h2>Yorum yazanın e-posta adresi gizlensin mi?</h2>
+<p>Bu ayar, bir yorum yazarının e-posta adresinin herkese açık gösterilip gösterilmeyeceğini denetler.</p>
+<p>Kullanıcılarınıza saygı gereği e-posta adreslerinin gösterilmemesi önerilir; ancak yorum yazanların e-posta adreslerini göstermenin arzu edildiği bazı durumlar olabilir.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="E-postalarda ISO-8859-1 kodlaması kullanılsın mı (varsayılan UTF-8)?"><![CDATA[
+<h2>E-postalarda ISO-8859-1 kodlaması kullanılsın mı (varsayılan UTF-8)?</h2>
+<p>Textpattern, varsayılan olarak mümkün olduğunca UTF-8 kodlaması kullanır; buna giden e-postalar da dahildir. Ancak bazı eski e-posta istemcileri (bazı Microsoft Outlook sürümleri dahil) UTF-8 desteğine tam sahip değildir. E-postalarda bozulmuş karakterlerle karşılaşırsanız, bu ayar metni göndermeden önce ISO-8859-1 kodlamasına dönüştürür.</p>
+<p><strong>Not:</strong> Karakterleri ISO-8859-1 ile temsil edilemeyen bir dil kullanıyorsanız, bu ayar maalesef size yardımcı olmaz. Bunun yerine UTF-8 (veya Unicode) uyumlu bir e-posta istemcisi bulmaya çalışmalısınız.</p>
+        ]]></item>
+        <item id="override_form_types" title="Form türlerini geçersiz kıl"><![CDATA[
+<h2>Form türlerini geçersiz kıl</h2>
+<p>Yaz panelinde, geçersiz kılma formları olarak şablonları kullanılabilir hâle getirilecek form türlerini seçin.</p>
+        ]]></item>
+        <item id="permlink_format" title="Kalıcı bağlantı başlık URL kalıbı"><![CDATA[
+<h2>Kalıcı bağlantı başlık URL kalıbı</h2>
+<p>Bu ayar, karışık olmayan bir mod kullanıldığında, makale URL'lerinin hangi yöntemle oluşturulup atandığını tanımlar.</p>
+<p>Bir makale yayımlandığında, URL'si, URL’ye özel başlık alanında belirli bir URL sağlanmadığı sürece makale başlığından üretilir.</p>
+<p>Şu örnek makale başlığını ele alalım: <em>Ann and Bob eat cake</em></p>
+<p>Kalıcı bağlantı başlık URL kalıbı seçeneği ‘Tireli (title-like-this)’ olarak ayarlandığında, makalenin URL'si şöyle olur:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Kalıcı bağlantı başlık URL kalıbı seçeneği ‘Birleşik Baş Harfli (TitleLikeThis)’ olarak ayarlandığında, makalenin URL'si şöyle olur:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Makale URL kalıbı"><![CDATA[
+<h2>Makale URL kalıbı</h2>
+<p>Bu ayar, <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> etiketi <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanılarak görüntülenen URL üzerinden tekil makalelere hangi yöntemle erişileceğini tanımlar.</p>
+<p>‘?=messy’ modu en uyumlu olandır – çok az veya hiç yapılandırma gerektirmeden çalışır – ancak URL okunabilirliği ve arama motoru optimizasyonu (SEO) açısından en az faydalıdır. Bu modda sitenizdeki makale URL'leri şöyle görünür:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Diğer tüm modlar, web sunucusunun URL yeniden yazma işlevselliğini gerektirir (örneğin, Apache <code>mod_rewrite</code> veya <code>server</code> bloğundaki NGINX rewrite yönergeleri). Sunucunuz URL yeniden yazma işlevselliğini desteklemiyorsa, barındırıcınızla iletişime geçin veya yukarıda açıklanan ‘?=messy’ modunu kullanın.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Eklenti önbellek dizini yolu"><![CDATA[
+<h2>Eklenti önbellek dizini yolu</h2>
+<p>Bu ayar esas olarak eklenti geliştiricileri için kullanılır. Belirtildiğinde, eklentinin kaynak dosyasını (derlenmemiş) bu dizine koyabilir ve Textpattern'in onu otomatik olarak yüklemesini sağlayabilirsiniz; böylece eklentiyi kolayca düzenleyebilir ve eklentiyi kurup/etkinleştirmek zorunda kalmadan etkisini anında görebilirsiniz. Ancak <strong>şuna dikkat edin</strong>: Bu yöntemi kullanmak, derlenemeyen (bozuk) bir eklentinin Textpattern'i de bozmasına neden olabilir!</p>
+<p>Üretim sitesinde, eklentileri eklenti önbellek dizini yerine standart ‘Eklentiler’ paneli üzerinden yüklemeniz önerilir.</p>
+<p><strong>Not:</strong> ‘Geçici’ ve ‘eklenti önbelleği’ için aynı dizini belirtmeyin; bu sorunlara neden olur (Textpattern, geçici günlük dosyalarının içeriğini eklenti olarak çalıştırmaya çalışır).</p>
+        ]]></item>
+        <item id="production_status" title="Üretim durumu"><![CDATA[
+<h2>Üretim durumu</h2>
+<p>Bir Textpattern sitesinin üç moddan biri vardır:</p>
+<ol>
+    <li>‘Hata ayıklama’</li>
+    <li>‘Test’</li>
+    <li>‘Canlı’</li>
+</ol>
+<h3>Hata ayıklama modu</h3>
+<p>Canlı sitenizdeki tüm PHP hata raporlaması, hatalı kod ve eklentilerle ilgili uyarılarla birlikte görünür olur. Buna ek olarak, canlı sayfaların HTML kaynağını görüntülediğinizde şu bilgiler görünür:</p>
+<ul>
+    <li>sunucunun sayfayı oluşturmasının ne kadar sürdüğü (‘Çalışma süresi’)</li>
+    <li>çalıştırılan MySQL sorgularının sayısı</li>
+    <li>yaklaşık en yüksek bellek kullanımı</li>
+    <li>sayfa oluşturulurken karşılaşılan tüm Textpattern etiketleri (etiket izi olarak da bilinir)</li>
+</ul>
+<h3>Test modu</h3>
+<p>Canlı sitenizdeki tüm PHP hata raporlaması, hatalı kod ve eklentilerle ilgili uyarılarla birlikte görünür olur. Canlı sayfaların HTML kaynağını görüntülediğinizde aşağıdaki bilgiler görünür:</p>
+<ul>
+    <li>sunucunun sayfayı oluşturmasının ne kadar sürdüğü (‘Çalışma süresi’)</li>
+    <li>çalıştırılan MySQL sorgularının sayısı</li>
+    <li>yaklaşık en yüksek bellek kullanımı</li>
+</ul>
+<h3>Canlı modu</h3>
+<p>Hiçbir hata raporlama veya tanılama bilgisi sayfaya gönderilmez. Genel olarak canlı mod tercih edilir; çünkü en iyi kullanıcı deneyimini sunar ve sunucu üzerinde en az yükü oluşturur.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Ön yüz teması"><![CDATA[
+<h2>Ön yüz teması</h2>
+<p>Genel web sitenizi ziyaret eden herkes için kullanılacak varsayılan ön yüz teması. Textpattern ile birlikte, bir tema olmadan başlama seçeneğine ek olarak, önceden kurulmuş bir varsayılan tema da gelir. Ayrıca, kullanıma hazır hâle getirmek için tema paketlerini <code>textpattern/themes</code> dizinine ekleyebilirsiniz.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Süresi dolmuş makaleler yayımlansın mı?"><![CDATA[
+<h2>Süresi dolmuş makaleler yayımlansın mı?</h2>
+<p>‘Evet’ olarak ayarlandığında, süresi dolmuş makaleler, bitiş tarihleri geçtikten sonra da sitenizde görünmeye devam eder. Süresi dolmuş makaleler için alternatif içerik veya biçimlendirme göstermek için <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> etiketini <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> kullanabilirsiniz.</p>
+<p>‘Hayır’ olarak ayarlandığında, süresi dolmuş makaleler genel siteden kaldırılır ve bunun yerine "410 Gone" HTTP durumu döner. Varsayılan ayar ‘Hayır’dır.</p>
+        ]]></item>
+        <item id="publisher_email" title="Giriş bilgileri bu e-posta adresinden gönderilsin"><![CDATA[
+<h2>Giriş bilgileri bu e-posta adresinden gönderilsin</h2>
+<p>Yeni kullanıcıların giriş bilgilerinin gönderildiği iletilerde, gönderenin ‘From:’ adresi olarak kullanılacak e-posta adresini belirtin.</p>
+<p>Bu tercih boş bırakılırsa ya da geçersiz bir e-posta adresi içerirse, Textpattern bunun yerine oturum açmış kullanıcının adını ve adresini kullanır.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Beslemelere kaç makale dahil edilmeli?"><![CDATA[
+<h2>Beslemelere kaç makale dahil edilmeli?</h2>
+<p>Bu, RSS ve Atom biçimlerinde bir seferde yayımlanacak en fazla güncel makale sayısıdır.</p>
+<p><code>5</code> ile <code>15</code> arasında düşük bir değer önerilir.</p>
+        ]]></item>
+        <item id="secondpass" title="Ek ayrıştırıcı tarama sayısı"><![CDATA[
+<h2>Ek ayrıştırıcı tarama sayısı</h2>
+<p>Textpattern etiket ayrıştırıcısı, genelde tüm etiketlerinizi sayfa şablonunun tek bir taramasında veritabanındaki içeriklerle değiştirir. Bazı durumlarda bu yeterli olmayabilir; örneğin:</p>
+<ul>
+    <li>Düşük yükleme sırasına sahip eklentiler etiket öznitelikleri olarak kullanıldığında</li>
+    <li><code>&lt;txp:php&gt;</code> etiketleri içindeki kod değişimleri</li>
+    <li>Sayfanın daha sonra işlenen bir etiketten türetilen içeriği alabilecekleri bölümlerini atlayıp daha sonra doldurmak istediğinizde</li>
+</ul>
+<p>Textpattern, geçmiş nedenlerden ötürü geleneksel olarak bir tane fazladan tarama (‘secondpass’ olarak adlandırılır) çalıştırmıştır; bu nedenle bu tercihin varsayılan değeri <code>1</code>’dir. Ancak daha fazla tarama, istenmeyen etiketlerin de yakalanıp işlenme olasılığını artırır. Ayrıştırıcıdaki son iyileştirmeler, bu ikinci taramaya duyulan ihtiyacı azaltmıştır. Bu nedenle, ikinci taramayı özel bir nedenle kullanmıyorsanız, sitenizi daha güvenli hâle getirmek için bu değeri <code>0</code>’a düşürün.</p>
+<p>Sonrasında sitenizde işlenmemiş etiketlerin görüntülendiğini fark ederseniz (ve etiket çiftlerinin uyuşmaması nedeniyle Test/Hata Ayıklama modlarında gösterilen başka etiket hataları yoksa), lütfen sayfa şablonunuz/kodunuz/eklenti örneğiniz ile bizimle iletişime geçin. Ek ayrıştırıcı geçişlerine duyulan ihtiyacı ortadan kaldırmaya çalışıyoruz ve bu bilgiler bunu başarmamıza yardımcı olacaktır.</p>
+        ]]></item>
+        <item id="send_lastmod" title="&quot;Last-Modified&quot; üstbilgisi gönderilsin mi?"><![CDATA[
+<h2>"Last-Modified" üstbilgisi gönderilsin mi?</h2>
+<p>Bu ayar etkinleştirildiğinde, Textpattern bir ziyaretçinin HTTP <code>If-Modified-Since</code> üstbilgisini (varsa) okur ve son site güncellemesiyle karşılaştırır. Ziyaretçi sayfayı en son yüklediğinden beri hiçbir şey değişmemişse (yani tarayıcının gönderdiği zaman damgası son site güncellemesiyle aynıysa), ziyaretçinin tarayıcısına sayfanın önbelleğe alınmış sürümünü kullanmasını söyleyen bir üstbilgi gönderilir.</p>
+<p>Bu, bant genişliği tüketimini, sayfa yükleme sürelerini ve web sunucusunun yükünü azaltabilir.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Beslemelerde yorum sayısı gösterilsin mi?"><![CDATA[
+<h2>Beslemelerde yorum sayısı gösterilsin mi?</h2>
+<p>‘Evet’ olarak ayarlandığında, bu ayar RSS/Atom beslemelerinizde makale başlıklarına yorum sayısını ekler.</p>
+        ]]></item>
+        <item id="site_slogan" title="Site sloganı"><![CDATA[
+<h2>Site sloganı</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Site sloganı <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a>, sitenizin bir özeti veya açıklamasıdır. Gerektiğinde sitenizin açıklaması olarak kullanılacak, örneğin RSS/Atom beslemelerinizde ve takdirinize bağlı olarak sitenizin farklı yerlerinde kullanılabilecektir.</p>
+<p><strong>Not:</strong> Site sloganı isteğe bağlıdır; ancak geçerli bir RSS veya Atom beslemesi için gerekli olabilir.</p>
+        ]]></item>
+        <item id="sitename" title="Site adı"><![CDATA[
+<h2>Site adı</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Sitenizin adı veya başlığıdır <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a>. Ziyaretçinin tarayıcısının başlık çubuğunda veya besleme okuyucusunda ve takdirinize bağlı olarak sitenizin farklı yerlerinde görüntülenir.</p>
+        ]]></item>
+        <item id="siteurl" title="Site URL'si"><![CDATA[
+<h2>Site URL'si</h2>
+<p>Bu, Textpattern sitenizin adresidir; örneğin <code>www.example.com</code>.</p>
+<p><strong>Not:</strong> <code>http://</code>, <code>https://</code> veya sonda eğik çizgi <code>/</code> gerekmez.</p>
+        ]]></item>
+        <item id="skin_dir" title="Tema dizini"><![CDATA[
+<h2>Tema dizini</h2>
+<p>Ön yüz temalarının düz dosyalarının kalıcı olarak kaydedileceği dizinin adını özelleştirmek isterseniz, bunu burada yapabilirsiniz. Önce Textpattern kurulumunuzun kök dizininde bu dizini oluşturmalı ve PHP'nin bu dizine yazabildiğinden emin olmalısınız.</p>
+<p>Bu yol her zaman, Textpattern kurulumunuzun kök dizinine göre bir <strong>göreli yoldur</strong>.</p>
+<p>Varsayılan değer <code>themes</code>’tir.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP zarf gönderen adresi"><![CDATA[
+<h2>SMTP zarf gönderen adresi</h2>
+<p>Bu tercihi, Textpattern'de e-posta gönderirken (hiç e-posta gönderilmiyorsa) sorun yaşamıyorsanız boş bırakmalısınız. Böyle bir sorun ortaya çıkarsa, buraya istediğiniz herhangi bir geçerli e-posta adresini girebilirsiniz; ancak tercihen Textpattern'i kurduğunuz web sitesinin alan adıyla aynı alan adına sahip olmalıdır (örneğin, web siteniz <code>https://example.com</code> ise <code>you@example.com</code> kullanabilirsiniz).</p>
+<p>Teknik ayrıntılarla ilgilenenler için:</p>
+<ul>
+    <li>UNIX-benzeri/macOS sunucularda girilen e-posta adresi, PHP <code>mail()</code> işlevi için 4. parametre ("-f" önekiyle) olarak kullanılır</li>
+    <li>Windows sunucularda girilen e-posta adresi, <code>sendmail_from</code> php.ini ayarını yapılandırmak (veya geçersiz kılmak) için kullanılır</li>
+</ul>
+<p>Bu, SMTP zarf gönderen adresinin (e-postalarda normalde gördüğünüz "From:" üstbilgisiyle aynı olmak zorunda değildir), burada girdiğiniz e-posta adresiyle ayarlandığını ve bunun bazı web sunucularında e-posta göndermek için bir gereklilik olduğunu garanti eder.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP sunucusu"><![CDATA[
+<h2>SMTP sunucusu</h2>
+<p>İleti teslimini iyileştirmek ve e-postayı (SendGrid, AWS SES, Mailchimp, Mailgun vb.) gibi harici bir hizmet üzerinden yönlendirmenin avantajlarından yararlanmak için SMTP sunucusunu burada belirtin. Bu değeri edinmek için SMTP sağlayıcınıza danışın.</p>
+<p>Bu değer, <code>config.php</code> dosyasında bir <code>SMTP_HOST</code> sabiti tanımlanarak da sağlanabilir; bu durumda Tercihler panelinde değer gri renkte ve düzenlenemez olur.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP parolası"><![CDATA[
+<h2>SMTP parolası</h2>
+<p>SMTP bağlantınız, belirtilen kullanıcı adı için parola gerektiriyorsa, parolayı buraya girin. Ayrıntılar için sağlayıcınızın dokümantasyonuna bakın.</p>
+<p>Not: Parola burada görüntülenmese de, veritabanındaki prefs tablosunda düz metin olarak <em>saklanır</em>. Güvenliği artırmak isterseniz, bunun yerine <code>config.php</code> dosyanızda bir <code>SMTP_PASS</code> sabiti tanımlayabilirsiniz.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP bağlantı noktası"><![CDATA[
+<h2>SMTP bağlantı noktası</h2>
+<p>Bir SMTP sunucusu belirlediyseniz, SMTP yönlendirmesini etkinleştirmek için bir bağlantı noktası belirtmeniz gerekir. Yaygın bağlantı noktaları şunlardır:</p>
+<ul>
+    <li>25 - güvenli olmayan posta için</li>
+    <li>465 - güvenli posta için eski (resmi olmayan)</li>
+    <li>587 - güvenli TLS e-posta için varsayılan (önerilir)</li>
+</ul>
+<p>Seçtiğiniz SMTP sağlayıcısı farklı bir bağlantı noktası kullanabilir; bu nedenle belgelerine bakın.</p>
+<p>Bu değer, <code>config.php</code> dosyasında bir <code>SMTP_PORT</code> sabiti tanımlanarak da sağlanabilir; bu durumda Tercihler panelinde değer gri renkte ve düzenlenemez olur.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP güvenlik yöntemi"><![CDATA[
+<h2>SMTP güvenlik yöntemi</h2>
+<p>SMTP sağlayıcınızın e-posta güvenlik protokolü olarak kullandığı mekanizmayı seçin. Ayrıntılar için dokümantasyonlarına bakın.</p>
+<p>Bu değer, <code>config.php</code> dosyasında bir <code>SMTP_SECTYPE</code> sabiti tanımlanarak da sağlanabilir; bu durumda Tercihler panelinde değer gri renkte ve düzenlenemez olur.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP kullanıcı adı"><![CDATA[
+<h2>SMTP kullanıcı adı</h2>
+<p>SMTP bağlantınız bir kullanıcı/ad giriş adı gerektiriyorsa, bunu burada belirtin. Ayrıntılar için sağlayıcınızın dokümantasyonuna bakın.</p>
+<p>Bu değer, <code>config.php</code> dosyasında bir <code>SMTP_USER</code> sabiti tanımlanarak da sağlanabilir; bu durumda Tercihler panelinde değer gri renkte ve düzenlenemez olur.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spam kara listeleri (virgülle ayrılmış)"><![CDATA[
+<h2>Spam kara listeleri (virgülle ayrılmış)</h2>
+<p>Buraya girilen <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">kara liste <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> sağlayıcıları, blogunuza bir yorum gönderildiğinde sorgulanır ve yorum gönderenin IP adresi denetlenir. IP adresi listede yer alıyorsa, bu IP'den geçmişte bir veya daha fazla istenmeyen ileti raporu yapılmıştır ve yorum reddedilir. Denetim sonucundan bağımsız olarak, yorum gönderenin IP adresi Textpattern tarafından saklanmaz.</p>
+<p>Buraya, virgülle ayrılmış bir alan adı listesi girebilirsiniz. Kara listelerin amacınıza uygun olduğundan emin olmanın sizin sorumluluğunuzda olduğunu unutmayın.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Yalnızca makale alıntısı yayımlansın mı?"><![CDATA[
+<h2>Yalnızca makale alıntısı <strong>yayımlansın</strong> mı?</h2>
+<p>Bu ayar ‘Hayır’ ise, besleme ögeleri tam makale gövdelerini içerir.</p>
+<p>Bu ayar ‘Evet’ ise, besleme ögeleri, mümkün olduğunda makale gövdesi yerine makale alıntısını içerir.</p>
+        ]]></item>
+        <item id="tempdir" title="Geçici dizin yolu"><![CDATA[
+<h2>Geçici dizin yolu</h2>
+<p>Geçici (bazen ‘tmp’ veya ‘temp’ olarak da bilinir) bir dizine ait <strong>mutlak yolu</strong> ayarlar. PHP'nin bu dizine yazma erişimine sahip olması gerekir. Bu dizin, eklentiler, dosyalar veya görseller gibi her türlü yükleme için kullanılan geçici dosyalar için kullanılır.</p>
+<p><strong>Notlar:</strong>
+<ul>
+    <li>‘Geçici’ ve ‘eklenti önbelleği’ için aynı dizini belirtmeyin; bu sorunlara yol açar (Textpattern, geçici günlük dosyalarının içeriğini eklenti olarak çalıştırmaya çalışır).</li>
+    <li>Ek güvenlik için bu dizini sitenizin herkese açık docroot'unun dışına taşımayı düşünün.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Yönetici tarafı teması"><![CDATA[
+<h2>Yönetici tarafı teması</h2>
+<p>Birinin Textpattern'e oturum açtığında kullanılacak varsayılan yönetici tarafı teması. Textpattern ile birlikte bir dizi önceden yüklenmiş yönetim teması gelir; ayrıca, kullanıma hazır hâle getirmek için özel tema paketlerini <code>textpattern/admin-themes</code> dizinine ekleyebilirsiniz.</p>
+        ]]></item>
+        <item id="trailing_slash" title="URL'lere sonda eğik çizgi ekle"><![CDATA[
+<h2>URL'lere sonda eğik çizgi ekle</h2>
+<p>Textpattern'in oluşturduğu URL'lere otomatik olarak sonda eğik çizgi ekleyip eklemeyeceğini belirler. Seçenekler:</p>
+<ul>
+    <li><strong>Hayır</strong> - Asla</li>
+    <li><strong>Liste</strong> - Yalnızca liste tabanlı açılış sayfalarında (yani tek tek makaleler görüntülenirken değil)</li>
+    <li><strong>Evet</strong> - Her zaman</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="txp:evaluate içinde etkinleştirilen PHP işlevleri"><![CDATA[
+<h2>txp:evaluate içinde etkinleştirilen PHP işlevleri</h2>
+<p>Bu, <code>function</code> veya <code>alias=function</code> ögelerinden oluşan virgülle ayrılmış bir listedir; örneğin <code>md5</code>, <code>replace=str_replace</code>. Bu listede belirtilen ögeler, <code>&lt;txp:evaluate /&gt;</code> etiketinin <code>query</code> özniteliğinde kullanılabilir:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code>, bir dizi/nesne <strong>değil</strong>, skaler bir değer döndürmelidir.</p>
+        ]]></item>
+        <item id="use_comments" title="Yorum kabul edilsin mi?"><![CDATA[
+<h2>Yorum kabul edilsin mi?</h2>
+<p>Bu ayar, Textpattern'in yorum işlevselliğinin etkin olup olmayacağını belirler.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Besleme kimliklerini oluşturmak için e-posta adresi kullanılsın mı (varsayılan site URL'si)?"><![CDATA[
+<h2>Besleme kimliklerini oluşturmak için e-posta adresi kullanılsın mı (varsayılan site URL'si)?</h2>
+<p>Bir Atom beslemesindeki ögelerin benzersiz bir kimliğe (ID) ihtiyacı vardır.</p>
+<p>Sitenize özgü kimlikler oluşturmak için Textpattern, bu kimliklere e-posta adresi veya alan adınızdan birini dahil etme arasında seçim yapmanıza izin verir. E-posta adresi, site oluşturulurken ilk kullanılan adres olacaktır. Gelecekte alan adınızı değiştirme olasılığınız yoksa, bu ayarı muhtemelen güvenle ‘Hayır’ olarak set edebilirsiniz.</p>
+        ]]></item>
+        <item id="use_plugins" title="Eklentiler kullanılsın mı?"><![CDATA[
+<h2>Eklentiler kullanılsın mı?</h2>
+<p>Bu ayar, tüm Textpattern eklenti desteğini kapatmanıza olanak tanır. Sitenizdeki hataları ayıklıyorsanız ve bir veya daha fazla eklentinin buna dahil olup olmadığını denetlemek istiyorsanız kullanışlıdır.</p>
+        ]]></item>
+        <item id="use_textile" title="Varsayılan metin biçimlendirmesi"><![CDATA[
+<h2>Varsayılan metin biçimlendirmesi</h2>
+<p>Burada seçtiğiniz metin biçimlendirici, ‘Yaz’ panelinde alıntı ve gövde biçimlendirmesi için varsayılan olur. Tam Textile işleme yapılmasına, satır sonlarının HTML paragraf imlerine dönüştürülmesine ya da hiçbir metnin dönüştürülmemesine izin verebilirsiniz.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a>, düz metni HTML'ye dönüştürmeyi kolaylaştırmayı amaçlayan bir yardımcı araçtır. Etkinleştirildiğinde Textile, makalelerin gövde metnini işler ve yapısal olarak sağlam HTML döndürür.</p>
+<p>Textile, metni biçimlendirmek, listeler, başlıklar ve alıntı blokları gibi yapılar tanımlamak ve bağlantılar ile görseller eklemek için güçlü, ancak öğrenmesi kolay bir komut kümesi de sunar.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Bölümler paneli">
-        <item id="section_category" title="Giriş"><![CDATA[]]></item>
-        <item id="section_default" title="Varsayılan yayın bölümü"><![CDATA[]]></item>
-        <item id="section_description" title="Açıklama"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title="Bu bölüm site aramalarına dahil edilsin mi?"><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title="Kullanılan stil"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Kullanılan sayfa"><![CDATA[]]></item>
+        <item id="section_category" title="Giriş"><![CDATA[
+<h2>Giriş</h2>
+<p>Textpattern'deki bölümleri, bir gazetede bulunan bölümlere benzetmek en doğrusudur; her biri aynı yayına aittir ama her birinde farklı bir yerleşim, farklı bir makale türü vb. olabilir.</p>
+<p>Çoğu web sitesi için yalnızca asgari sayıda bölüm oluşturmak gerekir.</p>
+<h3>Üç bölümlü bir web sitesi için olası bir senaryo:</h3>
+<ol>
+    <li><strong>Arşiv:</strong> Ön sayfada görünen tüm makalelerin ait olduğu ‘Bölüm’dür. Bir okuyucu bir makalenin kalıcı bağlantısına tıkladığında, makale bu ‘Bölüm’e atanan sayfa yerleşimi ile görüntülenir. "Archive" bölümüne atanmış en yeni makalelerin sayfalandırılmış listesine gitmek için URL <code>https://example.com/archive/</code> olur.</li>
+    <li><strong>Hakkında:</strong> Ön sayfadan ve "Arşiv" bölümünden farklı olan, ‘bu site hakkında’ sayfasıdır; daha durağandır, farklı bir yerleşime sahip olabilir ve büyük olasılıkla yalnızca bir makale içerir. ‘Hakkında’ bölümüne <code>https://example.com/about/</code> adresinden ulaşılır.</li>
+    <li><strong>Fotoğraflar:</strong> Farklı yerleşimiyle (ve muhtemelen farklı CSS ile) makaleler yerine fotoğrafları görüntüleyen bir ‘Bölüm’dür.</li>
+</ol>
+<p>Varsayılan adlı, özel ve gizli bir bölümün her zaman var olduğunu unutmayın. Bu varsayılan bölüm, varsayılan adlı sayfayı ve varsayılan adlı stili kullanır ve sitenizin ön sayfasını oluşturur.</p>
+        ]]></item>
+        <item id="section_default" title="Varsayılan yayın bölümü"><![CDATA[
+<h2>Varsayılan yayımlama bölümü</h2>
+<p>Bu seçenek, yeni bir makale oluştururken ‘Yaz’ panelindeki Bölüm menüsünde önceden seçili olacak bölümü belirler.</p>
+<p>Makalenizin çoğu belirli bir bölüme aitse, onu buradaki listeden seçin. Değişiklikler hemen yansıtılır.</p>
+<p>‘Yaz’ panelinde ‘Sırala ve göster’ bölmesinde farklı bir bölüm seçerek bunu makale bazında geçersiz kılabilirsiniz.</p>
+        ]]></item>
+        <item id="section_description" title="Açıklama"><![CDATA[
+<h2>Açıklama</h2>
+<p>Bölüm açıklaması, arama motorlarının ve web tarayıcılarının içeriği daha iyi tanımlamasına ve sıralamasına yardımcı olabilecek isteğe bağlı bir bileşendir.</p>
+<p>Makale açıklaması en fazla 255 karakterle sınırlıdır. Bazı arama motorlarının, arama sonuçları sayfalarında (SERP'ler) gösterim kolaylığı için bir sayfanın <code>meta description</code> uzunluğuna karakter sınırı koyduğunu ve bunun Textpattern'deki 255 karakter sınırından daha az olabileceğini unutmayın.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Bölüm makaleleri ön sayfada görünsün mü?"><![CDATA[
+<h2>Bölüm makaleleri ön sayfada görünsün mü?</h2>
+<p>Bazı bölümlerdeki makaleler, daha ‘durağan’ web sayfalarına benzediğinden, sitenizin ön sayfasındaki zamana duyarlı akışa uymayabilir.</p>
+<p>Bunu ‘Hayır’ olarak ayarlamak, bu bölüme atanmış makalelerin ön sayfada görünmesini engeller.</p>
+        ]]></item>
+        <item id="section_searchable" title="Bu bölüm site aramalarına dahil edilsin mi?"><![CDATA[
+<h2>Bu bölüm site aramasına dahil edilsin mi?</h2>
+<p>Bu ayar, bu bölüme ait makalelerin site genelindeki arama sonuçlarında görünüp görünmeyeceğini belirler.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Bu bölümdeki makaleler için besleme oluşturulsun mu?"><![CDATA[
+<h2>Bu bölümdeki makaleler için besleme oluşturulsun mu?</h2>
+<p>Bu ayar, bu bölümdeki makalelerin sitenin RSS ve Atom beslemelerinde görünüp görünmeyeceğini belirler.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Kullanılan stil"><![CDATA[
+<h2>Kullanılan stil</h2>
+<p>Belirli bir bölüm için varsayılan stil sayfasını geçersiz kılmak isterseniz, bunu burada ayarlayabilirsiniz.</p>
+<p>Bu yalnızca Textpattern ‘Stiller’ panelinde tutulan stil sayfaları için geçerlidir; CSS'yi Textpattern dışındaki bir yerde barındırıyorsanız (şiddetle önerilir), bu seçeneğin etkisi olmaz.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Kullanılan sayfa"><![CDATA[
+<h2>Kullanılan sayfa</h2>
+<p>Textpattern'de bölümler, sayfa şablonlarıyla eşleştirilir.</p>
+        ]]></item>
         <item id="section_uses_skin" title="Kullanılan tema"><![CDATA[
 <h2>Kullanılan tema</h2>
 <p>Eğer belirli bi bölüm için kullanılan temayı değiştirmek istiyorsanız, önceden yüklenmiş temaların listesinden seçerek buradan ayarlayabilirsiniz.</p>
@@ -292,22 +1104,95 @@
     </group>
 
     <group id="setup" title="Kurulum paneli">
-        <item id="setup_user_login" title="Kullanıcı girişi"><![CDATA[]]></item>
-        <item id="setup_user_pass" title="Kullanıcı parolası"><![CDATA[]]></item>
-        <item id="table_prefix" title="Tablo öneki"><![CDATA[]]></item>
+        <item id="setup_admin_url" title="Yönetim alt alan adı"><![CDATA[
+<h2>Yönetim alt alan adı</h2>
+<p>Textpattern yönetim arayüzüne erişmek için kullanmak istediğiniz alt alan adı (örneğin <code>admin.example.com</code>).</p>
+<p>Daha fazla ayrıntı için lütfen <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern çoklu site kurulumu</a> dokümantasyonuna bakın.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Çerez alan adı"><![CDATA[
+<h2>Çerez alan adı</h2>
+<p>Textpattern çerez(ler)i için kullanmak istediğiniz (alt) alan adı.</p>
+<p>Daha fazla ayrıntı için lütfen <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern çoklu site kurulumu</a> dokümantasyonuna bakın.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Kullanıcı girişi"><![CDATA[
+<h2>Kullanıcı girişi</h2>
+<p>Sitenizi yönetmek için kullanacağınız yönetici (‘Yayıncı’) hesabının oturum açma adı.</p>
+<p>Ad için herhangi bir kısıtlama olmamasına rağmen, karmaşık karakter dizilerinden ve kolayca tahmin edilebilir kullanıcı adlarından (örneğin <code>admin</code>, <code>administrator</code> vb.) kaçınmak en iyisidir.</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Kullanıcı parolası"><![CDATA[
+<h2>Kullanıcı parolası</h2>
+<p>Bu hesap Textpattern'de en yüksek düzeyde erişime sahip olduğundan, çok güçlü bir parola veya tercihen bir parola tümcesi seçin.</p>
+<h3>İpuçları</h3>
+<ul>
+    <li>Büyük ve küçük harfleri karışık kullanın</li>
+    <li>Sayı kullanın</li>
+    <li>Sembol kullanın</li>
+    <li>En az sekiz karakter uzunluğunda yapın</li>
+    <li><strong>Kaçının:</strong> her türlü kişisel bilgiden (tarihler, adlar, yerler, aile üyeleri, evcil hayvanlar vb.)</li>
+    <li><strong>Kaçının:</strong> tek başına veya tekrarlanan sözlük sözcüklerinden; yazımı, dili veya harf büyüklüğü ne olursa olsun</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tablo öneki"><![CDATA[
+<h2>Tablo öneki</h2>
+    <p>Veritabanında birden fazla Textpattern kurulumu gerekmiyorsa tablo öneki kullanmanıza gerek yoktur. Her Textpattern kurulumu benzersiz bir önek gerektirir.</p>
+    <p>Önekin aşağıdaki kurallara uyması gerektiğini unutmayın:</p>
+<ul>
+    <li><strong>1. karakter:</strong> a-z, A-Z veya alt çizgi olmalıdır</li>
+    <li><strong>Sonraki karakterler:</strong> yalnızca a-z, A-Z, 0-9 veya alt çizgi olabilir</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="skin" title="Temalar paneli">
-        <item id="skin_author" title="Tema yazarı"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="Tema web sitesi"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title="Tema açıklaması"><![CDATA[]]></item>
-        <item id="skin_import" title="Temayı içe aktar"><![CDATA[]]></item>
-        <item id="skin_name" title="Tema adı"><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
+        <item id="skin_author" title="Tema yazarı"><![CDATA[
+<h2>Tema yazarı</h2>
+<p>Bu temanın yazarı/yazarları (isteğe bağlı).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Tema web sitesi"><![CDATA[
+<h2>Tema web sitesi</h2>
+<p>Bu tema hakkında ayrıntılı bilginin ve/veya en güncel sürümlerin bulunabileceği URL (isteğe bağlı).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Tema şablonlarını diskten de sil"><![CDATA[
+<h2>Tema şablonlarını diskten de sil</h2>
+<p>Seçilirse, seçilen tema(lar)daki tüm şablon dosyaları kalıcı olarak diskten silinir. Ancak, bu dizinlerde başka dosyalar (JavaScript, görseller vb.) bulunduğu sürece temayla ilgili dizinler ve alt dizinler silinmez.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="İçe aktarma sırasında kullanılmayan şablonları veritabanından sil"><![CDATA[
+<h2>İçe aktarma sırasında kullanılmayan şablonları veritabanından sil</h2>
+<p>Seçilirse, seçilen tema(lar)daki ancak diskte karşılık gelen bir dosyası bulunmayan her şablon, veritabanından kalıcı olarak silinir. İşlem tamamlandıktan sonra veritabanındaki şablonlarınız, mümkün olduğunca disk üzerindeki durumla eşleşir.</p>
+<p>Textpattern'in ihtiyaç duyduğu şablon dosyalarını kaldırdıysanız, veritabanında sizin için boş sürümler oluşturulacağını unutmayın.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Dışa aktarma sırasında kullanılmayan şablonları diskten sil"><![CDATA[
+<h2>Dışa aktarma sırasında kullanılmayan şablonları diskten sil</h2>
+<p>Seçilirse, seçilen tema(lar)daki veritabanında karşılığı olmayan her bir şablon dosyası, kalıcı olarak disk tabanlı temadan silinir. İşlem tamamlandıktan sonra dosya sistemi şablonlarınız, veritabanındaki ile birebir uyuşur.</p>
+        ]]></item>
+        <item id="skin_description" title="Tema açıklaması"><![CDATA[
+<h2>Tema açıklaması</h2>
+<p>Bu tema tasarımı/düzeni hakkında kısa bir özet verilebilir (isteğe bağlı).</p>
+<p>Tema açıklaması en fazla 255 karakterle sınırlıdır.</p>
+        ]]></item>
+        <item id="skin_import" title="Temayı içe aktar"><![CDATA[
+<h2>Temayı diskten içe aktar</h2>
+<p>Bu form, temayı tema dizininizden Textpattern veritabanına içe aktarmanıza olanak tanır.</p>
+<p>İçe aktarılabilir bir tema, tema adının klasör adı olarak kullanıldığı okunabilir bir üst klasörden ve bu klasör içinde beklenen biçimde okunabilir bir <code>manifest.json</code> dosyasından oluşmalıdır. Tema klasörü ayrıca, aynı adlı alt klasörler içinde sayfaları, formları ve stilleri içermelidir.</p>
+<p>Sayfalar ve formlar <code>.txp</code> uzantısını kullanmalı, stil sayfaları ise <code>.css</code> dosyaları olmalıdır. Formlar ayrıca kendi türlerine göre ayrılmış özel klasörlerde gruplanmalıdır. Textpattern, içe aktarma sırasında eksik olan temel şablonları oluşturur.</p>
+<p>Textpattern CMS içinde tema oluşturma, kurma ve kullanma hakkında daha fazla bilgi için <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">tema dokümantasyonuna <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> bakın.</p>
+        ]]></item>
+        <item id="skin_name" title="Tema adı"><![CDATA[
+<h2>Tema adı</h2>
+<p>Bir temanın adı, tema dizin adı ve diğer teknik amaçlar için kullanılır (zorunlu).</p>
+<p>Ad, özel karakter veya boşluk içermemelidir.</p>
+        ]]></item>
+        <item id="skin_overview" title="Temalara giriş"><![CDATA[
+<h2>Temalara giriş</h2>
+<p>Bir Textpattern teması, Sayfa, Form ve Stil sayfalarından oluşan bir koleksiyondur. Temalar, site ögelerinizi tanımlamayı kolaylaştırmak veya başkalarıyla paylaşmak için mantıksal gruplar hâlinde ayırmanıza olanak tanır. Bir Tema (ve içindeki ögelerin) oluşturulması veya içe aktarılması işlemi, mevcut siteniz üzerinde <em>herhangi</em> bir etki yaratmaz. Sitenizin herhangi bir Bölümüyle ilişkilendirilmemiş tüm ögeleri özgürce düzenleyebilir veya değiştirebilir ve sitenin kendisini etkilemeden bırakabilirsiniz.</p>
+<p>Bir temadaki ögeleri düzenlemek için Sayfalar, Formlar veya Stiller paneline gidin ve üzerinde çalışmak istediğiniz temayı seçmek için açılır seçiciyi kullanın. Üzerinde çalıştığınız tema, yönetim alanının tamamında hatırlanır; böylece öge türleri arasında hızlı ve kolay bir şekilde geçiş yapabilirsiniz. Buna <em>çalışma temanız</em> denir.</p>
+<p>Daha fazla bilgi için lütfen <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern Kullanıcı Dokümantasyonu'na <span class="ui-icon ui-icon-extlink">(yeni pencerede harici bir bağlantı açar)</span></a> bakın.</p>
+        ]]></item>
+        <item id="skin_title" title="Tema başlığı"><![CDATA[
+<h2>Tema başlığı</h2>
+<p>Textpattern panelleri içinde temayı tanımlamak için kullanılan açıklayıcı tema başlığı.</p>
+<p>Başlık, özel karakterler ve boşluklar içerebilir.</p>
+        ]]></item>
         <item id="skin_version" title="Tema sürümü"><![CDATA[
 <h2>Tema sürümü</h2>
 <p>Bu temanın yüklü sürümünün sürüm numarası (isteğe bağlı).</p>

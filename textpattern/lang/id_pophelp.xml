@@ -83,23 +83,26 @@
     <group id="article" title="Panel tulis">
         <item id="article_image" title="Gambar artikel"><![CDATA[
 <h2>Gambar artikel</h2>
-<p>Untuk mengaitkan satu gambar dengan artikel ini, tempatkan salah satu dari yang berikut di sini:</p>
+<p>Untuk mengaitkan gambar dengan artikel ini, letakkan salah satu dari berikut di sini:</p>
 <ol>
-    <li>ID gambar (misal <code>12</code>)</li>
-    <li>tautan URL relatif ke gambar <code>/images/my_pic.jpg</code>)</li>
-    <li>tautan lengkap URL (misal <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+    <li>satu atau lebih ID gambar Textpattern, dipisahkan koma (misalnya <code>12, 25, 18</code>)</li>
+    <li>satu atau lebih URL relatif ke gambar, dipisahkan koma (misalnya <code>/images/my_pic.jpg</code>)</li>
+    <li>satu atau lebih URL lengkap, dipisahkan koma (misalnya <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>Gambar dapat ditampilkan dengan menempatkan sebuah <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(buka tautan luar di jendela baru)</span></a> dalam sebuah form artikel. Ini akan menampilkan HTML lengkap tag <code>&lt;img&gt;</code> ke gambar yang dipilih.</p>
+<p>Gambar pertama dapat ditampilkan dengan menempatkan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> di dalam formulir artikel. Secara bawaan, tag ini akan menghasilkan tag HTML <code>&lt;img&gt;</code> lengkap ke gambar yang dipilih.</p>
+<p>Anda dapat menampilkan galeri menggunakan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
         ]]></item>
         <item id="body" title="Badan"><![CDATA[
 <h2>Badan</h2>
 <p>Isi utama sebuah artikel terdapat di dalam badan artikel.</p>
 <p>Saat membuat atau menyiapkan artikel untuk publikasi di Textpattern, penulis dapat beralih di antara tiga tampilan artikel: teks biasa, markup HTML (kode yang digunakan browser web untuk merender artikel), dan pratinjau yang dibangun.</p>
         ]]></item>
-        <item id="description" title="Deskripsi"><![CDATA[<h2>Deskripsi</h2>
-<p>Deskripsi artikel adalah komponen opsional yang dapat membantu mesin pencari (search engine) dan perayap situs (website crawler) mengidentifikasi dan mengurutkan konten dengan lebih baik.</p>
-<p>Deskripsi artikel dibatasi hingga 255 karakter. Perhatikan bahwa beberapa mesin pencari menempatkan batas panjang karakter pada halaman <code>meta description</code> untuk kepraktisan tampilan di halaman hasil mesin pencari (SERPs) dan ini mungkin kurang dari batas 255 karakter di Textpattern.</ 1>
-<p>Perhatikan bahwa deskripsi artikel berbeda dengan kutipan artikel, meskipun keduanya menerima konten yang serupa. Deskripsi artikel sebaiknya ditujukan terutama untuk digunakan dengan mesin pencari dan crawler, sedangkan kutipan artikel lebih cocok untuk ringkasan artikel yang dapat dibaca manusia jika diinginkan.</p>]]></item>
+        <item id="description" title="Deskripsi"><![CDATA[
+<h2>Deskripsi</h2>
+<p>Deskripsi artikel adalah komponen opsional yang dapat membantu mesin pencari dan perayap situs web mengidentifikasi dan mengurutkan konten dengan lebih baik.</p>
+<p>Deskripsi artikel dibatasi hingga maksimum 255 karakter. Perhatikan bahwa beberapa mesin pencari memberi batas jumlah karakter pada panjang <code>meta description</code> suatu halaman demi kepraktisan tampilan di halaman hasil mesin pencari (SERP) dan batas ini mungkin lebih kecil daripada 255 karakter di Textpattern.</p>
+<p>Perhatikan bahwa deskripsi artikel berbeda dengan ringkasan artikel, meskipun keduanya menerima konten yang mirip. Deskripsi artikel terutama dimaksudkan untuk digunakan oleh mesin pencari dan perayap, sedangkan ringkasan artikel lebih cocok sebagai ringkasan artikel yang mudah dibaca manusia jika diinginkan.</p>
+        ]]></item>
         <item id="excerpt" title="Kutipan"><![CDATA[
 <h2>Kutipan</h2>
 <p>Kutipan artikel bersifat opsional. Kutipan dapat digunakan sebagai ringkasan singkat dari artikel yang ditampilkan sebagai bagian dari daftar isi, digunakan sebagai pengganti badan artikel lengkap di halaman web RSS/Atom, atau sejumlah penggunaan lainnya.</p>
@@ -134,21 +137,19 @@
 </ul>
 <p>Item dengan waktu lebih baru dari waktu sekarang (baca: masa depan) tidak akan tampil di halaman depan dan umpan RSS/Atom sampai waktunya tiba.</p>
         ]]></item>
-        <item id="status" title="Status"><![CDATA[<h2>Status</h2>
-<p>Menentukan status visibilitas publikasi dari artikel Textpattern ini.</p>
-<p>Status publikasi adalah salah satu dari yang berikut:</p>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Menentukan status visibilitas publikasi artikel Textpattern ini.</p>
+<p>Status publikasi adalah salah satu dari berikut:</p>
 <ul>
-    <li>Konsep</li>
-    <li>Tersembunyi</li>
-    <li>Tertunda</li>
-    <li>Langsung</li>
-    <li>Sticky</li>
+<li><strong>Draft</strong>: dianggap sebagai pekerjaan yang sedang berjalan dan tidak dapat dilihat di luar area administrasi Textpattern (yaitu tidak terlihat di situs web dan tidak disindikasi di umpan).</li>
+<li><strong>Hidden</strong>: artikel tidak dapat dilihat di luar area administrasi Textpattern. Berguna untuk menghapus konten dari situs web tanpa benar-benar menghapusnya.</li>
+<li><strong>Pending</strong>: dianggap siap diterbitkan dan menunggu persetujuan, tetapi tidak dapat dilihat di luar area administrasi Textpattern.</li>
+<li><strong>Live</strong>: biasanya dapat dilihat di luar area administrasi Textpattern (yaitu terlihat di situs web, disindikasi di umpan jika preferensi mengizinkan). Jika sebuah artikel berstatus Live dan memiliki tanggal kedaluwarsa, statusnya akan tetap Live setelah tanggal tersebut terlewati, tetapi artikel hanya muncul di luar area administrasi jika artikel kedaluwarsa diizinkan untuk diterbitkan.</li>
+<li><strong>Sticky</strong>: mirip dengan artikel <strong>Live</strong> sejauh pengunjung situs dapat melihatnya, tetapi <strong>tidak</strong> akan muncul dalam daftar artikel kecuali tag <code>article</code> atau <code>article_custom</code> yang bersangkutan menyertakan atribut <code>status</code> dengan nilai <code>sticky</code>.</li>
 </ul>
-<p>Sebuah artikel <strong>konsep</strong> dianggap sebagai pekerjaan-dalam-pengerjaan dan tidak dapat dilihat diluar area administrasi TextPattern (tidak terlihat pada halaman depan Textpattern dan tidak disindikasi dalam feed).</p>
-<p>Sebuah artikel <strong>Tersembunyi</strong> tidak dapat dilihat diluar area administrasi Textpattern.</p>
-<p>Sebuah artikel <strong>Tertunda</strong> dianggap siap untuk publikasi dan menunggu persetujuan, tetapi tidak dapat dilihat diluar area administrasi Textpattern.</p>
-<p>Sebuah artikel  <strong>Langsung</strong> biasanya dapat dilihat diluar area Administrasi Textpattern (cont. terlihat pada halaman depan Textpattern, sindikasi dalam feed jika preferensi memungkinkan). Jika sebuah artikel langsung dan memiliki tanggal kadaluarsa, status akan tetap sejalan setelah tanggal itu telah tercapai, tetapi artikel itu hanya muncul di luar area administrasi jika artikel kadaluarsa diizinkan untuk dipublikasikan.</p>
-<p>Sebuah artikel <strong>Sticky</strong> mirip dengan artikel <strong>Langsung</strong> sejauh yang dapat dilihat diluar area administrasi Textpattern tetapi <strong>tidak</strong> akan muncul dalam artikel. Daftar kecuali masing-masing <code>article</code> atau tag <code>article_custom</code> mencakup atribut <code>status</code> dengan nilai <code>sticky</code>.</p> ]]></item>
+<p>Catatan: konten yang tidak dapat dilihat secara publik di situs web masih dapat dipratinjau oleh pengguna yang masuk.</p>
+        ]]></item>
         <item id="title" title="Judul"><![CDATA[
 <h2>Judul</h2>
 <p>Tambahkan judul yang sesuai untuk artikel ini.</p>
@@ -182,7 +183,7 @@
         ]]></item>
         <item id="image_category" title="Gambar"><![CDATA[
 <h2>Gambar</h2>
-<p>Kategori gambar adalah opsional, dan berguna untuk penataan internal dan untuk menentukan kumpulan gambar yang dapat ditampilkan menggunakan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(buka tautan dengan jendela baru)</span></a> tag.</p>
+<p>Kategori gambar bersifat opsional, dan berguna baik untuk pengorganisasian internal maupun untuk mendefinisikan set gambar yang dapat ditampilkan menggunakan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
         ]]></item>
         <item id="link_category" title="Tautan"><![CDATA[<h2>Tautan</h2>
 <p>Kategori Tautan bersifat opsional, dan berguna untuk menampilkan pengelompokan tautan yang berbeda, mis. 'Teman', 'Teman Akrab', 'Sekampung'</p>
@@ -214,29 +215,33 @@
     <li>server tidak mendukung URL ramah pengguna</li>
 </ul>
 <p>Uji URL ramah pengguna mencoba mengakses halaman situs yang disebutkan dalam preferensi 'URL Situs'  untuk memeriksa jika semua parameter URL ramah pengguna bekerja dengan baik. Jika URL mengarah pada situs yang berbeda, atau telah diganti dengan halaman statis atau lainnya, maka uji URL akan gagal. Hingga masalah ini terselesaikan, gunakan URL tidak ramah pengguna (contoh <code>https://example.com?s=section&amp;id=4</code>). Pastikan 'Mode tautan permanen' pada Preferensi Admin sudah disesuaikan.</p>]]></item>
+        <item id="concurrent_user_live" title="Login bersamaan di server live"><![CDATA[
+<h2>Login bersamaan di server live</h2>
+<p>Mengizinkan akun pengguna Anda masuk dari beberapa sesi merupakan risiko keamanan dan tidak disarankan. Harap nonaktifkan fitur ini dari panel preferensi lanjutan, kecuali jika risikonya sudah dipahami dan dapat diterima.</p>
+        ]]></item>
         <item id="diag_clear_private" title="Sembunyikan informasi pribadi"><![CDATA[
 <h2>Sembunyikan informasi pribadi</h2>
-<p>Sembunyikan informasi pribadi untuk keamanan tambahan. Jika informasi diagnostik disebarkan melalui format yang dapat dibaca publik, misal forum bantuan Textpattern, maka risiko keamanan akan berkurang dengan menghilangkan informasi server yang sensitif.</p>
+<p>Sembunyikan informasi pribadi untuk keamanan tambahan. Jika informasi diagnostik akan dibagikan dalam format yang dapat dilihat publik, misalnya forum dukungan Textpattern, hal ini mengurangi risiko keamanan dengan tidak menyertakan informasi server yang sensitif.</p>
         ]]></item>
-        <item id="dev_version_live" title="Code pengembangan di peladen langsung"><![CDATA[
+        <item id="dev_version_live" title="Kode pengembangan di server live"><![CDATA[
 <h2>Kode pengembangan di server live</h2>
-<p>Tidak disarankan menggunakan Textpattern versi dalam-pengembangan pada situs produksi. Peringatan ini dapat diabaikan jika telah memahami dan menyetujui risikonya.</p>
+<p>Versi Textpattern yang masih dalam pengembangan tidak disarankan untuk digunakan pada situs produksi. Peringatan ini dapat diabaikan dengan aman jika risikonya telah dipahami dan dapat diterima.</p>
         ]]></item>
         <item id="dir_not_writable" title="Direktori tidak dapat ditulisi"><![CDATA[
 <h2>Direktori tidak dapat ditulisi</h2>
-<p>Untuk menggunakan kemampuan mengunggah file dan gambar, direktori harus dapat ditulisi oleh PHP melalui pengguna jaringan server. Gunakan klien (S)FTP, atau menuliskan perintah <code>chmod 755 /path/to/dir</code> pada baris perintah untuk menulisi direktori.</p>
+<p>Untuk menggunakan kemampuan unggah berkas dan gambar, direktori ini harus dapat ditulisi oleh PHP melalui pengguna server web. Hal ini dapat dilakukan dengan klien (S)FTP, atau alternatifnya di baris perintah dengan menjalankan perintah <code>chmod 755 /path/to/dir</code>.</p>
         ]]></item>
         <item id="dns_lookup_fails" title="Kegagalan DNS"><![CDATA[
 <h2>Pencarian DNS gagal</h2>
-<p>Sepertinya URL alamat situs tidak dapat dijangkau.</p>
+<p>Sepertinya URL yang ditentukan sebagai alamat situs tidak dapat dijangkau.</p>
         ]]></item>
         <item id="file_uploads_disabled" title="Unggah berkas dinonaktifkan"><![CDATA[
-<h2>Unggah file dinonaktifkan</h2>
-<p>Konfigurasi server saat ini mengindikasikan fungsi unggah file dinonaktifkan. Periksa dan ubah <code>file_uploads</code> pengaturan di <code>php.ini</code> atau minta bantuan host situs.</p>
+<h2>Unggah berkas dinonaktifkan</h2>
+<p>Konfigurasi server saat ini menunjukkan bahwa unggah berkas dinonaktifkan. Silakan periksa dan ubah pengaturan <code>file_uploads</code> di <code>php.ini</code> atau konsultasikan dengan penyedia hosting situs untuk bantuan.</p>
         ]]></item>
         <item id="htaccess_missing" title="Berkas .htaccess tidak ditemukan"><![CDATA[
-<h2>Berkas .htaccess hilang</h2>
-<p>Mode tautan permanen membutuhkan file <code>.htaccess</code> untuk digunakan, dan berkas tersebut tidak ditemukan. File disertakan dengan Textpattern dan berada di root Textpattern, disamping <code>index.php</code> dan direktori <code>textpattern</code> . Petunjuk yang direkomendasikan adalah:</p>
+<h2>Berkas .htaccess tidak ditemukan</h2>
+<p>Sedang digunakan mode tautan permanen yang memerlukan berkas <code>.htaccess</code>, tetapi berkas tersebut tidak dapat ditemukan. Berkas ini disertakan dengan Textpattern dan berada di root Textpattern, di samping <code>index.php</code> dan direktori <code>textpattern</code>. Direktif yang direkomendasikan adalah:</p>
 <pre><code># BEGIN Textpattern
   #DirectoryIndex index.php index.html
 
@@ -267,37 +272,44 @@
         ]]></item>
         <item id="index_inaccessible" title="Indeks situs tidak dapat diakses"><![CDATA[
 <h2>Indeks situs tidak dapat diakses</h2>
-<p>File root <code>index.php</code> yang ditetapkan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa keberadaan dan izinnya.</p>
+<p>Berkas root <code>index.php</code> yang ditentukan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa keberadaan dan perizinannya.</p>
         ]]></item>
-        <item id="missing_files" title="Berkas-berkas yang hilang"><![CDATA[
-<h2>Berkas-berkas yang hilang</h2>
+        <item id="missing_files" title="Berkas-berkas hilang"><![CDATA[
+<h2>Berkas-berkas hilang</h2>
 <p>Satu atau lebih berkas penting hilang dari Textpattern. Pastikan semua berkas yang terdaftar ada di server dan berada di lokasi yang benar.</p>
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite tidak ditemukan"><![CDATA[
-<h2>Apache mod_rewrite hilang</h2>
-<p>Modul Apache <code>mod_rewrite</code> tidak diinstal atau dinonaktifkan. Ini disarankan agar Textpattern berfungsi dengan benar. Pastikan keberadaan dan status aktifnya, atau hubungi Admin situs untuk mendapatkan bantuan.</p>
+<h2>Apache mod_rewrite tidak ditemukan</h2>
+<p>Modul <code>mod_rewrite</code> milik Apache tidak diinstal atau dinonaktifkan. Modul ini direkomendasikan agar Textpattern berfungsi dengan benar. Pastikan modul ini ada dan aktif, atau hubungi penyedia hosting situs untuk bantuan.</p>
         ]]></item>
         <item id="modified_files" title="Berkas yang diubah"><![CDATA[
-<h2>Perubahan berkas</h2>
-<p>Berkas ditetapkan menjadi termodifikasi jika masing-masing checksum berbeda dari daftar checksum yang dikenal yang tersedia di Textpattern. Jika ada berkas dalam instalasi Textpattern yang berbeda dari yang diharapkan, berkas tersebut akan disorot di sini.</p>
+<h2>Berkas yang diubah</h2>
+<p>Sebuah berkas dianggap telah diubah jika checksum-nya berbeda dari daftar checksum tepercaya yang disertakan dengan Textpattern. Jika ada berkas di instalasi Textpattern yang berbeda dari yang diharapkan, berkas-berkas tersebut akan disorot di sini.</p>
         ]]></item>
         <item id="mysql_table_errors" title="Kesalahan tabel MySQL"><![CDATA[
 <h2>Kesalahan tabel MySQL</h2>
-<p>Mungkin terdapat beberapa korup atau kerusakan pada database MySQL Textpattern. Coba perbaiki tabel yang terpengaruh dengan alat akses MySQL, seperti <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> atau <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+<p>Mungkin terdapat kerusakan atau gangguan pada basis data MySQL Textpattern. Cobalah memperbaiki tabel yang terpengaruh dengan alat akses MySQL, seperti <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> atau <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
         ]]></item>
-        <item id="no_temp_dir" title="Direktori sementara tidak ditentukan"><![CDATA[
-<h2>Direktori sementara tidak ditentukan</h2>
-<p>Meskipun Textpattern akan berjalan tanpa direktori sementara, beberapa fungsionalitas mungkin tidak berfungsi seperti yang diharapkan jika preferensi ini tidak disetel. Silakan kunjungi Preferensi Admin dan siapkan 'Jalur direktori sementara'.</p>
+        <item id="no_temp_dir" title="Tidak ada direktori sementara yang ditentukan"><![CDATA[
+<h2>Tidak ada direktori sementara yang ditentukan</h2>
+<p>Meskipun Textpattern dapat berjalan tanpa direktori sementara, beberapa fungsionalitas mungkin tidak berfungsi sebagaimana mestinya jika preferensi ini tidak disetel. Silakan kunjungi Preferensi Admin dan atur ‘Jalur direktori sementara’.</p>
         ]]></item>
-        <item id="old_placeholder_exists" title="Bagian dinamai sama seperti direktori"><![CDATA[<h2>Bagian dinamai sama seperti direktori</h2>
-<p>Nama direktori yang telah ada mungkin akan bermasalah dengan nama bagian yang digunakan dalam skema permlink di artikel. Untuk menghindari masalah, periksa dan hapus nama direktori yang bersangkutan jika langkah ini aman untuk dilakukan, atau ubah nama bagian agar tidak bermasalah. </p>        ]]></item>
+        <item id="old_placeholder_exists" title="Seksi dinamai sama seperti direktori"><![CDATA[
+<h2>Seksi dinamai sama seperti direktori</h2>
+<p>Nama direktori yang sudah ada mungkin berbenturan dengan nama seksi yang digunakan dalam skema tautan permanen artikel. Untuk menghindari masalah, periksa dan hapus nama direktori yang terpengaruh jika aman untuk dilakukan, atau ubah nama seksi sehingga tidak bertabrakan.</p>
+        ]]></item>
         <item id="path_to_site_inaccessible" title="Direktori situs tidak terbaca"><![CDATA[
 <h2>Direktori situs tidak terbaca</h2>
-<p>Direktori yang berisi file root <code>index.php</code> yang ditentukan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa izin akses.</p>
+<p>Direktori yang berisi berkas root <code>index.php</code> yang ditentukan sebagai indeks untuk situs tidak dapat dibaca oleh server. Silakan periksa izin aksesnya.</p>
         ]]></item>
-        <item id="php_version_required" title="Keperluan versi minimum"><![CDATA[
-<h2>Keperluan versi minimum</h2>
-<p>Textpattern membutuhkan fungsionalitas tertentu yang ada dalam bahasa pemrograman PHP dan server database MySQL. Silakan lihat tabel berikut untuk menentukan persyaratan sistem minimum:</p>
+        <item id="php_scripting_enabled" title="Skrip PHP diaktifkan"><![CDATA[
+<h2>Skrip PHP diaktifkan</h2>
+<p>Textpattern mengizinkan penulis dan administrator menyematkan kode PHP di dalam artikel dan halaman/formulir jika fitur-fitur ini diaktifkan. Karena ini merupakan masalah keamanan – segala jenis PHP dapat dieksekusi, termasuk kode yang berpotensi merusak/berbahaya yang dapat menghancurkan instalasi Anda atau membocorkan informasi ke pihak ketiga – sangat disarankan untuk menonaktifkan opsi ini di <a href="?event=prefs#prefs_group_publish">panel Preferensi</a> kecuali jika Anda benar-benar memerlukannya.</p>
+<p>Banyak peningkatan pada situs Textpattern yang sebelumnya memerlukan potongan PHP sekarang dapat dilakukan dengan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">tag inti</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Persyaratan versi minimum"><![CDATA[
+<h2>Persyaratan versi minimum</h2>
+<p>Textpattern memerlukan fungsionalitas tertentu yang tersedia di bahasa pemrograman PHP dan server basis data MySQL. Silakan lihat tabel berikut untuk mengetahui persyaratan sistem minimum:</p>
 <div class="txp-listtables">
     <table class="txp-list">
         <thead>
@@ -341,156 +353,735 @@
         </tbody>
     </table>
 </div>
-<p>Selain persyaratan sistem di atas, diperlukan ekstensi PHP berikut:</p>
+<p>Selain persyaratan sistem di atas, ekstensi PHP berikut diperlukan:</p>
 <ul>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a></li>
 </ul>
-<p>Berkas <code>php.ini</code>, baik global maupun lokal, harus berisi pengaturan <code>date.timezone</code>.</p>
+<p>Berkas <code>php.ini</code> situs, baik global maupun lokal, harus memuat pengaturan <code>date.timezone</code>.</p>
         ]]></item>
-        <item id="setup_still_exists" title="Direktori /setup masih ada"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title="Ketidakcocokan URL situs"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Fungsi-fungsi PHP [&#8230;] telah dinonaktifkan pada Peladen"><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Versi pembaruan Textpattern"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title="Versi pra-rilis Textpattern tersedia"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="Jalur direktori &quot;Sementara&quot; dan Kes Plugin tidak boleh sama"><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title="Pembaruan peladen tidak dapat diakses"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title="Fungsi mail() pada instalasi PHP tidak ditemukan"><![CDATA[]]></item>
-        <item id="php_scripting_enabled" title="Skrip PHP dihidupkan"><![CDATA[]]></item>
+        <item id="setup_still_exists" title="Direktori setup masih ada"><![CDATA[
+<h2>Direktori setup masih ada</h2>
+<p>Setelah Textpattern dipasang, direktori <code>textpattern/setup</code> dan isinya tidak lagi dibutuhkan, dan harus dihapus demi alasan keamanan.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="URL situs tidak cocok"><![CDATA[
+<h2>URL situs tidak cocok</h2>
+<p>URL Situs yang ditetapkan di panel ‘Preferensi’ tidak cocok dengan URL sebenarnya yang digunakan untuk mengunjungi situs.</p>
+<p>Jika situs dapat diakses melalui beberapa URL berbeda, dan situs berfungsi seperti yang diharapkan, pesan ini dapat diabaikan dengan aman.</p>
+<p>Jika tidak, silakan periksa dan ubah pengaturan ‘URL Situs’ di Preferensi Admin sesuai kebutuhan. Perkiraan cerdas URL Situs yang benar ditampilkan di pesan peringatan pra-penerbangan pada panel ‘Diagnostik’.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Fungsi PHP […] dinonaktifkan di server Anda"><![CDATA[
+<h2>Fungsi PHP [&#8230;] dinonaktifkan di server Anda</h2>
+<p>Penyedia hosting situs atau administrator server telah menonaktifkan satu atau lebih fungsi PHP, beberapa di antaranya mungkin memengaruhi jalannya Textpattern.</p>
+<p>Silakan lihat <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentasi Pengguna Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> untuk informasi lebih lanjut.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Pembaruan versi Textpattern"><![CDATA[
+<h2>Pembaruan versi Textpattern</h2>
+<p>Tersedia versi Textpattern yang lebih baru. Untuk memanfaatkan fitur dan keamanan terbaru, disarankan untuk melakukan peningkatan versi.</p>
+<p>Perlu diketahui bahwa meskipun kami berupaya membuat proses peningkatan sehalus dan semudah mungkin:</p>
+<ul>
+    <li>Jika hanya digit terakhir yang berbeda dari versi Anda saat ini, peningkatan versi kemungkinan besar kompatibel mundur dengan plugin dan tema.</li>
+    <li>Jika dua digit terakhir berbeda dari versi Anda saat ini, peningkatan mungkin memerlukan pembaruan pada beberapa plugin dan/atau tema, meskipun kemungkinan tetap berfungsi dalam kapasitas terbatas.</li>
+    <li>Jika digit pertama berbeda dari versi Anda saat ini, peningkatan kemungkinan memerlukan pembaruan pada sebagian besar plugin dan tema. Jika Anda sangat bergantung pada fitur plugin atau tema tertentu, silakan periksa terlebih dahulu dengan penulis atau anggota komunitas sebelum memulai peningkatan.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Pra-rilis Textpattern tersedia"><![CDATA[
+<h2>Pembaruan pra-rilis Textpattern tersedia</h2>
+<p>Tersedia versi pra-rilis Textpattern yang lebih baru. Kami mencari relawan aktif untuk menguji versi ini sehingga rilis final dapat dibuat sekuat mungkin. Kami berusaha membuat pengalaman peningkatan tetap mulus dan mudah, bahkan untuk kode beta.</p>
+<p>Jika Anda memutuskan untuk berpartisipasi, harap perhatikan:</p>
+<ul>
+    <li>Jangan gunakan rilis beta ini di situs produksi kecuali Anda memiliki cadangan yang berfungsi untuk berkas-berkas situs dan basis datanya, dan Anda tahu cara menggunakannya.</li>
+    <li>Silakan <a href="https://github.com/textpattern/textpattern/issues">laporkan masalah apa pun</a>, sebutkan versi beta yang Anda gunakan. Rilis beta lanjutan mungkin diperlukan sebelum rilis stabil, tergantung masalah yang dilaporkan.</li>
+    <li>Pastikan jika Anda menerapkan rilis beta ini, Anda juga memperbarui ke versi final ketika dirilis.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Jalur direktori sementara dan cache plugin tidak boleh sama"><![CDATA[
+<h2>Jalur direktori sementara dan cache plugin tidak boleh sama</h2>
+<p>Plugin harus memiliki direktori tersendiri dan tidak berbagi direktori sementara. Ini merupakan potensi risiko keamanan dan dapat berdampak buruk pada situs Anda jika direktori sementara dikosongkan. Pastikan jalur direktori sementara berbeda dari jalur cache plugin.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Server pembaruan tidak dapat diakses"><![CDATA[
+<h2>Server pembaruan tidak dapat diakses</h2>
+<p>Pemeriksaan pembaruan gagal, biasanya karena kemacetan jaringan atau batas waktu koneksi terlampaui. Situasi ini biasanya akan pulih sendiri dalam satu atau dua jam, jadi coba buka kembali panel ini nanti.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Instalasi PHP Anda tidak memiliki fungsi mail()"><![CDATA[
+<h2>Instalasi PHP Anda tidak memiliki fungsi mail()</h2>
+<p>Fungsi <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> milik PHP dinonaktifkan. Oleh karena itu, Textpattern tidak dapat mengirim email dan beberapa fungsionalitas tidak akan tersedia. Misalnya, pemberitahuan email untuk komentar baru tidak akan dikirim, dan pengguna baru tidak akan menerima email sambutan. Namun, pengguna tetap dapat ditambahkan.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Panel berkas">
-        <item id="file_reassign" title="Penetapan kembali berkas"><![CDATA[]]></item>
-        <item id="file_replace" title="Ganti berkas"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Tanggal terbit"><![CDATA[]]></item>
-        <item id="upload" title="Unggah berkas"><![CDATA[]]></item>
+        <item id="file_reassign" title="Penetapan kembali berkas"><![CDATA[
+<h2>Tugaskan ulang berkas</h2>
+<p>Ketika Anda mengunggah sebuah berkas untuk menggantikan berkas yang berlabel ‘Hilang (Missing)’, berkas yang Anda pilih akan diunggah ke server dan dihubungkan ke informasi berkas asli di basis data. Ini berarti nama berkas dari berkas asli akan tetap sama, begitu juga semua informasi lain yang terkait seperti jumlah unduhan dan kategori. Namun, ukuran berkas akan diperbarui agar mencerminkan berkas baru.</p>
+        ]]></item>
+        <item id="file_replace" title="Ganti berkas"><![CDATA[
+<h2>Ganti berkas</h2>
+<p>Mengunggah berkas di sini akan mengganti isi berkas yang sudah ada di server tetapi akan mempertahankan nama berkas seperti sebelumnya. Jumlah unduhan dan informasi lain yang terkait dengan berkas tidak terpengaruh.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Tanggal terbit"><![CDATA[
+<h2>Tanggal terbit</h2>
+<p>Waktu ketika sebuah berkas diterbitkan atau terakhir direvisi. Waktu dapat diatur ke saat item diterbitkan, atau ke waktu bebas di masa lalu maupun masa depan.</p>
+<p>Kotak-kotak isian sesuai dengan informasi berikut:</p>
+<ul>
+    <li>Tahun / Bulan / Hari</li>
+    <li>Jam (format 24-jam) : Menit : Detik</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Unggah berkas"><![CDATA[
+<h2>Unggah berkas</h2>
+<p>Gunakan formulir ini untuk mengunggah berkas atau gambar ke server Anda.</p>
+<p>Gunakan kode Textile untuk menampilkan grafik di dalam artikel, kode Textpattern untuk menempatkan grafik pada templat halaman Anda, atau kode HTML untuk menempatkan grafik di tempat lain.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="Panel formulir">
-        <item id="forms_overview" title="Pengantar Formulir"><![CDATA[]]></item>
+        <item id="forms_overview" title="Pengantar Formulir"><![CDATA[
+<h2>Pengenalan Formulir</h2>
+<p>Di Textpattern, formulir adalah potongan teks, HTML, dan tag Textpattern yang dapat digunakan kembali untuk menampilkan konten.</p>
+<p>Berikut contoh formulir yang bisa diberi nama <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Anda bisa menggunakannya untuk menampilkan daftar tak berurutan HTML dari artikel terkait:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Karena peran formulir ini adalah untuk menampilkan daftar judul, formulir ini bisa diterapkan di dalam tag lain, misalnya menampilkan 20 artikel dari seksi saat ini:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Anda juga dapat menggunakan formulir untuk menampilkan konten berulang, seperti header dan footer di templat halaman Anda. Ini berarti konten hanya ada di satu tempat dan jika Anda memutuskan untuk mengubahnya, Anda hanya perlu melakukannya sekali. Menampilkan konten dari sebuah formulir biasanya dilakukan dengan:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Sebuah formulir dapat berukuran hingga 64KB. Contoh untuk footer mungkin menyertakan judul, paragraf, tautan, tag kondisional, dan referensi ke formulir lain seperti <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
     <group id="image" title="Panel gambar">
-        <item id="create_thumbnail" title="Buat keluku"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Ganti gambar"><![CDATA[]]></item>
-        <item id="upload_image" title="Unggah gambar"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Unggah keluku"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Buat keluku"><![CDATA[
+<h2>Buat gambar mini</h2>
+<p>Mengizinkan Anda (membuat ulang) gambar mini dengan dimensi tertentu dari gambar berukuran penuh.</p>
+<p>Untuk pengaturan ukuran khusus, gambar mini akan diskalakan agar sesuai dengan dimensi yang Anda pilih, kecuali jika Anda mencentang kotak ‘Pangkas (Crop)’. Dalam kasus tersebut, gambar mini akan dibuat dari bagian tengah gambar tanpa penskalaan.</p>
+<p>Untuk pengaturan ukuran otomatis, gambar mini akan diskalakan ke dimensi dan (opsional) pengaturan pemangkasan di tema admin saat ini.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Ganti gambar"><![CDATA[
+<h2>Ganti gambar</h2>
+<p>Gambar yang diunggah di sini akan langsung menggantikan gambar yang sudah terkait dengan entri ini di basis data.</p>
+        ]]></item>
+        <item id="upload_image" title="Unggah gambar"><![CDATA[
+<h2>Unggah gambar</h2>
+<p>Unggah satu atau lebih gambar ke server Anda.</p>
+<p>Saat diunggah ke direktori <code>images</code>, nama berkas gambar asli Anda hanya akan disimpan secara internal di basis data Textpattern; berkas gambarnya sendiri akan diganti namanya menjadi nomor berurutan + ekstensi berkas.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Unggah keluku"><![CDATA[
+<h2>Unggah gambar mini</h2>
+<p>Gambar berukuran penuh dapat diberi gambar mini tersendiri. Ini berguna untuk membuat tautan ke – dan pengindeksan – gambar berukuran penuh.</p>
+<p>Referensi ke gambar mini persis sama dengan referensi ke gambar berukuran penuh, dengan tambahan <code>t</code> pada nama berkas. Sebagai contoh, untuk mereferensikan gambar mini yang terkait dengan gambar berukuran penuh yang disimpan di <code>/images/12.jpg</code> Anda akan menggunakan <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="Panel Bahasa">
-        <item id="get_textpack" title="Pasang paket-teks (Textpack)"><![CDATA[]]></item>
+        <item id="get_textpack" title="Pasang paket-teks (Textpack)"><![CDATA[
+<h2>Pasang Textpack</h2>
+<p>Tempel string bahasa tambahan untuk situs Anda ke dalam kotak ini lalu pilih ‘Unggah’ untuk memasangnya.</p>
+<p>String tersebut biasanya berupa Textpack yang dapat diunduh, didistribusikan bersama plugin agar string bahasa plugin dapat digunakan secara native di dalam Textpattern.</p>
+<p>Penerjemah kemudian dapat menerjemahkan paket ini sesuai kebutuhan dan mendistribusikan ulang konten terlokalisasi tersebut kepada komunitas.</p>
+        ]]></item>
     </group>
 
     <group id="link" title="Panel tautan">
-        <item id="link_description" title="Deskripsi"><![CDATA[]]></item>
-        <item id="link_sort" title="Urutkan nilai"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title="Tanggal terbit"><![CDATA[]]></item>
+        <item id="link_description" title="Deskripsi"><![CDATA[
+<h2>Deskripsi</h2>
+<p>Deskripsi untuk tautan bersifat opsional, dan berguna untuk memberi keterangan pada tautan, membuat atribut <code>title=""</code> (tooltip) untuk tautan, atau sekadar menyimpan dokumentasi internal Anda sendiri.</p>
+        ]]></item>
+        <item id="link_sort" title="Urutkan nilai"><![CDATA[
+<h2>Nilai pengurutan</h2>
+<p>Berguna untuk pengurutan daftar tautan dalam bahasa alami, misalnya berdasarkan nama belakang seseorang, bukan nama depan, atau berdasarkan frasa yang diawali dengan kata sandang tertentu.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Alamat dari tautan. Jika tautan mengarah ke situs lain, maka harus diawali dengan <code>http://</code> atau <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Tanggal terbit"><![CDATA[
+<h2>Tanggal terbit</h2>
+<p>Waktu ketika sebuah tautan diterbitkan atau terakhir direvisi. Waktu dapat diatur ke saat item diterbitkan, atau ke waktu bebas di masa lalu maupun masa depan.</p>
+<p>Kotak-kotak isian sesuai dengan informasi berikut:</p>
+<ul>
+    <li>Tahun / Bulan / Hari</li>
+    <li>Jam (format 24-jam) : Menit : Detik</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Panel masuk">
-        <item id="remember_login" title="Tetap masuk dengan peramban ini"><![CDATA[]]></item>
+        <item id="remember_login" title="Tetap masuk dengan peramban ini"><![CDATA[
+<h2>Tetap masuk dengan peramban ini</h2>
+<p>Jika dicentang, Anda akan tetap masuk ke akun Textpattern Anda dengan peramban web saat ini sampai Anda memilih untuk keluar. Jika tidak dicentang, Anda akan otomatis keluar setelah periode tidak aktif.</p>
+<p>Memerlukan kuki diaktifkan di peramban Anda.</p>
+        ]]></item>
     </group>
 
     <group id="plugin" title="Panel plugin">
-        <item id="install_plugin" title="Pasang plugin"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Unggah plugin"><![CDATA[]]></item>
+        <item id="install_plugin" title="Pasang plugin"><![CDATA[
+<h2>Pasang plugin</h2>
+<p>Tempel isi berkas teks plugin terkompilasi di sini, lalu gunakan ‘Unggah’ untuk memulai pemasangan. Setiap plugin yang Anda unggah dengan nama yang sama seperti plugin yang sudah pernah Anda pasang akan ditimpa dengan versi yang diunggah.</p>
+<p>Teks plugin yang Anda tempel di sini <strong>bukan</strong> kode PHP mentah, tetapi teks yang dikodekan Base64, biasanya diawali dengan header yang berisi informasi plugin (seperti nama, versi dan deskripsi plugin, nama penulis, dan sebagainya).</p>
+<p>Anda sering kali bisa mendapatkan versi plugin terkompilasi dari <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repositori Plugin <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> atau kanal resmi penulis plugin, seperti situs web mereka atau GitHub.</p>
+<p>Anda juga dapat menempelkan sebuah URL ke berkas teks terkompilasi Textpattern di sini, jika situs eksternal mengizinkannya.</p>
+<p>Semua plugin yang diunggah akan melalui langkah verifikasi yang memungkinkan Anda memeriksa kode dan isi plugin sebelum pemasangan.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Unggah plugin"><![CDATA[
+<h2>Unggah plugin</h2>
+<p>Gunakan formulir ini untuk mengunggah berkas plugin. Plugin yang diunggah (dan aset apa pun) disimpan di dalam direktori ‘plugins’.</p>
+<p>Jenis plugin yang dapat diunggah di sini adalah:</p>
+<ul>
+<li>Berkas Templat PHP Textpattern yang memuat kode lengkap, metadata, string Textpack, dan teks bantuan.</li>
+<li>Berkas teks terkompilasi Textpattern yang memuat kode lengkap, metadata, string Textpack, dan teks bantuan.</li>
+<li>Paket zip Textpattern yang memuat informasi manifest dan kode, metadata, string Textpack, teks bantuan, dan berkas pendukung.</li>
+<li>Berkas PHP mentah (meskipun jenis ini tidak akan mengisi metadata tambahan dan tidak disarankan).</li>
+</ul>
+<p>Setiap plugin yang Anda unggah dengan nama yang sama seperti plugin yang sudah pernah Anda pasang akan ditimpa dengan versi yang diunggah.</p>
+<p>Semua plugin yang diunggah akan melalui langkah verifikasi yang memungkinkan Anda memeriksa kode dan isi plugin sebelum pemasangan.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Panel preferensi">
-        <item id="admin_side_plugins" title="Gunakan plugin sisi-admin?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Opsi-opsi lanjutan"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Izinkan PHP dalam artikel"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Izinkan penggantian formulir?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Izinkan PHP dalam halaman"><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Gunakan plugin sisi-admin?"><![CDATA[
+<h2>Gunakan plugin sisi-admin?</h2>
+<p>Plugin sisi-admin dapat mengubah cara kerja antarmuka administrasi. Plugin dapat terhubung ke tindakan yang sudah ada, seperti mengedit atau menerbitkan artikel, atau menambahkan panel baru untuk fungsionalitas tambahan/ekstra.</p>
+<p>Jika Anda ingin mempelajari lebih lanjut tentang plugin sisi-admin, silakan lihat halaman <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Memperluas Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> di <a rel="external" target="_blank" href="https://docs.textpattern.com/">Dokumentasi Pengguna Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>. Berbagai jenis plugin tercantum di situs <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugin Textpattern <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opsi-opsi lanjutan"><![CDATA[
+<h2>Opsi lanjutan</h2>
+<p>Tampilkan grup preferensi lanjutan, tempat pengaturan tambahan dapat dikonfigurasi seperti:</p>
+<ul>
+    <li>Fungsi PHP yang diaktifkan di <code>txp:evaluate</code>.</li>
+    <li>Jenis templat formulir ubahan (custom).</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Izinkan PHP dalam artikel"><![CDATA[
+<h2>Izinkan PHP di artikel?</h2>
+<p>Jika diaktifkan, pengaturan ini akan mengizinkan penggunaan PHP di dalam artikel. Penulis harus memiliki hak istimewa yang cukup untuk melakukannya (secara bawaan, hanya <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publisher’ <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editor’ <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> dan <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editor’ <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> yang dapat melakukannya).</p>
+<p><strong>Sangat disarankan Anda mematikan opsi ini</strong> kecuali jika benar-benar memerlukannya. Berbagai kode PHP berbahaya yang dapat menghancurkan situs web Anda atau membocorkan informasi ke pihak ketiga bisa saja ditambahkan oleh penulis mana pun dan dieksekusi oleh siapa pun yang melihat artikel tersebut.</p>
+<p>Kode PHP harus tanpa tag pembuka dan penutup PHP, dan juga harus dibungkus di dalam tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Izinkan penggantian formulir?"><![CDATA[
+<h2>Izinkan penggantian formulir?</h2>
+<p>Pengaturan ini mengizinkan penulis artikel mengganti formulir yang akan digunakan saat artikel mereka dirender. Jika diaktifkan, menu tarik-turun ‘Ganti formulir (Override form)’ akan tersedia ketika mengedit artikel.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Izinkan PHP dalam halaman"><![CDATA[
+<h2>Izinkan PHP di halaman?</h2>
+<p>Jika diaktifkan, pengaturan ini mengizinkan kode PHP di dalam templat halaman dan templat formulir.</p>
+<p><strong>Sangat disarankan Anda mematikan opsi ini</strong> kecuali jika benar-benar memerlukannya. Berbagai kode PHP berbahaya yang dapat menghancurkan situs web Anda atau membocorkan informasi ke pihak ketiga bisa saja ditambahkan oleh pengguna lain dan dieksekusi oleh administrator atau pengunjung situs tanpa disadari.</p>
+<p>Kode PHP harus tanpa tag pembuka dan penutup PHP, dan juga harus dibungkus di dalam tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+        ]]></item>
         <item id="archive_dateformat" title="Format tanggal arsip"><![CDATA[
 <h2>Format tanggal arsip</h2>
 <p>Bagaimana tanggal akan muncul di artikel di seksi situs Anda.</p>
         ]]></item>
-        <item id="articles_use_excerpts" title="Gunakan kutipan artikel?"><![CDATA[]]></item>
+        <item id="articles_use_excerpts" title="Tampilkan ringkasan di halaman sunting artikel?"><![CDATA[
+<h2>Tampilkan ringkasan di halaman sunting artikel?</h2>
+<p>Dengan memilih ‘Tidak’ kolom ringkasan tidak akan ditampilkan kepada penulis pada layar penyuntingan artikel.</p>
+        ]]></item>
         <item id="attach_titles_to_permalinks" title="Lampirkan judul ke pranala (permalink)"><![CDATA[<h2>Lampirkan judul untuk Permalinks?</h2>
 <p>Pengaturan ini akan melampirkan versi artikel yang dihasilkan secara otomatis ke URL. Ini dihasilkan secara otomatis atau dapat secara manual ditimpa dalam 'judul hanya URL' saat menyunting artikel.</p>
 <p>Pengaturan hanya akan memiliki efek saat Anda menggunakan URL yang bersih. Untuk bahasa tertentu ini dapat menghasilkan URL yang panjang dan jelek, dalam hal ini Anda mungkin ingin mengatur ini ke 'Mati'.</p>
         ]]></item>
-        <item id="auto_dst" title="Secara otomatis menyesuaikan Waktu Musim Panas (DST)?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Komentar baru berarti situs diperbarui?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title="Terapkan atribut rel=&quot;nofollow&quot; pada komentar?"><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Sajikan komentar sebagai daftar bernomor?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title="Sertakan komentar di artikel secara otomatis?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Format tanggal komentar"><![CDATA[]]></item>
-        <item id="comments_default_invite" title="Undangan komentar bawaan"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title="Komentar dinonaktifkan setelah"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Izinkan penggunaan gambar dalam komentar?"><![CDATA[]]></item>
-        <item id="comments_mode" title="Mode komentar"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Moderasi komentar"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Komentar aktif sebagai bawaan?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Komentar memerlukan email pengguna?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Komentar memerlukan nama pengguna?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Kirim email komentar ke penulis?"><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title="Ijinkan markup Textile lebih banyak di komentar?"><![CDATA[]]></item>
-        <item id="custom_form_types" title="Formulir ubahsuai jenis acuan"><![CDATA[]]></item>
-        <item id="custom_overview" title="Kolom ubahsuai"><![CDATA[]]></item>
+        <item id="auto_dst" title="Secara otomatis menyesuaikan Waktu Musim Panas (DST)?"><![CDATA[
+<h2>Sesuaikan Waktu Musim Panas (Daylight Saving Time) secara otomatis?</h2>
+<p>Pengaturan ini memungkinkan Textpattern mengubah kapan DST (Daylight Saving Time) berlaku di lokal Anda. Jika disetel ke ‘Tidak’, Anda dapat mengubah preferensi ‘DST diaktifkan’ secara manual.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Komentar baru berarti situs diperbarui?"><![CDATA[
+<h2>Komentar baru berarti situs diperbarui?</h2>
+<p>Basis data Textpattern melacak kapan perubahan terakhir di situs Anda terjadi. Jika pengaturan ini disetel ke ‘Ya’, sebuah komentar baru juga akan memperbarui nilai ini. Nilai ini digunakan, misalnya, untuk fungsionalitas <code>"Kirim header Last-Modified"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Terapkan atribut rel=&quot;nofollow&quot; pada komentar?"><![CDATA[
+<h2>Terapkan rel="nofollow" pada komentar?</h2>
+<p>Jika disetel ke ‘Ya’, ini akan menambahkan atribut tambahan pada tautan yang dibuat di komentar. Ini dimaksudkan sebagai langkah untuk mengurangi insentif bagi spammer komentar dan diinisiasi oleh berbagai mesin pencari dan pengembang perangkat lunak. Anda dapat mempelajari lebih lanjut dengan membaca <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">pengumuman Google <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+<p><strong>Catatan:</strong> Pengaturan ini tidak memengaruhi fungsionalitas situs Anda. Pengaturan ini dapat mencegah atau mengurangi pengaruh komentar Anda ketika beberapa mesin pencari memberi peringkat situs yang ditaut dari komentar tersebut.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Sajikan komentar sebagai daftar bernomor?"><![CDATA[
+<h2>Tampilkan komentar sebagai daftar bernomor?</h2>
+<p>Menentukan apakah komentar artikel akan dibungkus dengan tag HTML <code>&lt;ol&gt;</code> dan tiap komentar dibungkus dalam tag <code>&lt;li&gt;</code> (sehingga komentar ditampilkan sebagai daftar bernomor), atau apakah tiap komentar akan dibungkus dengan tag <code>&lt;div&gt;</code> sebagai gantinya.</p>
+<p>Dengan nilai apa pun, Anda dapat mengganti tag yang digunakan per formulir dengan memodifikasi tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>, yang berada di formulir <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Sertakan komentar di artikel secara otomatis?"><![CDATA[
+<h2>Tambahkan komentar otomatis ke artikel?</h2>
+<p>Pengaturan ini menentukan apakah komentar dan formulir komentar secara otomatis ditambahkan ke semua artikel individual (dengan otomatis menyertakan isi formulir <code>comments_display</code>).</p>
+<p>Umumnya, Anda akan ingin menyetelnya ke ‘Tidak’, karena ini memberi fleksibilitas lebih besar terhadap penempatan komentar di desain situs Anda. Anda perlu menambahkan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> secara manual pada templat berbasis artikel di mana Anda ingin komentar muncul.</p>
+<p>Jika Anda mengalami tampilan komentar ganda pada sebuah artikel, besar kemungkinan templat Anda sudah memiliki tag <code>&lt;txp:comments /&gt;</code> di dalam templat tetapi opsi ‘Tambahkan komentar otomatis ke artikel?’ juga disetel ke ‘Ya’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Format tanggal komentar"><![CDATA[
+<h2>Format tanggal komentar</h2>
+<p>Cara tanggal komentar akan muncul bagi pengunjung situs Anda.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Undangan komentar bawaan"><![CDATA[
+<h2>Ajakan komentar bawaan</h2>
+<p>Jika Anda mengizinkan pengunjung berkomentar di situs Anda, ini adalah teks ajakan bawaan. Misalnya:</p>
+<ul>
+    <li>Komentar</li>
+    <li>Tambah komentar</li>
+    <li>Umpan balik</li>
+    <li>Anotasi</li>
+</ul>
+<p>Perhatikan bahwa teks ajakan ini selalu bisa diubah per artikel.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Komentar dinonaktifkan setelah"><![CDATA[
+<h2>Komentar dinonaktifkan setelah</h2>
+<p>Gunakan ini untuk mengatur lamanya waktu setelah itu komentar akan dimatikan untuk artikel (dapat disetel ke ‘Tidak pernah’ agar komentar dapat diberikan tanpa batas waktu).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Izinkan penggunaan gambar dalam komentar?"><![CDATA[
+<h2>Izinkan gambar pemberi komentar di komentar?</h2>
+<p>Jika opsi ini disetel ke ‘Tidak’, gambar apa pun yang disertakan dalam komentar akan dihapus.</p>
+        ]]></item>
+        <item id="comments_mode" title="Mode komentar"><![CDATA[
+<h2>Mode komentar</h2>
+<p>Jika ‘nopopup’ dipilih (disarankan) jendela saat ini akan dimuat ulang untuk hanya menampilkan artikel saat ini, dengan komentar di bawahnya.</p>
+<p>Jika ‘popup’ dipilih, jendela peramban baru akan terbuka ketika tautan komentar diklik (menggunakan formulir <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderasi komentar"><![CDATA[
+<h2>Moderasi komentar?</h2>
+<p>Jika disetel ke ‘Ya’, setiap komentar baru akan memiliki visibilitas dimatikan sampai ditinjau. Anda harus secara manual memoderasi dan membuat setiap komentar terlihat (sebuah pesan akan dikirim lewat email ke penulis artikel ketika sebuah komentar baru diterima).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Komentar aktif sebagai bawaan?"><![CDATA[
+<h2>Komentar aktif secara bawaan?</h2>
+<p>Jika disetel ke ‘Ya’, komentar akan otomatis diaktifkan untuk setiap artikel yang diterbitkan. Jika disetel ke ‘Tidak’, Anda harus mengaktifkan komentar di panel ‘Tulis’ artikel setiap kali Anda ingin menerima komentar.</p>
+<p>Komentar dapat diaktifkan/dinonaktifkan kapan saja, per artikel.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Komentar memerlukan email pengguna?"><![CDATA[
+<h2>Komentar memerlukan alamat email pengguna?</h2>
+<p>Jika disetel ke ‘Ya’, orang yang ingin mengomentari artikel Anda harus memasukkan alamat email di formulir komentar. Mereka tidak akan bisa mengirim komentar jika tidak memberikan alamat email.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Komentar memerlukan nama pengguna?"><![CDATA[
+<h2>Komentar memerlukan nama pemberi komentar?</h2>
+<p>Jika disetel ke ‘Ya’, orang yang ingin mengomentari artikel Anda harus memasukkan nama di formulir komentar. Mereka tidak akan bisa mengirim komentar jika tidak memberikan nama.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Kirim email komentar ke penulis?"><![CDATA[
+<h2>Email komentar ke penulis?</h2>
+<p>Jika disetel ke ‘Ya’, setiap kali komentar baru diterima pada sebuah artikel, salinannya akan dikirim melalui email ke penulis artikel tersebut.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Ijinkan markup Textile lebih banyak di komentar?"><![CDATA[
+<h2>Izinkan markup Textile lebih banyak di komentar?</h2>
+<p>Jika disetel ke ‘Ya’, komentar dapat berisi elemen <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> yang sebaliknya akan diperlakukan sebagai teks biasa, seperti:</p>
+<ul>
+    <li>judul</li>
+    <li>daftar berurutan dan tak berurutan</li>
+    <li>catatan kaki</li>
+    <li>tabel</li>
+    <li>kode</li>
+    <li>sintaks blok lanjutan (<code>bc..</code>, <code>bq..</code>, dll.)</li>
+</ul>
+<p><strong>Catatan:</strong> Demi alasan keamanan, HTML mentah diubah menjadi teks biasa.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Akun yang diizinkan login bersamaan"><![CDATA[
+<h2>Akun yang diizinkan login bersamaan</h2>
+<p>Daftar nama akun login, dipisahkan koma, yang boleh masuk dari beberapa peramban/sesi. Ini membantu selama pengembangan untuk berbagi login dengan klien.</p>
+<p>Menggunakan fitur ini merupakan risiko keamanan dan <strong>tidak disarankan di situs live</strong>. Panel Diagnostik akan menampilkan peringatan jika akun pengguna Anda dikonfigurasi untuk login bersamaan di situs web live.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Jenis templat formulir ubahan"><![CDATA[
+<h2>Jenis templat formulir ubahan</h2>
+<p>Selain jenis templat formulir standar (article, file, misc, dan sebagainya), Publisher dapat menentukan jenis khusus. Tujuan jenis templat formulir ubahan ada dua: memudahkan pengelompokan templat formulir dan mendefinisikan aset ubahan.</p>
+<p>Format preferensi ini adalah <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>, dengan setiap bagian mewakili satu jenis templat formulir.</p>
+<p>Untuk mendefinisikan jenis formulir khusus (misalnya <code>js</code>) Anda harus menambahkan (di baris terpisah) bagian <code>[js]</code>. Judul bawaan dapat ditetapkan melalui entri <code>title="Javascript"</code> di bagian yang sesuai. Jika perlu, judul terlokalisasi juga bisa ditambahkan (misalnya <code>ru="Скрипт"</code>).</p>
+<p>Selain itu, jenis media templat formulir <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> (sebelumnya dikenal sebagai jenis MIME) dapat ditentukan, misalnya <code>mediatype="application/javascript"</code>. Ini mengubah templat formulir jenis tersebut menjadi aset ubahan yang dapat disajikan sebagai jenis media tersebut, baik dari basis data maupun dari disk (berkas datar) melalui tag <code>&lt;txp:output_form /&gt;</code>. Sebagai contoh, templat formulir bernama <code>myscript.js</code> bertipe <code>[js]</code> dengan media type <code>application/javascript</code> dapat disertakan dalam kode Anda seperti berikut:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Ini akan menghasilkan tag HTML <code>&lt;script&gt;</code> berikut:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Hanya templat formulir dengan ekstensi nama yang sesuai dengan tipenya (misalnya <code>myscript.js</code>) yang dapat disajikan sebagai berkas datar. Dalam kasus ini, templat tidak akan diproses oleh Textpattern sama sekali dan dapat diakses melalui URL-nya.</p>
+Jika sebuah templat formulir perlu diproses (misalnya berisi tag Textpattern), Anda harus menyajikannya dari basis data. Dalam kasus ini Anda tidak boleh menambahkan ekstensi ke nama formulir – cukup beri nama <code>myscript</code> (tanpa <code>.js</code>) agar tidak dapat diakses dengan URL biasa – dan sertakan seperti berikut:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Kolom ubahan (Custom fields)"><![CDATA[
+<h2>Kolom ubahan (Custom fields)</h2>
+<p>Kolom ubahan digunakan untuk menyimpan data tambahan artikel. Anda dapat mendefinisikan hingga sepuluh buah dengan memberikan nama di sini. Masing-masing akan muncul sebagai kolom terpisah di panel Tulis, sehingga data ubahan dapat dikaitkan dengan setiap artikel.</p>
+<p>Anda dapat menamai kolom-kolom ini sesuka Anda, tetapi perhatikan hal-hal berikut:</p>
+<ul>
+<li>Menggunakan spasi meningkatkan keterbacaan di panel Tulis, tetapi kolom tersebut kemudian <em>tidak</em> dapat digunakan sebagai parameter pengurutan atau pemfilteran di tag article_custom. Pertimbangkan menggunakan garis bawah sebagai pengganti jika Anda ingin menggunakan fungsionalitas ini.</li>
+<li>Berhati-hatilah saat memberi nama agar tidak bertabrakan dengan nama kolom yang sudah dipesan di Textpattern. Misalnya, jangan gunakan <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, dan sebagainya, karena Anda akan mendapatkan hasil aneh atau situs rusak.</li>
+<li>Data di setiap kolom dibatasi hingga 255 karakter teks saja.</li>
+</ul>
+        ]]></item>
         <item id="dateformat" title="Format tanggal"><![CDATA[
 <h2>Format tanggal</h2>
-<p>Opsi ini akan memengaruhi bagaimana tanggal artikel tampil di halaman depan dari situs Anda saja.</p>
+<p>Opsi ini hanya akan memengaruhi bagaimana tanggal artikel muncul di halaman depan situs Anda.</p>
         ]]></item>
-        <item id="default_event" title="Panel bawaan"><![CDATA[]]></item>
-        <item id="default_publish_status" title="Status bawaan publikasi"><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title="Aktifkan pratinjau tema pengembangan?"><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Aktifkan dukungan tag singkat?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="Aktifkan peladen XML-RPC?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title="Catatan kadaluwarsa setelah berapa hari?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Jalur unggah berkas"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Ukuran maksimal unggah berkas (dalam bita/byte)"><![CDATA[]]></item>
+        <item id="default_event" title="Panel bawaan"><![CDATA[
+<h2>Panel bawaan</h2>
+<p>Panel antarmuka administrasi Textpattern yang akan muncul pertama kali ketika seseorang masuk.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Status penerbitan bawaan"><![CDATA[
+<h2>Status penerbitan bawaan</h2>
+<p>Menentukan status visibilitas publikasi untuk artikel Textpattern yang baru dibuat.</p>
+<p>Perhatikan bahwa pengaturan preferensi ini tidak memengaruhi status artikel yang dibuat atau disunting sebelum perubahan.</p>
+<p>Status penerbitan bawaan adalah salah satu dari berikut:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>Artikel <strong>Draft</strong> dianggap sebagai pekerjaan yang sedang berjalan dan tidak dapat dilihat di luar area administrasi Textpattern (yaitu tidak terlihat di sisi depan Textpattern dan tidak disindikasi di umpan).</p>
+<p>Artikel <strong>Hidden</strong> tidak dapat dilihat di luar area administrasi Textpattern.</p>
+<p>Artikel <strong>Pending</strong> dianggap siap diterbitkan dan menunggu persetujuan, tetapi tidak dapat dilihat di luar area administrasi Textpattern.</p>
+<p>Artikel <strong>Live</strong> umumnya dapat dilihat di luar area administrasi Textpattern (yaitu terlihat di sisi depan Textpattern, disindikasi di umpan jika preferensi mengizinkan). Jika artikel Live memiliki tanggal kedaluwarsa, statusnya akan tetap Live setelah tanggal tersebut terlewati, tetapi artikel hanya muncul di luar area administrasi jika artikel kedaluwarsa diizinkan untuk diterbitkan.</p>
+<p>Artikel <strong>Sticky</strong> mirip dengan artikel <strong>Live</strong> sejauh dapat dilihat di luar area administrasi Textpattern, tetapi <strong>tidak</strong> akan muncul dalam daftar artikel kecuali tag <code>article</code> atau <code>article_custom</code> yang bersangkutan menyertakan atribut <code>status</code> dengan nilai <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Pilih doctype HTML yang ingin Anda gunakan (HTML5 atau XHTML). Ini memengaruhi formulir masukan komentar, perenderan Textile untuk <code>&lt;abbr&gt;</code> atau <code>&lt;acronym&gt;</code>, dan tag <code>&lt;link&gt;</code> yang dihasilkan oleh tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Aktifkan pratinjau tema pengembangan?"><![CDATA[
+<h2>Aktifkan pratinjau tema pengembangan?</h2>
+<p>Pengguna dengan hak istimewa yang cukup (secara bawaan, mereka yang berperan sebagai Publisher dan Designer) dapat dengan aman mengembangkan dan mempratinjau tema baru sementara semua pengguna lain masih melihat tema lama (hingga tema baru diterapkan).</p>
+<p>Namun, pengguna istimewa yang tidak ingin terlibat dalam pengembangan tema dapat menonaktifkan pratinjau tema pengembangan. Mereka kemudian akan dilayani dengan tema ‘publik’ saat ini, seperti pengunjung situs biasa.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Aktifkan dukungan tag singkat?"><![CDATA[
+<h2>Aktifkan dukungan tag singkat?</h2>
+<p>Tag Textpattern berbentuk <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Anda dapat mengurangi jumlah pengetikan dengan mengaktifkan notasi singkat di mana <code>txp:</code> dapat dihilangkan dengan mengikuti beberapa pedoman sederhana. Berikut beberapa contoh untuk menjelaskan konsepnya:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> menjadi <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> menjadi <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> menjadi <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> menjadi <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> menjadi <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (perhatikan bahwa awalan plugin dapat digunakan untuk tag <code>else</code>).</li>
+</ul>
+<p>Jika sebuah tag berisi garis bawah dan Anda mengaktifkan tag singkat, konsep dasarnya adalah:</p>
+<ol>
+    <li>Hapus awalan <code>txp:</code>.</li>
+    <li>Ganti kemunculan pertama garis bawah dengan <code>::</code>.</li>
+</ol>
+<p>Perhatikan bahwa pengaturan preferensi ini tidak memengaruhi kemampuan menggunakan kode singkat <code>&lt;txp:output_form /&gt;</code> untuk merender potongan formulir. Anda masih dapat menggunakan <code>&lt;txp::shortcode /&gt;</code>, yang akan ditafsirkan sebagai <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Aktifkan server XML-RPC?"><![CDATA[
+<h2>Aktifkan server XML-RPC?</h2>
+<p>Jika Anda ingin menggunakan <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> untuk mengendalikan Textpattern dari jarak jauh (misalnya dari aplikasi desktop atau seluler) Anda harus mengaktifkan server XML-RPC dengan menyetel opsi ini ke ‘Ya’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Gunakan fitur email tingkat lanjut"><![CDATA[
+<h2>Gunakan fitur email tingkat lanjut</h2>
+<p>Menyetel ini ke ‘Tidak’ akan membuat semua email – seperti permintaan pengaturan ulang sandi akun, dan email dari plugin seperti com_connect – dikirim melalui fungsi <code>mail()</code> milik PHP. Memilih ‘Ya’ akan menggunakan PHPMailer bawaan sebagai gantinya, yang membuka pengaturan opsional untuk mengirim email melalui server SMTP eksternal.</p>
+<p>Jika Anda mengalami masalah dengan keterkiriman email (terutama dengan penyedia daring seperti Gmail, Outlook, Yahoo!, dan sebagainya), kemungkinan penyebabnya adalah domain Anda tidak dianggap sebagai sumber tepercaya. Mengubah ke ‘Ya’ dapat meningkatkan keterkiriman email. Selain itu, menggunakan SMTP dapat memberikan kompatibilitas yang lebih baik dengan beberapa penyedia email dan semakin meningkatkan keterkiriman.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Catatan kedaluwarsa setelah berapa hari?"><![CDATA[
+<h2>Catatan kedaluwarsa setelah berapa hari?</h2>
+<p>Ketika pencatatan Textpattern diaktifkan, Anda dapat menentukan berapa lama (dalam hari) catatan (log) harus disimpan. Nilai ‘7’ akan menyimpan catatan selama tujuh hari.</p>
+<p><strong>Catatan:</strong> Catatan hanya dipangkas ketika Anda melihat panel ‘Catatan pengunjung’, dan sebaliknya akan terus bertambah besar ukurannya.</p>
+        ]]></item>
+        <item id="file_base_path" title="Jalur direktori berkas"><![CDATA[
+<h2>Jalur direktori berkas</h2>
+<p>Ini menyetel <strong>jalur absolut</strong> ke direktori tempat unggahan berkas akan disimpan secara permanen. PHP harus memiliki hak tulis ke direktori ini.</p>
+<p><strong>Catatan:</strong> Pertimbangkan untuk memindahkan direktori ini ke luar docroot publik situs Anda demi keamanan tambahan.</p>
+        ]]></item>
+        <item id="file_download_header" title="Header unduhan berkas"><![CDATA[
+<h2>Header unduhan berkas</h2>
+<p>Mengizinkan Anda menyesuaikan cara penanganan unduhan berkas.</p>
+<p>Biasanya semua unduhan diperlakukan sebagai lampiran dan diunduh (tergantung bagaimana peramban Anda dikonfigurasikan untuk menangani jenis berkas tersebut). Jika Anda ingin memberikan petunjuk mengenai bagaimana Anda lebih suka beberapa atau semua jenis berkas diperlakukan, Anda dapat memberikan kode tag di sini. Sebagai contoh, untuk menampilkan berkas PDF yang Anda tambahkan ke kategori Textpattern 'inline-pdf' secara inline, bukan diunduh:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Ukuran maksimum unggahan berkas (dalam byte)"><![CDATA[
+<h2>Ukuran maksimum unggahan berkas (dalam byte)</h2>
+<p>Anda dapat membatasi ukuran maksimum (dalam byte) untuk unggahan berkas. Perhatikan bahwa nilai ini juga dibatasi oleh konfigurasi PHP. Jika Textpattern mendeteksi bahwa konfigurasi PHP Anda membatasi ukuran unggahan ke nilai yang lebih kecil, Textpattern akan otomatis menyesuaikannya ke bawah. Jika Anda ingin mengizinkan unggahan berkas yang lebih besar melalui unggahan dari peramban, hubungi penyedia hosting Anda (nilai terkait di <code>php.ini</code> adalah <code>post_max_size</code>, <code>upload_max_filesize</code> dan <code>memory_limit</code>).</p>
+        ]]></item>
         <item id="gmtoffset" title="Zona waktu"><![CDATA[
 <h2>Zona waktu</h2>
 <p>Untuk menampilkan tanggal dalam zona waktu lokal Anda, pilih zona waktu Anda.</p>
         ]]></item>
-        <item id="img_dir" title="Direktori gambar"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Sertakan surel di umpan Atom?"><![CDATA[]]></item>
-        <item id="is_dst" title="&lt;abbr title=&quot;Daylight Saving Time/Waktu Musim Panas&quot;>DST&lt;/abbr> diaktifkan?"><![CDATA[]]></item>
-        <item id="logging" title="Pencatatan"><![CDATA[]]></item>
-        <item id="max_url_len" title="Panjang maksimal URL (dalam karakter)"><![CDATA[]]></item>
-        <item id="module_pophelp" title="Tampilkan taut bantuan sebaris sisi-admin"><![CDATA[]]></item>
-        <item id="never_display_email" title="Sembunyikan surel (di komentar)?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title="Gunakan ISO-8859-1 untuk surel (standarnya UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title="Format URL pranala judul"><![CDATA[]]></item>
-        <item id="permlink_mode" title="Mode URL artikel"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Jalur direktori tembolok plugin"><![CDATA[]]></item>
-        <item id="production_status" title="Status Produksi"><![CDATA[]]></item>
-        <item id="public_theme_name" title="Tema sisi-depan"><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Terbitkan artikel kadaluarsa?"><![CDATA[]]></item>
-        <item id="publisher_email" title="Kirim rincian masuk dari surel ini"><![CDATA[]]></item>
-        <item id="rss_how_many" title="Berapa artikel yang masuk dalam umpan RSS?"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title="Kirim tajuk &quot;Last-Modified&quot;?"><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Tampilkan hitungan komentar di RSS?"><![CDATA[]]></item>
-        <item id="site_slogan" title="Slogan situs"><![CDATA[]]></item>
-        <item id="sitename" title="Nama situs"><![CDATA[]]></item>
-        <item id="siteurl" title="URL situs"><![CDATA[]]></item>
-        <item id="skin_dir" title="Direktori tema"><![CDATA[]]></item>
-        <item id="smtp_from" title="Pengaturan alamat pengirim SMTP"><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Senarai-hitam spam (dipisahkan koma)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title="Sindikasikan kutipan artikel saja?"><![CDATA[]]></item>
-        <item id="tempdir" title="Jalur/path direktori temporer"><![CDATA[]]></item>
-        <item id="theme_name" title="Tema sisi-admin"><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title="Fungsi-fungsi PHP yang aktif: txp:evaluate"><![CDATA[]]></item>
-        <item id="use_comments" title="Terima komentar?"><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title="Gunakan surel untuk membentuk id RSS (standarnya adalah URL situs)?"><![CDATA[]]></item>
-        <item id="use_plugins" title="Gunakan plugins?"><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="img_dir" title="Direktori gambar"><![CDATA[
+<h2>Direktori gambar</h2>
+<p>Jika Anda ingin menyesuaikan nama direktori gambar, Anda dapat melakukannya di sini. Anda harus terlebih dahulu membuat direktori tersebut di root instalasi Textpattern Anda, dan memastikan PHP dapat menulis ke direktori itu.</p>
+<p>Jalur ini selalu merupakan <strong>jalur relatif</strong> (terhadap direktori root instalasi Textpattern Anda).</p>
+<p>Nilai bakunya adalah <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Sertakan alamat email di umpan Atom?"><![CDATA[
+<h2>Sertakan alamat email di umpan Atom?</h2>
+<p>Ini memungkinkan Anda menyertakan alamat email penulis (seperti yang disetel di akun pengguna mereka) dari sebuah artikel di bagian <code>author</code> umpan Atom Anda.</p>
+        ]]></item>
+        <item id="is_dst" title="Daylight Saving Time diaktifkan?"><![CDATA[
+<h2>Daylight Saving Time diaktifkan?</h2>
+<p>Menentukan apakah DST (Daylight Saving Time) saat ini diaktifkan untuk zona waktu Anda.</p>
+        ]]></item>
+        <item id="logging" title="Pencatatan"><![CDATA[
+<h2>Pencatatan</h2>
+<p>Anda dapat memilih tingkat pencatatan pengunjung yang dilakukan Textpattern:</p>
+<ul>
+    <li><strong>Semua hit:</strong> Textpattern akan mencatat semua tampilan halaman di situs Anda</li>
+    <li><strong>Perujuk saja:</strong> Textpattern hanya akan mencatat kunjungan yang dirujuk dari situs lain</li>
+    <li><strong>Tidak ada:</strong> Textpattern tidak akan mencatat tampilan halaman apa pun</li>
+</ul>
+<p>Sejak Textpattern 4.7.0, informasi alamat IP pengunjung tidak dikumpulkan atau disimpan oleh Textpattern. Jika Anda mengumpulkan atau menyimpan alamat IP di luar Textpattern, harap ambil tindakan pencegahan yang sesuai untuk menyimpan dan/atau menggunakan data sesuai dengan hukum yang berlaku, seperti <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>, dan terapkan keamanan yang kuat di setiap aspek server dan instalasi Textpattern Anda untuk menghindari kebocoran data.</p>
+<p>Sangat disarankan Anda membiarkan pengaturan ini pada nilai bawaan, ‘Tidak ada’, kecuali Anda benar-benar memerlukan informasi ini dan, terlebih lagi, secara terbuka menyatakan tujuan penggunaannya.</p>
+        ]]></item>
+        <item id="max_url_len" title="Panjang maksimum URL (dalam karakter)"><![CDATA[
+<h2>Panjang maksimum URL (dalam karakter)</h2>
+<p>Ini mencegah URL yang lebih panjang dari batas yang ditentukan agar tidak berfungsi. Pengaturan ini dapat membantu membatasi kerusakan dan meningkatkan keamanan situs.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Tampilkan tautan bantuan sebaris sisi-admin"><![CDATA[
+<h2>Tampilkan tautan bantuan sebaris sisi-admin</h2>
+<p>Jika Anda ingin menyembunyikan tautan bantuan sebaris sisi-admin (jendela pop-up bantuan Textpattern) di seluruh sistem, ubah pengaturan ini ke ‘Tidak ada’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Sembunyikan alamat email pemberi komentar?"><![CDATA[
+<h2>Sembunyikan alamat email pemberi komentar?</h2>
+<p>Pengaturan ini mengontrol apakah alamat email pemberi komentar akan ditampilkan secara publik.</p>
+<p>Direkomendasikan agar alamat email tidak ditampilkan, sebagai bentuk penghormatan kepada pengguna Anda, tetapi mungkin ada situasi tertentu ketika menampilkan alamat email pemberi komentar diinginkan.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Gunakan enkode ISO-8859-1 di email (bawaan UTF-8)?"><![CDATA[
+<h2>Gunakan enkode ISO-8859-1 di email (bawaan UTF-8)?</h2>
+<p>Textpattern secara bawaan menggunakan enkode UTF-8 bila memungkinkan, termasuk untuk email keluar. Namun, beberapa klien email lama (termasuk beberapa versi Microsoft Outlook) tidak mendukung UTF-8 dengan baik. Jika Anda menemui karakter berantakan di email, pengaturan ini akan mengonversi teks ke enkode ISO-8859-1 sebelum dikirim.</p>
+<p><strong>Catatan:</strong> Jika Anda menggunakan bahasa yang karakternya tidak dapat direpresentasikan dalam ISO-8859-1, pengaturan ini sayangnya tidak akan membantu. Anda sebaiknya mencari klien email yang kompatibel dengan UTF-8 (atau Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Ganti jenis formulir"><![CDATA[
+<h2>Ganti jenis formulir</h2>
+<p>Pilih jenis formulir mana yang templatnya akan tersedia di panel Tulis sebagai formulir pengganti (override forms).</p>
+        ]]></item>
+        <item id="permlink_format" title="Pola URL judul tautan permanen"><![CDATA[
+<h2>Pola URL judul tautan permanen</h2>
+<p>Ini menentukan metode pembentukan dan penetapan URL artikel ketika mode non-messy digunakan.</p>
+<p>Saat sebuah artikel diterbitkan, URL-nya dihasilkan dari judul artikel kecuali jika URL khusus diberikan di kolom judul khusus URL.</p>
+<p>Ambil contoh judul artikel berikut: <em>Ann and Bob eat cake</em></p>
+<p>Ketika opsi pola URL judul tautan permanen disetel ke ‘Dipisahkan tanda hubung (title-like-this)’, URL artikel akan menjadi:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Ketika opsi pola URL judul tautan permanen disetel ke ‘Intercapped (TitleLikeThis)’, URL artikel akan menjadi:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Pola URL artikel"><![CDATA[
+<h2>Pola URL artikel</h2>
+<p>Ini menentukan metode untuk mengakses artikel individual melalui URL yang ditampilkan menggunakan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>.</p>
+<p>Mode ‘?=messy’ paling kompatibel – dapat berfungsi dengan sedikit atau tanpa konfigurasi – tetapi paling tidak menguntungkan dalam hal keterbacaan URL dan optimasi mesin pencari (SEO). Dalam mode ini URL artikel di situs Anda akan tampak seperti ini:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Semua mode lain memerlukan fungsionalitas penulisan ulang URL di server web (misalnya Apache <code>mod_rewrite</code> atau direktif rewrite NGINX di blok <code>server</code>). Jika server Anda tidak mendukung penulisan ulang URL, hubungi penyedia hosting web Anda atau gunakan mode ‘?=messy’ seperti di atas.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Jalur direktori cache plugin"><![CDATA[
+<h2>Jalur direktori cache plugin</h2>
+<p>Pengaturan ini terutama digunakan oleh pengembang plugin. Jika diisi, Anda dapat menempatkan berkas sumber plugin (bukan yang terkompilasi) di direktori ini dan Textpattern akan memuatnya secara otomatis, sehingga Anda dapat dengan mudah menyunting plugin dan langsung melihat efeknya tanpa harus memasang/mengaktifkan plugin. <strong>Namun waspadalah</strong> bahwa dengan metode ini, plugin yang rusak (gagal dikompilasi) juga dapat merusak Textpattern!</p>
+<p>Disarankan untuk memuat plugin melalui panel ‘Plugin’ standar di situs produksi, bukan menggunakan direktori cache plugin.</p>
+<p><strong>Catatan:</strong> Jangan tentukan direktori yang sama untuk ‘sementara’ dan ‘cache plugin’, karena akan menimbulkan masalah (Textpattern akan mencoba menjalankan isi berkas log sementara sebagai plugin).</p>
+        ]]></item>
+        <item id="production_status" title="Status produksi"><![CDATA[
+<h2>Status produksi</h2>
+<p>Sebuah situs Textpattern memiliki satu dari tiga mode:</p>
+<ol>
+    <li>‘Debugging’</li>
+    <li>‘Testing’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Mode Debugging</h3>
+<p>Semua laporan kesalahan PHP di situs live Anda akan terlihat, begitu juga peringatan tentang kode dan plugin yang tidak berfungsi. Selain itu, informasi berikut akan terlihat ketika Anda melihat sumber HTML halaman live:</p>
+<ul>
+    <li>waktu yang dibutuhkan server untuk membangun halaman (‘Runtime’)</li>
+    <li>jumlah kueri MySQL yang dijalankan</li>
+    <li>perkiraan penggunaan memori puncak</li>
+    <li>semua tag Textpattern yang ditemui saat membangun halaman (dikenal juga sebagai jejak tag)</li>
+</ul>
+<h3>Mode Testing</h3>
+<p>Semua laporan kesalahan PHP di situs live Anda akan terlihat, begitu juga peringatan tentang kode dan plugin yang tidak berfungsi. Informasi berikut akan terlihat ketika Anda melihat sumber HTML halaman live:</p>
+<ul>
+    <li>waktu yang dibutuhkan server untuk membangun halaman (‘Runtime’)</li>
+    <li>jumlah kueri MySQL yang dijalankan</li>
+    <li>perkiraan penggunaan memori puncak</li>
+</ul>
+<h3>Mode Live</h3>
+<p>Tidak ada laporan kesalahan atau informasi diagnostik yang dikirim ke halaman. Umumnya, mode Live lebih disukai, karena memberikan pengalaman pengguna terbaik dan membebani server paling ringan.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema sisi depan"><![CDATA[
+<h2>Tema sisi depan</h2>
+<p>Tema sisi depan bawaan yang akan digunakan ketika seseorang mengunjungi situs publik Anda. Sebuah tema bawaan telah disertakan dengan Textpattern, plus opsi untuk memulai tanpa tema. Anda juga dapat menambahkan paket tema ke direktori <code>textpattern/themes</code> agar tersedia untuk digunakan.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publikasikan artikel kedaluwarsa?"><![CDATA[
+<h2>Publikasikan artikel kedaluwarsa?</h2>
+<p>Jika disetel ke ‘Ya’, artikel kedaluwarsa akan tetap ditampilkan di situs Anda setelah tanggal kedaluwarsanya terlewati. Anda dapat menggunakan tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> untuk menampilkan konten atau markup alternatif bagi artikel kedaluwarsa.</p>
+<p>Jika disetel ke ‘Tidak’, artikel kedaluwarsa akan dihapus dari situs publik dan mengembalikan status HTTP "410 Gone". Nilai bakunya adalah ‘Tidak’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Kirim detail login dari alamat email ini"><![CDATA[
+<h2>Kirim detail login dari alamat email ini</h2>
+<p>Tentukan alamat email yang digunakan sebagai alamat ‘From:’ pengirim pada pesan yang berisi informasi login untuk pengguna baru.</p>
+<p>Jika preferensi ini dibiarkan kosong atau berisi alamat email tidak valid, Textpattern akan menggunakan nama dan alamat pengguna yang sedang masuk sebagai gantinya.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Berapa banyak artikel yang harus disertakan dalam umpan?"><![CDATA[
+<h2>Berapa banyak artikel yang harus disertakan dalam umpan?</h2>
+<p>Ini adalah jumlah maksimum artikel terkini yang disindikasi dalam satu waktu, dalam format RSS dan Atom.</p>
+<p>Nilai kecil, seperti <code>5</code> hingga <code>15</code> direkomendasikan.</p>
+        ]]></item>
+        <item id="secondpass" title="Jumlah siklus parser ekstra"><![CDATA[
+<h2>Jumlah siklus parser ekstra</h2>
+<p>Parser tag Textpattern biasanya mengganti semua tag Anda dengan konten dari basis data dalam satu siklus pemrosesan templat halaman. Dalam beberapa kasus, ini mungkin tidak cukup, misalnya:</p>
+<ul>
+    <li>Saat menggunakan plugin dengan urutan muat rendah sebagai atribut tag</li>
+    <li>Penggantian kode di dalam tag <code>&lt;txp:php&gt;</code></li>
+    <li>Melewati elemen halaman lebih awal agar dapat menerima konten yang berasal dari tag yang diproses kemudian</li>
+</ul>
+<p>Secara tradisional Textpattern menjalankan satu siklus ekstra (disebut ‘secondpass’) karena alasan legacy, sehingga nilai bawaan preferensi ini adalah <code>1</code>. Namun, lebih banyak siklus akan meningkatkan kemungkinan tag yang tidak diinginkan ikut diproses. Peningkatan terbaru pada parser tag telah mengurangi kebutuhan akan siklus kedua ini. Jadi, kecuali Anda menggunakan siklus kedua untuk tujuan khusus, kurangi nilai ini ke <code>0</code> agar situs Anda lebih aman.</p>
+<p>Jika setelah itu Anda menemukan tag yang tidak terproses ditampilkan di situs web (dan tidak ada kesalahan tag lain yang ditampilkan dalam mode Testing/Debugging karena pasangan tag tidak cocok) maka harap hubungi kami dengan contoh templat halaman/kode/plugin Anda. Kami berupaya menghapus kebutuhan siklus parser tambahan, dan informasi ini akan membantu kami mencapainya.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Kirim header &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Kirim "Last-Modified" header?</h2>
+<p>Jika diaktifkan, Textpattern akan membaca header HTTP pengunjung <code>If-Modified-Since</code> (jika ada) dan membandingkannya dengan waktu pembaruan situs terakhir. Jika tidak ada yang berubah sejak pengunjung terakhir memuat halaman (yaitu jika stempel waktu yang dikirim peramban sama dengan pembaruan terakhir situs), maka header akan dikirim kembali untuk memberi tahu peramban pengunjung agar menggunakan versi cache halaman tersebut.</p>
+<p>Ini dapat mengurangi konsumsi bandwidth, waktu muat halaman, dan beban server web.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Tampilkan jumlah komentar di umpan?"><![CDATA[
+<h2>Tampilkan jumlah komentar di umpan?</h2>
+<p>Jika disetel ke ‘Ya’, pengaturan ini akan menambahkan jumlah komentar ke judul artikel Anda di umpan RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan situs"><![CDATA[
+<h2>Slogan situs</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan situs <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> adalah ringkasan atau deskripsi situs Anda. Slogan ini akan digunakan sebagai deskripsi situs Anda ketika diperlukan, misalnya di umpan RSS/Atom, dan dapat digunakan di berbagai tempat di seluruh situs, sesuai kebijakan Anda.</p>
+<p><strong>Catatan:</strong> Slogan situs bersifat opsional, tetapi mungkin diperlukan untuk keabsahan umpan RSS atau Atom.</p>
+        ]]></item>
+        <item id="sitename" title="Nama situs"><![CDATA[
+<h2>Nama situs</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Nama atau judul situs Anda <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a>. Nama ini akan muncul di bilah judul peramban pengunjung atau pembaca umpan sindikasi, dan dapat digunakan di berbagai tempat lain di seluruh situs, sesuai kebijakan Anda.</p>
+        ]]></item>
+        <item id="siteurl" title="URL situs"><![CDATA[
+<h2>URL situs</h2>
+<p>Ini adalah alamat situs Textpattern Anda, misalnya <code>www.example.com</code>.</p>
+<p><strong>Catatan:</strong> Tidak perlu menambahkan <code>http://</code>, <code>https://</code> atau garis miring di akhir <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Direktori tema"><![CDATA[
+<h2>Direktori tema</h2>
+<p>Jika Anda ingin menyesuaikan nama direktori tempat berkas datar tema sisi depan disimpan secara permanen, Anda dapat melakukannya di sini. Anda harus terlebih dahulu membuat direktori ini di root instalasi Textpattern Anda, dan memastikan PHP dapat menulis ke direktori tersebut.</p>
+<p>Jalur ini selalu merupakan <strong>jalur relatif</strong> (terhadap direktori root instalasi Textpattern Anda).</p>
+<p>Nilai bakunya adalah <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Alamat pengirim amplop SMTP"><![CDATA[
+<h2>Alamat pengirim amplop SMTP</h2>
+<p>Preferensi ini sebaiknya dibiarkan kosong kecuali Anda mengalami masalah saat mengirim email di Textpattern (misalnya tidak ada email yang terkirim sama sekali). Jika masalah tersebut muncul, Anda dapat memasukkan alamat email apa pun yang valid di sini, sebaiknya yang memiliki nama domain sama dengan situs tempat Textpattern dipasang (misalnya jika situs Anda <code>https://example.com</code>, Anda dapat menggunakan <code>you@example.com</code>).</p>
+<p>Bagi yang tertarik dengan detail teknis:</p>
+<ul>
+    <li>Di server mirip UNIX/macOS, alamat email yang dimasukkan digunakan sebagai parameter ke-4 (diawali "-f") untuk fungsi PHP <code>mail()</code></li>
+    <li>Di server Windows, alamat email yang dimasukkan digunakan untuk menyetel (atau menimpa) pengaturan <code>sendmail_from</code> di php.ini</li>
+</ul>
+<p>Ini memastikan bahwa alamat pengirim amplop SMTP (yang tidak selalu sama dengan header "From:" yang biasanya Anda lihat di email) disetel ke alamat email yang Anda masukkan di sini, yang merupakan persyaratan pengiriman email di beberapa server web.</p>
+        ]]></item>
+        <item id="smtp_host" title="Host SMTP"><![CDATA[
+<h2>Host SMTP</h2>
+<p>Untuk meningkatkan keterkiriman pesan dan memanfaatkan pengiriman email melalui layanan eksternal (seperti SendGrid, AWS SES, Mailchimp, Mailgun, dan sebagainya), tentukan server SMTP di sini. Lihat dokumentasi penyedia SMTP Anda untuk mendapatkan nilainya.</p>
+<p>Nilai ini juga dapat diberikan dengan mendefinisikan konstanta <code>SMTP_HOST</code> di <code>config.php</code>, dalam hal ini nilai tersebut akan diarsir (tidak dapat diubah) di panel Preferensi.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Sandi SMTP"><![CDATA[
+<h2>Sandi SMTP</h2>
+<p>Jika koneksi SMTP Anda memerlukan sandi untuk nama pengguna yang spesifik, berikan di sini. Lihat dokumentasi penyedia untuk detailnya.</p>
+<p>Catatan: Meskipun sandi tidak akan ditampilkan di sini, sandi <em>akan</em> disimpan dalam teks biasa di tabel preferensi basis data. Jika Anda ingin meningkatkan keamanan, Anda dapat mendefinisikan konstanta <code>SMTP_PASS</code> di <code>config.php</code> sebagai gantinya.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>Port SMTP</h2>
+<p>Jika Anda telah menentukan host SMTP, Anda harus menentukan port untuk mengaktifkan pengiriman via SMTP. Port umum meliputi:</p>
+<ul>
+    <li>25 - untuk email tanpa enkripsi</li>
+    <li>465 - lama (tidak resmi) untuk email aman</li>
+    <li>587 - bawaan (direkomendasikan) untuk email TLS aman</li>
+</ul>
+<p>Penyedia SMTP pilihan Anda mungkin menggunakan port berbeda, jadi lihat dokumentasinya.</p>
+<p>Nilai ini juga dapat diberikan dengan mendefinisikan konstanta <code>SMTP_PORT</code> di <code>config.php</code>, dalam hal ini nilai tersebut akan diarsir di panel Preferensi.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Metode keamanan SMTP"><![CDATA[
+<h2>Metode keamanan SMTP</h2>
+<p>Pilih mekanisme yang digunakan penyedia SMTP Anda sebagai protokol keamanan email. Lihat dokumentasi mereka untuk detailnya.</p>
+<p>Nilai ini juga dapat diberikan dengan mendefinisikan konstanta <code>SMTP_SECTYPE</code> di <code>config.php</code>, dalam hal ini nilai tersebut akan diarsir di panel Preferensi.</p>
+        ]]></item>
+        <item id="smtp_user" title="Nama pengguna SMTP"><![CDATA[
+<h2>Nama pengguna SMTP</h2>
+<p>Jika koneksi SMTP Anda memerlukan nama pengguna/login, berikan di sini. Lihat dokumentasi penyedia untuk detailnya.</p>
+<p>Nilai ini juga dapat diberikan dengan mendefinisikan konstanta <code>SMTP_USER</code> di <code>config.php</code>, dalam hal ini nilai tersebut akan diarsir di panel Preferensi.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Daftar blokir spam (dipisahkan koma)"><![CDATA[
+<h2>Daftar blokir spam (dipisahkan koma)</h2>
+<p>Penyedia <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">daftar blokir <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> yang dimasukkan di sini akan dikueri ketika sebuah komentar diposting ke blog Anda, dan alamat IP pengirim komentar akan diperiksa. Jika alamat IP tercantum berarti telah ada satu atau lebih laporan spam terhadap IP ini di masa lalu, dan komentar akan ditolak. Terlepas dari hasil pemeriksaan, alamat IP pengirim komentar tidak disimpan oleh Textpattern.</p>
+<p>Anda dapat memasukkan daftar nama domain di sini, dipisahkan koma. Perhatikan bahwa Anda bertanggung jawab memastikan daftar blokir tersebut sesuai dengan tujuan penggunaannya.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindikasikan hanya ringkasan artikel?"><![CDATA[
+<h2>Sindikasikan <strong>hanya</strong> ringkasan artikel?</h2>
+<p>Jika disetel ke ‘Tidak’, item dalam umpan akan berisi isi penuh artikel.</p>
+<p>Jika disetel ke ‘Ya’, item dalam umpan akan berisi ringkasan artikel alih-alih isi artikel ketika tersedia.</p>
+        ]]></item>
+        <item id="tempdir" title="Jalur direktori sementara"><![CDATA[
+<h2>Jalur direktori sementara</h2>
+<p>Menyetel <strong>jalur absolut</strong> ke direktori sementara (kadang disebut ‘tmp’ atau ‘temp’). PHP harus memiliki hak tulis ke direktori ini. Direktori ini digunakan untuk berkas sementara, misalnya unggahan apa pun (plugin, berkas, atau gambar).</p>
+<p><strong>Catatan:</strong>
+<ul>
+    <li>Jangan tentukan direktori yang sama untuk ‘sementara’ dan ‘cache plugin’, karena akan menimbulkan masalah (Textpattern akan mencoba menjalankan isi berkas log sementara sebagai plugin).</li>
+    <li>Pertimbangkan untuk memindahkan direktori ini ke luar docroot publik situs Anda demi keamanan tambahan.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema sisi admin"><![CDATA[
+<h2>Tema sisi admin</h2>
+<p>Tema sisi admin bawaan yang akan digunakan ketika seseorang masuk ke Textpattern. Sejumlah tema admin bawaan disertakan dengan Textpattern, dan Anda juga dapat menambahkan paket tema kustom ke direktori <code>textpattern/admin-themes</code> agar tersedia untuk digunakan.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Tambahkan garis miring di akhir URL"><![CDATA[
+<h2>Tambahkan garis miring di akhir URL</h2>
+<p>Menentukan apakah Textpattern akan secara otomatis menambahkan garis miring di akhir pada URL yang dihasilkannya. Opsinya adalah:</p>
+<ul>
+    <li><strong>Tidak</strong> - Tidak pernah</li>
+    <li><strong>Daftar</strong> - Hanya pada halaman pendaratan berbasis daftar (yaitu bukan saat melihat artikel individual)</li>
+    <li><strong>Ya</strong> - Selalu</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Fungsi PHP yang diizinkan di txp:evaluate"><![CDATA[
+<h2>Fungsi PHP yang diizinkan di txp:evaluate</h2>
+<p>Ini adalah daftar item <code>function</code> atau <code>alias=function</code> yang dipisahkan koma, misalnya <code>md5</code>, <code>replace=str_replace</code>. Item yang tercantum dapat digunakan di atribut <code>query</code> dari tag <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> harus mengembalikan nilai skalar (<strong>bukan</strong> array/objek).</p>
+        ]]></item>
+        <item id="use_comments" title="Terima komentar?"><![CDATA[
+<h2>Terima komentar?</h2>
+<p>Ini mengatur apakah fungsionalitas komentar Textpattern diaktifkan atau dinonaktifkan.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Gunakan alamat email untuk membentuk ID umpan (bawaan URL situs)?"><![CDATA[
+<h2>Gunakan alamat email untuk membentuk ID umpan (bawaan URL situs)?</h2>
+<p>Item dalam umpan Atom memerlukan ID unik.</p>
+<p>Untuk membuat ID yang unik bagi situs Anda, Textpattern mengizinkan Anda memilih antara alamat email atau nama domain untuk disertakan dalam ID tersebut. Alamat email yang digunakan adalah yang pertama kali digunakan saat membuat situs. Kecuali Anda berencana mengganti nama domain di masa mendatang, biasanya aman untuk menyetel opsi ini ke ‘Tidak’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Gunakan plugin?"><![CDATA[
+<h2>Gunakan plugin?</h2>
+<p>Ini mengizinkan Anda mematikan semua dukungan untuk plugin Textpattern. Hal ini berguna jika Anda sedang menelusuri kesalahan di situs dan ingin memeriksa apakah satu atau lebih plugin terlibat.</p>
+        ]]></item>
+        <item id="use_textile" title="Format teks bawaan"><![CDATA[
+<h2>Format teks bawaan</h2>
+<p>Pengaturan format teks yang Anda pilih di sini menjadi bawaan untuk markup ringkasan dan isi di panel ‘Tulis’. Anda dapat memilih untuk mengizinkan pemrosesan Textile lengkap, mengonversi jeda baris menjadi penanda paragraf HTML atau tidak mengonversi teks sama sekali.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(membuka tautan eksternal di jendela baru)</span></a> adalah utilitas yang dimaksudkan untuk menyederhanakan konversi teks biasa ke HTML. Jika diaktifkan, Textile akan memproses teks isi artikel dan mengembalikan HTML yang strukturally benar.</p>
+<p>Textile juga menyediakan seperangkat perintah yang kuat namun mudah dipelajari untuk memformat teks, mendefinisikan struktur seperti daftar, judul, dan kutipan blok, serta menyisipkan tautan dan gambar.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Panel seksi">
-        <item id="section_category" title="Pengenalan"><![CDATA[]]></item>
-        <item id="section_default" title="Bawaan seksi penerbitan"><![CDATA[]]></item>
-        <item id="section_description" title="Deskripsi"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title="Seksi artikel yang muncul di halaman depan?"><![CDATA[]]></item>
-        <item id="section_searchable" title="Sertakan seksi ini dalam pencarian situs?"><![CDATA[]]></item>
-        <item id="section_syndicate" title="Sindikasikan artikel dalam seksi ini?"><![CDATA[]]></item>
+        <item id="section_category" title="Pengenalan"><![CDATA[
+<h2>Pengenalan</h2>
+<p>Seksi di Textpattern paling mudah dipahami sebagai analogi seksi di sebuah surat kabar; semuanya milik publikasi yang sama, tetapi masing-masing mungkin memiliki tata letak berbeda, atau gaya artikel yang berbeda, dan seterusnya.</p>
+<p>Untuk sebagian besar situs web, hanya perlu membuat beberapa seksi saja.</p>
+<h3>Skenario yang mungkin untuk situs web dengan tiga seksi:</h3>
+<ol>
+    <li><strong>Arsip:</strong> ‘Seksi’ tempat semua artikel yang muncul di halaman depan berada. Kapan pun pembaca mengeklik tautan permanen sebuah artikel, artikel itu akan ditampilkan dalam tata letak halaman yang ditetapkan untuk ‘Seksi’ ini. Untuk menuju daftar bertahap artikel terbaru yang ditetapkan ke seksi "Archive", URL-nya adalah <code>https://example.com/archive/</code>.</li>
+    <li><strong>Tentang:</strong> Halaman ‘tentang situs ini’, yang berbeda dari halaman depan dan seksi "Archive", karena lebih statis, mungkin memiliki tata letak berbeda, dan kemungkinan hanya berisi satu artikel. Seksi ‘About’ dapat diakses di <code>https://example.com/about/</code>.</li>
+    <li><strong>Foto:</strong> Sebuah ‘Seksi’ dengan tata letak berbeda (dan mungkin CSS berbeda) yang menampilkan foto alih-alih artikel.</li>
+</ol>
+<p>Perhatikan bahwa sebuah seksi tersembunyi khusus bernama default selalu ada. Seksi default ini menggunakan halaman bernama default dan gaya bernama default, dan menyusun halaman depan situs Anda.</p>
+        ]]></item>
+        <item id="section_default" title="Bawaan seksi penerbitan"><![CDATA[
+<h2>Seksi penerbitan bawaan</h2>
+<p>Opsi ini mengatur seksi mana yang akan dipilih sebelumnya di menu Seksi saat membuat artikel baru pada panel ‘Tulis’.</p>
+<p>Jika sebagian besar artikel Anda berakhir di seksi tertentu, pilih seksi tersebut dari daftar di sini. Perubahan akan langsung berlaku.</p>
+<p>Anda dapat mengganti pengaturan ini per artikel di panel ‘Tulis’ dengan memilih seksi berbeda di panel ‘Urutkan dan tampilkan’.</p>
+        ]]></item>
+        <item id="section_description" title="Deskripsi"><![CDATA[
+<h2>Deskripsi</h2>
+<p>Deskripsi seksi adalah komponen opsional yang dapat membantu mesin pencari dan perayap situs web mengidentifikasi dan mengurutkan konten dengan lebih baik.</p>
+<p>Deskripsi artikel dibatasi hingga maksimum 255 karakter. Perhatikan bahwa beberapa mesin pencari memberi batas jumlah karakter pada panjang <code>meta description</code> suatu halaman demi kepraktisan tampilan di halaman hasil mesin pencari (SERP) dan batas ini mungkin lebih kecil daripada 255 karakter di Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Seksi artikel yang muncul di halaman depan?"><![CDATA[
+<h2>Artikel seksi muncul di halaman depan?</h2>
+<p>Artikel di beberapa seksi, seperti yang menyerupai halaman web yang lebih ‘statis’, mungkin terasa tidak pada tempatnya dalam alur waktu-sensitif halaman depan situs Anda.</p>
+<p>Menyetel ini ke ‘Tidak’ akan mencegah artikel yang ditetapkan ke seksi ini muncul di halaman depan.</p>
+        ]]></item>
+        <item id="section_searchable" title="Sertakan seksi ini dalam pencarian situs?"><![CDATA[
+<h2>Sertakan seksi ini dalam pencarian situs?</h2>
+<p>Ini mengatur apakah artikel yang termasuk dalam seksi ini harus muncul sebagai bagian dari hasil pencarian di seluruh situs.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindikasikan artikel dalam seksi ini?"><![CDATA[
+<h2>Sindikasikan artikel di seksi ini?</h2>
+<p>Mengatur apakah artikel di seksi ini akan muncul di umpan RSS dan Atom situs.</p>
+        ]]></item>
         <item id="section_uses_css" title="Gunakan gaya"><![CDATA[
 <h2>Penggunaan gaya</h2>
 <p>Jika Anda ingin mengganti lembar gaya bawaan untuk seksi tertentu, ini dapat disetel di sini.</p>
@@ -498,7 +1089,7 @@
         ]]></item>
         <item id="section_uses_page" title="Gunakan halaman"><![CDATA[
 <h2>Gunakan halaman</h2>
-<p>Di Textpattern, seksi digabungkan dengan acuan halaman. Itu terasa manis, sungguh&#8230;</p>
+<p>Di Textpattern, seksi dikaitkan dengan templat halaman.</p>
         ]]></item>
         <item id="section_uses_skin" title="Gunakan tema"><![CDATA[
 <h2>Gunakan tema</h2>
@@ -507,13 +1098,43 @@
     </group>
 
     <group id="setup" title="Panel setelan">
+        <item id="setup_admin_url" title="Subdomain admin"><![CDATA[
+<h2>Subdomain admin</h2>
+<p>Subdomain yang ingin Anda gunakan untuk mengakses antarmuka administrasi Textpattern (misalnya <code>admin.example.com</code>).</p>
+<p>Silakan lihat <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalasi multi-situs Textpattern</a> untuk detail lebih lanjut.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domain kuki"><![CDATA[
+<h2>Domain kuki</h2>
+<p>(Sub)domain yang ingin Anda gunakan untuk kuki Textpattern.</p>
+<p>Silakan lihat <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalasi multi-situs Textpattern</a> untuk detail lebih lanjut.</p>
+        ]]></item>
         <item id="setup_user_login" title="Login pengguna"><![CDATA[
 <h2>Login pengguna</h2>
-<p>Nama login akun administrator ('Penerbit') yang akan Anda gunakan untuk mengelola situs Anda.</p>
-<p>Meskipun tidak ada batasan pada nama, sebaiknya hindari urutan karakter yang rumit dan nama pengguna yang mudah ditebak (misalnya <code>admin</code>, <code>administrator</code>, dll.)</p>
+<p>Nama login akun administrator (‘Publisher’) yang akan Anda gunakan untuk mengelola situs Anda.</p>
+<p>Meskipun tidak ada batasan pada nama, sebaiknya hindari urutan karakter yang rumit dan nama pengguna yang mudah ditebak (misalnya <code>admin</code>, <code>administrator</code>, dan sebagainya.)</p>
         ]]></item>
-        <item id="setup_user_pass" title="Sandi pengguna"><![CDATA[]]></item>
-        <item id="table_prefix" title="Awalan tabel (pada pangkalan-data)"><![CDATA[]]></item>
+        <item id="setup_user_pass" title="Sandi pengguna"><![CDATA[
+<h2>Sandi pengguna</h2>
+<p>Karena akun ini memiliki tingkat akses tertinggi di Textpattern, pilihlah sandi yang sangat kuat atau, lebih baik lagi, sebuah frasa sandi.</p>
+<h3>Tips</h3>
+<ul>
+    <li>Gunakan campuran huruf besar dan huruf kecil</li>
+    <li>Gunakan angka</li>
+    <li>Gunakan simbol</li>
+    <li>Panjang minimal delapan karakter</li>
+    <li><strong>Hindari</strong> informasi pribadi apa pun (tanggal, nama, tempat, anggota keluarga, hewan peliharaan, dan sebagainya)</li>
+    <li><strong>Hindari</strong> kata-kata kamus tunggal atau berulang, apa pun ejaan, bahasa, atau bentuknya</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Awalan tabel"><![CDATA[
+<h2>Awalan tabel</h2>
+    <p>Anda hanya perlu menggunakan awalan tabel jika memerlukan beberapa instalasi Textpattern dalam satu basis data. Setiap instalasi Textpattern membutuhkan awalan yang unik.</p>
+    <p>Perhatikan bahwa awalan harus mengikuti aturan berikut:</p>
+<ul>
+    <li><strong>Karakter pertama:</strong> harus a-z, A-Z, atau garis bawah</li>
+    <li><strong>Karakter berikutnya:</strong> hanya boleh a-z, A-Z, 0-9, atau garis bawah</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="skin" title="Panel tema">

@@ -83,13 +83,14 @@
     <group id="article" title="Írás panel">
         <item id="article_image" title="Cikk kép"><![CDATA[
 <h2>Cikk kép</h2>
-<p>Egyetlen kép elhelyezéséhez a cikkben adja meg itt az alábbiak egyikét:</p>
+<p>A cikkhez tartozó képek társításához adja meg itt az alábbi lehetőségek egyikét vagy kombinációját:</p>
 <ol>
-    <li>Textpattern képazonosító (pl.: <code>12</code>)</li>
-    <li>a képre mutató relatív URL (pl.: <code>/kepek/az_en_kepem.jpg</code>)</li>
-    <li>teljesen minősített URL (pl.: <code>https://pelda.com/eleresi/ut/kepek/az_en_kepem.jpg</code>)</li>
+    <li>egy vagy több Textpattern képazonosító, vesszővel elválasztva (pl. <code>12, 25, 18</code>)</li>
+    <li>egy vagy több, a képre mutató relatív URL, vesszővel elválasztva (pl. <code>/images/my_pic.jpg</code>)</li>
+    <li>egy vagy több teljesen minősített URL, vesszővel elválasztva (pl. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>A kép megjeleníthető egy <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> címke <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> elem elhelyezésével a cikk űrlapjában. Ennek kimenete egy, a kiválasztott képre mutató teljes <code>&lt;img&gt;</code> HTML jelölő.</p>
+<p>Az első kép a cikkűrlapban elhelyezett <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> címkével <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> jeleníthető meg. Alapértelmezés szerint ez a kiválasztott képre mutató, teljes <code>&lt;img&gt;</code> HTML elemet adja ki.</p>
+<p>Galériákat a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> címkével <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> jeleníthet meg.</p>
         ]]></item>
         <item id="body" title="Törzs"><![CDATA[<h2>Törzs</h2>
 <p>A cikk fő tartalma a cikk törzsében található.</p>
@@ -97,9 +98,9 @@
         ]]></item>
         <item id="description" title="Leírás"><![CDATA[
 <h2>Leírás</h2>
-<p>A cikk leírását nem kötelező megadni. Segítségével az internetes keresők és a webbejárók hatékonyabban azonosítják és rendezik a tartalmakat.</p>
-<p>A cikk leírásának hossza korlátozott, maximum 255 karakter lehet. Érdemes megjegyezni, hogy néhány internetes kereső a találati listákban való hatékonyabb megjelenítés érdekében korlátozza az oldal <code>meta leírásának</code> hosszát és ez rövidebb lehet, mint a Textpattern 255 karakteres határa.</p>
-<p>Érdemes megjegyezni, hogy a cikk leírása nem azonos a cikk szemelvényével, bár tartalmuk hasonló lehet. A cikk leírását elsősorban az internetes keresők és webbejárók hivatottak használni, míg a cikk szemelvénye sokkal inkább emberi olvasásra szánt, a kívánt esetben megjeleníthető összefoglaló.</p>
+<p>A cikk leírása egy opcionális elem, amely segíthet a keresőmotoroknak és a webrobotoknak a tartalom jobb azonosításában és rendezésében.</p>
+<p>A cikk leírása legfeljebb 255 karakter hosszú lehet. Vegye figyelembe, hogy egyes keresőmotorok korlátozzák az oldal <code>meta description</code> elemének hosszát a találati listákban (SERP-ekben) való megjelenítés gyakorlati okai miatt, és ez rövidebb is lehet a Textpatternben megengedett 255 karakternél.</p>
+<p>Meg kell jegyezni, hogy a cikk leírása eltér a cikk szemelvényétől, bár hasonló tartalmat fogadhatnak. A cikk leírását elsősorban a keresőmotorok és webrobotok számára célszerű megadni, míg a cikk szemelvénye inkább emberi olvasásra szánt, igény esetén megjeleníthető cikk-összefoglaló.</p>
         ]]></item>
         <item id="excerpt" title="Szemelvény"><![CDATA[
 <h2>Szemelvény</h2>
@@ -125,7 +126,7 @@
 <h2>Sablon felülírása</h2>
 <p>Egy cikk megjelenhet az alapértelmezettől eltérő sablon alapján - például a cikk szemelvényének megjelenítése <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> sablonnal a cikk törzse helyett <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> - ezt lehet itt beállítani.</p>
         ]]></item>
-        <item id="publish_date" title=""><![CDATA[
+        <item id="publish_date" title="Közzététel dátuma"><![CDATA[
 <h2>Közzétételi dátum</h2>
 <p>Az időpont, amikor a cikk vagy a fájl közzé lesz téve vagy legutóbb módosítva lett. Az időpontot be lehet állítani az elem tényleges közzétételének idejére, vagy tetszőleges múltbeli vagy jövőbeli időpontra.</p>
 <p>A mezők a következő információknak felelnek meg:</p>
@@ -137,8 +138,587 @@
         ]]></item>
         <item id="status" title="Állapot"><![CDATA[
 <h2>Állapot</h2>
-<p>Megadja ezen Textpattern cikk közzétételi láthatósági állapotát.</p>
+<p>Meghatározza az adott Textpattern cikk közzétételi láthatósági állapotát.</p>
 <p>A közzétételi állapot az alábbiak egyike:</p>
+<ul>
+<li><strong>Vázlatos</strong>: szerkesztés alatt álló tartalom, amely a Textpattern adminisztrációs felületén kívül nem látható (vagyis nem jelenik meg a webhelyen, és nem szerepel a hírfolyamokban).</li>
+<li><strong>Rejtett</strong>: a cikk nem látható a Textpattern adminisztrációs felületén kívül. Hasznos, ha úgy szeretne tartalmat eltávolítani a webhelyről, hogy nem törli véglegesen.</li>
+<li><strong>Függőben lévő</strong>: kész a közzétételre és jóváhagyásra vár, de a Textpattern adminisztrációs felületén kívül nem látható.</li>
+<li><strong>Élő</strong>: általában látható a Textpattern adminisztrációs felületén kívül (azaz megjelenik a webhelyen, és a hírfolyamokban is, ha a beállítás ezt engedi). Ha egy cikk élő, és lejárati dátummal rendelkezik, az állapota a dátum elérése után is Élő marad, de a cikk csak akkor jelenik meg az adminfelületen kívül, ha a lejárt cikkek közzététele engedélyezve van.</li>
+<li><strong>Állandó</strong>: hasonló az <strong>Élő</strong> cikkhez abból a szempontból, hogy a látogatók megtekinthetik, de <strong>nem</strong> jelenik meg a cikklistákban, hacsak az adott <code>article</code> vagy <code>article_custom</code> címke nem tartalmazza a <code>status</code> attribútumot <code>sticky</code> értékkel.</li>
+</ul>
+<p>Megjegyzés: a webhelyen nyilvánosan nem látható tartalmat a bejelentkezett felhasználók továbbra is megtekinthetik előnézetben.</p>
+        ]]></item>
+        <item id="title" title="Cím"><![CDATA[
+<h2>Cím</h2>
+<p>Adjon meg egy megfelelő címet ehhez a cikkhez.</p>
+<p>A cikk címe legfeljebb 255 karakter hosszú lehet.</p>
+        ]]></item>
+        <item id="url_title" title="Csak URL-cím"><![CDATA[
+<h2>Csak URL-cím</h2>
+<p>Ha egy adott címet szeretne használni egy cikk állandó hivatkozásának (permalink) URL-jében, itt adhatja meg. Ha üresen hagyja, az URL-cím automatikusan a cikk címe alapján lesz előállítva.</p>
+<p>Ez különösen akkor hasznos, ha a cikk címe nem ASCII karaktereket tartalmaz.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategóriák panel">
+        <item id="article_category" title="Cikkek"><![CDATA[
+<h2>Cikkek</h2>
+<p>A szekciókkal ellentétben, amelyek az oldal navigációs szerkezetét határozzák meg, a cikk-kategóriák a cikkek témák szerinti rendszerezését teszik lehetővé. Miután a kategóriákat hozzárendelte, a kategóriákhoz tartozó cikkek listái böngészhetők.</p>
+<p>Például egy ételekről szóló oldalon a várható cikk-kategóriák a következők lehetnek:</p>
+<ul>
+    <li>alapanyagok</li>
+    <li>bevásárlás</li>
+    <li>receptek</li>
+    <li>tálalás</li>
+    <li>éttermek</li>
+    <li>séfek</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Leírás"><![CDATA[
+<h2>Kategórialeírás</h2>
+<p>A kategórialeírás egy nem kötelező elem, amely segíthet a keresőmotoroknak és a webrobotoknak a tartalom jobb azonosításában és rendezésében.</p>
+<p>A kategórialeírás legfeljebb 255 karakter hosszú lehet. Vegye figyelembe, hogy egyes keresőmotorok korlátozzák az oldal <code>meta description</code> elemének hosszát a találati listákban (SERP-ekben) való megjelenítés gyakorlati okai miatt, és ez rövidebb is lehet a Textpatternben megengedett 255 karakternél.</p>
+        ]]></item>
+        <item id="file_category" title="Fájlok"><![CDATA[
+<h2>Fájlok</h2>
+<p>A fájlkategóriák opcionálisak, és hasznosak a kiválasztott, feltöltött fájlok csoportosítására.</p>
+        ]]></item>
+        <item id="image_category" title="Képek"><![CDATA[
+<h2>Képek</h2>
+<p>A képkategóriák nem kötelezőek, de hasznosak a belső rendszerezéshez és olyan képkészletek meghatározásához, amelyek a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> címkével <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> jeleníthetők meg.</p>
+        ]]></item>
+        <item id="link_category" title="Hivatkozások"><![CDATA[
+<h2>Hivatkozások</h2>
+<p>A hivatkozás-kategóriák opcionálisak, és hasznosak különböző hivatkozás-csoportosítások megjelenítésére, pl. „Barátok”, „Rómaiak”, „Honfitársak”.</p>
+<p>Az ilyen, válogatott hivatkozáslistákat a következő módon adja ki a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> címke <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnosztika panel">
+        <item id="clean_url_data_failed" title="Tiszta URL-adat tesztje sikertelen"><![CDATA[
+<h2>Tiszta URL-adat tesztje sikertelen</h2>
+<p>Úgy tűnik, hogy az oldalon használt URL-ek (pl. <code>https://example.com/section/article</code>) jelenleg nem működnek, vagy a webszerver nem támogatja azt a teszteljárást, amely eldöntené, hogy a tiszta URL-ek működnek-e; ha a tiszta URL-ek az oldalon a vártaknak megfelelően működnek, ez az üzenet figyelmen kívül hagyható.</p>
+<p>Ha a tiszta URL-ek <em>nem</em> működnek, annak az alábbi okai lehetnek:</p>
+<ul>
+    <li>a „Site URL” beállítás hibás, vagy az adott címen lévő oldalt nem ez a Textpattern-példány kezeli</li>
+    <li>a szerveren módosítani kell a <code>.htaccess</code> fájlt vagy hasonló szerverutasítást a tiszta URL-ek működéséhez</li>
+    <li>a szerver egyáltalán nem támogatja a tiszta URL-eket</li>
+</ul>
+<p>A tiszta URL-teszt megpróbál betölteni egy oldalt a „Site URL” beállításban megadott webcímről, hogy ellenőrizze, minden tiszta URL-paraméter megfelelően működik-e. Ha ez az URL egy másik oldalra mutat, vagy statikus oldallal stb. helyettesítették, a teszt meghiúsul. Amíg a hiba nem kerül kijavításra, a zavaros URL-eket (pl. <code>https://example.com?s=section&amp;id=4</code>) kell használni. Győződjön meg róla, hogy az Admin beállítások között a „Permanent link mode” (Állandó hivatkozás mód) ennek megfelelően van beállítva.</p>
+<p>Figyelem: ha egy bővítményt használ a webhely „karbantartási módba” állításához, az is kiválthatja ezt a figyelmeztetést.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Tiszta URL-teszt sikertelen"><![CDATA[
+<h2>Tiszta URL-teszt sikertelen</h2>
+<p>Úgy tűnik, hogy az oldalon használt URL-ek (pl. <code>https://example.com/section/article</code>) jelenleg nem működnek, vagy a webszerver nem támogatja azt a teszteljárást, amely eldöntené, hogy a tiszta URL-ek működnek-e; ha a tiszta URL-ek az oldalon a vártaknak megfelelően működnek, ez az üzenet figyelmen kívül hagyható.</p>
+<p>Ha a tiszta URL-ek <em>nem</em> működnek, annak az alábbi okai lehetnek:</p>
+<ul>
+    <li>a „Site URL” beállítás hibás, vagy az adott címen lévő oldalt nem ez a Textpattern-példány kezeli</li>
+    <li>a szerveren módosítani kell a <code>.htaccess</code> fájlt vagy hasonló szerverutasítást a tiszta URL-ek működéséhez</li>
+    <li>a szerver egyáltalán nem támogatja a tiszta URL-eket</li>
+</ul>
+<p>A tiszta URL-teszt megpróbál betölteni egy oldalt a „Site URL” beállításban megadott webcímről, hogy ellenőrizze, minden tiszta URL-paraméter megfelelően működik-e. Ha ez az URL egy másik oldalra mutat, vagy statikus oldallal stb. helyettesítették, a teszt meghiúsul. Amíg a hiba nem kerül kijavításra, a zavaros URL-eket (pl. <code>https://example.com?s=section&amp;id=4</code>) kell használni. Győződjön meg róla, hogy az Admin beállítások között a „Permanent link mode” (Állandó hivatkozás mód) ennek megfelelően van beállítva.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Párhuzamos bejelentkezések éles szerveren"><![CDATA[
+<h2>Párhuzamos bejelentkezések éles szerveren</h2>
+<p>Annak engedélyezése, hogy egy felhasználói fiókkal több munkamenetből is be lehessen jelentkezni, biztonsági kockázatot jelent, ezért nem ajánlott. Ha nem ismeri és nem fogadja el a kockázatokat, kapcsolja ki ezt a funkciót a speciális beállítások panelen.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Személyes adatok elrejtése"><![CDATA[
+<h2>Személyes adatok elrejtése</h2>
+<p>Rejtse el a bizalmas információkat a fokozott biztonság érdekében. Ha a diagnosztikai információkat nyilvánosan megtekinthető formában kívánja megosztani – például a Textpattern támogatási fórumán –, ez a beállítás úgy csökkenti a biztonsági kockázatot, hogy a rendszer kihagyja az érzékeny szerverinformációkat.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Fejlesztői kód éles szerveren"><![CDATA[
+<h2>Fejlesztői kód éles szerveren</h2>
+<p>A Textpattern fejlesztés alatt álló verzióinak használata nem ajánlott éles webhelyeken. Ha tisztában van a kockázatokkal, és elfogadja őket, a figyelmeztetés figyelmen kívül hagyható.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="A könyvtár nem írható"><![CDATA[
+<h2>A könyvtár nem írható</h2>
+<p>A fájl- és képfeltöltési funkciók használatához ezeknek a könyvtáraknak írhatónak kell lenniük a PHP számára a webszerver felhasználóján keresztül. Ezt (S)FTP klienssel lehet beállítani, vagy parancssorban például a <code>chmod 755 /path/to/dir</code> parancs kiadásával.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS-hiba"><![CDATA[
+<h2>DNS-keresés sikertelen</h2>
+<p>Úgy tűnik, hogy a webhely címeként megadott URL nem érhető el.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Fájlfeltöltés letiltva"><![CDATA[
+<h2>Fájlfeltöltés letiltva</h2>
+<p>A jelenlegi szerverbeállítás azt mutatja, hogy a fájlfeltöltés le van tiltva. Ellenőrizze és módosítsa a <code>php.ini</code> fájlban a <code>file_uploads</code> beállítást, vagy kérjen segítséget a tárhelyszolgáltatótól.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess fájl hiányzik"><![CDATA[
+<h2>.htaccess fájl hiányzik</h2>
+<p>Olyan állandó hivatkozás módot használ, amely <code>.htaccess</code> fájlt igényel, de a fájl nem található. A fájl a Textpattern csomag része, és a Textpattern gyökérkönyvtárában található, az <code>index.php</code> és a <code>textpattern</code> könyvtár mellett. Az ajánlott direktívák a következők:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Webhely-index nem érhető el"><![CDATA[
+<h2>Webhely-index nem érhető el</h2>
+<p>A webhely indexeként megadott gyökér <code>index.php</code> fájl nem olvasható a szerver számára. Ellenőrizze a fájl meglétét és jogosultságait.</p>
+        ]]></item>
+        <item id="missing_files" title="Hiányzó fájlok"><![CDATA[
+<h2>Hiányzó fájlok</h2>
+<p>Egy vagy több alapvető Textpattern-fájl hiányzik. Ellenőrizze, hogy az itt felsorolt fájlok mindegyike jelen van-e a szerveren, és a megfelelő helyre került-e.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite hiányzik"><![CDATA[
+<h2>Apache mod_rewrite hiányzik</h2>
+<p>Az Apache <code>mod_rewrite</code> modulja nincs telepítve vagy le van tiltva. A Textpattern megfelelő működéséhez ajánlott ennek használata. Ellenőrizze a modul meglétét és aktivált állapotát, vagy kérjen segítséget a tárhelyszolgáltatótól.</p>
+        ]]></item>
+        <item id="modified_files" title="Módosított fájlok"><![CDATA[
+<h2>Módosított fájlok</h2>
+<p>Egy fájlról akkor állapítja meg a rendszer, hogy módosult, ha a hozzá tartozó ellenőrzőösszeg eltér a Textpatternhez mellékelt, ismert jó ellenőrzőösszegtől. Ha a Textpattern telepítésében bármelyik fájl eltér az elvárttól, itt lesz kiemelve.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL tábla hibák"><![CDATA[
+<h2>MySQL tábla hibák</h2>
+<p>Előfordulhat, hogy a Textpattern MySQL adatbázisában sérülés vagy hiba található. Próbálja meg javítani az érintett táblát vagy táblákat valamilyen MySQL-kezelő eszközzel, például az <a rel="external" target="_blank" href="https://www.adminer.org">Adminerrel <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> vagy a <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdminnel <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nincs ideiglenes könyvtár megadva"><![CDATA[
+<h2>Nincs ideiglenes könyvtár megadva</h2>
+<p>Noha a Textpattern ideiglenes könyvtár nélkül is fut, egyes funkciók nem biztos, hogy a várt módon működnek, ha ez a beállítás nincs megadva. Látogassa meg az Admin beállításokat, és állítsa be az „Ideiglenes könyvtár útvonala” értéket.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Szekció neve megegyezik egy könyvtár nevével"><![CDATA[
+<h2>Szekció neve megegyezik egy könyvtár nevével</h2>
+<p>A már létező könyvtárnevek ütközhetnek az állandó hivatkozás-sémában használt szekciónevekkel. A problémák elkerülése érdekében ellenőrizze, és ha biztonságosan megteheti, törölje az érintett könyvtárneveket, vagy módosítsa a szekcióneveket, hogy ne ütközzenek velük.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Webhely-könyvtár nem olvasható"><![CDATA[
+<h2>Webhely-könyvtár nem olvasható</h2>
+<p>A webhely indexeként megadott gyökér <code>index.php</code> fájlt tartalmazó könyvtár nem olvasható a szerver számára. Ellenőrizze a jogosultságokat.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP szkriptek engedélyezve"><![CDATA[
+<h2>PHP szkriptek engedélyezve</h2>
+<p>A Textpattern lehetővé teszi, hogy a szerzők és adminisztrátorok PHP kódot ágyazzanak a cikkekbe és az oldalakba/űrlapokba, ha ez a funkció engedélyezve van. Mivel ez biztonsági kockázatot jelent – bármilyen PHP-kód lefuthat, beleértve a potenciálisan káros vagy veszélyes kódot, amely a telepítés tönkretételéhez vagy adatszivárgáshoz vezethet –, erősen ajánlott, hogy kapcsolja ki ezeket az opciókat a <a href="?event=prefs#prefs_group_publish">Beállítások panelen</a>, hacsak nincs feltétlenül szüksége rájuk.</p>
+<p>A Textpattern webhelyek olyan bővítései, amelyek korábban PHP-kódrészleteket igényeltek, ma már gyakran megvalósíthatók a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">magcímkék</a> segítségével.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimális verziókövetelmények"><![CDATA[
+<h2>Minimális verziókövetelmények</h2>
+<p>A Textpattern bizonyos, a PHP programozási nyelvben és a MySQL adatbázis-szerverben elérhető funkciókat igényel. Az alábbi táblázat segít meghatározni a minimális rendszerkövetelményeket:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern verzió</th>
+                <th scope="col">Minimális PHP verzió</th>
+                <th scope="col">Minimális MySQL verzió</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>A fenti rendszerkövetelmények mellett az alábbi PHP-bővítmények is szükségesek:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a></li>
+</ul>
+<p>A webhely <code>php.ini</code> fájljában – akár globális, akár helyi – szerepelnie kell a <code>date.timezone</code> beállításnak.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Setup könyvtár még létezik"><![CDATA[
+<h2>Setup könyvtár még létezik</h2>
+<p>A Textpattern telepítése után a <code>textpattern/setup</code> könyvtárra és tartalmára már nincs szükség, és biztonsági okokból törölni kell.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Site URL eltérés"><![CDATA[
+<h2>Site URL eltérés</h2>
+<p>A „Preferences” panelen beállított Site URL nem egyezik meg azzal az URL-lel, amelyen keresztül a webhelyet elérik.</p>
+<p>Ha a webhely több különböző URL-en is elérhető, és a webhely a várakozásoknak megfelelően működik, ez az üzenet figyelmen kívül hagyható.</p>
+<p>Ellenkező esetben ellenőrizze, és szükség szerint módosítsa az „Site URL” beállítást az Admin beállításokban. A „Diagnostics” panel előzetes figyelmeztetésében megjelenik egy becslés arról, hogy mi lehet a helyes Site URL.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP függvények [&#8230;] le vannak tiltva a szerveren"><![CDATA[
+<h2>PHP függvények [&#8230;] le vannak tiltva a szerveren</h2>
+<p>A tárhelyszolgáltató vagy a szerver adminisztrátora egy vagy több PHP-függvényt letiltott, amelyek közül néhány befolyásolhatja a Textpattern működését.</p>
+<p>További információért lásd a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern felhasználói dokumentációt <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern verziófrissítés"><![CDATA[
+<h2>Textpattern verziófrissítés</h2>
+<p>Elérhető a Textpattern egy újabb verziója. Az új funkciók és biztonsági javítások kihasználása érdekében ajánlott frissíteni.</p>
+<p>Bár törekszünk arra, hogy a frissítési folyamat a lehető legzökkenőmentesebb és fájdalommentesebb legyen, vegye figyelembe a következőket:</p>
+<ul>
+    <li>Ha csak az utolsó számjegy tér el a jelenlegi verziótól, a frissítés nagy valószínűséggel visszafelé kompatibilis a bővítményekkel és témákkal.</li>
+    <li>Ha az utolsó két számjegy tér el, a frissítés egyes bővítmények és/vagy témák frissítését igényelheti, bár nagy eséllyel korlátozottan így is működőképes lesz a webhely.</li>
+    <li>Ha az első számjegy tér el, akkor valószínű, hogy a legtöbb bővítményt és témát frissíteni kell. Ha erősen támaszkodik egy bizonyos bővítményre vagy témafunkcióra, frissítés előtt feltétlenül egyeztessen a szerzővel vagy a közösséggel.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern előzetes kiadás elérhető"><![CDATA[
+<h2>Textpattern előzetes frissítés elérhető</h2>
+<p>Elérhető a Textpattern egy újabb előzetes (pre-release) verziója. Aktív tesztelőket keresünk, hogy a végleges kiadást a lehető legstabilabbá tehessük. Arra törekszünk, hogy a frissítési élmény a béta kód esetén is zökkenőmentes és problémamentes legyen.</p>
+<p>Ha úgy dönt, hogy részt vesz a tesztelésben, vegye figyelembe:</p>
+<ul>
+    <li>Ne használja ezt a béta-verziót éles webhelyen, hacsak nincs működő, visszaállítható biztonsági mentése a webhely fájljairól és adatbázisáról, és nem tudja biztosan, hogyan kell azt visszaállítani.</li>
+    <li>Kérjük, <a href="https://github.com/textpattern/textpattern/issues">jelentse a felmerülő problémákat</a>, feltüntetve, hogy melyik bétaverziót használja. A stabil kiadás előtt további béta-verziók is kiadásra kerülhetnek az észlelt problémáktól függően.</li>
+    <li>Ha telepíti ezt a béta-verziót, ügyeljen arra, hogy a végleges verzió megjelenésekor arra is frissítsen.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Az ideiglenes és a bővítmény-gyorsítótár könyvtár útvonala nem egyezhet meg"><![CDATA[
+<h2>Az ideiglenes és a bővítmény-gyorsítótár könyvtár útvonala nem egyezhet meg</h2>
+<p>A bővítményeket külön könyvtárban kell tárolni, nem oszthatják meg az ideiglenes könyvtárat. Ez biztonsági kockázatot jelent, és problémákat okozhat, ha az ideiglenes könyvtár tartalma kiürítésre kerül. Győződjön meg róla, hogy az ideiglenes könyvtár útvonala eltér a bővítmény-gyorsítótár útvonalától.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Frissítésszerver nem érhető el"><![CDATA[
+<h2>Frissítésszerver nem érhető el</h2>
+<p>A frissítések ellenőrzése sikertelen volt, ami gyakran hálózati torlódás vagy kapcsolat-időtúllépés miatt fordul elő. Ez a helyzet rendszerint egy-két órán belül magától megoldódik, ezért érdemes később újra megnyitni ezt a panelt.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="A PHP telepítésből hiányzik a mail() függvény"><![CDATA[
+<h2>A PHP telepítésből hiányzik a mail() függvény</h2>
+<p>A PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> függvénye le van tiltva. Emiatt a Textpattern nem tud e-maileket küldeni, így bizonyos funkciók nem érhetők el. Például nem küld értesítést az új megjegyzésekről, és az új felhasználók nem kapnak üdvözlő e-mailt – ettől függetlenül azonban hozzáadhatók.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Fájlok panel">
+        <item id="file_reassign" title="Fájl újrahivatkozása"><![CDATA[
+<h2>Fájl újrahivatkozása</h2>
+<p>Ha egy olyan fájl helyére tölt fel új fájlt, amelynek állapota „Hiányzik”, akkor az újonnan kiválasztott fájl felkerül a szerverre, és a rendszer hozzákapcsolja az eredeti fájlinformációhoz az adatbázisban. Ez azt jelenti, hogy az eredeti fájl neve megmarad, ugyanígy minden egyéb kapcsolódó információ, például a letöltésszámláló és a kategória. A fájlméret azonban frissül, hogy tükrözze az új fájl méretét.</p>
+        ]]></item>
+        <item id="file_replace" title="Fájl cseréje"><![CDATA[
+<h2>Fájl cseréje</h2>
+<p>Ha itt tölt fel fájlt, az lecseréli a szerveren lévő meglévő fájl tartalmát, de a fájlnév változatlan marad. A letöltésszámláló és a fájlhoz tartozó egyéb információk változatlanok maradnak.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Közzététel dátuma"><![CDATA[
+<h2>Közzététel dátuma</h2>
+<p>Az az időpont, amikor egy fájl közzé lesz téve vagy amikor legutóbb módosították. Az időpont beállítható a közzététel pillanatára, illetve tetszőleges múltbeli vagy jövőbeli időpontra.</p>
+<p>A mezők az alábbi információknak felelnek meg:</p>
+<ul>
+    <li>Év / Hónap / Nap</li>
+    <li>Óra (24 órás formátumban) : Perc : Másodperc</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Fájl feltöltése"><![CDATA[
+<h2>Fájl feltöltése</h2>
+<p>Ezzel az űrlappal fájlokat vagy képeket tölthet fel a szerverre.</p>
+<p>Használja a Textile kódot a képek cikkeken belüli megjelenítésére, Textpattern kódot az oldal-sablonokon való elhelyezésükre, vagy HTML kódot a máshol történő elhelyezéshez.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Űrlapok panel">
+        <item id="forms_overview" title="Bevezetés az űrlapokhoz"><![CDATA[
+<h2>Bevezetés az űrlapokhoz</h2>
+<p>A Textpatternben az űrlap egy újrahasznosítható szöveg-, HTML- és Textpattern-címke-részlet, amellyel tartalmat lehet megjeleníteni.</p>
+<p>Íme egy példaűrlap, amelynek neve lehet <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Ezzel például egy HTML, rendezés nélküli lista formájában jeleníthet meg kapcsolódó cikkeket:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Mivel ennek az űrlapnak a feladata egy cím-lista kiadása, más címkéken belül is használható, például az aktuális szekció 20 cikkének megjelenítésére:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Űrlapokat ismétlődő tartalmak, például fejlécek és láblécek megjelenítésére is használhat az oldal-sablonjaiban. Így a tartalom csak egy helyen létezik, és ha módosítani szeretné, elég egyszer megtennie. Az űrlapból származó tartalom kiadása általában a következő módon történik:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Egy űrlap legfeljebb 64 KB méretű lehet. Egy láblécpélda tartalmazhat címsorokat, bekezdéseket, hivatkozásokat, feltételes címkéket és más űrlapokra – például az <code>ordinary_list</code>-re – való hivatkozásokat.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Képek panel">
+        <item id="create_thumbnail" title="Bélyegkép létrehozása"><![CDATA[
+<h2>Bélyegkép létrehozása</h2>
+<p>Lehetővé teszi a teljes méretű képből egy, a megadott méretű bélyegkép (újra)létrehozását.</p>
+<p>Egyéni méret esetében a bélyegkép az Ön által megadott méretarányba lesz kicsinyítve, hacsak nem jelöli be a „Vágás” jelölőnégyzetet. Ez utóbbi esetben a rendszer a kép közepéből vágja ki a bélyegképet, átméretezés nélkül.</p>
+<p>Automatikus méretezés esetén a bélyegkép az aktuális admin témában beállított mérethez és (opcionális) vágási beállításokhoz igazodva kerül átméretezésre.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Kép cseréje"><![CDATA[
+<h2>Kép cseréje</h2>
+<p>Az itt feltöltött kép egyszerűen lecseréli az adatbázisban ehhez a bejegyzéshez társított meglévő képet.</p>
+        ]]></item>
+        <item id="upload_image" title="Kép feltöltése"><![CDATA[
+<h2>Kép feltöltése</h2>
+<p>Töltsön fel egy vagy több képet a szerverére.</p>
+<p>A <code>images</code> könyvtárba való feltöltéskor az eredeti kép fájlneve csak a Textpattern adatbázisában kerül eltárolásra; maga a képfájl egy sorszámmal és a kiterjesztéssel kerül átnevezésre.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Bélyegkép feltöltése"><![CDATA[
+<h2>Bélyegkép feltöltése</h2>
+<p>A teljes méretű képekhez saját bélyegképek rendelhetők. Ezek hasznosak a teljes méretű képekre mutató hivatkozások és azok indexelése szempontjából.</p>
+<p>A bélyegképre való hivatkozás pontosan megegyezik a teljes méretű képre való hivatkozással, csak a fájlnévhez egy <code>t</code> betű kerül hozzáfűzésre. Például, ha a teljes méretű kép a <code>/images/12.jpg</code> útvonalon érhető el, a hozzátartozó bélyegképre így hivatkozhat: <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Nyelvek panel">
+        <item id="get_textpack" title="Textpack telepítése"><![CDATA[
+<h2>Textpack telepítése</h2>
+<p>Illessze be a webhely további nyelvi sztringjeit ebbe a mezőbe, majd a telepítésükhöz válassza a „Feltöltés” lehetőséget.</p>
+<p>A sztringek gyakran letölthető Textpack formájában érkeznek, amelyeket egy bővítmény mellé csatolnak, hogy a bővítmény nyelvi sztringjei natív módon legyenek használhatók a Textpatternben.</p>
+<p>A fordítók ezután szükség szerint lefordíthatják ezeket a csomagokat, és a lokalizált tartalmat újra megoszthatják a közösséggel.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Hivatkozások panel">
+        <item id="link_description" title="Leírás"><![CDATA[
+<h2>Leírás</h2>
+<p>A hivatkozások leírása nem kötelező, de hasznos a hivatkozások feliratozásához, a <code>title=""</code> (buboréksúgó) attribútum létrehozásához, vagy a saját belső dokumentációjához.</p>
+        ]]></item>
+        <item id="link_sort" title="Rendezési érték"><![CDATA[
+<h2>Rendezési érték</h2>
+<p>Természetes nyelvű hivatkozáslisták rendezéséhez hasznos, például amikor valakinek a vezetékneve szerint, és nem a keresztneve szerint szeretne rendezni, vagy olyan kifejezések esetén, amelyek határozott vagy határozatlan névelővel kezdődnek.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>A hivatkozás címe. Ha a hivatkozás egy másik webhelyre mutat, akkor <code>http://</code> vagy <code>https://</code> előtagot is kell kapnia.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Közzététel dátuma"><![CDATA[
+<h2>Közzététel dátuma</h2>
+<p>Az az időpont, amikor egy hivatkozás közzé lesz téve vagy amikor legutóbb módosították. Az időpont beállítható a közzététel pillanatára, illetve tetszőleges múltbeli vagy jövőbeli időpontra.</p>
+<p>A mezők az alábbi információknak felelnek meg:</p>
+<ul>
+    <li>Év / Hónap / Nap</li>
+    <li>Óra (24 órás formátumban) : Perc : Másodperc</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Bejelentkezés panel">
+        <item id="remember_login" title="Maradjon bejelentkezve ebben a böngészőben"><![CDATA[
+<h2>Maradjon bejelentkezve ebben a böngészőben</h2>
+<p>Ha bejelöli, a jelenlegi webböngészőben bejelentkezve marad Textpattern-fiókjába, amíg ki nem jelentkezik. Ha nincs bejelölve, egy bizonyos inaktivitási időszak után automatikusan kijelentkezteti a rendszer.</p>
+<p>A böngészőben engedélyezni kell a sütik használatát.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Bővítmények panel">
+        <item id="install_plugin" title="Bővítmény telepítése"><![CDATA[
+<h2>Bővítmény telepítése</h2>
+<p>Illessze be ide a lefordított bővítmény-szövegfájl tartalmát, majd a telepítés elindításához válassza a „Feltöltés” lehetőséget. Bármely, korábban már telepített bővítményt felülír az azonos nevű, újonnan feltöltött verzió.</p>
+<p>Az itt beillesztett bővítményszöveg <strong>nem</strong> nyers PHP kód, hanem Base64-kódolt szöveg, amelyet általában egy fejléc előz meg a bővítményre vonatkozó információkkal (például név, verzió, leírás, szerző neve stb.).</p>
+<p>A bővítmények lefordított változatait gyakran a <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins tárolóból <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> vagy a bővítmény szerzőjének kijelölt csatornájáról (például weboldaláról vagy GitHubról) töltheti le.</p>
+<p>Ha a külső webhely engedélyezi, ide egy Textpattern formátumú, lefordított szövegfájl URL-jét is beillesztheti.</p>
+<p>Minden feltöltött bővítmény egy ellenőrzési lépésen megy keresztül, amely lehetővé teszi, hogy a telepítés előtt áttekintse a bővítmény kódját és tartalmát.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Bővítmény feltöltése"><![CDATA[
+<h2>Bővítmény feltöltése</h2>
+<p>Ezzel az űrlappal bővítményfájlt tölthet fel. A feltöltött bővítményeket (és az esetleges kapcsolódó eszközöket) a „plugins” könyvtár tárolja.</p>
+<p>Az itt feltölthető bővítménytípusok:</p>
+<ul>
+<li>Textpattern PHP Template fájlok, amelyek a teljes kódot, metaadatokat, Textpack sztringeket és súgószöveget tartalmazzák.</li>
+<li>Textpattern lefordított szövegfájlok, amelyek a teljes kódot, metaadatokat, Textpack sztringeket és súgószöveget tartalmazzák.</li>
+<li>Textpattern zip csomagok, amelyek manifest-információt és kódot, metaadatokat, Textpack sztringeket, súgószöveget és kiegészítő fájlokat tartalmaznak.</li>
+<li>Nyers PHP fájlok (ezek azonban nem töltik fel az extra metaadatokat, és nem ajánlott a használatuk).</li>
+</ul>
+<p>Bármely, korábban már telepített bővítményt felülír az azonos nevű, újonnan feltöltött verzió.</p>
+<p>Minden feltöltött bővítmény egy ellenőrzési lépésen megy keresztül, amely lehetővé teszi, hogy a telepítés előtt áttekintse a bővítmény kódját és tartalmát.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Beállítások panel">
+        <item id="admin_side_plugins" title="Admin-oldali bővítmények használata?"><![CDATA[
+<h2>Admin-oldali bővítmények használata?</h2>
+<p>Az admin-oldali bővítmények megváltoztathatják az adminisztrációs felület működését. Csatlakozhatnak meglévő műveletekhez, például cikkek szerkesztéséhez vagy közzétételéhez, de új panelek is hozzáadhatók velük a kibővített funkciókhoz.</p>
+<p>Ha többet szeretne megtudni az admin-oldali bővítményekről, olvassa el az <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> oldalt a <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern felhasználói dokumentációjában <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>. A különféle bővítmények listáját a <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> oldalon találja.</p>
+        ]]></item>
+        <item id="advanced_options" title="Speciális beállítások"><![CDATA[
+<h2>Speciális beállítások</h2>
+<p>Megjeleníti a speciális beállítások csoportját, ahol további beállításokat konfigurálhat, például:</p>
+<ul>
+    <li>Engedélyezett PHP-függvények a <code>txp:evaluate</code> címkében.</li>
+    <li>Egyedi űrlapsablon-típusok.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="PHP használatának engedélyezése a cikkekben?"><![CDATA[
+<h2>PHP használatának engedélyezése a cikkekben?</h2>
+<p>Ha engedélyezi, ez a beállítás lehetővé teszi a PHP használatát a cikkekben. A szerzőnek ehhez megfelelő jogosultsággal kell rendelkeznie (alapértelmezetten csak a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Publishers” <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>, a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Managing Editors” <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> és a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Copy Editors” <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> szerepkör rendelkezik vele).</p>
+<p><strong>Erősen ajánlott kikapcsolni ezt az opciót</strong>, hacsak nincs feltétlenül szüksége rá. Bármely szerző olyan, potenciálisan káros vagy veszélyes PHP-kódot helyezhet el a cikkekben, amely tönkreteheti a webhelyet vagy adatokat szivárogtathat ki, és ez a kód bárki által lefuttatható, aki az adott cikket megnyitja.</p>
+<p>A PHP kódból el kell hagyni a nyitó és záró PHP-címkéket, és a kódot <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> címkék közé <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> kell zárni.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Űrlap felülbírálása engedélyezett?"><![CDATA[
+<h2>Űrlap felülbírálása engedélyezett?</h2>
+<p>Ez a beállítás lehetővé teszi a cikkek szerzői számára, hogy felülbírálják a cikkük megjelenítésekor használt űrlapot. Ha engedélyezi, a cikk szerkesztésekor megjelenik egy „Felülbíráló űrlap” legördülő lista.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="PHP használatának engedélyezése az oldalakon?"><![CDATA[
+<h2>PHP használatának engedélyezése az oldalakon?</h2>
+<p>Ha engedélyezi, ez a beállítás lehetővé teszi a PHP kód használatát az oldalsablonokban és űrlapsablonokban.</p>
+<p><strong>Erősen ajánlott kikapcsolni ezt az opciót</strong>, hacsak nincs feltétlenül szüksége rá. Bármely felhasználó potenciálisan veszélyes PHP-kódot helyezhet el, amely tönkreteheti a webhelyet vagy adatokat szivárogtathat ki, és ez a kód mit sem sejtő adminisztrátor vagy látogató böngészésével is lefuttatható.</p>
+<p>A PHP kódnak el kell hagynia a nyitó és záró PHP-címkéket, és a kódot <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> címkék közé <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> kell zárni.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Archívum dátumformátuma"><![CDATA[
+<h2>Archívum dátumformátuma</h2>
+<p>Meghatározza, hogy az egyes szekciókban lévő cikkek dátuma hogyan jelenjen meg.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Szemelvény megjelenítése a cikk szerkesztő oldalán?"><![CDATA[
+<h2>Szemelvény megjelenítése a cikk szerkesztő oldalán?</h2>
+<p>Ha „Nem”-re állítja, a cikk szerkesztő felületén a szerző nem látja a szemelvény mezőt.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Címek hozzáfűzése az állandó hivatkozásokhoz?"><![CDATA[
+<h2>Címek hozzáfűzése az állandó hivatkozásokhoz?</h2>
+<p>Ez a beállítás automatikusan generált verziót csatol a cikk címéből az URL-hez. Az URL-cím vagy automatikusan kerül előállításra, vagy a cikk szerkesztésekor a „Csak URL-cím” mezőben kézzel felülbírálható.</p>
+<p>A beállítás csak akkor hatásos, ha tiszta URL-eket használ. Bizonyos nyelvek esetén ez hosszú és csúnyán kinéző URL-ekhez vezethet, ilyen esetben valószínűleg érdemes „Ki”-re állítani.</p>
+        ]]></item>
+        <item id="auto_dst" title="A nyári időszámítás automatikus beállítása?"><![CDATA[
+<h2>A nyári időszámítás automatikus beállítása?</h2>
+<p>Ez a beállítás lehetővé teszi a Textpattern számára, hogy a helyi beállításoknak megfelelően automatikusan kezelje a nyári időszámítást (DST). Ha „Nem”-re állítja, a „DST engedélyezve” beállítást kézzel módosíthatja.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Új megjegyzés esetén frissült az oldal?"><![CDATA[
+<h2>Új megjegyzés esetén frissült az oldal?</h2>
+<p>A Textpattern adatbázis nyilvántartja, hogy a webhelyen mikor történt legutóbb módosítás. Ha ezt a beállítást „Igen”-re állítja, egy új megjegyzés is frissíti ezt az értéket. Ezt az értéket például a <code>"Send Last-Modified header"</code> funkció használja.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Alkalmazzuk a rel=&quot;nofollow&quot; attribútumot a megjegyzésekre?"><![CDATA[
+<h2>Alkalmazzuk a rel="nofollow" attribútumot a megjegyzésekre?</h2>
+<p>Ha „Igen”-re állítja, a megjegyzésekben szereplő hivatkozások egy további attribútumot kapnak. Ezt eredetileg keresőmotorok és szoftverfejlesztők egy csoportja kezdeményezte, hogy csökkentsék a megjegyzés-spamelés ösztönzését. További információkat a <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google bejelentésében <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> talál.</p>
+<p><strong>Megjegyzés:</strong> Ez a beállítás nem befolyásolja a webhely működését. Előfordulhat azonban, hogy egyes keresőmotorok kevesebb jelentőséget tulajdonítanak az ilyen hivatkozásoknak, amikor rangsorolják azokat az oldalakat, amelyekre ezek a megjegyzések mutatnak.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Megjelenjenek a megjegyzések sorszámozott listaként?"><![CDATA[
+<h2>Megjelenjenek a megjegyzések sorszámozott listaként?</h2>
+<p>Meghatározza, hogy a cikkek megjegyzései HTML <code>&lt;ol&gt;</code> elembe legyenek-e csomagolva, és az egyes megjegyzések <code>&lt;li&gt;</code> elembe kerüljenek (sorszámozott listaként megjelenítve azokat), vagy az egyes megjegyzések helyette <code>&lt;div&gt;</code> elemekbe kerüljenek.</p>
+<p>Bármelyik beállítást is választja, űrlaponként felülbírálhatja a használt elemeket a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> címke <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> módosításával, a <code>comments_display</code> űrlapban.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Megjegyzések automatikus hozzáfűzése a cikkekhez?"><![CDATA[
+<h2>Megjegyzések automatikus hozzáfűzése a cikkekhez?</h2>
+<p>Ez a beállítás szabályozza, hogy a megjegyzések és a megjegyzésűrlap automatikusan minden egyes cikkhez hozzáfűződjön-e (a <code>comments_display</code> űrlap tartalmának automatikus beillesztésével).</p>
+<p>A legtöbb esetben érdemes ezt „Nem”-re állítani, mivel így nagyobb szabadsága van a megjegyzések elhelyezésére a webhely dizájnjában. Ilyenkor a megjegyzések megjelenítésére szolgáló <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> címkét <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> kézzel kell beillesztenie azokba a cikkalapú sablonokba, ahol meg szeretné jeleníteni a megjegyzéseket.</p>
+<p>Ha azt tapasztalja, hogy a megjegyzések duplán jelennek meg egy cikkben, akkor valószínűleg a sablon már tartalmazza a <code>&lt;txp:comments /&gt;</code> címkét, miközben a „Megjegyzések automatikus hozzáfűzése a cikkekhez?” beállítás „Igen”-re van állítva.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Megjegyzések dátumformátuma"><![CDATA[
+<h2>Megjegyzések dátumformátuma</h2>
+<p>Meghatározza, hogy a megjegyzések dátuma hogyan jelenjen meg a látogatók számára.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Alapértelmezett megjegyzés-felhívás"><![CDATA[
+<h2>Alapértelmezett megjegyzés-felhívás</h2>
+<p>Ha engedélyezi a látogatóknak, hogy megjegyzéseket írjanak, itt adhatja meg az alapértelmezett felhívó szöveget. Például:</p>
+<ul>
+    <li>Megjegyzések</li>
+    <li>Megjegyzés hozzáadása</li>
+    <li>Visszajelzés</li>
+    <li>Jegyzetelés</li>
+</ul>
+<p>Megjegyzés: a felhívó szöveg cikkenként bármikor módosítható.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Megjegyzések letiltása ennyi idő után"><![CDATA[
+<h2>Megjegyzések letiltása ennyi idő után</h2>
+<p>Ezzel állíthatja be, mennyi idő után kapcsolódjanak ki a megjegyzések az egyes cikkeknél (a „Soha” érték esetén korlátlan ideig lehet hozzászólni).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Megjegyzésekben lévő képek engedélyezése?"><![CDATA[
+<h2>Megjegyzésekben lévő képek engedélyezése?</h2>
+<p>Ha ezt az opciót „Nem”-re állítja, a megjegyzésekbe beszúrt képeket a rendszer eltávolítja.</p>
+        ]]></item>
+        <item id="comments_mode" title="Megjegyzés módja"><![CDATA[
+<h2>Megjegyzés módja</h2>
+<p>Ha a „nopopup” (ajánlott) opciót választja, az aktuális ablak frissül, és csak az aktuális cikk jelenik meg, alatta a megjegyzésekkel.</p>
+<p>Ha a „popup” opciót választja, a megjegyzés hivatkozására kattintva egy új böngészőablak nyílik meg (ez a <code>popup_comments</code> űrlapot használja).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Megjegyzések moderálása?"><![CDATA[
+<h2>Megjegyzések moderálása?</h2>
+<p>Ha „Igen”-re állítja, minden új megjegyzés alapértelmezés szerint rejtett lesz, amíg át nem vizsgálja. A megjegyzéseket kézzel kell moderálnia és láthatóvá tennie (új megjegyzés érkezésekor üzenetet küld a rendszer a cikk szerzőjének).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Megjegyzések alapértelmezés szerint bekapcsolva?"><![CDATA[
+<h2>Megjegyzések alapértelmezés szerint bekapcsolva?</h2>
+<p>Ha „Igen”-re állítja, minden közzétett cikkhez automatikusan engedélyezve lesznek a megjegyzések. Ha „Nem”-re, akkor minden alkalommal a cikk „Write” panelén kell engedélyeznie a megjegyzéseket, amikor fogadni szeretné őket.</p>
+<p>A megjegyzések cikkenként, bármikor engedélyezhetők vagy tilthatók.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Megjegyzésekhez kötelező az e-mail-cím megadása?"><![CDATA[
+<h2>Megjegyzésekhez kötelező az e-mail-cím megadása?</h2>
+<p>Ha „Igen”-re állítja, a megjegyzést írók csak akkor küldhetik el hozzászólásukat, ha megadják az e-mail-címüket a megjegyzésűrlapon.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Megjegyzésekhez kötelező a név megadása?"><![CDATA[
+<h2>Megjegyzésekhez kötelező a név megadása?</h2>
+<p>Ha „Igen”-re állítja, a megjegyzést írók csak akkor küldhetik el hozzászólásukat, ha megadják a nevüket a megjegyzésűrlapon.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Megjegyzések elküldése e-mailben a szerzőnek?"><![CDATA[
+<h2>Megjegyzések elküldése e-mailben a szerzőnek?</h2>
+<p>Ha „Igen”-re állítja, minden új, a cikkhez érkező megjegyzésről másolatot küld a rendszer e-mailben az adott cikk szerzőjének.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="További Textile-jelölés engedélyezése a megjegyzésekben?"><![CDATA[
+<h2>További Textile-jelölés engedélyezése a megjegyzésekben?</h2>
+<p>Ha „Igen”-re állítja, a megjegyzések olyan <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile-elemeket <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> is tartalmazhatnak, amelyeket egyébként sima szövegként kezelne a rendszer, például:</p>
+<ul>
+    <li>címsorok</li>
+    <li>számozott és számozatlan listák</li>
+    <li>lábjegyzetek</li>
+    <li>táblázatok</li>
+    <li>kód</li>
+    <li>kiterjesztett blokk szintaxis (<code>bc..</code>, <code>bq..</code> stb.)</li>
+</ul>
+<p><strong>Megjegyzés:</strong> Biztonsági okokból a nyers HTML kód normál szöveggé lesz alakítva.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Párhuzamos bejelentkezésekre jogosult fiókok"><![CDATA[
+<h2>Párhuzamos bejelentkezésekre jogosult fiókok</h2>
+<p>Vesszővel elválasztott lista azoknak a bejelentkezési fiókneveknek, amelyek több böngészőből / munkamenetből is bejelentkezhetnek. Fejlesztés közben hasznos lehet, ha egy bejelentkezést meg kell osztani az ügyfelekkel.</p>
+<p>Ennek a funkciónak a használata biztonsági kockázatot jelent, ezért <strong>nem ajánlott éles webhelyeken</strong>. A Diagnosztika figyelmeztetést ad, ha az Ön felhasználói fiókja éles webhelyen párhuzamos bejelentkezésre van beállítva.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Egyéni űrlapsablon-típusok"><![CDATA[
+<h2>Egyéni űrlapsablon-típusok</h2>
+<p>A szabványos űrlapsablon-típusokon (article, file, misc stb.) felül a kiadók egyéni típusokat is megadhatnak. Az egyéni űrlapsablon-típusok célja kettős: az űrlapsablonok egyszerűbb osztályozása és egyéni erőforrások meghatározása.</p>
+<p>A beállítás formátuma <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>, ahol minden szakasz egy űrlapsablon-típusnak felel meg.</p>
+<p>Egy egyéni űrlaptípus (például <code>js</code>) definiálásához hozzá kell adni (külön sorban) egy <code>[js]</code> szakaszt. Alapértelmezett cím adható meg a megfelelő szakaszban a <code>title="Javascript"</code> bejegyzéssel. Ha szükséges, lokalizált címek is megadhatók (például <code>ru="Скрипт"</code>).</p>
+<p>Ezen felül az űrlapsablonhoz megadható egy <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">médiatípus <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> (korábbi nevén MIME-típus), például <code>mediatype="application/javascript"</code>. Ez az adott típusú űrlapsablonokat olyan egyéni erőforrásokká alakítja, amelyek a beállított médiatípusként szolgálhatók ki – akár az adatbázisból, akár a lemezről (egyszerű fájlként) a <code>&lt;txp:output_form /&gt;</code> címkével. Például egy <code>myscript.js</code> nevű, <code>[js]</code> típusú űrlapsablon <code>application/javascript</code> médiatípussal az alábbi módon illeszthető be a kódjába:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Ez a következő HTML <code>&lt;script&gt;</code> elemet fogja előállítani:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Csak azok az űrlapsablonok szolgálhatók ki egyszerű fájlként, amelyek névkiterjesztése megfelel a típusuknak (például <code>myscript.js</code>). Ilyen esetben a Textpattern egyáltalán nem dolgozza fel őket, és közvetlenül az URL-en keresztül érhetők el.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Egyéni mezők"><![CDATA[
+<h2>Egyéni mezők</h2>
+<p>Az egyéni mezők további cikkadatok tárolására szolgálnak. Legfeljebb tíz ilyen mezőt definiálhat a nevük megadásával. Mindegyik külön mezőként jelenik meg a Write panelen, így cikkenként egyedi adatokat rendelhet hozzájuk.</p>
+<p>A mezőket tetszés szerint nevezheti el, de az alábbiakat tartsa szem előtt:</p>
+<ul>
+<li>A szóközök növelik az olvashatóságot a Write panelen, de az ilyen mezők <em>nem</em> használhatók rendezési vagy szűrési paraméterként az article_custom címkében. Ha ilyen funkciót is szeretne használni, inkább aláhúzásjeleket használjon.</li>
+<li>Ügyeljen arra, hogy a mezőnevek ne ütközzenek a Textpattern fenntartott mezőneveivel. Például ne használja a <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> stb. neveket, mert furcsa eredményekhez vagy hibás webhelyhez vezethetnek.</li>
+<li>Az egyes mezőkben tárolt adat legfeljebb 255 karakter hosszú sima szöveg lehet.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Dátumformátum"><![CDATA[
+<h2>Dátumformátum</h2>
+<p>Ez a beállítás kizárólag azt határozza meg, hogy a cikkek dátuma hogyan jelenjen meg a webhely címlapján.</p>
+        ]]></item>
+        <item id="default_event" title="Alapértelmezett panel"><![CDATA[
+<h2>Alapértelmezett panel</h2>
+<p>Az a Textpattern adminisztrációs panel, amelyet elsőként lát bárki, amikor bejelentkezik.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Alapértelmezett közzétételi állapot"><![CDATA[
+<h2>Alapértelmezett közzétételi állapot</h2>
+<p>Meghatározza az újonnan létrehozott Textpattern cikkek közzétételi láthatósági állapotát.</p>
+<p>Ez a beállítás nem érinti a módosítás előtt létrehozott vagy szerkesztett cikkek állapotát.</p>
+<p>Az alapértelmezett közzétételi állapot az alábbiak egyike lehet:</p>
 <ul>
     <li>Vázlatos</li>
     <li>Rejtett</li>
@@ -146,194 +726,477 @@
     <li>Élő</li>
     <li>Állandó</li>
 </ul>
-<p>A <strong>vázlatos</strong> cikkek szerkesztés alatt állnak és nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről (azaz nem tekinthetők meg a Textpattern kezdőoldalról és nem jelennek meg a hírfolyamokban).</p>
-<p>A <strong>rejtett</strong> cikkek nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről.</p>
-<p>A <strong>függőben lévő</strong> cikkek közzétételre készek és jóváhagyásra várnak, azonban nem tekinthetők meg a Textpattern adminisztrációs felületén kívülről.</p>
-<p>Az <strong>élő</strong> cikkek jellemzően megtekinthetők a Textpattern adminisztrációs felületén kívülről is (azaz megjelennek a Textpattern kezdőoldalán, és a hírfolyamokban, ha a beállítás megengedi). Az élő cikkek a lejárati dátum elérése után is élő állapotban maradnak, viszont csak abban az esetben jelennek meg az adminisztrációs felületen kívül, ha a lejárt cikkek közzététele engedélyezve van.</p>
-<p>Az <strong>állandó</strong> cikkek abból a szempontból hasonlóak az <strong>élő</strong> cikkekhez, hogy megtekinthetők a Textpattern adminisztrációs felületen kívül, viszont <strong>nem</strong> jelennek meg a cikkek listájában hacsak a hozzájuk tartozó <code>article</code> vagy <code>article_custom</code> elem nem tartalmazza a <code>status</code> attribútumot a <code>sticky</code> értékkel.</p>
+<p>A <strong>vázlatos</strong> cikk szerkesztés alatt áll, és nem látható a Textpattern adminisztrációs felületén kívül (vagyis nem látható a webhelyen és nem szerepel a hírfolyamokban).</p>
+<p>A <strong>rejtett</strong> cikk nem látható a Textpattern adminisztrációs felületén kívül.</p>
+<p>A <strong>függőben lévő</strong> cikk közzétételre kész és jóváhagyásra vár, de a Textpattern adminisztrációs felületén kívül nem látható.</p>
+<p>Az <strong>élő</strong> cikk általában látható a Textpattern adminisztrációs felületén kívül (vagyis megjelenik a webhelyen, és a hírfolyamokban is, ha a beállítás ezt engedi). Ha egy cikk élő, és lejárati dátummal rendelkezik, az állapota a dátum elérése után is élő marad, de a cikk csak akkor jelenik meg az adminfelületen kívül, ha a lejárt cikkek közzététele engedélyezve van.</p>
+<p>Az <strong>állandó</strong> cikk hasonló az <strong>élő</strong> cikkhez, amennyiben a látogatók megtekinthetik, azonban <strong>nem</strong> jelenik meg a cikklistákban, hacsak az adott <code>article</code> vagy <code>article_custom</code> címke nem tartalmazza a <code>status</code> attribútumot <code>sticky</code> értékkel.</p>
         ]]></item>
-        <item id="title" title=""><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Válassza ki, melyik HTML doctype-ot kívánja használni (HTML5 vagy XHTML). Ez befolyásolja a megjegyzésűrlapokat, a Textile által generált <code>&lt;abbr&gt;</code> vagy <code>&lt;acronym&gt;</code> elemeket, valamint a <code>&lt;link&gt;</code> címkéket, amelyeket a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> címke <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> hoz létre.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Fejlesztés alatt álló téma előnézetének engedélyezése?"><![CDATA[
+<h2>Fejlesztés alatt álló téma előnézetének engedélyezése?</h2>
+<p>A megfelelő jogosultsággal rendelkező felhasználók (alapértelmezés szerint a Publisher és Designer szerepkörrel rendelkezők) biztonságosan fejleszthetnek és előnézetben megtekinthetnek egy új témát, miközben a többi felhasználó továbbra is a régi témát látja (amíg az új nem kerül élesítésre).</p>
+<p>A kiváltságos felhasználók, akik nem kívánnak részt venni a témák fejlesztésében, letilthatják a fejlesztési téma előnézetét. Ilyenkor ők is az aktuális „nyilvános” témát fogják látni, akárcsak a szokásos látogatók.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Rövid címke szintaxis engedélyezése?"><![CDATA[
+<h2>Rövid címke szintaxis engedélyezése?</h2>
+<p>A Textpattern címkék formája alapból <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. A gépelés csökkentése érdekében engedélyezhető egy rövidített jelölés, amelynél a <code>txp:</code> előtag elhagyható, ha néhány egyszerű szabályt betart. Íme néhány példa a koncepció szemléltetésére:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> → <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> → <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> → <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> → <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> → <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (figyelje meg, hogy a bővítmény előtagja az <code>else</code> címkével is használható).</li>
+</ul>
+<p>Ha a címke aláhúzásjelet tartalmaz, és engedélyezi a rövid címkéket, az alapelv a következő:</p>
+<ol>
+    <li>Távolítsa el a <code>txp:</code> előtagot.</li>
+    <li>Cserélje le az első aláhúzásjelet <code>::</code> szekvenciára.</li>
+</ol>
+<p>Megjegyzés: ez a beállítás nem érinti a <code>&lt;txp:output_form /&gt;</code> rövid kódok használatának lehetőségét az űrlaprészletek kiadásához. Továbbra is használhatja a <code>&lt;txp::shortcode /&gt;</code> alakot, amelyet a rendszer <code>&lt;txp:output_form form="shortcode" /&gt;</code> formára értelmez.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="XML-RPC szerver engedélyezése?"><![CDATA[
+<h2>XML-RPC szerver engedélyezése?</h2>
+<p>Ha <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC-t <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> szeretne használni a Textpattern távoli vezérlésére (például asztali vagy mobil alkalmazásokkal), akkor ezt a beállítást „Igen”-re kell állítania.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Bővített e-mail funkciók használata"><![CDATA[
+<h2>Bővített e-mail funkciók használata</h2>
+<p>Ha „Nem”-re állítja, minden e-mail – például jelszó-visszaállítási kérések és bővítmények (mint a com_connect) által küldött levelek – a PHP <code>mail()</code> függvényén keresztül kerül elküldésre. Ha „Igen”-re állítja, a rendszer a mellékelt PHPMailer komponenst használja, amely lehetővé teszi az e-mailek külső SMTP-szervereken keresztüli továbbítását.</p>
+<p>Ha problémákat tapasztal az e-mailek kézbesíthetőségével (különösen online szolgáltatóknál, mint például a Gmail, Outlook, Yahoo! stb.), ennek oka gyakran az, hogy a tartománya nem számít megbízható forrásnak. A „Igen” beállítás javíthatja a kézbesíthetőséget. Emellett az SMTP használata jobb kompatibilitást nyújthat egyes e-mail-szolgáltatókkal, és tovább javíthatja a kézbesíthetőséget.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Naplók lejárata hány nap után?"><![CDATA[
+<h2>Naplók lejárata hány nap után?</h2>
+<p>Ha a Textpattern naplózás engedélyezve van, megadhatja, hogy hány napig őrizze meg a rendszer a naplókat. A „7” például hét napig tartja meg őket.</p>
+<p><strong>Megjegyzés:</strong> A naplókat csak a „Visitor logs” panel megtekintésekor vágja le a rendszer, ellenkező esetben tovább nő a méretük.</p>
+        ]]></item>
+        <item id="file_base_path" title="Fájlkönyvtár útvonala"><![CDATA[
+<h2>Fájlkönyvtár útvonala</h2>
+<p>Ez állítja be azt az <strong>abszolút útvonalat</strong>, ahová a feltöltött fájlok véglegesen mentésre kerülnek. A PHP-nak írási joggal kell rendelkeznie ezen a könyvtáron.</p>
+<p><strong>Megjegyzés:</strong> Biztonsági okokból érdemes ezt a könyvtárat a webhely nyilvánosan elérhető dokumentum-gyökérkönyvtárán kívülre helyezni.</p>
+        ]]></item>
+        <item id="file_download_header" title="Fájllelérési fejlécek"><![CDATA[
+<h2>Fájllelérési fejlécek</h2>
+<p>Lehetővé teszi a fájlletöltések kezelésének testreszabását.</p>
+<p>Alapértelmezés szerint minden letöltés mellékletként kerül kiszolgálásra (a böngésző beállításaitól függően letöltés indul). Ha azt szeretné jelezni, hogy egyes fájltípusokkal hogyan bánjon a böngésző, itt adhat meg címkekódot a kívánt viselkedés beállításához. Példa: a Textpattern „inline-pdf” kategóriába sorolt PDF-fájlokat letöltés helyett megjelenítheti beágyazva:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Feltölthető fájlok maximális mérete (byte-ban)"><![CDATA[
+<h2>Feltölthető fájlok maximális mérete (byte-ban)</h2>
+<p>A fájlfeltöltésekhez megadhat egy maximális méretet (byte-ban). Ne feledje, hogy ezt az értéket a PHP konfigurációja is korlátozza. Ha a Textpattern azt észleli, hogy a PHP beállításai ennél kisebb értékre korlátozzák a feltöltési méretet, automatikusan lejjebb igazítja. Ha nagyobb fájlok böngészőn keresztüli feltöltését szeretné engedélyezni, lépjen kapcsolatba a tárhelyszolgáltatóval (a releváns beállítások a <code>php.ini</code> fájlban: <code>post_max_size</code>, <code>upload_max_filesize</code> és <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Időzóna"><![CDATA[
+<h2>Időzóna</h2>
+<p>Annak érdekében, hogy a dátumok a helyi idő szerint jelenjenek meg, válassza ki az időzónáját.</p>
+        ]]></item>
+        <item id="img_dir" title="Képkönyvtár"><![CDATA[
+<h2>Képkönyvtár</h2>
+<p>Ha szeretné testre szabni a képkönyvtár nevét, itt teheti meg. A könyvtárat előbb létre kell hoznia a Textpattern telepítés gyökérkönyvtárában, és meg kell győződnie arról is, hogy a PHP írni tud ebbe a könyvtárba.</p>
+<p>Ez az útvonal mindig a Textpattern telepítés gyökeréhez viszonyított <strong>relatív útvonal</strong>.</p>
+<p>Alapértelmezett értéke: <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="E-mail-címek megjelenítése az Atom-hírfolyamokban?"><![CDATA[
+<h2>E-mail-címek megjelenítése az Atom-hírfolyamokban?</h2>
+<p>Ezzel a beállítással engedélyezheti, hogy a cikk szerzőjének e-mail-címe (a felhasználói fiókban megadott cím) megjelenjen az Atom-hírfolyamok <code>author</code> részében.</p>
+        ]]></item>
+        <item id="is_dst" title="Nyári időszámítás engedélyezve?"><![CDATA[
+<h2>Nyári időszámítás engedélyezve?</h2>
+<p>Megadja, hogy jelenleg érvényben van-e a nyári időszámítás (DST) az Ön időzónájában.</p>
+        ]]></item>
+        <item id="logging" title="Naplózás"><![CDATA[
+<h2>Naplózás</h2>
+<p>Megadhatja, milyen szintű látogatói naplózást végezzen a Textpattern:</p>
+<ul>
+    <li><strong>Minden lekérés:</strong> a Textpattern minden oldalmegtekintést naplóz a webhelyén</li>
+    <li><strong>Csak hivatkozók:</strong> a Textpattern csak azokat a látogatásokat naplózza, amelyek más webhelyekről érkeztek</li>
+    <li><strong>Nincs:</strong> a Textpattern nem naplózza az oldalmegtekintéseket</li>
+</ul>
+<p>A Textpattern 4.7.0 verziójától kezdve a rendszer semmilyen látogatói IP-címet nem gyűjt és nem tárol. Ha a Textpatternen kívül tárol IP-címeket, az adatvédelemre vonatkozó előírások (például a <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>) betartása érdekében gondoskodjon a megfelelő adatkezelésről, és a szerver és a Textpattern telepítés minden elemét védje megfelelően, hogy elkerülje az adatszivárgást.</p>
+<p>Erősen ajánlott az alapértelmezett „Nincs” beállításon hagyni ezt az opciót, hacsak nincs feltétlenül szüksége ezekre az információkra, és nem tájékoztatja nyilvánosan a felhasználókat az adatok tervezett felhasználásáról.</p>
+        ]]></item>
+        <item id="max_url_len" title="URL maximális hossza (karakterben)"><![CDATA[
+<h2>URL maximális hossza (karakterben)</h2>
+<p>Ez a beállítás megakadályozza, hogy a megadottnál hosszabb URL-ek működjenek. Hasznos lehet a károk csökkentésében és a webhely biztonságának növelésében.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Admin-oldali inline súgóhivatkozások megjelenítése"><![CDATA[
+<h2>Admin-oldali inline súgóhivatkozások megjelenítése</h2>
+<p>Ha el szeretné rejteni az admin-oldali inline súgóhivatkozásokat (Textpattern súgó felugró ablakok) a rendszer egészében, állítsa ezt a beállítást „Nincs”-ra.</p>
+        ]]></item>
+        <item id="never_display_email" title="Megjegyzést író e-mail-címének elrejtése?"><![CDATA[
+<h2>Megjegyzést író e-mail-címének elrejtése?</h2>
+<p>Ez a beállítás szabályozza, hogy a megjegyzést írók e-mail-címei nyilvánosan megjelenjenek-e.</p>
+<p>Udvariassági okokból ajánlott az e-mail-címek elrejtése, ugyanakkor bizonyos helyzetekben előnyös lehet a megjelenítésük.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="ISO-8859-1 kódolás használata e-mailekben (alapértelmezett az UTF-8)?"><![CDATA[
+<h2>ISO-8859-1 kódolás használata e-mailekben (alapértelmezett az UTF-8)?</h2>
+<p>A Textpattern alapértelmezés szerint, ahol csak lehetséges, UTF-8 kódolást használ, beleértve a kimenő e-maileket is. Néhány régebbi e-mail kliens (beleértve bizonyos Microsoft Outlook verziókat) azonban nem rendelkezik megfelelő UTF-8 támogatással. Ha az e-mailekben torz karaktereket lát, ez a beállítás ISO-8859-1 kódolásra konvertálja a szöveget küldés előtt.</p>
+<p><strong>Megjegyzés:</strong> Ha olyan nyelvet használ, amelynek karakterei nem fejezhetők ki ISO-8859-1-ben, ez a beállítás sajnos nem segít. Ilyen esetben UTF-8- (vagy Unicode-) kompatibilis e-mail klienst kell keresnie.</p>
+        ]]></item>
+        <item id="override_form_types" title="Felülbíráló űrlaptípusok"><![CDATA[
+<h2>Felülbíráló űrlaptípusok</h2>
+<p>Válassza ki, mely űrlaptípusok sablonjai legyenek elérhetők a Write panelen felülbíráló űrlapként.</p>
+        ]]></item>
+        <item id="permlink_format" title="Állandó hivatkozás címének URL mintája"><![CDATA[
+<h2>Állandó hivatkozás címének URL mintája</h2>
+<p>Ez határozza meg, hogyan épüljenek fel és kerüljenek hozzárendelésre a cikk-URL-ek, amikor nem „zavaros” módot használ.</p>
+<p>Amikor egy cikket közzétesz, az URL alapértelmezés szerint a cikk címéből generálódik, hacsak a Csak URL-cím mezőben nem ad meg egyedi URL-t.</p>
+<p>Tegyük fel, hogy a cikk címe: <em>Ann and Bob eat cake</em></p>
+<p>Ha az állandó hivatkozás URL mintája „Kötőjeles (title-like-this)”, akkor a cikk URL-je a következő lesz:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Ha az állandó hivatkozás URL mintája „Nagy kezdőbetűs (TitleLikeThis)”, akkor a cikk URL-je ez lesz:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Cikk URL mintája"><![CDATA[
+<h2>Cikk URL mintája</h2>
+<p>Ez határozza meg, hogy az egyes cikkek URL-je milyen séma szerint épüljön fel, amikor a <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> címkével <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> jeleníti meg azokat.</p>
+<p>A „?=messy” mód a leginkább kompatibilis – szinte semmilyen beállítást nem igényel –, ugyanakkor a legkevésbé kedvező az URL-ek olvashatósága és a keresőoptimalizálás (SEO) szempontjából. Ebben a módban a cikkek URL-je például így néz ki:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>A többi mód megköveteli a webszerver URL-átírási képességét (például az Apache <code>mod_rewrite</code> modulját vagy NGINX esetén átírási direktívákat a <code>server</code> blokkban). Ha a szerver nem támogat URL-átírást, keresse fel a tárhelyszolgáltatót, vagy használja a fenti „?=messy” módot.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Bővítmények gyorsítótárának könyvtár útvonala"><![CDATA[
+<h2>Bővítmények gyorsítótárának könyvtár útvonala</h2>
+<p>Ez a beállítás elsősorban bővítményfejlesztők számára hasznos. Ha megadja, akkor a bővítmény forrásfájlját (nem a lefordított változatot) ebbe a könyvtárba helyezheti, és a Textpattern automatikusan betölti, így a bővítmény installálása / aktiválása nélkül is szerkesztheti azt, és azonnal láthatja a hatását. <strong>Figyelem:</strong> ha ilyen módon tölt be egy bővítményt, egy hibás (nem fordítható) bővítmény akár a Textpattern működését is megakaszthatja!</p>
+<p>Éles webhelyen ajánlott, hogy a bővítményeket a szokásos „Plugins” panelen keresztül töltse be, ne a bővítmény-gyorsítótárat használja.</p>
+<p><strong>Megjegyzés:</strong> Ne adja meg ugyanazt a könyvtárat ideiglenes és bővítmény-gyorsítótár könyvtárként is, mert ez problémákat okoz (a Textpattern megpróbálná a naplófájlok tartalmát is bővítményként futtatni).</p>
+        ]]></item>
+        <item id="production_status" title="Produkciós állapot"><![CDATA[
+<h2>Produkciós állapot</h2>
+<p>Egy Textpattern webhely három üzemmód egyikében működhet:</p>
+<ol>
+    <li>„Debugging” (hibakeresés)</li>
+    <li>„Testing” (tesztelés)</li>
+    <li>„Live” (éles)</li>
+</ol>
+<h3>Hibakeresési mód</h3>
+<p>A webhelyen minden PHP hibaüzenet látható lesz, ugyanígy a hibás kódokra és bővítményekre figyelmeztető üzenetek is. Ezen felül az élő oldalak HTML forrásában az alábbi információk jelennek meg:</p>
+<ul>
+    <li>az oldal felépítéséhez szükséges szerveridő („Runtime”)</li>
+    <li>a végrehajtott MySQL-lekérdezések száma</li>
+    <li>a hozzávetőleges csúcsmemória-használat</li>
+    <li>az oldal felépítése során feldolgozott összes Textpattern címke (úgynevezett címkekövetés)</li>
+</ul>
+<h3>Tesztelési mód</h3>
+<p>A webhelyen minden PHP hibaüzenet látható lesz, ugyanígy a hibás kódokra és bővítményekre figyelmeztető üzenetek is. Az élő oldalak HTML forrásában az alábbi információk jelennek meg:</p>
+<ul>
+    <li>az oldal felépítéséhez szükséges szerveridő („Runtime”)</li>
+    <li>a végrehajtott MySQL-lekérdezések száma</li>
+    <li>a hozzávetőleges csúcsmemória-használat</li>
+</ul>
+<h3>Éles mód</h3>
+<p>Ebben a módban nem jelennek meg hibajelentések vagy diagnosztikai információk az oldalon. Általában az éles mód használata javasolt, mivel ez biztosítja a legjobb felhasználói élményt, és a legkisebb terhelést jelenti a szerver számára.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Nyilvános oldal témája"><![CDATA[
+<h2>Nyilvános oldal témája</h2>
+<p>Az az alapértelmezett téma, amelyet a rendszer a nyilvános webhely megjelenítésére használ. A Textpattern tartalmaz egy előre telepített alapértelmezett témát, valamint a témanélküli indulás lehetőségét. Ezen felül további téma-csomagokat is elhelyezhet a <code>textpattern/themes</code> könyvtárban, hogy használhatóvá váljanak.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Lejárt cikkek közzététele?"><![CDATA[
+<h2>Lejárt cikkek közzététele?</h2>
+<p>Ha „Igen”-re állítja, a lejárt cikkek a lejárati dátumuk után is megjelennek a webhelyen. Az <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> címkével <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> alternatív tartalmat vagy jelölést jeleníthet meg a lejárt cikkekhez.</p>
+<p>Ha „Nem”-re állítja, a lejárt cikkek eltűnnek a nyilvános webhelyről, és a rendszer „410 Gone” HTTP-állapotkódot ad vissza rájuk. Az alapértelmezett érték „Nem”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Bejelentkezési adatok küldése erről az e-mail-címről"><![CDATA[
+<h2>Bejelentkezési adatok küldése erről az e-mail-címről</h2>
+<p>Itt adhatja meg azt az e-mail-címet, amely a felhasználói bejelentkezési adatokat tartalmazó üzenetek „Feladó:” címeként szerepel.</p>
+<p>Ha ezt a beállítást üresen hagyja, vagy érvénytelen e-mail-címet ad meg, a Textpattern az aktuálisan bejelentkezett felhasználó nevét és címét fogja használni helyette.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Hány cikk szerepeljen a hírfolyamokban?"><![CDATA[
+<h2>Hány cikk szerepeljen a hírfolyamokban?</h2>
+<p>Ez határozza meg, hogy egyszerre legfeljebb hány aktuális cikk kerüljön szindikálásra RSS és Atom formátumban.</p>
+<p>Alacsony, például <code>5</code> és <code>15</code> közötti érték használata ajánlott.</p>
+        ]]></item>
+        <item id="secondpass" title="További elemzési menetek száma"><![CDATA[
+<h2>További elemzési menetek száma</h2>
+<p>A Textpattern címkeelemzője általában egy menetben helyettesíti a sablon összes címkéjét az adatbázisból származó tartalommal. Bizonyos esetekben ez nem elegendő, például:</p>
+<ul>
+    <li>alacsony betöltési sorrendű bővítmények használatakor címkeattribútumként</li>
+    <li>kódcsere <code>&lt;txp:php&gt;</code> címkékben</li>
+    <li>az oldal korábbi elemeinek kihagyása annak érdekében, hogy később, más címkék kimenete alapján kapjanak tartalmat</li>
+</ul>
+<p>A Textpattern hagyományosan egy extra elemzési menetet („secondpass”) futtatott visszafelé kompatibilitási okokból, ezért ennek a beállításnak az alapértéke <code>1</code>. A több elemzési menet növeli annak esélyét, hogy nem kívánt címkék is feldolgozásra kerülnek. A címkeelemzőben végrehajtott fejlesztések csökkentették ennek a második menetnek a szükségességét. Ezért, hacsak nincs kimondottan szüksége extra futtatásra, állítsa az értéket <code>0</code>-ra, hogy biztonságosabbá tegye a webhelyet.</p>
+<p>Ha ezután feldolgozatlan címkéket lát a webhelyen kiíratva (és NINCS más címkehiba a Tesztelés/Hibakeresés mód által jelzett, például párosítatlan címkepárok miatt), kérjük, jelezze felénk a sablon / kód / bővítmény részletével együtt. Célunk, hogy megszüntessük a további elemzési menetek szükségességét, és ehhez nagy segítség lenne ez az információ.</p>
+        ]]></item>
+        <item id="send_lastmod" title="„Last-Modified” fejléc küldése?"><![CDATA[
+<h2>„Last-Modified” fejléc küldése?</h2>
+<p>Ha engedélyezi, a Textpattern kiolvassa a látogató HTTP <code>If-Modified-Since</code> fejlécét (ha létezik), és összehasonlítja a webhely utolsó frissítésének idejével. Ha az oldal a látogató legutóbbi letöltése óta nem változott (vagyis a böngésző által küldött időbélyeg megegyezik a webhely utolsó frissítésének időpontjával), a rendszer olyan fejléccel válaszol, amely arra utasítja a böngészőt, hogy a gyorsítótárban lévő verziót használja.</p>
+<p>Ez csökkentheti a sávszélesség-felhasználást, az oldalbetöltési időt és a webszerver terhelését.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Megjegyzések számának megjelenítése a hírfolyamokban?"><![CDATA[
+<h2>Megjegyzések számának megjelenítése a hírfolyamokban?</h2>
+<p>Ha „Igen”-re állítja, ez a beállítás hozzáfűzi a megjegyzések számát a cikkcímekhez az RSS/Atom hírfolyamokban.</p>
+        ]]></item>
+        <item id="site_slogan" title="Webhely jelmondata"><![CDATA[
+<h2>Webhely jelmondata</h2>
+<p>A <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">site slogan <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> a webhelyének tömör összefoglalása vagy leírása. Ahol szükséges, ez kerül felhasználásra a webhely leírásaként – például az RSS/Atom hírfolyamokban –, és tetszőleges más helyen is megjelenítheti a webhelyen.</p>
+<p><strong>Megjegyzés:</strong> A jelmondat opcionális, de érvényes RSS vagy Atom hírfolyamhoz szükség lehet rá.</p>
+        ]]></item>
+        <item id="sitename" title="Webhely neve"><![CDATA[
+<h2>Webhely neve</h2>
+<p>A webhely <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">neve vagy címe <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>. Ez jelenik meg a látogatók böngészőjének címsorában vagy a hírfolyam-olvasóban, illetve a webhely bármely más pontján, ahol Ön szeretné.</p>
+        ]]></item>
+        <item id="siteurl" title="Webhely URL"><![CDATA[
+<h2>Webhely URL</h2>
+<p>Ez a Textpattern webhely címe, például: <code>www.example.com</code>.</p>
+<p><strong>Megjegyzés:</strong> Nem szükséges <code>http://</code>, <code>https://</code> előtag vagy záró perjel <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Témakönyvtár"><![CDATA[
+<h2>Témakönyvtár</h2>
+<p>Ha testre szeretné szabni azt a könyvtárnevet, ahová a nyilvános oldal témáinak egyszerű fájljai kerülnek, itt teheti meg. A könyvtárat előbb létre kell hoznia a Textpattern telepítés gyökérkönyvtárában, és biztosítania kell, hogy a PHP írni tudjon bele.</p>
+<p>Ez az útvonal mindig a Textpattern telepítés gyökeréhez viszonyított <strong>relatív útvonal</strong>.</p>
+<p>Alapértelmezett értéke: <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP „boríték” feladó címe"><![CDATA[
+<h2>SMTP „boríték” feladó címe</h2>
+<p>Ezt a beállítást hagyja üresen, hacsak nem tapasztal problémákat a Textpatternből küldött e-mailek kézbesítésével (például egyáltalán nem érkeznek meg az e-mailek). Ha ilyen probléma merül fel, bármilyen érvényes e-mail-címet megadhat, de lehetőleg olyat, amelynek tartománya megegyezik a Textpattern telepítés webhelyének tartományával (például ha a webhelye <code>https://example.com</code>, használhatja a <code>you@example.com</code> címet).</p>
+<p>Technikai részletek iránt érdeklődőknek:</p>
+<ul>
+    <li>UNIX-szerű / macOS szervereken a megadott e-mail-cím a PHP <code>mail()</code> függvény 4. paramétereként kerül felhasználásra (előtagja „-f”).</li>
+    <li>Windows szervereken a megadott e-mail-cím a <code>sendmail_from</code> php.ini beállítás értékét adja meg vagy írja felül.</li>
+</ul>
+<p>Ezzel biztosítható, hogy az SMTP „boríték” feladó címe (amely nem feltétlenül egyezik meg a levelekben látható „From:” fejléccel) a megadott e-mail-cím legyen – egyes webszerverek megkövetelik ezt a beállítást az e-mailek küldéséhez.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP hoszt"><![CDATA[
+<h2>SMTP hoszt</h2>
+<p>Az üzenetek megbízhatóbb kézbesítése és külső e-mail-szolgáltató (például SendGrid, AWS SES, Mailchimp, Mailgun stb.) használata érdekében itt adhatja meg az SMTP szervert. Az értéket az SMTP szolgáltatótól kaphatja meg.</p>
+<p>Ez az érték a <code>config.php</code> fájlban definiált <code>SMTP_HOST</code> konstanssal is megadható; ilyen esetben a beállítás a Preferences panelen szürkén, nem módosíthatóként jelenik meg.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP jelszó"><![CDATA[
+<h2>SMTP jelszó</h2>
+<p>Ha az SMTP-kapcsolat a megadott felhasználónévhez jelszót igényel, itt adhatja meg. A részletekért olvassa el a szolgáltató dokumentációját.</p>
+<p>Megjegyzés: bár a jelszó itt nem jelenik meg, <em>egyszerű szövegként</em> kerül tárolásra az adatbázis prefs táblájában. Ha fokozott biztonságra vágyik, a jelszót inkább <code>SMTP_PASS</code> konstansként adja meg a <code>config.php</code> fájlban.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP port"><![CDATA[
+<h2>SMTP port</h2>
+<p>Ha SMTP-hosztot adott meg, a portot is meg kell határozni az SMTP használatához. Gyakoribb portok:</p>
+<ul>
+    <li>25 – titkosítatlan levelezés</li>
+    <li>465 – régi (nem hivatalos) port titkosított levelezéshez</li>
+    <li>587 – alapértelmezett (ajánlott) port biztonságos TLS levelezéshez</li>
+</ul>
+<p>Az Ön által választott SMTP-szolgáltató ettől eltérő portot is használhat, ezért mindenképp olvassa el a dokumentációjukat.</p>
+<p>Ez az érték a <code>config.php</code> fájlban definiált <code>SMTP_PORT</code> konstanssal is megadható; ilyen esetben a beállítás a Preferences panelen szürkén, nem módosíthatóként jelenik meg.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP biztonsági módszer"><![CDATA[
+<h2>SMTP biztonsági módszer</h2>
+<p>Válassza ki, hogy az SMTP szolgáltató mely e-mail biztonsági protokollt használja. A részletekért olvassa el a szolgáltató dokumentációját.</p>
+<p>Ez az érték a <code>config.php</code> fájlban definiált <code>SMTP_SECTYPE</code> konstanssal is megadható; ilyen esetben a beállítás a Preferences panelen szürkén, nem módosíthatóként jelenik meg.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP felhasználónév"><![CDATA[
+<h2>SMTP felhasználónév</h2>
+<p>Ha az SMTP-kapcsolat felhasználó- vagy bejelentkezési nevet igényel, itt adhatja meg. A részletekért olvassa el a szolgáltató dokumentációját.</p>
+<p>Ez az érték a <code>config.php</code> fájlban definiált <code>SMTP_USER</code> konstanssal is megadható; ilyen esetben a beállítás a Preferences panelen szürkén, nem módosíthatóként jelenik meg.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spam feketelisták (vesszővel elválasztva)"><![CDATA[
+<h2>Spam feketelisták (vesszővel elválasztva)</h2>
+<p>Az itt megadott <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">feketelista-szolgáltatók <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> kerülnek lekérdezésre, amikor valaki megjegyzést küld be az oldalán, és a rendszer ellenőrzi a megjegyzést küldő IP-címét. Ha az IP-cím szerepel a listán, az azt jelenti, hogy korábban egy vagy több spam-bejelentés érkezett róla, és a megjegyzést a rendszer elutasítja. A vizsgálat eredményétől függetlenül a Textpattern nem tárolja a megjegyzést író IP-címét.</p>
+<p>Vesszővel elválasztott domainnevek listáját adhatja meg. Ne feledje, hogy Ön felelős azért, hogy a használt feketelisták megfeleljenek a céljuknak.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Csak a cikk kivonatának hírszolgáltatása?"><![CDATA[
+<h2>Csak a cikk kivonatának hírszolgáltatása?</h2>
+<p>Ha „Nem”-re állítja, a hírfolyamelemek a cikk teljes törzsét fogják tartalmazni.</p>
+<p>Ha „Igen”-re állítja, a hírfolyamelemek, ha rendelkezésre áll, a cikkkivonatot fogják tartalmazni a cikk törzse helyett.</p>
+        ]]></item>
+        <item id="tempdir" title="Ideiglenes könyvtár útvonala"><![CDATA[
+<h2>Ideiglenes könyvtár útvonala</h2>
+<p>Beállít egy <strong>abszolút útvonalat</strong> az ideiglenes (gyakran „tmp” vagy „temp”) könyvtárhoz. A PHP-nak írási joggal kell rendelkeznie ebben a könyvtárban. Ezt a könyvtárat ideiglenes fájlok – például különféle feltöltések (bővítmények, fájlok, képek) – tárolására használja a rendszer.</p>
+<p><strong>Megjegyzések:</strong>
+<ul>
+    <li>Ne adja meg ugyanazt a könyvtárat ideiglenes és bővítmény-gyorsítótár könyvtárként is, mert ez problémákat okoz (a Textpattern a naplófájlokat is bővítményként próbálná futtatni).</li>
+    <li>Biztonsági okokból érdemes ezt a könyvtárat a webhely nyilvánosan elérhető dokumentum-gyökérkönyvtárán kívülre helyezni.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Admin-oldali téma"><![CDATA[
+<h2>Admin-oldali téma</h2>
+<p>Az az alapértelmezett adminisztrációs téma, amelyet a rendszer minden bejelentkezett felhasználó számára használ. A Textpattern több előre telepített admin-témát tartalmaz, és további egyéni téma-csomagokat helyezhet el a <code>textpattern/admin-themes</code> könyvtárban, hogy használhatóvá váljanak.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Záró perjel hozzáadása az URL-ek végére"><![CDATA[
+<h2>Záró perjel hozzáadása az URL-ek végére</h2>
+<p>Meghatározza, hogy a Textpattern automatikusan hozzáadjon-e egy záró perjelet a generált URL-ekhez. A lehetőségek:</p>
+<ul>
+    <li><strong>Nem</strong> – soha</li>
+    <li><strong>Lista</strong> – csak a listaalapú céloldalakon (egyedi cikknézetben nem)</li>
+    <li><strong>Igen</strong> – mindig</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="txp:evaluate függvényben engedélyezett PHP függvények"><![CDATA[
+<h2>txp:evaluate függvényben engedélyezett PHP függvények</h2>
+<p>Ez egy vesszővel elválasztott lista <code>függvény</code> vagy <code>álnév=függvény</code> elemekkel, például: <code>md5</code>, <code>replace=str_replace</code>. A listában szereplő elemek a <code>&lt;txp:evaluate /&gt;</code> címke <code>query</code> attribútumában használhatók:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>A <code>függvény</code> visszatérési értékének skalár típusúnak kell lennie (<strong>nem</strong> lehet tömb / objektum).</p>
+        ]]></item>
+        <item id="use_comments" title="Megjegyzések elfogadása?"><![CDATA[
+<h2>Megjegyzések elfogadása?</h2>
+<p>Ez a beállítás határozza meg, hogy a Textpattern megjegyzésfunkciója be legyen-e kapcsolva vagy sem.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="E-mail-cím használata hírfolyam-azonosítók felépítéséhez (alapértelmezett az oldal URL-je)?"><![CDATA[
+<h2>E-mail-cím használata hírfolyam-azonosítók felépítéséhez (alapértelmezett az oldal URL-je)?</h2>
+<p>Az Atom hírfolyam elemeinek egyedi azonosítóra van szükségük.</p>
+<p>Annak érdekében, hogy ezek az azonosítók egyediek legyenek az Ön webhelyén, a Textpattern két lehetőséget kínál: e-mail-címből vagy a domainnévből építi fel az azonosítókat. Az e-mail-cím a webhely létrehozásakor elsőként megadott cím lesz. Ha várhatóan nem fogja megváltoztatni a domainnevét, valószínűleg biztonságos a „Nem” beállítás.</p>
+        ]]></item>
+        <item id="use_plugins" title="Bővítmények használata?"><![CDATA[
+<h2>Bővítmények használata?</h2>
+<p>Ezzel a beállítással teljesen ki tudja kapcsolni a Textpattern bővítmények támogatását. Hasznos lehet hibakereséskor, ha ellenőrizni szeretné, hogy egy vagy több bővítmény okozza-e a problémát.</p>
+        ]]></item>
+        <item id="use_textile" title="Alapértelmezett szövegformázás"><![CDATA[
+<h2>Alapértelmezett szövegformázás</h2>
+<p>Az itt kiválasztott szövegformázás lesz az alapértelmezett a szemelvény és a törzs jelölésére a „Write” panelen. Kiválaszthatja a teljes Textile feldolgozást, a sortörések HTML bekezdéssé alakítását vagy a szöveg érintetlenül hagyását.</p>
+<p>A <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a> olyan segédeszköz, amelynek célja, hogy egyszerűbbé tegye a sima szöveg HTML-lé alakítását. Ha engedélyezi, a Textile feldolgozza a cikkek törzsszövegét, és szerkezetileg helyes HTML-ként adja vissza.</p>
+<p>A Textile egy hatékony, mégis könnyen elsajátítható parancskészletet kínál a szöveg formázásához, listák, címsorok és idézetblokkok létrehozásához, illetve hivatkozások és képek beszúrásához.</p>
+        ]]></item>
     </group>
 
-    <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
-        <item id="category_description" title=""><![CDATA[]]></item>
-        <item id="file_category" title=""><![CDATA[]]></item>
-        <item id="image_category" title=""><![CDATA[]]></item>
-        <item id="link_category" title=""><![CDATA[]]></item>
+    <group id="section" title="Szekciók panel">
+        <item id="section_category" title="Bevezetés"><![CDATA[
+<h2>Bevezetés</h2>
+<p>A Textpatternben a szekciókat leginkább egy újság rovataihoz lehet hasonlítani: mind ugyanahhoz a kiadványhoz tartoznak, de lehet, hogy eltérő elrendezést vagy cikk-stílust használnak, és így tovább.</p>
+<p>A legtöbb webhely esetében csak a lehető legkevesebb szekció létrehozása szükséges.</p>
+<h3>Egy lehetséges példa egy három szekcióból álló webhelyre:</h3>
+<ol>
+    <li><strong>Archívum:</strong> Az a „Szekció”, amelyhez minden olyan cikk tartozik, amely a címlapon megjelenik. Amikor egy olvasó egy cikk állandó hivatkozására kattint, az ebben a „Szekcióban” beállított oldalelrendezésben jelenik meg. Az „Archive” szekcióhoz tartozó legfrissebb cikkek lapozható listájához az URL például ez lehet: <code>https://example.com/archive/</code>.</li>
+    <li><strong>Névjegy:</strong> Egy „erről az oldalról” típusú oldal, amely eltér a címlaptól és az „Archive” szekciótól, mivel inkább statikus, eltérő elrendezésű lehet, és valószínűleg csak egyetlen cikket tartalmaz. A „Névjegy” szekció például a <code>https://example.com/about/</code> címen érhető el.</li>
+    <li><strong>Fotók:</strong> Egy olyan „Szekció”, amelynek eltérő elrendezése (és esetleg CSS-e) a cikkek helyett fotók megjelenítésére szolgál.</li>
+</ol>
+<p>Megjegyzés: mindig létezik egy speciális, rejtett szekció, amelynek neve default. Ez az alapértelmezett szekció a default nevű oldalt és a default nevű stílust használja, és ebből áll össze a webhely címlapja.</p>
+        ]]></item>
+        <item id="section_default" title="Alapértelmezett közzétételi szekció"><![CDATA[
+<h2>Alapértelmezett közzétételi szekció</h2>
+<p>Ez az opció szabályozza, hogy a „Write” panelen új cikk létrehozásakor melyik szekció legyen előre kiválasztva a Szekció menüben.</p>
+<p>Ha a cikkek többsége egy adott szekcióba kerül, válassza ki azt itt a listából. A változtatások azonnal érvénybe lépnek.</p>
+<p>Ezt cikkenként felülbírálhatja a „Write” panelen, ha a „Rendezés és megjelenítés” részben más szekciót választ.</p>
+        ]]></item>
+        <item id="section_description" title="Leírás"><![CDATA[
+<h2>Leírás</h2>
+<p>A szekcióleírás egy opcionális elem, amely segíthet a keresőmotoroknak és a webrobotoknak a tartalom jobb azonosításában és rendezésében.</p>
+<p>A szekcióleírás legfeljebb 255 karakter hosszú lehet. Vegye figyelembe, hogy egyes keresőmotorok korlátozzák az oldal <code>meta description</code> elemének hosszát a találati listákban (SERP-ekben) való megjelenítés gyakorlati okai miatt, és ez rövidebb is lehet a Textpatternben megengedett 255 karakternél.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="A szekció cikkei megjelenjenek a címlapon?"><![CDATA[
+<h2>A szekció cikkei megjelenjenek a címlapon?</h2>
+<p>Egyes szekciók cikkei – például a „statikusabb” weboldalnak tűnő tartalmak – idegenül hathatnak a webhely címlapjának időérzékeny folyamban.</p>
+<p>Ha ezt „Nem”-re állítja, az adott szekcióhoz tartozó cikkek nem jelennek meg a címlapon.</p>
+        ]]></item>
+        <item id="section_searchable" title="Ez a szekció szerepeljen az oldalszintű keresésben?"><![CDATA[
+<h2>Ez a szekció szerepeljen az oldalszintű keresésben?</h2>
+<p>Ez a beállítás szabályozza, hogy az adott szekcióhoz tartozó cikkek megjelenjenek-e a teljes webhelyre kiterjedő keresési találatok között.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Hírszolgáltatás az ebben a szekcióban lévő cikkekhez?"><![CDATA[
+<h2>Hírszolgáltatás az ebben a szekcióban lévő cikkekhez?</h2>
+<p>Szabályozza, hogy az adott szekcióban lévő cikkek megjelenjenek-e a webhely RSS- és Atom-hírfolyamaiban.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Használt stílus"><![CDATA[
+<h2>Használt stílus</h2>
+<p>Ha egy adott szekcióhoz felül szeretné bírálni az alapértelmezett stíluslapot, itt állíthatja be.</p>
+<p>Ez csak a Textpattern „Styles” paneljén tárolt stíluslapokra vonatkozik – ha a CSS-t a Textpatternen kívül tárolja (ami erősen ajánlott), ez az opció nem lesz hatással a megjelenésre.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Használt oldal"><![CDATA[
+<h2>Használt oldal</h2>
+<p>A Textpatternben a szekciók oldal-sablonokhoz vannak hozzárendelve.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Használt téma"><![CDATA[
+<h2>Használt téma</h2>
+<p>Ha egy adott szekcióhoz meg szeretné változtatni a használt témát, itt választhat a jelenleg telepített témák listájából.</p>
+        ]]></item>
     </group>
 
-    <group id="diag" title="">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+    <group id="setup" title="Telepítés panel">
+        <item id="setup_admin_url" title="Admin aldomain"><![CDATA[
+<h2>Admin aldomain</h2>
+<p>Az az aldomain, amelyen keresztül a Textpattern adminisztrációs felületét el kívánja érni (például <code>admin.example.com</code>).</p>
+<p>További információért lásd a <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern többwebhelyes telepítésről szóló leírását</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Süti domain"><![CDATA[
+<h2>Süti domain</h2>
+<p>Az a (al)domain, amelyet a Textpattern sütijeihez használni kíván.</p>
+<p>További információért lásd a <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern többwebhelyes telepítésről szóló leírását</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Felhasználói bejelentkezés"><![CDATA[
+<h2>Felhasználói bejelentkezés</h2>
+<p>Az adminisztrátor („Publisher”) fiók bejelentkezési neve, amellyel a webhelyet fogja kezelni.</p>
+<p>Habár nincs szigorú korlátozás a névre, érdemes kerülni a bonyolult karakterhalmazokat és a könnyen kitalálható felhasználóneveket (például <code>admin</code>, <code>administrator</code> stb.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Felhasználói jelszó"><![CDATA[
+<h2>Felhasználói jelszó</h2>
+<p>Mivel ez a fiók a Textpattern legmagasabb szintű hozzáférésével rendelkezik, válasszon nagyon erős jelszót, vagy még inkább egy jelszó-kifejezést.</p>
+<h3>Tippek</h3>
+<ul>
+    <li>Használjon kis- és nagybetűket vegyesen</li>
+    <li>Használjon számokat</li>
+    <li>Használjon szimbólumokat</li>
+    <li>Legyen legalább nyolc karakter hosszú</li>
+    <li><strong>Kerülje</strong> a személyes információkat (dátumok, nevek, helyek, családtagok, háziállatok stb.)</li>
+    <li><strong>Kerülje</strong> az önmagukban álló vagy ismétlődő szótári szavakat, nyelvtől, helyesírástól és kis- / nagybetűtől függetlenül</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Táblaprefix"><![CDATA[
+<h2>Táblaprefix</h2>
+    <p>Csak akkor van szükség táblaprefixre, ha egy adatbázison belül több Textpattern telepítést szeretne használni. Minden Textpattern telepítéshez egyedi prefix szükséges.</p>
+    <p>Ne feledje, hogy a prefixnek az alábbi szabályoknak kell megfelelnie:</p>
+<ul>
+    <li><strong>1. karakter:</strong> a–z, A–Z vagy aláhúzásjel lehet</li>
+    <li><strong>További karakterek:</strong> csak a–z, A–Z, 0–9 vagy aláhúzásjel lehet</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="file" title="">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title=""><![CDATA[]]></item>
-        <item id="timestamp_file" title=""><![CDATA[]]></item>
-        <item id="upload" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="image" title="">
-        <item id="create_thumbnail" title=""><![CDATA[]]></item>
-        <item id="replace_image_form" title=""><![CDATA[]]></item>
-        <item id="upload_image" title=""><![CDATA[]]></item>
-        <item id="upload_thumbnail" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="link" title="">
-        <item id="link_description" title=""><![CDATA[]]></item>
-        <item id="link_sort" title=""><![CDATA[]]></item>
-        <item id="link_url" title=""><![CDATA[]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="login" title="">
-        <item id="remember_login" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="plugin" title="">
-        <item id="install_plugin" title=""><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title=""><![CDATA[]]></item>
-        <item id="advanced_options" title=""><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title=""><![CDATA[]]></item>
-        <item id="allow_form_override" title=""><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title=""><![CDATA[]]></item>
-        <item id="archive_dateformat" title=""><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title=""><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title=""><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title=""><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title=""><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title=""><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title=""><![CDATA[]]></item>
-        <item id="img_dir" title=""><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title=""><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blocklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+    <group id="skin" title="Témák panel">
+        <item id="skin_author" title="Téma szerzője"><![CDATA[
+<h2>Téma szerzője</h2>
+<p>A téma szerzője vagy szerzői (nem kötelező).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Téma webhelye"><![CDATA[
+<h2>Téma webhelye</h2>
+<p>Az az URL, ahol a téma teljes leírása és/vagy legfrissebb verziói elérhetők (nem kötelező).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Téma sablonjainak törlése a lemezről is"><![CDATA[
+<h2>Téma sablonjainak törlése a lemezről is</h2>
+<p>Ha bejelöli, a kijelölt témák összes sablonfájlja véglegesen törlődik a lemezről. A témához tartozó könyvtárakat és alkönyvtáraikat azonban nem törli a rendszer, ha más fájlok (például JavaScript, képek stb.) vannak bennük.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Nem használt sablonok törlése az adatbázisból importáláskor"><![CDATA[
+<h2>Nem használt sablonok törlése az adatbázisból importáláskor</h2>
+<p>Ha bejelöli, minden olyan sablon, amely a kijelölt témákban szerepel, de nincs hozzá tartozó fájl a lemezen, véglegesen törlődik az adatbázisból. Az importálás végén az adatbázisbeli sablonok a lehető legjobban tükrözni fogják a lemezen található állapotot.</p>
+<p>Ne feledje: ha olyan sablonfájlokat távolított el, amelyekre a Textpatternnek szüksége van, a rendszer üres verziókat hoz létre helyettük az adatbázisban.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Nem használt sablonok törlése a lemezről exportáláskor"><![CDATA[
+<h2>Nem használt sablonok törlése a lemezről exportáláskor</h2>
+<p>Ha bejelöli, minden olyan sablonfájl, amely a kijelölt témákban megtalálható, de nincs hozzá tartozó bejegyzés az adatbázisban, véglegesen törlődik a lemezen lévő témából. Az exportálás végén a fájlrendszerben lévő sablonok pontosan meg fognak egyezni az adatbázisban tároltakkal.</p>
+        ]]></item>
+        <item id="skin_description" title="Téma leírása"><![CDATA[
+<h2>Téma leírása</h2>
+<p>A téma elrendezéséről / megjelenéséről rövid összefoglaló adható meg (nem kötelező).</p>
+<p>A téma leírása legfeljebb 255 karakter hosszú lehet.</p>
+        ]]></item>
+        <item id="skin_import" title="Téma importálása"><![CDATA[
+<h2>Téma importálása lemezről</h2>
+<p>Ezzel az űrlappal egy témát importálhat a Textpattern adatbázisába a themes könyvtárból.</p>
+<p>Az importálható téma egy olvasható szülőmappából áll, amelynek neve megegyezik a téma nevével, a mappában pedig egy olvasható <code>manifest.json</code> fájlnak kell lennie a várt formátumban. A témamappának ezen felül tartalmaznia kell az oldalakat, űrlapokat és stíluslapokat az azonos nevű alkönyvtárakban.</p>
+<p>Míg az oldalaknak és űrlapoknak <code>.txp</code> kiterjesztést kell használniuk, a stíluslapokat <code>.css</code> fájlként várja a rendszer. Az űrlapokat típus szerint csoportosítva, külön könyvtárakba érdemes rendezni. A Textpattern az importálás során minden hiányzó, alapvető sablont létrehoz.</p>
+<p>További információért a Textpattern CMS-en belüli témák létrehozásáról, telepítéséről és használatáról lásd a <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">témákról szóló dokumentációt <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Téma neve"><![CDATA[
+<h2>Téma neve</h2>
+<p>A téma neve a téma könyvtárnevéhez és egyéb technikai célokra is használatos (kötelező).</p>
+<p>A név nem tartalmazhat speciális karaktereket vagy szóközöket.</p>
+        ]]></item>
+        <item id="skin_overview" title="Bevezetés a témákhoz"><![CDATA[
+<h2>Bevezetés a témákhoz</h2>
+<p>Egy Textpattern téma oldalak, űrlapok és stíluslapok gyűjteménye. A témák lehetővé teszik az oldaleszközök logikus csoportokra bontását az egyszerűbb azonosíthatóság és a másokkal való megosztás érdekében. Egy téma, illetve az abban lévő eszközök létrehozása vagy importálása <em>nem</em> befolyásolja a meglévő webhelyet. Szabadon szerkeszthet vagy módosíthat minden olyan eszközt, amely nincs hozzárendelve a webhely egyik szekciójához sem, ezek nem lesznek hatással a webhelyre.</p>
+<p>Egy téma eszközeinek szerkesztéséhez lépjen a Pages, Forms vagy Styles panelre, és használja a legördülő listát annak a témának a kiválasztásához, amelyen dolgozni szeretne. Az aktuálisan szerkesztett téma kiválasztása az adminisztrációs felület egészén megmarad, így gyorsan és egyszerűen válthat az eszköztípusok között. Ezt nevezzük <em>munkatémának</em>.</p>
+<p>További információért lásd a <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern felhasználói dokumentációt <span class="ui-icon ui-icon-extlink">(új ablakban nyitja meg a külső hivatkozást)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Téma címe"><![CDATA[
+<h2>Téma címe</h2>
+<p>A téma leíró címe, amely a Textpattern paneljein belül azonosítja a témát.</p>
+<p>A cím tartalmazhat speciális karaktereket és szóközöket.</p>
+        ]]></item>
+        <item id="skin_version" title="Téma verziója"><![CDATA[
+<h2>Téma verziója</h2>
+<p>A téma telepített verziójának verziószáma (nem kötelező).</p>
+        ]]></item>
     </group>
 </help>
 </resources>

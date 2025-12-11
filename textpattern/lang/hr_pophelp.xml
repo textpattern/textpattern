@@ -1,228 +1,1204 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <help lang="hr">
-    <group id="admin" title="">
-        <item id="about_privileges" title=""><![CDATA[]]></item>
-        <item id="create_author" title=""><![CDATA[]]></item>
-    </group>
-
-    <group id="article" title="">
-        <item id="article_image" title="Slika unosa"><![CDATA[]]></item>
-        <item id="body" title="Tijelo"><![CDATA[]]></item>
-        <item id="description" title="Opis"><![CDATA[]]></item>
-        <item id="excerpt" title="Sažetak"><![CDATA[]]></item>
-        <item id="expire_date" title=""><![CDATA[]]></item>
-        <item id="keywords" title="Ključne riječi"><![CDATA[]]></item>
-        <item id="override_form" title="Zanemari formu"><![CDATA[]]></item>
-        <item id="publish_date" title="Datum objave"><![CDATA[]]></item>
-        <item id="status" title="Status"><![CDATA[]]></item>
-        <item id="title" title="Naslov"><![CDATA[]]></item>
-        <item id="url_title" title="Naslov samo za-URL"><![CDATA[]]></item>
-    </group>
-
-    <group id="category" title="">
-        <item id="article_category" title=""><![CDATA[]]></item>
-        <item id="category_description" title="Opis"><![CDATA[]]></item>
-        <item id="file_category" title="Datoteke"><![CDATA[]]></item>
-        <item id="image_category" title="Slike"><![CDATA[]]></item>
-        <item id="link_category" title="Linkovi"><![CDATA[]]></item>
-    </group>
-
-    <group id="diag" title="">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title=""><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title=""><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Textpattern ažuriranje"><![CDATA[<h2>Textpattern ažuriranje</h2>
-<p>Dostupna je nova verzija Textpatterna. Da bi iskoristio najnovije mogućnosti i siguronosne postavke preporučamo ti ažuriranje.</p>
-<p>Iako mi težimo da ažuriranje prođe glatko i bezbolno, ipak napominjemo:</p>
+    <group id="admin" title="Korisnički panel">
+        <item id="about_privileges" title="O ulogama"><![CDATA[
+<h2>O ulogama</h2>
+<h3>Izdavač</h3>
 <ul>
-    <li>Ako se trenutna verzija razlikuje samo u zadnjoj znamenki, nadogradnja će vjerojatno biti kompatibilna sa starim dodacima i temama.</li>
-    <li>Ako se trenutna verzija razlikuje u zadnje dvije znamenke, ažuriranjem će se tražiti i nadogradnja nekih dodataka i/ili tema, premda će oni vjerojatno i dalje ograničeno raditi.</li>
-    <li>Ako se trenutna verzija razlikuje u prvoj znamenki, ažuriranjem će se tražiti i nadogradnja većine dodataka i tema. Ako stvarno puno koristiš određeni dodatak ili temu, provjeri s autorom ili  članovima zajednice prije početka nadogradnje.</li>
+    <li>može upravljati člancima, komentarima i poveznicama</li>
+    <li>može koristiti PHP u člancima ako je administrativna postavka „Dopusti PHP u člancima?” postavljena na „Da”</li>
+    <li>može upravljati slikama i datotekama</li>
+    <li>može upravljati odjeljcima i kategorijama</li>
+    <li>može upravljati stranicama, obrascima i stilom</li>
+    <li>može vidjeti dijagnostičke informacije</li>
+    <li>može upravljati postavkama web-mjesta</li>
+    <li>može upravljati korisnicima</li>
+    <li>može upravljati zapisima posjetitelja</li>
+    <li>može upravljati dodacima (pluginovima)</li>
+    <li>može uvoziti podatke</li>
+</ul>
+<h3>Upravljački urednik</h3>
+<ul>
+    <li>može upravljati člancima, komentarima i poveznicama</li>
+    <li>može koristiti PHP u člancima ako je administrativna postavka „Dopusti PHP u člancima?” postavljena na „Da”</li>
+    <li>može upravljati slikama i datotekama</li>
+    <li>može upravljati odjeljcima i kategorijama</li>
+    <li>može upravljati stranicama, obrascima i stilom</li>
+    <li>može vidjeti dijagnostičke informacije</li>
+    <li>može upravljati postavkama web-mjesta</li>
+    <li>može vidjeti korisnike</li>
+    <li>može upravljati zapisima posjetitelja</li>
+    <li>može upravljati dodacima (pluginovima)</li>
+    <li>može uvoziti podatke</li>
+</ul>
+<h3>Urednik za lekturu</h3>
+<ul>
+    <li>može upravljati člancima s jednim ograničenjem:
+        <ul>
+            <li>ne može izbrisati one koji pripadaju drugim korisnicima</li>
+        </ul>
+    </li>
+    <li>može upravljati komentarima i poveznicama</li>
+    <li>može upravljati slikama i datotekama</li>
+    <li>može upravljati kategorijama</li>
+    <li>može upravljati stranicama i obrascima</li>
+    <li>može vidjeti korisnike</li>
+    <li>može upravljati zapisima posjetitelja</li>
+</ul>
+<h3>Novinar</h3>
+<ul>
+    <li>može upravljati vlastitim člancima, vidjeti članke drugih korisnika</li>
+    <li>može upravljati slikama i datotekama</li>
+</ul>
+<h3>Suradnik</h3>
+<ul>
+    <li>može upravljati vlastitim člancima u ograničenom smislu:
+        <ul>
+            <li>može mijenjati članak samo dok nije objavljen</li>
+            <li>može primijeniti status <em>samo</em> Skica, Skriveno ili Na čekanju</li>
+        </ul>
+    </li>
+    <li>može vidjeti članke drugih korisnika</li>
+</ul>
+<h3>Dizajner</h3>
+<ul>
+    <li>može upravljati vlastitim člancima u ograničenom smislu:
+        <ul>
+            <li>može mijenjati članak samo dok nije objavljen</li>
+            <li>može primijeniti status <em>samo</em> Skica, Skriveno ili Na čekanju</li>
+        </ul>
+    </li>
+    <li>može vidjeti članke drugih korisnika</li>
+    <li>može upravljati slikama</li>
+    <li>može upravljati odjeljcima</li>
+    <li>može upravljati stranicama, obrascima i stilom</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Stvori autora"><![CDATA[
+<h2>Dodaj novog autora</h2>
+<p>Poruka dobrodošlice i upute za prijavu bit će poslane novom autoru e-poštom.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Panel za pisanje">
+        <item id="article_image" title="Slika unosa"><![CDATA[
+<h2>Slika članka</h2>
+<p>Da bi povezao slike s ovim člankom, ovdje unesi jedno od sljedećeg:</p>
+<ol>
+    <li>jedan ili više Textpattern ID-eva slika, odvojenih zarezima (npr. <code>12, 25, 18</code>)</li>
+    <li>jedan ili više relativnih URL-ova slike, odvojenih zarezima (npr. <code>/images/my_pic.jpg</code>)</li>
+    <li>jedan ili više potpuno kvalificiranih URL-ova, odvojenih zarezima (npr. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Prva slika može se prikazati postavljanjem oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> unutar obrasca članka. Prema zadanim postavkama, ona će ispisati potpunu HTML oznaku <code>&lt;img&gt;</code> prema odabranoj slici.</p>
+<p>Galerije možeš prikazivati pomoću oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Tijelo"><![CDATA[
+<h2>Tijelo članka</h2>
+<p>Glavni sadržaj članka nalazi se u tijelu članka.</p>
+<p>Prilikom pisanja ili pripreme članaka za objavu u Textpatternu, autor može prelaziti između tri prikaza članka: običnog teksta, HTML oznaka (kôd kojim web preglednik prikazuje članak) i prikaza pretpregleda.</p>
+        ]]></item>
+        <item id="description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis članka je neobavezan element koji može pomoći tražilicama i indeksnim robotima da bolje prepoznaju i razvrstaju sadržaj.</p>
+<p>Opis članka ograničen je na najviše 255 znakova. Imaj na umu da neke tražilice zbog praktičnosti prikaza u rezultatima pretraživanja (SERP) ograničavaju broj znakova u <code>meta description</code> elementu stranice i ta vrijednost može biti manja od ograničenja od 255 znakova u Textpatternu.</p>
+<p>Imaj na umu da se opis članka razlikuje od sažetka članka, premda oba mogu prihvatiti sličan sadržaj. Opis članka prvenstveno je namijenjen za tražilice i indekse, dok je sažetak članka prikladniji za ljudski čitljiv sažetak članka, gdje je to poželjno.</p>
+        ]]></item>
+        <item id="excerpt" title="Sažetak"><![CDATA[
+<h2>Sažetak</h2>
+<p>Sažeci članaka su neobavezni. Sažeci se mogu koristiti kao kratki sažetak članka koji se prikazuje kao dio sadržaja, koristi se umjesto cijelog tijela članka u RSS/Atom kanalima web-mjesta ili za niz drugih namjena.</p>
+        ]]></item>
+        <item id="expire_date" title="Datum isteka"><![CDATA[
+<h2>Datum isteka</h2>
+<p>Vrijeme kada je članak označen kao istekao. Vrijeme je neobavezno i može se postaviti na proizvoljno vrijeme u prošlosti ili budućnosti.</p>
+<p>Polja odgovaraju sljedećim podacima:</p>
+<ul>
+    <li>Godina / Mjesec / Dan</li>
+    <li>Sat (24-satni format) : Minuta : Sekunda</li>
+</ul>
+<p>Kad nastupi zadano vrijeme, ili u slučaju da je postavljeno vrijeme u prošlosti, članak istječe.</p>
+<p>Ako je omogućena opcija prikaza članaka kojima je istekao rok, članak ostaje vidljiv. Ako je opcija prikaza istečenih članaka onemogućena, posjetiteljima stranice članka umjesto sadržaja članka bit će poslan HTTP 410 (Gone) odgovor.</p>
+        ]]></item>
+        <item id="keywords" title="Ključne riječi"><![CDATA[
+<h2>Ključne riječi</h2>
+<p>Ključne riječi korisne su za dodatno preciziranje odnosa među člancima izvan onoga što omogućuju kategorije.</p>
+<p>Ključne riječi moraju biti pojedinačne riječi odvojene zarezima.</p>
+        ]]></item>
+        <item id="override_form" title="Zanemari formu"><![CDATA[
+<h2>Nadređeni obrazac</h2>
+<p>Članak može po želji koristiti obrazac različit od zadanog – na primjer, da bi se prikazao sažetak članka pomoću <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> umjesto tijela članka pomoću <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> – to se može postaviti ovdje.</p>
+        ]]></item>
+        <item id="publish_date" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Vrijeme kada je članak ili datoteka objavljena ili zadnji put izmijenjena. Vrijeme se može postaviti na trenutak objave stavke ili na proizvoljno vrijeme u prošlosti ili budućnosti.</p>
+<p>Polja odgovaraju sljedećim podacima:</p>
+<ul>
+    <li>Godina / Mjesec / Dan</li>
+    <li>Sat (24-satni format) : Minuta : Sekunda</li>
+</ul>
+<p>Stavka s vremenskom oznakom koja je veća od trenutačnog vremena (tj. u budućnosti) neće se pojaviti na javnoj strani i u RSS/Atom kanalima sve dok to vrijeme ne nastupi.</p>
+        ]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Definira status vidljivosti objave ovog Textpattern članka.</p>
+<p>Status objave može biti jedan od sljedećih:</p>
+<ul>
+<li><strong>Skica (Draft)</strong>: smatra se radnom verzijom i nije vidljiva izvan administrativnog područja Textpatterna (tj. nije vidljiva na web-mjestu i nije uključena u kanale).</li>
+<li><strong>Skriveno (Hidden)</strong>: članak nije vidljiv izvan administrativnog područja Textpatterna. Korisno za uklanjanje sadržaja s web-mjesta koji ne želiš nužno izbrisati.</li>
+<li><strong>Na čekanju (Pending)</strong>: smatra se spremnim za objavu i čeka odobrenje, ali nije vidljiv izvan administrativnog područja Textpatterna.</li>
+<li><strong>Objavljen (Live)</strong>: obično je vidljiv izvan administrativnog područja Textpatterna (tj. vidljiv je na web-mjestu, sindikiran u kanalima ako postavka to dopušta). Ako je članak objavljen (Live) i ima datum isteka, status će ostati Live i nakon što taj datum nastupi, ali će se članak pojaviti izvan administrativnog područja samo ako je dopušteno objavljivanje istečenih članaka.</li>
+<li><strong>Prilijepljen (Sticky)</strong>: sličan je članku sa statusom <strong>Live</strong> utoliko što ga posjetitelji web-mjesta mogu vidjeti, ali se <strong>neće</strong> pojavljivati u popisima članaka osim ako odgovarajuća oznaka <code>article</code> ili <code>article_custom</code> ne uključuje atribut <code>status</code> s vrijednošću <code>sticky</code>.</li>
+</ul>
+<p>Napomena: sadržaj koji nije javno vidljiv na web-mjestu i dalje mogu pregledati prijavljeni korisnici.</p>
+        ]]></item>
+        <item id="title" title="Naslov"><![CDATA[
+<h2>Naslov</h2>
+<p>Dodaj odgovarajući naslov za ovaj članak.</p>
+<p>Naslov članka ograničen je na najviše 255 znakova.</p>
+        ]]></item>
+        <item id="url_title" title="Naslov samo za-URL"><![CDATA[
+<h2>Naslov samo za URL</h2>
+<p>Kako bi se u trajnoj poveznici članka koristio određeni naslov, ovdje ga unesi. Ako se ovo polje ostavi prazno, naslov URL-a automatski će se generirati iz naslova članka.</p>
+<p>Ovo je osobito korisno ako naslov članka koristi znakove izvan ASCII skupa.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Panel kategorija">
+        <item id="article_category" title="Članci"><![CDATA[
+<h2>Članci</h2>
+<p>Za razliku od odjeljaka, koji određuju navigacijsku strukturu web-mjesta, kategorije članaka omogućuju organiziranje članaka prema njihovoj temi. Nakon što se dodijele kategorije, mogu se pregledavati popisi članaka koji pripadaju određenim kategorijama.</p>
+<p>Na primjer, moguće kategorije članaka na web-mjestu o hrani mogle bi biti:</p>
+<ul>
+    <li>sirove namirnice</li>
+    <li>kupovina</li>
+    <li>recepti</li>
+    <li>prezentacija</li>
+    <li>restorani</li>
+    <li>chefovi</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Opis"><![CDATA[
+<h2>Opis kategorije</h2>
+<p>Opis kategorije je neobavezan element koji može pomoći tražilicama i indeksnim robotima da bolje prepoznaju i razvrstaju sadržaj.</p>
+<p>Opis kategorije ograničen je na najviše 255 znakova. Imaj na umu da neke tražilice zbog praktičnosti prikaza u rezultatima pretraživanja (SERP) ograničavaju broj znakova u <code>meta description</code> elementu stranice i ta vrijednost može biti manja od ograničenja od 255 znakova u Textpatternu.</p>
+        ]]></item>
+        <item id="file_category" title="Datoteke"><![CDATA[
+<h2>Datoteke</h2>
+<p>Kategorije datoteka su neobavezne i korisne za grupiranje odabranih prenesenih datoteka.</p>
+        ]]></item>
+        <item id="image_category" title="Slike"><![CDATA[
+<h2>Slike</h2>
+<p>Kategorije slika su neobavezne i korisne i za internu organizaciju i za definiranje skupova slika koje se mogu prikazati pomoću oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Linkovi"><![CDATA[
+<h2>Poveznice</h2>
+<p>Kategorije poveznica su neobavezne i korisne za prikaz različitih skupina poveznica, npr. „Prijatelji”, „Rimljani”, „Sunarodnjaci”.</p>
+<p>Odabrani popisi poveznica poput ovih ispisuju se pomoću oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> na sljedeći način:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Panel dijagnostike">
+        <item id="clean_url_data_failed" title="Neuspjelo dohvaćanje podataka za čiste URL-ove"><![CDATA[
+<h2>Neuspjelo dohvaćanje podataka za čiste URL-ove</h2>
+<p>Čini se da URL-ovi web-mjesta (npr. <code>https://example.com/section/article</code>) trenutačno ne rade ili web-poslužitelj ne podržava testni postupak kojim se provjerava rade li čisti URL-ovi; ako čisti URL-ovi na web-mjestu rade kako je očekivano, ova se poruka može zanemariti.</p>
+<p>Ako čisti URL-ovi <em>ne</em> rade, to može značiti:</p>
+<ul>
+    <li>postavka „URL web-mjesta” nije ispravna ili stranicom na toj adresi ne upravlja ova instanca Textpatterna</li>
+    <li>poslužitelj zahtijeva izmjene u datoteci <code>.htaccess</code> ili sličnoj poslužiteljskoj direktivi da bi čisti URL-ovi radili</li>
+    <li>poslužitelj uopće ne podržava čiste URL-ove</li>
+</ul>
+<p>Test čistih URL-ova pokušava dohvatiti stranicu s web-adrese navedene u postavci „URL web-mjesta” kako bi provjerio rade li svi parametri čistih URL-ova ispravno. Ako je taj URL neko drugo web-mjesto ili je zamijenjen statičkom stranicom ili sličnim, test će propasti. Dok se problem ne riješi, treba koristiti nečiste URL-ove (npr. <code>https://example.com?s=section&amp;id=4</code>). Provjeri je li u administrativnim postavkama odgovarajuće postavljen „Način trajnih poveznica”.</p>
+<p>Imaj na umu da bi korištenje dodatka za postavljanje web-mjesta u „način održavanja” moglo aktivirati ovo upozorenje.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Neuspjeli test čistih URL-ova"><![CDATA[
+<h2>Neuspjeli test čistih URL-ova</h2>
+<p>Čini se da URL-ovi web-mjesta (npr. <code>https://example.com/section/article</code>) trenutačno ne rade ili web-poslužitelj ne podržava testni postupak kojim se provjerava rade li čisti URL-ovi; ako čisti URL-ovi na web-mjestu rade kako je očekivano, ova se poruka može zanemariti.</p>
+<p>Ako čisti URL-ovi <em>ne</em> rade, to može značiti:</p>
+<ul>
+    <li>postavka „URL web-mjesta” nije ispravna ili stranicom na toj adresi ne upravlja ova instanca Textpatterna</li>
+    <li>poslužitelj zahtijeva izmjene u datoteci <code>.htaccess</code> ili sličnoj poslužiteljskoj direktivi da bi čisti URL-ovi radili</li>
+    <li>poslužitelj uopće ne podržava čiste URL-ove</li>
+</ul>
+<p>Test čistih URL-ova pokušava dohvatiti stranicu s web-adrese navedene u postavci „URL web-mjesta” kako bi provjerio rade li svi parametri čistih URL-ova ispravno. Ako je taj URL neko drugo web-mjesto ili je zamijenjen statičkom stranicom ili sličnim, test će propasti. Dok se problem ne riješi, treba koristiti nečiste URL-ove (npr. <code>https://example.com?s=section&amp;id=4</code>). Provjeri je li u administrativnim postavkama odgovarajuće postavljen „Način trajnih poveznica”.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Istovremene prijave na produkcijskom poslužitelju"><![CDATA[
+<h2>Istovremene prijave na produkcijskom poslužitelju</h2>
+<p>Dopuštanje da se na korisnički račun prijavi iz više sesija predstavlja sigurnosni rizik i ne preporučuje se. Onemogući ovu značajku u panelu naprednih postavki, osim ako su rizici shvaćeni i prihvatljivi.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Sakrij privatne informacije"><![CDATA[
+<h2>Sakrij privatne informacije</h2>
+<p>Sakrij privatne informacije radi dodatne sigurnosti. Ako se dijagnostičke informacije dijele u javno vidljivom obliku, na primjer na forumu za podršku Textpatterna, to smanjuje sigurnosni rizik izostavljanjem osjetljivih podataka o poslužitelju.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Razvojni kôd na produkcijskom poslužitelju"><![CDATA[
+<h2>Razvojni kôd na produkcijskom poslužitelju</h2>
+<p>Razvojna izdanja Textpatterna ne preporučuju se za upotrebu na produkcijskim web-mjestima. Ovo se upozorenje može zanemariti ako su rizici shvaćeni i prihvatljivi.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Direktorij nije moguće zapisivati"><![CDATA[
+<h2>Direktorij nije moguće zapisivati</h2>
+<p>Kako bi se koristile mogućnosti prijenosa datoteka i slika, ovi direktoriji moraju biti zapisivi za PHP preko korisnika web-poslužitelja. To se može učiniti FTP/SFTP klijentom ili, alternativno, putem naredbenog retka izdavanjem naredbe <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Neuspjeli DNS upit"><![CDATA[
+<h2>Neuspjelo DNS traženje</h2>
+<p>Čini se da je URL naveden kao adresa web-mjesta nedostupan.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Prijenos datoteka je onemogućen"><![CDATA[
+<h2>Prijenos datoteka je onemogućen</h2>
+<p>Trenutačna konfiguracija poslužitelja pokazuje da je prijenos datoteka onemogućen. Provjeri i izmijeni postavku <code>file_uploads</code> u datoteci <code>php.ini</code> ili zatraži pomoć od davatelja hostinga.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess datoteka nedostaje"><![CDATA[
+<h2>.htaccess datoteka nedostaje</h2>
+<p>Koristi se način trajnih poveznica koji zahtijeva datoteku <code>.htaccess</code>, a datoteka ne može biti pronađena. Datoteka je uključena s Textpatternom i nalazi se u njegovom korijenskom direktoriju, uz <code>index.php</code> i direktorij <code>textpattern</code>. Preporučene direktive su:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Indeks web-mjesta nedostupan"><![CDATA[
+<h2>Indeks web-mjesta nedostupan</h2>
+<p>Korijenska datoteka <code>index.php</code> navedena kao indeks za web-mjesto nije čitljiva za poslužitelj. Provjeri njezino postojanje i dozvole.</p>
+        ]]></item>
+        <item id="missing_files" title="Datoteke nedostaju"><![CDATA[
+<h2>Datoteke nedostaju</h2>
+<p>Jedna ili više ključnih datoteka nedostaje u instalaciji Textpatterna. Provjeri jesu li sve navedene datoteke prisutne na poslužitelju i nalaze li se na ispravnim lokacijama.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite nedostaje"><![CDATA[
+<h2>Apache mod_rewrite nedostaje</h2>
+<p>Apache modul <code>mod_rewrite</code> nije instaliran ili je onemogućen. Preporučuje se za ispravan rad Textpatterna. Provjeri postoji li i je li aktiviran ili kontaktiraj davatelja hostinga za pomoć.</p>
+        ]]></item>
+        <item id="modified_files" title="Izmijenjene datoteke"><![CDATA[
+<h2>Izmijenjene datoteke</h2>
+<p>Datoteke se smatraju izmijenjenima ako se njihov kontrolni zbroj razlikuje od popisa poznatih dobrih kontrolnih zbrojeva koji se isporučuje s Textpatternom. Ako su bilo koje datoteke u instalaciji Textpatterna drukčije od očekivanih, bit će ovdje istaknute.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Pogreške MySQL tablica"><![CDATA[
+<h2>Pogreške MySQL tablica</h2>
+<p>Moguće je da postoji oštećenje ili šteta u MySQL bazi podataka Textpatterna. Pokušaj popraviti pogođene tablice pomoću alata za pristup MySQL-u, kao što su <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> ili <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Privremeni direktorij nije definiran"><![CDATA[
+<h2>Privremeni direktorij nije definiran</h2>
+<p>Iako će Textpattern raditi i bez privremenog direktorija, određene funkcije možda neće raditi kako je očekivano ako ova postavka nije zadana. Posjeti panel Administrativne postavke i postavi „Put privremenog direktorija”.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Odjeljak ima isto ime kao direktorij"><![CDATA[
+<h2>Odjeljak ima isto ime kao direktorij</h2>
+<p>Postojeći nazivi direktorija mogu se sukobiti s nazivima odjeljaka koji se koriste u shemi trajnih poveznica za članke. Kako bi se izbjegli problemi, provjeri i izbriši direktorij(e) sa sukobljenim nazivom, ako je sigurno to učiniti, ili izmijeni naziv(e) odjeljka tako da se ne podudaraju.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Direktorij web-mjesta nije čitljiv"><![CDATA[
+<h2>Direktorij web-mjesta nije čitljiv</h2>
+<p>Direktorij koji sadrži korijensku datoteku <code>index.php</code> navedenu kao indeks za web-mjesto nije čitljiv za poslužitelj. Provjeri dozvole.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP skriptiranje omogućeno"><![CDATA[
+<h2>PHP skriptiranje omogućeno</h2>
+<p>Textpattern dopušta autorima i administratorima da ugrade PHP kôd u članke i stranice/obrasce ako su te mogućnosti omogućene. Budući da to predstavlja sigurnosni rizik – može se izvršavati bilo kakav PHP, uključujući potencijalno štetan/opasan kôd koji može dovesti do uništenja instalacije ili curenja informacija trećim stranama – toplo se preporučuje da te mogućnosti isključiš u <a href="?event=prefs#prefs_group_publish">panelu Postavke</a> osim ako ih baš ne trebaš.</p>
+<p>Mnoge nadogradnje Textpattern web-mjesta koje su ranije zahtijevale isječke PHP koda sada se mogu postići pomoću <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">osnovnih oznaka</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimalni zahtjevi za verzije"><![CDATA[
+<h2>Minimalni zahtjevi za verzije</h2>
+<p>Textpattern zahtijeva određene funkcionalnosti prisutne u programskom jeziku PHP i MySQL poslužitelju baze podataka. Pogledaj sljedeću tablicu za minimalne zahtjeve sustava:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern verzija</th>
+                <th scope="col">Minimalna PHP verzija</th>
+                <th scope="col">Minimalna MySQL verzija</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Uz gore navedene zahtjeve sustava, potrebna su i sljedeća PHP proširenja:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a></li>
+</ul>
+<p>Datoteka <code>php.ini</code> web-mjesta, bilo globalna ili lokalna, mora sadržavati postavku <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Direktorij za postavljanje i dalje postoji"><![CDATA[
+<h2>Direktorij za postavljanje i dalje postoji</h2>
+<p>Nakon što je Textpattern instaliran, direktorij <code>textpattern/setup</code> i njegov sadržaj više nisu potrebni i zbog sigurnosnih razloga trebali bi se izbrisati.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Nesklad URL-a web-mjesta"><![CDATA[
+<h2>Nesklad URL-a web-mjesta</h2>
+<p>URL web-mjesta zadan u panelu „Postavke” ne odgovara stvarnom URL-u korištenom za posjet web-mjestu.</p>
+<p>Ako se web-mjesto može dohvatiti putem više različitih URL-ova i ako se ponaša kako je očekivano, ova se poruka može zanemariti.</p>
+<p>U suprotnom provjeri i po potrebi ispravi postavku „URL web-mjesta” u administrativnim postavkama. Obavijest prije provjere sustava na panelu „Dijagnostika” prikazuje približnu pretpostavku ispravnog URL-a web-mjesta.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP funkcije […] onemogućene su na tvom poslužitelju"><![CDATA[
+<h2>PHP funkcije […] onemogućene su na tvom poslužitelju</h2>
+<p>Davatelj hostinga ili administrator poslužitelja onemogućio je jednu ili više PHP funkcija, od kojih neke mogu utjecati na rad Textpatterna.</p>
+<p>Pogledaj <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">korisničku dokumentaciju Textpatterna <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> za dodatne informacije.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern ažuriranje verzije"><![CDATA[
+<h2>Textpattern ažuriranje verzije</h2>
+<p>Dostupna je novija verzija Textpatterna. Kako bi iskoristio najnovije mogućnosti i sigurnosna poboljšanja, preporučujemo da nadogradiš sustav.</p>
+<p>Imaj na umu da, iako nastojimo iskustvo nadogradnje učiniti što jednostavnijim i bezbolnijim:</p>
+<ul>
+    <li>Ako se samo zadnja znamenka razlikuje od tvoje trenutačne verzije, nadogradnja će vjerojatno biti unatrag kompatibilna s dodacima i temama.</li>
+    <li>Ako se zadnje dvije znamenke razlikuju od tvoje trenutačne verzije, nadogradnja bi mogla zahtijevati ažuriranja nekih dodataka i/ili tema, iako će oni vjerojatno nastaviti raditi, barem djelomično.</li>
+    <li>Ako se prva znamenka razlikuje od tvoje trenutačne verzije, nadogradnja će vjerojatno zahtijevati ažuriranje većine dodataka i tema. Ako se u velikoj mjeri oslanjaš na određeni dodatak ili mogućnost teme, provjeri s autorom ili članovima zajednice prije početka nadogradnje.</li>
 </ul>
         ]]></item>
         <item id="textpattern_version_update_beta" title="Dostupna je prijevremena verzija Textpatterna"><![CDATA[
-<h2>Dostupna je prijevremena verzija Textpatterna</h2>
-<p>Dostupna je nova prijevremena verzija Textpatterna. Tražimo aktivne volontere koji bi testirali ovu verziju kako bi konačnu verziju učinili što boljom. Nastojimo da iskustvo nadogradnje bude besprijekorno i bez muke, čak i za beta verzije. </p>
-<p> Ako odlučiš sudjelovati, imaj na umu:</p>
+<h2>Dostupno je prijevremeno ažuriranje Textpatterna</h2>
+<p>Dostupna je novija prijevremena verzija Textpatterna. Tražimo aktivne volontere koji će testirati ovu verziju kako bismo konačno izdanje učinili što stabilnijim. Nastojimo da iskustvo nadogradnje bude besprijekorno i bez muke, čak i za beta kôd.</p>
+<p>Ako odlučiš sudjelovati, imaj na umu:</p>
 <ul>
-    <li>Ne koristi ovo beta izdanje na produkciji osim ako nemaš sigurnosnu kopiju kako datoteka tako i web lokacije, te njihove baze podataka i ako ih ne znaš koristiti.</li>
-    <li>Molimo te <a href="https://github.com/textpattern/textpattern/issues">prijavi sve probleme</a> navodeći beta verziju koju koristiš. Možda će biti potrebne naredne beta verzije prije stabilne verzije, ovisno o prijavljenim problemima.</li>
-    <li>Ako implementiraš ovu beta verziju, pobrini se da je ažuriraš na konačnu verziju kad ona izađe.</li>
+    <li>Nemoj koristiti ovo beta izdanje na produkcijskom web-mjestu osim ako nemaš funkcionalnu sigurnosnu kopiju i datoteka web-mjesta i njegove baze podataka te znaš kako je vratiti.</li>
+    <li>Molimo te <a href="https://github.com/textpattern/textpattern/issues">prijavi sve probleme</a>, navodeći beta verziju koju koristiš. Ovisno o prijavljenim problemima, možda će biti potrebna dodatna beta izdanja prije stabilnog izdanja.</li>
+    <li>Provjeri da, ako uvedeš ovo beta izdanje, naknadno nadogradiš i na konačnu verziju kada bude objavljena.</li>
 </ul>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="Putanje mapa privremenog međuspremnika i međuspremnika dodataka ne bi se trebale podudarati"><![CDATA[
-<h2>Putanja privremenog međuspremnika i međuspremnika dodataka ne bi se trebali podudarati</h2>
-<p>Dodaci trebaju biti u vlastitoj mapi i ne smiju dijeliti mapu s privremenim datotekama. To predstavlja potencijalni sigurnosni rizik i može negativno utjecati na vašu web lokaciju ako se privremena mapa ne isprazni. Provjerite je li putanja privremene mape različita od putanje međuspremnika dodataka.</p>
+        <item id="tmp_plugin_paths_match" title="Putanje direktorija privremenog i dodatnog međuspremnika ne bi se trebale podudarati"><![CDATA[
+<h2>Putanje direktorija privremenog i dodatnog međuspremnika ne bi se trebale podudarati</h2>
+<p>Dodaci bi trebali imati vlastiti direktorij i ne bi smjeli dijeliti privremeni direktorij. To predstavlja potencijalni sigurnosni rizik i može negativno utjecati na tvoje web-mjesto ako se privremeni direktorij isprazni. Provjeri je li putanja privremenog direktorija različita od putanje međuspremnika dodataka.</p>
         ]]></item>
         <item id="update_server_inaccessible" title="Poslužitelj za ažuriranje je nedostupan"><![CDATA[
 <h2>Poslužitelj za ažuriranje je nedostupan</h2>
-<p>Pristup ažuriranju nije uspio, često se to dešava zbog zagušenja mreže ili prekida veze. Ova se situacija obično rješava u roku od sat-dva pa pokušajte ponovno kasnije.</p>
+<p>Provjera ažuriranja nije uspjela, često zbog zagušenja mreže ili isteka vremena veze. Ova se situacija obično sama riješi u roku od sat ili dva, pa pokušaj ponovno posjetiti ovaj panel kasnije.</p>
         ]]></item>
-        <item id="warn_mail_unavailable" title="Tvojoj PHP instalaciji nedostaje mail () funkcija"><![CDATA[<h2>Tvojoj PHP instalaciji nedostaje mail () funkcija</h2>
-<p>PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>funkcija je onemogućena. Stoga Textpattern ne može slati elektroničku poštu, a neke funkcionalnosti neće biti dostupne. Npr. obavijesti elektroničkom poštom za nove komentare neće se slati, a novi korisnici neće primati elektroničku poštu dobrodošlice. Međutim, korisnici se i dalje mogu dodavati.</p>
-]]></item>
+        <item id="warn_mail_unavailable" title="Tvom PHP-u nedostaje funkcija mail()"><![CDATA[
+<h2>Tvom PHP-u nedostaje funkcija mail()</h2>
+<p>PHP funkcija <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> je onemogućena. Stoga Textpattern ne može slati e-poštu i neke funkcionalnosti neće biti dostupne. Na primjer, obavijesti e-poštom o novim komentarima neće se slati, a novi korisnici neće primati poruku dobrodošlice. Ipak, korisnike je i dalje moguće dodavati.</p>
+        ]]></item>
     </group>
 
-    <group id="file" title="">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title="Zamijeni datoteku"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Datum objave"><![CDATA[]]></item>
-        <item id="upload" title="Upload datoteku"><![CDATA[]]></item>
+    <group id="file" title="Panel datoteka">
+        <item id="file_reassign" title="Ponovno dodijeli datoteku"><![CDATA[
+<h2>Ponovno dodijeli datoteku</h2>
+<p>Kada preneseš (uploadiraš) datoteku umjesto one koja je označena kao „Nedostaje”, odabrana datoteka prenosi se na poslužitelj i povezuje s izvornim zapisom o datoteci u bazi podataka. To znači da će naziv izvorne datoteke ostati isti, kao i svi ostali povezani podaci, poput broja preuzimanja i kategorije. Međutim, veličina datoteke će se ažurirati kako bi odražavala novu datoteku.</p>
+        ]]></item>
+        <item id="file_replace" title="Zamijeni datoteku"><![CDATA[
+<h2>Zamijeni datoteku</h2>
+<p>Prijenos datoteke ovdje zamijenit će sadržaj postojeće datoteke na poslužitelju, ali će naziv datoteke ostati isti kao i prije. Broj preuzimanja i druge informacije povezane s datotekom ostaju nepromijenjene.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Vrijeme kada je datoteka objavljena ili zadnji put izmijenjena. Vrijeme se može postaviti na trenutak objave stavke ili na proizvoljno vrijeme u prošlosti ili budućnosti.</p>
+<p>Polja odgovaraju sljedećim podacima:</p>
+<ul>
+    <li>Godina / Mjesec / Dan</li>
+    <li>Sat (24-satni format) : Minuta : Sekunda</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Upload datoteku"><![CDATA[
+<h2>Prijenos datoteke</h2>
+<p>Ovim obrascem možeš prenijeti datoteke ili slike na svoj poslužitelj.</p>
+<p>Koristi Textile kôd za prikaz grafike unutar članaka, Textpattern kôd za postavljanje grafike u predloške stranica ili HTML kôd za postavljanje grafike drugdje.</p>
+        ]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+    <group id="form" title="Panel obrazaca">
+        <item id="forms_overview" title="Uvod u obrasce"><![CDATA[
+<h2>Uvod u obrasce</h2>
+<p>U Textpatternu je obrazac isječak ili dio teksta, HTML-a i Textpattern oznaka koji se može ponovno koristiti za prikaz sadržaja.</p>
+<p>Evo primjera obrasca koji bi mogao imati naziv <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Možeš ga koristiti za prikaz neuređenog HTML popisa povezanih članaka:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Budući da je uloga ovog obrasca ispis popisa naslova, može se koristiti unutar drugih oznaka, na primjer za prikaz 20 članaka iz trenutačnog odjeljka:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Obrazac možeš koristiti i za prikaz ponavljajućeg sadržaja, poput zaglavlja i podnožja u predlošcima stranica. To znači da sadržaj postoji samo na jednom mjestu i ako odlučiš nešto promijeniti, to moraš učiniti samo jedanput. Sadržaj iz obrasca obično se prikazuje pomoću:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Obrazac može biti veličine do 64 KB. Primjer podnožja može sadržavati naslove, odlomke, poveznice, uvjetne oznake i reference na druge obrasce poput <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title="Napravi thumbnail"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Zamijeni sliku"><![CDATA[]]></item>
-        <item id="upload_image" title="Postavi sliku"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Postavi thumbnail"><![CDATA[]]></item>
+    <group id="image" title="Panel slika">
+        <item id="create_thumbnail" title="Napravi thumbnail"><![CDATA[
+<h2>Izradi minijaturu</h2>
+<p>Omogućuje ti (ponovnu) izradu minijature zadanih dimenzija iz slike pune veličine.</p>
+<p>Za prilagođeno dimenzioniranje, minijatura će se skalirati kako bi odgovarala odabranim dimenzijama, osim ako označiš potvrdni okvir „Obreži”. U tom će slučaju minijatura biti izrađena iz središnjeg dijela slike bez ikakvog skaliranja.</p>
+<p>Za automatsko dimenzioniranje minijatura će biti skalirana na dimenzije i (neobavezne) postavke obrezivanja iz trenutačne administrativne teme.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Zamijeni sliku"><![CDATA[
+<h2>Zamijeni sliku</h2>
+<p>Slika koja se ovdje prenese jednostavno će zamijeniti postojeću sliku povezanu s ovim zapisom u bazi podataka.</p>
+        ]]></item>
+        <item id="upload_image" title="Postavi sliku"><![CDATA[
+<h2>Prijenos slike</h2>
+<p>Prenesi jednu ili više slika na svoj poslužitelj.</p>
+<p>Nakon prijenosa u direktorij <code>images</code>, naziv tvoje izvorne slike čuva se samo interno u bazi podataka Textpatterna; sama slikovna datoteka preimenovat će se u uzastopni broj + nastavak datoteke.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Postavi thumbnail"><![CDATA[
+<h2>Prijenos minijature</h2>
+<p>Slikama pune veličine mogu se dodijeliti vlastite minijature. One su korisne za povezivanje na slike pune veličine i za njihovo indeksiranje.</p>
+<p>Referenca na minijaturu potpuno je ista kao i referenca na sliku pune veličine, samo se na naziv datoteke dodaje slovo <code>t</code>. Na primjer, da bi se referencirala minijatura povezana sa slikom pune veličine spremljenom na <code>/images/12.jpg</code>, koristio bi se put <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="lang" title="">
-        <item id="get_textpack" title=""><![CDATA[]]></item>
+    <group id="lang" title="Panel jezika">
+        <item id="get_textpack" title="Instaliraj Textpack"><![CDATA[
+<h2>Instaliraj Textpack</h2>
+<p>Zalijepi dodatne jezične nizove za svoje web-mjesto u ovo polje i odaberi „Prenesi” za njihovu instalaciju.</p>
+<p>Ti nizovi često dolaze u obliku Textpack arhive koja se može preuzeti, a distribuira se s dodatkom (pluginom) kako bi se njegove jezične poruke mogle koristiti izravno unutar Textpatterna.</p>
+<p>Prevoditelji zatim po potrebi mogu prevesti ove pakete i ponovno distribuirati lokalizirani sadržaj zajednici.</p>
+        ]]></item>
     </group>
 
-    <group id="link" title="">
-        <item id="link_description" title="Opis"><![CDATA[]]></item>
-        <item id="link_sort" title="Vrijednost sortiranja"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title=""><![CDATA[]]></item>
+    <group id="link" title="Panel poveznica">
+        <item id="link_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opisi poveznica su neobavezni i korisni za dodavanje natpisa uz poveznice, za izradu atributa <code>title=""</code> (infoprikaza) za poveznice ili jednostavno za tvoju internu dokumentaciju.</p>
+        ]]></item>
+        <item id="link_sort" title="Vrijednost sortiranja"><![CDATA[
+<h2>Vrijednost za sortiranje</h2>
+<p>Korisno za prirodno jezično sortiranje popisa poveznica, npr. po prezimenu osobe umjesto po imenu ili po izrazima koji počinju određenim ili neodređenim članom.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Adresa poveznice. Ako poveznica vodi na drugo web-mjesto, mora joj prethoditi <code>http://</code> ili <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Vrijeme kada je poveznica objavljena ili zadnji put izmijenjena. Vrijeme se može postaviti na trenutak objave stavke ili na proizvoljno vrijeme u prošlosti ili budućnosti.</p>
+<p>Polja odgovaraju sljedećim podacima:</p>
+<ul>
+    <li>Godina / Mjesec / Dan</li>
+    <li>Sat (24-satni format) : Minuta : Sekunda</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="login" title="">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+    <group id="login" title="Panel prijave">
+        <item id="remember_login" title="Ostani prijavljen u ovom pregledniku"><![CDATA[
+<h2>Ostani prijavljen u ovom pregledniku</h2>
+<p>Kad je označeno, ostat ćeš prijavljen na svoj Textpattern račun s trenutačnim web-preglednikom dok se sam ne odjaviš. Ako nije označeno, automatski ćeš biti odjavljen nakon određenog razdoblja neaktivnosti.</p>
+<p>Za ovu funkciju moraju biti omogućeni kolačići u tvom pregledniku.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title="Instaliraj plugin"><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    <group id="plugin" title="Panel dodataka">
+        <item id="install_plugin" title="Instaliraj plugin"><![CDATA[
+<h2>Instaliraj dodatak</h2>
+<p>Zalijepi sadržaj kompilirane tekstualne datoteke dodatka ovdje, zatim odaberi „Prenesi” kako bi započeo/la instalaciju. Svaki dodatak koji preneseš s istim nazivom kao neki prethodno instaliran bit će prepisan prenesenom verzijom.</p>
+<p>Tekst dodatka koji ovdje lijepiš <strong>nije</strong> neobrađeni PHP kôd, već Base64-kodirani tekst, obično s prethodnim zaglavljem koje sadrži informacije o dodatku (kao što su naziv dodatka, verzija i opis, ime autora itd.).</p>
+<p>Kompilirane verzije dodataka često možeš dobiti iz <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repozitorija dodataka <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> ili namjenskog kanala autora dodatka, kao što je njegovo web-mjesto ili GitHub.</p>
+<p>Možeš također zalijepiti URL na Textpattern kompiliranu tekstualnu datoteku ovdje, ako to vanjsko web-mjesto dopušta.</p>
+<p>Svi preneseni dodaci prolaze kroz korak provjere koji ti omogućuje pregled koda i sadržaja dodatka prije instalacije.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Prenesi dodatak"><![CDATA[
+<h2>Prenesi dodatak</h2>
+<p>Ovim obrascem možeš prenijeti datoteku dodatka. Preneseni dodaci (i sva njihova sredstva) pohranjuju se u direktoriju „plugins”.</p>
+<p>Vrste dodataka koje se mogu prenijeti ovdje su:</p>
+<ul>
+<li>Textpattern PHP predlošci koji sadrže cjelokupan kôd, metapodatke, Textpack nizove i tekst pomoći.</li>
+<li>Textpattern kompilirane tekstualne datoteke koje sadrže cjelokupan kôd, metapodatke, Textpack nizove i tekst pomoći.</li>
+<li>Textpattern zip paketi koji sadrže informacije iz manifeste, kôd, metapodatke, Textpack nizove, tekst pomoći i pomoćne datoteke.</li>
+<li>Neobrađene PHP datoteke (iako one neće popuniti dodatne metapodatke i ne preporučuju se).</li>
+</ul>
+<p>Svaki dodatak koji preneseš s istim nazivom kao neki prethodno instaliran bit će prepisan prenesenom verzijom.</p>
+<p>Svi preneseni dodaci prolaze kroz korak provjere koji ti omogućuje pregled koda i sadržaja dodatka prije instalacije.</p>
+        ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title="Koristi admin-side plugine?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Napredne opcije"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Dozvoli PHP u unosima?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Dozvoli zanemarivanje forme?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Dozvoli PHP u stranicama?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Arhiva format datuma"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Unosi koriste sažetak?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Dodaj naslov permalinkovima?"><![CDATA[]]></item>
-        <item id="auto_dst" title=""><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Novi komentar znači; site osvježen?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Prikaži komentare kao numeriranu listu?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title="Automatski dodaj komentare unosima?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Format datuma za komentare"><![CDATA[]]></item>
-        <item id="comments_default_invite" title="Default pozivnica"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title="Zaključano nakon"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title="Zabrani slike korisnika?"><![CDATA[]]></item>
-        <item id="comments_mode" title="Mod komentara"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Nadzor komentara?"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Uključeno po default?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Traži posjetiteljev email?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Traži posjetiteljevo ime?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Šalji komentare autoru?"><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title="Dozvoli više Textile markupa?"><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title="Posebna polja"><![CDATA[]]></item>
-        <item id="dateformat" title="Format datuma"><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Maksimalna veličina datoteka (u byte-ima)"><![CDATA[]]></item>
-        <item id="gmtoffset" title="Vremenska zona"><![CDATA[]]></item>
-        <item id="img_dir" title="Direktoriji slika"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Uključi email kod Atom feeds-a?"><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title="Logiranje"><![CDATA[]]></item>
-        <item id="max_url_len" title="Maximum URL, dužina (broj karaktera)"><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title="Nikad ne prikazuj email adrese?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title="Upotrijebi ISO-8859-1 encoding kod poslanih emailova (default je UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Putanja direktorija do Plugin cache"><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title="Koliko unosa bi trebalo biti uključeno u feedove?"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Prikaži broj komentara kod feed-ova?"><![CDATA[]]></item>
-        <item id="site_slogan" title="Slogan site-a"><![CDATA[]]></item>
-        <item id="sitename" title="Ime site-a"><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Spam crna-lista (odvojeno-zarezom)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title="Sindiciraj samo sažetak unosa?"><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title="Prihvati komentare?"><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title="Koristi email za konstrukciju feed id-a (default je site URL)?"><![CDATA[]]></item>
-        <item id="use_plugins" title="Koristi plugine?"><![CDATA[]]></item>
-        <item id="use_textile" title="Koristi Textile?"><![CDATA[]]></item>
+    <group id="prefs" title="Panel postavki">
+        <item id="admin_side_plugins" title="Koristi admin-side plugine?"><![CDATA[
+<h2>Koristiti administrativne dodatke?</h2>
+<p>Administrativni dodaci mogu promijeniti rad administrativnog sučelja. Mogu se „ukopčati” u već postojeće radnje, poput uređivanja ili objavljivanja članaka, ili mogu dodati nove panele za dodatne/proširene funkcije.</p>
+<p>Ako želiš saznati više o administrativnim dodacima, pogledaj stranicu <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Proširivanje Textpatterna <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> u <a rel="external" target="_blank" href="https://docs.textpattern.com/">korisničkoj dokumentaciji Textpatterna <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>. Dodaci svih vrsta navedeni su na web-mjestu <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Napredne opcije"><![CDATA[
+<h2>Napredne opcije</h2>
+<p>Prikaži grupu naprednih postavki, u kojoj se mogu dodatno konfigurirati postavke kao što su:</p>
+<ul>
+    <li>PHP funkcije omogućene u <code>txp:evaluate</code>.</li>
+    <li>Prilagođene vrste predložaka obrazaca.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Dozvoli PHP u unosima?"><![CDATA[
+<h2>Dopustiti PHP u člancima?</h2>
+<p>Kad je omogućeno, ova postavka dopušta korištenje PHP-a unutar članaka. Autor mora imati odgovarajuće ovlasti (prema zadanim postavkama to su samo <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„izdavači” <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„upravljački urednici” <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> i <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„urednici za lekturu” <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>).</p>
+<p><strong>Toplo se preporučuje da ovu mogućnost isključiš</strong> osim ako ti stvarno treba. Bilo kakav potencijalno štetan/opasan PHP kôd koji može uništiti tvoje web-mjesto ili dovesti do curenja podataka trećim stranama mogao bi dodati bilo koji autor, a izvršiti ga bilo tko tko vidi taj članak.</p>
+<p>PHP kôd mora izostaviti početne i završne PHP oznake te također biti obuhvaćen <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> oznakama <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Dozvoli zanemarivanje forme?"><![CDATA[
+<h2>Dopustiti nadjačavanje obrasca?</h2>
+<p>Ova postavka omogućuje autorima članaka da nadjačaju obrazac koji će se koristiti pri ispisu njihova članka. Ako je omogućeno, pri uređivanju članka bit će dostupan padajući izbornik „Nadređeni obrazac”.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Dozvoli PHP u stranicama?"><![CDATA[
+<h2>Dopustiti PHP na stranicama?</h2>
+<p>Kad je omogućeno, ova postavka dopušta PHP kôd unutar predložaka stranica i obrazaca.</p>
+<p><strong>Toplo se preporučuje da ovu mogućnost isključiš</strong> osim ako ti stvarno treba. Bilo kakav potencijalno štetan/opasan PHP kôd koji može uništiti tvoje web-mjesto ili dovesti do curenja podataka trećim stranama mogli bi dodati drugi korisnici, a zatim bi ga mogao nenamjerno izvršiti administrator ili posjetitelj.</p>
+<p>PHP kôd mora izostaviti početne i završne PHP oznake te također biti obuhvaćen <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> oznakama <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arhiva format datuma"><![CDATA[
+<h2>Format datuma arhive</h2>
+<p>Kako će se datumi pojavljivati na člancima u odjeljcima tvog web-mjesta.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Prikazati sažetak na stranici za uređivanje članka?"><![CDATA[
+<h2>Prikazati sažetak na stranici za uređivanje članka?</h2>
+<p>Ako odabereš „Ne”, polje sažetka neće se prikazati autoru na zaslonu za uređivanje članka.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Dodaj naslov permalinkovima?"><![CDATA[
+<h2>Automatski dodati naslov u trajne poveznice?</h2>
+<p>Ova postavka trajnim poveznicama pridružuje automatski generiranu verziju naslova članka. Naslov se ili generira automatski ili se može ručno nadjačati u polju „Naslov samo za URL” pri uređivanju članka.</p>
+<p>Postavka će imati učinka samo ako koristiš čiste URL-ove. Za određene jezike to može rezultirati dugačkim i neprivlačnim URL-ovima, u kojem slučaju ćeš vjerojatno željeti ovo postaviti na „Isključeno”.</p>
+        ]]></item>
+        <item id="auto_dst" title="Automatski prilagoditi ljetno računanje vremena?"><![CDATA[
+<h2>Automatski prilagoditi ljetno računanje vremena?</h2>
+<p>Ova postavka omogućuje Textpatternu da automatski prilagodi kada nastupa DST (ljetno računanje vremena) u tvojoj vremenskoj zoni. Ako je postavljeno na „Ne”, postavku „Ljetno računanje vremena omogućeno” moći ćeš mijenjati ručno.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Novi komentar znači; site osvježen?"><![CDATA[
+<h2>Novi komentar znači ažurirano web-mjesto?</h2>
+<p>Baza podataka Textpatterna prati kada je došlo do posljednje promjene na tvojem web-mjestu. Kad je ova postavka postavljena na „Da”, novi komentar će također ažurirati tu vrijednost. Ova se vrijednost koristi, na primjer, za funkcionalnost <code>"Pošalji Last-Modified zaglavlje"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Primijeniti rel=&quot;nofollow&quot; na komentare?"><![CDATA[
+<h2>Primijeniti rel="nofollow" na komentare?</h2>
+<p>Ako je postavljeno na „Da”, svim poveznicama u komentarima dodaje se dodatni atribut. Namjera mu je smanjiti poticaj za neželjene komentare, a inicijativu je pokrenuo niz tražilica i proizvođača softvera. Više možeš saznati čitanjem <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">objave Googlea <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+<p><strong>Napomena:</strong> Ova postavka ne utječe na funkcionalnost tvog web-mjesta. Može spriječiti ili smanjiti utjecaj tvojih komentara kada neke tražilice rangiraju web-mjesta na koja se iz tih komentara povezuje.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Prikaži komentare kao numeriranu listu?"><![CDATA[
+<h2>Prikazati komentare kao numerirani popis?</h2>
+<p>Određuje hoće li komentari članka biti omotani HTML oznakom <code>&lt;ol&gt;</code>, a pojedini komentari oznakom <code>&lt;li&gt;</code> (što uzrokuje prikaz komentara kao numeriranog popisa) ili će pojedini komentari biti omotani oznakom <code>&lt;div&gt;</code>.</p>
+<p>Bez obzira na vrijednost, oznake koje se koriste možeš nadjačati na razini pojedinog obrasca izmjenom oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>, koja se nalazi u obrascu <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automatski dodaj komentare unosima?"><![CDATA[
+<h2>Automatski pridružiti komentare člancima?</h2>
+<p>Ova postavka određuje hoće li se komentari i obrazac za komentare automatski dodavati svim pojedinačnim člancima (automatskim uključivanjem sadržaja obrasca <code>comments_display</code>).</p>
+<p>U većini slučajeva željet ćeš ovo postaviti na „Ne”, jer to omogućuje veću fleksibilnost u smještaju komentara unutar dizajna web-mjesta. Oznaku <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> morat ćeš ručno dodati u sve predloške zasnovane na člancima na kojima želiš prikazivati komentare.</p>
+<p>Ako se susretneš s dvostrukim prikazom komentara u članku, vjerojatno u predlošku već imaš oznaku <code>&lt;txp:comments /&gt;</code>, a postavka „Automatski pridružiti komentare člancima?” također je postavljena na „Da”.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Format datuma za komentare"><![CDATA[
+<h2>Format datuma komentara</h2>
+<p>Kako će se datumi komentara prikazivati posjetiteljima tvog web-mjesta.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Default pozivnica"><![CDATA[
+<h2>Zadani poziv na komentiranje</h2>
+<p>Ako dopuštaš posjetiteljima da komentiraju na tvom web-mjestu, ovo je zadani tekst poziva. Na primjer:</p>
+<ul>
+    <li>Komentari</li>
+    <li>Dodaj komentar</li>
+    <li>Povratne informacije</li>
+    <li>Bilješke</li>
+</ul>
+<p>Imaj na umu da se tekst poziva uvijek može promijeniti zasebno za pojedini članak.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Zaključano nakon"><![CDATA[
+<h2>Komentari onemogućeni nakon</h2>
+<p>Ovom postavkom možeš definirati nakon koliko će vremena komentiranje biti isključeno za članke (može se postaviti na „Nikada” kako bi se dopustilo neograničeno vrijeme za komentiranje).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Zabrani slike korisnika?"><![CDATA[
+<h2>Dopustiti slike komentatora u komentarima?</h2>
+<p>Ako je ova opcija postavljena na „Ne”, sve slike uključene u komentare bit će uklonjene.</p>
+        ]]></item>
+        <item id="comments_mode" title="Mod komentara"><![CDATA[
+<h2>Način komentara</h2>
+<p>Ako je odabran „nopopup” (preporučeno), trenutačni prozor će se osvježiti i prikazati samo trenutačni članak, s komentarima ispod.</p>
+<p>Ako je odabran „popup”, kada se klikne na poveznicu za komentare otvorit će se novi prozor preglednika (koristi obrazac <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Nadzor komentara?"><![CDATA[
+<h2>Moderirati komentare?</h2>
+<p>Kad je ovo postavljeno na „Da”, svaki novi komentar imat će isključenu vidljivost dok ne bude pregledan. Svaki komentar moraš ručno moderirati i učiniti vidljivim (autoru članka bit će poslana poruka e-poštom kada stigne novi komentar).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Uključeno po default?"><![CDATA[
+<h2>Komentari uključeni prema zadanim postavkama?</h2>
+<p>Ako je ova postavka postavljena na „Da”, komentari će se automatski omogućiti za svaki objavljeni članak. Ako je postavljena na „Ne”, moraš omogućiti komentare u panelu „Pisanje” svaki put kad želiš prihvatiti komentare.</p>
+<p>Komentare je moguće uključiti/isključiti u bilo kojem trenutku za svaki članak zasebno.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Traži posjetiteljev email?"><![CDATA[
+<h2>Komentari zahtijevaju adresu e-pošte korisnika?</h2>
+<p>Ako je postavljeno na „Da”, osobe koje žele komentirati na tvoj članak morat će unijeti adresu e-pošte u obrazac za unos komentara. Neće moći poslati komentar ako ne navedu adresu e-pošte.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Traži posjetiteljevo ime?"><![CDATA[
+<h2>Komentari zahtijevaju ime komentatora?</h2>
+<p>Ako je postavljeno na „Da”, osobe koje žele komentirati na tvoj članak morat će unijeti ime u obrazac za unos komentara. Neće moći poslati komentar ako ne navedu ime.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Šalji komentare autoru?"><![CDATA[
+<h2>Slati komentare autoru e-poštom?</h2>
+<p>Ako je postavljeno na „Da”, kad god novi komentar bude ostavljen na članku, njegova kopija bit će poslana e-poštom autoru tog članka.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Dozvoli više Textile markupa?"><![CDATA[
+<h2>Dopustiti više Textile oznaka u komentarima?</h2>
+<p>Kad je postavljeno na „Da”, komentari mogu sadržavati elemente <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textilea <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> koji bi se inače tretirali kao običan tekst, kao što su:</p>
+<ul>
+    <li>naslovi</li>
+    <li>uređeni i neuređeni popisi</li>
+    <li>fusnote</li>
+    <li>tablice</li>
+    <li>kôd</li>
+    <li>proširena blok-sintaksa (<code>bc..</code>, <code>bq..</code> itd.)</li>
+</ul>
+<p><strong>Napomena:</strong> Iz sigurnosnih razloga, neobrađeni HTML pretvara se u običan tekst.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Računima dozvoljene istovremene prijave"><![CDATA[
+<h2>Računima dozvoljene istovremene prijave</h2>
+<p>Popis naziva računa za prijavu, odvojenih zarezima, koji se smiju prijaviti u više preglednika/sesija. Ovo je korisno tijekom razvoja kada želiš podijeliti prijavu s klijentima.</p>
+<p>Korištenje ove mogućnosti predstavlja sigurnosni rizik i <strong>ne preporučuje se na produkcijskim web-mjestima</strong>. Panel dijagnostike prikazat će upozorenje ako je tvoj korisnički račun konfiguriran za istodobne prijave na produkcijskom web-mjestu.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Prilagođene vrste predložaka obrazaca"><![CDATA[
+<h2>Prilagođene vrste predložaka obrazaca</h2>
+<p>Uz standardne vrste predložaka obrazaca (article, file, misc itd.) izdavači mogu definirati prilagođene vrste. Svrha prilagođenih vrsta predložaka obrazaca je dvostruka: lakša klasifikacija predložaka obrazaca i prilagođena definicija sredstava.</p>
+<p>Format ove postavke je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>, pri čemu svaki odjeljak odgovara jednoj vrsti predloška obrasca.</p>
+<p>Za definiranje prilagođene vrste obrasca (npr. <code>js</code>) treba dodati (u zasebnom retku) odjeljak <code>[js]</code>. Zadani naslov može se postaviti unosom <code>title="Javascript"</code> u odgovarajući odjeljak. Ako je potrebno, mogu se dodati i lokalizirani naslovi (npr. <code>ru="Скрипт"</code>).</p>
+<p>Dodatno, može se zadati <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">vrsta medija <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> (nekad poznata kao MIME tip) za predložak obrasca, npr. <code>mediatype="application/javascript"</code>. To pretvara predloške obrazaca te vrste u prilagođena sredstva koja se mogu posluživati kao zadani tip medija, bilo iz baze podataka ili s diska (ravne datoteke) putem oznake <code>&lt;txp:output_form /&gt;</code>. Na primjer, predložak obrasca nazvan <code>myscript.js</code> tipa <code>[js]</code> s vrstom medija <code>application/javascript</code> možeš uključiti u svoj kôd ovako:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>To će generirati sljedeću HTML oznaku <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Samo se predlošci obrazaca s ekstenzijom naziva koja odgovara njihovoj vrsti (npr. <code>myscript.js</code>) mogu posluživati kao ravne datoteke. U tom slučaju Textpattern ih uopće neće obrađivati i bit će dostupni putem svog URL-a.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Prilagođena polja"><![CDATA[
+<h2>Prilagođena polja</h2>
+<p>Prilagođena polja koriste se za pohranu dodatnih podataka o članku. Možeš definirati do deset polja tako da im ovdje daš naziv. Svako će se pojaviti kao zasebno polje u panelu Pisanje, kako bi se uz svaki članak mogli povezati prilagođeni podaci.</p>
+<p>Polja možeš imenovati kako god želiš, ali imaj na umu sljedeće:</p>
+<ul>
+<li>Korištenje razmaka poboljšava čitljivost u panelu Pisanje, ali se tada polja <em>ne mogu</em> koristiti kao parametri sortiranja ili filtriranja u oznaci article_custom. Razmisli o podvlakama ako želiš koristiti tu funkcionalnost.</li>
+<li>Pazi prilikom imenovanja polja da se ne sukobljavaju s rezerviranim nazivima polja u Textpatternu. Na primjer, nemoj koristiti <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> itd., jer ćeš dobiti neobične rezultate ili neispravno web-mjesto.</li>
+<li>Podaci u svakom polju ograničeni su na 255 znakova običnog teksta.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Format datuma"><![CDATA[
+<h2>Format datuma</h2>
+<p>Ova opcija utječe samo na način na koji se datumi članaka prikazuju na naslovnici tvog web-mjesta.</p>
+        ]]></item>
+        <item id="default_event" title="Zadani panel"><![CDATA[
+<h2>Zadani panel</h2>
+<p>Panel administratorskog sučelja Textpatterna koji će se prvi prikazati kad se bilo tko prijavi.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Zadani status objave"><![CDATA[
+<h2>Zadani status objave</h2>
+<p>Definira status vidljivosti objave za novostvorene Textpattern članke.</p>
+<p>Imaj na umu da ova postavka ne utječe na status članaka izrađenih ili uređenih prije njezine promjene.</p>
+<p>Zadani status objavljivanja može biti jedan od sljedećih:</p>
+<ul>
+    <li>Skica (Draft)</li>
+    <li>Skriveno (Hidden)</li>
+    <li>Na čekanju (Pending)</li>
+    <li>Objavljen (Live)</li>
+    <li>Prilijepljen (Sticky)</li>
+</ul>
+<p><strong>Skica</strong> članka smatra se radnom verzijom i nije vidljiva izvan administrativnog područja Textpatterna (tj. nije vidljiva na javnim stranicama i nije uključena u kanale).</p>
+<p><strong>Skriven</strong> članak nije vidljiv izvan administrativnog područja Textpatterna.</p>
+<p><strong>Članak na čekanju</strong> smatra se spremnim za objavu i čeka odobrenje, ali nije vidljiv izvan administrativnog područja Textpatterna.</p>
+<p><strong>Objavljen</strong> članak obično je vidljiv izvan administrativnog područja Textpatterna (tj. vidljiv na javnim stranicama, sindikiran u kanalima ako postavka to dopušta). Ako je članak objavljen i ima datum isteka, status će ostati objavljen i nakon isteka tog datuma, ali će se članak pojaviti izvan administrativnog područja samo ako je dopušteno objavljivanje istečenih članaka.</p>
+<p><strong>Prilijepljen</strong> članak sličan je <strong>objavljenom</strong> u smislu da se može vidjeti izvan administrativnog područja Textpatterna, ali se <strong>neće</strong> pojavljivati u popisima članaka osim ako odgovarajuća oznaka <code>article</code> ili <code>article_custom</code> ne uključuje atribut <code>status</code> s vrijednošću <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Odaberi koji HTML doctype želiš koristiti (HTML5 ili XHTML). To utječe na obrasce za unos komentara, Textile obradu oznaka <code>&lt;abbr&gt;</code> ili <code>&lt;acronym&gt;</code> i oznake <code>&lt;link&gt;</code> koje generira oznaka <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Omogućiti pretpregled razvojne teme?"><![CDATA[
+<h2>Omogućiti pretpregled razvojne teme?</h2>
+<p>Korisnici s dovoljnim ovlastima (prema zadanim postavkama oni s ulogama izdavača i dizajnera) mogu sigurno razvijati i pregledavati novu temu dok svi ostali korisnici i dalje vide staru temu (sve dok se nova ne objavi).</p>
+<p>Međutim, ovlašteni korisnici koji ne žele sudjelovati u razvoju tema mogu isključiti pretpregled razvojne teme. Tada će im se posluživati trenutačna „javna” tema, kao i običnim posjetiteljima.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Omogućiti podršku za kratke oznake?"><![CDATA[
+<h2>Omogućiti podršku za kratke oznake?</h2>
+<p>Textpattern oznake imaju oblik <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Moguće je smanjiti količinu pisanja omogućivanjem skraćene notacije kojom se <code>txp:</code> može izostaviti, uz poštivanje nekoliko jednostavnih pravila. Evo nekoliko primjera za ilustraciju koncepta:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> postaje <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> postaje <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> postaje <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> postaje <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> postaje <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (primijeti da se prefiks dodatka može koristiti za oznaku <code>else</code>).</li>
+</ul>
+<p>Ako oznaka sadrži podvlaku i omogućiš kratke oznake, osnovni je koncept:</p>
+<ol>
+    <li>Ukloni prefiks <code>txp:</code>.</li>
+    <li>Zamijeni prvu pojavu podvlake s <code>::</code>.</li>
+</ol>
+<p>Imaj na umu da ova postavka ne utječe na mogućnost korištenja kratkih kôdova <code>&lt;txp:output_form /&gt;</code> za ispis ulomaka obrazaca. I dalje možeš koristiti <code>&lt;txp::shortcode /&gt;</code>, što će se protumačiti kao <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Omogućiti XML-RPC poslužitelj?"><![CDATA[
+<h2>Omogućiti XML-RPC poslužitelj?</h2>
+<p>Ako želiš koristiti <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> za daljinsko upravljanje Textpatternom (npr. putem desktop ili mobilnih aplikacija), moraš uključiti XML-RPC poslužitelj postavljanjem ove opcije na „Da”.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Koristiti napredne funkcije e-pošte"><![CDATA[
+<h2>Koristiti napredne funkcije e-pošte</h2>
+<p>Postavljanje ove opcije na „Ne” usmjerit će svu e-poštu – poput zahtjeva za poništavanje lozinke računa i poruka iz dodataka kao što je com_connect – kroz PHP funkciju <code>mail()</code>. Odabirom „Da” koristit će se priloženi PHPMailer, što otvara dodatne postavke za usmjeravanje pošte putem vanjskih SMTP poslužitelja.</p>
+<p>Ako imaš problema s isporučivošću e-poruka (osobito kod online pružatelja kao što su Gmail, Outlook, Yahoo! itd.), vjerojatni je uzrok to što se tvoja domena ne smatra pouzdanim izvorom. Prebacivanje na „Da” može poboljšati isporučivost. Uz to, korištenje SMTP-a može pružiti bolju kompatibilnost s nekim pružateljima e-pošte i dodatno poboljšati isporučivost.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Zapisnici istječu nakon koliko dana?"><![CDATA[
+<h2>Zapisnici istječu nakon koliko dana?</h2>
+<p>Kad je zapisivanje u Textpatternu omogućeno, možeš odrediti koliko dugo (u danima) će se zapisnici čuvati. „7” će zadržati zapisnike dostupnima sedam dana.</p>
+<p><strong>Napomena:</strong> Zapisnici se skraćuju samo kada posjetiš panel „Zapisi posjetitelja”; inače će nastaviti rasti.</p>
+        ]]></item>
+        <item id="file_base_path" title="Put direktorija datoteka"><![CDATA[
+<h2>Put direktorija datoteka</h2>
+<p>Ovim se postavlja <strong>apsolutni put</strong> do direktorija u koji će se trajno spremati prenesene datoteke. PHP mora imati pravo pisanja u taj direktorij.</p>
+<p><strong>Napomena:</strong> Radi dodatne sigurnosti razmisli o premještanju ovog direktorija izvan javno dostupnog docroota tvojeg web-mjesta.</p>
+        ]]></item>
+        <item id="file_download_header" title="Zaglavlje preuzimanja datoteka"><![CDATA[
+<h2>Zaglavlje preuzimanja datoteka</h2>
+<p>Omogućuje prilagodbu načina rukovanja preuzimanjima datoteka.</p>
+<p>Uobičajeno se sva preuzimanja tretiraju kao privici i preuzimaju se (ovisno o tome kako je tvoj preglednik konfiguriran za tu vrstu datoteka). Ako želiš dati naznake kako bi želio/la da se neke ili sve vrste datoteka tretiraju, možeš ovdje unijeti oznake kojima ćeš to postići. Primjer može biti prikaz PDF datoteka koje si dodao/la u Textpattern kategoriju 'inline-pdf' unutar preglednika umjesto njihova preuzimanja:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maksimalna veličina prijenosa datoteka (u bajtovima)"><![CDATA[
+<h2>Maksimalna veličina prijenosa datoteka (u bajtovima)</h2>
+<p>Možeš ograničiti najveću dopuštenu veličinu (u bajtovima) za prijenos datoteka. Imaj na umu da je ova vrijednost također ograničena konfiguracijom PHP-a. Ako Textpattern otkrije da tvoja PHP konfiguracija ograničava veličinu prijenosa na manju vrijednost, automatski će je smanjiti. Ako želiš dopustiti veće datoteke za prijenos putem preglednika, kontaktiraj davatelja hostinga (relevantne vrijednosti u <code>php.ini</code> su <code>post_max_size</code>, <code>upload_max_filesize</code> i <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Vremenska zona"><![CDATA[
+<h2>Vremenska zona</h2>
+<p>Kako bi se datumi prikazivali u tvojoj lokalnoj vremenskoj zoni, odaberi svoju vremensku zonu.</p>
+        ]]></item>
+        <item id="img_dir" title="Direktorij slika"><![CDATA[
+<h2>Direktorij slika</h2>
+<p>Ako želiš prilagoditi naziv svog direktorija sa slikama, možeš to učiniti ovdje. Najprije moraš stvoriti direktorij u korijenu svoje Textpattern instalacije, a također se pobrinuti da PHP može pisati u taj direktorij.</p>
+<p>Ova je putanja uvijek <strong>relativna putanja</strong> (u odnosu na direktorij korijena instalacije Textpatterna).</p>
+<p>Zadana vrijednost je <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Uključiti adresu e-pošte u Atom kanale?"><![CDATA[
+<h2>Uključiti adresu e-pošte u Atom kanale?</h2>
+<p>Ovo ti omogućuje da u <code>author</code> dio Atom kanala uključiš adresu e-pošte autora članka (kako je zadano u njegovom korisničkom računu).</p>
+        ]]></item>
+        <item id="is_dst" title="Ljetno računanje vremena omogućeno?"><![CDATA[
+<h2>Ljetno računanje vremena omogućeno?</h2>
+<p>Je li DST (ljetno računanje vremena) trenutačno omogućeno za tvoju vremensku zonu.</p>
+        ]]></item>
+        <item id="logging" title="Zapisivanje"><![CDATA[
+<h2>Zapisivanje</h2>
+<p>Možeš odabrati razinu zapisivanja posjetitelja koju provodi Textpattern:</p>
+<ul>
+    <li><strong>Svi pristupi:</strong> Textpattern će zapisivati sve prikaze stranica na tvom web-mjestu</li>
+    <li><strong>Samo preporuke:</strong> Textpattern će zapisivati samo posjete koje dolaze s drugih web-mjesta</li>
+    <li><strong>Ništa:</strong> Textpattern neće zapisivati prikaze stranica</li>
+</ul>
+<p>Od verzije Textpattern 4.7.0, Textpattern ne prikuplja niti pohranjuje IP adrese posjetitelja. Ako IP adrese prikupljaš ili pohranjuješ izvan Textpatterna, poduzmi odgovarajuće mjere predostrožnosti kako bi podatke pohranjivao/la i/ili koristio/la u skladu s primjenjivim zakonima, poput <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR-a <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>, te primijeni snažne sigurnosne mjere u svim dijelovima svog poslužitelja i instalacije Textpatterna kako bi se spriječilo kompromitiranje tih podataka.</p>
+<p>Toplo se preporučuje da ovu postavku ostaviš na zadanoj vrijednosti „None” (Ništa), osim ako ti ove informacije doista nisu potrebne i, dodatno, javno priopćiš namjeravanu upotrebu tih podataka.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maksimalna duljina URL-a (u znakovima)"><![CDATA[
+<h2>Maksimalna duljina URL-a (u znakovima)</h2>
+<p>Ovo sprječava rad URL-ova koji su dulji od zadane duljine. Može biti korisno za ograničavanje štete i sigurnost web-mjesta.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Prikaži administrativne inline poveznice za pomoć"><![CDATA[
+<h2>Prikaži administrativne inline poveznice za pomoć</h2>
+<p>Ako želiš sakriti inline poveznice za pomoć (popup prozore s pomoću Textpatterna) u administrativnom sučelju, postavi ovu mogućnost na „None”.</p>
+        ]]></item>
+        <item id="never_display_email" title="Sakriti adresu e-pošte komentatora?"><![CDATA[
+<h2>Sakriti adresu e-pošte komentatora?</h2>
+<p>Ova postavka kontrolira treba li javno prikazati adresu e-pošte komentatora.</p>
+<p>Preporučuje se da se adrese e-pošte ne prikazuju, iz obzira prema tvojim korisnicima, ali mogu postojati situacije u kojima je prikazivanje adresa e-pošte komentatora poželjno.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Koristiti ISO-8859-1 kodiranje u e-porukama (zadano je UTF-8)?"><![CDATA[
+<h2>Koristiti ISO-8859-1 kodiranje u e-porukama (zadano je UTF-8)?</h2>
+<p>Textpattern prema zadanim postavkama koristi UTF-8 kodiranje kad god je to moguće, uključujući odlazne e-poruke. Međutim, neki stariji klijenti e-pošte (uključujući neke verzije Microsoft Outlooka) nemaju odgovarajuću podršku za UTF-8. Ako u e-porukama nailaziš na iskrivljene znakove, ova postavka će tekst pretvoriti u ISO-8859-1 kodiranje prije slanja.</p>
+<p><strong>Napomena:</strong> Ako koristiš jezik čiji se znakovi ne mogu predstaviti u ISO-8859-1, ova postavka ti, nažalost, neće pomoći. Trebao/la bi potražiti klijent e-pošte kompatibilan s UTF-8 (ili Unicodeom).</p>
+        ]]></item>
+        <item id="override_form_types" title="Vrste nadređenih obrazaca"><![CDATA[
+<h2>Vrste nadređenih obrazaca</h2>
+<p>Odaberi za koje će se vrste obrazaca njihovi predlošci učiniti dostupnima u panelu Pisanje kao nadređeni obrasci.</p>
+        ]]></item>
+        <item id="permlink_format" title="Uzorak naziva URL-a trajne poveznice"><![CDATA[
+<h2>Uzorak naziva URL-a trajne poveznice</h2>
+<p>Ovo definira način na koji se izrađuju i dodjeljuju URL-ovi članaka kada se koristi neki od „čistih” načina.</p>
+<p>Kad se članak objavi, njegov se URL generira na temelju naslova članka, osim ako je u polju „Naslov samo za URL” naveden određeni URL.</p>
+<p>Uzmimo sljedeći primjer naslova članka: <em>Ana i Marko jedu tortu</em></p>
+<p>Kada je uzorak naziva URL-a trajne poveznice postavljen na „Sa spojnicama (naslov-ovakav-kao-ovaj)”, URL članka bio bi:</p>
+<pre><code>https://example.com/ana-i-marko-jedu-tortu</code></pre>
+<p>Kada je uzorak naziva URL-a trajne poveznice postavljen na „Spajanje početnih velikih slova (TitleLikeThis)”, URL članka bio bi:</p>
+<pre><code>https://example.com/AnaIMarkoJeduTortu</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Uzorak URL-a članka"><![CDATA[
+<h2>Uzorak URL-a članka</h2>
+<p>Ovo definira način na koji se do pojedinačnih članaka dolazi putem URL-a prikazanog pomoću oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+<p>Način „?=messy” je najkompatibilniji – funkcionirat će uz malo ili nimalo konfiguracije – ali je najmanje povoljan u smislu čitljivosti URL-ova i optimizacije za tražilice (SEO). U ovom načinu URL-ovi za članke na tvom web-mjestu izgledaju ovako:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Svi ostali načini zahtijevaju funkcionalnost prepisivanja URL-ova na web-poslužitelju (npr. Apache <code>mod_rewrite</code> ili NGINX rewrite direktive u bloku <code>server</code>). Ako tvoj poslužitelj ne podržava prepisivanje URL-ova, kontaktiraj davatelja hostinga ili koristi način „?=messy” opisan gore.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Put direktorija međuspremnika dodataka"><![CDATA[
+<h2>Put direktorija međuspremnika dodataka</h2>
+<p>Ova se postavka uglavnom koristi za razvojne programere dodataka. Kada je zadana, možeš smjestiti izvornu datoteku dodatka (nekompiliranu) u ovaj direktorij i Textpattern će je automatski učitati, tako da možeš jednostavno uređivati dodatak i odmah vidjeti učinak bez potrebe za instalacijom/aktivacijom dodatka. <strong>Pazi</strong> ipak da se ovim načinom, ako je dodatak neispravan (ne može se kompilirati), može pokvariti i sam Textpattern!</p>
+<p>Preporučuje se da na produkcijskom web-mjestu učitavaš dodatke kroz standardni panel „Dodatci”, a ne putem direktorija međuspremnika dodataka.</p>
+<p><strong>Napomena:</strong> Nemoj zadavati isti direktorij i za „privremeni” i za „međuspremnik dodataka” jer će to uzrokovati probleme (Textpattern bi pokušao izvršavati sadržaj privremenih zapisničkih datoteka kao dodatke).</p>
+        ]]></item>
+        <item id="production_status" title="Status produkcije"><![CDATA[
+<h2>Status produkcije</h2>
+<p>Textpattern web-mjesto može biti u jednom od tri načina rada:</p>
+<ol>
+    <li>„Otklanjanje pogrešaka” (Debugging)</li>
+    <li>„Testiranje” (Testing)</li>
+    <li>„Produkcija” (Live)</li>
+</ol>
+<h3>Način otklanjanja pogrešaka</h3>
+<p>Sve PHP pogreške na tvom javnom web-mjestu bit će vidljive, kao i upozorenja o neispravnom kôdu i dodacima. Dodatno, sljedeće informacije bit će vidljive kada pogledaš HTML izvor javne stranice:</p>
+<ul>
+    <li>vrijeme koje je poslužitelju trebalo da izgradi stranicu („Runtime”)</li>
+    <li>broj izvršenih MySQL upita</li>
+    <li>približna maksimalna upotreba memorije</li>
+    <li>sve Textpattern oznake na koje je naišao prilikom izgradnje stranice (poznato i kao „trag oznaka”)</li>
+</ul>
+<h3>Način testiranja</h3>
+<p>Sve PHP pogreške na tvom javnom web-mjestu bit će vidljive, kao i upozorenja o neispravnom kôdu i dodacima. Sljedeće informacije bit će vidljive kada pogledaš HTML izvor javnih stranica:</p>
+<ul>
+    <li>vrijeme koje je poslužitelju trebalo da izgradi stranicu („Runtime”)</li>
+    <li>broj izvršenih MySQL upita</li>
+    <li>približna maksimalna upotreba memorije</li>
+</ul>
+<h3>Način produkcije</h3>
+<p>Na stranicu se neće slati nikakva izvješća o pogreškama ni dijagnostičke informacije. Općenito, način produkcije je poželjan jer pruža najbolje korisničko iskustvo i najmanje opterećuje poslužitelj.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema za javne stranice"><![CDATA[
+<h2>Tema za javne stranice</h2>
+<p>Zadana tema za javne stranice koja će se koristiti kad god netko posjeti tvoje javno web-mjesto. S Textpatternom dolazi unaprijed instalirana zadana tema, uz mogućnost pokretanja bez teme. Možeš također dodati pakete tema u direktorij <code>textpattern/themes</code> kako bi ih učinio/la dostupnima za upotrebu.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Objavljivati istečene članke?"><![CDATA[
+<h2>Objavljivati istečene članke?</h2>
+<p>Kad je postavljeno na „Da”, istečeni članci nastavit će se prikazivati na tvom web-mjestu i nakon isteka datuma isteka. Za prikaz alternativnog sadržaja ili oznaka za istečene članke možeš koristiti oznaku <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
+<p>Kad je postavljeno na „Ne”, istečeni članci bit će uklonjeni s javnog web-mjesta i vraćat će HTTP status „410 Gone”. Zadana postavka je „Ne”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Slati podatke za prijavu s ove adrese e-pošte"><![CDATA[
+<h2>Slati podatke za prijavu s ove adrese e-pošte</h2>
+<p>Odredi adresu e-pošte koja će se koristiti kao pošiljateljeva „From:” adresa u porukama s podacima za prijavu novih korisnika.</p>
+<p>Ako ovo polje ostaviš praznim ili uneseš nevažeću adresu e-pošte, Textpattern će umjesto toga koristiti ime i adresu trenutačno prijavljenog korisnika.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Koliko članaka treba uključiti u kanale?"><![CDATA[
+<h2>Koliko članaka treba uključiti u kanale?</h2>
+<p>Ovo je najveći broj trenutačnih članaka koji će se u jednom trenutku sindicirati u RSS i Atom formatima.</p>
+<p>Preporučuje se manja vrijednost, primjerice između <code>5</code> i <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Broj dodatnih prolaza parsera"><![CDATA[
+<h2>Broj dodatnih prolaza parsera</h2>
+<p>Textpattern parser oznaka obično zamjenjuje sve tvoje oznake sadržajem iz baze podataka u jednom prolazu kroz predložak stranice. U nekim je slučajevima to nedostatno, na primjer:</p>
+<ul>
+    <li>pri korištenju dodataka s niskim redoslijedom učitavanja kao atributa oznaka</li>
+    <li>kod zamjene unutar oznaka <code>&lt;txp:php&gt;</code></li>
+    <li>pri preskakanju elemenata stranice ranije na stranici kako bi kasnije mogli primiti sadržaj koji se dobiva iz oznake koja se obrađuje kasnije</li>
+</ul>
+<p>Textpattern je tradicionalno izvršavao jedan dodatni prolaz (tzv. „secondpass”) iz povijesnih razloga, stoga je zadana vrijednost ove postavke <code>1</code>. Međutim, više prolaza povećava vjerojatnost da će nepredviđene oznake proći i biti obrađene. Nedavna poboljšanja parsera oznaka smanjila su potrebu za tim drugim prolazom. Dakle, osim ako izričito ne koristiš drugi prolaz, smanji ovu vrijednost na <code>0</code> kako bi tvoje web-mjesto bilo sigurnije.</p>
+<p>Ako naknadno primijetiš neobrađene oznake koje se ispisuju na tvom web-mjestu (a u načinima Testiranje/Otklanjanje pogrešaka nema drugih pogrešaka u oznakama zbog nepodudaranja parova oznaka), kontaktiraj nas s primjerom predloška stranice/kôda/dodatka. Pokušavamo ukloniti potrebu za dodatnim parser prolazima, a ove će nam informacije pomoći da to postignemo.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Slati zaglavlje &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Slati zaglavlje "Last-Modified"?</h2>
+<p>Kad je ova opcija omogućena, Textpattern će pročitati HTTP zaglavlje posjetitelja <code>If-Modified-Since</code> (ako postoji) i usporediti ga s vremenom posljednjeg ažuriranja web-mjesta. Ako se od posljednjeg učitavanja stranice nije ništa promijenilo (tj. ako se vremenska oznaka koju preglednik šalje podudara s vremenom posljednjeg ažuriranja web-mjesta), tada se natrag šalje zaglavlje koje pregledniku nalaže da koristi svoju predmemoriranu verziju stranice.</p>
+<p>To može smanjiti potrošnju propusnosti, vrijeme učitavanja stranice i opterećenje web-poslužitelja.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Prikazati broj komentara u kanalima?"><![CDATA[
+<h2>Prikazati broj komentara u kanalima?</h2>
+<p>Kad je postavljeno na „Da”, ova postavka će broju komentara pridružiti naslovima članaka u RSS/Atom kanalima.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan web-mjesta"><![CDATA[
+<h2>Slogan web-mjesta</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan web-mjesta <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> je sažetak ili opis tvog web-mjesta. Koristit će se kao opis tvog web-mjesta gdje god je potreban, primjerice u RSS/Atom kanalima, a možeš ga koristiti i na bilo kojem mjestu na web-mjestu, prema vlastitom nahođenju.</p>
+<p><strong>Napomena:</strong> Slogan web-mjesta je neobavezan, ali može biti potreban za valjane RSS ili Atom kanale.</p>
+        ]]></item>
+        <item id="sitename" title="Naziv web-mjesta"><![CDATA[
+<h2>Naziv web-mjesta</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Naziv ili naslov tvog web-mjesta <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>. Pojavit će se u naslovnoj traci preglednika posjetitelja ili čitača kanala te na mnogim drugim mjestima na tvom web-mjestu, prema vlastitom nahođenju.</p>
+        ]]></item>
+        <item id="siteurl" title="URL web-mjesta"><![CDATA[
+<h2>URL web-mjesta</h2>
+<p>Ovo je adresa tvog Textpattern web-mjesta, na primjer <code>www.example.com</code>.</p>
+<p><strong>Napomena:</strong> Nije potrebno navoditi <code>http://</code>, <code>https://</code> ili završnu kosu crtu <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Direktorij tema"><![CDATA[
+<h2>Direktorij tema</h2>
+<p>Ako želiš prilagoditi naziv direktorija u kojem će se trajno spremati datoteke tema za javne stranice, to možeš učiniti ovdje. Najprije moraš stvoriti direktorij u korijenu svoje Textpattern instalacije, a također se pobrinuti da PHP može pisati u taj direktorij.</p>
+<p>Ova je putanja uvijek <strong>relativna putanja</strong> (u odnosu na direktorij korijena instalacije Textpatterna).</p>
+<p>Zadana vrijednost je <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Adresa pošiljatelja omotnice za SMTP"><![CDATA[
+<h2>Adresa pošiljatelja omotnice za SMTP</h2>
+<p>Ovu postavku treba ostaviti praznom osim ako imaš problema sa slanjem e-pošte iz Textpatterna (ako se uopće ne šalje e-pošta). Ako se taj problem pojavi, možeš ovdje unijeti bilo koju valjanu adresu e-pošte, ali po mogućnosti onu koja ima istu domenu kao i web-mjesto na kojem je instaliran Textpattern (tj. ako je tvoje web-mjesto <code>https://example.com</code>, mogao/la bi koristiti <code>you@example.com</code>).</p>
+<p>Za one koje zanimaju tehnički detalji:</p>
+<ul>
+    <li>Na UNIX/macOS poslužiteljima unesena adresa e-pošte koristi se kao četvrti parametar (s prefiksom "-f") za PHP funkciju <code>mail()</code></li>
+    <li>Na Windows poslužiteljima unesena adresa e-pošte koristi se za postavljanje (ili prebrisavanje) postavke <code>sendmail_from</code> u php.ini</li>
+</ul>
+<p>Ovo osigurava da se adresa pošiljatelja SMTP omotnice (koja nije nužno ista kao zaglavlje "From:" koje obično vidiš u e-porukama) postavlja na adresu e-pošte koju si ovdje unio/la, što je zahtjev za slanje e-pošte na nekim web-poslužiteljima.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP poslužitelj"><![CDATA[
+<h2>SMTP poslužitelj</h2>
+<p>Kako bi se poboljšala isporučivost poruka i omogućilo usmjeravanje e-pošte putem vanjske usluge (kao što su SendGrid, AWS SES, Mailchimp, Mailgun itd.), ovdje navedi SMTP poslužitelj. Potrebnu vrijednost zatraži od svog SMTP pružatelja.</p>
+<p>Ova se vrijednost može zadati definiranjem konstante <code>SMTP_HOST</code> u <code>config.php</code>, pri čemu će vrijednost biti nedostupna za uređivanje u panelu Postavke.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP lozinka"><![CDATA[
+<h2>SMTP lozinka</h2>
+<p>Ako tvoja SMTP veza zahtijeva lozinku za zadano korisničko ime, unesi je ovdje. Detalje potraži u dokumentaciji pružatelja usluge.</p>
+<p>Napomena: Iako se lozinka ovdje neće prikazivati, <em>bit će</em> pohranjena kao običan tekst u tablici prefs u bazi podataka. Ako želiš povećati sigurnost, možeš definirati konstantu <code>SMTP_PASS</code> u datoteci <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP port"><![CDATA[
+<h2>SMTP port</h2>
+<p>Ako si naveo/la SMTP poslužitelj, moraš navesti i port kako bi se omogućilo usmjeravanje putem SMTP-a. Uobičajeni portovi su:</p>
+<ul>
+    <li>25 – za neosiguranu poštu</li>
+    <li>465 – zastarjeli (neslužbeni) za sigurnu poštu</li>
+    <li>587 – zadani (preporučen) za sigurnu TLS e-poštu</li>
+</ul>
+<p>Tvoj odabrani pružatelj SMTP usluge može koristiti i neki drugi port, stoga provjeri njihovu dokumentaciju.</p>
+<p>Ova se vrijednost može zadati definiranjem konstante <code>SMTP_PORT</code> u <code>config.php</code>, pri čemu će vrijednost biti nedostupna za uređivanje u panelu Postavke.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP metoda sigurnosti"><![CDATA[
+<h2>SMTP metoda sigurnosti</h2>
+<p>Odaberi mehanizam koji tvoj SMTP pružatelj koristi kao protokol sigurnosti e-pošte. Detalje potraži u njegovoj dokumentaciji.</p>
+<p>Ova se vrijednost može zadati definiranjem konstante <code>SMTP_SECTYPE</code> u <code>config.php</code>, pri čemu će vrijednost biti nedostupna za uređivanje u panelu Postavke.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP korisničko ime"><![CDATA[
+<h2>SMTP korisničko ime</h2>
+<p>Ako tvoja SMTP veza zahtijeva korisničko ime/prijavu, unesi ga ovdje. Detalje potraži u dokumentaciji pružatelja usluge.</p>
+<p>Ova se vrijednost može zadati definiranjem konstante <code>SMTP_USER</code> u <code>config.php</code>, pri čemu će vrijednost biti nedostupna za uređivanje u panelu Postavke.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Popisi blokiranih pošiljatelja (odvojeni zarezima)"><![CDATA[
+<h2>Popisi blokiranih pošiljatelja (odvojeni zarezima)</h2>
+<p>Pružatelji <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">popisa blokiranih pošiljatelja <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> navedeni ovdje bit će upitani prilikom objave komentara na tvom blogu i provjerit će se IP adresa autora komentara. Ako je IP adresa navedena, to znači da je u prošlosti jedan ili više puta prijavljena zbog slanja neželjene pošte i komentar će biti odbijen. Bez obzira na rezultat provjere, Textpattern ne pohranjuje IP adresu autora komentara.</p>
+<p>Ovdje možeš navesti popis naziva domena, odvojenih zarezima. Imaj na umu da je tvoja odgovornost osigurati da su popisi blokiranih pošiljatelja prikladni za svrhu.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindicirati samo sažetak članka?"><![CDATA[
+<h2>Sindicirati <strong>samo</strong> sažetak članka?</h2>
+<p>Ako je postavljeno na „Ne”, stavke u kanalima sadržavat će cijelo tijelo članka.</p>
+<p>Ako je postavljeno na „Da”, stavke u kanalima sadržavat će sažetak članka umjesto tijela članka, ako je sažetak dostupan.</p>
+        ]]></item>
+        <item id="tempdir" title="Put privremenog direktorija"><![CDATA[
+<h2>Put privremenog direktorija</h2>
+<p>Postavlja <strong>apsolutni put</strong> do privremenog direktorija (koji se ponekad naziva „tmp” ili „temp”). PHP mora imati pravo pisanja u taj direktorij. Ovaj se direktorij koristi za privremene datoteke, primjerice prijenose bilo koje vrste (dodataka, datoteka ili slika).</p>
+<p><strong>Napomene:</strong>
+<ul>
+    <li>Nemoj zadavati isti direktorij i za „privremeni” i za „međuspremnik dodataka” jer će to uzrokovati probleme (Textpattern bi pokušao izvršavati sadržaj privremenih zapisničkih datoteka kao dodatke).</li>
+    <li>Radi dodatne sigurnosti razmisli o premještanju ovog direktorija izvan javno dostupnog docroota tvog web-mjesta.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema administrativnog sučelja"><![CDATA[
+<h2>Tema administrativnog sučelja</h2>
+<p>Zadana tema administrativnog sučelja koja će se koristiti kad god se netko prijavi u Textpattern. S Textpatternom dolazi nekoliko unaprijed instaliranih administrativnih tema, a možeš dodati i prilagođene pakete tema u direktorij <code>textpattern/admin-themes</code> kako bi ih učinio/la dostupnima za upotrebu.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Dodati završnu kosu crtu u URL-ove"><![CDATA[
+<h2>Dodati završnu kosu crtu u URL-ove</h2>
+<p>Određuje hoće li Textpattern automatski dodavati završnu kosu crtu na URL-ove koje generira. Opcije su:</p>
+<ul>
+    <li><strong>Ne</strong> – Nikad</li>
+    <li><strong>Popis</strong> – Samo na odredišnim stranicama zasnovanim na popisima (tj. ne pri prikazu pojedinačnih članaka)</li>
+    <li><strong>Da</strong> – Uvijek</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP funkcije omogućene u txp:evaluate"><![CDATA[
+<h2>PHP funkcije omogućene u txp:evaluate</h2>
+<p>Ovo je popis stavki <code>function</code> ili <code>alias=function</code>, odvojenih zarezima, npr. <code>md5</code>, <code>replace=str_replace</code>. Stavke navedene u ovom popisu mogu se koristiti u atributu <code>query</code> oznake <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> bi trebala vraćati skalar (a <strong>ne</strong> polje/objekt).</p>
+        ]]></item>
+        <item id="use_comments" title="Prihvatiti komentare?"><![CDATA[
+<h2>Prihvatiti komentare?</h2>
+<p>Ovo postavlja treba li Textpatternova funkcionalnost komentiranja biti omogućena ili onemogućena.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Koristiti adresu e-pošte za sastavljanje ID-ova kanala (zadano je URL web-mjesta)?"><![CDATA[
+<h2>Koristiti adresu e-pošte za sastavljanje ID-ova kanala (zadano je URL web-mjesta)?</h2>
+<p>Stavke u Atom kanalu moraju imati jedinstveni ID.</p>
+<p>Kako bi generirao ID-ove jedinstvene za tvoje web-mjesto, Textpattern ti omogućuje da odabereš između adrese e-pošte ili naziva domene koji će se uključiti u te ID-ove. Adresa e-pošte bit će prva koja se koristi prilikom stvaranja web-mjesta. Ako vjerojatno nećeš mijenjati ime domene u budućnosti, vjerojatno je sigurno postaviti ovu opciju na „Ne”.</p>
+        ]]></item>
+        <item id="use_plugins" title="Koristiti dodatke?"><![CDATA[
+<h2>Koristiti dodatke?</h2>
+<p>Ovo ti omogućuje da isključiš svu podršku za Textpattern dodatke. To je korisno ako otklanjaš pogreške na web-mjestu i želiš provjeriti jesu li uključeni jedan ili više dodataka.</p>
+        ]]></item>
+        <item id="use_textile" title="Zadano oblikovanje teksta"><![CDATA[
+<h2>Zadano oblikovanje teksta</h2>
+<p>Postavka oblikovanja teksta koju ovdje odabereš postaje zadana za sažetak i tijelo članka u panelu „Pisanje”. Možeš dopustiti potpunu obradu Textileom, pretvoriti prijelome redaka u HTML oznake odlomka ili ne pretvarati tekst uopće.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> je alat namijenjen pojednostavljivanju pretvorbe običnog teksta u HTML. Kad je omogućen, Textile će obraditi tijelo teksta članaka i vratiti strukturno ispravan HTML.</p>
+<p>Textile također nudi moćan, ali jednostavan skup naredbi za oblikovanje teksta, definiranje struktura kao što su popisi, naslovi i blok-citati te umetanje poveznica i slika.</p>
+        ]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title="Uvod"><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title="Opis"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title="Koristi stil"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Koristi stranicu"><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    <group id="section" title="Panel odjeljaka">
+        <item id="section_category" title="Uvod"><![CDATA[
+<h2>Uvod</h2>
+<p>Odjeljke u Textpatternu najbolje je zamisliti kao odjeljke u novinama; svi pripadaju istoj publikaciji, ali svaki može imati drugačiji raspored, drugačiji stil članaka i slično.</p>
+<p>Za većinu web-mjesta potrebno je stvoriti samo minimalan broj odjeljaka.</p>
+<h3>Mogući scenarij za web-mjesto s tri odjeljka:</h3>
+<ol>
+    <li><strong>Arhiva:</strong> „Odjeljak” kojem pripadaju svi članci koji se pojavljuju na naslovnoj stranici. Kad god čitatelj klikne na trajnu poveznicu članka, on će se prikazati u predlošku stranice dodijeljenom tom „Odjeljku”. Za odlazak na stranicu s popisom najnovijih članaka dodijeljenih odjeljku "archive", URL bi bio <code>https://example.com/archive/</code>.</li>
+    <li><strong>O nama:</strong> Stranica „o ovom web-mjestu” koja se razlikuje od naslovnice i odjeljka „Archive” po tome što je statičnija, može imati drugačiji raspored i vjerojatno će sadržavati samo jedan članak. Odjeljak „About” bio bi dostupan na <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotografije:</strong> „Odjeljak” čiji bi se drukčiji izgled (i možda drukčiji CSS) koristio za prikaz fotografija umjesto članaka.</li>
+</ol>
+<p>Imaj na umu da uvijek postoji poseban skriveni odjeljak nazvan default. Taj zadani odjeljak koristi stranicu nazvanu default i stil nazvan default te gradi naslovnicu tvog web-mjesta.</p>
+        ]]></item>
+        <item id="section_default" title="Zadani odjeljak za objavu"><![CDATA[
+<h2>Zadani odjeljak za objavu</h2>
+<p>Ova opcija određuje koji će odjeljak biti unaprijed odabran u izborniku Odjeljak prilikom izrade novog članka u panelu „Pisanje”.</p>
+<p>Ako većina tvojih članaka na kraju pripada određenom odjeljku, ovdje ga odaberi s popisa. Promjene će odmah stupiti na snagu.</p>
+<p>Ovu postavku možeš nadjačati za svaki članak zasebno u panelu „Pisanje” odabirom drugog odjeljka u okviru „Razvrstavanje i prikaz”.</p>
+        ]]></item>
+        <item id="section_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis odjeljka je neobavezan element koji može pomoći tražilicama i indeksnim robotima da bolje prepoznaju i razvrstaju sadržaj.</p>
+<p>Opis članka ograničen je na najviše 255 znakova. Imaj na umu da neke tražilice zbog praktičnosti prikaza u rezultatima pretraživanja (SERP) ograničavaju broj znakova u <code>meta description</code> elementu stranice i ta vrijednost može biti manja od ograničenja od 255 znakova u Textpatternu.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Prikazivati članke ovog odjeljka na naslovnici?"><![CDATA[
+<h2>Prikazivati članke ovog odjeljka na naslovnici?</h2>
+<p>Članci u nekim odjeljcima, primjerice u onima koji nalikuju „statičnim” web-stranicama, mogu se činiti neprimjerenima u vremenski osjetljivom tijeku sadržaja na naslovnici.</p>
+<p>Postavljanje ove opcije na „Ne” spriječit će pojavu članaka dodijeljenih ovom odjeljku na naslovnici.</p>
+        ]]></item>
+        <item id="section_searchable" title="Uključiti ovaj odjeljak u pretraživanje web-mjesta?"><![CDATA[
+<h2>Uključiti ovaj odjeljak u pretraživanje web-mjesta?</h2>
+<p>Ovo određuje hoće li se članci koji pripadaju ovom odjeljku pojavljivati kao dio rezultata pretraživanja cijelog web-mjesta.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindicirati članke u ovom odjeljku?"><![CDATA[
+<h2>Sindicirati članke u ovom odjeljku?</h2>
+<p>Određuje hoće li se članci iz ovog odjeljka pojavljivati u RSS i Atom kanalima web-mjesta.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Koristi stil"><![CDATA[
+<h2>Koristi stil</h2>
+<p>Ako želiš nadjačati zadani stilopis (stylesheet) za određeni odjeljak, to možeš postaviti ovdje.</p>
+<p>Ovo se odnosi samo na stilopise koji se nalaze u panelu „Stilovi” u Textpatternu – ako svoj CSS držiš izvan Textpatterna (što se toplo preporučuje), ova opcija nema učinka.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Koristi stranicu"><![CDATA[
+<h2>Koristi stranicu</h2>
+<p>U Textpatternu su odjeljci povezani s predlošcima stranica.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Koristi temu"><![CDATA[
+<h2>Koristi temu</h2>
+<p>Ako želiš promijeniti temu koja se koristi za određeni odjeljak, to možeš postaviti ovdje s popisa trenutačno instaliranih tema.</p>
+        ]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title="Prefiks tablice"><![CDATA[]]></item>
+    <group id="setup" title="Panel postavljanja">
+        <item id="setup_admin_url" title="Administrativna poddomena"><![CDATA[
+<h2>Administrativna poddomena</h2>
+<p>Poddomena koju želiš koristiti za pristup administrativnom sučelju Textpatterna (npr. <code>admin.example.com</code>).</p>
+<p>Za dodatne pojedinosti pogledaj <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">višestruke instalacije Textpatterna</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domena kolačića"><![CDATA[
+<h2>Domena kolačića</h2>
+<p>(Pod)domena koju želiš koristiti za Textpattern kolačiće.</p>
+<p>Za dodatne pojedinosti pogledaj <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">višestruke instalacije Textpatterna</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Korisnička prijava"><![CDATA[
+<h2>Korisnička prijava</h2>
+<p>Naziv računa administratora („izdavača”) koji ćeš koristiti za administraciju svog web-mjesta.</p>
+<p>Iako nema ograničenja za naziv, najbolje je izbjegavati komplicirane nizove znakova i lako pogađiva korisnička imena (npr. <code>admin</code>, <code>administrator</code> itd.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Korisnička lozinka"><![CDATA[
+<h2>Korisnička lozinka</h2>
+<p>Budući da ovaj račun ima najvišu razinu pristupa u Textpatternu, odaberi vrlo jaku lozinku ili, još bolje, lozinku u obliku fraze.</p>
+<h3>Savjeti</h3>
+<ul>
+    <li>koristi kombinaciju velikih i malih slova</li>
+    <li>koristi brojeve</li>
+    <li>koristi simbole</li>
+    <li>neka bude duga barem osam znakova</li>
+    <li><strong>izbjegavaj</strong> osobne podatke (datume, imena, mjesta, članove obitelji, kućne ljubimce itd.)</li>
+    <li><strong>izbjegavaj</strong> pojedinačne ili ponavljajuće riječi iz rječnika, bez obzira na jezik, pravopis ili veličinu slova</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Prefiks tablica"><![CDATA[
+<h2>Prefiks tablica</h2>
+    <p>Prefiks tablica trebaš koristiti samo ako u jednoj bazi podataka trebaš više Textpattern instalacija. Svaka instalacija Textpatterna treba jedinstveni prefiks.</p>
+    <p>Imaj na umu da prefiks mora poštivati sljedeća pravila:</p>
+<ul>
+    <li><strong>1. znak:</strong> mora biti a-z, A-Z ili podvlaka</li>
+    <li><strong>Sljedeći znakovi:</strong> mogu biti samo a-z, A-Z, 0-9 ili podvlaka</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+    <group id="skin" title="Panel tema">
+        <item id="skin_author" title="Autor teme"><![CDATA[
+<h2>Autor teme</h2>
+<p>Autor(i) ove teme (neobavezno).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Web-mjesto teme"><![CDATA[
+<h2>Web-mjesto teme</h2>
+<p>URL na kojem se mogu pronaći potpune informacije i/ili najnovija izdanja ove teme (neobavezno).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Izbrisati i predloške teme s diska"><![CDATA[
+<h2>Izbrisati i predloške teme s diska</h2>
+<p>Ako je označeno, sve predloške datoteka u odabranoj/odabranim temama trajno će se izbrisati s diska. Međutim, direktoriji povezani s temama i njihovi poddirektoriji neće se izbrisati ako u njima postoje druge datoteke (kao što su JavaScript, slike itd.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Izbrisati neiskorištene predloške iz baze pri uvozu"><![CDATA[
+<h2>Izbrisati neiskorištene predloške iz baze pri uvozu</h2>
+<p>Ako je označeno, svaki predložak u odabranoj/odabranim temama koji nema odgovarajuću datoteku na disku bit će trajno izbrisan iz baze podataka. Nakon dovršetka radnje predlošci u bazi podataka odražavat će sadržaj na disku koliko je god moguće.</p>
+<p>Imaj na umu da će, ako si uklonio/la datoteke predložaka koje Textpattern zahtijeva, u bazi podataka biti izrađene prazne verzije.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Izbrisati neiskorištene predloške s diska pri izvozu"><![CDATA[
+<h2>Izbrisati neiskorištene predloške s diska pri izvozu</h2>
+<p>Ako je označeno, svaka datoteka predloška u odabranoj/odabranim temama koja nema odgovarajuću stavku u bazi podataka trajno će se izbrisati iz teme na disku. Nakon dovršetka radnje predlošci u datotečnom sustavu točno će odražavati ono što se nalazi u bazi podataka.</p>
+        ]]></item>
+        <item id="skin_description" title="Opis teme"><![CDATA[
+<h2>Opis teme</h2>
+<p>Možeš navesti kratki sažetak dizajna/izgleda ove teme (neobavezno).</p>
+<p>Opis teme ograničen je na najviše 255 znakova.</p>
+        ]]></item>
+        <item id="skin_import" title="Uvezi temu"><![CDATA[
+<h2>Uvezi temu s diska</h2>
+<p>Ovaj obrazac omogućuje ti uvoz teme u bazu podataka Textpatterna iz tvog direktorija s temama.</p>
+<p>Uvoznička tema mora se sastojati od čitljive nadređene mape koja koristi naziv teme kao naziv mape te čitljive datoteke <code>manifest.json</code> u toj mapi u očekivanom formatu. Mapa s temom trebala bi sadržavati i stranice, obrasce i stilove u istoimenim podmapama.</p>
+<p>Dok bi stranice i obrasci trebali koristiti nastavak <code>.txp</code>, od stilopisa se očekuje da budu <code>.css</code> datoteke. Obrasci bi također trebali biti grupirani po tipu u zasebne direktorije. Textpattern će pri uvozu izraditi sve nedostajuće ključne predloške.</p>
+<p>Pogledaj <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentaciju o temama <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> za dodatne informacije o stvaranju, instalaciji i korištenju tema unutar Textpattern CMS-a.</p>
+        ]]></item>
+        <item id="skin_name" title="Naziv teme"><![CDATA[
+<h2>Naziv teme</h2>
+<p>Naziv teme koristi se za naziv direktorija teme i druge tehničke svrhe (obavezno).</p>
+<p>Naziv ne bi trebao sadržavati posebne znakove ni razmake.</p>
+        ]]></item>
+        <item id="skin_overview" title="Uvod u teme"><![CDATA[
+<h2>Uvod u teme</h2>
+<p>Textpattern tema je zbirka stranica, obrazaca i stilopisa. Teme ti omogućuju logičko razdvajanje sredstava web-mjesta u skupine radi lakšeg prepoznavanja ili dijeljenja s drugima. Sam čin stvaranja ili uvoza teme i svih sredstava koje sadrži <em>nema</em> nikakav utjecaj na tvoje postojeće web-mjesto. Možeš slobodno uređivati ili mijenjati sva sredstva koja nisu povezana s odjeljkom tvog web-mjesta, a to neće utjecati na samo web-mjesto.</p>
+<p>Za uređivanje sredstava u temi posjeti panele Stranice, Obrasci ili Stilovi i koristi padajući izbornik za odabir teme na kojoj želiš raditi. Tema na kojoj radiš pamti se u cijelom administrativnom području, što ti omogućuje brzo i jednostavno prebacivanje između vrsta sredstava. Naziva se tvoja <em>radna tema</em>.</p>
+<p>Molimo pogledaj <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">korisničku dokumentaciju Textpatterna <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a> za dodatne informacije.</p>
+        ]]></item>
+        <item id="skin_title" title="Naslov teme"><![CDATA[
+<h2>Naslov teme</h2>
+<p>Opisni naslov teme koji se koristi za prepoznavanje teme unutar panela Textpatterna.</p>
+<p>Naslov može sadržavati posebne znakove i razmake.</p>
+        ]]></item>
+        <item id="skin_version" title="Verzija teme"><![CDATA[
+<h2>Verzija teme</h2>
+<p>Broj verzije instalirane verzije ove teme (neobavezno).</p>
+        ]]></item>
     </group>
 </help>
 </resources>

@@ -2,7 +2,79 @@
 <resources>
 <help lang="nl">
     <group id="admin" title="Gebruikerspaneel">
-        <item id="about_privileges" title="Over privileges"><![CDATA[]]></item>
+        <item id="about_privileges" title="Over privileges"><![CDATA[
+<h2>Over rollen</h2>
+<h3>Uitgever</h3>
+<ul>
+    <li>kan artikelen, reacties en links beheren</li>
+    <li>kan PHP gebruiken in artikelen als de admin-voorkeur ‘PHP in artikelen toestaan?’ op ‘Ja’ staat</li>
+    <li>kan afbeeldingen en bestanden beheren</li>
+    <li>kan secties en categorieën beheren</li>
+    <li>kan pagina's, formulieren en stijl beheren</li>
+    <li>kan diagnostische informatie bekijken</li>
+    <li>kan sitevoorkeuren beheren</li>
+    <li>kan gebruikers beheren</li>
+    <li>kan bezoeklogs beheren</li>
+    <li>kan plugins beheren</li>
+    <li>kan gegevens importeren</li>
+</ul>
+<h3>Managing editor</h3>
+<ul>
+    <li>kan artikelen, reacties en links beheren</li>
+    <li>kan PHP gebruiken in artikelen als de admin-voorkeur ‘PHP in artikelen toestaan?’ op ‘Ja’ staat</li>
+    <li>kan afbeeldingen en bestanden beheren</li>
+    <li>kan secties en categorieën beheren</li>
+    <li>kan pagina's, formulieren en stijl beheren</li>
+    <li>kan diagnostische informatie bekijken</li>
+    <li>kan sitevoorkeuren beheren</li>
+    <li>kan gebruikers bekijken</li>
+    <li>kan bezoeklogs beheren</li>
+    <li>kan plugins beheren</li>
+    <li>kan gegevens importeren</li>
+</ul>
+<h3>Eindredacteur</h3>
+<ul>
+    <li>kan artikelen beheren met één beperking:
+        <ul>
+            <li>kan geen artikelen verwijderen die aan andere gebruikers toebehoren</li>
+        </ul>
+    </li>
+    <li>kan reacties en links beheren</li>
+    <li>kan afbeeldingen en bestanden beheren</li>
+    <li>kan categorieën beheren</li>
+    <li>kan pagina's en formulieren beheren</li>
+    <li>kan gebruikers bekijken</li>
+    <li>kan bezoeklogs beheren</li>
+</ul>
+<h3>Stafschrijver</h3>
+<ul>
+    <li>kan eigen artikelen beheren en artikelen van andere gebruikers bekijken</li>
+    <li>kan afbeeldingen en bestanden beheren</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>kan eigen artikelen in beperkte zin beheren:
+        <ul>
+            <li>kan een artikel alleen wijzigen totdat het is gepubliceerd</li>
+            <li>kan de status <em>alleen</em> Concept, Verborgen of In afwachting toekennen</li>
+        </ul>
+    </li>
+    <li>kan artikelen van andere gebruikers bekijken</li>
+</ul>
+<h3>Vormgever</h3>
+<ul>
+    <li>kan eigen artikelen in beperkte zin beheren:
+        <ul>
+            <li>kan een artikel alleen wijzigen totdat het is gepubliceerd</li>
+            <li>kan de status <em>alleen</em> Concept, Verborgen of In afwachting toekennen</li>
+        </ul>
+    </li>
+    <li>kan artikelen van andere gebruikers bekijken</li>
+    <li>kan afbeeldingen beheren</li>
+    <li>kan secties beheren</li>
+    <li>kan pagina's, formulieren en stijl beheren</li>
+</ul>
+        ]]></item>
         <item id="create_author" title="Auteur aanmaken"><![CDATA[
 <h2>Nieuwe medewerker toevoegen</h2>
 <p>Een wachtwoord, welkomstbericht en aanmeldinstructies worden per e-mail verstuurd naar de nieuwe medewerker.</p>
@@ -12,13 +84,14 @@
     <group id="article" title="Schrijf paneel">
         <item id="article_image" title="Artikelafbeelding"><![CDATA[
 <h2>Artikelafbeelding</h2>
-<p>Om een enkele afbeelding aan dit artikel te koppelen, plaats hier een van de volgende voorbeelden:</p>
+<p>Om afbeeldingen aan dit artikel te koppelen, plaats hier een van de volgende items:</p>
 <ol>
-    <li>een Textpattern image ID (bijv. . <code>12</code>)</li>
-    <li>een relatieve URL naar de afbeelding (bijv. <code>/images/my_pic.jpg</code>)</li>
-    <li>een volledig gekwalificeerde URL (bijv. <code>https://example.com/path/to/images/my_pic. pg</code>)</li>
+    <li>een of meer Textpattern‑afbeeldings‑ID's, gescheiden door komma's (bijv. <code>12, 25, 18</code>)</li>
+    <li>een of meer relatieve URL's naar de afbeelding, gescheiden door komma's (bijv. <code>/images/my_pic.jpg</code>)</li>
+    <li>een of meer volledig gekwalificeerde URL's, gescheiden door komma's (bijv. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>De afbeelding kan worden weergegeven door het plaatsen van een <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> binnen een artikel formulier. Het geeft een volledige HTML <code>&lt;img&gt;</code> tag naar de gekozen afbeelding.</p>
+<p>De eerste afbeelding kan worden weergegeven door een <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code>-tag <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> in een artikelformulier te plaatsen. Standaard wordt daarmee een volledige HTML‑tag <code>&lt;img&gt;</code> naar de gekozen afbeelding uitgevoerd.</p>
+<p>Je kunt galerijen weergeven met de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
         ]]></item>
         <item id="body" title="Artikelinhoud"><![CDATA[
 <h2>Artikelinhoud</h2>
@@ -27,23 +100,57 @@
         ]]></item>
         <item id="description" title="Beschrijving"><![CDATA[
 <h2>Beschrijving</h2>
-<p>De artikelbeschrijving is een optioneel component die zoekmachines en crawlers beter kan helpen inhoud te identificeren en sorteren.</p>
-<p>De artikelbeschrijving is beperkt tot 255 tekens. Merk op dat sommige zoekmachines tekenlimieten leggen op de lengte van een pagina van de <code>meta-beschrijving</code> voor de praktische weergave in de zoekmachine resultaten pagina's (SERP's) en dit kan minder zijn dan de 255 karakters limiet in Textpattern.</p>
-<p>Merk op dat de beschrijving van het artikel verschilt van het artikel fragment, hoewel ze allebei vergelijkbare inhoud accepteren. De artikelbeschrijving moet in de eerste plaats bedoeld zijn voor gebruik met zoekmachines en crawlers, terwijl de samenvatting van het artikel geschikter is voor een samenvatting van een menselijk leesbaar artikel waar dit gewenst is.</p>
+<p>De artikelbeschrijving is een optioneel onderdeel dat zoekmachines en webcrawlers kan helpen om inhoud beter te identificeren en te sorteren.</p>
+<p>De artikelbeschrijving is beperkt tot maximaal 255 tekens. Let op dat sommige zoekmachines om praktische redenen een limiet stellen aan de lengte van de <code>meta description</code> van een pagina voor weergave in zoekresultatenpagina's (SERP's); deze limiet kan lager liggen dan de limiet van 255 tekens in Textpattern.</p>
+<p>Merk op dat de artikelbeschrijving verschilt van het uittreksel van het artikel, al kunnen ze vergelijkbare inhoud bevatten. De artikelbeschrijving is primair bedoeld voor gebruik door zoekmachines en crawlers, terwijl het uittreksel geschikter is als menselijk leesbare samenvatting van het artikel, waar gewenst.</p>
         ]]></item>
         <item id="excerpt" title="Samenvatting"><![CDATA[
 <h2>Samenvatting</h2>
 <p>Artikel samenvatting zijn optioneel. Deze kunnen worden gebruikt als een korte samenvatting van het artikel dat wordt weergegeven als onderdeel van een inhoudsopgave, gebruikt in plaats van de volledige inhoud van het artikel in de RSS/Atom feeds van de site, of een aantal andere toepassingen.</p>
         ]]></item>
-        <item id="expire_date" title="Vervaldatum"><![CDATA[]]></item>
+        <item id="expire_date" title="Vervaldatum"><![CDATA[
+<h2>Verloopdatum</h2>
+<p>Het tijdstip waarop een artikel als verlopen wordt aangemerkt. De tijd is optioneel en kan op een willekeurig moment in het verleden of de toekomst worden ingesteld.</p>
+<p>De velden komen overeen met de volgende informatie:</p>
+<ul>
+    <li>Jaar / Maand / Dag</li>
+    <li>Uur (24-uurs formaat) : Minuut : Seconde</li>
+</ul>
+<p>Wanneer dat tijdstip is aangebroken, of als een tijdstip in het verleden is opgegeven, verloopt het artikel.</p>
+<p>Als de optie om verlopen artikelen weer te geven is ingeschakeld, blijft het artikel zichtbaar. Als de optie om verlopen artikelen weer te geven is uitgeschakeld, krijgen bezoekers van de artikelpagina een HTTP 410-foutmelding te zien in plaats van de inhoud van het artikel.</p>
+        ]]></item>
         <item id="keywords" title="Trefwoorden"><![CDATA[
 <h2>Trefwoorden</h2>
 <p>Trefwoorden zijn nuttig om de verbanden tussen artikelen buiten de categorieën te verfijnen.</p>
 <p>Trefwoorden moeten individuele woorden zijn, gescheiden door komma's.</p>
         ]]></item>
-        <item id="override_form" title="Gebruik andere module"><![CDATA[]]></item>
-        <item id="publish_date" title="Publicatiedatum"><![CDATA[]]></item>
-        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="override_form" title="Gebruik andere module"><![CDATA[
+<h2>Formulier overschrijven</h2>
+<p>Een artikel kan optioneel een ander formulier gebruiken dan het standaard toegewezen formulier – bijvoorbeeld om een artikeluittreksel weer te geven met <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> in plaats van de artikeltekst met <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> – dit kan hier worden ingesteld.</p>
+        ]]></item>
+        <item id="publish_date" title="Publicatiedatum"><![CDATA[
+<h2>Publicatiedatum</h2>
+<p>Het tijdstip waarop een artikel of bestand wordt gepubliceerd of het meest recent is bijgewerkt. De tijd kan worden ingesteld op het moment waarop het item wordt gepubliceerd, of op een willekeurig moment in het verleden of de toekomst.</p>
+<p>De vakjes komen overeen met de volgende informatie:</p>
+<ul>
+    <li>Jaar / Maand / Dag</li>
+    <li>Uur (24-uurs formaat) : Minuut : Seconde</li>
+</ul>
+<p>Een item met een tijdstempel dat later ligt dan de huidige tijd (dus in de toekomst) verschijnt pas op de voorkant en in de RSS/Atom-feeds wanneer dat tijdstip is aangebroken.</p>
+        ]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Bepaalt de publicatie‑ en zichtbaarheidsstatus van dit Textpattern‑artikel.</p>
+<p>De publicatiestatus is een van de volgende:</p>
+<ul>
+<li><strong>Concept</strong>: wordt beschouwd als werk in uitvoering en is buiten het Textpattern‑beheergedeelte niet zichtbaar (dus niet zichtbaar op de website en niet opgenomen in feeds).</li>
+<li><strong>Verborgen</strong>: artikel is buiten het Textpattern‑beheergedeelte niet zichtbaar. Handig om inhoud van de website te verwijderen die je niet per se wilt wissen.</li>
+<li><strong>In afwachting</strong>: wordt beschouwd als klaar voor publicatie en in afwachting van goedkeuring, maar is buiten het Textpattern‑beheergedeelte niet zichtbaar.</li>
+<li><strong>Live</strong>: doorgaans zichtbaar buiten het Textpattern‑beheergedeelte (dus zichtbaar op de website en, indien de voorkeur dat toestaat, in feeds). Als een artikel live is en een verloopdatum heeft, blijft de status Live nadat die datum is verstreken, maar het artikel verschijnt alleen buiten het beheergedeelte als verlopen artikelen mogen worden gepubliceerd.</li>
+<li><strong>Sticky</strong>: vergelijkbaar met een <strong>live</strong> artikel in die zin dat het door websitebezoekers kan worden bekeken, maar het verschijnt <strong>niet</strong> in artikellijsten, tenzij de betreffende tag <code>article</code> of <code>article_custom</code> een attribuut <code>status</code> met de waarde <code>sticky</code> bevat.</li>
+</ul>
+<p>Let op: inhoud die niet openbaar op de website zichtbaar is, kan nog steeds worden bekeken door aangemelde gebruikers.</p>
+        ]]></item>
         <item id="title" title="Titel"><![CDATA[
 <h2>Titel</h2>
 <p>Voeg een passende titel toe voor dit artikel.</p>
@@ -57,74 +164,268 @@
     </group>
 
     <group id="category" title="Categorieën paneel">
-        <item id="article_category" title="Artikelen"><![CDATA[]]></item>
-        <item id="category_description" title="Beschrijving"><![CDATA[]]></item>
-        <item id="file_category" title="Bestanden"><![CDATA[]]></item>
-        <item id="image_category" title="Afbeeldingen"><![CDATA[]]></item>
-        <item id="link_category" title="Links"><![CDATA[]]></item>
+        <item id="article_category" title="Artikelen"><![CDATA[
+<h2>Artikelen</h2>
+<p>In tegenstelling tot secties, die de navigatiestructuur van een site bepalen, maken artikelcategorieën het mogelijk artikelen te ordenen naar onderwerp. Zodra categorieën zijn toegewezen, kunnen lijsten met artikelen die tot bepaalde categorieën behoren worden doorgebladerd.</p>
+<p>Op een site over eten zouden veelvoorkomende artikelcategorieën bijvoorbeeld kunnen zijn:</p>
+<ul>
+    <li>grondstoffen</li>
+    <li>boodschappen</li>
+    <li>recepten</li>
+    <li>presentatie</li>
+    <li>restaurants</li>
+    <li>chefs</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Beschrijving"><![CDATA[
+<h2>Categoriebeschrijving</h2>
+<p>De categoriebeschrijving is een optioneel onderdeel dat zoekmachines en webcrawlers kan helpen om inhoud beter te identificeren en te sorteren.</p>
+<p>De categoriebeschrijving is beperkt tot maximaal 255 tekens. Let op dat sommige zoekmachines om praktische redenen een limiet stellen aan de lengte van de <code>meta description</code> van een pagina voor weergave in zoekresultatenpagina's (SERP's); deze limiet kan lager liggen dan de limiet van 255 tekens in Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Bestanden"><![CDATA[
+<h2>Bestanden</h2>
+<p>Bestandscategorieën zijn optioneel en handig om geselecteerde geüploade bestanden te groeperen.</p>
+        ]]></item>
+        <item id="image_category" title="Afbeeldingen"><![CDATA[
+<h2>Afbeeldingen</h2>
+<p>Afbeeldingscategorieën zijn optioneel en nuttig zowel voor interne organisatie als voor het definiëren van afbeeldingsets die kunnen worden weergegeven met de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Links"><![CDATA[
+<h2>Links</h2>
+<p>Linkcategorieën zijn optioneel en nuttig voor het tonen van verschillende groeperingen van links, bijvoorbeeld ‘Vrienden’, ‘Romeinen’, ‘Landgenoten’.</p>
+<p>Selectieve lijstjes met links zoals deze worden uitgevoerd met de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>, bijvoorbeeld:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Diagnostische paneel">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title=""><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Verberg persoonlijke gegevens"><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Map is niet beschrijfbaar"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title="DNS mislukt"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Bestands uploads zijn uitgeschakeld"><![CDATA[]]></item>
-        <item id="htaccess_missing" title=".htaccess bestand ontbreekt"><![CDATA[]]></item>
-        <item id="index_inaccessible" title="Site index ontoegankelijk"><![CDATA[]]></item>
-        <item id="missing_files" title="Ontbrekende bestanden"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title="Apache mod_rewrite ontbreekt"><![CDATA[]]></item>
-        <item id="modified_files" title="Gewijzigde bestanden"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="MySQL tabel fouten"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Er is gen tijdelijke map aangegeven"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Deze sectie heeft de naam van een al bestaande map"><![CDATA[
-<h2>Deze sectie heeft de naam van een al bestaande map</h2>
-<p>Namen van al bestaande mappen kunnen problemen opleveren met sectienamen bij de permanente links van artikelen. Om problemen te voorkomen, controleer en verander je de naam van de betrokken map, als dit veilig kan, of wijzig je de sectienaam, zodat ze niet botsen.</p>
-        ]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title="Minimale versie vereisten"><![CDATA[]]></item>
-        <item id="setup_still_exists" title="Setup map bestaat nog steeds"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Nieuwe textpattern versie"><![CDATA[
-<h2>Nieuwe Textpattern versie</h2>
-<p>Er is een nieuwere versie van Textpattern beschikbaar. Om te kunnen profiteren van de nieuwste functies en beveiliging, raden we aan deze upgrade uit te voeren. /1>
-<p>We doen ons best om de upgrade zo gestroomlijnd mogelijk te maken:</p>
+        <item id="clean_url_data_failed" title="Schone-URL-gegevens mislukt"><![CDATA[
+<h2>Schone-URL-gegevens mislukt</h2>
+<p>Het lijkt erop dat ofwel de site-URL's (bijv. <code>https://example.com/section/article</code>) momenteel niet werken, of dat de webserver de testprocedure om te bepalen of schone URL's werken niet ondersteunt; als schone URL's op de site naar verwachting werken, kan dit bericht veilig worden genegeerd.</p>
+<p>Als schone URL's <em>niet</em> werken kan dat betekenen dat:</p>
 <ul>
-    <li>Als alleen het laatste cijfer verschilt van je huidige versie, zal de upgrade waarschijnlijk achterwaarts compatibel zijn met de gebruikte plugins en thema's. /3>
-    <li>Als de laatste twee cijfers afwijken van de huidige versie, kan het nodig zijn dat sommige plug-ins en/of thema's ook bijgewerkt moeten worden. Waarschijnlijk zal de site gewoon blijven werken met mogelijk kleine comptabiliteitsproblemen. /3>
-    <li>Als het eerste cijfer afwijkt van je huidige versie, vraagt de upgrade waarschijnlijk updates voor de meeste plugins en thema's. Als u sterk afhankelijk bent van een specifieke plugin of themafunctie, controleer dan vooraf bij de auteur ervan of op het Textpattern-forum wat er kan gebeuren als u de upgrade toepast. /3>
+    <li>de instelling ‘Site-URL’ onjuist is, of dat de pagina op dat adres niet door dit Textpattern-exemplaar wordt beheerd</li>
+    <li>de server aanpassingen aan <code>.htaccess</code> of een vergelijkbare serverinstructie nodig heeft om schone URL's te laten werken</li>
+    <li>de server helemaal geen schone URL's ondersteunt</li>
+</ul>
+<p>De test voor schone URL's probeert een pagina op te halen van het webadres dat is opgegeven in de voorkeur ‘Site-URL’ om te controleren of alle parameters voor schone URL's correct werken. Als die URL naar een andere site verwijst, of is vervangen door een statische pagina of iets dergelijks, zal de test mislukken. Totdat het probleem is opgelost, moeten rommelige URL's (bijv. <code>https://example.com?s=section&amp;id=4</code>) worden gebruikt. Zorg ervoor dat de ‘Permanente-linkmodus’ in de admin-voorkeuren hierop is afgestemd.</p>
+<p>Merk op dat het gebruik van een plugin om een site in ‘onderhoudsmodus’ te zetten, deze waarschuwing kan activeren.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Test voor schone URL's mislukt"><![CDATA[
+<h2>Test voor schone URL's mislukt</h2>
+<p>Het lijkt erop dat ofwel de site-URL's (bijv. <code>https://example.com/section/article</code>) momenteel niet werken, of dat de webserver de testprocedure om te bepalen of schone URL's werken niet ondersteunt; als schone URL's op de site naar verwachting werken, kan dit bericht veilig worden genegeerd.</p>
+<p>Als schone URL's <em>niet</em> werken kan dat betekenen dat:</p>
+<ul>
+    <li>de instelling ‘Site-URL’ onjuist is, of dat de pagina op dat adres niet door dit Textpattern-exemplaar wordt beheerd</li>
+    <li>de server aanpassingen aan <code>.htaccess</code> of een vergelijkbare serverinstructie nodig heeft om schone URL's te laten werken</li>
+    <li>de server helemaal geen schone URL's ondersteunt</li>
+</ul>
+<p>De test voor schone URL's probeert een pagina op te halen van het webadres dat is opgegeven in de voorkeur ‘Site-URL’ om te controleren of alle parameters voor schone URL's correct werken. Als die URL naar een andere site verwijst, of is vervangen door een statische pagina of iets dergelijks, zal de test mislukken. Totdat het probleem is opgelost, moeten rommelige URL's (bijv. <code>https://example.com?s=section&amp;id=4</code>) worden gebruikt. Zorg ervoor dat de ‘Permanente-linkmodus’ in de admin-voorkeuren hierop is afgestemd.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Gelijktijdige aanmeldingen op een live‑server"><![CDATA[
+<h2>Gelijktijdige aanmeldingen op een live‑server</h2>
+<p>Je gebruikersaccount toestaan om vanuit meerdere sessies tegelijk aan te melden vormt een veiligheidsrisico en wordt niet aanbevolen. Schakel deze functie uit via het paneel met geavanceerde voorkeuren, tenzij je de risico's begrijpt en aanvaardbaar vindt.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Privé‑informatie verbergen"><![CDATA[
+<h2>Privé‑informatie verbergen</h2>
+<p>Verberg privé‑informatie voor extra beveiliging. Als diagnostische informatie in een publiek toegankelijke vorm wordt gedeeld, bijvoorbeeld op het Textpattern‑supportforum, verkleint dit het veiligheidsrisico doordat gevoelige serverinformatie wordt weggelaten.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Ontwikkelcode op een live‑server"><![CDATA[
+<h2>Ontwikkelcode op een live‑server</h2>
+<p>Versies van Textpattern die nog in ontwikkeling zijn, worden niet aanbevolen voor gebruik op productie‑sites. Deze waarschuwing kan veilig worden genegeerd als je de risico's begrijpt en aanvaardbaar vindt.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Map is niet beschrijfbaar"><![CDATA[
+<h2>Map is niet beschrijfbaar</h2>
+<p>Om de uploadmogelijkheden voor bestanden en afbeeldingen te gebruiken, moeten deze mappen voor PHP beschrijfbaar zijn via de webservergebruiker. Dit kun je doen met een (S)FTP‑client, of via de opdrachtregel met het commando <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS mislukt"><![CDATA[
+<h2>DNS‑opvraging mislukt</h2>
+<p>Het lijkt erop dat de URL die als adres van de site is opgegeven, onbereikbaar is.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Bestandsuploads zijn uitgeschakeld"><![CDATA[
+<h2>Bestandsuploads zijn uitgeschakeld</h2>
+<p>De huidige serverconfiguratie geeft aan dat bestandsuploads zijn uitgeschakeld. Controleer en wijzig de instelling <code>file_uploads</code> in <code>php.ini</code> of neem contact op met de host van de site voor hulp.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess‑bestand ontbreekt"><![CDATA[
+<h2>.htaccess‑bestand ontbreekt</h2>
+<p>Er wordt een permanente‑linkmodus gebruikt die een <code>.htaccess</code>-bestand vereist, maar dat bestand is niet gevonden. Het bestand wordt met Textpattern meegeleverd en bevindt zich in de Textpattern‑root, naast <code>index.php</code> en de map <code>textpattern</code>. De aanbevolen regels zijn:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Site‑index onbereikbaar"><![CDATA[
+<h2>Site‑index onbereikbaar</h2>
+<p>Het hoofd‑<code>index.php</code>-bestand dat als index voor de site is opgegeven, is voor de server niet leesbaar. Controleer het bestaan en de rechten.</p>
+        ]]></item>
+        <item id="missing_files" title="Ontbrekende bestanden"><![CDATA[
+<h2>Ontbrekende bestanden</h2>
+<p>Een of meer essentiële bestanden ontbreken in Textpattern. Zorg ervoor dat alle genoemde bestanden op de server aanwezig zijn en zich op de juiste locatie bevinden.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite ontbreekt"><![CDATA[
+<h2>Apache mod_rewrite ontbreekt</h2>
+<p>De Apache‑module <code>mod_rewrite</code> is niet geïnstalleerd of uitgeschakeld. Deze wordt aanbevolen om Textpattern correct te laten functioneren. Controleer of de module aanwezig en ingeschakeld is, of neem contact op met de host van de site voor hulp.</p>
+        ]]></item>
+        <item id="modified_files" title="Gewijzigde bestanden"><![CDATA[
+<h2>Gewijzigde bestanden</h2>
+<p>Bestanden worden als gewijzigd beschouwd als hun checksum afwijkt van de lijst met bekende, juiste checksums die met Textpattern wordt meegeleverd. Als een of meer bestanden in de Textpattern‑installatie anders zijn dan verwacht, worden ze hier gemarkeerd.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL‑tabelfouten"><![CDATA[
+<h2>MySQL‑tabelfouten</h2>
+<p>Er is mogelijk sprake van beschadiging of schade in de MySQL‑database van Textpattern. Probeer de betreffende tabel(len) te repareren met een MySQL‑toegangstool, zoals <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> of <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Geen tijdelijke map gedefinieerd"><![CDATA[
+<h2>Geen tijdelijke map gedefinieerd</h2>
+<p>Hoewel Textpattern zonder tijdelijke map kan draaien, werkt sommige functionaliteit mogelijk niet zoals verwacht als deze voorkeur niet is ingesteld. Ga naar Admin‑voorkeuren en stel daar het ‘Pad naar tijdelijke map’ in.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sectie heeft dezelfde naam als map"><![CDATA[
+<h2>Sectie heeft dezelfde naam als map</h2>
+<p>Bestaande mapnamen kunnen conflicteren met sectienamen die worden gebruikt in het permlink‑schema voor artikelen. Controleer en verwijder zo nodig de betreffende map(pen) als dat veilig kan, of wijzig de sectiena(a)m(en) zodat er geen conflict is.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Sitemap onleesbaar"><![CDATA[
+<h2>Sitemap onleesbaar</h2>
+<p>De map die het hoofd‑<code>index.php</code>-bestand bevat dat als index voor de site is opgegeven, is voor de server niet leesbaar. Controleer de rechten.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP‑scripting ingeschakeld"><![CDATA[
+<h2>PHP‑scripting ingeschakeld</h2>
+<p>Textpattern staat auteurs en beheerders toe om PHP‑code in artikelen en pagina's/formulieren in te sluiten als deze functies zijn ingeschakeld. Omdat dit een veiligheidsrisico vormt – elk soort PHP kan worden uitgevoerd, inclusief mogelijk schadelijke of gevaarlijke code die kan leiden tot vernietiging van je installatie of het lekken van informatie naar derden – wordt het ten zeerste aanbevolen om deze opties in het <a href="?event=prefs#prefs_group_publish">voorkeurenpaneel</a> uit te schakelen, tenzij je de functie absoluut nodig hebt.</p>
+<p>Veel uitbreidingen van Textpattern‑sites die voorheen snippets PHP vereisten, kunnen nu met <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">kern‑tags</a> worden gerealiseerd.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimale versievereisten"><![CDATA[
+<h2>Minimale versievereisten</h2>
+<p>Textpattern vereist bepaalde functionaliteit in de programmeertaal PHP en de MySQL‑databaseserver. Raadpleeg onderstaande tabel om de minimale systeemvereisten te bepalen:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern‑versie</th>
+                <th scope="col">Minimale PHP‑versie</th>
+                <th scope="col">Minimale MySQL‑versie</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Naast bovenstaande systeemvereisten zijn de volgende PHP‑extensies vereist:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a></li>
+</ul>
+<p>Het <code>php.ini</code>-bestand van de site, globaal of lokaal, moet een instelling <code>date.timezone</code> bevatten.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Installatiemap bestaat nog steeds"><![CDATA[
+<h2>Installatiemap bestaat nog steeds</h2>
+<p>Nadat Textpattern is geïnstalleerd, zijn de map <code>textpattern/setup</code> en de inhoud ervan niet meer nodig en moeten ze om veiligheidsredenen worden verwijderd.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Site‑URL komt niet overeen"><![CDATA[
+<h2>Site‑URL komt niet overeen</h2>
+<p>De site‑URL zoals ingesteld in het paneel ‘Voorkeuren’ komt niet overeen met de daadwerkelijke URL waarmee de site is bezocht.</p>
+<p>Als de site via meerdere verschillende URL's bereikbaar is en de site zich naar verwachting gedraagt, kan dit bericht veilig worden genegeerd.</p>
+<p>Controleer en wijzig anders de instelling ‘Site‑URL’ in de admin‑voorkeuren. Een beredeneerde gok naar de juiste site‑URL wordt getoond in de preflight‑waarschuwing op het paneel ‘Diagnostiek’.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP‑functies [...] zijn uitgeschakeld op je server"><![CDATA[
+<h2>PHP‑functies [&#8230;] zijn uitgeschakeld op je server</h2>
+<p>De host of serverbeheerder van de site heeft een of meer PHP‑functies uitgeschakeld, waarvan sommige de werking van Textpattern kunnen beïnvloeden.</p>
+<p>Raadpleeg de <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern gebruikersdocumentatie <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> voor meer informatie.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern‑versie‑update"><![CDATA[
+<h2>Textpattern‑versie‑update</h2>
+<p>Er is een nieuwere versie van Textpattern beschikbaar. Om te profiteren van de nieuwste functies en beveiligingsverbeteringen wordt aanbevolen om te upgraden.</p>
+<p>Houd er rekening mee dat we ernaar streven de upgrade‑ervaring zo soepel en probleemloos mogelijk te maken:</p>
+<ul>
+    <li>Als alleen het laatste cijfer verschilt van je huidige versie, is de upgrade waarschijnlijk achterwaarts compatibel met plugins en thema's.</li>
+    <li>Als de laatste twee cijfers afwijken van je huidige versie, kan het nodig zijn dat sommige plugins en/of thema's moeten worden bijgewerkt, hoewel de site waarschijnlijk toch in beperkte mate blijft functioneren.</li>
+    <li>Als het eerste cijfer verschilt van je huidige versie, is het waarschijnlijk dat de meeste plugins en thema's moeten worden bijgewerkt. Als je sterk afhankelijk bent van een bepaalde plugin of themaverbetering, neem dan vóór de upgrade contact op met de auteur of met communityleden.</li>
 </ul>
         ]]></item>
-        <item id="textpattern_version_update_beta" title="Er is een Textpattern pre-release beschikbaar"><![CDATA[
-<h2>Textpattern pre-release update beschikbaar</h2>
-<p>Er is een nieuwere pre-release versie van Textpattern beschikbaar. We zijn op zoek naar actieve vrijwilligers om deze versie te testen, zodat we de definitieve release zo solide mogelijk kunnen maken. We streven ernaar om de upgrade ook voor bèta versies zo soepel mogelijk te laten verlopen. /1>
-<p>Als je beslist om de upgrade toe te passen, let op:</p>
+        <item id="textpattern_version_update_beta" title="Textpattern‑prerelease beschikbaar"><![CDATA[
+<h2>Textpattern‑prerelease‑update beschikbaar</h2>
+<p>Er is een nieuwere prerelease‑versie van Textpattern beschikbaar. We zoeken actieve vrijwilligers om deze versie te testen, zodat we de definitieve release zo stabiel mogelijk kunnen maken. We streven ernaar om de upgrade‑ervaring ook voor bèta‑code zo soepel en probleemloos mogelijk te maken.</p>
+<p>Als je besluit om mee te doen, let dan op het volgende:</p>
 <ul>
-    <li>Gebruik deze bèta-versie niet op een productie-site tenzij je een werkende back-up hebt van zowel de site-bestanden als de bijbehorende database, en ook weet hoe die weer terug te zetten. /3>
-    <li>Rapporteer <a href="https://github.com/textpattern/textpattern/issues">problemen </a>, met het vermelden van de bètaversie die je gebruikt. Er kunnen nieuwe beta releases nodig zijn voorafgaand aan de stabiele release, afhankelijk van de gemelde problemen. /3>
-    <li>Zorg ervoor dat je na deze bèta-versie ook overstapt naar de definitieve versie wanneer deze uitkomt. /3>
+    <li>Gebruik deze bèta‑release niet op een productie‑site, tenzij je een werkende back‑up hebt van zowel de bestanden van de site als de database, en weet hoe je die kunt terugzetten.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Meld eventuele problemen</a> en vermeld daarbij de bèta‑versie die je gebruikt. Afhankelijk van de gemelde problemen kunnen aanvullende bèta‑releases nodig zijn vóór de stabiele release.</li>
+    <li>Zorg ervoor dat je, als je deze bèta‑release inzet, ook upgrade naar de definitieve versie zodra die wordt uitgebracht.</li>
 </ul>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="Het pad naar de tijdelijke bestanden map en de map voor de plugin cache kunnen niet identiek zijn"><![CDATA[
-<h2>De paden naar de tijdelijke bestanden-map en de plugin-map mogen niet hetzelfde zijn</h2>
-<p>Plugins moeten een eigen map hebben en kunnen de tijdelijke map niet delen. Deze map delen is een potentieel veiligheidsrisico en kan uw site negatief beïnvloeden als de tijdelijke directory wordt aangevallen. Zorg er dus voor dat het pad naar de tijdelijke bestanden-map verschilt van dat voor de plugin cache.</p>
+        <item id="tmp_plugin_paths_match" title="Paden naar tijdelijke map en plugincache mogen niet overeenkomen"><![CDATA[
+<h2>Paden naar tijdelijke map en plugincache mogen niet overeenkomen</h2>
+<p>Plugins moeten een eigen map hebben en mogen de tijdelijke map niet delen. Dit vormt een potentieel veiligheidsrisico en kan je site negatief beïnvloeden als de tijdelijke map wordt geleegd. Zorg ervoor dat het pad naar de tijdelijke map verschilt van het pad naar de plugincache.</p>
         ]]></item>
-        <item id="update_server_inaccessible" title="De updateserver is onbereikbaar"><![CDATA[
-<h2>De update server is niet bereikbaar</h2>
-<p>Het lukt niet om te zien of er updates zijn.  Mogelijk is er een netwerkstoring of een time-out. Meestal lost dit zich vanzelf op.  Kom dus later op deze plek terug.
+        <item id="update_server_inaccessible" title="Updateserver onbereikbaar"><![CDATA[
+<h2>Updateserver onbereikbaar</h2>
+<p>De controle op updates is mislukt, vaak door netwerkcongestie of time‑outs bij de verbinding. Deze situatie lost zich meestal binnen een uur of twee vanzelf op, probeer dit paneel dus later opnieuw te bezoeken.</p>
         ]]></item>
-        <item id="warn_mail_unavailable" title="De mail() functie ontbreekt in uw PHP-installatie"><![CDATA[
-<h2>De mail() functie ontbreekt in uw PHP-installatie</h2>
-<p>PHP's<a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> functie is uitgeschakeld. Daarom kan Textpattern geen e-mails verzenden en zullen sommige functies niet beschikbaar zijn. E-mail-notificaties voor nieuwe reacties zullen bijvoorbeeld niet worden verzonden en nieuwe gebruikers zullen geen welkomstmail ontvangen. Gebruikers kunnen echter nog steeds worden toegevoegd.</p>
+        <item id="warn_mail_unavailable" title="Je PHP‑installatie mist de functie mail()"><![CDATA[
+<h2>Je PHP‑installatie mist de functie mail()</h2>
+<p>De PHP‑functie <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is uitgeschakeld. Daardoor kan Textpattern geen e‑mails versturen en zijn sommige functies niet beschikbaar. Zo worden e‑mailmeldingen van nieuwe reacties niet verzonden en ontvangen nieuwe gebruikers geen welkomstmail. Je kunt echter nog steeds gebruikers toevoegen.</p>
         ]]></item>
     </group>
 
     <group id="file" title="Bestanden paneel">
-        <item id="file_reassign" title="Bestand opnieuw toewijzen"><![CDATA[]]></item>
-        <item id="file_replace" title="Bestand vervangen"><![CDATA[]]></item>
+        <item id="file_reassign" title="Bestand opnieuw toewijzen"><![CDATA[
+<h2>Bestand opnieuw toewijzen</h2>
+<p>Wanneer je een bestand uploadt ter vervanging van een bestand dat als ‘Ontbrekend’ is aangemerkt, wordt het door jou gekozen bestand naar de server geüpload en gekoppeld aan de oorspronkelijke bestandsinformatie in de database. Dit betekent dat de bestandsnaam van het oorspronkelijke bestand behouden blijft, evenals alle andere gekoppelde informatie zoals het aantal downloads en de categorie. De bestandsgrootte wordt echter bijgewerkt zodat die overeenkomt met het nieuwe bestand.</p>
+        ]]></item>
+        <item id="file_replace" title="Bestand vervangen"><![CDATA[
+<h2>Bestand vervangen</h2>
+<p>Door hier een bestand te uploaden worden de inhoud van het bestaande bestand op de server vervangen, terwijl de bestandsnaam hetzelfde blijft als voorheen. Het aantal downloads en andere aan het bestand gekoppelde informatie blijft onveranderd.</p>
+        ]]></item>
         <item id="timestamp_file" title="Publicatiedatum"><![CDATA[
 <h2>Publicatiedatum</h2>
 <p>De tijd dat een bestand is opgeslagen of recent is herzien. Voor deze tijd kan het moment van publicatie worden gebruikt, of ieder willekeurige moment in verleden of toekomst. </p>
@@ -142,25 +443,71 @@
         ]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+    <group id="form" title="Formulierenpaneel">
+        <item id="forms_overview" title="Introductie tot formulieren"><![CDATA[
+<h2>Introductie tot formulieren</h2>
+<p>In Textpattern is een formulier een fragment of blok tekst, HTML en Textpattern-tags dat hergebruikt kan worden om inhoud weer te geven.</p>
+<p>Hier is een voorbeeldformulier dat <code>ordinary_list</code> zou kunnen heten:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Je kunt dit gebruiken om een ongenummerde HTML-lijst van gerelateerde artikelen weer te geven:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Aangezien de rol van dit formulier is om een lijst met titels uit te voeren, kan het ook worden toegepast binnen andere tags, zoals het tonen van 20 artikelen uit de huidige sectie:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Je kunt er ook voor kiezen een formulier te gebruiken om herhaalde inhoud weer te geven, zoals kop- en voetteksten in je paginatemplates. Dit betekent dat de inhoud slechts op één plaats bestaat, en dat je die slechts één keer hoeft te wijzigen als je iets aanpast. Inhoud uit een formulier weergeven gebeurt doorgaans met:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Een formulier mag maximaal 64 KB groot zijn. Een voorbeeld voor een voettekst kan koppen, alinea's, links, voorwaardelijke tags en verwijzingen naar andere formulieren zoals <code>ordinary_list</code> bevatten.</p>
+        ]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title="Mini-afbeelding aanmaken"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Afbeelding vervangen"><![CDATA[]]></item>
-        <item id="upload_image" title="Afbeelding uploaden"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Upload mini-afbeelding"><![CDATA[]]></item>
+    <group id="image" title="Afbeeldingenpaneel">
+        <item id="create_thumbnail" title="Mini-afbeelding aanmaken"><![CDATA[
+<h2>Miniatuur maken</h2>
+<p>Hiermee kun je een miniatuur (opnieuw) maken met de opgegeven afmetingen op basis van de afbeelding op volledig formaat.</p>
+<p>Bij aangepaste afmetingen wordt de miniatuur geschaald zodat hij in de door jou gekozen afmetingen past, tenzij je het selectievakje ‘Bijsnijden’ aanvinkt. In dat geval wordt de miniatuur uit het midden van de afbeelding gemaakt zonder te schalen.</p>
+<p>Bij automatische afmetingen wordt de miniatuur geschaald naar de afmetingen en (optionele) bijsnijdinstellingen in het huidige admin‑thema.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Afbeelding vervangen"><![CDATA[
+<h2>Afbeelding vervangen</h2>
+<p>Een hier geüploade afbeelding vervangt eenvoudigweg de bestaande afbeelding die aan dit item in de database is gekoppeld.</p>
+        ]]></item>
+        <item id="upload_image" title="Afbeelding uploaden"><![CDATA[
+<h2>Afbeelding uploaden</h2>
+<p>Upload een of meer afbeeldingen naar je server.</p>
+<p>Bij upload naar de map <code>images</code> wordt de bestandsnaam van je oorspronkelijke afbeelding alleen intern in de Textpattern-database bewaard; het afbeeldingsbestand zelf wordt hernoemd naar een opeenvolgend nummer + bestandsextensie.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Upload mini-afbeelding"><![CDATA[
+<h2>Miniatuur uploaden</h2>
+<p>Afbeeldingen op volledig formaat kunnen een eigen miniatuur toegewezen krijgen. Deze zijn handig om naar de afbeelding op volledig formaat te linken en om die te indexeren.</p>
+<p>Een verwijzing naar de miniatuur is exact hetzelfde als de verwijzing naar de afbeelding op volledig formaat, met <code>t</code> achter de bestandsnaam. Om bijvoorbeeld te verwijzen naar een miniatuur die hoort bij een afbeelding op volledig formaat die is opgeslagen als <code>/images/12.jpg</code>, gebruik je <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="lang" title="">
-        <item id="get_textpack" title="Textpack installeren"><![CDATA[]]></item>
+    <group id="lang" title="Talenpaneel">
+        <item id="get_textpack" title="Textpack installeren"><![CDATA[
+<h2>Textpack installeren</h2>
+<p>Plak extra taalstrings voor je site in dit veld en kies ‘Uploaden’ om ze te installeren.</p>
+<p>De strings worden vaak aangeboden als een downloadbare Textpack, die met een plugin wordt meegeleverd zodat de taalstrings van de plugin native binnen Textpattern gebruikt kunnen worden.</p>
+<p>Vertalers kunnen deze pakketten vervolgens naar behoefte vertalen en de gelokaliseerde inhoud opnieuw verspreiden binnen de community.</p>
+        ]]></item>
     </group>
 
-    <group id="link" title="">
-        <item id="link_description" title="Beschrijving"><![CDATA[]]></item>
-        <item id="link_sort" title="Sorteerwaarde"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
+    <group id="link" title="Linkspaneel">
+        <item id="link_description" title="Beschrijving"><![CDATA[
+<h2>Beschrijving</h2>
+<p>Beschrijvingen voor links zijn optioneel en nuttig voor het voorzien van bijschriften bij links, voor het maken van <code>title=""</code>-attributen (tooltips) voor links, of simpelweg voor je eigen interne documentatie.</p>
+        ]]></item>
+        <item id="link_sort" title="Sorteerwaarde"><![CDATA[
+<h2>Sorteerwaarde</h2>
+<p>Handig voor sorteren van linklijsten op natuurlijke taal, bijvoorbeeld op iemands achternaam in plaats van voornaam, of op woordgroepen die beginnen met een bepaald lidwoord.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Het adres van de link. Als de link naar een andere site verwijst, moet daar <code>http://</code> of <code>https://</code> voor staan.</p>
+        ]]></item>
         <item id="timestamp_link" title="Publicatiedatum"><![CDATA[
 <h2>Publicatiedatum</h2>
 <p>het tijdstipt een bestand is opgeslagen of recent is herzien. Voor deze tijd kan het moment van publicatie worden gebruikt, of ieder willekeurige moment in verleden of toekomst. </p>
@@ -172,131 +519,687 @@
         ]]></item>
     </group>
 
-    <group id="login" title="">
-        <item id="remember_login" title="Blijf ingelogd met deze browser"><![CDATA[]]></item>
+    <group id="login" title="Aanmeldingspaneel">
+        <item id="remember_login" title="Blijf ingelogd met deze browser"><![CDATA[
+<h2>Aangemeld blijven met deze browser</h2>
+<p>Wanneer aangevinkt blijf je met de huidige webbrowser aangemeld bij je Textpattern-account totdat je ervoor kiest om je af te melden. Indien niet aangevinkt, word je na een periode van inactiviteit automatisch afgemeld.</p>
+<p>Hiervoor moeten cookies in je browser zijn ingeschakeld.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title="Plugin installeren"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Plug-in uploaden"><![CDATA[]]></item>
+    <group id="plugin" title="Pluginpaneel">
+        <item id="install_plugin" title="Plugin installeren"><![CDATA[
+<h2>Plugin installeren</h2>
+<p>Plak de inhoud van het gecompileerde plugin‑tekstbestand hier en kies vervolgens ‘Uploaden’ om de installatie te starten. Elke plugin die je uploadt met dezelfde naam als een reeds geïnstalleerde plugin wordt overschreven door de geüploade versie.</p>
+<p>De plugintekst die je hier plakt is <strong>niet</strong> de ruwe PHP‑code, maar Base64‑gecodeerde tekst, doorgaans voorafgegaan door een kop met plugininformatie (zoals pluginnaam, versie en beschrijving, naam van de auteur, enz.).</p>
+<p>Je kunt gecompileerde versies van plugins vaak verkrijgen uit de <a rel="external" target="_blank" href="https://plugins.textpattern.com/">pluginrepository van Textpattern <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> of via het aangewezen kanaal van de pluginauteur, zoals diens website of GitHub.</p>
+<p>Je kunt hier ook een URL naar een gecompileerd Textpattern‑tekstbestand plakken, als de externe site dat toestaat.</p>
+<p>Alle geüploade plugins doorlopen een verificatiestap, waarin je de plugincode en -inhoud kunt inspecteren voordat je installeert.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Plug-in uploaden"><![CDATA[
+<h2>Plugin uploaden</h2>
+<p>Gebruik dit formulier om een pluginbestand te uploaden. Geüploade plugins (en alle bijbehorende bestanden) worden opgeslagen in de map ‘plugins’.</p>
+<p>De volgende plugintypen kunnen hier worden geüpload:</p>
+<ul>
+<li>Textpattern PHP‑templatebestanden die volledige code, metadata, Textpack‑strings en hulptekst bevatten.</li>
+<li>Gecompileerde Textpattern‑tekstbestanden die volledige code, metadata, Textpack‑strings en hulptekst bevatten.</li>
+<li>Textpattern‑zipbundels die manifestinformatie en code, metadata, Textpack‑strings, hulptekst en ondersteunende bestanden bevatten.</li>
+<li>Ruwe PHP‑bestanden (hoewel deze geen extra metadata vullen en niet worden aanbevolen).</li>
+</ul>
+<p>Elke plugin die je uploadt met dezelfde naam als een eerder geïnstalleerde plugin wordt overschreven door de geüploade versie.</p>
+<p>Alle geüploade plugins doorlopen een verificatiestap, waarin je de plugincode en -inhoud kunt inspecteren voordat je installeert.</p>
+        ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title="Admin plugins toestaan?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Meer opties"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="PHP in artikelen toestaan?"><![CDATA[]]></item>
+    <group id="prefs" title="Voorkeurenpaneel">
+        <item id="admin_side_plugins" title="Admin plugins toestaan?"><![CDATA[
+<h2>Admin-side-plugins gebruiken?</h2>
+<p>Admin-side-plugins kunnen de werking van de beheersinterface veranderen. Ze kunnen inhaken op al bestaande handelingen, zoals het bewerken of publiceren van artikelen, of nieuwe panelen toevoegen voor extra of uitgebreide functionaliteit.</p>
+<p>Als je meer wilt weten over admin-side-plugins, zie dan de pagina <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Textpattern uitbreiden <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> in de <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern gebruikersdocumentatie <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>. Plugins van allerlei soort staan vermeld op de site <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern plugins <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Meer opties"><![CDATA[
+<h2>Geavanceerde opties</h2>
+<p>Toont de groep met geavanceerde voorkeuren, waar extra instellingen kunnen worden geconfigureerd, zoals:</p>
+<ul>
+    <li>PHP-functies die zijn ingeschakeld in <code>txp:evaluate</code>.</li>
+    <li>Aangepaste formulier-template-typen.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="PHP in artikelen toestaan?"><![CDATA[
+<h2>PHP in artikelen toestaan?</h2>
+<p>Als dit is ingeschakeld, kun je PHP binnen artikelen gebruiken. De auteur moet daarvoor voldoende rechten hebben (standaard kunnen alleen <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘uitgevers’ <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘managing editors’ <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> en <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘eindredacteuren’ <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> dat).</p>
+<p><strong>Het wordt ten zeerste aanbevolen om deze optie uit te schakelen</strong>, tenzij je de functie absoluut nodig hebt. Elke vorm van mogelijk schadelijke of gevaarlijke PHP‑code die je website kan vernietigen of informatie naar derden kan lekken, kan door elke auteur worden toegevoegd en door iedereen die dat artikel bekijkt worden uitgevoerd.</p>
+<p>PHP‑code mag geen openings‑ en sluitings‑PHP‑tags bevatten en moet bovendien worden ingesloten in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tags <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+        ]]></item>
         <item id="allow_form_override" title="Eigen modulekeuze voor artikelen toestaan?"><![CDATA[
 <h2>Mogen medewerker andere modules kiezen?</h2>
 <p>Met deze instelling kunnen medewerkers aan een artikel
 zelf kiezen welke module gebruikt zal worden bij de weergave. Als dit wordt toegestaan zal er een 'Pas module aan' uitklapmenu zichtbaar zijn bij het bewerken van het artikel.</p>
         ]]></item>
-        <item id="allow_page_php_scripting" title="PHP in pagina’s toestaan?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Datumweergave archief"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Samenvattingen gebruiken?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Titels aan permalinks verbinden?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Zomer- en wintertijd automatisch bijstellen?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Reacties als updates beschouwen?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title="Gebruik rel=&quot;nofollow&quot; bij reacties?"><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Reacties als genummerde lijst weergeven?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title="Reacties automatisch toevoegen onder artikelen?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Datumweergave reacties"><![CDATA[]]></item>
-        <item id="comments_default_invite" title="Standaard uitnodiging voor reacties"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title="Inactief na"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title="Reactietype"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Reacties controleren?"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Standaard aan?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Invullen email verplicht bij reacties?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Invullen naam verplicht bij reacties?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Reacties naar de auteur mailen?"><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title="Uitgebreidere Textile opmaak gebruiken?"><![CDATA[]]></item>
-        <item id="custom_form_types" title="Speciale soorten module voorbeelden"><![CDATA[]]></item>
-        <item id="custom_overview" title="Speciale velden"><![CDATA[]]></item>
-        <item id="dateformat" title="Datumweergave voorpagina"><![CDATA[]]></item>
-        <item id="default_event" title="Standaard admin tab"><![CDATA[]]></item>
-        <item id="default_publish_status" title="Standaard publiceren als"><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title="Voorvertoning van het thema in ontwikkeling aanzetten?"><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Korte tag-ondersteuning inschakelen?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="XML-RPC server aanzetten?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Max grootte uploads (bytes)"><![CDATA[]]></item>
-        <item id="gmtoffset" title="Tijdzone"><![CDATA[]]></item>
-        <item id="img_dir" title="Afbeeldingenmap"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Email in Atom feeds tonen?"><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title="Hulplinks aan de administratiekant tonen"><![CDATA[]]></item>
-        <item id="never_display_email" title="Emailadressen altijd verbergen?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title="Moduletype aanpassen"><![CDATA[
-<h2>Pas het moduletype aan</h2>
-<p>Kies welke modules beschikbaar moeten zijn onder de Schrijf tab als speciale modules.</p>
+        <item id="allow_page_php_scripting" title="PHP in pagina’s toestaan?"><![CDATA[
+<h2>PHP in pagina's toestaan?</h2>
+<p>Als dit is ingeschakeld, is PHP‑code toegestaan binnen pagina‑ en formuliertemplates.</p>
+<p><strong>Het wordt ten zeerste aanbevolen om deze optie uit te schakelen</strong>, tenzij je de functie absoluut nodig hebt. Elke vorm van mogelijk schadelijke of gevaarlijke PHP‑code die je website kan vernietigen of informatie naar derden kan lekken, kan door elke andere gebruiker worden toegevoegd en worden uitgevoerd door een nietsvermoedende beheerder of sitebezoeker.</p>
+<p>PHP‑code mag geen openings‑ en sluitings‑PHP‑tags bevatten en moet bovendien worden ingesloten in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tags <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
         ]]></item>
-        <item id="permlink_format" title="URL van de permanente link naar de titel"><![CDATA[]]></item>
-        <item id="permlink_mode" title="URL-vorm voor het artikel"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Pad naar de plugincache"><![CDATA[]]></item>
-        <item id="production_status" title="Productie status"><![CDATA[]]></item>
-        <item id="public_theme_name" title="Thema voor de voorpagina"><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Verlopen artikelen tonen?"><![CDATA[]]></item>
-        <item id="publisher_email" title="Verstuur logingegevens vanuit dit emailadres"><![CDATA[]]></item>
-        <item id="rss_how_many" title="Hoe veel artikelen in RSS?"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Aantal reacties in feeds tonen?"><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Spam blocklists (komma gescheiden)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title="Tijdelijke bestanden map"><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title="PHP functies geactiveerd in txp:evaluate"><![CDATA[]]></item>
-        <item id="use_comments" title="Reacties accepteren?"><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title="Plugins toestaan?"><![CDATA[]]></item>
+        <item id="archive_dateformat" title="Datumweergave archief"><![CDATA[
+<h2>Archiefdatumopmaak</h2>
+<p>Hoe datums op artikelen in secties van je site worden weergegeven.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Uittreksel tonen op de artikelbewerkingspagina?"><![CDATA[
+<h2>Uittreksel tonen op de artikelbewerkingspagina?</h2>
+<p>Als je ‘Nee’ kiest, wordt het veld voor het uittreksel niet aan de auteur getoond op het scherm voor het bewerken van artikelen.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Titels aan permalinks verbinden?"><![CDATA[
+<h2>Titels aan permanente links koppelen?</h2>
+<p>Met deze instelling wordt een automatisch gegenereerde versie van de artikel­titel aan de URL gekoppeld. Deze wordt automatisch aangemaakt of kan handmatig worden overschreven in ‘Alleen-URL-titel’ bij het bewerken van een artikel.</p>
+<p>De instelling heeft alleen effect wanneer je schone URL's gebruikt. Voor sommige talen kan dit resulteren in lange en lelijke URL's; in dat geval wil je dit waarschijnlijk op ‘Uit’ zetten.</p>
+        ]]></item>
+        <item id="auto_dst" title="Zomer- en wintertijd automatisch bijstellen?"><![CDATA[
+<h2>Zomertijd automatisch aanpassen?</h2>
+<p>Met deze instelling kan Textpattern bepalen wanneer zomertijd (DST, Daylight Saving Time) in jouw regio geldt. Als dit op ‘Nee’ staat, kun je de voorkeur ‘Zomertijd ingeschakeld’ handmatig wijzigen.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Reacties als updates beschouwen?"><![CDATA[
+<h2>Nieuwe reactie betekent site bijgewerkt?</h2>
+<p>De Textpattern-database houdt bij wanneer de meest recente wijziging op je site heeft plaatsgevonden. Als deze instelling op ‘Ja’ staat, werkt een nieuwe reactie deze waarde ook bij. Deze waarde wordt bijvoorbeeld gebruikt voor de functionaliteit <code>"Last-Modified-header verzenden"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Gebruik rel=&quot;nofollow&quot; bij reacties?"><![CDATA[
+<h2><code>rel="nofollow"</code> toepassen op reacties?</h2>
+<p>Indien ingesteld op ‘Ja’ wordt er een extra attribuut toegevoegd aan links in reacties. Dit is bedoeld als maatregel om de prikkel voor reactiespam weg te nemen en is geïnitieerd door een aantal zoekmachines en softwareontwikkelaars. Meer informatie vind je in <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google's aankondiging <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+<p><strong>Let op:</strong> Deze instelling heeft geen invloed op de functionaliteit van je site. Ze kan wel voorkomen of beperken dat sommige zoekmachines gewicht toekennen aan reacties bij het bepalen van de positie van sites waarnaar vanuit die reacties wordt gelinkt.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Reacties als genummerde lijst weergeven?"><![CDATA[
+<h2>Reacties presenteren als genummerde lijst?</h2>
+<p>Bepaalt of artikelreacties worden omgeven door de HTML-tag <code>&lt;ol&gt;</code> en de afzonderlijke reacties door de tag <code>&lt;li&gt;</code> (waardoor reacties als genummerde lijst worden gepresenteerd), of dat afzonderlijke reacties in plaats daarvan worden omgeven door de tag <code>&lt;div&gt;</code>.</p>
+<p>Met beide waarden kun je de gebruikte tags per formulier overschrijven door de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> aan te passen in het formulier <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Reacties automatisch toevoegen onder artikelen?"><![CDATA[
+<h2>Reacties automatisch aan artikelen toevoegen?</h2>
+<p>Deze instelling bepaalt of reacties en het reactieformulier automatisch aan alle afzonderlijke artikelen worden toegevoegd (door automatisch de inhoud van het formulier <code>comments_display</code> op te nemen).</p>
+<p>In de meeste gevallen laat je dit op ‘Nee’ staan, omdat dit meer flexibiliteit geeft voor de plaatsing van reacties binnen het ontwerp van je site. Je moet dan de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> handmatig toevoegen in elk op artikelen gebaseerd template waarin je reacties wilt tonen.</p>
+<p>Als reacties dubbel worden weergegeven in een artikel, is de kans groot dat je templates de tag <code>&lt;txp:comments /&gt;</code> bevatten én dat ‘Reacties automatisch aan artikelen toevoegen?’ ook op ‘Ja’ staat.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Datumweergave reacties"><![CDATA[
+<h2>Datumopmaak reacties</h2>
+<p>Hoe reactiedatums aan bezoekers van je site worden getoond.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Standaard uitnodiging voor reacties"><![CDATA[
+<h2>Standaard uitnodiging voor reacties</h2>
+<p>Als je bezoekers toestaat om te reageren op je site, is dit de standaard uitnodigende tekst. Bijvoorbeeld:</p>
+<ul>
+    <li>Reacties</li>
+    <li>Voeg een reactie toe</li>
+    <li>Feedback</li>
+    <li>Annoteren</li>
+</ul>
+<p>Merk op dat de uitnodigingstekst altijd per artikel kan worden aangepast.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Inactief na"><![CDATA[
+<h2>Reacties uitgeschakeld na</h2>
+<p>Gebruik dit om de periode in te stellen waarna reageren op artikelen wordt uitgeschakeld (kan op ‘Nooit’ worden gezet om onbeperkt reageren mogelijk te maken).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Afbeeldingen in reacties toestaan?"><![CDATA[
+<h2>Afbeeldingen van reageerders in reacties toestaan?</h2>
+<p>Als deze optie op ‘Nee’ staat, worden alle afbeeldingen die in reacties zijn opgenomen verwijderd.</p>
+        ]]></item>
+        <item id="comments_mode" title="Reactietype"><![CDATA[
+<h2>Reactiemodus</h2>
+<p>Als ‘nopopup’ is geselecteerd (aanbevolen) wordt het huidige venster ververst om alleen het huidige artikel met daaronder de reacties weer te geven.</p>
+<p>Als ‘popup’ is geselecteerd, wordt een nieuw browservenster geopend wanneer op de reactielink wordt geklikt (dit gebruikt het formulier <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Reacties controleren?"><![CDATA[
+<h2>Reacties modereren?</h2>
+<p>Als dit op ‘Ja’ staat, wordt bij elke nieuwe reactie de zichtbaarheid uitgeschakeld totdat deze is gecontroleerd. Je moet elke reactie handmatig modereren en zichtbaar maken (er wordt een bericht gemaild naar de auteur van het artikel wanneer een nieuwe reactie is ontvangen).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Standaard aan?"><![CDATA[
+<h2>Reacties standaard aan?</h2>
+<p>Als dit op ‘Ja’ staat, worden reacties automatisch ingeschakeld voor elk gepubliceerd artikel. Als het op ‘Nee’ staat, moet je reacties inschakelen op het paneel ‘Schrijven’ wanneer je reacties op een artikel wilt toestaan.</p>
+<p>Reacties kunnen op elk moment per artikel worden in‑ of uitgeschakeld.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Invullen email verplicht bij reacties?"><![CDATA[
+<h2>Reacties vereisen e‑mailadres van reageerder?</h2>
+<p>Als dit op ‘Ja’ staat, moeten mensen die op je artikel willen reageren een e‑mailadres invoeren in het reactieformulier. Ze kunnen geen reactie plaatsen als ze geen e‑mailadres opgeven.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Invullen naam verplicht bij reacties?"><![CDATA[
+<h2>Reacties vereisen naam van reageerder?</h2>
+<p>Als dit op ‘Ja’ staat, moeten mensen die op je artikel willen reageren een naam invoeren in het reactieformulier. Ze kunnen geen reactie versturen als ze geen naam opgeven.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Reacties naar de auteur mailen?"><![CDATA[
+<h2>Reacties naar auteur e‑mailen?</h2>
+<p>Als dit op ‘Ja’ staat, wordt telkens wanneer een nieuwe reactie op een artikel wordt ontvangen een kopie per e‑mail naar de auteur van dat artikel gestuurd.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Uitgebreidere Textile opmaak gebruiken?"><![CDATA[
+<h2>Meer Textile-opmaak in reacties toestaan?</h2>
+<p>Als dit op ‘Ja’ staat, mogen reacties <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile- <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>elementen bevatten die anders als platte tekst zouden worden behandeld, zoals:</p>
+<ul>
+    <li>koppen</li>
+    <li>genummerde en ongenummerde lijsten</li>
+    <li>voetnoten</li>
+    <li>tabellen</li>
+    <li>code</li>
+    <li>uitgebreide bloksyntaxis (<code>bc..</code>, <code>bq..</code>, enz.)</li>
+</ul>
+<p><strong>Let op:</strong> Om veiligheidsredenen wordt rauwe HTML omgezet in gewone tekst.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Accounts die gelijktijdig mogen inloggen"><![CDATA[
+<h2>Accounts die gelijktijdig mogen inloggen</h2>
+<p>Een door komma's gescheiden lijst met aanmeldingsnamen die zich vanuit meerdere browsers/sessies tegelijk mogen aanmelden. Dit is handig tijdens ontwikkeling om een inlog te delen met klanten.</p>
+<p>Het gebruik van deze functie vormt een veiligheidsrisico en wordt <strong>niet aanbevolen op live‑sites</strong>. Diagnostiek geeft een waarschuwing als je gebruikersaccount voor gelijktijdige aanmeldingen is geconfigureerd op een live website.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Aangepaste formulier‑template‑typen"><![CDATA[
+<h2>Aangepaste formulier‑template‑typen</h2>
+<p>Naast de standaardtypen formulier‑templates (article, file, misc, enz.) kunnen uitgevers aangepaste typen definiëren. De bedoeling van aangepaste formulier‑template‑typen is tweevoudig: eenvoudiger classificatie van formulier‑templates en aangepaste assetdefinities.</p>
+<p>Het formaat van deze voorkeur is <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>, waarbij elke sectie overeenkomt met een formulier‑templatetype.</p>
+<p>Om een aangepast formulier‑type te definiëren (bijv. <code>js</code>) moet je (op een aparte regel) een sectie <code>[js]</code> toevoegen. Een standaardtitel kan worden ingesteld via een invoer <code>title="Javascript"</code> in de betreffende sectie. Indien nodig kunnen ook gelokaliseerde titels worden toegevoegd (bijv. <code>ru="Скрипт"</code>).</p>
+<p>Bovendien kan een formulier‑template een <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">mediatype <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> (voorheen MIME‑type) krijgen, bijv. <code>mediatype="application/javascript"</code>. Hiermee worden formulier‑templates van dit type aangepaste assets die als het ingestelde mediatype kunnen worden aangeboden, hetzij vanuit de database, hetzij als bestand (flat file) via de tag <code>&lt;txp:output_form /&gt;</code>. Een formulier‑template met de naam <code>myscript.js</code> van het type <code>[js]</code> met mediatype <code>application/javascript</code> kan bijvoorbeeld als volgt in je code worden opgenomen:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Dit genereert de volgende HTML‑tag <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Alleen formulier‑templates waarvan de naamsextensie overeenkomt met hun type (bijv. <code>myscript.js</code>) kunnen als flat file worden aangeboden. In dat geval worden ze helemaal niet door Textpattern verwerkt en zijn ze toegankelijk via hun URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Aangepaste velden"><![CDATA[
+<h2>Aangepaste velden</h2>
+<p>Aangepaste velden worden gebruikt voor extra artikelgegevens. Je kunt er maximaal tien definiëren door ze hier een naam te geven. Elk veld verschijnt als een apart veld op het paneel Schrijven, zodat aangepaste gegevens aan elk artikel kunnen worden gekoppeld.</p>
+<p>Je mag de velden naar wens benoemen, maar houd rekening met het volgende:</p>
+<ul>
+<li>Spaties verbeteren de leesbaarheid op het paneel Schrijven, maar de velden kunnen dan <em>niet</em> worden gebruikt als sorteer‑ of filterparameter in een <code>article_custom</code>-tag. Overweeg in dat geval in plaats daarvan underscores te gebruiken.</li>
+<li>Wees voorzichtig bij het benoemen van velden, zodat ze niet botsen met gereserveerde veldnamen in Textpattern. Gebruik bijvoorbeeld niet <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, enz., omdat dat tot vreemde resultaten of niet‑werkende sites kan leiden.</li>
+<li>Gegevens in elk veld zijn beperkt tot 255 tekens platte tekst.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Datumopmaak"><![CDATA[
+<h2>Datumopmaak</h2>
+<p>Deze optie heeft alleen invloed op hoe artikeldata op de voorpagina van je site worden weergegeven.</p>
+        ]]></item>
+        <item id="default_event" title="Standaardpaneel"><![CDATA[
+<h2>Standaardpaneel</h2>
+<p>Het Textpattern‑beheerpaneel dat als eerste wordt getoond wanneer iemand zich aanmeldt.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Standaard publicatiestatus"><![CDATA[
+<h2>Standaard publicatiestatus</h2>
+<p>Bepaalt de publicatie‑ en zichtbaarheidsstatus van nieuw aangemaakte Textpattern‑artikelen.</p>
+<p>Let op: deze voorkeur heeft geen invloed op de status van artikelen die vóór een wijziging zijn aangemaakt of bewerkt.</p>
+<p>De standaard publicatiestatus is een van de volgende:</p>
+<ul>
+    <li>Concept</li>
+    <li>Verborgen</li>
+    <li>In afwachting</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>Een <strong>concept</strong>artikel wordt beschouwd als werk in uitvoering en is buiten het Textpattern‑beheergedeelte niet zichtbaar (dus niet zichtbaar op de voorkant van Textpattern en niet opgenomen in feeds).</p>
+<p>Een <strong>verborgen</strong> artikel is buiten het Textpattern‑beheergedeelte niet zichtbaar.</p>
+<p>Een <strong>in afwachting</strong> artikel wordt beschouwd als klaar voor publicatie en in afwachting van goedkeuring, maar is buiten het Textpattern‑beheergedeelte niet zichtbaar.</p>
+<p>Een <strong>live</strong> artikel is doorgaans zichtbaar buiten het Textpattern‑beheergedeelte (dus zichtbaar op de voorkant van Textpattern en, indien de voorkeur dat toestaat, in feeds). Als een artikel live is en een verloopdatum heeft, blijft de status live nadat die datum is verstreken, maar het artikel verschijnt alleen buiten het beheergedeelte als verlopen artikelen mogen worden gepubliceerd.</p>
+<p>Een <strong>sticky</strong> artikel is vergelijkbaar met een <strong>live</strong> artikel in die zin dat het buiten het Textpattern‑beheergedeelte kan worden bekeken, maar het verschijnt <strong>niet</strong> in artikellijsten, tenzij de betreffende tag <code>article</code> of <code>article_custom</code> een attribuut <code>status</code> met de waarde <code>sticky</code> bevat.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Selecteer welke HTML‑doctype je wilt gebruiken (HTML5 of XHTML). Dit is van invloed op reactie‑invoervelden, op de Textile‑weergave van <code>&lt;abbr&gt;</code> of <code>&lt;acronym&gt;</code> en op <code>&lt;link&gt;</code>-tags die worden gegenereerd door de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Voorvertoning van ontwikkelingsthema inschakelen?"><![CDATA[
+<h2>Voorvertoning van ontwikkelingsthema inschakelen?</h2>
+<p>Gebruikers met voldoende rechten (standaard degenen met de rollen Uitgever en Vormgever) kunnen veilig een nieuw thema ontwikkelen en bekijken, terwijl alle andere gebruikers nog steeds het oude thema zien (totdat het nieuwe thema wordt uitgerold).</p>
+<p>Bevoorrechte gebruikers die niet willen deelnemen aan themasontwikkeling kunnen de voorvertoning van het ontwikkelingsthema uitschakelen. Zij krijgen dan het huidige ‘publieke’ thema te zien, net als gewone sitebezoekers.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Ondersteuning voor korte tags inschakelen?"><![CDATA[
+<h2>Ondersteuning voor korte tags inschakelen?</h2>
+<p>Textpattern‑tags hebben de vorm <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Het is mogelijk het typewerk te verminderen door een verkorte notatie in te schakelen, waarbij <code>txp:</code> kan worden weggelaten als je enkele eenvoudige richtlijnen volgt. Enkele voorbeelden ter illustratie:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> wordt <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> wordt <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> wordt <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> wordt <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> wordt <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (let op dat de plugin‑prefix ook voor de tag <code>else</code> kan worden gebruikt).</li>
+</ul>
+<p>Als een tag een underscore bevat en je korte tags inschakelt, is het basisprincipe:</p>
+<ol>
+    <li>Verwijder het voorvoegsel <code>txp:</code>.</li>
+    <li>Vervang het eerste voorkomen van de underscore door <code>::</code>.</li>
+</ol>
+<p>Merk op dat deze voorkeur geen invloed heeft op het gebruik van shortcodes <code>&lt;txp:output_form /&gt;</code> om formulieren weer te geven. Je kunt nog steeds <code>&lt;txp::shortcode /&gt;</code> gebruiken, wat wordt geïnterpreteerd als <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="XML‑RPC‑server inschakelen?"><![CDATA[
+<h2>XML‑RPC‑server inschakelen?</h2>
+<p>Als je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML‑RPC <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> wilt gebruiken om Textpattern op afstand te bedienen (bijv. via desktop‑ of mobiele apps), moet je de XML‑RPC‑server inschakelen door dit op ‘Ja’ te zetten.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Uitgebreide e‑mailfuncties gebruiken"><![CDATA[
+<h2>Uitgebreide e‑mailfuncties gebruiken</h2>
+<p>Wanneer dit op ‘Nee’ staat, wordt alle e‑mail – zoals aanvragen voor het opnieuw instellen van accountwachtwoorden en e‑mail afkomstig van plugins zoals com_connect – via de PHP‑functie <code>mail()</code> verstuurd. Als je ‘Ja’ selecteert, wordt in plaats daarvan de meegeleverde PHPMailer gebruikt, die extra instellingen biedt om e‑mail via externe SMTP‑servers te routeren.</p>
+<p>Als je problemen ondervindt met de bezorging van e‑mails (vooral bij online aanbieders zoals Gmail, Outlook, Yahoo! enz.), is de waarschijnlijke oorzaak dat je domein niet als betrouwbare bron wordt gezien. Overschakelen naar ‘Ja’ kan de bezorging verbeteren. Daarnaast kan het gebruik van SMTP zorgen voor betere compatibiliteit met sommige e‑mailproviders en de aflevering verder verbeteren.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Logbestanden verlopen na hoeveel dagen?"><![CDATA[
+<h2>Logbestanden verlopen na hoeveel dagen?</h2>
+<p>Wanneer loggen in Textpattern is ingeschakeld, kun je instellen hoe lang (in dagen) de logs bewaard moeten blijven. Met ‘7’ blijven de logs zeven dagen beschikbaar.</p>
+<p><strong>Let op:</strong> De logs worden alleen opgeschoond wanneer je het paneel ‘Bezoekerslogs’ bekijkt; anders blijven ze in grootte groeien.</p>
+        ]]></item>
+        <item id="file_base_path" title="Pad naar bestandsmap"><![CDATA[
+<h2>Pad naar bestandsmap</h2>
+<p>Dit stelt het <strong>absolute pad</strong> in van de map waar uploads van bestanden permanent worden opgeslagen. PHP moet schrijfrechten op deze map hebben.</p>
+<p><strong>Let op:</strong> Overweeg om deze map buiten de openbaar toegankelijke docroot van je website te plaatsen, voor extra veiligheid.</p>
+        ]]></item>
+        <item id="file_download_header" title="Header voor bestandsdownload"><![CDATA[
+<h2>Header voor bestandsdownload</h2>
+<p>Hiermee kun je bepalen hoe bestandsdownloads worden afgehandeld.</p>
+<p>Normaal worden alle downloads als bijlage behandeld en gedownload (afhankelijk van hoe je browser dit bestandstype afhandelt). Als je aanwijzingen wilt geven hoe bepaalde of alle bestandstypen het liefst behandeld worden, kun je hier tagcode invullen. Een voorbeeld is het inline tonen van PDF‑bestanden die je aan de Textpattern‑categorie 'inline-pdf' hebt toegevoegd, in plaats van ze te downloaden:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maximale bestandsgrootte van uploads (in bytes)"><![CDATA[
+<h2>Maximale bestandsgrootte van uploads (in bytes)</h2>
+<p>Je kunt de maximale grootte (in bytes) voor bestandsuploads beperken. Let op dat deze waarde ook wordt beperkt door de configuratie van PHP. Als Textpattern detecteert dat je PHP‑configuratie een lagere uploadlimiet oplegt, wordt de waarde automatisch naar beneden bijgesteld. Als je via de browser grotere bestanden wilt kunnen uploaden, neem dan contact op met je host (de relevante waarden in <code>php.ini</code> zijn <code>post_max_size</code>, <code>upload_max_filesize</code> en <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Tijdzone"><![CDATA[
+<h2>Tijdzone</h2>
+<p>Selecteer je tijdzone om datums in jouw lokale tijd weer te geven.</p>
+        ]]></item>
+        <item id="img_dir" title="Afbeeldingenmap"><![CDATA[
+<h2>Afbeeldingenmap</h2>
+<p>Als je de naam van je afbeeldingenmap wilt aanpassen, kun je dat hier doen. Je moet de map eerst aanmaken in de root van je Textpattern‑installatie en ervoor zorgen dat PHP schrijfrechten op de map heeft.</p>
+<p>Dit pad is altijd een <strong>relatief pad</strong> (ten opzichte van de map van je Textpattern‑root).</p>
+<p>De standaardwaarde is <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="E‑mailadres opnemen in Atom‑feeds?"><![CDATA[
+<h2>E‑mailadres opnemen in Atom‑feeds?</h2>
+<p>Hiermee kun je het e‑mailadres van de auteur (zoals ingesteld in zijn of haar gebruikersaccount) van een artikel opnemen in het onderdeel <code>author</code> van je Atom‑feeds.</p>
+        ]]></item>
+        <item id="is_dst" title="Zomertijd ingeschakeld?"><![CDATA[
+<h2>Zomertijd ingeschakeld?</h2>
+<p>Of op dit moment zomertijd (DST, Daylight Saving Time) geldt voor jouw tijdzone.</p>
+        ]]></item>
+        <item id="logging" title="Loggen"><![CDATA[
+<h2>Loggen</h2>
+<p>Je kunt het niveau kiezen waarop Textpattern bezoekerslogboeken bijhoudt:</p>
+<ul>
+    <li><strong>Alle hits:</strong> Textpattern logt alle paginaweergaven op je site</li>
+    <li><strong>Alleen verwijzers:</strong> Textpattern logt alleen bezoeken die vanaf andere sites zijn doorverwezen</li>
+    <li><strong>Geen:</strong> Textpattern logt geen enkele paginaweergave</li>
+</ul>
+<p>Vanaf Textpattern 4.7.0 verzamelt of bewaart Textpattern geen IP‑adressen van bezoekers. Als je buiten Textpattern IP‑adressen verzamelt of bewaart, neem dan passende maatregelen om de gegevens op te slaan en/of te gebruiken in overeenstemming met toepasselijke wetgeving, zoals de <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">AVG/GDPR <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>, en zorg voor sterke beveiliging in alle onderdelen van je server en Textpattern‑installatie om te voorkomen dat deze gegevens worden gecompromitteerd.</p>
+<p>Het wordt sterk aanbevolen om deze instelling op de standaardwaarde ‘Geen’ te laten staan, tenzij je deze informatie absoluut nodig hebt en bovendien je beoogde gebruik ervan publiekelijk vermeldt.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maximale URL‑lengte (in tekens)"><![CDATA[
+<h2>Maximale URL‑lengte (in tekens)</h2>
+<p>Dit voorkomt dat URL's die langer zijn dan de opgegeven lengte functioneren. Dit kan nuttig zijn voor schadebeperking en de beveiliging van de site.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Inline hulplinks aan admin‑zijde tonen"><![CDATA[
+<h2>Inline hulplinks aan admin‑zijde tonen</h2>
+<p>Als je inline hulplinks aan de admin‑zijde (Textpattern‑hulpopvensters) in het hele systeem wilt verbergen, zet je deze instelling op ‘Geen’.</p>
+        ]]></item>
+        <item id="never_display_email" title="E‑mailadres van reageerder verbergen?"><![CDATA[
+<h2>E‑mailadres van reageerder verbergen?</h2>
+<p>Deze instelling bepaalt of het e‑mailadres van een reageerder publiekelijk moet worden getoond.</p>
+<p>Het wordt aanbevolen om e‑mailadressen niet te tonen, uit respect voor je gebruikers, maar in sommige situaties kan het tonen van e‑mailadressen van reageerders wenselijk zijn.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="ISO‑8859‑1‑codering gebruiken in e‑mails (standaard is UTF‑8)?"><![CDATA[
+<h2>ISO‑8859‑1‑codering gebruiken in e‑mails (standaard is UTF‑8)?</h2>
+<p>Textpattern gebruikt standaard zo veel mogelijk UTF‑8‑codering, ook voor uitgaande e‑mails. Sommige oudere e‑mailclients (waaronder sommige versies van Microsoft Outlook) hebben echter geen volledige UTF‑8‑ondersteuning. Als je vreemde tekens in e‑mails tegenkomt, zet deze instelling dan aan om tekst vóór verzending naar ISO‑8859‑1 te converteren.</p>
+<p><strong>Let op:</strong> Als je een taal gebruikt waarvan de tekens niet in ISO‑8859‑1 kunnen worden weergegeven, helpt deze instelling helaas niet. Je kunt dan beter een e‑mailclient zoeken die UTF‑8 (of Unicode) ondersteunt.</p>
+        ]]></item>
+        <item id="override_form_types" title="Formuliertypen overschrijven"><![CDATA[
+<h2>Formuliertypen overschrijven</h2>
+<p>Kies welke formulier‑typen hun templates beschikbaar hebben in het paneel Schrijven als override‑formulieren.</p>
+        ]]></item>
+        <item id="permlink_format" title="URL‑patroon voor permalink‑titel"><![CDATA[
+<h2>URL‑patroon voor permalink‑titel</h2>
+<p>Dit bepaalt op welke manier artikel‑URL's worden opgebouwd en toegewezen wanneer een niet‑rommelige modus wordt gebruikt.</p>
+<p>Wanneer een artikel wordt gepubliceerd, wordt de URL gegenereerd op basis van de artikeltitel, tenzij er een specifieke URL is opgegeven in het veld Alleen‑URL‑titel.</p>
+<p>Neem het volgende voorbeeld van een artikeltitel: <em>Ann and Bob eat cake</em></p>
+<p>Als de optie URL‑patroon voor permalink‑titel is ingesteld op ‘Met koppeltekens (titel‑zoals‑deze)’, zou de URL voor het artikel zijn:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Als de optie URL‑patroon voor permalink‑titel is ingesteld op ‘Met hoofdletters (TitleLikeThis)’, zou de URL voor het artikel zijn:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="URL‑patroon voor artikel"><![CDATA[
+<h2>URL‑patroon voor artikel</h2>
+<p>Dit bepaalt op welke manier afzonderlijke artikelen worden benaderd via de URL die wordt weergegeven met de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>.</p>
+<p>De modus ‘?=messy’ is het meest compatibel – die werkt met weinig tot geen configuratie – maar het minst gunstig voor de leesbaarheid van URL's en zoekmachine‑optimalisatie (SEO). In deze modus zouden URL's voor artikelen op je site er ongeveer zo uitzien:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Alle andere modi vereisen URL‑rewritefunctionaliteit op de webserver (bijv. Apache <code>mod_rewrite</code> of NGINX‑rewrite‑regels in het <code>server</code>-blok). Als je server geen URL‑rewritefunctionaliteit ondersteunt, neem dan contact op met je webhost of gebruik de hierboven beschreven modus ‘?=messy’.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Pad naar plugincache"><![CDATA[
+<h2>Pad naar plugincache</h2>
+<p>Deze instelling is voornamelijk bedoeld voor plugindevelopers. Wanneer je hier een pad opgeeft, kun je het bronbestand van een plugin (niet gecompileerd) in deze map plaatsen en Textpattern laadt het automatisch. Zo kun je de plugin eenvoudig aanpassen en het effect direct zien zonder de plugin steeds opnieuw te hoeven installeren/activeren. <strong>Let wel</strong> dat bij deze methode een kapotte plugin (die niet compileert) ook Textpattern zelf kan breken!</p>
+<p>Het wordt aanbevolen om plugins op een productie‑site via het standaardpaneel ‘Plugins’ te laden en niet via de plugincachemap.</p>
+<p><strong>Let op:</strong> Geef niet dezelfde map op voor zowel ‘tijdelijk’ als ‘plugincache’, omdat dit problemen veroorzaakt (Textpattern zou dan proberen de inhoud van tijdelijke logbestanden als plugins uit te voeren).</p>
+        ]]></item>
+        <item id="production_status" title="Productiestatus"><![CDATA[
+<h2>Productiestatus</h2>
+<p>Een Textpattern‑site heeft een van de volgende drie modi:</p>
+<ol>
+    <li>‘Debuggen’</li>
+    <li>‘Testen’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Debugmodus</h3>
+<p>Alle PHP‑fouten op je live‑site worden weergegeven, evenals waarschuwingen over niet‑goed functionerende code en plugins. Daarnaast is de volgende informatie zichtbaar wanneer je de HTML‑bron van live‑pagina's bekijkt:</p>
+<ul>
+    <li>de tijd die de server nodig had om de pagina op te bouwen (‘Runtime’)</li>
+    <li>het aantal uitgevoerde MySQL‑queries</li>
+    <li>het geschatte piekgeheugengebruik</li>
+    <li>alle Textpattern‑tags die zijn tegengekomen bij het opbouwen van de pagina (ook wel een tagtrace genoemd)</li>
+</ul>
+<h3>Testmodus</h3>
+<p>Alle PHP‑fouten op je live‑site worden weergegeven, evenals waarschuwingen over niet‑goed functionerende code en plugins. De volgende informatie is zichtbaar wanneer je de HTML‑bron van live‑pagina's bekijkt:</p>
+<ul>
+    <li>de tijd die de server nodig had om de pagina op te bouwen (‘Runtime’)</li>
+    <li>het aantal uitgevoerde MySQL‑queries</li>
+    <li>het geschatte piekgeheugengebruik</li>
+</ul>
+<h3>Livemodus</h3>
+<p>Er wordt geen foutrapportage of diagnostische informatie naar de pagina gestuurd. In het algemeen is Livemodus de beste keuze, omdat dit de beste gebruikerservaring biedt en de server het minst belast.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Thema voor voorkant"><![CDATA[
+<h2>Thema voor voorkant</h2>
+<p>Het standaardthema voor de voorkant dat wordt gebruikt wanneer iemand je publieke website bezoekt. Met Textpattern wordt een vooraf geïnstalleerd standaardthema meegeleverd, plus de optie om zonder thema te beginnen. Je kunt ook themapakketten toevoegen aan de map <code>textpattern/themes</code> om ze beschikbaar te maken.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Verlopen artikelen publiceren?"><![CDATA[
+<h2>Verlopen artikelen publiceren?</h2>
+<p>Als dit op ‘Ja’ staat, blijven verlopen artikelen op je site zichtbaar nadat hun verloopdatum is verstreken. Je kunt de tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> gebruiken om alternatieve inhoud of markup te tonen voor verlopen artikelen.</p>
+<p>Als dit op ‘Nee’ staat, worden verlopen artikelen van de publieke site verwijderd en geven ze in plaats daarvan de HTTP‑status "410 Gone" terug. De standaardinstelling is ‘Nee’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Aanmeldgegevens vanaf dit e‑mailadres verzenden"><![CDATA[
+<h2>Aanmeldgegevens vanaf dit e‑mailadres verzenden</h2>
+<p>Geef een e‑mailadres op dat wordt gebruikt als het ‘Van:’-adres voor berichten met aanmeldinformatie voor nieuwe gebruikers.</p>
+<p>Als deze voorkeur leeg wordt gelaten of een ongeldig e‑mailadres bevat, gebruikt Textpattern in plaats daarvan de naam en het adres van de momenteel aangemelde gebruiker.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Hoeveel artikelen moeten in feeds worden opgenomen?"><![CDATA[
+<h2>Hoeveel artikelen moeten in feeds worden opgenomen?</h2>
+<p>Dit is het maximale aantal actuele artikelen dat per keer wordt gesyndiceerd, in RSS‑ en Atom‑formaat.</p>
+<p>Een lage waarde, zoals <code>5</code> tot <code>15</code>, wordt aanbevolen.</p>
+        ]]></item>
+        <item id="secondpass" title="Aantal extra parserrondes"><![CDATA[
+<h2>Aantal extra parserrondes</h2>
+<p>De Textpattern‑tagparser vervangt je tags normaal in één ronde over de paginatemplate door inhoud uit de database. In sommige gevallen is dat niet voldoende, bijvoorbeeld:</p>
+<ul>
+    <li>bij het gebruik van plugins met lage laadvolgorde als tagattributen</li>
+    <li>bij codereeksen binnen <code>&lt;txp:php&gt;</code>-tags</li>
+    <li>bij het overslaan van paginagebieden eerder op de pagina, zodat die inhoud kunnen krijgen die wordt afgeleid van een later verwerkte tag</li>
+</ul>
+<p>Om redenen van achterwaartse compatibiliteit voert Textpattern traditioneel één extra ronde (secondpass) uit, vandaar de standaardwaarde <code>1</code> voor deze voorkeur. Meer rondes vergroten echter de kans dat ongewenste tags toch worden verwerkt. Recente verbeteringen in de tagparser hebben de noodzaak van deze tweede ronde verminderd. Tenzij je de tweede ronde dus om een specifieke reden nodig hebt, verlaag deze waarde bij voorkeur naar <code>0</code> om je site veiliger te maken.</p>
+<p>Als je daarna niet‑verwerkte tags op je website ziet (en er geen andere tagfouten in Test‑/Debugmodus worden getoond, bijvoorbeeld door niet‑matchende tagparen), neem dan contact met ons op met je paginatemplate/code/pluginvoorbeeld. We proberen de noodzaak van extra parserpasses weg te nemen, en die informatie helpt ons daarbij.</p>
+        ]]></item>
+        <item id="send_lastmod" title="&quot;Last-Modified&quot;‑header verzenden?"><![CDATA[
+<h2>"Last-Modified"‑header verzenden?</h2>
+<p>Als dit is ingesteld, leest Textpattern de HTTP‑header <code>If-Modified-Since</code> van een bezoeker (als die bestaat) en vergelijkt deze met de laatste site‑update. Als er sinds het laatste bezoek niets is veranderd (dus als het tijdstempel dat de browser verstuurt gelijk is aan de tijd van de laatste site‑update), wordt een header teruggestuurd die de browser van de bezoeker instrueert om de gecachte versie van de pagina te gebruiken.</p>
+<p>Dit kan het bandbreedtegebruik, de laadtijd van pagina's en de serverbelasting verminderen.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Aantal reacties in feeds tonen?"><![CDATA[
+<h2>Aantal reacties in feeds tonen?</h2>
+<p>Als dit op ‘Ja’ staat, wordt het aantal reacties achter de artikeltitels in RSS‑/Atom‑feeds geplaatst.</p>
+        ]]></item>
+        <item id="site_slogan" title="Siteslogan"><![CDATA[
+<h2>Siteslogan</h2>
+<p>De <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">siteslogan <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een samenvatting of beschrijving van je site. Deze wordt gebruikt als omschrijving van je site waar dat nodig is, bijvoorbeeld in je RSS‑/Atom‑feeds, en kan naar eigen inzicht op verschillende plaatsen in je site worden weergegeven.</p>
+<p><strong>Let op:</strong> De siteslogan is optioneel, maar kan vereist zijn voor een geldige RSS‑ of Atom‑feed.</p>
+        ]]></item>
+        <item id="sitename" title="Sitenaam"><![CDATA[
+<h2>Sitenaam</h2>
+<p>De <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">naam of titel van je site <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a>. Deze verschijnt in de titelbalk van de browser of feedreader van een bezoeker en naar eigen inzicht op verschillende andere plaatsen op je site.</p>
+        ]]></item>
+        <item id="siteurl" title="Site‑URL"><![CDATA[
+<h2>Site‑URL</h2>
+<p>Dit is het adres van je Textpattern‑site, bijvoorbeeld <code>www.example.com</code>.</p>
+<p><strong>Let op:</strong> <code>http://</code>, <code>https://</code> of een afsluitende slash <code>/</code> zijn niet nodig.</p>
+        ]]></item>
+        <item id="skin_dir" title="Themamap"><![CDATA[
+<h2>Themamap</h2>
+<p>Als je de naam van de map waarin themabestanden voor de voorkant permanent worden opgeslagen wilt aanpassen, kun je dat hier doen. Je moet de map eerst aanmaken in de root van je Textpattern‑installatie en ervoor zorgen dat PHP schrijfrechten op de map heeft.</p>
+<p>Dit pad is altijd een <strong>relatief pad</strong> (ten opzichte van de map van je Textpattern‑root).</p>
+<p>De standaardwaarde is <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP‑envelop‑afzenderadres"><![CDATA[
+<h2>SMTP‑envelop‑afzenderadres</h2>
+<p>Laat deze voorkeur leeg, tenzij je problemen ondervindt bij het versturen van e‑mail met Textpattern (als er helemaal geen e‑mail wordt verzonden). Als dat gebeurt, kun je hier elk geldig e‑mailadres opgeven, bij voorkeur met hetzelfde domein als de website waarop Textpattern is geïnstalleerd (dus als je website <code>https://example.com</code> is, kun je bijvoorbeeld <code>jij@example.com</code> gebruiken).</p>
+<p>Voor wie interesse heeft in de technische details:</p>
+<ul>
+    <li>Op UNIX‑achtige/macOS‑servers wordt het ingevoerde e‑mailadres gebruikt als vierde parameter (met voorvoegsel "-f") voor de PHP‑functie <code>mail()</code></li>
+    <li>Op Windows‑servers wordt het ingevoerde e‑mailadres gebruikt om de instelling <code>sendmail_from</code> in php.ini in te stellen (of te overschrijven)</li>
+</ul>
+<p>Dit zorgt ervoor dat het SMTP‑envelop‑afzenderadres (dat niet per se hetzelfde is als de "From:"‑header die je normaal in e‑mails ziet) wordt ingesteld op het hier ingevoerde e‑mailadres, wat op sommige webservers een vereiste is om e‑mails te kunnen verzenden.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP‑host"><![CDATA[
+<h2>SMTP‑host</h2>
+<p>Om de afleveringskans van berichten te verbeteren en e‑mail via een externe dienst (zoals SendGrid, AWS SES, Mailchimp, Mailgun, enz.) te kunnen laten lopen, geef je hier de SMTP‑server op. Raadpleeg de documentatie van je SMTP‑provider voor deze waarde.</p>
+<p>Deze waarde kan ook worden opgegeven door een constante <code>SMTP_HOST</code> in <code>config.php</code> te definiëren; in dat geval is de waarde in het voorkeurenpaneel grijs weergegeven.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP‑wachtwoord"><![CDATA[
+<h2>SMTP‑wachtwoord</h2>
+<p>Als je SMTP‑verbinding een wachtwoord vereist voor de opgegeven gebruikersnaam, vul dat dan hier in. Raadpleeg de documentatie van je provider voor details.</p>
+<p>Let op: hoewel het wachtwoord hier niet wordt getoond, wordt het <em>wel</em> in platte tekst opgeslagen in de voorkeurentabel van de database. Als je de veiligheid wilt verhogen, kun je in plaats daarvan een constante <code>SMTP_PASS</code> in je <code>config.php</code> definiëren.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP‑poort"><![CDATA[
+<h2>SMTP‑poort</h2>
+<p>Als je een SMTP‑host hebt opgegeven, moet je een poort opgeven om SMTP‑routing in te schakelen. Veelgebruikte poorten zijn:</p>
+<ul>
+    <li>25 – voor onbeveiligde e‑mail</li>
+    <li>465 – legacy (niet‑officieel) voor beveiligde e‑mail</li>
+    <li>587 – standaard (aanbevolen) voor beveiligde TLS‑e‑mail</li>
+</ul>
+<p>Je gekozen SMTP‑provider kan een andere poort gebruiken; raadpleeg de documentatie.</p>
+<p>Deze waarde kan worden opgegeven door een constante <code>SMTP_PORT</code> in <code>config.php</code> te definiëren; in dat geval is de waarde in het voorkeurenpaneel grijs weergegeven.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP‑beveiligingsmethode"><![CDATA[
+<h2>SMTP‑beveiligingsmethode</h2>
+<p>Kies het mechanisme dat je SMTP‑provider gebruikt als beveiligingsprotocol voor e‑mail. Raadpleeg de documentatie van je provider voor details.</p>
+<p>Deze waarde kan worden opgegeven door een constante <code>SMTP_SECTYPE</code> in <code>config.php</code> te definiëren; in dat geval is de waarde in het voorkeurenpaneel grijs weergegeven.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP‑gebruikersnaam"><![CDATA[
+<h2>SMTP‑gebruikersnaam</h2>
+<p>Als je SMTP‑verbinding een gebruikers‑/inlognaam vereist, vul die dan hier in. Raadpleeg de documentatie van de provider voor details.</p>
+<p>Deze waarde kan worden opgegeven door een constante <code>SMTP_USER</code> in <code>config.php</code> te definiëren; in dat geval is de waarde in het voorkeurenpaneel grijs weergegeven.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spam‑blocklists (gescheiden door komma's)"><![CDATA[
+<h2>Spam‑blocklists (gescheiden door komma's)</h2>
+<p>De hier opgegeven aanbieders van <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklists <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> worden geraadpleegd wanneer een reactie op je blog wordt geplaatst; het IP‑adres van de reageerder wordt dan gecontroleerd. Als het IP‑adres in een blocklist voorkomt, betekent dit dat er in het verleden een of meer spamrapporten over dit adres zijn ingediend en wordt de reactie geweigerd. Ongeacht de uitkomst van de controle wordt het IP‑adres van de reageerder niet door Textpattern opgeslagen.</p>
+<p>Je kunt hier een lijst met domeinnamen invullen, gescheiden door komma's. Let op: het is je eigen verantwoordelijkheid om ervoor te zorgen dat de blocklists geschikt zijn voor het beoogde doel.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Alleen artikeluittreksel syndikeren?"><![CDATA[
+<h2><strong>Alleen</strong> artikeluittreksel syndikeren?</h2>
+<p>Als dit op ‘Nee’ staat, bevatten feeditems de volledige artikeltekst.</p>
+<p>Als dit op ‘Ja’ staat, bevatten feeditems het artikeluittreksel in plaats van de artikeltekst, indien dat beschikbaar is.</p>
+        ]]></item>
+        <item id="tempdir" title="Pad naar tijdelijke map"><![CDATA[
+<h2>Pad naar tijdelijke map</h2>
+<p>Stelt een <strong>absoluut pad</strong> in naar een tijdelijke map (vaak ‘tmp’ of ‘temp’ genoemd). PHP moet schrijfrechten op deze map hebben. De map wordt gebruikt voor tijdelijke bestanden, zoals uploads (plugins, bestanden of afbeeldingen).</p>
+<p><strong>Let op:</strong></p>
+<ul>
+    <li>Geef niet dezelfde map op voor zowel ‘tijdelijk’ als ‘plugincache’, omdat dit problemen veroorzaakt (Textpattern zou dan proberen de inhoud van tijdelijke logbestanden als plugins uit te voeren).</li>
+    <li>Overweeg om deze map buiten de openbaar toegankelijke docroot van je website te plaatsen, voor extra veiligheid.</li>
+</ul>
+        ]]></item>
+        <item id="theme_name" title="Thema voor beheergedeelte"><![CDATA[
+<h2>Thema voor beheergedeelte</h2>
+<p>Het standaardthema voor de admin‑zijde dat wordt gebruikt wanneer iemand zich bij Textpattern aanmeldt. Met Textpattern worden enkele vooraf geïnstalleerde admin‑thema's meegeleverd en je kunt ook eigen themapakketten toevoegen aan de map <code>textpattern/admin-themes</code> om ze beschikbaar te maken.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Achterwaartse slash aan URL's toevoegen"><![CDATA[
+<h2>Achterwaartse slash aan URL's toevoegen</h2>
+<p>Of Textpattern automatisch een afsluitende slash aan zelf gegenereerde URL's toevoegt. De opties zijn:</p>
+<ul>
+    <li><strong>Nee</strong> – nooit</li>
+    <li><strong>Lijst</strong> – alleen op op lijsten gebaseerde landingspagina's (dus niet bij het bekijken van afzonderlijke artikelen)</li>
+    <li><strong>Ja</strong> – altijd</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP‑functies ingeschakeld in txp:evaluate"><![CDATA[
+<h2>PHP‑functies ingeschakeld in txp:evaluate</h2>
+<p>Dit is een door komma's gescheiden lijst met items van de vorm <code>functie</code> of <code>alias=functie</code>, bijv. <code>md5</code>, <code>replace=str_replace</code>. Items in deze lijst kunnen worden gebruikt in het attribuut <code>query</code> van de tag <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>functie</code> moet een scalair waarde teruggeven (<strong>geen</strong> array/object).</p>
+        ]]></item>
+        <item id="use_comments" title="Reacties accepteren?"><![CDATA[
+<h2>Reacties accepteren?</h2>
+<p>Dit bepaalt of de reactiefunctionaliteit van Textpattern moet zijn in‑ of uitgeschakeld.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="E‑mailadres gebruiken om feed‑ID's te maken (standaard is site‑URL)?"><![CDATA[
+<h2>E‑mailadres gebruiken om feed‑ID's te maken (standaard is site‑URL)?</h2>
+<p>Items in een Atom‑feed hebben een unieke ID nodig.</p>
+<p>Om ID's te genereren die uniek zijn voor je site, kun je in Textpattern kiezen of je daarvoor een e‑mailadres of je domeinnaam wilt gebruiken. Het e‑mailadres is dat wat bij het aanmaken van de site als eerste is gebruikt. Tenzij je je domeinnaam in de toekomst waarschijnlijk gaat wijzigen, is het waarschijnlijk veilig om dit op ‘Nee’ te zetten.</p>
+        ]]></item>
+        <item id="use_plugins" title="Plugins gebruiken?"><![CDATA[
+<h2>Plugins gebruiken?</h2>
+<p>Hiermee kun je alle ondersteuning voor Textpattern‑plugins uitschakelen. Dit is handig als je fouten op je site debugt en wilt controleren of een of meer plugins daarbij een rol spelen.</p>
+        ]]></item>
         <item id="use_textile" title="Standaard tekstopmaak"><![CDATA[
 <h2>Standaard tekstopmaak</h2>
-<p>De door u gekozen tekst vormgeving wordt standaard gebruikt voor de samenvatting en body tekstopmaak op de 'Schrijven' tab. Je kunt ervoor kiezen om volledige Textile vormgevingstags toe te staan, alleen lijnen om te zetten in HTML alinea-markeringen of  de tekst helemaal niet aan te passen.</p>
-<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een hulpmiddel om de omzetting van platte tekst naar HTML te vereenvoudigen. Indien ingeschakeld, zal Textile de tekst van artikelen verwerken en naar correcte HTML omzetten.</p>
-<p>Textile biedt ook een krachtige maar eenvoudig te leren set code's waarmee tekst kan worden opgemaakt. Je kunt er structuren zoals lijsten, kop- en blokalinea's mee maken en links en afbeeldingen invoegen.</p>
+<p>De hier gekozen tekstopmaak wordt de standaard voor opmaak van uittreksel en hoofdtekst op het paneel ‘Schrijven’. Je kunt kiezen voor volledige Textile‑verwerking, het omzetten van regeleinden naar HTML‑paragrafen, of voor het helemaal niet omzetten van tekst.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> is een hulpmiddel dat bedoeld is om de omzetting van platte tekst naar HTML te vereenvoudigen. Indien ingeschakeld verwerkt Textile de hoofdtekst van artikelen en levert correcte, structureel geldige HTML.</p>
+<p>Textile biedt ook een krachtige maar eenvoudig te leren set commando's om tekst op te maken, structuren zoals lijsten, koppen en blokcitaten te definiëren en links en afbeeldingen in te voegen.</p>
         ]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title="Introductie"><![CDATA[]]></item>
-        <item id="section_default" title="Standaardsectie voor nieuwe artikelen"><![CDATA[]]></item>
-        <item id="section_description" title="Beschrijving"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    <group id="section" title="Sectiespaneel">
+        <item id="section_category" title="Introductie"><![CDATA[
+<h2>Inleiding</h2>
+<p>Secties in Textpattern kun je het best zien als vergelijkbaar met secties in een krant: ze behoren allemaal tot dezelfde uitgave, maar kunnen een andere lay‑out of een andere stijl artikelen hebben, enzovoort.</p>
+<p>Voor de meeste websites hoeven slechts een minimumaantal secties te worden aangemaakt.</p>
+<h3>Een waarschijnlijk scenario voor een website met drie secties:</h3>
+<ol>
+    <li><strong>Archief:</strong> de ‘sectie’ waar alle artikelen die op de voorpagina verschijnen toe behoren. Wanneer een lezer op de permanente link van een artikel klikt, wordt het weergegeven in de paginalay‑out die aan deze ‘sectie’ is toegewezen. Om naar een paginalijst met de meest recente artikelen in de sectie "Archive" te gaan, zou de URL <code>https://example.com/archive/</code> zijn.</li>
+    <li><strong>Over:</strong> een ‘Over deze site’-pagina, die verschilt van de voorpagina en de sectie "Archive" doordat die statischer is, mogelijk een andere lay‑out heeft en waarschijnlijk slechts één artikel bevat. De sectie ‘About’ zou bereikbaar zijn op <code>https://example.com/about/</code>.</li>
+    <li><strong>Foto's:</strong> een ‘sectie’ met een afwijkende lay‑out (en mogelijk andere CSS) die foto's in plaats van artikelen weergeeft.</li>
+</ol>
+<p>Merk op dat er altijd een speciale verborgen sectie met de naam default bestaat. Deze sectie default gebruikt de pagina met de naam default en de stijl met de naam default en vormt zo de voorpagina van je site.</p>
+        ]]></item>
+        <item id="section_default" title="Standaardsectie voor nieuwe artikelen"><![CDATA[
+<h2>Standaard publicatiesectie</h2>
+<p>Deze optie bepaalt welke sectie vooraf is geselecteerd in het sectiemenu wanneer je een nieuw artikel maakt op het paneel ‘Schrijven’.</p>
+<p>Als het merendeel van je artikelen uiteindelijk tot een bepaalde sectie behoort, selecteer die dan hier in de lijst. Wijzigingen worden direct doorgevoerd.</p>
+<p>Je kunt dit per artikel overschrijven op het paneel ‘Schrijven’ door in het deel ‘Sorteren en weergeven’ een andere sectie te selecteren.</p>
+        ]]></item>
+        <item id="section_description" title="Beschrijving"><![CDATA[
+<h2>Beschrijving</h2>
+<p>De sectiebeschrijving is een optioneel onderdeel dat zoekmachines en webcrawlers kan helpen om inhoud beter te identificeren en te sorteren.</p>
+<p>De beschrijving is beperkt tot maximaal 255 tekens. Let op dat sommige zoekmachines om praktische redenen een limiet stellen aan de lengte van de <code>meta description</code> van een pagina voor weergave in zoekresultatenpagina's (SERP's); deze limiet kan lager liggen dan de limiet van 255 tekens in Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Sectieartikelen verschijnen op de voorpagina?"><![CDATA[
+<h2>Sectieartikelen verschijnen op de voorpagina?</h2>
+<p>De artikelen in sommige secties, zoals die welke meer op ‘statische’ webpagina's lijken, kunnen misplaatst aanvoelen in de tijdsgevoelige stroom van je voorpagina.</p>
+<p>Door dit op ‘Nee’ te zetten, voorkom je dat artikelen die aan deze sectie zijn toegewezen op de voorpagina verschijnen.</p>
+        ]]></item>
+        <item id="section_searchable" title="Deze sectie opnemen in sitesearch?"><![CDATA[
+<h2>Deze sectie opnemen in sitesearch?</h2>
+<p>Dit bepaalt of artikelen die tot deze sectie behoren onderdeel moeten zijn van de zoekresultaten op de hele site.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Artikelen in deze sectie opnemen in feed?"><![CDATA[
+<h2>Artikelen in deze sectie syndikeren?</h2>
+<p>Bepaalt of artikelen in deze sectie in de RSS- en Atom-feeds van de site verschijnen.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Gebruikt stijl"><![CDATA[
+<h2>Gebruikt stijl</h2>
+<p>Als je het standaardstijlblad voor een bepaalde sectie wilt overschrijven, kun je dat hier instellen.</p>
+<p>Dit is alleen relevant voor stijlen die in het Textpattern‑paneel ‘Stijlen’ worden beheerd; als je je CSS buiten Textpattern host (wat ten zeerste wordt aanbevolen), heeft deze optie geen effect.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Gebruikt pagina"><![CDATA[
+<h2>Gebruikt pagina</h2>
+<p>In Textpattern zijn secties gekoppeld aan paginatemplates.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Gebruikt thema"><![CDATA[
+<h2>Gebruikt thema</h2>
+<p>Als je het gebruikte thema voor een bepaalde sectie wilt wijzigen, kun je dat hier doen, via de lijst van momenteel geïnstalleerde thema's.</p>
+        ]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+    <group id="setup" title="Installatiepaneel">
+        <item id="setup_admin_url" title="Admin‑subdomein"><![CDATA[
+<h2>Admin‑subdomein</h2>
+<p>Het subdomein dat je wilt gebruiken om toegang te krijgen tot de Textpattern‑beheersinterface (bijv. <code>admin.example.com</code>).</p>
+<p>Zie <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi‑site‑installatie</a> voor meer details.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookiedomein"><![CDATA[
+<h2>Cookiedomein</h2>
+<p>Het (sub)domein dat je wilt gebruiken voor Textpattern‑cookie(s).</p>
+<p>Zie <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi‑site‑installatie</a> voor meer details.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Gebruikerslogin"><![CDATA[
+<h2>Gebruikerslogin</h2>
+<p>De inlognaam van het beheerdersaccount (‘uitgever’) dat je gaat gebruiken voor het beheer van je site.</p>
+<p>Hoewel er geen beperkingen gelden voor de naam, kun je het beste ingewikkelde tekenreeksen en makkelijk te raden gebruikersnamen (zoals <code>admin</code>, <code>administrator</code> enz.) vermijden.</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Gebruikerswachtwoord"><![CDATA[
+<h2>Gebruikerswachtwoord</h2>
+<p>Omdat dit account het hoogste toegangsniveau in Textpattern heeft, kies je het beste een zeer sterk wachtwoord of, bij voorkeur, een wachtwoordzin.</p>
+<h3>Tips</h3>
+<ul>
+    <li>Gebruik een mix van hoofd‑ en kleine letters</li>
+    <li>Gebruik cijfers</li>
+    <li>Gebruik symbolen</li>
+    <li>Maak het wachtwoord minimaal acht tekens lang</li>
+    <li><strong>Vermijd</strong> persoonlijke informatie (data, namen, plaatsen, familieleden, huisdieren, enz.)</li>
+    <li><strong>Vermijd</strong> enkelvoudige of herhaalde woorden uit woordenboeken, ongeacht spelling, taal of hoofdlettergebruik</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tabelvoorvoegsel"><![CDATA[
+<h2>Tabelvoorvoegsel</h2>
+    <p>Je hoeft alleen een tabelvoorvoegsel te gebruiken als je meerdere Textpattern‑installaties in één database nodig hebt. Elke Textpattern‑installatie heeft een uniek voorvoegsel nodig.</p>
+    <p>Het voorvoegsel moet voldoen aan de volgende regels:</p>
+<ul>
+    <li><strong>1e teken:</strong> moet a‑z, A‑Z of een underscore zijn</li>
+    <li><strong>Volgende tekens:</strong> mogen alleen a‑z, A‑Z, 0‑9 of underscore zijn</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title=""><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title=""><![CDATA[]]></item>
-        <item id="skin_version" title=""><![CDATA[]]></item>
+    <group id="skin" title="Themepaneel">
+        <item id="skin_author" title="Themaauteur"><![CDATA[
+<h2>Themaauteur</h2>
+<p>De auteur(s) van dit thema (optioneel).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Themawebsite"><![CDATA[
+<h2>Themawebsite</h2>
+<p>De URL waar uitgebreide informatie en/of de nieuwste versies van dit thema te vinden zijn (optioneel).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Themtemplates ook van schijf verwijderen"><![CDATA[
+<h2>Thematemplates ook van schijf verwijderen</h2>
+<p>Indien aangevinkt worden alle templatebestanden in de geselecteerde thema('s) permanent van schijf verwijderd. Thema‑mappen en hun submappen worden echter niet verwijderd als er nog andere bestanden (zoals JavaScript, afbeeldingen, ...) in staan.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Ongebruikte templates bij import uit database verwijderen"><![CDATA[
+<h2>Ongebruikte templates uit database verwijderen bij import</h2>
+<p>Indien aangevinkt wordt elk template in de geselecteerde thema('s) waarvoor geen overeenkomstig bestand op schijf bestaat, permanent uit de database verwijderd. Het resultaat is dat je databasetemplates na afloop zo veel mogelijk overeenkomen met wat er op schijf staat.</p>
+<p>Let op: als je templatebestanden hebt verwijderd die Textpattern nodig heeft, worden in de database lege versies voor je aangemaakt.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Ongebruikte templates bij export van schijf verwijderen"><![CDATA[
+<h2>Ongebruikte templates bij export van schijf verwijderen</h2>
+<p>Indien aangevinkt wordt elk templatebestand in de geselecteerde thema('s) waarvoor geen overeenkomstig item in de database bestaat, permanent verwijderd uit het themabestandssysteem. Het resultaat is dat je bestandssysteemtemplates na afloop exact weerspiegelen wat er in de database staat.</p>
+        ]]></item>
+        <item id="skin_description" title="Themabeschrijving"><![CDATA[
+<h2>Themabeschrijving</h2>
+<p>Je kunt een korte samenvatting geven van het ontwerp of de lay‑out van dit thema (optioneel).</p>
+<p>De themabeschrijving is beperkt tot maximaal 255 tekens.</p>
+        ]]></item>
+        <item id="skin_import" title="Thema importeren"><![CDATA[
+<h2>Thema van schijf importeren</h2>
+<p>Met dit formulier kun je een thema vanuit je themamap in de Textpattern‑database importeren.</p>
+<p>Een importeerbaar thema moet bestaan uit een leesbare hoofdmap met de themanaam als mapnaam, met daarin een leesbaar <code>manifest.json</code>-bestand in het verwachte formaat. De themamap moet ook pagina's, formulieren en stijlen bevatten in gelijknamige submappen.</p>
+<p>Hoewel pagina's en formulieren de extensie <code>.txp</code> moeten gebruiken, worden stijlen verwacht als <code>.css</code>-bestanden. Formulieren moeten bovendien per type gegroepeerd zijn in aparte mappen. Textpattern maakt bij import alle ontbrekende essentiële templates voor je aan.</p>
+<p>Zie de <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themadocumentatie <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> voor meer informatie over het maken, installeren en gebruiken van thema's binnen Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Themanaam"><![CDATA[
+<h2>Themanaam</h2>
+<p>De naam van een thema wordt gebruikt voor de mapnaam van het thema en andere technische doeleinden (vereist).</p>
+<p>De naam mag geen speciale tekens of spaties bevatten.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introductie tot thema's"><![CDATA[
+<h2>Introductie tot thema's</h2>
+<p>Een Textpattern‑thema is een verzameling pagina's, formulieren en stijlen. Thema's maken het mogelijk de onderdelen van je site logisch te groeperen voor eenvoudigere herkenning of om met anderen te delen. Het aanmaken of importeren van een thema en zijn onderdelen heeft <em>geen</em> effect op je bestaande site. Je kunt vrijelijk elk onderdeel bewerken of wijzigen dat niet aan een sectie van je site is gekoppeld, zonder dat dit invloed heeft op de site zelf.</p>
+<p>Om onderdelen in een thema te bewerken, ga je naar het paneel Pagina's, Formulieren of Stijlen en gebruik je de keuzelijst om het thema te selecteren waaraan je wilt werken. Het thema waaraan je werkt wordt in het hele beheergedeelte onthouden, zodat je snel en eenvoudig kunt schakelen tussen typen onderdelen. Dit wordt je <em>werkthema</em> genoemd.</p>
+<p>Raadpleeg de <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern gebruikersdocumentatie <span class="ui-icon ui-icon-extlink">(opent een externe link in een nieuw venster)</span></a> voor meer informatie.</p>
+        ]]></item>
+        <item id="skin_title" title="Thematitel"><![CDATA[
+<h2>Thematitel</h2>
+<p>De beschrijvende titel van een thema, gebruikt om het thema in de Textpattern‑panelen te herkennen.</p>
+<p>De titel mag speciale tekens en spaties bevatten.</p>
+        ]]></item>
+        <item id="skin_version" title="Themaversie"><![CDATA[
+<h2>Themaversie</h2>
+<p>Het versienummer van de geïnstalleerde versie van dit thema (optioneel).</p>
+        ]]></item>
     </group>
 </help>
 </resources>

@@ -1,0 +1,1203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ja">
+    <group id="admin" title="ユーザー パネル">
+        <item id="about_privileges" title="ロールについて"><![CDATA[
+<h2>ロールについて</h2>
+<h3>発行者 (Publisher)</h3>
+<ul>
+    <li>記事、コメント、リンクを管理できます</li>
+    <li>管理者設定「記事内で PHP を許可しますか？」が「はい」に設定されている場合、記事内で PHP を使用できます</li>
+    <li>画像とファイルを管理できます</li>
+    <li>セクションとカテゴリを管理できます</li>
+    <li>ページ、フォーム、スタイルを管理できます</li>
+    <li>診断情報を表示できます</li>
+    <li>サイト設定を管理できます</li>
+    <li>ユーザーを管理できます</li>
+    <li>訪問者ログを管理できます</li>
+    <li>プラグインを管理できます</li>
+    <li>データをインポートできます</li>
+</ul>
+<h3>管理編集者 (Managing Editor)</h3>
+<ul>
+    <li>記事、コメント、リンクを管理できます</li>
+    <li>管理者設定「記事内で PHP を許可しますか？」が「はい」に設定されている場合、記事内で PHP を使用できます</li>
+    <li>画像とファイルを管理できます</li>
+    <li>セクションとカテゴリを管理できます</li>
+    <li>ページ、フォーム、スタイルを管理できます</li>
+    <li>診断情報を表示できます</li>
+    <li>サイト設定を管理できます</li>
+    <li>ユーザーを閲覧できます</li>
+    <li>訪問者ログを管理できます</li>
+    <li>プラグインを管理できます</li>
+    <li>データをインポートできます</li>
+</ul>
+<h3>コピー編集者 (Copy Editor)</h3>
+<ul>
+    <li>次の制限付きで記事を管理できます。
+        <ul>
+            <li>他のユーザーに属する記事は削除できません</li>
+        </ul>
+    </li>
+    <li>コメントとリンクを管理できます</li>
+    <li>画像とファイルを管理できます</li>
+    <li>カテゴリを管理できます</li>
+    <li>ページとフォームを管理できます</li>
+    <li>ユーザーを閲覧できます</li>
+    <li>訪問者ログを管理できます</li>
+</ul>
+<h3>スタッフライター (Staff Writer)</h3>
+<ul>
+    <li>自分の記事を管理し、他のユーザーの記事を閲覧できます</li>
+    <li>画像とファイルを管理できます</li>
+</ul>
+<h3>フリーランサー (Freelancer)</h3>
+<ul>
+    <li>次のように制限された形で自分の記事を管理できます。
+        <ul>
+            <li>記事が公開されるまでしか修正できません</li>
+            <li>付与できるステータスは、<em>下書き</em>・非表示・保留のみです</li>
+        </ul>
+    </li>
+    <li>他のユーザーの記事を閲覧できます</li>
+</ul>
+<h3>デザイナー (Designer)</h3>
+<ul>
+    <li>次のように制限された形で自分の記事を管理できます。
+        <ul>
+            <li>記事が公開されるまでしか修正できません</li>
+            <li>付与できるステータスは、<em>下書き</em>・非表示・保留のみです</li>
+        </ul>
+    </li>
+    <li>他のユーザーの記事を閲覧できます</li>
+    <li>画像を管理できます</li>
+    <li>セクションを管理できます</li>
+    <li>ページ、フォーム、スタイルを管理できます</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="作者の作成"><![CDATA[
+<h2>新しい作者を追加</h2>
+<p>新しい作者には、歓迎メッセージとログイン手順がメールで送信されます。</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="書くパネル">
+        <item id="article_image" title="記事画像"><![CDATA[
+<h2>記事画像</h2>
+<p>この記事に画像を関連付けるには、ここに次のいずれかを入力します。</p>
+<ol>
+    <li>Textpattern の画像 ID を 1 つ以上、コンマ区切りで指定 (例: <code>12, 25, 18</code>)</li>
+    <li>画像への相対 URL を 1 つ以上、コンマ区切りで指定 (例: <code>/images/my_pic.jpg</code>)</li>
+    <li>完全修飾 URL を 1 つ以上、コンマ区切りで指定 (例: <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>最初の画像は、記事フォーム内に <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を配置することで表示できます。既定では、指定された画像に対する完全な HTML の <code>&lt;img&gt;</code> タグを出力します。</p>
+<p>ギャラリーを表示するには、<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使用できます。</p>
+        ]]></item>
+        <item id="body" title="本文"><![CDATA[
+<h2>本文</h2>
+<p>記事の主なコンテンツは、記事本文内に含まれます。</p>
+<p>Textpattern で公開用の記事を作成または準備する際、作者は記事の 3 つの表示モード (プレーンテキスト、HTML マークアップ (ブラウザが記事を描画するためのコード)、レンダリング済みプレビュー) を切り替えることができます。</p>
+        ]]></item>
+        <item id="description" title="概要"><![CDATA[
+<h2>概要</h2>
+<p>記事の概要は任意項目ですが、検索エンジンやクローラがコンテンツをより適切に識別・整理するのに役立ちます。</p>
+<p>記事の概要は最大 255 文字までに制限されています。実際の検索結果ページ (SERP) 上での表示の都合により、一部の検索エンジンでは <code>meta description</code> の文字数に上限を設けており、これは Textpattern の 255 文字制限より少ない場合があります。</p>
+<p>記事の概要は記事抜粋とは異なる点に注意してください。どちらも似たような内容を受け付けますが、記事の概要は主に検索エンジンやクローラ向けを想定しており、記事の抜粋は必要に応じて人間が読みやすい記事要約として適しています。</p>
+        ]]></item>
+        <item id="excerpt" title="抜粋"><![CDATA[
+<h2>抜粋</h2>
+<p>記事の抜粋は任意です。抜粋は、目次の一部として表示する記事の短い要約や、サイトの RSS / Atom フィードで本文の代わりに使用するテキストなど、さまざまな用途に利用できます。</p>
+        ]]></item>
+        <item id="expire_date" title="有効期限の日付"><![CDATA[
+<h2>有効期限の日付</h2>
+<p>記事が期限切れとみなされる日時です。時間は任意で、過去または未来の任意の時刻に設定できます。</p>
+<p>各ボックスは次の情報に対応します。</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時 (24 時間表記) : 分 : 秒</li>
+</ul>
+<p>指定した時刻になると (または過去の時刻が指定されている場合は直ちに)、記事は期限切れになります。</p>
+<p>期限切れ記事を表示するオプションが有効な場合、記事は引き続き表示されます。期限切れ記事を表示しないオプションの場合は、記事ページにアクセスした訪問者には、記事コンテンツの代わりに HTTP 410 エラーが返されます。</p>
+        ]]></item>
+        <item id="keywords" title="キーワード"><![CDATA[
+<h2>キーワード</h2>
+<p>キーワードは、カテゴリだけでは表現しきれない記事同士の関係性を、さらに詳細に定義するのに役立ちます。</p>
+<p>キーワードは、それぞれをコンマで区切った単語として入力する必要があります。</p>
+        ]]></item>
+        <item id="override_form" title="デフォルトフォームの上書き"><![CDATA[
+<h2>デフォルトフォームの上書き</h2>
+<p>記事は、既定で割り当てられているフォームとは異なるフォームを任意で使用できます。たとえば、記事本文を表示する代わりに <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使って記事の抜粋を表示したり、<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使って本文を表示したりできます。ここでは、そのようなフォームの上書きを設定できます。</p>
+        ]]></item>
+        <item id="publish_date" title="発行日"><![CDATA[
+<h2>発行日</h2>
+<p>記事またはファイルが公開された、もしくは直近で更新された日時です。公開の瞬間と同じ時刻にも設定できますし、過去または未来の任意の時刻に設定することもできます。</p>
+<p>各ボックスは次の情報に対応します。</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時 (24 時間表記) : 分 : 秒</li>
+</ul>
+<p>現在の時刻より新しいタイムスタンプ (つまり未来) が付いているアイテムは、その時刻になるまでフロント側や RSS / Atom フィードには表示されません。</p>
+        ]]></item>
+        <item id="status" title="状態"><![CDATA[
+<h2>状態</h2>
+<p>この Textpattern 記事の公開可視性ステータスを定義します。</p>
+<p>公開ステータスには次のいずれかを指定できます。</p>
+<ul>
+<li><strong>下書き</strong>: 作成途中とみなされ、Textpattern 管理画面の外部からは閲覧できません (つまりウェブサイト上にもフィードにも表示されません)。</li>
+<li><strong>非表示</strong>: 記事は Textpattern 管理画面の外部からは閲覧できません。削除したくはないがウェブサイトからは外したいコンテンツに便利です。</li>
+<li><strong>保留</strong>: 公開準備が整い承認待ちとみなされますが、Textpattern 管理画面の外部からは閲覧できません。</li>
+<li><strong>公開 (Live)</strong>: 通常は Textpattern 管理画面の外部から閲覧できます (つまりウェブサイト上で表示され、設定によってはフィードにも配信されます)。記事が公開状態で有効期限日が設定されている場合、期限を過ぎてもステータスは公開のままですが、期限切れ記事の公開が許可されている場合に限り管理画面の外部にも表示されます。</li>
+<li><strong>固定表示 (Sticky)</strong>: <strong>公開</strong>記事と同様にサイト訪問者から閲覧できますが、<code>article</code> または <code>article_custom</code> タグで <code>status</code> 属性に <code>sticky</code> を指定しない限り、記事一覧には表示され<strong>ません</strong>。</li>
+</ul>
+<p>注意: 公開サイト上で表示されないコンテンツでも、ログイン中のユーザーはプレビューできる場合があります。</p>
+        ]]></item>
+        <item id="title" title="タイトル"><![CDATA[
+<h2>タイトル</h2>
+<p>この記事に適切なタイトルを付けてください。</p>
+<p>記事タイトルは最大 255 文字までに制限されています。</p>
+        ]]></item>
+        <item id="url_title" title="URL 専用タイトル"><![CDATA[
+<h2>URL 専用タイトル</h2>
+<p>記事のパーマリンク URL に特定のタイトルを使用したい場合は、ここに入力します。空欄のままにすると、URL タイトルは記事タイトルから自動生成されます。</p>
+<p>特に、記事タイトルに非 ASCII 文字を使用している場合に便利です。</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="カテゴリ パネル">
+        <item id="article_category" title="記事"><![CDATA[
+<h2>記事</h2>
+<p>サイトのナビゲーション構造を定義するセクションとは異なり、記事カテゴリは記事を題材ごとに整理するためのものです。カテゴリを割り当てると、特定のカテゴリに属する記事一覧を閲覧できるようになります。</p>
+<p>たとえば、料理サイトで想定される記事カテゴリには次のようなものがあります。</p>
+<ul>
+    <li>食材</li>
+    <li>買い物</li>
+    <li>レシピ</li>
+    <li>盛り付け</li>
+    <li>レストラン</li>
+    <li>シェフ</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="概要"><![CDATA[
+<h2>カテゴリの概要</h2>
+<p>カテゴリの概要は任意項目ですが、検索エンジンやクローラがコンテンツをより適切に識別・整理するのに役立ちます。</p>
+<p>カテゴリの概要は最大 255 文字までに制限されています。実際の検索結果ページ (SERP) 上での表示の都合により、一部の検索エンジンでは <code>meta description</code> の文字数に上限を設けており、これは Textpattern の 255 文字制限より少ない場合があります。</p>
+        ]]></item>
+        <item id="file_category" title="ファイル"><![CDATA[
+<h2>ファイル</h2>
+<p>ファイルカテゴリは任意ですが、アップロードした特定のファイルをグループ化するのに役立ちます。</p>
+        ]]></item>
+        <item id="image_category" title="画像"><![CDATA[
+<h2>画像</h2>
+<p>画像カテゴリは任意項目であり、内部的な整理に役立つほか、<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使って表示する画像セットを定義するのにも役立ちます。</p>
+        ]]></item>
+        <item id="link_category" title="リンク"><![CDATA[
+<h2>リンク</h2>
+<p>リンクカテゴリは任意項目であり、「友人」「ローマ人」「同胞」など、さまざまなグループ分けをしてリンクを表示するのに便利です。</p>
+<p>このような選択的なリンクリストは、次のように <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使って出力します。</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="診断パネル">
+        <item id="clean_url_data_failed" title="クリーン URL データのテストに失敗"><![CDATA[
+<h2>クリーン URL データのテストに失敗</h2>
+<p>現在、サイトの URL (例: <code>https://example.com/section/article</code>) が機能していないか、またはクリーン URL が動作しているかどうかを判定するテスト手順をウェブサーバーがサポートしていないようです。サイト上でクリーン URL が期待どおりに動作している場合は、このメッセージは無視してかまいません。</p>
+<p>クリーン URL が<em>機能していない</em>場合、次のいずれかが原因として考えられます。</p>
+<ul>
+    <li>「サイト URL」設定が正しくない、またはそのアドレスのページがこの Textpattern インスタンスで管理されていない</li>
+    <li>クリーン URL を機能させるために、サーバー上の <code>.htaccess</code> などのサーバーディレクティブに変更が必要である</li>
+    <li>サーバーがクリーン URL にまったく対応していない</li>
+</ul>
+<p>クリーン URL テストは、「サイト URL」設定で指定されたウェブアドレスからページを取得し、すべてのクリーン URL パラメータが正しく動作しているかどうかを確認します。その URL が別サイトであったり、静的ページなどに置き換わっている場合はテストは失敗します。問題が解決するまでは、メッシーな URL (例: <code>https://example.com?s=section&amp;id=4</code>) を使用してください。管理画面の設定で「パーマリンクモード」がそれに合わせて設定されていることを確認してください。</p>
+<p>サイトを「メンテナンスモード」にするプラグインを使用している場合、この警告が表示されることがあります。</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="クリーン URL テストに失敗しました"><![CDATA[
+<h2>クリーン URL テストに失敗</h2>
+<p>現在、サイトの URL (例: <code>https://example.com/section/article</code>) が機能していないか、またはクリーン URL が動作しているかどうかを判定するテスト手順をウェブサーバーがサポートしていないようです。サイト上でクリーン URL が期待どおりに動作している場合は、このメッセージは無視してかまいません。</p>
+<p>クリーン URL が<em>機能していない</em>場合、次のいずれかが原因として考えられます。</p>
+<ul>
+    <li>「サイト URL」設定が正しくない、またはそのアドレスのページがこの Textpattern インスタンスで管理されていない</li>
+    <li>クリーン URL を機能させるために、サーバー上の <code>.htaccess</code> などのサーバーディレクティブに変更が必要である</li>
+    <li>サーバーがクリーン URL にまったく対応していない</li>
+</ul>
+<p>クリーン URL テストは、「サイト URL」設定で指定されたウェブアドレスからページを取得し、すべてのクリーン URL パラメータが正しく動作しているかどうかを確認します。その URL が別サイトであったり、静的ページなどに置き換わっている場合はテストは失敗します。問題が解決するまでは、メッシーな URL (例: <code>https://example.com?s=section&amp;id=4</code>) を使用してください。管理画面の設定で「パーマリンクモード」がそれに合わせて設定されていることを確認してください。</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="本番サーバーでの同時ログイン"><![CDATA[
+<h2>本番サーバーでの同時ログイン</h2>
+<p>同一ユーザーアカウントで複数のセッションからログインできるようにすることは、セキュリティリスクとなるため推奨されません。この機能のリスクを理解し許容できる場合を除き、詳細設定パネルからこの機能を無効にしてください。</p>
+        ]]></item>
+        <item id="diag_clear_private" title="プライベート情報を隠す"><![CDATA[
+<h2>プライベート情報を隠す</h2>
+<p>追加のセキュリティのために、プライベート情報を非表示にします。診断情報を Textpattern サポートフォーラムなど一般公開される場所で共有する場合、この設定により機密性の高いサーバー情報が省略されるため、セキュリティリスクを軽減できます。</p>
+        ]]></item>
+        <item id="dev_version_live" title="本番サーバーでの開発用コード"><![CDATA[
+<h2>本番サーバーでの開発用コード</h2>
+<p>開発中の Textpattern バージョンを本番サイトで使用することは推奨されません。この警告は、リスクを理解し許容している場合には無視してかまいません。</p>
+        ]]></item>
+        <item id="dir_not_writable" title="ディレクトリに書き込み権がありません"><![CDATA[
+<h2>ディレクトリに書き込み権がありません</h2>
+<p>ファイルおよび画像のアップロード機能を使用するには、これらのディレクトリが、ウェブサーバーユーザー経由で PHP から書き込み可能である必要があります。これは (S)FTP クライアントを使うか、コマンドラインで <code>chmod 755 /path/to/dir</code> のようなコマンドを実行して行えます。</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS エラー"><![CDATA[
+<h2>DNS ルックアップに失敗しました</h2>
+<p>サイトのアドレスとして指定されている URL に到達できないようです。</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="ファイルのアップロード機能が無効になっています"><![CDATA[
+<h2>ファイルのアップロード機能が無効になっています</h2>
+<p>現在のサーバー設定では、ファイルアップロードが無効になっていることを示しています。<code>php.ini</code> 内の <code>file_uploads</code> 設定を確認・変更するか、サイトホストに問い合わせてください。</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess ファイルがありません"><![CDATA[
+<h2>.htaccess ファイルがありません</h2>
+<p><code>.htaccess</code> ファイルを必要とするパーマリンクモードが使用されていますが、そのファイルが見つかりません。ファイルは Textpattern に同梱されており、<code>index.php</code> や <code>textpattern</code> ディレクトリと共に Textpattern ルートに配置されます。推奨されるディレクティブは次のとおりです。</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="サイトインデックスにアクセスできません"><![CDATA[
+<h2>サイトインデックスにアクセスできません</h2>
+<p>サイトのインデックスとして指定されているルートの <code>index.php</code> ファイルを、サーバーが読み取れません。ファイルの存在とパーミッションを確認してください。</p>
+        ]]></item>
+        <item id="missing_files" title="欠損ファイル"><![CDATA[
+<h2>欠損ファイル</h2>
+<p>Textpattern の必須ファイルの一部が欠落している可能性があります。一覧表示されているファイルがサーバー上に存在し、正しい場所にあることを確認してください。</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache の mod_rewrite が見つかりません"><![CDATA[
+<h2>Apache mod_rewrite が見つかりません</h2>
+<p>Apache の <code>mod_rewrite</code> モジュールがインストールされていないか、無効になっています。Textpattern を正常に動作させるには、このモジュールが推奨されます。存在と有効化状態を確認するか、サイトホストに問い合わせてください。</p>
+        ]]></item>
+        <item id="modified_files" title="変更されたファイル"><![CDATA[
+<h2>変更されたファイル</h2>
+<p>Textpattern に同梱されている既知の正当なチェックサム一覧と比較して、チェックサムが異なるファイルは変更されたと見なされます。Textpattern インストール内のファイルが想定と異なる場合、そのファイルがここに強調表示されます。</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL テーブルエラー"><![CDATA[
+<h2>MySQL テーブルエラー</h2>
+<p>Textpattern の MySQL データベースに破損や損傷がある可能性があります。<a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> や <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> などの MySQL アクセスツールで、影響を受けているテーブルの修復を試みてください。</p>
+        ]]></item>
+        <item id="no_temp_dir" title="tempディレクトリが未指定"><![CDATA[
+<h2>一時ディレクトリが未定義</h2>
+<p>Textpattern は一時ディレクトリがなくても動作しますが、この設定が行われていないと一部の機能が期待どおりに動作しない場合があります。管理設定で「一時ディレクトリパス」を設定してください。</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="ディレクトリ名と同じセクション"><![CDATA[
+<h2>ディレクトリ名と同じセクション</h2>
+<p>既存のディレクトリ名が、記事パーマリンク方式で使用されるセクション名と競合している可能性があります。問題を避けるには、安全であれば該当ディレクトリ名を削除するか、競合しないようにセクション名を変更してください。</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="サイトディレクトリが読み取れません"><![CDATA[
+<h2>サイトディレクトリが読み取れません</h2>
+<p>サイトのインデックスとして指定されているルート <code>index.php</code> ファイルを含むディレクトリを、サーバーが読み取れません。パーミッションを確認してください。</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP スクリプトが有効"><![CDATA[
+<h2>PHP スクリプトが有効</h2>
+<p>Textpattern では、機能を有効にしている場合、記事やページ / フォーム内に PHP コードを埋め込むことができます。これはセキュリティ上の懸念事項です。あらゆる種類の PHP が実行される可能性があり、インストールの破壊や第三者への情報漏えいなど、潜在的に危険なコードも含まれます。そのため、この機能が本当に必要な場合を除き、<a href="?event=prefs#prefs_group_publish">設定パネル</a>でこれらのオプションを無効にすることを強くお勧めします。</p>
+<p>以前は PHP のスニペットが必要だった多くの Textpattern サイトの拡張は、現在では<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">コアタグ</a>のみで実現できるようになっています。</p>
+        ]]></item>
+        <item id="php_version_required" title="最小バージョン要件"><![CDATA[
+<h2>最小バージョン要件</h2>
+<p>Textpattern には、PHP プログラミング言語および MySQL データベースサーバーに一定の機能が備わっている必要があります。最低動作環境は次の表で確認できます。</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern バージョン</th>
+                <th scope="col">最低 PHP バージョン</th>
+                <th scope="col">最低 MySQL バージョン</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>上記システム要件に加えて、次の PHP 拡張モジュールが必要です。</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a></li>
+</ul>
+<p>サイトの <code>php.ini</code> ファイル (グローバルまたはローカル) には、<code>date.timezone</code> の設定が必要です。</p>
+        ]]></item>
+        <item id="setup_still_exists" title="セットアップディレクトリがまだ存在します"><![CDATA[
+<h2>セットアップディレクトリがまだ存在します</h2>
+<p>Textpattern のインストール完了後は、<code>textpattern/setup</code> ディレクトリとその中身は不要になるため、セキュリティ上の理由から削除する必要があります。</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="サイト URL の不一致"><![CDATA[
+<h2>サイト URL の不一致</h2>
+<p>設定パネルで指定されている「サイト URL」が、実際にサイトへアクセスするために使用されている URL と一致していません。</p>
+<p>複数の異なる URL からサイトにアクセスでき、なおかつ問題なく動作している場合は、このメッセージは無視してかまいません。</p>
+<p>そうでない場合は、管理画面の設定で「サイト URL」を確認・修正してください。診断パネルの事前チェック警告メッセージには、想定される正しいサイト URL が推測値として表示されます。</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP 関数 […] がサーバー上で無効化されています"><![CDATA[
+<h2>PHP 関数 […] がサーバー上で無効化されています</h2>
+<p>サイトホストまたはサーバー管理者によって、1 つ以上の PHP 関数が無効化されています。その一部は Textpattern の動作に影響を与える可能性があります。</p>
+<p>詳細については、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern ユーザードキュメント <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を参照してください。</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern バージョンの更新"><![CDATA[
+<h2>Textpattern バージョンの更新</h2>
+<p>利用可能な Textpattern の新バージョンがあります。最新の機能とセキュリティを利用するため、アップグレードを推奨します。</p>
+<p>アップグレード作業ができるだけスムーズで負担にならないよう努めていますが、次の点に注意してください。</p>
+<ul>
+    <li>現在のバージョンと比べて末尾の 1 桁だけが異なる場合、プラグインやテーマとの後方互換性は高いと考えられます。</li>
+    <li>末尾 2 桁が異なる場合、一部のプラグインやテーマに更新が必要になることがありますが、多くの場合は制限付きながらも動作し続ける可能性があります。</li>
+    <li>先頭の桁が異なる場合、多くのプラグインやテーマに更新が必要になる可能性が高くなります。特定のプラグインやテーマ機能に強く依存している場合は、アップグレード前に作者やコミュニティメンバーに確認することをお勧めします。</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern プレリリースが利用可能です"><![CDATA[
+<h2>Textpattern プレリリースの更新が利用可能です</h2>
+<p>利用可能な Textpattern の新しいプレリリースバージョンがあります。最終リリースをできるだけ安定させるため、このバージョンのテストに参加してくださるアクティブなボランティアを募集しています。ベータ版コードであっても、アップグレード作業がシームレスで負担にならないよう努めています。</p>
+<p>参加いただける場合は、次の点にご注意ください。</p>
+<ul>
+    <li>サイトのファイルとデータベースの両方について有効なバックアップを保持し、それを復元する方法を理解していない限り、本番サイトではこのベータリリースを使用しないでください。</li>
+    <li>使用しているベータバージョンを明記したうえで、<a href="https://github.com/textpattern/textpattern/issues">問題を報告</a>してください。報告された問題の内容によっては、安定版リリース前にさらにベータリリースが必要になる場合があります。</li>
+    <li>このベータリリースを導入した場合は、最終版がリリースされた際に必ずそちらへも更新してください。</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="一時ディレクトリパスとプラグインキャッシュディレクトリパスは同じパスに定義できません。"><![CDATA[
+<h2>一時ディレクトリパスとプラグインキャッシュディレクトリパスは同じにすべきではありません</h2>
+<p>プラグインは専用のディレクトリを持つべきであり、一時ディレクトリと共有してはいけません。これは潜在的なセキュリティリスクであり、一時ディレクトリが削除された場合にサイトへ悪影響を及ぼす可能性があります。一時ディレクトリパスとプラグインキャッシュパスが異なるディレクトリを指すよう設定してください。</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="更新サーバーにアクセスできません"><![CDATA[
+<h2>更新サーバーにアクセスできません</h2>
+<p>ネットワーク混雑や接続タイムアウトなどにより、更新チェックに失敗しました。通常は 1 ～ 2 時間ほどで解消するため、時間をおいて再度このパネルを表示してみてください。</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="PHP インストールに mail() 関数がありません"><![CDATA[
+<h2>PHP インストールに mail() 関数がありません</h2>
+<p>PHP の <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> 関数が無効になっています。そのため、Textpattern はメールを送信できず、一部の機能が使えなくなります。たとえば、新しいコメントのメール通知が送信されなくなり、新規ユーザーにも歓迎メールが届きません。ただし、ユーザーの追加自体は可能です。</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="ファイル パネル">
+        <item id="file_reassign" title="ファイルの再割り当て"><![CDATA[
+<h2>ファイルの再割り当て</h2>
+<p>「見つからない」と表示されているファイルの代わりにファイルをアップロードすると、選択したファイルがサーバーにアップロードされ、データベース上の元のファイル情報にリンクされます。つまり、元のファイル名やダウンロード数、カテゴリなどの関連情報は維持されます。ただし、ファイルサイズは新しいファイルに合わせて更新されます。</p>
+        ]]></item>
+        <item id="file_replace" title="ファイルの置き換え"><![CDATA[
+<h2>ファイルの置き換え</h2>
+<p>ここでファイルをアップロードすると、サーバー上の既存ファイルの内容が置き換えられますが、ファイル名は以前と同じままです。ダウンロード数やファイルに関連付けられたその他の情報には影響しません。</p>
+        ]]></item>
+        <item id="timestamp_file" title="発行日"><![CDATA[
+<h2>発行日</h2>
+<p>ファイルが公開された、または直近で更新された日時です。公開の瞬間と同じ時刻にも設定できますし、過去または未来の任意の時刻に設定することもできます。</p>
+<p>各ボックスは次の情報に対応します。</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時 (24 時間表記) : 分 : 秒</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="ファイルのアップロード"><![CDATA[
+<h2>ファイルのアップロード</h2>
+<p>このフォームを使って、サーバーにファイルまたは画像をアップロードします。</p>
+<p>記事内で画像を表示するには Textile コード、ページテンプレート上で画像を配置するには Textpattern コード、その他の場所に画像を配置するには HTML コードを使用してください。</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="フォーム パネル">
+        <item id="forms_overview" title="フォーム入門"><![CDATA[
+<h2>フォーム入門</h2>
+<p>Textpattern におけるフォームとは、コンテンツを再利用して表示するためのテキスト、HTML、Textpattern タグからなるスニペットまたはチャンクです。</p>
+<p>例えば、<code>ordinary_list</code> という名前を付けた次のようなフォームがあります。</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>これを使って、関連する記事の HTML 箇条書きリストを表示できます。</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>このフォームの役割はタイトルのリストを出力することなので、現在のセクションから 20 件の記事を表示するなど、他のタグ内でも利用できます。</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>また、ページテンプレート内でヘッダーやフッターなど繰り返し現れるコンテンツを表示するためにフォームを使うこともできます。これにより、そのコンテンツは 1 か所にしか存在しなくなり、変更したい場合も 1 度変更するだけで済みます。フォームからコンテンツを表示するには通常、次のようにします。</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>フォームのサイズは最大 64 KB です。例えばフッター用のフォームには、見出し、段落、リンク、条件付きタグ、<code>ordinary_list</code> など他のフォームへの参照を含めることができます。</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="画像パネル">
+        <item id="create_thumbnail" title="サムネイルの作成"><![CDATA[
+<h2>サムネイルの作成</h2>
+<p>指定したサイズのサムネイルを、フルサイズ画像から (再)作成できます。</p>
+<p>カスタムサイズの場合、サムネイルは指定したサイズに収まるように拡大・縮小されます。「切り抜き」を選択した場合は、拡大縮小せず画像の中央部分を切り抜いてサムネイルを作成します。</p>
+<p>自動サイズの場合、サムネイルは現在の管理テーマで設定されているサイズおよび (任意の) 切り抜き設定に合わせて拡大・縮小されます。</p>
+        ]]></item>
+        <item id="replace_image_form" title="画像の置き換え"><![CDATA[
+<h2>画像の置き換え</h2>
+<p>ここでアップロードした画像は、このエントリに関連付けられている既存の画像を単純に置き換えます。</p>
+        ]]></item>
+        <item id="upload_image" title="画像のアップロード"><![CDATA[
+<h2>画像のアップロード</h2>
+<p>1 枚以上の画像をサーバーにアップロードします。</p>
+<p><code>images</code> ディレクトリにアップロードされると、元の画像ファイル名は Textpattern データベース内でのみ保持され、画像ファイル自体は連番 + 拡張子の名前に変更されます。</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="サムネイルのアップロード"><![CDATA[
+<h2>サムネイルのアップロード</h2>
+<p>フルサイズ画像には、それぞれ専用のサムネイルを割り当てることができます。これは、フルサイズ画像へのリンクやインデックス作成に役立ちます。</p>
+<p>サムネイルへの参照方法は、フルサイズ画像への参照方法とまったく同じで、ファイル名の末尾に <code>t</code> を付けます。例えば、<code>/images/12.jpg</code> に保存されているフルサイズ画像のサムネイルを参照するには、<code>/images/12t.jpg</code> を使用します。</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="言語パネル">
+        <item id="get_textpack" title="Textpack の追加"><![CDATA[
+<h2>Textpack の追加</h2>
+<p>サイト用の追加言語文字列をこのボックスに貼り付け、「アップロード」を選択してインストールします。</p>
+<p>これらの文字列は、多くの場合プラグインと共に配布されるダウンロード可能な Textpack の形式で提供され、プラグインの言語文字列を Textpattern 内でネイティブに使用できるようにします。</p>
+<p>翻訳者は必要に応じてこれらのパックを翻訳し、ローカライズされたコンテンツをコミュニティに再配布できます。</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="リンク パネル">
+        <item id="link_description" title="概要"><![CDATA[
+<h2>概要</h2>
+<p>リンクの概要は任意項目ですが、リンクのキャプションとして使ったり、リンクに対する <code>title=""</code> (ツールチップ) 属性を作成したり、単に自分用のメモとして利用したりできます。</p>
+        ]]></item>
+        <item id="link_sort" title="ソート用キーワード"><![CDATA[
+<h2>ソート用キーワード</h2>
+<p>リンクリストを自然な言語順で並べ替えるのに便利です。例えば、名前であれば名字でソートしたり、定冠詞・不定冠詞で始まる語句を調整したりできます。</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>リンク先のアドレスです。リンクが別サイトを指している場合は、<code>http://</code> か <code>https://</code> を先頭に付ける必要があります。</p>
+        ]]></item>
+        <item id="timestamp_link" title="発行日"><![CDATA[
+<h2>発行日</h2>
+<p>リンクが公開された、または直近で更新された日時です。公開の瞬間と同じ時刻にも設定できますし、過去または未来の任意の時刻に設定することもできます。</p>
+<p>各ボックスは次の情報に対応します。</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時 (24 時間表記) : 分 : 秒</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="ログイン パネル">
+        <item id="remember_login" title="このブラウザでログイン状態を維持する"><![CDATA[
+<h2>このブラウザでログイン状態を維持する</h2>
+<p>オンにすると、ログアウトするまで現在使用中のウェブブラウザで Textpattern アカウントのログイン状態が維持されます。オフにした場合は、一定時間操作しないと自動的にログアウトされます。</p>
+<p>ブラウザで Cookie が有効になっている必要があります。</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="プラグイン パネル">
+        <item id="install_plugin" title="プラグインのインストール"><![CDATA[
+<h2>プラグインのインストール</h2>
+<p>コンパイル済みプラグインテキストファイルの内容をここに貼り付け、「アップロード」でインストールを開始します。同名のプラグインがすでにインストールされている場合は、アップロードしたバージョンで上書きされます。</p>
+<p>ここに貼り付けるプラグインテキストは、生の PHP コードでは<strong>なく</strong>、通常はプラグイン名・バージョン・説明・作者名などの情報を含むヘッダーに続いて Base64 形式でエンコードされたテキストです。</p>
+<p>コンパイル済みプラグインは、<a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins リポジトリ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> や、プラグイン作者のウェブサイトや GitHub などの配布チャネルから入手できることがよくあります。</p>
+<p>外部サイトが許可している場合は、Textpattern のコンパイル済みテキストファイルへの URL をここに貼り付けることもできます。</p>
+<p>アップロードされたすべてのプラグインは、インストール前にコードや内容を確認できる検証ステップを経ます。</p>
+        ]]></item>
+        <item id="upload_plugin" title="プラグインのアップロード"><![CDATA[
+<h2>プラグインのアップロード</h2>
+<p>このフォームを使用してプラグインファイルをアップロードします。アップロードされたプラグイン (およびそのアセット) は「plugins」ディレクトリ内に保存されます。</p>
+<p>ここにアップロードできるプラグインタイプは次のとおりです。</p>
+<ul>
+<li>完全なコード、メタデータ、Textpack 文字列、ヘルプテキストを含む Textpattern PHP テンプレートファイル</li>
+<li>完全なコード、メタデータ、Textpack 文字列、ヘルプテキストを含む Textpattern コンパイル済みテキストファイル</li>
+<li>マニフェスト情報およびコード、メタデータ、Textpack 文字列、ヘルプテキスト、サポートファイルを含む Textpattern zip バンドル</li>
+<li>生の PHP ファイル (ただし追加メタデータは埋め込まれず、推奨されません)</li>
+</ul>
+<p>同名のプラグインがすでにインストールされている場合は、アップロードしたバージョンで上書きされます。</p>
+<p>アップロードされたすべてのプラグインは、インストール前にコードや内容を確認できる検証ステップを経ます。</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="設定パネル">
+        <item id="admin_side_plugins" title="管理画面のプラグインを使用しますか？"><![CDATA[
+<h2>管理画面のプラグインを使用しますか？</h2>
+<p>管理画面用プラグインは、管理インターフェイスの動作を変更できます。記事の編集や公開といった既存の操作にフックしたり、機能追加や拡張のための新しいパネルを追加したりすることがあります。</p>
+<p>管理画面用プラグインの詳細については、<a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> および <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern ユーザードキュメント <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を参照してください。さまざまな種類のプラグインは、<a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins サイト <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> に一覧されています。</p>
+        ]]></item>
+        <item id="advanced_options" title="詳細設定"><![CDATA[
+<h2>詳細設定</h2>
+<p>詳細設定グループを表示します。ここでは次のような追加設定を行えます。</p>
+<ul>
+    <li><code>txp:evaluate</code> で有効にする PHP 関数</li>
+    <li>カスタムフォームテンプレートタイプ</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="PHPを記事内で許可しますか？"><![CDATA[
+<h2>PHPを記事内で許可しますか？</h2>
+<p>この設定を有効にすると、記事内で PHP を使用できるようになります。使用するには、作者が十分な権限を持っている必要があります (既定では、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Publisher</a>、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Managing Editor</a>、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">Copy Editor</a> のみが対象)。</p>
+<p><strong>この機能が本当に必要な場合を除き、このオプションはオフにすることを強くお勧めします。</strong>任意の PHP コードを記事に追加でき、その記事を閲覧するだけで、ウェブサイトを破壊したり第三者に情報が漏えいしたりするような、潜在的に危険なコードが実行されてしまう可能性があります。</p>
+<p>PHP コードでは、PHP の開始・終了タグを省略し、さらに <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> で囲む必要があります。</p>
+        ]]></item>
+        <item id="allow_form_override" title="フォームの上書きを許可しますか？"><![CDATA[
+<h2>フォームの上書きを許可しますか？</h2>
+<p>この設定を有効にすると、記事のレンダリングに使用されるフォームを記事ごとに上書きできるようになります。有効な場合、記事編集画面に「デフォルトフォームの上書き」ドロップダウンが表示されます。</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="PHPをページ内で許可しますか？"><![CDATA[
+<h2>PHPをページ内で許可しますか？</h2>
+<p>この設定を有効にすると、ページテンプレートおよびフォームテンプレート内で PHP コードを使用できるようになります。</p>
+<p><strong>この機能が本当に必要な場合を除き、このオプションはオフにすることを強くお勧めします。</strong>他のユーザーが、ウェブサイトを破壊したり第三者に情報が漏えいしたりするような、潜在的に危険な PHP コードを追加できてしまい、そのコードが管理者やサイト訪問者によって意図せず実行される可能性があります。</p>
+<p>PHP コードでは、PHP の開始・終了タグを省略し、さらに <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> で囲む必要があります。</p>
+        ]]></item>
+        <item id="archive_dateformat" title="アーカイブの日付フォーマット"><![CDATA[
+<h2>アーカイブの日付フォーマット</h2>
+<p>サイト内のセクションにある記事の日付の表示形式です。</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="記事編集ページで抜粋を表示しますか？"><![CDATA[
+<h2>記事編集ページで抜粋を表示しますか？</h2>
+<p>「いいえ」を選択すると、記事編集画面で抜粋フィールドは作者に表示されません。</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="パーマリンクに記事タイトルを付けますか？"><![CDATA[
+<h2>パーマリンクに記事タイトルを付けますか？</h2>
+<p>この設定を有効にすると、記事タイトルから自動生成された文字列が URL に付加されます。これは自動生成されるか、「URL 専用タイトル」で手動指定することもできます。</p>
+<p>この設定は、クリーン URL を使用している場合にのみ有効です。言語によっては、長く読みにくい URL になることがあるため、その場合は「オフ」にすることを検討してください。</p>
+        ]]></item>
+        <item id="auto_dst" title="&lt;abbr title=&quot;Daylight Saving Time&quot;>夏時間&lt;/abbr>を自動調整しますか？"><![CDATA[
+<h2>夏時間を自動調整しますか？</h2>
+<p>この設定を有効にすると、Textpattern がロケールに応じて夏時間 (DST: Daylight Saving Time) の切り替わりを自動的に調整します。「いいえ」に設定した場合は、「夏時間の有無」設定を手動で変更できます。</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="コメントが付くとサイトの更新と見なしますか？"><![CDATA[
+<h2>コメントが付くとサイトの更新と見なしますか？</h2>
+<p>Textpattern データベースは、サイトに対する直近の変更日時を保持しています。この設定を「はい」にすると、新しいコメントが投稿された際にもこの値が更新されます。この値は、たとえば <code>"Send Last-Modified header"</code> 機能などで使用されます。</p>
+        ]]></item>
+        <item id="comment_nofollow" title="コメントに rel=&quot;nofollow&quot; を適応しますか？"><![CDATA[
+<h2>コメントに rel="nofollow" を適用しますか？</h2>
+<p>「はい」の場合、コメント内のリンクに追加の属性が付与されます。これはコメントスパムの動機を減らすことを目的とした措置で、複数の検索エンジンやソフトウェア開発者によって導入されました。詳細は、<a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google のアナウンス <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を参照してください。</p>
+<p><strong>注意:</strong> この設定はサイトの機能自体には影響しません。一部の検索エンジンにおいて、コメントからリンクされているサイトの評価に影響を与えたり、その影響を抑えたりする可能性があります。</p>
+        ]]></item>
+        <item id="comments_are_ol" title="コメントに数字を振りますか？"><![CDATA[
+<h2>コメントに数字を振りますか？</h2>
+<p>記事コメントを HTML の <code>&lt;ol&gt;</code> タグでラップし、各コメントを <code>&lt;li&gt;</code> タグでラップして (番号付きリストとして表示する)、または代わりに各コメントを <code>&lt;div&gt;</code> タグでラップするかを決定します。</p>
+<p>いずれの場合でも、<code>comments_display</code> フォーム内にある <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を変更することで、フォームごとに使用するタグを上書きできます。</p>
+        ]]></item>
+        <item id="comments_auto_append" title="記事へ自動的にコメントを付けますか？"><![CDATA[
+<h2>記事へ自動的にコメントを付けますか？</h2>
+<p>この設定は、個々の記事に自動的にコメントとコメントフォームを追加するかどうかを決定します (つまり、<code>comments_display</code> フォームの内容を自動的に含めるかどうか)。</p>
+<p>多くの場合、この設定は「いいえ」のままにしておくと良いでしょう。その方が、サイトデザイン内でコメントを配置する位置を柔軟に制御できます。コメントを表示したい記事用テンプレートには、手動で <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を追加する必要があります。</p>
+<p>記事内でコメントが重複表示されている場合は、テンプレート内に <code>&lt;txp:comments /&gt;</code> タグが含まれているのに加え、「記事へ自動的にコメントを付けますか？」が「はい」に設定されている可能性が高いです。</p>
+        ]]></item>
+        <item id="comments_dateformat" title="コメントの日付フォーマット"><![CDATA[
+<h2>コメントの日付フォーマット</h2>
+<p>サイト訪問者に表示されるコメントの日付形式です。</p>
+        ]]></item>
+        <item id="comments_default_invite" title="形式の初期設定"><![CDATA[
+<h2>コメント招待文のデフォルト</h2>
+<p>サイトで訪問者によるコメントを許可している場合、ここで指定したテキストが招待文のデフォルトになります。例:</p>
+<ul>
+    <li>コメント</li>
+    <li>コメントを追加</li>
+    <li>フィードバック</li>
+    <li>注釈</li>
+</ul>
+<p>なお、招待文のテキストは記事ごとにいつでも変更できます。</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="無効にする時期"><![CDATA[
+<h2>コメントを無効にするまでの期間</h2>
+<p>記事に対するコメント受付を何日後にオフにするかを設定します (「期限なし」に設定すると、コメント受付期間を無期限にできます)。</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="コメント欄に投稿者の画像を許可しますか？"><![CDATA[
+<h2>コメント欄に投稿者の画像を許可しますか？</h2>
+<p>このオプションを「いいえ」にすると、コメントに含まれる画像はすべて削除されます。</p>
+        ]]></item>
+        <item id="comments_mode" title="コメントモード"><![CDATA[
+<h2>コメントモード</h2>
+<p>「nopopup」を選択すると (推奨)、現在のウィンドウが再読み込みされ、対象記事のみとその下にコメントが表示されます。</p>
+<p>「popup」を選択すると、コメントリンクをクリックしたときに新しいブラウザウィンドウが開きます (この場合は <code>popup_comments</code> フォームが使用されます)。</p>
+        ]]></item>
+        <item id="comments_moderate" title="コメントを編集しますか？"><![CDATA[
+<h2>コメントをモデレートしますか？</h2>
+<p>これを「はい」にすると、新しいコメントはすべて、確認されるまで非表示になります。各コメントは手動でモデレートし、表示するように切り替える必要があります (新しいコメントが投稿されると、記事の作者にメールで通知が送信されます)。</p>
+        ]]></item>
+        <item id="comments_on_default" title="初期設定"><![CDATA[
+<h2>コメントをデフォルトで有効にしますか？</h2>
+<p>これを「はい」にすると、公開されたすべての記事でコメントが自動的に有効になります。「いいえ」の場合は、コメントを受け付けたい記事ごとに、「書く」パネルでコメントを有効にする必要があります。</p>
+<p>コメントの有効 / 無効は、記事ごとにいつでも切り替えられます。</p>
+        ]]></item>
+        <item id="comments_require_email" title="メールアドレスを必須にしますか？"><![CDATA[
+<h2>コメント投稿にメールアドレスを必須にしますか？</h2>
+<p>「はい」の場合、記事にコメントしたい人はコメント入力フォームでメールアドレスを入力する必要があります。メールアドレスを入力しないとコメントを投稿できません。</p>
+        ]]></item>
+        <item id="comments_require_name" title="ユーザ名を必須にしますか？"><![CDATA[
+<h2>コメント投稿に名前を必須にしますか？</h2>
+<p>「はい」の場合、記事にコメントしたい人はコメント入力フォームで名前を入力する必要があります。名前を入力しないとコメントを送信できません。</p>
+        ]]></item>
+        <item id="comments_sendmail" title="コメントが付いたらユーザにメールで通知しますか？"><![CDATA[
+<h2>コメントを作者にメール送信しますか？</h2>
+<p>「はい」の場合、記事に新しいコメントが投稿されるたびに、その記事の作者にコメント内容がメールで送信されます。</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="高度なTextile記法を許可しますか？"><![CDATA[
+<h2>コメントで高度な Textile 記法を許可しますか？</h2>
+<p>「はい」の場合、コメント内で、通常はプレーンテキストとして扱われる次のような <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> 要素を使用できます。</p>
+<ul>
+    <li>見出し</li>
+    <li>番号付き / 箇条書きリスト</li>
+    <li>脚注</li>
+    <li>表</li>
+    <li>コード</li>
+    <li>拡張ブロック構文 (<code>bc..</code>、<code>bq..</code> など)</li>
+</ul>
+<p><strong>注意:</strong> セキュリティ上の理由から、生の HTML は通常のテキストに変換されます。</p>
+        ]]></item>
+        <item id="concurrent_logins" title="同時ログインを許可するアカウント数"><![CDATA[
+<h2>同時ログインを許可するアカウント</h2>
+<p>複数のブラウザ / セッションから同時ログインを許可するログインアカウント名を、コンマ区切りで指定します。開発中にクライアントとログイン情報を共有する場合などに便利です。</p>
+<p>この機能の使用はセキュリティリスクであり、<strong>本番サイトでは推奨されません</strong>。本番サイトでユーザーアカウントに同時ログインが設定されている場合、診断パネルに警告が表示されます。</p>
+        ]]></item>
+        <item id="custom_form_types" title="カスタムフォームテンプレートタイプ"><![CDATA[
+<h2>カスタムフォームテンプレートタイプ</h2>
+<p>標準のフォームテンプレートタイプ (article、file、misc など) に加えて、Publisher はカスタムタイプを定義できます。カスタムフォームテンプレートタイプの目的は 2 つあります。フォームテンプレートの分類を分かりやすくすることと、カスタムアセットを定義することです。</p>
+<p>この設定の形式は <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI 形式 <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> で、各セクションがフォームテンプレートタイプに対応します。</p>
+<p>カスタムフォームタイプ (例: <code>js</code>) を定義するには、新しい行に <code>[js]</code> セクションを追加します。対応するセクション内に <code>title="Javascript"</code> のようなエントリを追加すると、デフォルトタイトルを設定できます。必要であれば、<code>ru="Скрипт"</code> のようにローカライズされたタイトルも追加できます。</p>
+<p>さらに、フォームテンプレートの<a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">メディアタイプ (旧 MIME タイプ) <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を <code>mediatype="application/javascript"</code> のように指定できます。これにより、そのタイプのフォームテンプレートはカスタムアセットとなり、<code>&lt;txp:output_form /&gt;</code> タグ経由で、データベースまたはディスク (フラットファイル) から指定されたメディアタイプとして配信できます。例えば、<code>[js]</code> タイプでメディアタイプ <code>application/javascript</code> を持つ <code>myscript.js</code> というフォームテンプレートは、次のようにコード内で参照できます。</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>これにより、次のような HTML の <code>&lt;script&gt;</code> タグが生成されます。</p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>そのタイプに対応する拡張子 (例: <code>myscript.js</code>) を持つフォームテンプレートだけが、フラットファイルとして配信できます。この場合、Textpattern による処理は一切行われず、URL を介して直接アクセスできます。</p>
+<p>フォームテンプレートに Textpattern タグが含まれており、処理が必要な場合は、データベースから配信する必要があります。その場合は標準の URL からアクセスできないよう、フォーム名に拡張子を付けないでください。例えば、<code>myscript</code> (末尾に <code>.js</code> を付けない) という名前にしておき、次のように呼び出します。</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="カスタムフィールド"><![CDATA[
+<h2>カスタムフィールド</h2>
+<p>カスタムフィールドは、記事に追加のデータを保持するために使用します。ここで名前を付けることで、最大 10 個まで定義できます。各フィールドは「書く」パネル上に個別フィールドとして表示され、記事ごとにカスタムデータを関連付けることができます。</p>
+<p>フィールド名は自由に付けられますが、次の点に注意してください。</p>
+<ul>
+<li>フィールド名にスペースを含めると、「書く」パネル上での視認性は向上しますが、そのフィールドは article_custom タグのソートや絞り込みパラメータとしては<em>使用できなくなります</em>。この機能を使用したい場合は、スペースの代わりにアンダースコアを検討してください。</li>
+<li>フィールド名が Textpattern の予約フィールド名と衝突しないよう注意してください。例えば <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> などを使用すると、予期しない結果やサイトの不具合を招く可能性があります。</li>
+<li>各フィールドのデータは 255 文字までのテキストのみに制限されます。</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="日付フォーマット"><![CDATA[
+<h2>日付フォーマット</h2>
+<p>このオプションは、サイトのトップページに表示される記事の日付形式にのみ影響します。</p>
+        ]]></item>
+        <item id="default_event" title="ログイン後の初期画面"><![CDATA[
+<h2>ログイン後の初期画面</h2>
+<p>誰かがログインしたときに最初に表示される Textpattern 管理画面のパネルです。</p>
+        ]]></item>
+        <item id="default_publish_status" title="デフォルトの公開ステータス"><![CDATA[
+<h2>デフォルトの公開ステータス</h2>
+<p>新しく作成される Textpattern 記事の公開可視性ステータスを定義します。</p>
+<p>この設定は変更前に作成または編集された記事のステータスには影響しません。</p>
+<p>デフォルトの公開ステータスとして指定できるのは次のいずれかです。</p>
+<ul>
+    <li>下書き</li>
+    <li>非表示</li>
+    <li>保留</li>
+    <li>公開</li>
+    <li>固定表示</li>
+</ul>
+<p><strong>下書き</strong>記事は作成途中とみなされ、Textpattern 管理画面の外部からは閲覧できません (つまり Textpattern フロント側にもフィードにも表示されません)。</p>
+<p><strong>非表示</strong>記事は Textpattern 管理画面の外部からは閲覧できません。</p>
+<p><strong>保留</strong>記事は公開準備が整い承認待ちとみなされますが、Textpattern 管理画面の外部からは閲覧できません。</p>
+<p><strong>公開</strong>記事は通常、Textpattern 管理画面の外部から閲覧できます (つまり Textpattern フロント側に表示され、設定によってはフィードにも配信されます)。記事が公開状態で有効期限日が設定されている場合、期限を過ぎてもステータスは公開のままですが、期限切れ記事の公開が許可されている場合に限り管理画面の外部にも表示されます。</p>
+<p><strong>固定表示</strong>記事は <strong>公開</strong>記事と同様に Textpattern 管理画面の外部から閲覧できますが、<code>article</code> または <code>article_custom</code> タグで <code>status</code> 属性に <code>sticky</code> を指定しない限り、記事一覧には表示され<strong>ません</strong>。</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>使用する HTML Doctype (HTML5 または XHTML) を選択します。これはコメント入力フォーム、<code>&lt;abbr&gt;</code> や <code>&lt;acronym&gt;</code> に対する Textile のレンダリング、および <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> が生成する <code>&lt;link&gt;</code> タグに影響します。</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="開発テーマのプレビューを有効にしますか？"><![CDATA[
+<h2>開発テーマのプレビューを有効にしますか？</h2>
+<p>十分な権限を持つユーザー (既定では Publisher と Designer ロール) は、新しいテーマを安全に開発・プレビューできます。その間、他のユーザーには旧テーマが表示されます (新テーマがデプロイされるまで)。</p>
+<p>テーマ開発に参加したくない権限ユーザーは、開発テーマのプレビューを無効にできます。その場合、一般のサイト訪問者と同様に、現在の「公開」テーマが表示されます。</p>
+        ]]></item>
+        <item id="enable_short_tags" title="ショートタグを有効にしますか？"><![CDATA[
+<h2>ショートタグを有効にしますか？</h2>
+<p>Textpattern タグは通常、<code>&lt;txp:tag_name attribute1="value" ... /&gt;</code> の形式を取ります。いくつかの簡単なルールに従うことで、<code>txp:</code> を省略できるショートハンド記法を有効にし、入力量を減らすことができます。概念を示す例は次のとおりです。</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> は <code>&lt;article::id /&gt;</code> になります</li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> は <code>&lt;recent::articles /&gt;</code> になります</li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> は <code>&lt;file::download_list /&gt;</code> になります</li>
+    <li><code>&lt;txp:smd_if /&gt;</code> は <code>&lt;smd::if /&gt;</code> になります</li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> は <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> になります (プラグインプレフィックスは <code>else</code> タグでも使用できます)。</li>
+</ul>
+<p>タグ名にアンダースコアを含むタグでショートタグを有効にした場合の基本的なルールは次のとおりです。</p>
+<ol>
+    <li><code>txp:</code> プレフィックスを取り除きます。</li>
+    <li>最初に現れるアンダースコアを <code>::</code> に置き換えます。</li>
+</ol>
+<p>この設定を有効にしても、フォームスニペットをレンダリングするための <code>&lt;txp:output_form /&gt;</code> 用ショートコードは引き続き使用できます。つまり、<code>&lt;txp::shortcode /&gt;</code> を使用すると、<code>&lt;txp:output_form form="shortcode" /&gt;</code> と解釈されます。</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="XML-RPCサーバを有効にしますか？"><![CDATA[
+<h2>XML-RPC サーバーを有効にしますか？</h2>
+<p><a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使用して (デスクトップやモバイルアプリなどから) Textpattern をリモート操作したい場合は、この設定を「はい」にして XML-RPC サーバーを有効にする必要があります。</p>
+        ]]></item>
+        <item id="enhanced_email" title="拡張メール機能を使用しますか？"><![CDATA[
+<h2>拡張メール機能を使用する</h2>
+<p>これを「いいえ」に設定すると、パスワード再設定メールや com_connect などのプラグインから送信されるメールなど、すべてのメールが PHP の <code>mail()</code> 関数経由で送信されます。「はい」に設定すると同梱の PHPMailer を使用し、外部 SMTP サーバー経由でのメール送信に関するオプション設定が利用可能になります。</p>
+<p>特に Gmail、Outlook、Yahoo! などのオンラインサービスを利用している場合、メールの到達性に問題がある場合は、ドメインが信頼できる送信元として認識されていないことが原因である可能性が高いです。「はい」に切り替えることで到達性が改善される場合があります。さらに、SMTP を使用することで一部メールプロバイダとの互換性が向上し、到達性がさらに高まることがあります。</p>
+        ]]></item>
+        <item id="expire_logs_after" title="ログの有効期限"><![CDATA[
+<h2>ログの有効期限 (日数)</h2>
+<p>Textpattern のログ機能が有効な場合、ログを保持する期間 (日数) を指定できます。例えば「7」とすると、ログは 7 日間保持されます。</p>
+<p><strong>注意:</strong> ログの削除は「訪問者ログ」パネルを表示したときにのみ行われ、それ以外のときはログは増え続けます。</p>
+        ]]></item>
+        <item id="file_base_path" title="ファイルディレクトリパス"><![CDATA[
+<h2>ファイルディレクトリパス</h2>
+<p>ファイルアップロードを恒久的に保存するディレクトリへの<strong>絶対パス</strong>を設定します。PHP がこのディレクトリへの書き込み権を持っている必要があります。</p>
+<p><strong>注意:</strong> セキュリティ向上のため、このディレクトリをウェブサイトの公開ドキュメントルートの外に移動することを検討してください。</p>
+        ]]></item>
+        <item id="file_download_header" title="ファイルダウンロードヘッダ"><![CDATA[
+<h2>ファイルダウンロードヘッダ</h2>
+<p>ファイルダウンロードの処理方法をカスタマイズできます。</p>
+<p>通常、すべてのダウンロードは添付ファイルとして扱われ、(ブラウザの設定に応じて) ダウンロードされます。ファイルタイプに応じて、特定の扱い方をブラウザに示したい場合は、ここにタグコードを記述します。例えば、Textpattern のカテゴリ「inline-pdf」に追加した PDF ファイルはダウンロードではなくインライン表示したい場合、次のようにします。</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="ファイルのアップロード可能最大容量(バイト)"><![CDATA[
+<h2>ファイルのアップロード可能最大容量 (バイト)</h2>
+<p>ファイルアップロードの最大サイズ (バイト単位) を制限できます。この値は PHP の設定によっても制約を受けます。Textpattern は、PHP 設定によるアップロードサイズ上限がより小さい場合、それを検出して自動的に下方修正します。ブラウザからのアップロードでより大きなファイルを許可したい場合は、ホストに連絡してください (<code>php.ini</code> の関連値は <code>post_max_size</code>、<code>upload_max_filesize</code>、<code>memory_limit</code> です)。</p>
+        ]]></item>
+        <item id="gmtoffset" title="タイムゾーン"><![CDATA[
+<h2>タイムゾーン</h2>
+<p>ローカルタイムゾーンに合わせて日付を表示するため、タイムゾーンを選択してください。</p>
+        ]]></item>
+        <item id="img_dir" title="画像ディレクトリ"><![CDATA[
+<h2>画像ディレクトリ</h2>
+<p>画像ディレクトリ名をカスタマイズしたい場合は、ここで変更できます。まず Textpattern インストールのルートディレクトリ直下にディレクトリを作成し、PHP がそのディレクトリに書き込みできることを確認してください。</p>
+<p>このパスは常に、Textpattern インストールルートディレクトリからの<strong>相対パス</strong>です。</p>
+<p>デフォルトは <code>images</code> です。</p>
+        ]]></item>
+        <item id="include_email_atom" title="メールアドレスを Atomフィードに含めますか？"><![CDATA[
+<h2>メールアドレスを Atom フィードに含めますか？</h2>
+<p>これを有効にすると、記事の作者 (ユーザーアカウントで設定されている) のメールアドレスが、Atom フィードの <code>author</code> 部分に含まれます。</p>
+        ]]></item>
+        <item id="is_dst" title="&lt;abbr title=&quot;Daylight Saving Time&quot;>夏時間&lt;/abbr>の有無"><![CDATA[
+<h2>夏時間を有効にしますか？</h2>
+<p>現在のタイムゾーンで夏時間 (DST: Daylight Saving Time) が有効かどうかを示します。</p>
+        ]]></item>
+        <item id="logging" title="ログ"><![CDATA[
+<h2>ログ</h2>
+<p>Textpattern が行う訪問者ログのレベルを選択できます。</p>
+<ul>
+    <li><strong>すべてのヒット:</strong> サイト上のすべてのページビューをログに記録します。</li>
+    <li><strong>リファラのみ:</strong> 他サイトからの参照による訪問のみをログに記録します。</li>
+    <li><strong>なし:</strong> ページビューを一切ログに記録しません。</li>
+</ul>
+<p>Textpattern 4.7.0 以降、Textpattern は訪問者の IP アドレス情報を収集・保存しません。Textpattern の外部で IP アドレスを収集・保存する場合は、<a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> など適用される法令を遵守したデータの保管および利用を行い、サーバーや Textpattern インストールのあらゆる側面で強固なセキュリティを確保して、このデータが侵害されないようにしてください。</p>
+<p>この設定はデフォルトの「なし」のままにしておくことが強く推奨されます。この情報が本当に必要であり、さらにその利用目的を公開して明示する場合のみ変更してください。</p>
+        ]]></item>
+        <item id="max_url_len" title="URLの最大長さ (文字数)"><![CDATA[
+<h2>URL の最大長さ (文字数)</h2>
+<p>この設定では、指定した長さを超える URL が機能しないようにできます。被害の最小化やサイトのセキュリティ向上に役立つ場合があります。</p>
+        ]]></item>
+        <item id="module_pophelp" title="管理画面でインラインヘルプリンクを表示"><![CDATA[
+<h2>管理画面でインラインヘルプリンクを表示</h2>
+<p>管理画面内のインラインヘルプリンク (Textpattern ヘルプのポップアップウィンドウ) を非表示にしたい場合は、この設定を「なし」に切り替えます。</p>
+        ]]></item>
+        <item id="never_display_email" title="メールアドレスを隠しますか？"><![CDATA[
+<h2>コメント投稿者のメールアドレスを隠しますか？</h2>
+<p>コメント投稿者のメールアドレスを一般公開するかどうかを制御します。</p>
+<p>ユーザーへの配慮として、通常はメールアドレスを表示しないことが推奨されますが、状況によってはコメント投稿者のメールアドレスを表示したい場合もあるでしょう。</p>
+        ]]></item>
+        <item id="override_emailcharset" title="メールのエンコードにISO-8859-1使用しますか(初期設定：UTF-8)？"><![CDATA[
+<h2>メールのエンコードに ISO-8859-1 を使用しますか (既定は UTF-8)?</h2>
+<p>Textpattern は既定で、送信メールを含め可能な限り UTF-8 エンコードを使用します。ただし、一部の古いメールクライアント (Microsoft Outlook の一部バージョンなど) では UTF-8 を正しくサポートしていません。メール内の文字化けが発生する場合は、この設定を有効にすることでテキストを ISO-8859-1 エンコードに変換してから送信できます。</p>
+<p><strong>注意:</strong> 使用している言語の文字が ISO-8859-1 で表現できない場合、この設定を有効にしても問題は解決しません。その場合は、UTF-8 (または Unicode) に対応したメールクライアントの利用を検討してください。</p>
+        ]]></item>
+        <item id="override_form_types" title="フォームタイプを上書き"><![CDATA[
+<h2>フォームタイプを上書き</h2>
+<p>「書く」パネルで上書きフォームとして使用できるテンプレートを持つフォームタイプを選択します。</p>
+        ]]></item>
+        <item id="permlink_format" title="パーマリンクタイトルURLの形式"><![CDATA[
+<h2>パーマリンクタイトル URL の形式</h2>
+<p>メッシーではないモードを使用している場合に、記事 URL の構築方法と割り当て方法を定義します。</p>
+<p>記事を公開すると、URL は URL 専用タイトルフィールドで特定の URL を指定しない限り、記事タイトルから生成されます。</p>
+<p>例えば、記事タイトルが <em>Ann and Bob eat cake</em> だとします。</p>
+<p>パーマリンクタイトル URL 形式のオプションが「ハイフン区切り (title-like-this)」の場合、記事の URL は次のようになります。</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>パーマリンクタイトル URL 形式のオプションが「Intercapped (TitleLikeThis)」の場合、記事の URL は次のようになります。</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="パーマリンク設定"><![CDATA[
+<h2>記事 URL パターン</h2>
+<p>個々の記事へアクセスするための URL をどのように構成するかを定義します。この URL は <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> で表示されます。</p>
+<p>「?=messy」モードは最も互換性が高く、ほとんど設定を必要としませんが、URL の可読性や検索エンジン最適化 (SEO) の観点では最も不利です。このモードでは、記事の URL は次のようになります。</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>その他のモードでは、ウェブサーバーの URL リライト機能 (Apache の <code>mod_rewrite</code> や NGINX の <code>server</code> ブロック内のリライトルールなど) が必要です。サーバーが URL リライト機能をサポートしていない場合は、ホストに問い合わせるか、上記の「?=messy」モードを使用してください。</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="プラグインのキャッシュディレクトリパス"><![CDATA[
+<h2>プラグインのキャッシュディレクトリパス</h2>
+<p>この設定は主にプラグイン開発者向けです。ここでディレクトリを指定すると、そのディレクトリにプラグインのソースファイル (コンパイル前) を配置でき、Textpattern はそれを自動的に読み込むため、プラグインをインストール / 有効化しなくてもコードを編集してすぐに効果を確認できます。ただし、<strong>注意</strong>が必要なのは、この方法ではコンパイルに失敗する壊れたプラグインによって Textpattern 自体も動作不能になる可能性がある点です。</p>
+<p>本番サイトでは、プラグインキャッシュディレクトリではなく、通常の「プラグイン」パネルからプラグインを読み込むことを推奨します。</p>
+<p><strong>注意:</strong> 「一時ディレクトリ」と「プラグインキャッシュ」に同じディレクトリを指定しないでください。そうすると、Textpattern が一時ログファイルの内容をプラグインとして実行しようとして問題が発生します。</p>
+        ]]></item>
+        <item id="production_status" title="動作設定"><![CDATA[
+<h2>動作設定</h2>
+<p>Textpattern サイトには次の 3 つのモードがあります。</p>
+<ol>
+    <li>デバッグ</li>
+    <li>テスト</li>
+    <li>本番 (Live)</li>
+</ol>
+<h3>デバッグモード</h3>
+<p>本番サイト上でのすべての PHP エラーや、動作不良を起こしているコードやプラグインに関する警告が表示されます。さらに、ページの HTML ソースを表示すると、次の情報も確認できます。</p>
+<ul>
+    <li>サーバーがページを生成するのにかかった時間 (Runtime)</li>
+    <li>実行された MySQL クエリの数</li>
+    <li>概算のピークメモリ使用量</li>
+    <li>ページ生成中に処理されたすべての Textpattern タグ (タグトレース)</li>
+</ul>
+<h3>テストモード</h3>
+<p>本番サイト上でのすべての PHP エラーや、動作不良を起こしているコードやプラグインに関する警告が表示されます。ページの HTML ソースを表示すると、次の情報が確認できます。</p>
+<ul>
+    <li>サーバーがページを生成するのにかかった時間 (Runtime)</li>
+    <li>実行された MySQL クエリの数</li>
+    <li>概算のピークメモリ使用量</li>
+</ul>
+<h3>本番モード</h3>
+<p>ページにはエラーや診断情報は一切出力されません。一般に、本番モードはユーザー体験が最も良く、サーバーへの負荷も最小限に抑えられるため推奨されます。</p>
+        ]]></item>
+        <item id="public_theme_name" title="フロント側テーマ"><![CDATA[
+<h2>フロント側テーマ</h2>
+<p>誰かが公開サイトにアクセスしたときに使用されるデフォルトのフロント側テーマです。Textpattern にはあらかじめデフォルトテーマが同梱されているほか、テーマなしで開始するオプションもあります。また、<code>textpattern/themes</code> ディレクトリにテーマパッケージを追加すると、利用可能なテーマとして選択できるようになります。</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="時効となった記事を公開しますか？"><![CDATA[
+<h2>時効となった記事を公開しますか？</h2>
+<p>「はい」に設定すると、有効期限を過ぎた記事もサイト上に表示され続けます。<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を使用すると、期限切れ記事向けに別のコンテンツやマークアップを表示できます。</p>
+<p>「いいえ」に設定すると、有効期限を過ぎた記事は公開サイトから削除され、代わりに HTTP ステータス「410 Gone」を返します。デフォルト設定は「いいえ」です。</p>
+        ]]></item>
+        <item id="publisher_email" title="ログイン情報をこのメールアドレスから送信する"><![CDATA[
+<h2>ログイン情報を送信する送信元メールアドレス</h2>
+<p>新規ユーザーにログイン情報を送信する際、「From:」アドレスとして使用するメールアドレスを指定します。</p>
+<p>この設定を空欄にするか無効なメールアドレスを指定した場合、Textpattern は代わりに現在ログインしているユーザーの名前とメールアドレスを使用します。</p>
+        ]]></item>
+        <item id="rss_how_many" title="フィードに含める記事数"><![CDATA[
+<h2>フィードに含める記事数</h2>
+<p>RSS および Atom 形式で一度に配信する最新記事の最大件数です。</p>
+<p><code>5</code> ～ <code>15</code> 程度の低めの値を推奨します。</p>
+        ]]></item>
+        <item id="secondpass" title="追加のパーサ処理回数"><![CDATA[
+<h2>追加のパーサ処理回数</h2>
+<p>Textpattern のタグパーサは通常、ページテンプレート全体を 1 回走査して、タグをデータベースから取得したコンテンツに置き換えます。ただし次のようなケースでは、これだけでは不十分な場合があります。</p>
+<ul>
+    <li>ロード順序が低いプラグインをタグ属性として使用している場合</li>
+    <li><code>&lt;txp:php&gt;</code> タグ内でコード置き換えを行う場合</li>
+    <li>ページの後ろの方で処理されるタグから生成されたコンテンツを、前の方の要素に差し込む必要がある場合</li>
+</ul>
+<p>歴史的な理由から、Textpattern は伝統的に 1 回の追加スイープ (secondpass と呼ばれます) を実行しており、この設定のデフォルト値が <code>1</code> になっているのはそのためです。ただしスイープ回数を増やすと、意図しないタグが処理されてしまうリスクも高まります。最近のタグパーサ改善により、この 2 回目の処理の必要性は減ってきています。そのため、特別な理由で 2 回目の処理を使っていない限り、この値を <code>0</code> に減らしてサイトの安全性を高めることをお勧めします。</p>
+<p>その後、ウェブサイト上に未処理のタグがそのまま表示される (テスト / デバッグモードでタグの対になどに関するタグエラーが表示されていない) 場合は、ページテンプレートやコード、プラグインの具体例とともに私たちにご連絡ください。追加のパーサ処理が不要となるよう改善を進めており、その情報が大いに役立ちます。</p>
+        ]]></item>
+        <item id="send_lastmod" title="Last-Modified ヘッダーを送る"><![CDATA[
+<h2>"Last-Modified" ヘッダーを送信しますか？</h2>
+<p>この設定を有効にすると、Textpattern は訪問者の HTTP <code>If-Modified-Since</code> ヘッダー (存在する場合) を読み取り、サイトの最終更新日時と比較します。訪問者が最後にページを読み込んだときから何も変更されていない場合 (ブラウザから送られてきたタイムスタンプが最終更新日時と同じ場合)、ブラウザにキャッシュされたページを使用するよう指示するヘッダーを返します。</p>
+<p>これにより、帯域使用量の削減、ページ読み込み時間の短縮、ウェブサーバー負荷の軽減が期待できます。</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="フィードへコメント数を表示しますか？"><![CDATA[
+<h2>フィードにコメント数を表示しますか？</h2>
+<p>「はい」に設定すると、RSS / Atom フィード内の記事タイトルにコメント数が付加されます。</p>
+        ]]></item>
+        <item id="site_slogan" title="サイトスローガン"><![CDATA[
+<h2>サイトスローガン</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">サイトスローガン <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> は、サイトの概要や説明です。RSS / Atom フィードの説明として使用されるほか、必要に応じてサイト上のさまざまな場所で使用できます。</p>
+<p><strong>注意:</strong> サイトスローガンは任意ですが、有効な RSS または Atom フィードには必要となる場合があります。</p>
+        ]]></item>
+        <item id="sitename" title="サイト名"><![CDATA[
+<h2>サイト名</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">サイトの名前またはタイトル <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> です。訪問者のブラウザやフィードリーダーのタイトルバーなど、必要に応じてサイトのさまざまな場所に表示されます。</p>
+        ]]></item>
+        <item id="siteurl" title="サイト URL"><![CDATA[
+<h2>サイト URL</h2>
+<p>Textpattern サイトのアドレスです。例: <code>www.example.com</code></p>
+<p><strong>注意:</strong> <code>http://</code> や <code>https://</code>、末尾のスラッシュ <code>/</code> は不要です。</p>
+        ]]></item>
+        <item id="skin_dir" title="テーマディレクトリ"><![CDATA[
+<h2>テーマディレクトリ</h2>
+<p>フロント側テーマのフラットファイルを恒久的に保存するディレクトリ名をカスタマイズしたい場合は、ここで変更します。まず Textpattern インストールのルートディレクトリ直下にディレクトリを作成し、PHP がそのディレクトリに書き込みできることを確認してください。</p>
+<p>このパスは常に、Textpattern インストールルートディレクトリからの<strong>相対パス</strong>です。</p>
+<p>デフォルトは <code>themes</code> です。</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTPで送信する送信元メールアドレス"><![CDATA[
+<h2>SMTP エンベロープ送信者アドレス</h2>
+<p>Textpattern からメールを送信できない (一切送信されない) 場合を除き、この設定は空欄のままにすることをお勧めします。問題が発生している場合は、ここに有効なメールアドレスを入力してください。できれば Textpattern をインストールしたウェブサイトと同じドメイン名のアドレス (例: サイトが <code>https://example.com</code> の場合は <code>you@example.com</code> など) が望ましいです。</p>
+<p>技術的な詳細に興味がある方のために補足すると:</p>
+<ul>
+    <li>UNIX 系 / macOS サーバーでは、入力したメールアドレスが PHP の <code>mail()</code> 関数の第 4 引数 ("-f" を付けて) として使用されます。</li>
+    <li>Windows サーバーでは、入力したメールアドレスが <code>php.ini</code> の <code>sendmail_from</code> 設定として設定 (または上書き) されます。</li>
+</ul>
+<p>これにより、SMTP エンベロープ送信者アドレス (通常、メールのヘッダーに表示される "From:" アドレスとは別物) がここで指定したメールアドレスに設定されます。一部のウェブサーバーでは、メール送信の要件としてこれが必要となっています。</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTPホスト"><![CDATA[
+<h2>SMTP ホスト</h2>
+<p>メッセージの到達性を高め、SendGrid、AWS SES、Mailchimp、Mailgun などの外部サービス経由でメールを送信するには、ここに SMTP サーバーを指定します。値は SMTP プロバイダに確認してください。</p>
+<p>この値は <code>config.php</code> 内で <code>SMTP_HOST</code> 定数を定義することで指定することもでき、その場合は設定パネル上ではグレー表示され変更できなくなります。</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTPパスワード"><![CDATA[
+<h2>SMTP パスワード</h2>
+<p>指定したユーザー名で SMTP 接続にパスワードが必要な場合は、ここに入力します。詳細はプロバイダのドキュメントを参照してください。</p>
+<p>注意: パスワードはここには表示されませんが、データベースの prefs テーブルには平文で保存されます。セキュリティを高めたい場合は、代わりに <code>config.php</code> 内で <code>SMTP_PASS</code> 定数を定義することを検討してください。</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTPポート"><![CDATA[
+<h2>SMTP ポート</h2>
+<p>SMTP ホストを指定した場合は、SMTP ルーティングを有効にするためにポート番号も指定する必要があります。一般的なポートは次のとおりです。</p>
+<ul>
+    <li>25 - 暗号化なしメール用</li>
+    <li>465 - レガシー (非公式) の暗号化メール用</li>
+    <li>587 - 既定 (推奨) の TLS 暗号化メール用</li>
+</ul>
+<p>SMTP プロバイダによっては別のポートを使用している場合もあるため、ドキュメントを確認してください。</p>
+<p>この値は <code>config.php</code> 内で <code>SMTP_PORT</code> 定数を定義することで指定することもでき、その場合は設定パネル上ではグレー表示され変更できなくなります。</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTPセキュリティ方式"><![CDATA[
+<h2>SMTP セキュリティ方式</h2>
+<p>使用する SMTP プロバイダが採用しているメールセキュリティプロトコルを選択します。詳細はプロバイダのドキュメントを参照してください。</p>
+<p>この値は <code>config.php</code> 内で <code>SMTP_SECTYPE</code> 定数を定義することで指定することもでき、その場合は設定パネル上ではグレー表示され変更できなくなります。</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTPユーザー名"><![CDATA[
+<h2>SMTP ユーザー名</h2>
+<p>SMTP 接続にユーザー名 / ログイン名が必要な場合は、ここに入力します。詳細はプロバイダのドキュメントを参照してください。</p>
+<p>この値は <code>config.php</code> 内で <code>SMTP_USER</code> 定数を定義することで指定することもでき、その場合は設定パネル上ではグレー表示され変更できなくなります。</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spamブラックリスト(カンマ区切り)"><![CDATA[
+<h2>スパムブロックリスト (カンマ区切り)</h2>
+<p>ここに入力した<a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">ブロックリスト <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> プロバイダは、ブログにコメントが投稿された際に参照され、コメント投稿者の IP アドレスが照合されます。IP アドレスがリストに登録されている場合、その IP から過去にスパム報告があったことを意味し、そのコメントは拒否されます。照合結果にかかわらず、コメント投稿者の IP アドレスが Textpattern に保存されることはありません。</p>
+<p>ここにはドメイン名をコンマ区切りで複数入力できます。ブロックリストが目的に適しているかどうかを確認する責任は利用者にあります。</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="フィードに記事の概要のみ掲載しますか？"><![CDATA[
+<h2>記事の抜粋<strong>のみ</strong>をフィード配信しますか？</h2>
+<p>「いいえ」の場合、フィードアイテムには記事本文が含まれます。</p>
+<p>「はい」の場合、抜粋が存在する記事については、本文の代わりに記事の抜粋がフィードアイテムに含まれます。</p>
+        ]]></item>
+        <item id="tempdir" title="一時ディレクトリパス"><![CDATA[
+<h2>一時ディレクトリパス</h2>
+<p>一時ディレクトリ (tmp や temp と呼ばれることもあります) への<strong>絶対パス</strong>を設定します。PHP がこのディレクトリに書き込みできる必要があります。このディレクトリは、プラグイン、ファイル、画像などのアップロード時に作成される一時ファイルの保管先として使用されます。</p>
+<p><strong>注意:</strong></p>
+<ul>
+    <li>「一時ディレクトリ」と「プラグインキャッシュ」に同じディレクトリを指定しないでください。Textpattern が一時ログファイルの内容をプラグインとして実行しようとして問題が発生します。</li>
+    <li>セキュリティ向上のため、このディレクトリをウェブサイトの公開ドキュメントルートの外に移動することを検討してください。</li>
+</ul>
+        ]]></item>
+        <item id="theme_name" title="管理ページのテーマ"><![CDATA[
+<h2>管理画面テーマ</h2>
+<p>誰かが Textpattern にログインしたときに使用されるデフォルトの管理画面テーマです。Textpattern にはあらかじめ複数の管理テーマが同梱されているほか、<code>textpattern/admin-themes</code> ディレクトリにカスタムテーマパッケージを追加すると、利用可能なテーマとして選択できるようになります。</p>
+        ]]></item>
+        <item id="trailing_slash" title="URLにトレイリングスラッシュを追加"><![CDATA[
+<h2>URL にトレイリングスラッシュを追加</h2>
+<p>Textpattern が生成する URL の末尾にトレイリングスラッシュを自動的に追加するかどうかを指定します。オプションは次のとおりです。</p>
+<ul>
+    <li><strong>いいえ</strong> - 常に追加しない</li>
+    <li><strong>リスト</strong> - 一覧ページなどのランディングページでのみ追加する (個別記事表示時は追加しない)</li>
+    <li><strong>はい</strong> - 常に追加する</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="txp:evaluate で有効な PHP 関数"><![CDATA[
+<h2>txp:evaluate で有効な PHP 関数</h2>
+<p><code>function</code> または <code>alias=function</code> の形式で、コンマ区切りのリストを指定します。例: <code>md5</code>、<code>replace=str_replace</code>。ここで指定した項目は、<code>&lt;txp:evaluate /&gt;</code> タグの <code>query</code> 属性内で使用できます。</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> は配列やオブジェクトではなく、スカラー値を返す必要があります。</p>
+        ]]></item>
+        <item id="use_comments" title="コメントの許可"><![CDATA[
+<h2>コメントの受け付け</h2>
+<p>Textpattern のコメント機能を有効にするかどうかを設定します。</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="フィードのIDにメールアドレスを使用する(初期設定：サイトアドレス)?"><![CDATA[
+<h2>フィードの ID 生成にメールアドレスを使用しますか (既定はサイト URL)?</h2>
+<p>Atom フィード内の各アイテムには、一意の ID が必要です。</p>
+<p>Textpattern では、フィード ID に使用する一意の要素として、メールアドレスかドメイン名のどちらを使用するか選択できます。メールアドレスには、サイト作成時に最初に使用したアドレスが使われます。将来的にドメイン名を変更する予定がない場合は、「いいえ」に設定しておくのが一般的に安全です。</p>
+        ]]></item>
+        <item id="use_plugins" title="プラグインを使用しますか？"><![CDATA[
+<h2>プラグインを使用しますか？</h2>
+<p>Textpattern プラグインに対するサポートをすべて無効化できます。サイトの不具合をデバッグしていて、プラグインが原因かどうか確認したい場合に便利です。</p>
+        ]]></item>
+        <item id="use_textile" title="デフォルトのテキスト整形"><![CDATA[
+<h2>デフォルトのテキスト整形</h2>
+<p>ここで選択したテキスト整形設定が、「書く」パネルにおける抜粋と本文マークアップのデフォルトになります。完全な Textile 処理を行うか、改行を HTML の段落タグに変換するか、まったく変換しないかを選択できます。</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> は、プレーンテキストを HTML に変換する作業を簡単にするためのユーティリティです。有効にすると、記事本文のテキストが Textile によって処理され、構造的に正しい HTML が返されます。</p>
+<p>Textile には、テキストの装飾、リストや見出し、引用ブロックといった構造の定義、リンクや画像の挿入などを行うための、強力でありながら習得しやすいコマンドセットも用意されています。</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="セクション パネル">
+        <item id="section_category" title="イントロダクション"><![CDATA[
+<h2>イントロダクション</h2>
+<p>Textpattern におけるセクションは、新聞の各セクションと同じようなものと考えると分かりやすいでしょう。どれも同じ出版物に属していますが、それぞれ異なるレイアウトや記事スタイルを持つ場合があります。</p>
+<p>ほとんどのウェブサイトでは、セクションは最小限だけ作成すれば十分です。</p>
+<h3>3 つのセクションを持つサイトの典型的な構成例:</h3>
+<ol>
+    <li><strong>Archive:</strong> トップページに表示されるすべての記事が属する「セクション」です。読者が記事のパーマリンクをクリックすると、その記事はこの「セクション」に割り当てられたページレイアウトで表示されます。「Archive」セクションに割り当てられた最新記事のページ送りリストに移動するには、<code>https://example.com/archive/</code> のような URL になります。</li>
+    <li><strong>About:</strong> 「このサイトについて」のページで、トップページや「Archive」セクションとは異なり、より静的で、レイアウトも異なり、通常は 1 本の記事のみを含みます。「About」セクションには <code>https://example.com/about/</code> でアクセスします。</li>
+    <li><strong>Photos:</strong> 記事ではなく写真を表示するための、レイアウト (および CSS) が異なる「セクション」です。</li>
+</ol>
+<p><code>default</code> という名前の特別な非表示セクションが常に存在する点に注意してください。この default セクションは、default という名前のページと default という名前のスタイルを使用し、サイトのトップページを構築します。</p>
+        ]]></item>
+        <item id="section_default" title="使用するデフォルトセクション"><![CDATA[
+<h2>使用するデフォルトセクション</h2>
+<p>このオプションは、「書く」パネルで新しい記事を作成するときに、セクションメニューであらかじめ選択されるセクションを決定します。</p>
+<p>ほとんどの記事が特定のセクションに属する場合は、ここでそのセクションを選択してください。変更はすぐに反映されます。</p>
+<p>「書く」パネルの「並べ替えと表示」ペインで別のセクションを選択することで、記事ごとにこの設定を上書きできます。</p>
+        ]]></item>
+        <item id="section_description" title="概要"><![CDATA[
+<h2>概要</h2>
+<p>セクションの概要は任意項目ですが、検索エンジンやクローラがコンテンツをより適切に識別・整理するのに役立ちます。</p>
+<p>記事の概要は最大 255 文字までに制限されています。実際の検索結果ページ (SERP) 上での表示の都合により、一部の検索エンジンでは <code>meta description</code> の文字数に上限を設けており、これは Textpattern の 255 文字制限より少ない場合があります。</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="フロントページにセクションの記事を表示しますか？"><![CDATA[
+<h2>フロントページにセクションの記事を表示しますか？</h2>
+<p>セクションによっては、より「静的」なウェブページに近いものがあり、その記事はサイトのフロントページに流れてくるタイムラインの中では違和感があるかもしれません。</p>
+<p>これを「いいえ」に設定すると、このセクションに割り当てられた記事はフロントページに表示されなくなります。</p>
+        ]]></item>
+        <item id="section_searchable" title="サイト検索に含める"><![CDATA[
+<h2>このセクションをサイト検索に含めますか？</h2>
+<p>このセクションに属する記事を、サイト全体検索の結果に含めるかどうかを制御します。</p>
+        ]]></item>
+        <item id="section_syndicate" title="このセクションの記事をフィードに含めますか？"><![CDATA[
+<h2>このセクションの記事をフィード配信しますか？</h2>
+<p>このセクションの記事を、サイトの RSS / Atom フィードに含めるかどうかを制御します。</p>
+        ]]></item>
+        <item id="section_uses_css" title="スタイルの使用"><![CDATA[
+<h2>スタイルの使用</h2>
+<p>特定のセクションについて、デフォルトのスタイルシートを上書きしたい場合は、ここで設定できます。</p>
+<p>これは Textpattern の「スタイル」パネル内で管理されているスタイルシートにだけ関係します。CSS を Textpattern の外部に配置している場合 (推奨)、このオプションは影響しません。</p>
+        ]]></item>
+        <item id="section_uses_page" title="ページの使用"><![CDATA[
+<h2>ページの使用</h2>
+<p>Textpattern では、セクションはページテンプレートと 1 対 1 で対応付けられます。</p>
+        ]]></item>
+        <item id="section_uses_skin" title="テーマを使用"><![CDATA[
+<h2>テーマを使用</h2>
+<p>特定のセクションで使用するテーマを変更したい場合は、ここで現在インストールされているテーマ一覧から選択できます。</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="セットアップ パネル">
+        <item id="setup_admin_url" title="管理サブドメイン"><![CDATA[
+<h2>管理サブドメイン</h2>
+<p>Textpattern 管理画面にアクセスする際に使用するサブドメインです (例: <code>admin.example.com</code>)。</p>
+<p>詳細については、<a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern マルチサイトインストール</a>を参照してください。</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie ドメイン"><![CDATA[
+<h2>Cookie ドメイン</h2>
+<p>Textpattern の Cookie に使用する (サブ) ドメインです。</p>
+<p>詳細については、<a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern マルチサイトインストール</a>を参照してください。</p>
+        ]]></item>
+        <item id="setup_user_login" title="ユーザー ログイン"><![CDATA[
+<h2>ユーザーログイン</h2>
+<p>サイト管理に使用する管理者 (Publisher) アカウントのログイン名です。</p>
+<p>名前に制限はありませんが、複雑すぎる文字列や、<code>admin</code>、<code>administrator</code> など簡単に推測されるユーザー名は避けることをお勧めします。</p>
+        ]]></item>
+        <item id="setup_user_pass" title="ユーザー パスワード"><![CDATA[
+<h2>ユーザーパスワード</h2>
+<p>このアカウントは Textpattern で最も高い権限を持つため、非常に強力なパスワード、できればパスフレーズを設定してください。</p>
+<h3>ヒント</h3>
+<ul>
+    <li>大文字と小文字を混在させる</li>
+    <li>数字を使用する</li>
+    <li>記号を使用する</li>
+    <li>8 文字以上にする</li>
+    <li>日付、名前、地名、家族、ペットなど、<strong>個人情報を含めない</strong></li>
+    <li>スペル・言語・大文字小文字にかかわらず、単語だけから成る、または単語の繰り返しから成るパスワードは<strong>使用しない</strong></li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="テーブル接頭辞"><![CDATA[
+<h2>テーブル接頭辞</h2>
+    <p>1 つのデータベースに複数の Textpattern をインストールする必要がある場合のみ、テーブル接頭辞を使用します。各 Textpattern インストールには、一意の接頭辞が必要です。</p>
+    <p>接頭辞は次のルールに従う必要があります。</p>
+<ul>
+    <li><strong>1 文字目:</strong> a～z、A～Z、またはアンダースコアのみ</li>
+    <li><strong>2 文字目以降:</strong> a～z、A～Z、0～9、アンダースコアのみ</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="テーマ パネル">
+        <item id="skin_author" title="テーマの作者"><![CDATA[
+<h2>テーマの作者</h2>
+<p>このテーマの作者 (任意)。複数可。</p>
+        ]]></item>
+        <item id="skin_author_uri" title="テーマのウェブサイト"><![CDATA[
+<h2>テーマのウェブサイト</h2>
+<p>このテーマの詳細情報や最新バージョンを掲載している URL (任意) です。</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="テーマのテンプレートをディスクからも削除する"><![CDATA[
+<h2>テーマのテンプレートをディスクからも削除する</h2>
+<p>オンにすると、選択したテーマ内のテンプレートファイルはすべてディスクから完全に削除されます。ただし、ディレクトリ内に JavaScript や画像など他のファイルが存在する場合は、テーマ関連ディレクトリおよびそのサブディレクトリは削除されません。</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="インポート時に未使用のテンプレートをデータベースから削除する"><![CDATA[
+<h2>インポート時に未使用のテンプレートをデータベースから削除する</h2>
+<p>オンにすると、選択したテーマ内でディスク上に対応するファイルを持たないテンプレートは、それぞれデータベースから完全に削除されます。この操作完了後、データベース上のテンプレートは可能な限りディスク上の内容と一致する状態になります。</p>
+<p>Textpattern が必須とするテンプレートファイルを削除している場合は、空のテンプレートが自動的にデータベース内に作成されます。</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="エクスポート時に未使用のテンプレートをディスクから削除する"><![CDATA[
+<h2>エクスポート時に未使用のテンプレートをディスクから削除する</h2>
+<p>オンにすると、選択したテーマ内でデータベースに対応する項目を持たないテンプレートファイルは、それぞれディスク上から完全に削除されます。この操作完了後、ファイルシステム上のテンプレートはデータベース上の内容と完全に一致する状態になります。</p>
+        ]]></item>
+        <item id="skin_description" title="テーマの説明"><![CDATA[
+<h2>テーマの説明</h2>
+<p>このテーマのデザイン / レイアウトについて簡単な要約を記載できます (任意)。</p>
+<p>テーマの説明は最大 255 文字までです。</p>
+        ]]></item>
+        <item id="skin_import" title="インポート元"><![CDATA[
+<h2>ディスクからテーマをインポート</h2>
+<p>このフォームでは、themes ディレクトリからテーマを Textpattern データベースにインポートできます。</p>
+<p>インポート可能なテーマは、テーマ名と同じ名前の読み取り可能な親フォルダと、その中に規定フォーマットの読み取り可能な <code>manifest.json</code> ファイルが含まれている必要があります。さらに、そのテーマフォルダには、同名のサブフォルダ内にページ、フォーム、スタイルシートが含まれている必要があります。</p>
+<p>ページとフォームは <code>.txp</code> 拡張子を使用し、スタイルシートは <code>.css</code> ファイルである必要があります。フォームは種類ごとに専用ディレクトリにグループ分けする必要があります。インポート時に必須テンプレートが不足している場合、Textpattern が自動的に作成します。</p>
+<p>Textpattern CMS 内でテーマを作成・インストール・使用する方法の詳細については、<a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">テーマのドキュメント <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を参照してください。</p>
+        ]]></item>
+        <item id="skin_name" title="テーマの名前"><![CDATA[
+<h2>テーマの名前</h2>
+<p>テーマ名は、テーマのディレクトリ名やその他の技術的用途に使用されます (必須)。</p>
+<p>特殊文字やスペースは含めないでください。</p>
+        ]]></item>
+        <item id="skin_overview" title="テーマ入門"><![CDATA[
+<h2>テーマ入門</h2>
+<p>Textpattern のテーマは、ページ、フォーム、スタイルシートの集合体です。テーマを利用すると、サイト資産を論理的なグループに分けて管理しやすくしたり、他者と共有しやすくしたりできます。テーマ (およびその中に含まれる資産) を作成またはインポートしても、既存サイトには<em>一切</em>影響しません。サイト内のセクションに関連付けられていない資産は自由に編集・変更できますが、サイト自体の表示には影響しません。</p>
+<p>テーマ内の資産を編集するには、「ページ」「フォーム」「スタイル」パネルを開き、ドロップダウンセレクタから作業対象のテーマを選択します。作業中のテーマは管理画面全体で記憶されるため、資産タイプ間を素早く簡単に行き来できます。これを<em>作業用テーマ</em>と呼びます。</p>
+<p>詳しくは、<a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern ユーザードキュメント <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> を参照してください。</p>
+        ]]></item>
+        <item id="skin_title" title="テーマのタイトル"><![CDATA[
+<h2>テーマのタイトル</h2>
+<p>Textpattern の各パネル内でテーマを識別するために使われる、テーマの説明的なタイトルです。</p>
+<p>タイトルには特殊文字やスペースを含めることができます。</p>
+        ]]></item>
+        <item id="skin_version" title="テーマのバージョン"><![CDATA[
+<h2>テーマのバージョン</h2>
+<p>このテーマのインストール済みバージョン番号です (任意)。</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
