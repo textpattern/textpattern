@@ -144,7 +144,7 @@
 <p>The publishing status is one of the following:</p>
 <ul>
 <li><strong>Draft</strong>: considered a work-in-progress and is not viewable outside of the Textpattern administration area (i.e. not visible on the website and not syndicated in feeds).</li>
-<li><strong>Hidden</strong>: article is not viewable outside of the Textpattern administration area. Useful to remove content from the website that you don't necessarily wish to delete.</li>
+<li><strong>Hidden</strong>: article is not viewable outside of the Textpattern administration area. Useful to remove content from the website that you don&#39;t necessarily wish to delete.</li>
 <li><strong>Pending</strong>: considered ready for publication and awaiting approval, but is not viewable outside of the Textpattern administration area.</li>
 <li><strong>Live</strong>: typically viewable outside the Textpattern administration area (i.e. visible on the website, syndicated in feeds if the preference permits). If an article is live and has an expiration date, the status will remain Live after that date has been reached, but the article only appears outside the administration area if expired articles are permitted to be published.</li>
 <li><strong>Sticky</strong>: similar to a <strong>Live</strong> article insofar as it can be viewed by website visitors, but will <strong>not</strong> appear in article lists unless the respective <code>article</code> or <code>article_custom</code> tag includes a <code>status</code> attribute with a <code>sticky</code> value.</li>
@@ -228,7 +228,7 @@
         ]]></item>
         <item id="diag_clear_private" title="Hide private information"><![CDATA[
 <h2>Hide private information</h2>
-<p>Hide private information for extra security. If diagnostic information is to be shared in a publicly-viewable format, for example the Textpattern support forum, this reduces a security risk by omitting sensitive server information.</p>
+<p>Hide private information for extra security. If diagnostic information is to be shared in a publicly viewable format, for example the Textpattern support forum, this reduces a security risk by omitting sensitive server information.</p>
         ]]></item>
         <item id="dev_version_live" title="Development code on a live server"><![CDATA[
 <h2>Development code on a live server</h2>
@@ -256,7 +256,7 @@
   #Options -Indexes
   #ErrorDocument 403 default
 
-  <IfModule mod_rewrite.c>
+  &lt;IfModule mod_rewrite.c&gt;
     RewriteEngine On
     #RewriteBase /relative/web/path/
 
@@ -269,12 +269,12 @@
 
     RewriteCond %{HTTP:Authorization}  !^$
     RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
-  </IfModule>
+  &lt;/IfModule&gt;
 
-  <IfModule mod_mime.c>
+  &lt;IfModule mod_mime.c&gt;
     AddType image/svg+xml  svg svgz
     AddEncoding gzip       svgz
-  </IfModule>
+  &lt;/IfModule&gt;
   # END Textpattern</code></pre>
         ]]></item>
         <item id="index_inaccessible" title="Site index inaccessible"><![CDATA[
@@ -287,19 +287,19 @@
         ]]></item>
         <item id="mod_rewrite_missing" title="Apache mod_rewrite missing"><![CDATA[
 <h2>Apache mod_rewrite missing</h2>
-<p>Apache’s <code>mod_rewrite</code> module is not installed or disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site‘s host for assistance.</p>
+<p>Apache&#39;s <code>mod_rewrite</code> module is not installed or is disabled. This is recommended for Textpattern to function correctly. Ensure its existence and activated state, or contact the site&#39;s host for assistance.</p>
         ]]></item>
         <item id="modified_files" title="Modified files"><![CDATA[
 <h2>Modified files</h2>
-<p>Files are determined to be modified if their respective checksum differs from the known-good checksum list provided with Textpattern. If any files in the Textpattern installation are different to those expected, the files will be highlighted here.</p>
+<p>Files are determined to be modified if their respective checksum differs from the known-good checksum list provided with Textpattern. If any files in the Textpattern installation are different from those expected, the files will be highlighted here.</p>
         ]]></item>
         <item id="mysql_table_errors" title="MySQL table errors"><![CDATA[
 <h2>MySQL table errors</h2>
-<p>There may be some corruption or damage in Textpattern‘s MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>There may be some corruption or damage in Textpattern&#39;s MySQL database. Try repairing the affected table(s) with a MySQL access tool, such as <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="no_temp_dir" title="No temporary directory defined"><![CDATA[
 <h2>No temporary directory defined</h2>
-<p>While Textpattern will run without a temporary directory, some functionality may not work as expected if this preference is not set. Please visit Admin Preferences and set up the ‘Temporary directory path’.</p>
+<p>While Textpattern will run without a temporary directory, some functionality may not work as expected if this preference is not set. Please visit Admin Preferences and set up the "Temporary directory path".</p>
         ]]></item>
         <item id="old_placeholder_exists" title="Section named the same as directory"><![CDATA[
 <h2>Section named the same as directory</h2>
@@ -311,7 +311,7 @@
         ]]></item>
         <item id="php_scripting_enabled" title="PHP scripting enabled"><![CDATA[
 <h2>PHP scripting enabled</h2>
-<p>Textpattern permits authors and administrators to embed PHP code inside articles and pages/forms if these features are enabled. Since this is a security concern - any kind of PHP could be executed, including potentially damaging/dangerous code that may lead to destruction of your installation or leaking information to third parties - it is strongly recommended you turn these options off in the <a href="?event=prefs#prefs_group_publish">Preferences panel</a> unless you absolutely require the feature.</p>
+<p>Textpattern permits authors and administrators to embed PHP code inside articles and pages/forms if these features are enabled. Since this is a security concern - any kind of PHP could be executed, including potentially damaging or dangerous code that may lead to destruction of your installation or leaking information to third parties - it is strongly recommended you turn these options off in the <a href="?event=prefs#prefs_group_publish">Preferences panel</a> unless you absolutely require the feature.</p>
 <p>Many enhancements to Textpattern sites that previously required snippets of PHP can now be performed in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">core tags</a>.</p>
         ]]></item>
         <item id="php_version_required" title="Minimum version requirements"><![CDATA[
@@ -366,7 +366,7 @@
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
 </ul>
-<p>The site‘s <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
+<p>The site&#39;s <code>php.ini</code> file, either global or local, needs to contain a <code>date.timezone</code> setting.</p>
         ]]></item>
         <item id="setup_still_exists" title="Setup directory still exists"><![CDATA[
 <h2>Setup directory still exists</h2>
@@ -374,9 +374,9 @@
         ]]></item>
         <item id="site_url_mismatch" title="Site URL mismatch"><![CDATA[
 <h2>Site URL mismatch</h2>
-<p>The Site URL as set in the ‘Preferences’ panel does not match the actual URL used to visit the site.</p>
+<p>The Site URL as set in the "Preferences" panel does not match the actual URL used to visit the site.</p>
 <p>If the site can be reached through multiple different URLs, and if the site behaves as expected, this message can be safely ignored.</p>
-<p>Otherwise, please check and amend the ‘Site URL’ setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the ‘Diagnostics’ panel.</p>
+<p>Otherwise, please check and amend the "Site URL" setting in Admin Preferences as required. An educated guess of the correct Site URL is shown in the pre-flight warning message on the "Diagnostics" panel.</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="PHP functions [&#8230;] are disabled on your server"><![CDATA[
 <h2>PHP functions [&#8230;] are disabled on your server</h2>
@@ -398,22 +398,22 @@
 <p>There is a newer pre-release version of Textpattern available. We are looking for active volunteers to test this version so we can make the final release as solid as possible. We strive to make the upgrade experience seamless and pain-free, even for beta code.</p>
 <p>Should you decide to participate, please note:</p>
 <ul>
-    <li>Do not use this beta release on a production site unless you have a working backup of both the site's files and its database, and know how to use it.</li>
+    <li>Do not use this beta release on a production site unless you have a working backup of both the site&#39;s files and its database, and know how to use it.</li>
     <li>Please <a href="https://github.com/textpattern/textpattern/issues">report any issues</a>, stating the beta version that you are using. Further beta releases may be required prior to the stable release, depending on issues reported.</li>
     <li>Ensure that if you deploy this beta release, you also update to the final version when it is released.</li>
 </ul>
         ]]></item>
         <item id="tmp_plugin_paths_match" title="Temporary and Plugin cache directory paths should not match"><![CDATA[
 <h2>Temporary and Plugin cache directory paths should not match</h2>
-<p>Plugins should have their own directory and not share the temporary directory. This is a potential security risk and may adversely affect your site if the temporary directory is flushed. Please ensure that the temporary directory path is different to the plugin cache path.</p>
+<p>Plugins should have their own directory and not share the temporary directory. This is a potential security risk and may adversely affect your site if the temporary directory is flushed. Please ensure that the temporary directory path is different from the plugin cache path.</p>
         ]]></item>
         <item id="update_server_inaccessible" title="Update server inaccessible"><![CDATA[
 <h2>Update server inaccessible</h2>
-<p>The check for updates failed, often due to network congestion or a connection timeout. This situation usually resolves itself within an hour or two so try revisiting this panel later.</p>
+<p>The check for updates failed, often due to network congestion or a connection timeout. This situation usually resolves itself within an hour or two, so try revisiting this panel later.</p>
         ]]></item>
         <item id="warn_mail_unavailable" title="Your PHP installation is missing the mail() function"><![CDATA[
 <h2>Your PHP installation is missing the mail() function</h2>
-<p>PHP’s <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> function is disabled. Therefore, Textpattern cannot send emails and some functionality will not be available. For example, email notifications for new comments will not be sent, and new users will not receive a welcome email. Users can still be added, however.</p>
+<p>PHP&#39;s <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> function is disabled. Therefore, Textpattern cannot send emails and some functionality will not be available. For example, email notifications for new comments will not be sent, and new users will not receive a welcome email. Users can still be added, however.</p>
         ]]></item>
     </group>
 
@@ -465,8 +465,8 @@
     <group id="image" title="Images panel">
         <item id="create_thumbnail" title="Create thumbnail"><![CDATA[
 <h2>Create thumbnail</h2>
-<p>Allows you to (re)create a thumbnail of the specified dimensions from the full size image.</p>
-<p>For custom sizing, the thumbnail will be scaled to fit the dimensions you choose, unless you select the ‘Crop’ checkbox. In that case, the thumbnail will be created from the centre of the image without any scaling.</p>
+<p>Allows you to (re)create a thumbnail of the specified dimensions from the full-size image.</p>
+<p>For custom sizing, the thumbnail will be scaled to fit the dimensions you choose, unless you select the "Crop" checkbox. In that case, the thumbnail will be created from the center of the image without any scaling.</p>
 <p>For automatic sizing, the thumbnail will be scaled to the dimensions and (optional) crop settings in the current admin theme.</p>
         ]]></item>
         <item id="replace_image_form" title="Replace image"><![CDATA[
@@ -529,15 +529,15 @@
     <group id="plugin" title="Plugin panel">
         <item id="install_plugin" title="Install plugin"><![CDATA[
 <h2>Install plugin</h2>
-<p>Paste the contents of the compiled plugin text file here, then use ‘Upload’ to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
-<p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc).</p>
-<p>You can often obtain compiled versions of plugins from the <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or a plugin author's designated channel, such as their website or GitHub.</p>
+<p>Paste the contents of the compiled plugin text file here, then use "Upload" to begin installation. Any plugin you upload with the same name as one you have previously installed will be overwritten with the uploaded version.</p>
+<p>The plugin text you paste here is <strong>not</strong> the raw PHP code but Base64-encoded text, usually preceded by a header containing plugin information (such as plugin name, version and description, author name, etc.).</p>
+<p>You can often obtain compiled versions of plugins from the <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> or a plugin author&#39;s designated channel, such as their website or GitHub.</p>
 <p>You may also paste a URL to a Textpattern compiled text file here, if the external site permits it.</p>
 <p>All uploaded plugins will go through a verification step allowing you to inspect the plugin code and contents prior to installation.</p>
         ]]></item>
         <item id="upload_plugin" title="Upload plugin"><![CDATA[
 <h2>Upload plugin</h2>
-<p>Use this form to upload a plugin file. Uploaded plugins (and any assets) are stored within the ‘plugins’ directory.</p>
+<p>Use this form to upload a plugin file. Uploaded plugins (and any assets) are stored within the "plugins" directory.</p>
 <p>Plugin types that may be uploaded here are:</p>
 <ul>
 <li>Textpattern PHP Template files that contain complete code, metadata, Textpack strings and help text.</li>
@@ -566,8 +566,8 @@
         ]]></item>
         <item id="allow_article_php_scripting" title="Allow PHP in articles?"><![CDATA[
 <h2>Allow PHP in articles?</h2>
-<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editors’ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
-<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging/dangerous PHP code that may destroy your website or leak information to third parties could be added by any author and executed by anyone viewing that article.</p>
+<p>When enabled, this setting will allow use of PHP within articles. The author must have sufficient privileges to do so (by default, only <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">"Publishers" <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">"Managing Editors" <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> and <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">"Copy Editors" <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> can).</p>
+<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging or dangerous PHP code that may destroy your website or leak information to third parties could be added by any author and executed by anyone viewing that article.</p>
 <p>PHP code must have opening and closing PHP tags omitted, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="allow_form_override" title="Allow form override?"><![CDATA[
@@ -577,7 +577,7 @@
         <item id="allow_page_php_scripting" title="Allow PHP in pages?"><![CDATA[
 <h2>Allow PHP in pages?</h2>
 <p>When enabled, this setting allows PHP code within page templates and form templates.</p>
-<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging/dangerous PHP code that may destroy your website or leak information to third parties could be added by any other user and executed by an unsuspecting administrator or site visitor.</p>
+<p><strong>It is strongly recommended you turn this option off</strong> unless you absolutely require the feature. Any kind of potentially damaging or dangerous PHP code that may destroy your website or leak information to third parties could be added by any other user and executed by an unsuspecting administrator or site visitor.</p>
 <p>PHP code must omit opening and closing PHP tags, and also be enclosed within <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Archive date format"><![CDATA[
@@ -651,8 +651,8 @@
         ]]></item>
         <item id="comments_on_default" title="Comments on by default?"><![CDATA[
 <h2>Comments on by default?</h2>
-<p>If this is set to ‘Yes’, comments will be automatically enabled for every article published. If set to ‘No’, you must enable comments on the article ‘Write’ panel each time you want to accept comments.</p>
-<p>Comments can be enabled/disabled at any time, on a per-article basis.</p>
+<p>If this is set to "Yes", comments will be automatically enabled for every article published. If set to "No", you must enable comments on the article "Write" panel each time you want to accept comments.</p>
+<p>Comments can be enabled or disabled at any time, on a per-article basis.</p>
         ]]></item>
         <item id="comments_require_email" title="Comments require commenter’s email address?"><![CDATA[
 <h2>Comments require user’s email address?</h2>
@@ -681,7 +681,7 @@
         ]]></item>
         <item id="concurrent_logins" title="Accounts permitted to login concurrently"><![CDATA[
 <h2>Accounts permitted to login concurrently</h2>
-<p>A comma-separated list of login account names that may log in across multiple browsers/sessions. This is helpful during development to share a login with clients.</p>
+<p>A comma-separated list of login account names that may log in across multiple browsers or sessions. This is helpful during development to share a login with clients.</p>
 <p>Using this feature is a security risk and <strong>not recommended on live sites</strong>. Diagnostics will issue a warning if your user account is configured for concurrency on a live website.</p>
         ]]></item>
         <item id="custom_form_types" title="Custom form template types"><![CDATA[
@@ -695,7 +695,7 @@
 <p>This will generate the following HTML <code>&lt;script&gt;</code> tag:<p>
 <pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
 <p>Only form templates with the name extension corresponding to their type (e.g. <code>myscript.js</code>) can be served as flat files. In this case, they will not be processed by Textpattern at all and are accessible via their URL.</p>
-If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn&#39;t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
 <pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
         ]]></item>
         <item id="custom_overview" title="Custom fields"><![CDATA[
@@ -704,7 +704,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>You may name the fields in any manner you wish, but be aware of the following:</p>
 <ul>
 <li>Using spaces improves legibility on the Write panel, but the fields may then <em>not</em> be used as sorting or filtering parameters in an article_custom tag. Consider underscores instead if you wish to use this functionality.</li>
-<li>Be careful when naming fields that they do not clash with reserved field names in Textpattern. For example, do not use <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, etc as you will obtain strange results or broken sites.</li>
+<li>Be careful when naming fields that they do not clash with reserved field names in Textpattern. For example, do not use <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, etc. as you will obtain strange results or broken sites.</li>
 <li>Data in each field is limited to 255 characters of text only.</li>
 </ul>
         ]]></item>
@@ -718,8 +718,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="default_publish_status" title="Default publishing status"><![CDATA[
 <h2>Default publishing status</h2>
-<p>Defines the publishing visibility status of newly-created Textpattern articles.</p>
-<p>Note this preference setting does not affect the status or articles created or edited prior to any change.</p>
+<p>Defines the publishing visibility status of newly created Textpattern articles.</p>
+<p>Note this preference setting does not affect the status of articles created or edited prior to any change.</p>
 <p>The default publishing status is one of the following:</p>
 <ul>
     <li>Draft</li>
@@ -741,7 +741,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="enable_dev_preview" title="Enable development theme preview?"><![CDATA[
 <h2>Enable development theme preview?</h2>
 <p>Users with sufficient privileges (by default, those with Publisher and Designer roles) can safely develop and preview a new theme while all other users will still see the old theme (until the new one is deployed).</p>
-<p>However, privileged users who do not wish to participate in themes development can disable the development theme preview. They will then be served the current ‘public’ theme, like standard site visitors.</p>
+<p>However, privileged users who do not wish to participate in themes development can disable the development theme preview. They will then be served the current "public" theme, like standard site visitors.</p>
         ]]></item>
         <item id="enable_short_tags" title="Enable short tag support?"><![CDATA[
 <h2>Enable short tag support?</h2>
@@ -756,34 +756,34 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>If a tag contains an underscore and you enable short tags, the basic concept is:</p>
 <ol>
     <li>Remove the <code>txp:</code> prefix.</li>
-    <li>Replace the first occurrence of the underscore for <code>::</code>.</li>
+    <li>Replace the first occurrence of the underscore with <code>::</code>.</li>
 </ol>
 <p>Note that setting this preference does not affect the ability to use <code>&lt;txp:output_form /&gt;</code> short codes to render form snippets. You can still use <code>&lt;txp::shortcode /&gt;</code>, which will be interpreted as <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
         ]]></item>
         <item id="enable_xmlrpc_server" title="Enable XML-RPC server?"><![CDATA[
 <h2>Enable XML-RPC server?</h2>
-<p>If you wish to use <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for controlling Textpattern remotely (e.g. desktop or mobile apps) you must switch the XML-RPC server on by setting this to ‘Yes’.</p>
+<p>If you wish to use <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> for controlling Textpattern remotely (e.g. desktop or mobile apps) you must switch the XML-RPC server on by setting this to "Yes".</p>
         ]]></item>
         <item id="enhanced_email" title="Use enhanced mail features"><![CDATA[
 <h2>Use enhanced mail features</h2>
-<p>Setting this to ‘No’ will route all email - such as account password reset requests, and email from plugins such as com_connect - through PHP's <code>mail()</code> function. Selecting ‘Yes’ will use the bundled PHPMailer instead, which opens up optional settings for routing mail via external SMTP servers.</p>
-<p>If you are having trouble with deliverability of emails (especially with online providers such as Gmail, Outlook, Yahoo!, etc), the likely culprit is because your domain is not being seen as a trusted source. Switching to ‘Yes’ can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
+<p>Setting this to "No" will route all email - such as account password reset requests, and email from plugins such as com_connect - through PHP&#39;s <code>mail()</code> function. Selecting "Yes" will use the bundled PHPMailer instead, which opens up optional settings for routing mail via external SMTP servers.</p>
+<p>If you are having trouble with deliverability of emails (especially with online providers such as Gmail, Outlook, Yahoo!, etc.), the likely culprit is because your domain is not being seen as a trusted source. Switching to "Yes" can improve deliverability. Additionally, using SMTP can provide better compatibility with some email providers and further enhance deliverability.</p>
         ]]></item>
         <item id="expire_logs_after" title="Logs expire after how many days?"><![CDATA[
 <h2>Logs expire after how many days?</h2>
-<p>When Textpattern logging is enabled, you can specify how long (in days) the logs should be kept. ‘7’ will keep the logs available for seven days.</p>
-<p><strong>Note:</strong> The logs only get trimmed when you view the ‘Visitor logs’ panel, and will otherwise continue to grow in size.</p>
+<p>When Textpattern logging is enabled, you can specify how long (in days) the logs should be kept. "7" will keep the logs available for seven days.</p>
+<p><strong>Note:</strong> The logs only get trimmed when you view the "Visitor logs" panel, and will otherwise continue to grow in size.</p>
         ]]></item>
         <item id="file_base_path" title="File directory path"><![CDATA[
 <h2>File directory path</h2>
 <p>This sets the <strong>absolute path</strong> to the directory where file uploads will be permanently saved. PHP needs to have write access to this directory.</p>
-<p><strong>Note:</strong> Consider moving this directory outside of your website's publicly accessible docroot, for added security.</p>
+<p><strong>Note:</strong> Consider moving this directory outside of your website&#39;s publicly accessible docroot, for added security.</p>
         ]]></item>
         <item id="file_download_header" title="File download header"><![CDATA[
 <h2>File download header</h2>
 <p>Allows you to customize how file downloads are handled.</p>
-<p>Normally all downloads are treated as attachments and are downloaded (depending on how your browser is configured to handle that file type). If you wish to provide hints on how you would prefer some or all file types to be treated, you can supply tag code here to do so. An example might be to display PDF files that you have added to the Textpattern category 'inline-pdf' inline, instead of downloading them:</p>
-<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+<p>Normally all downloads are treated as attachments and are downloaded (depending on how your browser is configured to handle that file type). If you wish to provide hints on how you would prefer some or all file types to be treated, you can supply tag code here to do so. An example might be to display PDF files that you have added to the Textpattern category "inline-pdf" inline, instead of downloading them:</p>
+<pre><code>&lt;txp:evaluate query=&#39;&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"&#39;&gt;
     &lt;txp:header name="Content-Disposition" value="inline" /&gt;
     &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
 &lt;/txp:evaluate&gt;
@@ -799,7 +799,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="img_dir" title="Image directory"><![CDATA[
 <h2>Image directory</h2>
-<p>If you’d like to customize the name of your images directory, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>If you&#39;d like to customize the name of your images directory, you can do so here. You must first create the directory in the root of your Textpattern installation; you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>images</code>.</p>
         ]]></item>
@@ -820,7 +820,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     <li><strong>None:</strong> Textpattern will not log any page views</li>
 </ul>
 <p>From Textpattern 4.7.0, no visitor IP address information is collected or stored by Textpattern. If you collect or store IP addresses outside of Textpattern, please take appropriate precautions to store and/or use the data in accordance with any applicable laws, such as <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, and employ strong security in every facet of your server and Textpattern installation to avoid this data being compromised.</p>
-<p>It is strongly advised that you leave this setting at its default, ‘None’, unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
+<p>It is strongly advised that you leave this setting at its default, "None", unless you absolutely need this information and, further, publicly state your intended usage of it.</p>
         ]]></item>
         <item id="max_url_len" title="Maximum URL length (in characters)"><![CDATA[
 <h2>Maximum URL length (in characters)</h2>
@@ -828,17 +828,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="module_pophelp" title="Display admin-side inline help links"><![CDATA[
 <h2>Display admin-side inline help links</h2>
-<p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to ‘None’.</p>
+<p>If you wish to hide admin-side inline help links (Textpattern help pop-up windows) throughout the system, switch this setting to "None".</p>
         ]]></item>
-        <item id="never_display_email" title="Hide commenter‘s email address?"><![CDATA[
-<h2>Hide commenter‘s email address?</h2>
+        <item id="never_display_email" title="Hide commenter&#39;s email address?"><![CDATA[
+<h2>Hide commenter&#39;s email address?</h2>
 <p>This setting controls whether the email address of a commenter should be shown publicly.</p>
-<p>It’s recommended that email addresses should not be shown, as courtesy to your users, but there may be certain situations when showing commenter email addresses is desirable.</p>
+<p>It&#39;s recommended that email addresses should not be shown, as courtesy to your users, but there may be certain situations when showing commenter email addresses is desirable.</p>
         ]]></item>
         <item id="override_emailcharset" title="Use ISO-8859-1 encoding in emails (default is UTF-8)?"><![CDATA[
 <h2>Use ISO-8859-1 encoding in emails (default is UTF-8)?</h2>
 <p>Textpattern uses UTF-8 encoding wherever possible by default, including for outgoing emails. However, some older email clients (including some versions of Microsoft Outlook) do not have proper UTF-8 support. If you encounter garbled characters in emails, this setting will convert text to ISO-8859-1 encoding before sending them.</p>
-<p><strong>Note:</strong> If you are using a language the characters of which cannot be represented in ISO-8859-1, this setting will unfortunately not help you. You should try finding a UTF-8 (or Unicode) compatible email client.</p>
+<p><strong>Note:</strong> If you are using a language whose characters cannot be represented in ISO-8859-1, this setting will unfortunately not help you. You should try finding a UTF-8 (or Unicode) compatible email client.</p>
         ]]></item>
         <item id="override_form_types" title="Override form types"><![CDATA[
 <h2>Override form types</h2>
@@ -847,38 +847,38 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="permlink_format" title="Permalink title URL pattern"><![CDATA[
 <h2>Permalink title URL pattern</h2>
 <p>This defines the method by which article URLs are constructed and assigned when a non-messy mode is used.</p>
-<p>When an article is published, its URL is generated from the article title unless a specific URL is provided in in the URL-only title field.</p>
+<p>When an article is published, its URL is generated from the article title unless a specific URL is provided in the URL-only title field.</p>
 <p>Take the following example article title: <em>Ann and Bob eat cake</em></p>
-<p>When permalink title URL pattern option is set to ‘Hyphenated (title-like-this)’, the URL for the article would be:</p>
+<p>When the permalink title URL pattern option is set to "Hyphenated (title-like-this)", the URL for the article would be:</p>
 <pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
-<p>When permalink title URL pattern option is set to ‘Intercapped (TitleLikeThis)’, the URL for the article would be:</p>
+<p>When the permalink title URL pattern option is set to "Intercapped (TitleLikeThis)", the URL for the article would be:</p>
 <pre><code>https://example.com/AnnandBobeatcake</code></pre>
         ]]></item>
         <item id="permlink_mode" title="Article URL pattern"><![CDATA[
 <h2>Article URL pattern</h2>
 <p>This defines the method by which individual articles are reached via the URL displayed using the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
-<p>‘?=messy’ mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
+<p>"?=messy" mode is the most compatible - it will work with little to no configuration required - but least beneficial in terms of URL readability and search engine optimization (SEO). In this mode URLs for articles on your site would look like this:</p>
 <pre><code>https://example.com/index.php?id=123</code></pre>
-<p>All other modes require the web server’s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the ‘?=messy’ mode outlined above.</p>
+<p>All other modes require the web server&#39;s URL rewrite functionality (e.g. Apache <code>mod_rewrite</code> or NGINX rewrite directives in the <code>server</code> block). If your server does not support URL rewrite functionality either contact your web host or use the "?=messy" mode outlined above.</p>
         ]]></item>
         <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
 <h2>Plugin cache directory path</h2>
-<p>This setting is mainly used for plugin developers. When specified, you can put the plugin source file (not compiled) in this directory and Textpattern will load it automatically, so you can easily edit the plugin and immediately see the effect it has without having to install/activate the plugin. <strong>Beware</strong> though that by using this method, a broken plugin (which fails to compile) may also break Textpattern!</p>
-<p>It is recommended that you load plugins through the standard ‘Plugins’ panel on a production site, rather than using the plugin cache directory.</p>
-<p><strong>Note:</strong> Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</p>
+<p>This setting is mainly used for plugin developers. When specified, you can put the plugin source file (not compiled) in this directory and Textpattern will load it automatically, so you can easily edit the plugin and immediately see the effect it has without having to install or activate the plugin. <strong>Beware</strong> though that by using this method, a broken plugin (which fails to compile) may also break Textpattern!</p>
+<p>It is recommended that you load plugins through the standard "Plugins" panel on a production site, rather than using the plugin cache directory.</p>
+<p><strong>Note:</strong> Do not specify the same directory for both "temporary" and "plugin cache", as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</p>
         ]]></item>
         <item id="production_status" title="Production status"><![CDATA[
 <h2>Production status</h2>
 <p>A Textpattern site has one of three modes:</p>
 <ol>
-    <li>‘Debugging’</li>
-    <li>‘Testing’</li>
-    <li>‘Live’</li>
+    <li>"Debugging"</li>
+    <li>"Testing"</li>
+    <li>"Live"</li>
 </ol>
 <h3>Debugging mode</h3>
 <p>All PHP error reporting on your live site will be visible, as will warnings about malfunctioning code and plugins. In addition, the following information will be visible when you view the HTML source of live pages:</p>
 <ul>
-    <li>the time it took the server to build the page (‘Runtime’)</li>
+    <li>the time it took the server to build the page ("Runtime")</li>
     <li>the number of MySQL queries executed</li>
     <li>approximate peak memory usage</li>
     <li>all Textpattern tags encountered while building the page (also known as a tag trace)</li>
@@ -886,7 +886,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h3>Testing mode</h3>
 <p>All PHP error reporting on your live site will be visible, as will warnings about malfunctioning code and plugins. The following information will be visible when you view the HTML source of live pages:</p>
 <ul>
-    <li>the time it took the server to build the page (‘Runtime’)</li>
+    <li>the time it took the server to build the page ("Runtime")</li>
     <li>the number of MySQL queries executed</li>
     <li>approximate peak memory usage</li>
 </ul>
@@ -899,18 +899,18 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="publish_expired_articles" title="Publish expired articles?"><![CDATA[
 <h2>Publish expired articles?</h2>
-<p>When set to ‘Yes’, expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
-<p>When set to ‘No’, expired articles will be removed from the public site and return a "410 Gone" HTTP status instead. The default setting is ‘No’.</p>
+<p>When set to "Yes", expired articles will continue to show on your site after their expiry date has elapsed. You can use the <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> to show alternate content or markup for expired articles.</p>
+<p>When set to "No", expired articles will be removed from the public site and return a "410 Gone" HTTP status instead. The default setting is "No".</p>
         ]]></item>
         <item id="publisher_email" title="Send login details from this email address"><![CDATA[
 <h2>Send login details from this email address</h2>
-<p>Specify an email address which is used as the sender’s ‘From:’ address on messages with login information for new users.</p>
+<p>Specify an email address which is used as the sender&#39;s "From:" address on messages with login information for new users.</p>
 <p>If this preference is left blank or contains an invalid email address, Textpattern uses the name and address of the currently logged-in user instead.</p>
         ]]></item>
         <item id="rss_how_many" title="How many articles should be included in feeds?"><![CDATA[
 <h2>How many articles should be included in feeds?</h2>
 <p>This is the maximum number of current articles to be syndicated at a time, in RSS and Atom formats.</p>
-<p>A low value, such as <code>5</code> through <code>15</code> is recommended.</p>
+<p>A low value, such as <code>5</code> through <code>15</code>, is recommended.</p>
         ]]></item>
         <item id="secondpass" title="Number of extra parser sweeps"><![CDATA[
 <h2>Number of extra parser sweeps</h2>
@@ -920,17 +920,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
     <li>Code replacements inside <code>&lt;txp:php&gt;</code> tags</li>
     <li>Skipping page elements earlier in the page so they may receive content that is derived from a tag that is processed later</li>
 </ul>
-<p>Textpattern has traditionally run one extra sweep (called ‘secondpass’) for legacy reasons, hence the default value of this preference being <code>1</code>. More sweeps, however, increase the chances of unintended tags slipping through and being processed. Recent improvements in the tag parser have reduced the need for this second pass. So, unless you are using the second sweep for a dedicated reason, please reduce this value to <code>0</code> to make your site more secure.</p>
-<p>If you subsequently find unprocessed tags being rendered on your website (and there are no other tag errors shown in Testing/Debugging modes due to mismatched tag pairs) then please contact us with your page template/code/plugin example. We are trying to eradicate the need for extra parser passes, and this information will help us achieve that.</p>
+<p>Textpattern has traditionally run one extra sweep (called "secondpass") for legacy reasons, hence the default value of this preference being <code>1</code>. More sweeps, however, increase the chances of unintended tags slipping through and being processed. Recent improvements in the tag parser have reduced the need for this second pass. So, unless you are using the second sweep for a dedicated reason, please reduce this value to <code>0</code> to make your site more secure.</p>
+<p>If you subsequently find unprocessed tags being rendered on your website (and there are no other tag errors shown in Testing or Debugging modes due to mismatched tag pairs) then please contact us with your page template/code/plugin example. We are trying to eradicate the need for extra parser passes, and this information will help us achieve that.</p>
         ]]></item>
         <item id="send_lastmod" title="Send &quot;Last-Modified&quot; header?"><![CDATA[
 <h2>Send "Last-Modified" header?</h2>
-<p>When set, Textpattern will read a visitor’s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor’s browser to use its cached version of the page.</p>
+<p>When set, Textpattern will read a visitor&#39;s HTTP <code>If-Modified-Since</code> header (if one exists) and compare it to the last site update. If nothing has changed since the visitor last loaded the page (i.e. if the timestamp the browser sends is the same as the last site update), then a header is sent back instructing the visitor&#39;s browser to use its cached version of the page.</p>
 <p>This can reduce bandwidth consumption, page load times, and web server load.</p>
         ]]></item>
         <item id="show_comment_count_in_feed" title="Show comment count in feeds?"><![CDATA[
 <h2>Show comment count in feeds?</h2>
-<p>When set to ‘Yes’, this setting will append the number of comments to your article titles in RSS/Atom feeds.</p>
+<p>When set to "Yes", this setting will append the number of comments to your article titles in RSS/Atom feeds.</p>
         ]]></item>
         <item id="site_slogan" title="Site slogan"><![CDATA[
 <h2>Site slogan</h2>
@@ -939,7 +939,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="sitename" title="Site name"><![CDATA[
 <h2>Site name</h2>
-<p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor’s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
+<p>The <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">name or title of your site <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. This will appear in the title bar of a visitor&#39;s browser or syndication feed reader, and any number of other places throughout your site, at your discretion.</p>
         ]]></item>
         <item id="siteurl" title="Site URL"><![CDATA[
 <h2>Site URL</h2>
@@ -948,28 +948,28 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="skin_dir" title="Theme directory"><![CDATA[
 <h2>Theme directory</h2>
-<p>If you’d like to customize the name of the directory where front-side themes flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation, you should also make sure that PHP is able to write to that directory.</p>
+<p>If you&#39;d like to customize the name of the directory where front-side themes&#39; flat files will be permanently saved, you can do so here. You must first create the directory in the root of your Textpattern installation; you should also make sure that PHP is able to write to that directory.</p>
 <p>This path is always a <strong>relative path</strong> (to the directory of your root Textpattern installation).</p>
 <p>The default is <code>themes</code>.</p>
         ]]></item>
         <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
 <h2>SMTP envelope sender address</h2>
-<p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you’ve installed Textpattern (i.e. if your website is <code>https://example.com</code>, you might use <code>you@example.com</code>).</p>
+<p>This preference should be left blank unless you experience problems with sending email in Textpattern (if no email is sent at all). Should that problem arise, you can enter any valid email address here, although preferably one that has the same domain name as the website where you&#39;ve installed Textpattern (i.e. if your website is <code>https://example.com</code>, you might use <code>you@example.com</code>).</p>
 <p>For those interested in the technical details:</p>
 <ul>
     <li>On UNIX-like/macOS servers, the entered email address is used as the 4th parameter (prefixed with "-f") for the PHP <code>mail()</code> function</li>
     <li>On Windows servers, the entered email address is used to set (or override) the <code>sendmail_from</code> php.ini setting</li>
 </ul>
-<p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you’ve entered here, which is a requirement for sending email on some web servers.</p>
+<p>This ensures that the SMTP envelope sender address (which is not necessarily the same as the "From:" header you normally see in emails) is set to the email address you&#39;ve entered here, which is a requirement for sending email on some web servers.</p>
         ]]></item>
         <item id="smtp_host" title="SMTP host"><![CDATA[
 <h2>SMTP host</h2>
-<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc), specify the SMTP server here. Consult your SMTP provider to obtain this value.</p>
+<p>To improve message deliverability and take advantage of routing email via an external service (such as SendGrid, AWS SES, Mailchimp, Mailgun, etc.), specify the SMTP server here. Consult your SMTP provider to obtain this value.</p>
 <p>This value may be provided by defining an <code>SMTP_HOST</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="smtp_pass" title="SMTP password"><![CDATA[
 <h2>SMTP password</h2>
-<p>If your SMTP connection requires a password for the specified user name, provide it here. Consult the provider's documentation for details.</p>
+<p>If your SMTP connection requires a password for the specified user name, provide it here. Consult the provider&#39;s documentation for details.</p>
 <p>Note: Although the password will not be displayed here, it <em>will</em> be stored in plaintext in the database prefs table. If you wish to increase security, you may define an <code>SMTP_PASS</code> constant in your <code>config.php</code> instead.</p>
         ]]></item>
         <item id="smtp_port" title="SMTP port"><![CDATA[
@@ -990,7 +990,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="smtp_user" title="SMTP user name"><![CDATA[
 <h2>SMTP user name</h2>
-<p>If your SMTP connection requires a user/login name, provide it here. Consult the provider's documentation for details.</p>
+<p>If your SMTP connection requires a user/login name, provide it here. Consult the provider&#39;s documentation for details.</p>
 <p>This value may be provided by defining an <code>SMTP_USER</code> constant in <code>config.php</code>, in which case the value is greyed out in the Preferences panel.</p>
         ]]></item>
         <item id="spam_blocklists" title="Spam blocklists (comma-separated)"><![CDATA[
@@ -1000,16 +1000,16 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="syndicate_body_or_excerpt" title="Syndicate article excerpt only?"><![CDATA[
 <h2>Syndicate article excerpt <strong>only</strong>?</h2>
-<p>If this is set to ‘No’, feed items will contain the full article bodies.</p>
-<p>If this is set to ‘Yes’, feed items will contain the article excerpt instead of the article body where it is available.</p>
+<p>If this is set to "No", feed items will contain the full article bodies.</p>
+<p>If this is set to "Yes", feed items will contain the article excerpt instead of the article body where it is available.</p>
         ]]></item>
         <item id="tempdir" title="Temporary directory path"><![CDATA[
 <h2>Temporary directory path</h2>
-<p>Sets an <strong>absolute path</strong> to a temporary (sometimes know as ‘tmp’ or ‘temp’) directory. PHP needs to have write access to this directory. This directory is used for temporary files, for example uploads of any kind (plugins, files or images).</p>
+<p>Sets an <strong>absolute path</strong> to a temporary (sometimes known as "tmp" or "temp") directory. PHP needs to have write access to this directory. This directory is used for temporary files, for example uploads of any kind (plugins, files or images).</p>
 <p><strong>Notes:</strong>
 <ul>
-    <li>Do not specify the same directory for both ‘temporary’ and ‘plugin cache’, as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</li>
-    <li>Consider moving this directory outside of your website's publicly accessible docroot, for added security.</li>
+    <li>Do not specify the same directory for both "temporary" and "plugin cache", as this will cause problems (Textpattern would try to run the contents of temporary log files as plugins).</li>
+    <li>Consider moving this directory outside of your website&#39;s publicly accessible docroot, for added security.</li>
 </ul>
 </p>
         ]]></item>
@@ -1029,17 +1029,17 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         <item id="txp_evaluate_functions" title="PHP functions enabled in txp:evaluate"><![CDATA[
 <h2>PHP functions enabled in txp:evaluate</h2>
 <p>This is a comma-separated list of <code>function</code> or <code>alias=function</code> items, e.g. <code>md5</code>, <code>replace=str_replace</code>. Items specified within this list can be utilized in the <code>query</code> attribute of the <code>&lt;txp:evaluate /&gt;</code> tag:</p>
-<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
-<p><code>function</code> should return a scalar value (<strong>not</strong> an array/object).</p>
+<pre><code>&lt;txp:evaluate query="replace(&#39;cats&#39;, &#39;dogs&#39;, &#39;I like cats.&#39;)" /&gt;</code></pre>
+<p><code>function</code> should return a scalar value (<strong>not</strong> an array or object).</p>
         ]]></item>
         <item id="use_comments" title="Accept comments?"><![CDATA[
 <h2>Accept comments?</h2>
-<p>This sets whether Textpattern’s commenting functionality should be enabled or disabled.</p>
+<p>This sets whether Textpattern&#39;s commenting functionality should be enabled or disabled.</p>
         ]]></item>
         <item id="use_mail_on_feeds_id" title="Use email address to construct feed IDs (default is site URL)?"><![CDATA[
 <h2>Use email address to construct feed IDs (default is site URL)?</h2>
 <p>Items in an Atom feed require a unique ID.</p>
-<p>To generate IDs unique to your site, Textpattern allows you to choose between either an email address or your domain name to include in these IDs. The email address will be the first one used when creating the site. Unless you are likely to be changing your domain name in the future, it is probably safe to set this to ‘No’.</p>
+<p>To generate IDs unique to your site, Textpattern allows you to choose between either an email address or your domain name to include in these IDs. The email address will be the first one used when creating the site. Unless you are likely to be changing your domain name in the future, it is probably safe to set this to "No".</p>
         ]]></item>
         <item id="use_plugins" title="Use plugins?"><![CDATA[
 <h2>Use plugins?</h2>
@@ -1047,7 +1047,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="use_textile" title="Default text formatting"><![CDATA[
 <h2>Default text formatting</h2>
-<p>The text format setting you choose here becomes the default for excerpt and body markup on the ‘Write’ panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
+<p>The text format setting you choose here becomes the default for excerpt and body markup on the "Write" panel. You can choose to allow complete Textile processing, to convert line breaks into HTML paragraph markers or not convert any text at all.</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> is a utility intended to simplify the conversion of plain text to HTML. When enabled, Textile will process the body text of articles and return structurally sound HTML.</p>
 <p>Textile also offers a powerful but easy-to-learn set of commands with which to format text, define structures such as lists, headers and blockquotes, and insert links and images.</p>
         ]]></item>
@@ -1110,16 +1110,16 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <h2>Admin subdomain</h2>
 <p>The subdomain you wish to use to access the Textpattern administration interface (e.g. <code>admin.example.com</code>).</p>
 <p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
-            ]]></item>
-        <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
 <h2>Cookie domain</h2>
 <p>The (sub)domain you wish to use for Textpattern cookie(s).</p>
 <p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
-            ]]></item>
+        ]]></item>
         <item id="setup_user_login" title="User login"><![CDATA[
 <h2>User login</h2>
-<p>The login name of the administrator (‘Publisher’) account that you will use for administering of your site.</p>
-<p>Although there are no restrictions on the name, it is best to avoid complicated character sequences and easily-guessed usernames (e.g. <code>admin</code>, <code>administrator</code>, etc.)</p>
+<p>The login name of the administrator ("Publisher") account that you will use for administering your site.</p>
+<p>Although there are no restrictions on the name, it is best to avoid complicated character sequences and easily guessed usernames (e.g. <code>admin</code>, <code>administrator</code>, etc.).</p>
         ]]></item>
         <item id="setup_user_pass" title="User password"><![CDATA[
 <h2>User password</h2>

@@ -1111,7 +1111,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>The subdomain you wish to use to access the Textpattern administration interface (e.g. <code>admin.example.com</code>).</p>
 <p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
         ]]></item>
-        <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+    <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
 <h2>Cookie domain</h2>
 <p>The (sub)domain you wish to use for Textpattern cookie(s).</p>
 <p>Please refer to <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> for further details.</p>
