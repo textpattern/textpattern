@@ -199,7 +199,7 @@ class SLIRRequest
                 $this->setProgressive($value);
                     break;
 
-            case 'b';
+            case 'b':
             case 'background':
             case 'backgroundFillColor':
                 $this->setBackgroundFillColor($value);
