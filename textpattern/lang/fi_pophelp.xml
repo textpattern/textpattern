@@ -2,213 +2,1190 @@
 <resources>
 <help lang="fi">
     <group id="admin" title="Käyttäjät-paneeli">
-        <item id="about_privileges" title="Tietoa rooleista"><![CDATA[]]></item>
+        <item id="about_privileges" title="Tietoa rooleista"><![CDATA[
+<h2>Tietoa rooleista</h2>
+<h3>Julkaisija</h3>
+<ul>
+    <li>voi hallita artikkeleita, kommentteja ja linkkejä</li>
+    <li>voi käyttää PHP:tä artikkeleissa jos hallintapaneelin asetus ‘Salli PHP artikkeleissa?’ on ‘Kyllä’</li>
+    <li>voi hallita kuvia ja tiedostoja</li>
+    <li>voi hallita osioita ja kategorioita</li>
+    <li>voi hallita sivuja, lomakkeita ja tyylejä</li>
+    <li>voi tarkastella diagnostiikkatietoja</li>
+    <li>voi hallita sivuston asetuksia</li>
+    <li>voi hallita käyttäjätilejä</li>
+    <li>voi hallita lokitietoja sivuston vierailijoista</li>
+    <li>voi hallita liitännäisiä</li>
+    <li>voi tuoda tietoja</li>
+</ul>
+<h3>Vastaava toimittaja</h3>
+<ul>
+    <li>voi hallita artikkeleita, kommentteja ja linkkejä</li>
+    <li>voi käyttää PHP:tä artikkeleissa jos hallintapaneelin asetus ‘Salli PHP artikkeleissa?’ on ‘Kyllä’</li>
+    <li>voi hallita kuvia ja tiedostoja</li>
+    <li>voi hallita osioita ja kategorioita</li>
+    <li>voi hallita sivuja, lomakkeita ja tyylejä</li>
+    <li>voi tarkastella diagnostiikkatietoja</li>
+    <li>voi hallita sivuston asetuksia</li>
+    <li>voi tarkastella käyttäjätilejä</li>
+    <li>voi hallita lokitietoja sivuston vierailijoista</li>
+    <li>voi hallita liitännäisiä</li>
+    <li>voi tuoda tietoja</li>
+</ul>
+<h3>Tekstin toimittaja</h3>
+<ul>
+    <li>voi hallita artikkeleita seuraavan rajoituksen puitteissa:
+        <ul>
+            <li>ei voi poistaa artikkeleita, jotka kuuluvat muille käyttäjille</li>
+        </ul>
+    </li>
+    <li>voi hallita kommentteja ja linkkejä</li>
+    <li>voi hallita kuvia ja tiedostoja</li>
+    <li>voi hallita kategorioita</li>
+    <li>voi hallita sivuja ja lomakkeita</li>
+    <li>voi tarkastella käyttäjätilejä</li>
+    <li>voi hallita lokitietoja sivuston vierailijoista</li>
+</ul>
+<h3>Rivitoimittaja</h3>
+<ul>
+    <li>voi hallita omia artikkeleita, voi tarkastella muiden käyttäjien artikkeleita</li>
+    <li>voi hallita kuvia ja tiedostoja</li>
+</ul>
+<h3>Vapaa toimittaja</h3>
+<ul>
+    <li>voi hallita omia artikkeleita seuraavin rajoituksin:
+        <ul>
+            <li>voi muokata artikkelia kunnes se on julkaistu</li>
+            <li>voi muuttaa statusta <em>vain</em> jos se on Luonnos, Piilotettu tai Odottaa hyväksyntää</li>
+        </ul>
+    </li>
+    <li>voi tarkastella muiden käyttäjien artikkeleita</li>
+</ul>
+<h3>Suunnittelija</h3>
+<ul>
+    <li>voi hallita omia artikkeleita seuraavin rajoituksin:
+        <ul>
+            <li>voi muokata artikkelia kunnes se on julkaistu</li>
+            <li>voi muuttaa statusta <em>vain</em> jos se on Luonnos, Piilotettu tai Odottaa hyväksyntää</li>
+        </ul>
+    </li>
+    <li>voi tarkastella muiden käyttäjien artikkeleita</li>
+    <li>voi hallita kuvia</li>
+    <li>voi hallita osioita</li>
+    <li>voi hallita sivuja, lomakkeita ja tyylejä</li>
+</ul>
+        ]]></item>
         <item id="create_author" title="Luo uusi tekijä"><![CDATA[<h2>Lisää uusi tekijä</h2>
 <p>Tervetuloviesti ja kirjautumisohjeet tullaan sähköpostittamaan uudelle tekijälle.</p>
         ]]></item>
     </group>
 
     <group id="article" title="Kirjoita-paneeli">
-        <item id="article_image" title="Artikkelin kuva"><![CDATA[]]></item>
-        <item id="body" title="Leipäteksti"><![CDATA[]]></item>
-        <item id="description" title="Kuvaus"><![CDATA[]]></item>
-        <item id="excerpt" title="Johdanto"><![CDATA[]]></item>
-        <item id="expire_date" title="Vanhentumispäivämäärä"><![CDATA[]]></item>
-        <item id="keywords" title="Avainsanat"><![CDATA[]]></item>
-        <item id="override_form" title="Kumoa lomake"><![CDATA[]]></item>
-        <item id="publish_date" title="Julkaisupäivämäärä"><![CDATA[]]></item>
-        <item id="status" title="Tila"><![CDATA[]]></item>
-        <item id="title" title="Otsikko"><![CDATA[]]></item>
-        <item id="url_title" title="URL-osoitepolku"><![CDATA[]]></item>
+        <item id="article_image" title="Artikkelin kuva"><![CDATA[
+<h2>Artikkelikuva</h2>
+<p>Liittääksesi tähän artikkeliin kuvia, lisää jokin seuraavista vaihtoehdoista:</p>
+<ol>
+    <li>yksi tai useampi Textpattern-kuvan ID pilkuin eroteltuna (esim. <code>12, 25, 18</code>)</li>
+    <li>yksi tai useampi kuvan suhteellinen URL-osoite pilkuin eroteltuna (esim. <code>/images/my_pic.jpg</code>)</li>
+    <li>yksi tai useampi täydellinen URL-osoite pilkuin eroteltuna (esim. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Ensimmäisen kuvan voi näyttää sijoittamalla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code>-tagin <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> artikkelin lomakkeen sisään. Oletuksena tagi tulostaa valitulle kuvalle täydellisen HTML-<code>&lt;img&gt;</code>-tägirakenteen.</p>
+<p>Voit näyttää kuvagallerioita käyttämällä tagia <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Leipäteksti"><![CDATA[
+<h2>Leipäteksti</h2>
+<p>Artikkelin pääasiallinen sisältö sijaitsee leipätekstille varatussa alueessa.</p>
+<p>Kun Textpatternilla kirjoitetaan artikkeleita tai niitä valmistellaan julkaistavaksi, kirjoittaja voi vaihtaa käsiteltävänä olevan artikkelin esitystapaa kolmen vaihtoehdon välillä: pelkkä teksti, HTML-merkkaus (se koodi, jonka selain tulkitsee kun artikkelia katsellaan), sekä esikatselu.</p>
+        ]]></item>
+        <item id="description" title="Kuvaus"><![CDATA[
+<h2>Kuvaus</h2>
+<p>Artikkelin kuvaus on vapaaehtoinen osa, jonka avulla hakukoneet ja haravointirobotit voivat helpommin tunnistaa ja jäsennellä sisältöä.</p>
+<p>Artikkelin kuvauksen enimmäispituus on 255 merkkiä. Huomaa, että jotkin hakukoneet rajoittavat sivun <code>meta description</code> -kentän pituutta käytännön syistä hakutulossivuillaan (SERP), ja tämä raja voi olla pienempi kuin Textpatternin 255 merkkiä.</p>
+<p>Huomaa, että artikkelin kuvaus poikkeaa artikkelin johdannosta, vaikka kenttiin voi kirjoittaa samantyyppistä sisältöä. Kuvaus on ensisijaisesti tarkoitettu hakukoneiden ja haravointirobottien käyttöön, kun taas johdanto on paremmin soveltuva ihmisen luettavaksi artikkelin tiivistelmäksi.</p>
+        ]]></item>
+        <item id="excerpt" title="Johdanto"><![CDATA[
+<h2>Johdanto</h2>
+<p>Artikkelien johdannot ovat vapaaehtoisia. Johdantoja voi käyttää lyhyinä yhteenvetoina artikkelissa käsiteltävistä asioista, ja johdantoteksti voidaan näyttää osana sisällysluetteloa tai artikkelin leipätekstin sijasta sivuston RSS-/Atom-syötteissä, sekä monissa muissa käyttötarkoituksissa.</p>
+        ]]></item>
+        <item id="expire_date" title="Vanhentumispäivämäärä"><![CDATA[
+<h2>Vanhentumispäivämäärä</h2>
+<p>Aika, jolloin artikkeli merkitään vanhentuneeksi. Ajan asettaminen on vapaaehtoista, ja sen voi määrittää mihin tahansa menneisyyden tai tulevaisuuden ajankohtaan.</p>
+<p>Kentät tarkoittavat seuraavia tietoja:</p>
+<ul>
+    <li>Vuosi / Kuukausi / Päivä</li>
+    <li>Tunti (24 tunnin muodossa) : Minuutti : Sekunti</li>
+</ul>
+<p>Kun asetettu ajankohta saavutetaan – tai jos vanhentumisaika on jo menneisyydessä – artikkeli vanhentuu.</p>
+<p>Jos vanhentuneiden artikkelien näyttäminen on sallittu, artikkeli pysyy näkyvissä. Jos vanhentuneiden artikkelien näyttäminen on pois käytöstä, artikkelin sivulle tuleville kävijöille palautetaan HTTP 410 -virhe varsinaisen sisällön sijaan.</p>
+        ]]></item>
+        <item id="keywords" title="Avainsanat"><![CDATA[
+<h2>Avainsanat</h2>
+<p>Avainsanat ovat hyödyllisiä, kun halutaan tarkentaa artikkeleiden välisiä suhteita pidemmälle kuin mitä kategoriat tarjoavat.</p>
+<p>Avainsanojen tulee olla yksittäisiä pilkuin eroteltuja sanoja.</p>
+        ]]></item>
+        <item id="override_form" title="Kumoa lomake"><![CDATA[
+<h2>Ohitettava lomake</h2>
+<p>Artikkelille voidaan halutessa asettaa jokin muu lomake kuin se, joka on sille oletuksena määritetty – esimerkiksi näyttää artikkelin johdanto <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> artikkelin leipätekstin sijaan, joka tuotetaan tagilla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>. Tämä valinta tehdään tässä.</p>
+        ]]></item>
+        <item id="publish_date" title="Julkaisupäivämäärä"><![CDATA[
+<h2>Julkaisupäivämäärä</h2>
+<p>Aika, jolloin artikkeli tai tiedosto julkaistaan tai jolloin sitä on viimeksi muokattu. Ajan voi asettaa julkaisun ajankohtaan tai mihin tahansa menneisyyden tai tulevaisuuden ajankohtaan.</p>
+<p>Kentät tarkoittavat seuraavia tietoja:</p>
+<ul>
+    <li>Vuosi / Kuukausi / Päivä</li>
+    <li>Tunti (24 tunnin muodossa) : Minuutti : Sekunti</li>
+</ul>
+<p>Jos objektin aikaleima on nykyhetkeä suurempi (eli tulevaisuudessa), se ei näy sivuston julkisella puolella eikä RSS-/Atom-syötteissä ennen kuin kyseinen ajankohta koittaa.</p>
+        ]]></item>
+        <item id="status" title="Tila"><![CDATA[
+<h2>Tila</h2>
+<p>Määrittää tämän Textpattern-artikkelin julkaisun näkyvyystilan.</p>
+<p>Julkaisutila voi olla jokin seuraavista:</p>
+<ul>
+<li><strong>Draft</strong>: keskeneräinen artikkeli, jota ei voi katsella Textpatternin ylläpitoalueen ulkopuolella (eli ei näy sivuston julkisella puolella eikä syötteissä).</li>
+<li><strong>Hidden</strong>: artikkeli ei näy Textpatternin ylläpitoalueen ulkopuolella. Hyödyllinen, kun sisältö halutaan poistaa julkiselta sivustolta sitä kuitenkaan poistamatta.</li>
+<li><strong>Pending</strong>: artikkeli on julkaisukelpoinen ja odottaa hyväksyntää, mutta ei näy ylläpitoalueen ulkopuolella.</li>
+<li><strong>Live</strong>: artikkeli näkyy yleensä ylläpitoalueen ulkopuolella (eli näkyvissä sivustolla ja mukana syötteissä, jos asetus sallii). Jos artikkeli on tilassa Live ja sillä on vanhentumispäivä, tila pysyy Live-tilassa tämän päivämäärän jälkeenkin, mutta artikkeli näkyy julkisella puolella vain, jos vanhentuneiden artikkeleiden julkaiseminen on sallittu.</li>
+<li><strong>Sticky</strong>: muistuttaa <strong>Live</strong>-tilaista artikkelia siltä osin, että se voi näkyä sivuston kävijöille, mutta se ei <strong>näy</strong> artikkelilistoissa, ellei <code>article</code>- tai <code>article_custom</code>-tagissa ole <code>status</code>-attribuuttia arvolla <code>sticky</code>.</li>
+</ul>
+<p>Huom: sisältö, joka ei ole julkisesti nähtävissä sivustolla, voidaan silti esikatsella sisäänkirjautuneena käyttäjänä.</p>
+        ]]></item>
+        <item id="title" title="Otsikko"><![CDATA[
+<h2>Otsikko</h2>
+<p>Lisää tälle artikkelille sopiva otsikko.</p>
+<p>Artikkelin otsikon enimmäispituus on 255 merkkiä.</p>
+        ]]></item>
+        <item id="url_title" title="URL-osoitepolku"><![CDATA[
+<h2>URL-otsikko</h2>
+<p>Jos haluat käyttää tiettyä otsikkoa artikkelin kestolinkin URL-osoitteessa, kirjoita se tähän. Jos kenttä jätetään tyhjäksi, URL-otsikko muodostetaan automaattisesti artikkelin otsikosta.</p>
+<p>Tämä on erityisen hyödyllistä, jos artikkelin otsikossa käytetään ASCII-merkistön ulkopuolisia merkkejä.</p>
+        ]]></item>
     </group>
 
     <group id="category" title="Kategoriat-paneeli">
-        <item id="article_category" title="Artikkelit"><![CDATA[]]></item>
-        <item id="category_description" title="Kuvaus"><![CDATA[]]></item>
+        <item id="article_category" title="Artikkelit"><![CDATA[
+<h2>Artikkelit</h2>
+<p>Toisin kuin sivuston navigaatiosta vastaavat osiot, artikkeliluokat mahdollistavat artikkelien järjestämisen aiheen mukaan. Kun luokat on määritetty, tiettyyn luokkaan kuuluvia artikkeleita voidaan selata listauksina.</p>
+<p>Esimerkiksi ruokaan keskittyvän sivuston mahdollisia artikkeliluokkia voisivat olla:</p>
+<ul>
+    <li>raaka-aineet</li>
+    <li>ostokset</li>
+    <li>reseptit</li>
+    <li>esillepano</li>
+    <li>ravintolat</li>
+    <li>kokit</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Kuvaus"><![CDATA[
+<h2>Kategorian kuvaus</h2>
+<p>Kategorian kuvaus on vapaaehtoinen osa, jonka avulla hakukoneet ja haravointirobotit voivat helpommin tunnistaa ja jäsennellä sisältöä.</p>
+<p>Kategorian kuvauksen enimmäispituus on 255 merkkiä. Huomaa, että jotkin hakukoneet rajoittavat sivun <code>meta description</code> -kentän pituutta käytännön syistä hakutulossivuillaan (SERP), ja tämä raja voi olla pienempi kuin Textpatternin 255 merkkiä.</p>
+        ]]></item>
         <item id="file_category" title="Tiedostot"><![CDATA[<h2>Tiedostot</h2>
 <p>Tiedostokategoriat ovat vapaaehtoisia, ja hyödyllisiä tiedostojen ryhmittelemisessä.</p>
         ]]></item>
-        <item id="image_category" title="Kuvat"><![CDATA[<h2>Kuvat</h2>
-<p>Kuvien kategoriat ovat valinnaisia, ja hyödyllisiä sekä kuvien järjestelemiseen sisäisesti että kuvakokoelmien luomiseen, jotta niitä voidaan näyttää käyttäen tageja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</5</a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code><span class="ui-icon ui-icon-extlink">(avaa ulkoisen linkin uudessa ikkunassa)</span></a>.</p>]]></item>
-        <item id="link_category" title="Linkit"><![CDATA[]]></item>
+        <item id="image_category" title="Kuvat"><![CDATA[
+<h2>Kuvat</h2>
+<p>Kuvakategoriat ovat vapaaehtoisia, ja niistä on hyötyä sekä sisäisessä järjestelyssä että kuvasettien määrittelyssä, jotka voidaan näyttää tagilla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Linkit"><![CDATA[
+<h2>Linkit</h2>
+<p>Linkkikategoriat ovat vapaaehtoisia, ja niistä on hyötyä, kun linkkejä halutaan ryhmitellä eri tavoin, esim. ”Ystävät”, ”Roomalaiset”, ”Kansalaiset”.</p>
+<p>Tämänkaltaisia valikoituja linkkilistoja tulostetaan tagilla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> esimerkiksi näin:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Diagnostiikka-paneeli">
-        <item id="clean_url_data_failed" title="Selkokielisten URL-osoitteiden testi epäonnistui"><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Selkokielisten URL-osoitteiden testi epäonnistui"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Piilota yksityiset tiedot"><![CDATA[]]></item>
-        <item id="dev_version_live" title="Kehityksenaikainen koodi live-palvelimella"><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Hakemistoon ei voi kirjoittaa"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title="DNS epäonnistui"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Tiedostojen lataaminen palvelimelle on estetty"><![CDATA[]]></item>
-        <item id="htaccess_missing" title=".htaccess-tiedosto puuttuu"><![CDATA[]]></item>
-        <item id="index_inaccessible" title="Sivuston indeksi on tavoittamattomissa"><![CDATA[]]></item>
-        <item id="missing_files" title="Puuttuvia tiedostoja"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title="Apachen mod_rewrite puuttuu"><![CDATA[]]></item>
-        <item id="modified_files" title="Muokattuja tiedostoja"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="MySQL-taulussa virheitä"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Väliaikaishakemistoa ei ole määritetty"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Osio nimetty samaksi kuin hakemisto"><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title="Sivuston hakemistoon ei ole kirjoitusoikeutta"><![CDATA[
-<h2>Sivuston hakemistoon ei voi kirjoittaa</h2>
-<p>Juuritason <code>index.php</code>-tiedosto, jota käytetään sivuston aloituspaikkana, on sellaisessa hakemistossa, johon palvelimella ei ole kirjoitusoikeuksia. Ole hyvä ja tarkista kirjoitusoikeudet.</p>
+        <item id="clean_url_data_failed" title="Selkokielisten URL-osoitteiden testi epäonnistui"><![CDATA[
+<h2>Siistien URL-osoitteiden tietojen haku epäonnistui</h2>
+<p>Näyttää siltä, että sivuston URL-osoitteet (esim. <code>https://example.com/section/article</code>) eivät tällä hetkellä toimi, tai että verkkopalvelin ei tue testiä, jolla tarkistetaan toimivatko siistit URL-osoitteet. Jos siistit URL-osoitteet kuitenkin toimivat sivustolla odotetusti, tämän viestin voi jättää huomiotta.</p>
+<p>Jos siistit URL-osoitteet <em>eivät</em> toimi, syynä voi olla jokin seuraavista:</p>
+<ul>
+    <li>”Site URL” -asetus on väärä, tai kyseisessä osoitteessa oleva sivu ei ole tämän Textpattern-asennuksen hallinnassa</li>
+    <li>palvelimella pitää muuttaa <code>.htaccess</code>-tiedostoa tai vastaavaa palvelinmääritystä, jotta siistit URL-osoitteet saadaan toimimaan</li>
+    <li>palvelin ei tue siistejä URL-osoitteita lainkaan</li>
+</ul>
+<p>Siistien URL-osoitteiden testi yrittää noutaa sivun osoitteesta, joka on määritetty ”Site URL” -asetukseksi, ja tarkistaa, toimivatko kaikki siisteihin osoitteisiin liittyvät parametrit oikein. Jos kyseinen osoite viittaa johonkin toiseen sivustoon tai sen tilalla on esimerkiksi staattinen sivu, testi epäonnistuu. Kunnes ongelma on korjattu, kannattaa käyttää ”sotkuisia” URL-osoitteita (esim. <code>https://example.com?s=section&amp;id=4</code>). Muista asettaa ”Permanent link mode” -asetus ylläpitoasetuksissa tätä vastaavaksi.</p>
+<p>Huomaa, että sivuston asettaminen huoltotilaan liitännäisen avulla saattaa laukaista tämän varoituksen.</p>
         ]]></item>
-        <item id="php_version_required" title="Version vähimmäisvaatimukset"><![CDATA[]]></item>
-        <item id="setup_still_exists" title="Asennushakemisto on vielä olemassa"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title="Sivuston URL ei täsmää"><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="PHP-funktiot [&#8230;] on otettu pois käytöstä palvelimella"><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Textpatternin version päivitys"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title="Textpatternin ennakkojulkaisuversio saatavilla"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="Tilapäisten ja liitännäisten cache-hakemistopolun ei tulisi olla sama"><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title="Päivitysten palvelin tavoittamattomissa"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title="PHP-asennuksestasi puuttuu mail()-funktio"><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Selkokielisten URL-osoitteiden testi epäonnistui"><![CDATA[
+<h2>Siistien URL-osoitteiden testi epäonnistui</h2>
+<p>Näyttää siltä, että sivuston URL-osoitteet (esim. <code>https://example.com/section/article</code>) eivät tällä hetkellä toimi, tai että verkkopalvelin ei tue testiä, jolla tarkistetaan toimivatko siistit URL-osoitteet. Jos siistit URL-osoitteet kuitenkin toimivat sivustolla odotetusti, tämän viestin voi jättää huomiotta.</p>
+<p>Jos siistit URL-osoitteet <em>eivät</em> toimi, syynä voi olla jokin seuraavista:</p>
+<ul>
+    <li>”Site URL” -asetus on väärä, tai kyseisessä osoitteessa oleva sivu ei ole tämän Textpattern-asennuksen hallinnassa</li>
+    <li>palvelimella pitää muuttaa <code>.htaccess</code>-tiedostoa tai vastaavaa palvelinmääritystä, jotta siistit URL-osoitteet saadaan toimimaan</li>
+    <li>palvelin ei tue siistejä URL-osoitteita lainkaan</li>
+</ul>
+<p>Siistien URL-osoitteiden testi yrittää noutaa sivun osoitteesta, joka on määritetty ”Site URL” -asetukseksi, ja tarkistaa, toimivatko kaikki siisteihin osoitteisiin liittyvät parametrit oikein. Jos kyseinen osoite viittaa johonkin toiseen sivustoon tai sen tilalla on esimerkiksi staattinen sivu, testi epäonnistuu. Kunnes ongelma on korjattu, kannattaa käyttää ”sotkuisia” URL-osoitteita (esim. <code>https://example.com?s=section&amp;id=4</code>). Muista asettaa ”Permanent link mode” -asetus ylläpitoasetuksissa tätä vastaavaksi.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Samanaikaiset kirjautumiset live-palvelimella"><![CDATA[
+<h2>Samanaikaiset kirjautumiset live-palvelimella</h2>
+<p>Käyttäjätilin salliminen useissa yhtäaikaisissa istunnoissa on tietoturvariski, eikä sitä suositella. Poista tämä ominaisuus käytöstä lisäasetusten paneelista, ellei riski ole tiedostettu ja hyväksyttävissä.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Piilota yksityiset tiedot"><![CDATA[
+<h2>Piilota yksityiset tiedot</h2>
+<p>Piilota yksityiset tiedot lisäturvan vuoksi. Jos diagnostiikkatietoja jaetaan julkisesti nähtävässä muodossa, esimerkiksi Textpatternin tukifoorumilla, tämä vähentää tietoturvariskiä jättämällä arkaluonteiset palvelintiedot pois.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Kehityksenaikainen koodi live-palvelimella"><![CDATA[
+<h2>Kehityskoodi live-palvelimella</h2>
+<p>Kehitysvaiheessa olevia Textpattern-versioita ei suositella käytettäväksi tuotantosivustoilla. Jos riskit ovat tiedossa ja hyväksyttäviä, tämän varoituksen voi jättää huomiotta.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Hakemistoon ei voi kirjoittaa"><![CDATA[
+<h2>Hakemistoon ei voi kirjoittaa</h2>
+<p>Jotta tiedosto- ja kuvalataukset toimisivat, näihin hakemistoihin on voitava kirjoittaa PHP:n kautta verkkopalvelimen käyttäjätunnuksella. Tämän voi tehdä (S)FTP-asiakasohjelmalla tai komentoriviltä komennolla <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS epäonnistui"><![CDATA[
+<h2>DNS-haku epäonnistui</h2>
+<p>Näyttää siltä, että sivuston osoitteeksi määritetty URL ei ole tavoitettavissa.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Tiedostolataukset on estetty"><![CDATA[
+<h2>Tiedostolataukset on estetty</h2>
+<p>Nykyisestä palvelinkokoonpanosta käy ilmi, että tiedostolataukset ovat pois käytöstä. Tarkista ja muuta asetusta <code>file_uploads</code> tiedostossa <code>php.ini</code> tai kysy apua palveluntarjoajaltasi.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess-tiedosto puuttuu"><![CDATA[
+<h2>.htaccess-tiedosto puuttuu</h2>
+<p>Käytössä on kestolinkin tila, joka edellyttää <code>.htaccess</code>-tiedostoa, mutta tiedostoa ei löydy. Tiedosto sisältyy Textpatterniin ja sijaitsee Textpatternin juurihakemistossa yhdessä tiedoston <code>index.php</code> ja <code>textpattern</code>-hakemiston kanssa. Suositellut direktiivit ovat:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Sivuston indeksi on tavoittamattomissa"><![CDATA[
+<h2>Sivuston indeksi ei ole luettavissa</h2>
+<p>Sivuston indeksinä käytettävä juuritason <code>index.php</code>-tiedosto ei ole palvelimen luettavissa. Tarkista sen olemassaolo ja käyttöoikeudet.</p>
+        ]]></item>
+        <item id="missing_files" title="Puuttuvat tiedostot"><![CDATA[
+<h2>Puuttuvia tiedostoja</h2>
+<p>Yksi tai useampi olennainen tiedosto puuttuu Textpatternista. Varmista, että kaikki listatut tiedostot ovat palvelimella ja oikeissa hakemistoissa.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apachen mod_rewrite puuttuu"><![CDATA[
+<h2>Apache mod_rewrite puuttuu</h2>
+<p>Apachen <code>mod_rewrite</code>-moduuli ei ole asennettuna tai se on poistettu käytöstä. Sen käyttöä suositellaan, jotta Textpattern toimisi oikein. Varmista moduulin olemassaolo ja että se on käytössä, tai ota yhteyttä palveluntarjoajaasi.</p>
+        ]]></item>
+        <item id="modified_files" title="Muokattuja tiedostoja"><![CDATA[
+<h2>Muokattuja tiedostoja</h2>
+<p>Tiedosto katsotaan muokatuksi, jos sen tarkistussumma poikkeaa Textpatternin mukana toimitetussa tunnettujen tarkistussummien listassa olevasta. Jos jotkin Textpattern-asennuksen tiedostot eroavat odotetusta, ne korostetaan täällä.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL-taulussa virheitä"><![CDATA[
+<h2>MySQL-taulujen virheitä</h2>
+<p>Textpatternin MySQL-tietokannassa saattaa olla vioittuneita tai vaurioituneita tauluja. Yritä korjata kyseiset taulut MySQL-hallintatyökalulla, kuten <a rel="external" target="_blank" href="https://www.adminer.org">Adminerilla <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> tai <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdminilla <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Väliaikaishakemistoa ei ole määritetty"><![CDATA[
+<h2>Väliaikaishakemistoa ei ole määritetty</h2>
+<p>Textpattern toimii ilman väliaikaishakemistoakin, mutta jotkin toiminnot eivät ehkä toimi odotetulla tavalla, jos tätä asetusta ei ole määritetty. Siirry ylläpitoasetuksiin (Admin Preferences) ja määritä ”Temporary directory path”.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Osio nimetty samaksi kuin hakemisto"><![CDATA[
+<h2>Osion nimi sama kuin hakemiston</h2>
+<p>Olemassa olevat hakemistonnimet voivat olla ristiriidassa artikkelien kestolinkkikaavassa käytettyjen osioiden nimien kanssa. Ongelman välttämiseksi tarkista ja poista tarvittaessa kyseiset hakemistot, jos se on turvallista, tai muuta osioiden nimiä niin, etteivät ne ole samoja.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Sivuston hakemistoon ei ole kirjoitusoikeutta"><![CDATA[
+<h2>Sivuston hakemisto ei ole luettavissa</h2>
+<p>Juuritason <code>index.php</code>-tiedoston sisältävä hakemisto, jota käytetään sivuston indeksinä, ei ole palvelimen luettavissa. Tarkista käyttöoikeudet.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP-skriptaus käytössä"><![CDATA[
+<h2>PHP-skriptaus käytössä</h2>
+<p>Textpattern sallii kirjoittajien ja ylläpitäjien upottaa PHP-koodia artikkeleihin ja sivu-/lomakepohjiin, jos nämä ominaisuudet ovat käytössä. Koska kyseessä on tietoturvariski – minkä tahansa PHP-koodin suorittaminen voi olla mahdollista, mukaan lukien vahingoittava tai vaarallinen koodi, joka voi tuhota asennuksesi tai vuotaa tietoja kolmansille osapuolille – on erittäin suositeltavaa kytkeä nämä asetukset pois päältä <a href="?event=prefs#prefs_group_publish">Preferences-paneelissa</a>, ellet ehdottomasti tarvitse ominaisuutta.</p>
+<p>Monet Textpattern-sivustojen laajennukset, jotka aiemmin vaativat PHP-pätkiä, voidaan nykyään toteuttaa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">ydintägeillä</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Version vähimmäisvaatimukset"><![CDATA[
+<h2>Version vähimmäisvaatimukset</h2>
+<p>Textpattern edellyttää tiettyjä ominaisuuksia PHP-ohjelmointikielessä ja MySQL-tietokantapalvelimessa. Alla olevasta taulukosta näet vähimmäisjärjestelmävaatimukset:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern-versio</th>
+                <th scope="col">PHP:n vähimmäisversio</th>
+                <th scope="col">MySQL:n vähimmäisversio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Edellä mainittujen järjestelmävaatimusten lisäksi vaaditaan seuraavat PHP-laajennukset:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a></li>
+</ul>
+<p>Sivuston <code>php.ini</code>-tiedostossa – joko globaalissa tai paikallisessa – on oltava määriteltynä <code>date.timezone</code>-asetus.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Asennushakemisto on vielä olemassa"><![CDATA[
+<h2>Asennushakemisto on vielä olemassa</h2>
+<p>Kun Textpattern on asennettu, hakemistoa <code>textpattern/setup</code> ja sen sisältöä ei enää tarvita, ja se tulisi poistaa tietoturvasyistä.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Sivuston URL ei täsmää"><![CDATA[
+<h2>Sivuston URL ei täsmää</h2>
+<p>”Site URL” -asetus Ylläpitoasetuksissa (Preferences) ei vastaa sivuston todellista osoitetta.</p>
+<p>Jos sivustolle pääsee useilla eri URL-osoitteilla ja sivusto toimii odotetulla tavalla, tämän viestin voi jättää huomiotta.</p>
+<p>Muussa tapauksessa tarkista ja korjaa tarvittaessa ”Site URL” -asetus ylläpitoasetuksissa. Arvio oikeasta Site URL -osoitteesta näkyy esivaroitusviestissä ”Diagnostics”-paneelissa.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP-funktiot […] on otettu pois käytöstä palvelimella"><![CDATA[
+<h2>PHP-funktiot [&#8230;] on otettu pois käytöstä palvelimella</h2>
+<p>Palveluntarjoaja tai palvelinadministraattori on poistanut yhden tai useamman PHP-funktion käytöstä, mikä saattaa vaikuttaa Textpatternin toimintaan.</p>
+<p>Lisätietoja saat <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation -dokumentaatiosta <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpatternin version päivitys"><![CDATA[
+<h2>Textpatternin version päivitys</h2>
+<p>Textpatternista on saatavilla uudempi versio. Saadaksesi käyttöösi viimeisimmät ominaisuudet ja tietoturvaparannukset, suosittelemme päivittämään.</p>
+<p>Huomaa, että vaikka pyrimme tekemään päivityksestä mahdollisimman vaivattoman:</p>
+<ul>
+    <li>Jos vain viimeinen numero eroaa nykyisestä versiostasi, päivitys on todennäköisesti taaksepäin yhteensopiva liitännäisten ja teemojen kanssa.</li>
+    <li>Jos kaksi viimeistä numeroa eroavat nykyisestä versiostasi, päivitys saattaa edellyttää joidenkin liitännäisten ja/tai teemojen päivittämistä, vaikka ne todennäköisesti toimivat edelleen rajoitetusti.</li>
+    <li>Jos ensimmäinen numero on eri kuin nykyisessä versiossasi, päivitys edellyttää todennäköisesti useimpien liitännäisten ja teemojen päivittämistä. Jos tukeudut vahvasti johonkin tiettyyn liitännäiseen tai teematoimintoon, tarkista tilanne tekijältä tai yhteisöltä ennen päivitykseen ryhtymistä.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpatternin ennakkojulkaisuversio saatavilla"><![CDATA[
+<h2>Textpatternin ennakkojulkaisu saatavilla</h2>
+<p>Textpatternista on saatavilla uudempi ennakkojulkaisu. Etsimme aktiivisia vapaaehtoisia testaamaan tätä versiota, jotta lopullisesta julkaisusta saadaan mahdollisimman vakaa. Pyrimme tekemään päivityskokemuksesta sujuvan ja vaivattoman myös beetaversioiden osalta.</p>
+<p>Jos päätät osallistua, huomioi seuraavat seikat:</p>
+<ul>
+    <li>Älä käytä tätä beetaversiota tuotantosivustolla, ellet omista toimivaa varmuuskopiota sekä sivuston tiedostoista että tietokannasta ja tiedä, miten palautus tehdään.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Ilmoita mahdollisista ongelmista</a> ja mainitse käyttämäsi beetaversion numero. Ennen vakaata julkaisua voidaan tarvita lisäbeetoja raportoiduista ongelmista riippuen.</li>
+    <li>Varmista, että päivität myös lopulliseen versioon, kun se julkaistaan, jos asennat tämän beetaversion.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Tilapäisten ja liitännäisten cache-hakemistopolun ei tulisi olla sama"><![CDATA[
+<h2>Tilapäisten ja liitännäisten cache-hakemistopolun ei tulisi olla sama</h2>
+<p>Liitännäisillä tulisi olla oma hakemistonsa, eikä niiden tule jakaa väliaikaishakemistoa. Tämä on tietoturvariski ja voi vaikuttaa haitallisesti sivustoosi, jos väliaikaishakemisto tyhjennetään. Varmista, että väliaikaishakemiston polku poikkeaa liitännäisten cache-hakemistosta.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Päivitysten palvelin tavoittamattomissa"><![CDATA[
+<h2>Päivityspalvelin ei ole tavoitettavissa</h2>
+<p>Päivitysten tarkistus epäonnistui, usein verkon ruuhkan tai yhteyden aikakatkaisun vuoksi. Tilanne korjaantuu yleensä itsestään tunnin tai kahden kuluessa, joten yritä uudelleen myöhemmin.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="PHP-asennuksestasi puuttuu mail()-funktio"><![CDATA[
+<h2>PHP-asennuksestasi puuttuu mail()-funktio</h2>
+<p>PHP:n <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>-funktio on poistettu käytöstä. Siksi Textpattern ei voi lähettää sähköposteja, ja jotkin toiminnot eivät ole käytettävissä. Esimerkiksi uusista kommenteista ei lähetetä ilmoitussähköposteja, eikä uusille käyttäjille lähde tervetuloviestiä. Käyttäjiä voidaan silti lisätä.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Tiedostot-paneeli">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title="Korvaa tiedosto"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Julkaisupäivämäärä"><![CDATA[]]></item>
-        <item id="upload" title="Siirrä tiedosto"><![CDATA[]]></item>
+        <item id="file_reassign" title="Liitä tiedosto uudelleen"><![CDATA[
+<h2>Liitä tiedosto uudelleen</h2>
+<p>Kun siirrät palvelimelle uuden tiedoston sellaisen tilalle, joka on merkitty ”Puuttuu”-tilaan, valitsemasi tiedosto siirretään palvelimelle ja liitetään tietokannassa olevaan alkuperäiseen tiedostotietueeseen. Tämä tarkoittaa, että alkuperäisen tiedoston tiedostonimi säilyy ennallaan, samoin kaikki siihen liittyvät tiedot, kuten latausmäärät ja luokka. Tiedoston koko päivitetään kuitenkin vastaamaan uutta tiedostoa.</p>
+        ]]></item>
+        <item id="file_replace" title="Korvaa tiedosto"><![CDATA[
+<h2>Korvaa tiedosto</h2>
+<p>Tähän ladattu tiedosto korvaa palvelimella olevan olemassa olevan tiedoston sisällön, mutta tiedostonimi säilyy samana. Latausmäärä ja muu tiedostoon liittyvä tieto eivät muutu.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Julkaisupäivämäärä"><![CDATA[
+<h2>Julkaisupäivämäärä</h2>
+<p>Aika, jolloin tiedosto julkaistaan tai jolloin sitä on viimeksi muokattu. Ajan voi asettaa julkaisun ajankohtaan tai mihin tahansa menneisyyden tai tulevaisuuden ajankohtaan.</p>
+<p>Kentät tarkoittavat seuraavia tietoja:</p>
+<ul>
+    <li>Vuosi / Kuukausi / Päivä</li>
+    <li>Tunti (24 tunnin muodossa) : Minuutti : Sekunti</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Siirrä tiedosto"><![CDATA[
+<h2>Siirrä tiedosto</h2>
+<p>Käytä tätä lomaketta tiedostojen tai kuvien siirtämiseen palvelimellesi.</p>
+<p>Käytä Textile-koodia kuvien upottamiseen artikkeleihin, Textpattern-koodia grafiikan sijoittamiseen sivupohjiin tai HTML-koodia, kun haluat sijoittaa grafiikkaa muualle.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="Lomakkeet-paneeli">
-        <item id="forms_overview" title="Johdanto lomakkeisiin"><![CDATA[]]></item>
+        <item id="forms_overview" title="Johdanto lomakkeisiin"><![CDATA[
+<h2>Johdatus lomakkeisiin</h2>
+<p>Textpatternissa lomake (Form) on uudelleenkäytettävä tekstin, HTML:n ja Textpattern-tägien pätkä, jolla voidaan näyttää sisältöä.</p>
+<p>Tässä esimerkki lomakkeesta, jonka nimeksi voisi antaa <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Voit käyttää sitä tulostamaan HTML-järjestämättömän listan (ul) aiheeseen liittyvistä artikkeleista:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Koska lomakkeen tehtävänä on tulostaa otsikkolista, se voi sopia käytettäväksi myös muiden tägien sisällä, esimerkiksi näyttämään 20 artikkelia nykyisestä osiosta:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Voit käyttää lomakkeita myös toistuvan sisällön, kuten sivupohjien ylä- ja alatunnisteiden, näyttämiseen. Tällöin sisältö sijaitsee vain yhdessä paikassa, ja jos haluat muuttaa sitä, riittää että teet muutoksen kerran. Sisällön näyttäminen lomakkeesta tapahtuu yleensä näin:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Lomakkeen enimmäiskoko on 64 kt. Esimerkiksi alatunnistetta varten laadittu lomake voi sisältää otsikoita, kappaleita, linkkejä, ehtotägejä ja viittauksia muihin lomakkeisiin, kuten <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
     <group id="image" title="Kuvat-paneeli">
-        <item id="create_thumbnail" title="Luo pienoiskuva"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Korvaa kuva"><![CDATA[]]></item>
-        <item id="upload_image" title="Lataa kuva"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Lataa pienoiskuva"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Luo pienoiskuva"><![CDATA[
+<h2>Luo pienoiskuva</h2>
+<p>Mahdollistaa täysikokoisesta kuvasta luotavan (tai uudelleen luotavan) pienoiskuvan määritellyillä mitoilla.</p>
+<p>Omavalintaisissa mitoissa pienoiskuva skaalataan valitsemiisi mittoihin, ellei ”Rajaa” (Crop) -valintaa ole valittu. Jos rajaus on valittuna, pienoiskuva luodaan kuvan keskiosasta skaalaamatta.</p>
+<p>Automaattisessa mitoittamisessa pienoiskuva skaalataan nykyisessä ylläpitoteemassa määriteltyihin mittoihin ja (valinnaisiin) raja-asetuksiin.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Korvaa kuva"><![CDATA[
+<h2>Korvaa kuva</h2>
+<p>Tässä ladattu kuva korvaa tietokannassa tähän tietueeseen liitetyn nykyisen kuvan.</p>
+        ]]></item>
+        <item id="upload_image" title="Lataa kuva"><![CDATA[
+<h2>Siirrä kuva</h2>
+<p>Siirrä yksi tai useampi kuva palvelimellesi.</p>
+<p>Kun kuvat siirretään <code>images</code>-hakemistoon, alkuperäisen kuvan tiedostonimi säilyy vain Textpatternin tietokannassa; itse kuvatiedosto nimetään uudelleen juoksevalla numerolla ja tiedostopäätteellä.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Lataa pienoiskuva"><![CDATA[
+<h2>Siirrä pienoiskuva</h2>
+<p>Täysikokoisiin kuviin voidaan liittää omat pienoiskuvansa. Niistä on hyötyä linkityksessä ja täysikokoisten kuvien indeksoinnissa.</p>
+<p>Pienoiskuvan viittaus on täsmälleen sama kuin täysikokoisen kuvan, mutta tiedostonimen perään on lisätty <code>t</code>. Jos esimerkiksi täysikokoinen kuva sijaitsee osoitteessa <code>/images/12.jpg</code>, siihen liittyvään pienoiskuvaan viitataan osoitteella <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="Kielet-paneeli">
-        <item id="get_textpack" title="Asenna Textpack"><![CDATA[]]></item>
+        <item id="get_textpack" title="Asenna Textpack"><![CDATA[
+<h2>Asenna Textpack</h2>
+<p>Liitä tähän kenttään sivustosi lisäkielimerkkijonot ja valitse ”Siirrä” asentaaksesi ne.</p>
+<p>Merkkijonot toimitetaan usein ladattavana Textpack-pakettina, joka julkaistaan liitännäisen mukana, jotta liitännäisen kielimerkkijonot voidaan ottaa käyttöön Textpatternissa.</p>
+<p>Kääntäjät voivat sitten kääntää näitä paketteja tarpeen mukaan ja jakaa lokalisoidun sisällön edelleen yhteisölle.</p>
+        ]]></item>
     </group>
 
     <group id="link" title="Linkit-paneeli">
-        <item id="link_description" title="Kuvaus"><![CDATA[]]></item>
-        <item id="link_sort" title="Järjestysarvo"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title="Julkaisupäivämäärä"><![CDATA[]]></item>
+        <item id="link_description" title="Kuvaus"><![CDATA[
+<h2>Kuvaus</h2>
+<p>Linkkien kuvaukset ovat vapaaehtoisia, ja niistä on hyötyä esimerkiksi linkkien kuvateksteissä, linkkien <code>title=""</code>- (tooltip) attribuuteissa tai omissa sisäisissä muistiinpanoissasi.</p>
+        ]]></item>
+        <item id="link_sort" title="Järjestysarvo"><![CDATA[
+<h2>Lajitteluarvo</h2>
+<p>Hyödyllinen, kun linkkilistoja halutaan lajitella luonnollisen kielen mukaisesti, esimerkiksi henkilön sukunimen eikä etunimen mukaan tai ilmauksen varsinaisen alun mukaan artikkelien ja muiden etuliitteiden ohittaen.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Linkin osoite. Jos linkki osoittaa toiselle sivustolle, sen edessä täytyy olla <code>http://</code> tai <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Julkaisupäivämäärä"><![CDATA[
+<h2>Julkaisupäivämäärä</h2>
+<p>Aika, jolloin linkki julkaistaan tai jolloin sitä on viimeksi muokattu. Ajan voi asettaa julkaisun ajankohtaan tai mihin tahansa menneisyyden tai tulevaisuuden ajankohtaan.</p>
+<p>Kentät tarkoittavat seuraavia tietoja:</p>
+<ul>
+    <li>Vuosi / Kuukausi / Päivä</li>
+    <li>Tunti (24 tunnin muodossa) : Minuutti : Sekunti</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Kirjaudu-paneeli">
-        <item id="remember_login" title="Pysy kirjautuneena tällä selaimella"><![CDATA[]]></item>
+        <item id="remember_login" title="Pysy kirjautuneena tällä selaimella"><![CDATA[
+<h2>Pysy kirjautuneena tällä selaimella</h2>
+<p>Jos valittu, pysyt kirjautuneena Textpattern-tiliisi nykyisellä verkkoselaimella, kunnes kirjaudut itse ulos. Jos valintaa ei ole tehty, sinut kirjataan automaattisesti ulos tietyn käyttämättömyysajan jälkeen.</p>
+<p>Toiminto edellyttää, että selaimesi sallii evästeiden käytön.</p>
+        ]]></item>
     </group>
 
     <group id="plugin" title="Liitännäiset-paneeli">
-        <item id="install_plugin" title="Asenna liitännäinen"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Lataa lisäosa"><![CDATA[]]></item>
+        <item id="install_plugin" title="Asenna liitännäinen"><![CDATA[
+<h2>Asenna liitännäinen</h2>
+<p>Liitä tähän käännetyn liitännäistekstitiedoston sisältö ja aloita asennus valitsemalla ”Siirrä”. Kaikki aiemmin asentamasi samannimiset liitännäiset korvataan uudella versiolla.</p>
+<p>Liittämäsi teksti ei ole <strong>raakaa</strong> PHP-koodia, vaan Base64-koodattua tekstiä, jota edeltää yleensä otsikko, jossa on tietoja liitännäisestä (kuten nimi, versio, kuvaus, tekijän nimi jne.).</p>
+<p>Valmiiksi käännettyjä liitännäisiä löydät usein <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins-arkistosta <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> tai liitännäisen tekijän omasta kanavasta, kuten tämän sivustolta tai GitHubista.</p>
+<p>Voit myös liittää tähän Textpatternin käännetyn tekstitiedoston URL-osoitteen, jos ulkoinen sivusto sallii sen.</p>
+<p>Kaikki siirretyt liitännäiset käyvät läpi vahvistusvaiheen, jossa voit tarkistaa liitännäisen koodin ja sisällön ennen asennusta.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Lataa lisäosa"><![CDATA[
+<h2>Siirrä liitännäinen</h2>
+<p>Käytä tätä lomaketta liitännäistiedoston siirtämiseen. Siirretyt liitännäiset (ja mahdolliset resurssit) tallennetaan ”plugins”-hakemistoon.</p>
+<p>Tässä voidaan siirtää seuraavantyyppisiä liitännäisiä:</p>
+<ul>
+<li>Textpattern PHP Template -tiedostoja, jotka sisältävät täydellisen koodin, metatiedot, Textpack-merkkijonot ja ohjetekstin.</li>
+<li>Textpatternin käännettyjä tekstitiedostoja, jotka sisältävät täydellisen koodin, metatiedot, Textpack-merkkijonot ja ohjetekstin.</li>
+<li>Textpattern-zip-paketteja, jotka sisältävät manifest-tiedot ja koodin, metatiedot, Textpack-merkkijonot, ohjetekstin ja tukitiedostoja.</li>
+<li>Raakoja PHP-tiedostoja (nämä eivät kuitenkaan täytä metatietoja eivätkä ole suositeltavia).</li>
+</ul>
+<p>Kaikki aiemmin asentamasi samannimiset liitännäiset korvataan uudella versiolla.</p>
+<p>Kaikki siirretyt liitännäiset käyvät läpi vahvistusvaiheen, jossa voit tarkistaa liitännäisen koodin ja sisällön ennen asennusta.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Asetukset-paneeli">
-        <item id="admin_side_plugins" title="Käytetäänkö admin-puolen liitännäisiä?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Lisävalinnat"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Salli PHP artikkeleissa?"><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Käytetäänkö admin-puolen liitännäisiä?"><![CDATA[
+<h2>Käytetäänkö ylläpito-osion liitännäisiä?</h2>
+<p>Ylläpito-osion liitännäiset voivat muuttaa hallintapaneelin käyttöliittymän toimintaa. Ne voivat kytkeytyä olemassa oleviin toimintoihin, kuten artikkelien muokkaamiseen tai julkaisemiseen, tai lisätä uusia paneeleja lisätoiminnallisuuksia varten.</p>
+<p>Mikäli haluat oppia lisää ylläpito-osion liitännäisistä, ole hyvä ja tutustu sivuun <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> osiossa <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>. Kaikenlaisia liitännäisiä on listattu sivustolla <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Lisävalinnat"><![CDATA[
+<h2>Lisäasetukset</h2>
+<p>Näytä lisäasetusten ryhmä, jossa voidaan säätää muun muassa seuraavia asetuksia:</p>
+<ul>
+    <li>PHP-funktiot, joita voi käyttää <code>txp:evaluate</code>-tageissa.</li>
+    <li>Mukautettujen lomakepohjien tyypit.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Salli PHP artikkeleissa?"><![CDATA[
+<h2>Salli PHP artikkeleissa?</h2>
+<p>Kun asetus on käytössä, artikkeleissa voidaan käyttää PHP:tä. Kirjoittajalla on oltava siihen riittävät oikeudet (oletuksena vain <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">”Julkaisijat” <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">”Vastaavat toimittajat” <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">”Tekstin toimittajat” <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> voivat käyttää tätä).</p>
+<p><strong>Asetus kannattaa pitää pois päältä</strong>, ellet ehdottomasti tarvitse ominaisuutta. Mikä tahansa mahdollisesti vahingollinen tai vaarallinen PHP-koodi, joka voi tuhota sivustosi tai vuotaa tietoja kolmansille osapuolille, voidaan tällöin lisätä minkä tahansa kirjoittajan toimesta ja suorittaa, kun joku katsoo kyseistä artikkelia.</p>
+<p>PHP-koodista on jätettävä pois PHP:n avaus- ja lopetustagit, ja se on lisäksi suljettava <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tagien <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> sisään.</p>
+        ]]></item>
         <item id="allow_form_override" title="Salli lomakkeen kumoaminen?"><![CDATA[<h2>Salli lomakkeen kumoaminen?</h2>
 <p>Tämä asetus tekee mahdolliseksi kirjoittajien kumota artikkelin näyttämiseen tarkoitetun lomakkeen asetukset. Jos käytössä, 'Kumoa lomake' -pudotusvalikko on käytettävissä kun artikkelia muokataan.</p>
         ]]></item>
-        <item id="allow_page_php_scripting" title="Salli PHP sivuissa?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Arkiston päiväysmuoto"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Käytä johdantoa artikkeleissa?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Liitä otsikot kestolinkkeihin?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Siirry automattisesti kesäaikaan?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Tekeekö uusi kommentti sivustosta päivitetyn?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title="Liitä rel=&quot;nofollow&quot; kommentteihin?"><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Näytä kommentit numeroituna listana?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title="Liitä kommentit automaattisesti artikkeleihin?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Kommenttien päiväysmuoto"><![CDATA[]]></item>
-        <item id="comments_default_invite" title="Kommenttien oletuskehoite"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title="Kommentointi vanhentuu kun on kulunut"><![CDATA[]]></item>
+        <item id="allow_page_php_scripting" title="Salli PHP sivuissa?"><![CDATA[
+<h2>Sallitaanko PHP sivuilla?</h2>
+<p>Kun asetus on käytössä, sivu- ja lomakepohjiin voidaan kirjoittaa PHP-koodia.</p>
+<p><strong>Asetus kannattaa pitää pois päältä</strong>, ellet ehdottomasti tarvitse ominaisuutta. Mikä tahansa mahdollisesti vahingollinen tai vaarallinen PHP-koodi, joka voi tuhota sivustosi tai vuotaa tietoja kolmansille osapuolille, voidaan tällöin lisätä minkä tahansa käyttäjän toimesta ja suorittaa ylläpitäjän tai sivuston kävijän huomaamatta.</p>
+<p>PHP-koodista on jätettävä pois PHP:n avaus- ja lopetustagit, ja se on lisäksi suljettava <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tagien <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> sisään.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arkiston päiväysmuoto"><![CDATA[
+<h2>Arkistopäivämäärän muoto</h2>
+<p>Määrittää, missä muodossa päivämäärät näytetään artikkeleissa sivustosi osioissa.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Näytä johdanto artikkelin muokkaussivulla?"><![CDATA[
+<h2>Näytä johdanto artikkelin muokkaussivulla?</h2>
+<p>Jos asetat arvoksi ”Ei”, johdantokenttää ei näytetä artikkelia muokkaavalle kirjoittajalle.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Liitä otsikot kestolinkkeihin?"><![CDATA[
+<h2>Liitetäänkö otsikot kestolinkkeihin?</h2>
+<p>Tämä asetus liittää artikkelin URL-osoitteeseen automaattisesti muodostetun version artikkelin otsikosta. Se luodaan joko automaattisesti tai se voidaan yliajaa käsin ”URL-otsikko” -kentässä artikkelia muokattaessa.</p>
+<p>Asetus vaikuttaa vain, jos käytät siistejä URL-osoitteita. Joillekin kielille tämä voi johtaa pitkiin ja kömpelöihin URL-osoitteisiin, jolloin asetus kannattaa todennäköisesti laittaa arvoon ”Off”.</p>
+        ]]></item>
+        <item id="auto_dst" title="Siirry automattisesti kesäaikaan?"><![CDATA[
+<h2>Korjataanko kesäaika automaattisesti?</h2>
+<p>Tällä asetuksella Textpattern voi hallita sitä, milloin kesäaika (DST, Daylight Saving Time) alkaa ja päättyy aikavyöhykkeelläsi. Jos asetus on ”Ei”, voit muuttaa ”Kesäaika käytössä” -asetusta manuaalisesti.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Tekeekö uusi kommentti sivustosta päivitetyn?"><![CDATA[
+<h2>Merkitäänkö sivusto päivittyneeksi uudesta kommentista?</h2>
+<p>Textpatternin tietokanta seuraa, milloin sivustoasi on viimeksi muutettu. Kun tämä asetus on ”Kyllä”, myös uusi kommentti päivittää kyseisen ajanhetken. Arvoa käytetään esimerkiksi toiminnossa <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Liitä rel=&quot;nofollow&quot; kommentteihin?"><![CDATA[
+<h2>Lisätäänkö kommenttien linkkeihin rel="nofollow"?</h2>
+<p>Jos arvo on ”Kyllä”, kommentteihin lisättyihin linkkeihin lisätään ylimääräinen attribuutti. Tarkoituksena on vähentää kommenttispämmäämisen houkuttelevuutta; käytännön ovat käynnistäneet useat hakukoneet ja ohjelmistokehittäjät. Lisätietoja löytyy lukemalla <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Googlen tiedote <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+<p><strong>Huom:</strong> Tämä asetus ei vaikuta sivustosi toimintaan. Se saattaa kuitenkin estää tai vähentää kommenttiesi vaikutusta joidenkin hakukoneiden sivustoja pisteyttävissä algoritmeissa.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Näytä kommentit numeroituna listana?"><![CDATA[
+<h2>Esitetäänkö kommentit numeroituna listana?</h2>
+<p>Määrittää, kääritäänkö artikkelien kommentit HTML-tageihin <code>&lt;ol&gt;</code> ja yksittäiset kommentit tageihin <code>&lt;li&gt;</code> (tällöin kommentit näkyvät numeroituna listana) vai kääritäänkö yksittäiset kommentit sen sijaan <code>&lt;div&gt;</code>-tägeihin.</p>
+<p>Kummassakin tapauksessa voit lomakekohtaisesti ohittaa käytetyt tagit muokkaamalla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code>-tagia <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>, joka sijaitsee <code>comments_display</code>-lomakkeessa.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Liitä kommentit automaattisesti artikkeleihin?"><![CDATA[
+<h2>Lisätäänkö kommentit automaattisesti artikkeleihin?</h2>
+<p>Tämä asetus määrittää, lisätäänkö kommentit ja kommenttilomake automaattisesti kaikkien yksittäisten artikkeleiden loppuun (sisällyttämällä automaattisesti <code>comments_display</code>-lomakkeen sisältö).</p>
+<p>Useimmissa tapauksissa asetus kannattaa pitää arvossa ”Ei”, koska tällöin kommenttien sijaintia sivuston ulkoasussa voi hallita joustavammin. Tällöin sinun on lisättävä <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code>-tagi <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> käsin kaikkiin artikkelipohjiin, joilla haluat näyttää kommentteja.</p>
+<p>Jos artikkeleissa näkyy kommentit kahteen kertaan, syynä on yleensä se, että sivupohjassasi on jo <code>&lt;txp:comments /&gt;</code>-tagi, ja lisäksi asetus ”Lisätäänkö kommentit automaattisesti artikkeleihin?” on asetettu arvoon ”Kyllä”.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Kommenttien päiväysmuoto"><![CDATA[
+<h2>Kommenttien päiväyksen muoto</h2>
+<p>Määrittää, missä muodossa kommenttien päivämäärät näytetään sivuston kävijöille.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Kommenttien oletuskehoite"><![CDATA[
+<h2>Kommenttikutsun oletusteksti</h2>
+<p>Jos sallittuja kommentteja sivustollasi, tämä on oletuskutsuteksti. Esimerkiksi:</p>
+<ul>
+    <li>Kommentit</li>
+    <li>Lisää kommentti</li>
+    <li>Palaute</li>
+    <li>Lisää huomautus</li>
+</ul>
+<p>Huomaa, että kutsutekstin voi aina muuttaa artikkelikohtaisesti.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Kommentointi vanhentuu kun on kulunut"><![CDATA[
+<h2>Kommentit käytöstä pois jälkeen</h2>
+<p>Määritä, kuinka kauan artikkelin julkaisemisen jälkeen kommentointi on sallittua (arvo ”Ei koskaan” sallii kommentoinnin rajoittamattoman ajan).</p>
+        ]]></item>
         <item id="comments_disallow_images" title="Salli kommentoijan kuvat kommenteissa?"><![CDATA[<h2>Salli kommentoijan kuvat kommenteissa?</h2>
 <p>Kun tämä asetus on 'Ei', kaikki kommentteihin sisältyvät kuvat tullaan poistamaan.</p>
         ]]></item>
-        <item id="comments_mode" title="Kommentointitapa"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Kommentointi vaatii kommentoijan sähköpostiosoitteen?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Kommentointi vaatii kommentoijan nimen?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Lähetä kommentit kirjoittajalle?"><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title="Salli lisää Textile-merkintäkieltä kommenteissa?"><![CDATA[]]></item>
-        <item id="custom_form_types" title="Muokattavien lomakepohjien tyypit"><![CDATA[]]></item>
-        <item id="custom_overview" title="Muokattavat kentät"><![CDATA[]]></item>
-        <item id="dateformat" title="Päiväyksen muoto"><![CDATA[]]></item>
-        <item id="default_event" title="Oletusarvoinen paneeli"><![CDATA[]]></item>
-        <item id="default_publish_status" title="Oletusarvoinen julkaisun tila"><![CDATA[]]></item>
-        <item id="doctype" title="Dokumenttityyppi"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title="Ota käyttöön kehityksen aikaisen teeman esikatselu?"><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Ota käyttöön lyhyttagit?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="Salli XML-RPC palvelin?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title="Lokit vanhentuvat kuinka monen päivän jälkeen?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Polku tiedostonsiirtoon"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Suurin siirrettävien tiedostojen tiedostokoko (tavuina)"><![CDATA[]]></item>
-        <item id="gmtoffset" title="Aikavyöhyke"><![CDATA[<h2>Aikavyöhyke</h2>
-<p>Ole hyvä ja valitse aikavyöhykkeesi nähdäksesi päivämäärät paikallisessa ajassa.</p>]]></item>
-        <item id="img_dir" title="Kuvahakemisto"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Liitä sähköpostiosoite Atom-syötteisiin?"><![CDATA[]]></item>
-        <item id="is_dst" title="Kesäaika käytössä?"><![CDATA[]]></item>
-        <item id="logging" title="Kirjaaminen"><![CDATA[]]></item>
-        <item id="max_url_len" title="URLin enimmäispituus (merkkimääränä)"><![CDATA[]]></item>
-        <item id="module_pophelp" title="Näytä hallintapaneelissa sisällön seassa ohjelinkkejä"><![CDATA[]]></item>
-        <item id="never_display_email" title="Piilota kommentoijan sähköpostiosoite?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title="Käytä ISO-8859-1 -merkistokoodausta sähköposteissa (oletuksena UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title="Ohita lomaketyypit"><![CDATA[]]></item>
-        <item id="permlink_format" title="Kestolinkin URL-muoto"><![CDATA[]]></item>
-        <item id="permlink_mode" title="Artikkelin URL-muoto"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Polku liitännäisten cache-hakemistoon"><![CDATA[]]></item>
-        <item id="production_status" title="Tuotannon tila"><![CDATA[]]></item>
-        <item id="public_theme_name" title="Julkisen puolen teema"><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Julkaise vanhentuneet artikkelit?"><![CDATA[]]></item>
-        <item id="publisher_email" title="Lähetä kirjautumistiedot tästä osoitteesta"><![CDATA[]]></item>
-        <item id="rss_how_many" title="Kuinka monta artikkelia tulisi näyttää syötteissä?"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title="Lähetetäänkö &quot;Last-Modified&quot;-otsikkotietue?"><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Näytä kommenttien lukumäärä syötteissä?"><![CDATA[]]></item>
-        <item id="site_slogan" title="Sivuston tunnuslause"><![CDATA[]]></item>
-        <item id="sitename" title="Sivuston nimi"><![CDATA[]]></item>
-        <item id="siteurl" title="Sivuston URL"><![CDATA[]]></item>
-        <item id="skin_dir" title="Teemahakemisto"><![CDATA[]]></item>
-        <item id="smtp_from" title="SMTP-kirjeen lähettäjän osoite"><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title="Syndikoi vain artikkelin johdanto?"><![CDATA[]]></item>
-        <item id="tempdir" title="Tilapäisten tiedostojen hakemistopolku"><![CDATA[]]></item>
-        <item id="theme_name" title="Hallintapaneelin teema"><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title="PHP-funktiot, joita voi käyttää txp:evaluate-koodissa"><![CDATA[]]></item>
-        <item id="use_comments" title="Salli kommentointi?"><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title="Salli kommentointi?"><![CDATA[]]></item>
-        <item id="use_plugins" title="Käytä liitännäisiä?"><![CDATA[]]></item>
-        <item id="use_textile" title="Tekstin oletusmuotoilu"><![CDATA[]]></item>
+        <item id="comments_mode" title="Kommentointitapa"><![CDATA[
+<h2>Kommenttien tila</h2>
+<p>Jos arvo on ”nopopup” (suositus), nykyinen selainikkuna päivitetään näyttämään pelkkä nykyinen artikkeli, ja kommentit sen alla.</p>
+<p>Jos arvo on ”popup”, kommenttilinkkiä napsautettaessa avataan uusi selainikkuna (käytetään lomaketta <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Tarkasta ja hyväksy kommentit?"><![CDATA[
+<h2>Moderoidaanko kommentit?</h2>
+<p>Kun asetus on ”Kyllä”, jokaisen uuden kommentin näkyvyys on oletuksena pois päältä, kunnes kommentti on tarkistettu. Sinun täytyy tällöin manuaalisesti moderoida ja asettaa kukin kommentti näkyväksi (artikkelin kirjoittajalle lähetetään sähköpostiviesti, kun uutta kommenttia odottaa).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Kommentointi on oletusarvoisesti käytössä?"><![CDATA[
+<h2>Ovatko kommentit oletuksena päällä?</h2>
+<p>Kun tämä on ”Kyllä”, kommentointi otetaan automaattisesti käyttöön kaikissa julkaistuissa artikkeleissa. Jos arvo on ”Ei”, sinun on otettava kommentit käyttöön ”Kirjoita” (Write) -paneelissa aina, kun haluat sallia kommentoinnin.</p>
+<p>Kommentteja voi ottaa käyttöön tai poistaa käytöstä milloin tahansa artikkelikohtaisesti.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Kommentointi vaatii kommentoijan sähköpostiosoitteen?"><![CDATA[
+<h2>Vaaditaanko kommentoijalta sähköpostiosoite?</h2>
+<p>Jos arvo on ”Kyllä”, kommentoijan on annettava sähköpostiosoite kommenttilomakkeelle. Kommenttia ei voi lähettää ilman sähköpostiosoitetta.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Kommentointi vaatii kommentoijan nimen?"><![CDATA[
+<h2>Vaaditaanko kommentoijan nimi?</h2>
+<p>Jos arvo on ”Kyllä”, kommentoijan on annettava nimi kommenttilomakkeelle. Kommenttia ei voi lähettää ilman nimeä.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Lähetä kommentit kirjoittajalle?"><![CDATA[
+<h2>Lähetetäänkö kommentit sähköpostitse kirjoittajalle?</h2>
+<p>Jos arvo on ”Kyllä”, jokaisesta artikkeliin saapuvasta uudesta kommentista lähetetään kopio artikkelin kirjoittajalle sähköpostitse.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Salli lisää Textile-merkintäkieltä kommenteissa?"><![CDATA[
+<h2>Sallitaanko kommenteissa laajempi Textile-muotoilu?</h2>
+<p>Kun arvo on ”Kyllä”, kommenteissa saa käyttää <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> -elementtejä, jotka muuten käsiteltäisiin pelkkänä tekstinä, kuten:</p>
+<ul>
+    <li>otsikot</li>
+    <li>järjestetyt ja järjestämättömät listat</li>
+    <li>alaviitteet</li>
+    <li>taulukot</li>
+    <li>koodi</li>
+    <li>laajennettu lohkosyntaksi (<code>bc..</code>, <code>bq..</code> jne.)</li>
+</ul>
+<p><strong>Huom:</strong> Tietoturvasyistä raaka HTML muunnetaan tavalliseksi tekstiksi.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Tilien määrä, jotka voivat olla kirjautuneena samanaikaisesti"><![CDATA[
+<h2>Tilien määrä, jotka voivat olla kirjautuneena samanaikaisesti</h2>
+<p>Pilkuin eroteltu lista kirjautumistunnuksista, jotka saavat olla kirjautuneena useista selaimista/istunnoista. Tästä voi olla hyötyä kehitysvaiheessa, kun kirjautumista halutaan jakaa asiakkaiden kanssa.</p>
+<p>Ominaisuuden käyttäminen on tietoturvariski, eikä sitä <strong>suositella tuotantosivustoilla</strong>. Diagnostics-paneeli näyttää varoituksen, jos käyttäjätilisi on määritetty samanaikaisiin kirjautumisiin live-sivustolla.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Muokattavien lomakepohjien tyypit"><![CDATA[
+<h2>Muokattavien lomakepohjien tyypit</h2>
+<p>Vakiolomaketyyppien (article, file, misc jne.) lisäksi Julkaisijat voivat määritellä omia lomaketyyppejä. Mukautettujen lomaketyyppien tarkoitus on kaksijakoinen: lomakkeiden helpompi luokittelu ja omien resurssityyppien määrittely.</p>
+<p>Asetuksen muoto on <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>, jossa jokainen osio vastaa yhtä lomaketyyppiä.</p>
+<p>Määritelläksesi oman lomaketyypin (esim. <code>js</code>) lisää (omalle rivilleen) osio <code>[js]</code>. Voit määrittää oletusotsikon antamalla kyseisessä osiossa <code>title="Javascript"</code>-merkinnän. Tarvittaessa voit lisätä myös lokalisoidut otsikot (esim. <code>ru="Скрипт"</code>).</p>
+<p>Lisäksi voit määritellä lomaketyypille <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">mediatyypin <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> (ent. MIME-tyyppi), esim. <code>mediatype="application/javascript"</code>. Tämä muuttaa kyseisen tyypin lomakkeet mukautetuiksi resursseiksi, joita voidaan palvella kyseisellä mediatyypillä joko tietokannasta tai levyltä (tasatiedostoina) <code>&lt;txp:output_form /&gt;</code>-tagilla. Esimerkiksi lomake <code>myscript.js</code>, joka on tyyppiä <code>[js]</code> ja jonka mediatyyppi on <code>application/javascript</code>, voidaan sisällyttää koodiisi näin:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Tämä tuottaa seuraavan HTML-<code>&lt;script&gt;</code>-tägirakenteen:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Vain ne lomakkeet, joiden nimessä on tyypin mukainen tiedostopääte (esim. <code>myscript.js</code>), voidaan palvella tasatiedostoina. Tällöin Textpattern ei käsittele niitä lainkaan, ja ne ovat saatavilla suoraan URL-osoitteella.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Muokattavat kentät"><![CDATA[
+<h2>Muokattavat kentät</h2>
+<p>Muokattavia kenttiä käytetään artikkelien lisätietojen tallentamiseen. Voit määritellä enintään kymmenen nimeämällä ne tässä. Kukin kenttä näkyy erillisenä kenttänä ”Kirjoita” (Write) -paneelissa, jolloin jokaiseen artikkeliin voidaan liittää omia lisätietoja.</p>
+<p>Voit nimetä kentät haluamallasi tavalla, mutta huomioi seuraavat seikat:</p>
+<ul>
+<li>Välilyönnit parantavat luettavuutta Kirjoita-paneelissa, mutta tällöin kenttiä ei voi käyttää <em>lainkaan</em> lajittelu- tai suodatusehtoina <code>article_custom</code>-tagissa. Jos haluat käyttää kenttiä niihin, harkitse välilyöntien sijaan alaviivoja.</li>
+<li>Varmista, etteivät kenttien nimet ole ristiriidassa Textpatternin varattujen kenttänimien kanssa. Esimerkiksi nimiä <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> jne. ei tule käyttää, sillä se johtaa outoihin tuloksiin tai rikkoo sivuston.</li>
+<li>Kunkin kentän sisältö on rajattu 255 merkkiin, ja se voi sisältää vain tekstiä.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Päiväyksen muoto"><![CDATA[
+<h2>Päiväyksen muoto</h2>
+<p>Tämä asetus vaikuttaa siihen, miten artikkelien päivämäärät näytetään vain sivustosi etusivulla.</p>
+        ]]></item>
+        <item id="default_event" title="Oletushallintasivu"><![CDATA[
+<h2>Oletushallintasivu</h2>
+<p>Textpatternin ylläpitokäyttöliittymän paneeli, joka avautuu ensimmäisenä, kun joku kirjautuu sisään.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Oletusarvoinen julkaisun tila"><![CDATA[
+<h2>Oletusarvoinen julkaisun tila</h2>
+<p>Määrittää vastikään luotujen Textpattern-artikkelien julkaisun näkyvyystilan.</p>
+<p>Huomaa, että tämä asetus ei vaikuta artikkeleihin, jotka on luotu tai joita on muokattu ennen asetuksen muuttamista.</p>
+<p>Oletusjulkaisutila voi olla jokin seuraavista:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p><strong>Draft</strong>-artikkeli katsotaan keskeneräiseksi, eikä sitä voi katsella Textpatternin ylläpitoalueen ulkopuolella (eli ei näy sivuston julkisella puolella eikä syötteissä).</p>
+<p><strong>Hidden</strong>-tilassa oleva artikkeli ei näy Textpatternin ylläpitoalueen ulkopuolella.</p>
+<p><strong>Pending</strong>-artikkeli on julkaisukelpoinen ja odottaa hyväksyntää, mutta ei näy ylläpitoalueen ulkopuolella.</p>
+<p><strong>Live</strong>-artikkeli näkyy yleensä ylläpitoalueen ulkopuolella (eli sivuston julkisella puolella ja syötteissä, jos asetus sallii). Jos artikkeli on tilassa Live ja sillä on vanhentumispäivä, tilana säilyy Live myös tämän päivämäärän jälkeen, mutta artikkeli näkyy julkisesti vain, jos vanhentuneiden artikkeleiden julkaiseminen on sallittu.</p>
+<p><strong>Sticky</strong>-artikkeli muistuttaa <strong>Live</strong>-tilaista artikkelia siltä osin, että se voidaan näyttää ylläpitoalueen ulkopuolella. Se ei kuitenkaan <strong>näy</strong> artikkelilistoissa, ellei <code>article</code>- tai <code>article_custom</code>-tagissa ole <code>status</code>-attribuuttia arvolla <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Valitse, mitä HTML-doctypea haluat käyttää (HTML5 tai XHTML). Tämä vaikuttaa kommenttien syöttölomakkeisiin, Textilella tuotettuihin <code>&lt;abbr&gt;</code>- ja <code>&lt;acronym&gt;</code>-tageihin sekä <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code>-tagin <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> tuottamiin <code>&lt;link&gt;</code>-tageihin.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Ota käyttöön kehityksen aikaisen teeman esikatselu?"><![CDATA[
+<h2>Ota käyttöön kehityksen aikaisen teeman esikatselu?</h2>
+<p>Riittävät oikeudet omaavat käyttäjät (oletuksena Julkaisija- ja Suunnittelija-roolin käyttäjät) voivat kehittää ja esikatsella uutta teemaa turvallisesti samalla, kun muut käyttäjät näkevät yhä vanhan teeman (kunnes uusi otetaan käyttöön).</p>
+<p>Etuoikeutetut käyttäjät, jotka eivät halua osallistua teemojen kehittämiseen, voivat poistaa kehitysteeman esikatselun käytöstä. Tällöin heille näytetään nykyinen ”julkinen” teema samaan tapaan kuin tavallisille sivuston kävijöille.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Ota käyttöön lyhyttagit?"><![CDATA[
+<h2>Ota käyttöön lyhyttagit?</h2>
+<p>Textpattern-tagit ovat muotoa <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Kirjoittamista voi nopeuttaa ottamalla käyttöön lyhemmän syntaksin, jossa <code>txp:</code>-etuliitteen voi jättää pois noudattamalla muutamia yksinkertaisia periaatteita. Tässä muutama esimerkki:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> muuttuu muotoon <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> muuttuu muotoon <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> muuttuu muotoon <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> muuttuu muotoon <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> muuttuu muotoon <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (huomaa, että liitännäisen etuliitettä voi käyttää myös <code>else</code>-tagin kanssa).</li>
+</ul>
+<p>Jos tagissa on alaviiva ja lyhyttagit ovat käytössä, perusperiaate on:</p>
+<ol>
+    <li>Poista <code>txp:</code>-etuliite.</li>
+    <li>Korvaa alaviivan ensimmäinen esiintymä merkkijonolla <code>::</code>.</li>
+</ol>
+<p>Huomaa, että tämä asetus ei vaikuta mahdollisuuteen käyttää <code>&lt;txp:output_form /&gt;</code>-lyhennyskoodia lomakepätkien tulostamiseen. Voit yhä käyttää muotoa <code>&lt;txp::shortcode /&gt;</code>, joka tulkitaan muodoksi <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Salli XML-RPC palvelin?"><![CDATA[
+<h2>Salli XML-RPC-palvelin?</h2>
+<p>Jos haluat käyttää <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC:tä <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> Textpatternin etähallintaan (esimerkiksi työpöytä- tai mobiilisovelluksilla), sinun täytyy laittaa XML-RPC-palvelin päälle asettamalla tämä arvoon ”Kyllä”.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Käytä tehostettuja sähköpostin ominaisuuksia"><![CDATA[
+<h2>Käytä tehostettuja sähköpostin ominaisuuksia</h2>
+<p>Kun arvo on ”Ei”, kaikki sähköposti – kuten tilin salasanan palautuspyynnöt ja liitännäisten (kuten com_connect) lähettämät viestit – kulkee PHP:n <code>mail()</code>-funktion kautta. Kun arvo on ”Kyllä”, käytetään sen sijaan mukana tulevaa PHPMailer-kirjastoa, joka mahdollistaa sähköpostin reitittämisen ulkoisten SMTP-palvelimien kautta.</p>
+<p>Jos sähköpostien perillemenossa on ongelmia (erityisesti verkossa toimivien palveluiden, kuten Gmail, Outlook, Yahoo! jne. kanssa), syynä on usein se, että verkko-osoitettasi ei pidetä luotettavana lähettäjänä. Vaihtaminen arvoon ”Kyllä” voi parantaa viestien perillemenoa. SMTP:n käyttö voi lisäksi parantaa yhteensopivuutta joidenkin sähköpostipalvelujen kanssa ja edelleen parantaa toimitusvarmuutta.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Lokit säilyvät"><![CDATA[
+<h2>Kuinka monta päivää lokeja säilytetään?</h2>
+<p>Kun Textpatternin lokitus on käytössä, voit määrittää, kuinka kauan (päivinä) lokit pidetään tallessa. Esimerkiksi ”7” säilyttää lokit seitsemän päivän ajalta.</p>
+<p><strong>Huom:</strong> Lokeja siivotaan vain, kun avaat ”Visitor logs” -paneelin; muuten ne kasvavat rajatta.</p>
+        ]]></item>
+        <item id="file_base_path" title="Polku tiedostonsiirtoon"><![CDATA[
+<h2>Polku tiedostohakemistoon</h2>
+<p>Määrittää <strong>absoluuttisen polun</strong> hakemistoon, johon tiedostolataukset tallennetaan pysyvästi. PHP:llä täytyy olla kirjoitusoikeus tähän hakemistoon.</p>
+<p><strong>Huom:</strong> Harkitse tämän hakemiston sijoittamista sivustosi julkisesti näkyvän juurihakemiston ulkopuolelle lisäturvan vuoksi.</p>
+        ]]></item>
+        <item id="file_download_header" title="Tiedostolatauksen otsake"><![CDATA[
+<h2>Tiedostolatauksen otsake</h2>
+<p>Mahdollistaa tiedostolatausten käsittelyn mukauttamisen.</p>
+<p>Normaalisti kaikki lataukset käsitellään liitetiedostoina ja ladataan (riippuen selaimesi asetuksista kyseiselle tiedostotyypille). Jos haluat antaa vihjeen tiettyjen tai kaikkien tiedostotyyppien toivotusta käsittelystä, voit määritellä tähän tägikoodia. Esimerkiksi PDF-tiedostot, jotka on asetettu Textpatternissa luokkaan ”inline-pdf”, voidaan näyttää selaimessa lataamisen sijaan näin:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Suurin siirrettävä tiedostokoko (tavua)"><![CDATA[
+<h2>Suurin siirrettävä tiedostokoko (tavua)</h2>
+<p>Voit rajoittaa siirrettävien tiedostojen enimmäiskoon tavuina. Huomaa, että tätä arvoa rajoittaa myös PHP:n oma kokoonpano. Jos Textpattern havaitsee, että PHP:n asetukset sallivat enintään pienemmän koon, arvoa pienennetään automaattisesti. Jos haluat sallia suurempia selainpohjaisia latauksia, ota yhteyttä palveluntarjoajaasi (asiaankuuluvat <code>php.ini</code>-arvot ovat <code>post_max_size</code>, <code>upload_max_filesize</code> ja <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Aikavyöhyke"><![CDATA[
+<h2>Aikavyöhyke</h2>
+<p>Ole hyvä ja valitse aikavyöhykkeesi, jotta päivämäärät näytetään paikallisessa ajassa.</p>
+        ]]></item>
+        <item id="img_dir" title="Kuvahakemisto"><![CDATA[
+<h2>Kuvahakemisto</h2>
+<p>Voit halutessasi muokata kuvahakemistosi nimen tässä. Sinun tulee ensin luoda hakemisto Textpattern-asennuksesi juurihakemistoon ja varmistaa, että PHP:llä on kirjoitusoikeus hakemistoon.</p>
+<p>Tämä polku on aina <strong>suhteellinen polku</strong> Textpattern-asennuksesi juurihakemistosta katsottuna.</p>
+<p>Oletusarvo on <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Liitä sähköpostiosoite Atom-syötteisiin?"><![CDATA[
+<h2>Liitä sähköpostiosoite Atom-syötteisiin?</h2>
+<p>Tällä asetuksella voit liittää artikkelin kirjoittajan (hänen käyttäjätililleen asetetun) sähköpostiosoitteen Atom-syötteen <code>author</code>-osaan.</p>
+        ]]></item>
+        <item id="is_dst" title="Kesäaika käytössä?"><![CDATA[
+<h2>Kesäaika käytössä?</h2>
+<p>Määrittää, onko kesäaika (DST, Daylight Saving Time) tällä hetkellä käytössä valitulla aikavyöhykkeellä.</p>
+        ]]></item>
+        <item id="logging" title="Lokiin kirjataan"><![CDATA[
+<h2>Lokitus</h2>
+<p>Voit valita, millä tasolla Textpattern kirjaa kävijöitä lokiin:</p>
+<ul>
+    <li><strong>Kaikki osumat:</strong> Textpattern kirjaa kaikki sivulataukset sivustollasi</li>
+    <li><strong>Vain viittaajat:</strong> Textpattern kirjaa vain vierailut, jotka tulevat muilta sivustoilta</li>
+    <li><strong>Ei mitään:</strong> Textpattern ei kirjaa lainkaan sivulatauksia</li>
+</ul>
+<p>Versiosta Textpattern 4.7.0 alkaen Textpattern ei kerää eikä tallenna kävijöiden IP-osoitteita. Jos keräät tai tallennat IP-osoitteita Textpatternin ulkopuolella, huolehdi siitä, että käsittely noudattaa sovellettavia lakeja, kuten <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR:ää <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>, ja että suojaat kyseiset tiedot kaikilla palvelin- ja Textpattern-asennuksen tasoilla.</p>
+<p>On vahvasti suositeltavaa pitää tämä asetus oletusarvossaan ”Ei mitään”, ellet ehdottomasti tarvitse lokitietoja ja lisäksi julkisesti kerro, mihin tarkoitukseen aiot niitä käyttää.</p>
+        ]]></item>
+        <item id="max_url_len" title="URLin maksimipituus"><![CDATA[
+<h2>URL-osoitteen enimmäispituus (merkkeinä)</h2>
+<p>Tämä estää asetettua pituutta pidempiä URL-osoitteita toimimasta. Siitä voi olla hyötyä vahinkojen rajoittamisessa ja sivuston tietoturvassa.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Näytä hallintapaneelissa sisällön seassa ohjelinkkejä"><![CDATA[
+<h2>Näytä hallintapaneelissa sisällön seassa ohjelinkkejä</h2>
+<p>Jos haluat piilottaa ylläpidon sisäiset ohjelinkit (Textpatternin ohjeponnahdusikkunat) kaikkialta järjestelmästä, aseta tämä arvoon ”Ei mitään”.</p>
+        ]]></item>
+        <item id="never_display_email" title="Piilota kommentoijan sähköpostiosoite?"><![CDATA[
+<h2>Piilota kommentoijan sähköpostiosoite?</h2>
+<p>Tämä asetus määrittää, näytetäänkö kommentoijan sähköpostiosoite julkisesti.</p>
+<p>On yleensä kohteliasta olla näyttämättä sähköpostiosoitteita käyttäjille, mutta tietyissä tilanteissa kommentoijien osoitteiden näyttäminen voi olla toivottavaa.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="ISO-8859-1 sähköposteissa (oletuksena UTF-8)?"><![CDATA[
+<h2>Käytetäänkö sähköposteissa ISO-8859-1-koodausta (oletus on UTF-8)?</h2>
+<p>Textpattern käyttää oletuksena UTF-8-koodausta aina kun mahdollista, myös lähtevässä sähköpostissa. Jotkin vanhemmat sähköpostiohjelmat (mukaan lukien jotkin Microsoft Outlookin versiot) eivät kuitenkaan tue UTF-8:aa kunnolla. Jos sähköposteissa näkyy sekaisin meneviä merkkejä, tämä asetus muuntaa tekstin ISO-8859-1-koodaukseen ennen lähettämistä.</p>
+<p><strong>Huom:</strong> Jos käytät sellaista kieltä, jonka merkkejä ei voi esittää ISO-8859-1:ssä, tämä asetus ei valitettavasti auta. Tällöin kannattaa etsiä UTF-8- (tai Unicode-) yhteensopiva sähköpostiohjelma.</p>
+        ]]></item>
+        <item id="override_form_types" title="Ohita lomaketyypit"><![CDATA[
+<h2>Ohita lomaketyypit</h2>
+<p>Valitse, minkä tyyppisten lomakkeiden mallipohjat otetaan käyttöön kirjoituspaneelin lomakeohituksina (override forms).</p>
+        ]]></item>
+        <item id="permlink_format" title="Kestolinkin URL-muoto"><![CDATA[
+<h2>Kestolinkin URL-muoto</h2>
+<p>Määrittää tavan, jolla artikkelien URL-osoitteet muodostetaan ja liitetään, kun käytössä ei ole sotkuinen tila.</p>
+<p>Kun artikkeli julkaistaan, sen URL-osoite muodostetaan artikkelin otsikon perusteella, ellei URL-otsikko-kenttään ole annettu erillistä otsikkoa.</p>
+<p>Tarkastellaan seuraavaa esimerkkititleä: <em>Ann and Bob eat cake</em></p>
+<p>Kun kestolinkin URL-muodoksi on valittu ”Hyphenated (title-like-this)”, artikkelin URL olisi:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Kun kestolinkin URL-muodoksi on valittu ”Intercapped (TitleLikeThis)”, artikkelin URL olisi:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Artikkelin URL-muoto"><![CDATA[
+<h2>Artikkelin URL-muoto</h2>
+<p>Määrittää tavan, jolla yksittäiset artikkelit saavutetaan URL-osoitteella, joka tulostetaan tagilla <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+<p>Tila ”?=messy” on yhteensopivin – se toimii usein ilman erillistä palvelinmääritystä – mutta huonoin URL-osoitteiden luettavuuden ja hakukoneoptimoinnin kannalta. Tässä tilassa sivustosi artikkeli-URL:t näyttävät esimerkiksi tältä:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Kaikki muut tilat vaativat palvelimen URL-uudelleenkirjoitustoiminnon (esimerkiksi Apachen <code>mod_rewrite</code> tai NGINX:n rewrite-direktiivit <code>server</code>-blokissa). Jos palvelimesi ei tue uudelleenkirjoitusta, ota yhteyttä palveluntarjoajaasi tai käytä edellä kuvattua ”?=messy”-tilaa.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Polku plugin cache -hakemistoon"><![CDATA[
+<h2>Polku plugin cache -hakemistoon</h2>
+<p>Tämä asetus on lähinnä liitännäiskehittäjien käyttöön. Kun se on määritetty, voit sijoittaa liitännäisen lähdekooditiedoston (ei käännettynä) tähän hakemistoon, jolloin Textpattern lataa sen automaattisesti. Näin liitännäistä voi muokata ja nähdä muutokset heti ilman, että liitännäistä tarvitsee asentaa/aktivoida. <strong>Varo kuitenkin</strong>, että tällä tavoin ladattu rikkinäinen liitännäinen (joka ei käänny) voi rikkoa koko Textpatternin!</p>
+<p>Tuotantosivustoilla liitännäiset kannattaa ladata tavanomaisen ”Plugins”-paneelin kautta eikä plugin cache -hakemiston avulla.</p>
+<p><strong>Huom:</strong> Älä koskaan käytä samaa hakemistoa sekä ”temporary”- että ”plugin cache” -hakemistona, sillä tämä aiheuttaa ongelmia (Textpattern yrittäisi suorittaa väliaikaisten lokitiedostojen sisältöä liitännäisinä).</p>
+        ]]></item>
+        <item id="production_status" title="Tuotannon tila"><![CDATA[
+<h2>Tuotannon tila</h2>
+<p>Textpattern-sivustolla on kolme tilaa:</p>
+<ol>
+    <li>”Debugging”</li>
+    <li>”Testing”</li>
+    <li>”Live”</li>
+</ol>
+<h3>Debugging-tila</h3>
+<p>Kaikki PHP-virheilmoitukset ja varoitukset toimimattomasta koodista ja liitännäisistä näkyvät live-sivustollasi. Lisäksi live-sivujen HTML-lähdekoodissa näkyy seuraavaa tietoa:</p>
+<ul>
+    <li>ajanhetki, joka kului sivun muodostamiseen (”Runtime”)</li>
+    <li>suoritettujen MySQL-kyselyiden lukumäärä</li>
+    <li>arvioitu huippumuistinkäyttö</li>
+    <li>kaikki sivun muodostuksessa käsitellyt Textpattern-tagit (ns. tag trace)</li>
+</ul>
+<h3>Testing-tila</h3>
+<p>Kaikki PHP-virheilmoitukset ja varoitukset toimimattomasta koodista ja liitännäisistä näkyvät live-sivustollasi. Live-sivujen HTML-lähdekoodissa näkyvät seuraavat tiedot:</p>
+<ul>
+    <li>ajanhetki, joka kului sivun muodostamiseen (”Runtime”)</li>
+    <li>suoritettujen MySQL-kyselyiden lukumäärä</li>
+    <li>arvioitu huippumuistinkäyttö</li>
+</ul>
+<h3>Live-tila</h3>
+<p>Sivuille ei lähetetä virheilmoituksia eikä diagnostiikkatietoja. Yleensä Live-tila on suositeltavin, sillä se tarjoaa parhaan käyttökokemuksen ja kuormittaa palvelinta vähiten.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Julkisen puolen teema"><![CDATA[
+<h2>Julkisen puolen teema</h2>
+<p>Oletusteema, jota käytetään, kun joku vierailee sivustosi julkisella puolella. Textpattern sisältää esiasennetun oletusteeman sekä mahdollisuuden aloittaa ilman teemaa. Voit lisätä teemapaketteja hakemistoon <code>textpattern/themes</code>, jolloin ne tulevat valittaviksi.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Julkaise vanhentuneet artikkelit?"><![CDATA[
+<h2>Julkaistaanko vanhentuneet artikkelit?</h2>
+<p>Kun arvo on ”Kyllä”, vanhentuneet artikkelit näkyvät edelleen sivustollasi vanhentumispäivän jälkeen. Voit käyttää tagia <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> näyttääksesi vanhentuneille artikkeleille vaihtoehtoista sisältöä tai merkkausta.</p>
+<p>Kun arvo on ”Ei”, vanhentuneet artikkelit poistetaan julkiselta sivustolta ja niistä palautetaan HTTP-status ”410 Gone”. Oletusarvo on ”Ei”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Lähetä kirjautumistiedot tästä osoitteesta"><![CDATA[
+<h2>Lähetä kirjautumistiedot tästä sähköpostiosoitteesta</h2>
+<p>Määritä sähköpostiosoite, jota käytetään lähettäjän ”From:”-osoitteena uusille käyttäjille lähetettävissä kirjautumistietoviesteissä.</p>
+<p>Jos kenttä jätetään tyhjäksi tai siinä on virheellinen osoite, Textpattern käyttää sen sijaan tällä hetkellä kirjautuneen käyttäjän nimeä ja osoitetta.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Kuinka monta artikkelia RSS:ssä?"><![CDATA[
+<h2>Kuinka monta artikkelia syötteisiin sisällytetään?</h2>
+<p>Tämä on kerralla syndikoitavien ajankohtaisten artikkeleiden enimmäismäärä RSS- ja Atom-muodoissa.</p>
+<p>Pieni arvo, esimerkiksi <code>5</code>–<code>15</code>, on suositeltava.</p>
+        ]]></item>
+        <item id="secondpass" title="Parserin ylimääräiset käsittelykerrat"><![CDATA[
+<h2>Parserin ylimääräiset käsittelykerrat</h2>
+<p>Textpatternin tagiparseri korvaa yleensä kaikki tagit sisällöllä tietokannasta yhdellä sivupohjan läpikäynnillä. Joissakin tilanteissa tämä ei riitä, esimerkiksi:</p>
+<ul>
+    <li>kun matalan latausjärjestyksen liitännäisiä käytetään tagin attribuutteina</li>
+    <li>kun tehdään koodin korvauksia <code>&lt;txp:php&gt;</code>-tagien sisällä</li>
+    <li>kun sivun aiempia elementtejä ohitetaan, jotta ne voivat saada sisältöä myöhemmin käsiteltävästä tagista</li>
+</ul>
+<p>Perinteisesti Textpattern on tehnyt toisen lisäajon (ns. ”secondpass”) taaksepäin yhteensopivuuden vuoksi, joten tämän asetuksen oletusarvo on <code>1</code>. Mitä useampia ajokertoja käytetään, sitä todennäköisempää on, että ei-toivottuja tageja pääsee käsittelyyn. Viimeaikaiset parannukset tagiparseriin ovat pienentäneet toisen ajokerran tarvetta. Ellet käytä toista ajokertaa nimenomaan johonkin tarpeeseen, suositeltavaa on laskea arvoon <code>0</code> sivustosi tietoturvan parantamiseksi.</p>
+<p>Jos tämän jälkeen huomaat sivustolla käsittelemättömiä tageja (eikä Testing- tai Debugging-tilassa näy muita tagivirheitä, kuten parittomia tagipareja), ota meihin yhteyttä sivupohja-/koodiesimerkin tai liitännäisen kanssa. Pyrimme poistamaan tarpeen lisäajokerroille, ja tämä tieto auttaa meitä siinä.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Lähetetäänkö &quot;Last-Modified&quot;-otsikkotietue?"><![CDATA[
+<h2>Lähetetäänkö "Last-Modified"-otsikkotietue?</h2>
+<p>Kun asetus on käytössä, Textpattern lukee kävijän HTTP-otsikon <code>If-Modified-Since</code> (jos sellainen on) ja vertaa sitä sivuston viimeisimpään päivitykseen. Jos mitään ei ole muuttunut sen jälkeen, kun kävijä viimeksi latasi sivun (eli selaimen lähettämä aikaleima vastaa sivuston viimeisintä päivitystä), selaimelle lähetetään otsikko, joka kehottaa käyttämään välimuistissa olevaa versiota sivusta.</p>
+<p>Tämä voi vähentää kaistanleveyden kulutusta, lyhentää sivujen latausaikoja ja pienentää verkkopalvelimen kuormaa.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Näytä kommenttien lukumäärä syötteissä?"><![CDATA[
+<h2>Näytä kommenttien lukumäärä syötteissä?</h2>
+<p>Kun arvo on ”Kyllä”, tämä asetus lisää RSS-/Atom-syötteissä artikkelin otsikon perään kyseisen artikkelin kommenttien lukumäärän.</p>
+        ]]></item>
+        <item id="site_slogan" title="Sivuston slogan"><![CDATA[
+<h2>Sivuston slogan</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Sivuston slogan <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> on sivustosi tiivistelmä tai kuvaus. Sitä käytetään sivustosi kuvauksena tarvittaessa, esimerkiksi RSS-/Atom-syötteissä, ja voit halutessasi näyttää sen sivustolla useissakin paikoissa.</p>
+<p><strong>Huom:</strong> Slogan on vapaaehtoinen, mutta se voi olla pakollinen kelvolliselle RSS- tai Atom-syötteelle.</p>
+        ]]></item>
+        <item id="sitename" title="Sivuston nimi"><![CDATA[
+<h2>Sivuston nimi</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Sivustosi nimi tai otsikko <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>. Se näkyy kävijän selaimen otsikkopalkissa tai syötteenlukijassa, ja voit käyttää sitä missä tahansa sivustollasi tarpeen mukaan.</p>
+        ]]></item>
+        <item id="siteurl" title="Sivuston URL"><![CDATA[
+<h2>Sivuston URL</h2>
+<p>Tämä on Textpattern-sivustosi osoite, esimerkiksi <code>www.example.com</code>.</p>
+<p><strong>Huom:</strong> <code>http://</code>-, <code>https://</code>-etuliitettä tai loppuun tulevaa kauttaviivaa <code>/</code> ei tarvita.</p>
+        ]]></item>
+        <item id="skin_dir" title="Teemahakemisto"><![CDATA[
+<h2>Teemahakemisto</h2>
+<p>Voit halutessasi muokata hakemiston nimen, johon julkisen puolen teemojen tasatiedostot tallennetaan pysyvästi. Sinun tulee ensin luoda hakemisto Textpattern-asennuksesi juurihakemistoon ja varmistaa, että PHP:llä on kirjoitusoikeus siihen.</p>
+<p>Tämä polku on aina <strong>suhteellinen polku</strong> Textpattern-asennuksesi juurihakemistosta katsottuna.</p>
+<p>Oletusarvo on <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP kirjeen lähettäjän osoite"><![CDATA[
+<h2>SMTP-kirjekuoren lähettäjän osoite</h2>
+<p>Jätä tämä asetus tyhjäksi, ellet kohtaa ongelmia sähköpostin lähettämisessä Textpatternissa (esimerkiksi jos sähköpostia ei lähde lainkaan). Jos ongelmia ilmenee, voit antaa tähän minkä tahansa kelvollisen sähköpostiosoitteen, mieluiten sellaisen, jonka verkkotunnus on sama kuin Textpattern-sivustosi (eli jos sivustosi on <code>https://example.com</code>, osoite voisi olla <code>you@example.com</code>).</p>
+<p>Teknisesti kiinnostuneille:</p>
+<ul>
+    <li>UNIX-tyyppisissä ja macOS-palvelimissa annettua osoitetta käytetään neljäntenä parametrina (etuliitteellä ”-f”) PHP:n <code>mail()</code>-funktiolle</li>
+    <li>Windows-palvelimissa annettu osoite asettaa (tai ohittaa) <code>sendmail_from</code>-asetuksen php.ini-tiedostossa</li>
+</ul>
+<p>Näin varmistetaan, että SMTP-kirjekuoren lähettäjän osoite (joka ei välttämättä ole sama kuin sähköposteissa näkyvä ”From:”-otsikko) asetetaan tähän osoitteeseen, mikä on joillakin web-palvelimilla edellytyksenä sähköpostin lähettämiselle.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP-palvelin"><![CDATA[
+<h2>SMTP-palvelin</h2>
+<p>Jos haluat parantaa viestien toimitusvarmuutta ja hyödyntää ulkoista palvelua sähköpostin reitittämiseen (esim. SendGrid, AWS SES, Mailchimp, Mailgun jne.), määritä tähän SMTP-palvelin. Kysy arvo SMTP-palveluntarjoajaltasi.</p>
+<p>Tämän arvon voi määritellä myös vakiolla <code>SMTP_HOST</code> tiedostossa <code>config.php</code>. Tällöin arvo näytetään Preferences-paneelissa harmaana.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP-salasana"><![CDATA[
+<h2>SMTP-salasana</h2>
+<p>Jos SMTP-yhteys vaatii käyttäjätunnukselle salasanan, anna se tähän. Lisätietoja löydät palveluntarjoajan ohjeista.</p>
+<p>Huom: Vaikka salasanaa ei näytetä tässä, se tallennetaan <em>selkotekstinä</em> tietokannan prefs-tauluun. Jos haluat parantaa tietoturvaa, määrittele mieluummin vakio <code>SMTP_PASS</code> tiedostossa <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP-portti"><![CDATA[
+<h2>SMTP-portti</h2>
+<p>Jos olet määritellyt SMTP-palvelimen, sinun on määriteltävä myös portti SMTP-reitityksen käyttöönottoa varten. Yleisiä portteja ovat:</p>
+<ul>
+    <li>25 – suojaamaton sähköposti</li>
+    <li>465 – vanha (epävirallinen) suojattu sähköposti</li>
+    <li>587 – oletus (suositeltu) suojatulle TLS-sähköpostille</li>
+</ul>
+<p>Valitsemasi SMTP-palveluntarjoaja saattaa käyttää toista porttia, joten tarkista palvelun dokumentaatio.</p>
+<p>Tämän arvon voi määritellä myös vakiolla <code>SMTP_PORT</code> tiedostossa <code>config.php</code>. Tällöin arvo näytetään Preferences-paneelissa harmaana.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP-suojaustapa"><![CDATA[
+<h2>SMTP-suojaustapa</h2>
+<p>Valitse mekanismi, jota SMTP-palveluntarjoajasi käyttää sähköpostin suojauksessa. Lisätietoja löydät palveluntarjoajan dokumentaatiosta.</p>
+<p>Tämän arvon voi määritellä myös vakiolla <code>SMTP_SECTYPE</code> tiedostossa <code>config.php</code>. Tällöin arvo näytetään Preferences-paneelissa harmaana.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP-käyttäjätunnus"><![CDATA[
+<h2>SMTP-käyttäjätunnus</h2>
+<p>Jos SMTP-yhteys vaatii käyttäjä-/kirjautumistunnuksen, anna se tähän. Lisätietoja löydät palveluntarjoajan ohjeista.</p>
+<p>Tämän arvon voi määritellä myös vakiolla <code>SMTP_USER</code> tiedostossa <code>config.php</code>. Tällöin arvo näytetään Preferences-paneelissa harmaana.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Roskapostilistat (pilkuin eroteltuna)"><![CDATA[
+<h2>Roskapostilistat (pilkuin eroteltuna)</h2>
+<p>Tähän määritetyt <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist-palveluntarjoajat <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> tarkistetaan aina, kun sivustolle lähetetään kommentti. Kommentoijan IP-osoite tarkistetaan; jos se löytyy listalta, osoitteesta on raportoitu roskapostia aiemmin ja kommentti hylätään. Textpattern ei tallenna tai säilytä kommentoijan IP-osoitetta tarkistustuloksista riippumatta.</p>
+<p>Voit antaa pilkuin erotellun listan verkkotunnuksia. Huomaa, että sinun vastuullasi on varmistaa, että käyttämäsi blocklistat soveltuvat tarkoitukseesi.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Syndikoi vain artikkelin johdanto?"><![CDATA[
+<h2>Syndikoidaanko <strong>vain</strong> artikkelin johdanto?</h2>
+<p>Jos arvo on ”Ei”, syötteen kohteina käytetään artikkelien täysiä leipätekstejä.</p>
+<p>Jos arvo on ”Kyllä”, syötteissä käytetään leipätekstin sijaan artikkelin johdantoa aina kun se on saatavilla.</p>
+        ]]></item>
+        <item id="tempdir" title="Väliaikaishakemisto"><![CDATA[
+<h2>Väliaikaishakemiston polku</h2>
+<p>Määrittää <strong>absoluuttisen polun</strong> väliaikaishakemistoon (usein nimeltään ”tmp” tai ”temp”). PHP:llä tulee olla kirjoitusoikeus tähän hakemistoon. Hakemistoa käytetään väliaikaisiin tiedostoihin, esimerkiksi kaikenlaisten latausten (liitännäiset, tiedostot, kuvat) vastaanottamiseen.</p>
+<p><strong>Huomautuksia:</strong>
+<ul>
+    <li>Älä käytä samaa hakemistoa sekä ”temporary”- että ”plugin cache” -hakemistona, sillä tämä aiheuttaa ongelmia (Textpattern yrittäisi suorittaa väliaikaisten lokitiedostojen sisältöä liitännäisinä).</li>
+    <li>Harkitse tämän hakemiston sijoittamista sivustosi julkisesti näkyvän juurihakemiston ulkopuolelle lisäturvan vuoksi.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Hallintapaneelin teema"><![CDATA[
+<h2>Hallintapaneelin teema</h2>
+<p>Oletusylläpitoteema, jota käytetään, kun joku kirjautuu Textpatterniin. Textpattern sisältää useita esiasennettuja ylläpitoteemoja, ja voit lisätä omia teemoja hakemistoon <code>textpattern/admin-themes</code>, jolloin ne tulevat valittaviksi.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Lisää kauttaviiva URL-osoitteiden perään"><![CDATA[
+<h2>Lisää kauttaviiva URL-osoitteiden perään</h2>
+<p>Määrittää, lisääkö Textpattern automaattisesti loppukauttaviivan itse generoimiinsa URL-osoitteisiin. Vaihtoehdot ovat:</p>
+<ul>
+    <li><strong>Ei</strong> – ei koskaan</li>
+    <li><strong>List</strong> – vain listapohjaisten laskeutumissivujen osoitteisiin (ei yksittäisille artikkeleille)</li>
+    <li><strong>Kyllä</strong> – aina</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP-funktiot, joita voi käyttää txp:evaluate-koodissa"><![CDATA[
+<h2>PHP-funktiot, joita voi käyttää txp:evaluate-koodissa</h2>
+<p>Tämä on pilkuin eroteltu lista <code>function</code>- tai <code>alias=function</code>-pareista, esim. <code>md5</code>, <code>replace=str_replace</code>. Listattuja funktioita voidaan käyttää <code>&lt;txp:evaluate /&gt;</code>-tagin <code>query</code>-attribuutissa:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code>-funktion on palautettava skalaarinen arvo (<strong>ei</strong> taulukkoa tai oliota).</p>
+        ]]></item>
+        <item id="use_comments" title="Salli kommentointi?"><![CDATA[
+<h2>Salli kommentointi?</h2>
+<p>Määrittää, onko Textpatternin kommentointitoiminto käytössä vai pois käytöstä.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Käytä sähköpostiosoitetta syötteiden tunnuksena (oletuksena sivuston osoite)?"><![CDATA[
+<h2>Käytä sähköpostiosoitetta syötteiden tunnisteiden muodostamiseen (oletuksena sivuston URL)?</h2>
+<p>Atom-syötteen jokaisella kohteella on oltava yksilöllinen tunniste (ID).</p>
+<p>Jotta tunnisteet olisivat yksilöllisiä sivustollasi, Textpattern antaa valita, käytetäänkö niissä sähköpostiosoitetta vai verkkotunnusta. Sähköpostiosoitteena käytetään asennuksen luomisen yhteydessä ensimmäisenä annettua osoitetta. Ellet ole vaihtamassa verkkotunnustasi tulevaisuudessa, on yleensä turvallista asettaa tämä arvoon ”Ei”.</p>
+        ]]></item>
+        <item id="use_plugins" title="Käytä liitännäisiä?"><![CDATA[
+<h2>Käytä liitännäisiä?</h2>
+<p>Tällä asetuksella voit kytkeä kaiken Textpattern-liitännäistuen pois päältä. Siitä voi olla hyötyä vianetsinnässä, kun haluat selvittää, liittyvätkö mahdolliset virheet yhteen tai useampaan liitännäiseen.</p>
+        ]]></item>
+        <item id="use_textile" title="Tekstin oletusmuotoilu"><![CDATA[
+<h2>Tekstin oletusmuotoilu</h2>
+<p>Tässä valitsemasi muotoilu on oletusarvo artikkelien johdanto- ja leipätekstin merkkausmuodolle ”Kirjoita” (Write) -paneelissa. Voit sallia täyden Textile-käsittelyn, muuntaa rivinvaihdot HTML-kappalemerkinnöiksi tai olla muuntamatta tekstiä lainkaan.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> on työkalu, joka helpottaa pelkän tekstin muuntamista HTML:ksi. Kun se on käytössä, Textile käsittelee artikkelien leipätekstin ja palauttaa rakenteellisesti ehjää HTML:ää.</p>
+<p>Textile tarjoaa myös tehokkaan mutta helposti opittavan joukon komentoja tekstin muotoiluun, rakenteiden (kuten listojen, otsikoiden ja lainauslohkojen) määrittelyyn sekä linkkien ja kuvien lisäämiseen.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Osiot-paneeli">
-        <item id="section_category" title="Esittely"><![CDATA[]]></item>
-        <item id="section_default" title="Oletusarvoinen osio julkaistaville artikkeleille"><![CDATA[]]></item>
-        <item id="section_description" title="Kuvaus"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title="Osion artikkelit ilmestyvät etusivulla?"><![CDATA[]]></item>
-        <item id="section_searchable" title="Sisällytä tämä osio sivuston sisäisessä haussa?"><![CDATA[]]></item>
-        <item id="section_syndicate" title="Syndikoi tämän osion artikkelit?"><![CDATA[]]></item>
-        <item id="section_uses_css" title="Käyttää tyyliä"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Käyttää sivupohjaa"><![CDATA[]]></item>
-        <item id="section_uses_skin" title="Käyttää teemaa"><![CDATA[]]></item>
+        <item id="section_category" title="Esittely"><![CDATA[
+<h2>Johdanto</h2>
+<p>Textpatternin osioita (Sections) voi ajatella samaan tapaan kuin lehden eri osastoja: kaikki kuuluvat samaan julkaisuun, mutta kullakin voi olla erilainen asettelu, erilainen artikkelityyppi ja niin edelleen.</p>
+<p>Useimmille sivustoille riittää vain hyvin pieni määrä osioita.</p>
+<h3>Esimerkki sivustosta, jossa on kolme osiota:</h3>
+<ol>
+    <li><strong>Arkisto:</strong> Osio, johon kaikki etusivulla näkyvät artikkelit kuuluvat. Kun lukija napsauttaa artikkelin kestolinkkiä, artikkeli näytetään tälle osiolle määritetyn sivupohjan mukaisesti. Päästäksesi listattuun näkymään osion ”Archive” uusimmista artikkeleista, URL olisi <code>https://example.com/archive/</code>.</li>
+    <li><strong>Tietoa:</strong> ”Tietoa sivustosta” -sivu, joka poikkeaa etusivusta ja ”Archive”-osiosta siten, että se on staattisempi, voi käyttää eri asettelua ja sisältää todennäköisesti vain yhden artikkelin. ”About”-osio löytyisi osoitteesta <code>https://example.com/about/</code>.</li>
+    <li><strong>Kuvat:</strong> Osio, jonka erilainen sivupohja (ja mahdollisesti eri CSS) on suunniteltu esittämään valokuvia artikkelien sijaan.</li>
+</ol>
+<p>Huomaa, että järjestelmässä on aina olemassa erityinen piilotettu osio nimeltä default. Tämä osio käyttää sivupohjaa default ja tyyliä default, ja sen perusteella muodostetaan sivustosi etusivu.</p>
+        ]]></item>
+        <item id="section_default" title="Oletusarvoinen osio julkaistaville artikkeleille"><![CDATA[
+<h2>Oletusjulkaisuosio</h2>
+<p>Tämä asetus määrittää, mikä osio on valmiiksi valittuna Section-valikossa, kun luot uuden artikkelin ”Kirjoita” (Write) -paneelissa.</p>
+<p>Jos suurin osa artikkeleistasi päätyy tiettyyn osioon, valitse se listasta. Muutos tulee voimaan välittömästi.</p>
+<p>Voit yliajaa tämän artikkelikohtaisesti ”Kirjoita”-paneelissa valitsemalla eri osion ”Lajittelu ja näyttö” -osiosta.</p>
+        ]]></item>
+        <item id="section_description" title="Kuvaus"><![CDATA[
+<h2>Kuvaus</h2>
+<p>Osion kuvaus on vapaaehtoinen osa, jonka avulla hakukoneet ja haravointirobotit voivat helpommin tunnistaa ja jäsennellä sisältöä.</p>
+<p>Artikkelin kuvauksen enimmäispituus on 255 merkkiä. Huomaa, että jotkin hakukoneet rajoittavat sivun <code>meta description</code> -kentän pituutta käytännön syistä hakutulossivuillaan (SERP), ja tämä raja voi olla pienempi kuin Textpatternin 255 merkkiä.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Osion artikkelit ilmestyvät etusivulla?"><![CDATA[
+<h2>Näkyvätkö tämän osion artikkelit etusivulla?</h2>
+<p>Joidenkin osioiden artikkelit – erityisesti ne, jotka muistuttavat staattisempia verkkosivuja – voivat vaikuttaa sopimattomilta sivuston etusivun ajankohtaisen sisällön virrassa.</p>
+<p>Jos asetat tämän arvoon ”Ei”, tähän osioon liitetyt artikkelit eivät näy etusivulla.</p>
+        ]]></item>
+        <item id="section_searchable" title="Sisällytä tämä osio sivuston sisäisessä haussa?"><![CDATA[
+<h2>Otetaanko tämä osio mukaan sivuston hakuun?</h2>
+<p>Määrittää, näytetäänkö tähän osioon kuuluvat artikkelit sivuston laajuisen haun tuloksissa.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Syndikoi tämän osion artikkelit?"><![CDATA[
+<h2>Julkaistaanko tämän osion artikkelit syötteissä?</h2>
+<p>Määrittää, näkyvätkö tämän osion artikkelit sivuston RSS- ja Atom-syötteissä.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Käyttää tyyliä"><![CDATA[
+<h2>Käytettävä tyyli</h2>
+<p>Jos haluat ohittaa jonkin osion oletustyylitiedoston, se voidaan määrittää tässä.</p>
+<p>Tämä koskee vain Textpatternin ”Tyylit” (Styles) -paneelissa olevia tyylejä – jos isännöit CSS-tiedostojasi Textpatternin ulkopuolella (mitä suositellaan), tällä asetuksella ei ole vaikutusta.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Käyttää sivupohjaa"><![CDATA[
+<h2>Käytettävä sivupohja</h2>
+<p>Textpatternissa osiot on sidottu sivupohjiin (page templates).</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Käyttää teemaa"><![CDATA[
+<h2>Käytettävä teema</h2>
+<p>Jos haluat käyttää jossakin osiossa eri teemaa, voit valita sen tässä asennetuiden teemojen listasta.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Asennus-paneeli">
-        <item id="setup_user_login" title="Käyttäjän kirjautuminen"><![CDATA[]]></item>
-        <item id="setup_user_pass" title="Käyttäjän salasana"><![CDATA[]]></item>
-        <item id="table_prefix" title="Taulun etuliite"><![CDATA[]]></item>
+        <item id="setup_admin_url" title="Ylläpitäjän alidomain"><![CDATA[
+<h2>Ylläpitäjän alidomain</h2>
+<p>Alidomain, jota haluat käyttää Textpatternin hallintapaneeliin kirjautumiseen (esim. <code>admin.example.com</code>).</p>
+<p>Lisätietoja saat ohjeesta <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Evästeen verkkotunnus"><![CDATA[
+<h2>Evästeen verkkotunnus</h2>
+<p>(Ali)domain, jota haluat käyttää Textpatternin evästeissä.</p>
+<p>Lisätietoja saat ohjeesta <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Käyttäjän kirjautuminen"><![CDATA[
+<h2>Käyttäjän kirjautuminen</h2>
+<p>Ylläpitäjän (”Publisher”-tilin) kirjautumistunnus, jota käytät sivustosi hallinnointiin.</p>
+<p>Vaikka tunnukselle ei ole erityisiä rajoituksia, on parasta välttää sekä monimutkaisia merkkijonoja että helposti arvattavia käyttäjänimiä (esim. <code>admin</code>, <code>administrator</code> jne.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Käyttäjän salasana"><![CDATA[
+<h2>Käyttäjän salasana</h2>
+<p>Koska tällä tilillä on Textpatternissa korkeimmat käyttöoikeudet, valitse hyvin vahva salasana tai mieluiten salalause.</p>
+<h3>Vinkkejä</h3>
+<ul>
+    <li>Käytä sekä isoja että pieniä kirjaimia</li>
+    <li>Käytä numeroita</li>
+    <li>Käytä symboleja</li>
+    <li>Tee salasanasta vähintään kahdeksan merkkiä pitkä</li>
+    <li><strong>Vältä</strong> kaikkea henkilökohtaista tietoa (päivämääriä, nimiä, paikkakuntia, perheenjäseniä, lemmikkejä jne.)</li>
+    <li><strong>Vältä</strong> yksittäisiä tai toistettuja sanakirjasanoja riippumatta kirjoitusasusta, kielestä tai kirjainkoosta</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Taulun etuliite"><![CDATA[
+<h2>Taulun etuliite</h2>
+    <p>Tarvitset taulujen etuliitteitä vain, jos haluat useita Textpattern-asennuksia samaan tietokantaan. Jokaisella asennuksella on oltava oma yksilöllinen etuliite.</p>
+    <p>Huomaa, että etuliitteen on noudatettava seuraavia sääntöjä:</p>
+<ul>
+    <li><strong>1. merkki:</strong> oltava a–z, A–Z tai alaviiva</li>
+    <li><strong>Seuraavat merkit:</strong> voivat olla vain a–z, A–Z, 0–9 tai alaviiva</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="skin" title="Teemat-paneeli">
-        <item id="skin_author" title="Teeman tekijä"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="Teeman nettisivut"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title="Poistetaanko teeman sivupohjat myös levyltä"><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title="Poistetaan käyttämättömät sivupohjat tietokannasta teemaa tuotaessa"><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title="Poistetaan käyttämättömät sivupohjat levyltä kun teemaa viedään"><![CDATA[]]></item>
-        <item id="skin_description" title="Teeman kuvaus"><![CDATA[]]></item>
-        <item id="skin_import" title="Tuo teema"><![CDATA[]]></item>
-        <item id="skin_name" title="Teeman nimi"><![CDATA[]]></item>
-        <item id="skin_overview" title="Teemojen esittely"><![CDATA[]]></item>
+        <item id="skin_author" title="Teeman tekijä"><![CDATA[
+<h2>Teeman tekijä</h2>
+<p>Tämän teeman tekijä tai tekijät (vapaaehtoinen).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Teeman nettisivut"><![CDATA[
+<h2>Teeman sivusto</h2>
+<p>URL-osoite, josta tämän teeman täydet tiedot ja/tai uusimmat versiot löytyvät (vapaaehtoinen).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Poistetaanko teeman sivupohjat myös levyltä"><![CDATA[
+<h2>Poista myös teeman mallipohjat levyltä</h2>
+<p>Jos valittu, kaikki valitun (tai valittujen) teeman mallipohjatiedostot poistetaan pysyvästi levyltä. Teemaan liittyviä hakemistoja ja niiden alihakemistoja ei kuitenkaan poisteta, jos niissä on muita tiedostoja (kuten JavaScriptiä, kuvia jne.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Poistetaan käyttämättömät sivupohjat tietokannasta teemaa tuotaessa"><![CDATA[
+<h2>Poista käyttämättömät mallipohjat tietokannasta tuonnin yhteydessä</h2>
+<p>Jos valittu, jokainen valitussa teemassa oleva mallipohja, jolle ei löydy vastaavaa tiedostoa levyltä, poistetaan pysyvästi tietokannasta. Toiminnon jälkeen tietokannan mallipohjat vastaavat mahdollisimman hyvin levyllä olevaa tilannetta.</p>
+<p>Huomaa, että jos olet poistanut mallipohjatiedostoja, joita Textpattern tarvitsee, järjestelmä luo niistä tyhjät versiot tietokantaan.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Poistetaan käyttämättömät sivupohjat levyltä kun teemaa viedään"><![CDATA[
+<h2>Poista käyttämättömät mallipohjat levyltä viennin yhteydessä</h2>
+<p>Jos valittu, jokainen valittujen teemojen mallipohjatiedosto, jolle ei löydy vastaavaa kohdetta tietokannasta, poistetaan pysyvästi levyyn perustuvasta teemasta. Toiminnon jälkeen tiedostojärjestelmän mallipohjat vastaavat täsmälleen sitä, mitä tietokannassa on.</p>
+        ]]></item>
+        <item id="skin_description" title="Teeman kuvaus"><![CDATA[
+<h2>Teeman kuvaus</h2>
+<p>Teeman ulkoasusta ja rakenteesta voidaan antaa lyhyt kuvaus (vapaaehtoinen).</p>
+<p>Teeman kuvauksen enimmäispituus on 255 merkkiä.</p>
+        ]]></item>
+        <item id="skin_import" title="Tuo teema"><![CDATA[
+<h2>Tuo teema levyltä</h2>
+<p>Tämä lomake mahdollistaa teeman tuomisen Textpatternin tietokantaan themes-hakemistostasi.</p>
+<p>Tuotava teema koostuu luettavasta yläkansiosta, jonka nimi on teeman nimi, sekä tämän kansion sisällä olevasta luettavasta <code>manifest.json</code>-tiedostosta odotetussa muodossa. Teemakansion tulisi sisältää myös sivut, lomakkeet ja tyylit omissa nimikkoalikansioissaan.</p>
+<p>Sivujen ja lomakkeiden tulisi käyttää tiedostopäätettä <code>.txp</code>, kun taas tyylitiedostojen oletetaan olevan <code>.css</code>-tiedostoja. Lomakkeet tulisi lisäksi ryhmitellä tyypeittäin omiin hakemistoihinsa. Textpattern luo puuttuvat olennaiset mallipohjat tuonnin yhteydessä.</p>
+<p>Lisätietoja teemojen luomisesta, asentamisesta ja käyttämisestä Textpattern CMS:ssä saat <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">teemoja koskevasta dokumentaatiosta <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Teeman nimi"><![CDATA[
+<h2>Teeman nimi</h2>
+<p>Teeman nimi käytetään teemakansion ja muiden teknisten viittausten nimenä (pakollinen).</p>
+<p>Nimessä ei tulisi käyttää erikoismerkkejä eikä välilyöntejä.</p>
+        ]]></item>
+        <item id="skin_overview" title="Teemojen esittely"><![CDATA[
+<h2>Johdatus teemoihin</h2>
+<p>Textpattern-teema on kokoelma sivuja (Pages), lomakkeita (Forms) ja tyylitiedostoja (Stylesheets). Teemojen avulla voit jäsentää sivustosi resurssit loogisiin ryhmiin, mikä helpottaa tunnistamista ja jakamista muille. Teeman luominen tai tuominen ja sen sisältämät resurssit eivät <em>vaikuta</em> olemassa olevaan sivustoosi. Voit vapaasti muokata mitä tahansa resurssia, joka ei ole liitetty sivustosi osioon, eikä se vaikuta sivustoon.</p>
+<p>Muokataksesi teeman resursseja siirry sivu-, lomake- tai tyylipaneeliin ja valitse pudotusvalikosta teema, jolla haluat työskennellä. Valittu teema muistetaan ylläpitoalueen eri osioiden välillä, joten voit liikkua resurssityyppien välillä nopeasti. Tätä teemaa kutsutaan nimellä <em>työskentelyteema</em> (working theme).</p>
+<p>Lisätietoja saat <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation -dokumentaatiosta <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a>.</p>
+        ]]></item>
         <item id="skin_title" title="Teeman otsikko"><![CDATA[<h2>Teeman otsikko</h2>
 <p>Teemaa kuvaava otsikko. Käytetään teeman tunnistamiseen Textpatternin välilehdillä.</p>
 <p>Otsikko voi sisältää erikoismerkkejä ja välilyöntejä.</p>

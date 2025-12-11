@@ -83,13 +83,14 @@
     <group id="article" title="写作面板">
         <item id="article_image" title="文章附图"><![CDATA[
 <h2>文章附图</h2>
-<p>文章用到的图像可能是：</p>
+<p>要将图像与本文关联，请在此处放置下列任一内容：</p>
 <ol>
-    <li>一个 Textpattern 图像 ID (e.g. <code>12</code>)</li>
-    <li>一个图像的相对 URL 路径 (例如 <code>/images/my_pic.jpg</code>)</li>
-    <li>一个完整 URL 路径 (例如 <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+    <li>一个或多个 Textpattern 图像 ID，使用逗号分隔（例如：<code>12, 25, 18</code>）</li>
+    <li>一个或多个指向图像的相对 URL，使用逗号分隔（例如：<code>/images/my_pic.jpg</code>）</li>
+    <li>一个或多个完整（含协议）的 URL，使用逗号分隔（例如：<code>https://example.com/path/to/images/my_pic.jpg</code>）</li>
 </ol>
-<p>插入诸如 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> 到一个文章的组件。该组件将输出完整的 HTML <code>&lt;img&gt;</code> 标签关闭图像。</p>
+<p>可以在文章表单中插入 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 来显示第一张图片。默认情况下，它会输出一段完整的 HTML <code>&lt;img&gt;</code> 标签指向所选图像。</p>
+<p>您也可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 来显示图片画廊。</p>
         ]]></item>
         <item id="body" title="内容"><![CDATA[
 <h2>内容</h2>
@@ -98,9 +99,10 @@
         ]]></item>
         <item id="description" title="描述"><![CDATA[
 <h2>描述</h2>
-<p>此可选的文章描述组件能够帮助搜索引擎和网站爬虫更好地识别和排序内容。</p>
-<p>文章描述最多不能超过255个字符。注意，为了便于在搜索引擎结果页面（SERPs）中显示，某些搜索引擎在页面的<code>元描述</code>的长度上设置了字符限制，该字符限制可能小于Textpattern中的255个字符。</p>
-<p>注意，文章描述与文章摘录不同，尽管它们可以有相似的内容。文章描述应主要用于搜索引擎和爬虫，而文章摘录更适合放在供人类阅读的地方。</p>        ]]></item>
+<p>文章描述是一个可选组件，可帮助搜索引擎和网站爬虫更好地识别和整理内容。</p>
+<p>文章描述最多为 255 个字符。请注意，为了便于在搜索引擎结果页面（SERPs）中显示，某些搜索引擎会对页面的 <code>meta description</code> 长度设置字符上限，该上限可能低于 Textpattern 所允许的 255 个字符。</p>
+<p>请注意，文章描述不同于文章摘录，尽管它们都可以包含类似的内容。文章描述主要用于搜索引擎和爬虫，而文章摘录更适合作为面向读者的文章摘要，在需要的地方展示。</p>
+        ]]></item>
         <item id="excerpt" title="摘录"><![CDATA[
 <h2>摘录</h2>
 <p>文章摘录可选。摘录主要用来展示文章的内容，可以使用目录来显示的文章梗概，可用于站点的RSS/Atom源或者其他用途。</p>
@@ -137,20 +139,16 @@
         ]]></item>
         <item id="status" title="状态"><![CDATA[
 <h2>状态</h2>
-<p>设置文章发布状态。</p>
-<p>发布状态可设置：</p>
+<p>定义此 Textpattern 文章的发布可见状态。</p>
+<p>发布状态可以是以下之一：</p>
 <ul>
-    <li>草稿</li>
-    <li>隐藏</li>
-    <li>待审</li>
-    <li>公开</li>
-    <li>置顶</li>
+<li><strong>草稿</strong>：被视为进行中的工作，在 Textpattern 管理区之外不可见（即在网站前台不可见，也不会在订阅源中分发）。</li>
+<li><strong>隐藏</strong>：文章在 Textpattern 管理区之外不可见。适用于从网站上移除但又不打算删除的内容。</li>
+<li><strong>待审</strong>：被视为已准备好发布并等待批准，但在 Textpattern 管理区之外不可见。</li>
+<li><strong>公开</strong>：通常在 Textpattern 管理区之外可见（即在网站前台可见，如果偏好设置允许，也会在订阅源中分发）。如果一篇文章是公开状态并设置了到期时间，到期后状态仍保持为公开，但只有在允许发布已过期文章时，它才会在管理区之外显示。</li>
+<li><strong>置顶</strong>：与<strong>公开</strong>文章类似，网站访客可以查看，但<strong>不会</strong>出现在文章列表中，除非相应的 <code>article</code> 或 <code>article_custom</code> 标签包含 <code>status</code> 属性且其值为 <code>sticky</code>。</li>
 </ul>
-<p><strong>草稿</strong>文章是指仍处于编辑状态中的文章，该状态文章仅能在管理端可见（不能在用户区和RSS中使用）。</p>
-<p><strong>隐藏</strong>文章仅能在管理端可见。</p>
-<p><strong>待审</strong>文章是指准备发布，等待审核的文章，该状态文章仅能在管理端可见。</p>
-<p><strong>公开</strong>文章不仅仅管理端可见，所有人都能看到（用户可见，Rss等也会采集相关信息）。如果一篇文章已经公开，但是有有效期，那么有效期到了之后，也只有管理端能看到了。</p>
-<p><strong>置顶</strong>文章类似于<strong>公开</strong>文章，谁都可以看到。设置文章为置顶状态或者相关的<code>article_custom</code>标签属性值为<code>置顶</code>后，文章才会出现在文章列表中。</p>
+<p>注意：在网站上不公开可见的内容，登录用户仍然可以预览。</p>
         ]]></item>
         <item id="title" title="标题"><![CDATA[
 <h2>标题</h2>
@@ -189,7 +187,7 @@
         ]]></item>
         <item id="image_category" title="图像"><![CDATA[
 <h2>图像</h2>
-<p>图像分类为选填项，对于内部组织以及定义图像集合可以使用<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt; <4> <4> </code>><span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 和<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code><7 </code><7><7>>在新窗口中打开外部链接></span>>标签</a>
+<p>图像分类是可选的，既有助于内部组织管理，也便于通过 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 定义并展示图像集合。</p>
         ]]></item>
         <item id="link_category" title="链接"><![CDATA[
 <h2>链接</h2>
@@ -222,26 +220,33 @@
    <li>服务器根本不支持简洁网址</li>
 </ul>
 <p>简洁网址测试尝试从“站点网址”首选项中指定的网址获取页面，以检查所有简洁网址参数是否正常工作。如果该网址是另一个站点，或者已被静态页面或类似页面替换，则测试将失败。除非问题得到解决，应使用凌乱网址（例如：<code>https://example.com?s=section&amp;id=4</code>）。确保管理首选项中的“永久链接模式”已进行相应设置。</p>        ]]></item>
-        <item id="diag_clear_private" title="隐藏隐私信息"><![CDATA[
-<h2>隐藏私人信息</h2>
-<p>隐藏私人信息以提高安全性。如果要以公开可见的格式（例如Textpattern支持论坛）共享诊断信息，这将通过省略敏感的服务器信息来降低安全风险。</p>]]></item>
-        <item id="dev_version_live" title="在一个开放服务器上写开发代码"><![CDATA[
-<h2>在线服务器开发代码</h2>
-<p>不建议将Textpattern开发中版本用于在线的站点。如果能够理解风险并且可以接受，则可以安全地忽略此警告。</p>
+        <item id="concurrent_user_live" title="在线服务器上的并发登录"><![CDATA[
+<h2>在线服务器上的并发登录</h2>
+<p>允许您的用户账户在多个会话中同时登录会带来安全风险，因此不推荐启用。除非充分了解并接受相关风险，否则请在高级首选项面板中禁用此功能。</p>
         ]]></item>
-        <item id="dir_not_writable" title="目录禁止写入"><![CDATA[
+        <item id="diag_clear_private" title="隐藏私人信息"><![CDATA[
+<h2>隐藏私人信息</h2>
+<p>隐藏私人信息以提高安全性。如果要以公开可见的形式（例如在 Textpattern 支持论坛中）共享诊断信息，通过省略敏感的服务器信息可以降低安全风险。</p>
+        ]]></item>
+        <item id="dev_version_live" title="在线服务器开发代码"><![CDATA[
+<h2>在线服务器开发代码</h2>
+<p>不建议在生产站点上使用仍在开发中的 Textpattern 版本。如果您已经了解并可以接受相关风险，可以安全地忽略此警告。</p>
+        ]]></item>
+        <item id="dir_not_writable" title="目录不可写"><![CDATA[
 <h2>目录不可写</h2>
-<p>要使用文件和图片上传功能，这些目录必须可由PHP通过Web服务器用户写入。这可以通过（S）FTP客户端来设置，也可以在命令行上通过发出<code>chmod 755 /path/to/dir</code>命令来设置。</p>        ]]></item>
-        <item id="dns_lookup_fails" title="DNS 测试失败"><![CDATA[
-<h2>DNS查找失败</h2>
-<p>看起来指定为该网站地址的URL无法访问。</p>        ]]></item>
+<p>要使用文件和图片上传功能，这些目录必须允许 PHP 通过 Web 服务器用户写入。可通过 (S)FTP 客户端进行设置，或者在命令行中执行 <code>chmod 755 /path/to/dir</code> 命令。</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS 查找失败"><![CDATA[
+<h2>DNS 查找失败</h2>
+<p>看起来指定为站点地址的 URL 无法访问。</p>
+        ]]></item>
         <item id="file_uploads_disabled" title="文件上传功能已禁用"><![CDATA[
 <h2>文件上传功能已禁用</h2>
-<p>当前服务器的配置显示，文件上传功能已禁用。请检查和更改<code>php.ini</code>中的<code>file_uploads</code> 设置或咨询网站主机服务商以获得帮助。</p>
+<p>当前服务器配置表明文件上传功能已被禁用。请检查并修改 <code>php.ini</code> 中的 <code>file_uploads</code> 设置，或联系主机服务商获取帮助。</p>
         ]]></item>
-        <item id="htaccess_missing" title=".htaccess 文件遗失"><![CDATA[
-<h2>.htaccess文件缺失</h2>
-<p>永久链接模式，需要使用<code>.htaccess</code> 文件，现无法找到该文件。该文件被包含在Textpattern 中，并且与<code>index.php</code>和<code>textpattern</code>目录一起位于Textpattern的根目录中。推荐的指令是：</p>
+        <item id="htaccess_missing" title=".htaccess 文件缺失"><![CDATA[
+<h2>.htaccess 文件缺失</h2>
+<p>当前正在使用需要 <code>.htaccess</code> 文件的永久链接模式，但未找到该文件。该文件随 Textpattern 一同提供，位于 Textpattern 根目录，与 <code>index.php</code> 和 <code>textpattern</code> 目录放在一起。推荐的指令如下：</p>
 <pre><code># BEGIN Textpattern
   #DirectoryIndex index.php index.html
 
@@ -250,7 +255,7 @@
   #ErrorDocument 403 default
 
   <IfModule mod_rewrite.c>
-     RewriteEngine On
+    RewriteEngine On
     #RewriteBase /relative/web/path/
 
     RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -270,46 +275,46 @@
   </IfModule>
   # END Textpattern</code></pre>
         ]]></item>
-        <item id="index_inaccessible" title="网站 index 禁止访问"><![CDATA[
+        <item id="index_inaccessible" title="站点索引不可访问"><![CDATA[
 <h2>站点索引不可访问</h2>
-<p>被指定为网站索引文件的根<code>index.php</code> 文件无法被服务器读取。请检查其是否存在及其权限。</p>
+<p>被指定为站点索引的根 <code>index.php</code> 文件，服务器无法读取。请检查其是否存在以及权限是否正确。</p>
         ]]></item>
-        <item id="missing_files" title="文件遗失"><![CDATA[
+        <item id="missing_files" title="缺少文件"><![CDATA[
 <h2>缺少文件</h2>
-<p>Textpattern缺少一个或多个必需的文件。确保列出的所有文件都存在于服务器上，并且在正确的位置。</p>
+<p>Textpattern 缺少一个或多个必需文件。请确认列出的所有文件都已上传到服务器，并位于正确的位置。</p>
         ]]></item>
-        <item id="mod_rewrite_missing" title="Apache 服务器 mod_rewrite 模块遗失"><![CDATA[
-<h2>Apache服务器mod_rewrite模块丢失</h2>
-<p>Apache服务器的<code>mod_rewrite</code>模块未安装或被禁用。此模块是Textpattern 正常工作需要的。确保其存在并处于激活状态，或联系网站主机服务商寻求帮助。</p>
+        <item id="mod_rewrite_missing" title="缺少 Apache mod_rewrite 模块"><![CDATA[
+<h2>缺少 Apache mod_rewrite 模块</h2>
+<p>Apache 的 <code>mod_rewrite</code> 模块未安装或已被禁用。该模块是 Textpattern 正常运行所推荐的依赖组件。请确认其已经安装并启用，或联系网站主机服务商获取帮助。</p>
         ]]></item>
-        <item id="modified_files" title="文件被修改"><![CDATA[
+        <item id="modified_files" title="修改过的文件"><![CDATA[
 <h2>修改过的文件</h2>
-<p>如果文件的校验和与Textpattern提供的已知良好校验和列表不同则确定该文件已被修改。如果Textpattern安装中的任何文件与预期的不同，这些文件将在此处突出显示。</p>
+<p>如果文件的校验和与 Textpattern 随附的“已知良好”校验和列表不同，则认为该文件已被修改。如果 Textpattern 安装中的任何文件与预期不符，这些文件会在此处高亮显示。</p>
         ]]></item>
-        <item id="mysql_table_errors" title="MySQL 数据库表错误"><![CDATA[
+        <item id="mysql_table_errors" title="MySQL 数据表错误"><![CDATA[
 <h2>MySQL 数据表错误</h2>
-<p>Textpattern的MySQL 数据库中可能有一些损坏。尝试使用 MySQL 访问工具修复受影响的数据表，例如<a rel="external" target="_blank" href="https://www.adminer.org"> Adminer <span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>或<a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>。</p>
+<p>Textpattern 使用的 MySQL 数据库中可能存在损坏或错误。请尝试使用 MySQL 管理工具（例如 <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 或 <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>）修复相关数据表。</p>
         ]]></item>
-        <item id="no_temp_dir" title="未指定临时文件夹"><![CDATA[
-<h2>未指定临时文件夹</h2>
-<p>尽管Textpattern 可以在没有临时文件夹的情况下运行，但如果没有设置此预设，某些功能可能无法正常工作。请访问管理预设并设置“临时文件夹”。</p>
+        <item id="no_temp_dir" title="未指定临时目录"><![CDATA[
+<h2>未指定临时目录</h2>
+<p>虽然 Textpattern 在没有临时目录的情况下也能运行，但如果未设置该首选项，某些功能可能不会按预期工作。请访问管理首选项并设置“临时目录路径”。</p>
         ]]></item>
         <item id="old_placeholder_exists" title="章节名称与目录相同"><![CDATA[
-<h2>章节名称与目录</h2>
-<p>现有目录名称可能与文章永久链接方案中使用的部分名称冲突。为了避免出现问题，如果受影响的目录名称是安全的，请检查并删除它。或更改部分名称，从而避免冲突。</p>
+<h2>章节名称与目录相同</h2>
+<p>现有目录名称可能与文章永久链接方案中使用的分区名称冲突。为避免问题，请在安全的前提下检查并删除受影响的目录，或者修改分区名称以避免冲突。</p>
         ]]></item>
         <item id="path_to_site_inaccessible" title="站点目录不可读"><![CDATA[
 <h2>站点目录不可读</h2>
-<p>服务器无法读取包含指定为站点索引的根<code>index.php</code>文件的目录。请检查权限。</p>
+<p>服务器无法读取包含被指定为站点索引的根 <code>index.php</code> 文件的目录。请检查该目录的权限设置。</p>
         ]]></item>
         <item id="php_scripting_enabled" title="已启用 PHP 脚本"><![CDATA[
 <h2>已启用 PHP 脚本</h2>
-<p>如果相关功能已启用，Textpattern 允许作者和管理员在文章以及页面／表单中嵌入 PHP 代码。由于这是一个安全隐患——可以执行任何类型的 PHP 代码，包括可能造成破坏或危险的代码，进而导致安装损坏或信息泄露给第三方——强烈建议您在<a href="?event=prefs#prefs_group_publish">“首选项”面板</a>中关闭这些选项，除非您绝对需要该功能。</p>
-<p>许多过去需要通过 PHP 代码片段实现的 Textpattern 增强功能，现在都可以通过<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">核心标签</a>来完成。</p>
+<p>在相关功能启用的前提下，Textpattern 允许作者和管理员在文章以及页面／表单中嵌入 PHP 代码。由于这会带来安全隐患——可以执行任何类型的 PHP 代码，包括可能具有破坏性／危险的代码，从而导致安装损坏或信息泄露给第三方——因此<strong>强烈建议</strong>在 <a href="?event=prefs#prefs_group_publish">“首选项”面板</a>中关闭这些选项，除非确实需要此功能。</p>
+<p>许多以往需要通过 PHP 代码片段实现的 Textpattern 站点增强功能，现在可以通过 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">核心标签</a> 来完成。</p>
         ]]></item>
-        <item id="php_version_required" title="最低版本需求"><![CDATA[
+        <item id="php_version_required" title="最低版本要求"><![CDATA[
 <h2>最低版本要求</h2>
-<p>Textpattern 需要 PHP 编程语言和 MySQL 数据库服务器中提供的某些功能。请查阅下表以确定最低系统要求：</p>
+<p>Textpattern 依赖 PHP 编程语言和 MySQL 数据库服务器中的某些功能。请参阅下表以了解最低系统要求：</p>
 <div class="txp-listtables">
     <table class="txp-list">
         <thead>
@@ -320,6 +325,16 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
             <tr>
                 <th scope="row">4.7.x</th>
                 <td>5.4.0</td>
@@ -349,52 +364,52 @@
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
     <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a></li>
 </ul>
-<p>站点的 <code>php.ini</code> 文件（全局或本地）需要包含 <code>date.timezone</code> 设置。</p>
+<p>站点的 <code>php.ini</code> 文件（全局或本地）必须包含 <code>date.timezone</code> 设置。</p>
         ]]></item>
         <item id="setup_still_exists" title="安装目录仍然存在"><![CDATA[
 <h2>安装目录仍然存在</h2>
-<p>安装 Textpattern 后，<code>textpattern/setup</code> 目录及其内容已不再需要，出于安全原因应将其删除。</p>
+<p>完成 Textpattern 安装后，<code>textpattern/setup</code> 目录及其内容已不再需要，出于安全原因应将其删除。</p>
         ]]></item>
         <item id="site_url_mismatch" title="站点 URL 不匹配"><![CDATA[
 <h2>站点 URL 不匹配</h2>
-<p>“首选项”面板中设置的站点 URL 与访问该站点时实际使用的 URL 不匹配。</p>
+<p>“首选项”面板中设置的站点 URL 与访问该站点时实际使用的 URL 不一致。</p>
 <p>如果站点可以通过多个不同的 URL 访问，并且站点行为符合预期，则可以放心忽略此消息。</p>
 <p>否则，请根据需要检查并修改管理首选项中的“站点 URL”设置。在“诊断”面板的预检警告消息中，会显示一个对正确站点 URL 的合理推测值。</p>
         ]]></item>
         <item id="some_php_functions_disabled" title="PHP 函数 […] 在您的服务器上被禁用"><![CDATA[
-<h2>PHP 函数 […] 在您的服务器上被禁用</h2>
+<h2>PHP 函数 [&#8230;] 在您的服务器上被禁用</h2>
 <p>站点主机或服务器管理员禁用了一个或多个 PHP 函数，其中部分可能会影响 Textpattern 的运行。</p>
 <p>请参阅 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern 用户文档 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 以获取更多信息。</p>
         ]]></item>
         <item id="textpattern_version_update" title="Textpattern 版本更新"><![CDATA[
 <h2>Textpattern 版本更新</h2>
-<p>有一个更新的 Textpattern 版本可用。为利用最新功能和安全改进，建议您进行升级。</p>
-<p>请注意，尽管我们努力让升级过程尽可能平滑和无痛：</p>
+<p>已有更新版本的 Textpattern 可用。建议升级以获得最新功能和安全性改进。</p>
+<p>请注意，尽管我们努力让升级过程尽可能平滑、无痛：</p>
 <ul>
-    <li>如果新版本只是在最后一位数字上与您当前版本不同，则升级很可能与插件和主题保持向后兼容。</li>
-    <li>如果新版本在最后两位数字上与您当前版本不同，则升级可能需要更新某些插件和／或主题，尽管在受限的情况下它们可能依然可以工作。</li>
-    <li>如果新版本的首位数字与您当前版本不同，则升级很可能需要更新大多数插件和主题。如果您严重依赖某个插件或主题中的特定功能，请在开始升级前与其作者或社区成员确认。</li>
+    <li>如果仅最后一位数字与当前版本不同，则该升级很可能与现有插件和主题保持向后兼容。</li>
+    <li>如果最后两位数字与当前版本不同，则升级可能需要更新某些插件和／或主题，尽管在功能受限的情况下它们通常仍能工作。</li>
+    <li>如果首位数字与当前版本不同，则升级很可能需要更新大部分插件和主题。如果您严重依赖某个插件或主题中的特定功能，请在开始升级前与其作者或社区成员确认。</li>
 </ul>
         ]]></item>
-        <item id="textpattern_version_update_beta" title="Textpattern 预发布可用"><![CDATA[
+        <item id="textpattern_version_update_beta" title="Textpattern 预发布版本可用"><![CDATA[
 <h2>Textpattern 预发布版本更新可用</h2>
-<p>有一个更新的 Textpattern 预发布版本可用。我们正在寻找积极的志愿者来测试该版本，以便让最终正式版本尽可能稳定可靠。即使是测试代码，我们也努力让升级体验保持平滑和无痛。</p>
+<p>已有更新的 Textpattern 预发布版本可用。我们正在寻找积极的志愿者测试该版本，以便让最终正式版本尽可能稳定可靠。即使是测试版代码，我们也努力让升级体验尽可能平滑、无痛。</p>
 <p>如果您决定参与，请注意：</p>
 <ul>
-    <li>除非您已对站点文件及其数据库进行了可用的备份，并且知道如何恢复，否则不要在生产站点上使用此测试版。</li>
-    <li>请<a href="https://github.com/textpattern/textpattern/issues">报告任何问题</a>，并说明您正在使用的测试版版本号。根据反馈的问题，在正式稳定版发布前可能还会发布更多测试版。</li>
-    <li>如果您部署了此测试版，请确保在最终版本发布后及时升级到该正式版本。</li>
+    <li>除非您已对站点文件及数据库进行了可用备份，并且清楚如何恢复，否则不要在生产站点上使用此测试版。</li>
+    <li>请<a href="https://github.com/textpattern/textpattern/issues">报告任何问题</a>，并注明所使用的测试版版本号。根据反馈情况，在稳定版发布前可能还会发布更多测试版。</li>
+    <li>如果您部署了此测试版，请确保在最终版本发布后及时升级到正式版。</li>
 </ul>
         ]]></item>
-        <item id="tmp_plugin_paths_match" title="临时文件和插件缓存目录路径不应匹配"><![CDATA[
+        <item id="tmp_plugin_paths_match" title="临时目录和插件缓存目录路径不应相同"><![CDATA[
 <h2>临时目录和插件缓存目录路径不应相同</h2>
-<p>插件应拥有自己的目录，而不应与临时目录共用。同用会带来潜在的安全风险，如果临时目录被清空，可能会对站点产生不利影响。请确保临时目录路径与插件缓存目录路径不同。</p>
+<p>插件应拥有自己的目录，而不应与临时目录共用。这存在潜在安全风险：如果临时目录被清空，可能会对站点造成不利影响。请确保临时目录路径与插件缓存目录路径不同。</p>
         ]]></item>
         <item id="update_server_inaccessible" title="更新服务器不可访问"><![CDATA[
 <h2>更新服务器不可访问</h2>
-<p>检查更新失败，通常是由于网络拥塞或连接超时造成的。这种情况通常会在一两个小时内自行恢复，请稍后再次访问此面板。</p>
+<p>检查更新失败，通常是由于网络拥塞或连接超时导致。这种情况一般会在一两个小时内自行恢复，请稍后再次访问此面板。</p>
         ]]></item>
-        <item id="warn_mail_unavailable" title="您的PHP安装缺少mail() 函数"><![CDATA[
+        <item id="warn_mail_unavailable" title="您的 PHP 安装缺少 mail() 函数"><![CDATA[
 <h2>您的 PHP 安装缺少 mail() 函数</h2>
 <p>PHP 的 <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 函数已被禁用。因此，Textpattern 无法发送电子邮件，部分功能将不可用。例如，新评论的邮件通知不会发送，新用户也不会收到欢迎邮件。不过，仍然可以添加用户。</p>
         ]]></item>
@@ -447,8 +462,9 @@
     <group id="image" title="图像面板">
         <item id="create_thumbnail" title="建立缩略图"><![CDATA[
 <h2>创建缩略图</h2>
-<p>允许您根据全尺寸图像（重新）创建一幅指定尺寸的缩略图。</p>
-<p>缩略图将被缩放以适应您选择的尺寸，除非您选择“裁剪”复选框。 “裁剪”将从图像中心生成缩略图，而无任何缩放。</p>
+<p>允许您根据全尺寸图像（重新）创建指定尺寸的缩略图。</p>
+<p>对于自定义尺寸，缩略图会按比例缩放以适应您选择的尺寸，除非勾选“裁剪”复选框。在选择裁剪的情况下，将从图像中心裁出缩略图，而不进行缩放。</p>
+<p>对于自动尺寸，缩略图会根据当前管理主题中设定的尺寸和（可选）裁剪设置进行缩放。</p>
         ]]></item>
         <item id="replace_image_form" title="替换图像"><![CDATA[
 <h2>替换图像</h2>
@@ -509,13 +525,24 @@
     <group id="plugin" title="插件面板">
         <item id="install_plugin" title="安装插件"><![CDATA[
 <h2>安装插件</h2>
-<p>在这里粘贴插件文本文件的内容，然后使用“上传”开始安装。您以前安装过的同名插件将被上传的版本覆盖。</p>
-<p>您在此粘贴的插件文本<strong>不</strong>是PHP原代码，而是Base64 编码的文本，通常之前有一个包含插件信息的标题(例如插件名称、 版本和描述、以及作者名称等)。 </p>
+<p>将已编译插件文本文件的内容粘贴到此处，然后使用“上传”开始安装。任何与已安装插件同名的插件都会被上传的新版本覆盖。</p>
+<p>这里粘贴的插件文本<strong>不是</strong>原始 PHP 代码，而是 Base64 编码文本，前面通常带有包含插件信息的头部（如插件名称、版本和描述、作者姓名等）。</p>
+<p>您通常可以从 <a rel="external" target="_blank" href="https://plugins.textpattern.com/">插件仓库 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 或插件作者指定的渠道（如其网站或 GitHub 仓库）获取已编译的插件版本。</p>
+<p>如果外部站点允许，您也可以在此粘贴指向 Textpattern 编译文本文件的 URL。</p>
+<p>所有上传的插件都会经过一个验证步骤，使您可以在安装前检查插件代码及其内容。</p>
         ]]></item>
         <item id="upload_plugin" title="上传插件"><![CDATA[
 <h2>上传插件</h2>
-<p>使用此表单上传插件文件(PHP 文件或压缩存档)。上传的插件(以及任何资源)都存储在“ plugins”目录中。</p>
-<p>您以前安装过的名称相同的插件将被上传的版本覆盖。</p>
+<p>使用此表单上传插件文件。上传的插件（及其资源文件）会存储在 “plugins” 目录中。</p>
+<p>此处允许上传的插件类型包括：</p>
+<ul>
+<li>包含完整代码、元数据、Textpack 字符串和帮助文本的 Textpattern PHP 模板文件。</li>
+<li>包含完整代码、元数据、Textpack 字符串和帮助文本的 Textpattern 编译文本文件。</li>
+<li>包含清单信息以及代码、元数据、Textpack 字符串、帮助文本和支持文件的 Textpattern zip 打包文件。</li>
+<li>原始 PHP 文件（不会填充附加元数据，且不推荐使用）。</li>
+</ul>
+<p>任何与已安装插件同名的插件都会被上传的新版本覆盖。</p>
+<p>所有上传的插件都会经过一个验证步骤，使您可以在安装前检查插件代码及其内容。</p>
         ]]></item>
     </group>
 
@@ -535,17 +562,19 @@
         ]]></item>
         <item id="allow_article_php_scripting" title="文章中允许使用PHP？"><![CDATA[
 <h2>在文章中允许 PHP？</h2>
-<p>启用后，此设置允许在文章中使用 PHP。作者必须具有足够的权限才能这样做（默认情况下只有<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“发布者” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“管理编辑” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>和<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“文字编辑” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>可以）。</p>
-<p>PHP 代码必须省略 PHP 的起始和结束标签，并且要包含在<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>内。</p>
+<p>启用后，此设置允许在文章中使用 PHP。作者必须拥有足够的权限才能这样做（默认情况下只有 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“发布者” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“管理编辑” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 和 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“文字编辑” <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 可以）。</p>
+<p><strong>强烈建议</strong>在非必要情况下关闭此选项。任何作者都可能添加具有破坏性或危险性的 PHP 代码，从而导致网站被破坏或信息泄露给第三方，而这些代码会在访问该文章时被执行。</p>
+<p>PHP 代码必须省略 PHP 的起始和结束标记，并包裹在 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 内。</p>
         ]]></item>
         <item id="allow_form_override" title="允许覆盖表单？"><![CDATA[
 <h2>允许覆盖表单？</h2>
 <p>此设置允许文章作者在文章渲染时覆盖表单。如果启用，编辑文章时，将在“高级选项”菜单下提供“覆盖表单”选项。</p>
         ]]></item>
         <item id="allow_page_php_scripting" title="页面中允许使用PHP？"><![CDATA[
-<h2>页面中允许使用PHP？</h2>
-<p>启用时，此设置允许页面模板和表格模板中使用PHP代码。</p>
-<p>PHP代码必须省略打开和关闭PHP标签，并包含在<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>标签<span class="ui-icon ui-icon-extlink">(在新窗口打开外部链接)</span></a>中。</p>
+<h2>在页面中允许 PHP？</h2>
+<p>启用后，此设置允许在页面模板和表单模板中使用 PHP 代码。</p>
+<p><strong>强烈建议</strong>在非必要情况下关闭此选项。其他用户可能添加具有破坏性或危险性的 PHP 代码，从而破坏您的网站或导致信息泄露给第三方，而这些代码会被毫无防备的管理员或访客在访问页面时触发。</p>
+<p>PHP 代码必须省略起始和结束 PHP 标记，并且要包含在 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 内。</p>
         ]]></item>
         <item id="archive_dateformat" title="归档日期格式"><![CDATA[
 <h2>存档日期格式</h2>
@@ -616,8 +645,8 @@
         ]]></item>
         <item id="comments_on_default" title="默认允许评论？"><![CDATA[
 <h2>默认允许评论？</h2>
-<p>如果将此设置为“是”，每篇已发布的文章将自动启用评论。如果设置为“否”，您必须在每次接受评论时启用文章“写作”面板的评论。</p>
-<p>请注意，允许评论可以随时在每篇文章的基础上打开或关闭。</p>
+<p>如果设置为“是”，每篇已发布的文章都会自动启用评论。如果设置为“否”，每当您希望接受评论时，都必须在文章“撰写”面板中手动启用评论。</p>
+<p>评论可以在任何时间按文章分别启用或禁用。</p>
         ]]></item>
         <item id="comments_require_email" title="评论需要评论者的电子邮件地址？"><![CDATA[
 <h2>评论需要用户的电子邮件地址？</h2>
@@ -643,41 +672,47 @@
 </ul>
 <p><strong>注意：</strong>出于安全原因，原始HTML被转换为常规文本。</p>
         ]]></item>
-        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[<h2>自定义表单模版类型</h2>
-<p>除了标准表单模板类型（文章、文件、杂项等），发布者还可以定义自定义类型。自定义表单模板类型有两个目的：更简单的表单模板分类和自定义资产定义。</p>
-<p>首选项的格式为<a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI<span class="ui-icon ui-icon-extlink">（在新窗口中打开一个外部链接）</span></a>，每个部分对应一个表单模板类型。</p>
-<p>要定义自定义表单类型（例如，<code>js</code>），必须（在单独的行中）附加一个<code>[js]</code>节。可以通过相应部分中的<code>title=“Javascript”</code>条目设置默认标题。如果需要，也可以附加本地化标题（例如，<code>ru="Скрипт"</code>）。</p>
-<p>此外，可以指定表单模板<a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">媒体类型<span class="ui-icon ui-icon-extlink">（在新窗口中打开外部链接）</span></a>（以前称为MIME类型），例如<code>mediatype=“application/javascript”</code>。通过<code>&lt;txp:output_form /&gt;</code>标记，将这种类型的表单模板转换为可作为设置媒体类型的自定义资产，这些资产可以来自数据库或来自磁盘(平面文件)。例如，可以在您的代码中包含名为 <code>myscript.js</code> 的 <code>[js]</code> 类型且媒体类型为 <code>application/javascript</code> 的表单模板，像这样：</p>
+        <item id="concurrent_logins" title="允许并发登录的账户"><![CDATA[
+<h2>允许并发登录的账户</h2>
+<p>以逗号分隔的登录账户名列表，这些账户可以在多个浏览器／会话中同时登录。在开发阶段与客户共享登录信息时，这一设置会很有帮助。</p>
+<p>启用此功能存在安全风险，<strong>不推荐在正式上线站点上使用</strong>。如果您的用户账户在在线网站上配置为允许并发登录，“诊断”面板会给出警告。</p>
+        ]]></item>
+        <item id="custom_form_types" title="自定义表单模板类型"><![CDATA[
+<h2>自定义表单模板类型</h2>
+<p>除了标准表单模板类型（article、file、misc 等）外，发布者还可以定义自定义类型。自定义表单模板类型的作用有两点：更便于对表单模板进行分类，以及定义自定义资源。</p>
+<p>该首选项采用 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI 格式 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>，每个节对应一种表单模板类型。</p>
+<p>要定义自定义表单类型（例如 <code>js</code>），需要单独一行添加 <code>[js]</code> 小节。可以通过在相应小节中添加 <code>title="Javascript"</code> 条目设置默认标题。如有需要，也可以附加本地化标题（例如 <code>ru="Скрипт"</code>）。</p>
+<p>此外，可以指定表单模板的 <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">媒体类型 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>（以前称为 MIME 类型），例如：<code>mediatype="application/javascript"</code>。这样，此类型的表单模板就会变成可以作为所设媒体类型提供的自定义资源，它们可以通过 <code>&lt;txp:output_form /&gt;</code> 标签从数据库或磁盘（平面文件）中输出。例如，一个名为 <code>myscript.js</code>、类型为 <code>[js]</code> 且媒体类型为 <code>application/javascript</code> 的表单模板，可以像下面这样包含到代码中：</p>
 <pre><code>&lt;txp:output_form form="myscript.js"
     format="flat.script" /&gt;</code></pre>
-<p>这将生成以下 HTML <code>&lt;script&gt;</code>标记：<p>
+<p>这将生成如下 HTML <code>&lt;script&gt;</code> 标签：</p>
 <pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
-<p>只有具有与其类型相对应的扩展名的表单模板（例如，<code>myscript.js</code>）才能用作平面文件。在这种情况下，它们根本不会被 Textpattern 处理，并且可以通过它们的 URL 访问。</p>
-如果表单模板需要处理（如果它包含 Textpattern 标记），则必须从数据库中提供它。 在这种情况下，您不应该将扩展名添加到表单名称 - 只需将其称为 <code>myscript</code>（不带 <code>.js</code>）以使其无法通过标准 URL 访问 - 并像这样包含它：</p>
+<p>只有名称扩展名与其类型相对应的表单模板（例如 <code>myscript.js</code>）才可以作为平面文件提供。在这种情况下，它们完全不会被 Textpattern 处理，而是通过其 URL 直接访问。</p>
+<p>如果表单模板需要被解析（例如其中包含 Textpattern 标签），则必须从数据库提供。在这种情况下，不应在表单名称中添加扩展名——只需将其命名为 <code>myscript</code>（不带 <code>.js</code>，从而无法通过普通 URL 访问）——并按如下方式包含：</p>
 <pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
         ]]></item>
         <item id="custom_overview" title="自定义栏"><![CDATA[
 <h2>自定义栏</h2>
-<p>自定义栏用于保存额外的文章数据。您可以在这里给它们命名，最多可以定义十个自定义栏。每个字段将作为一个单独栏出现在写入面板上，允许自定义数据与每篇文章相关联。</p>
-<p>您可以按您想要的任何方式命名字段，但要注意以下几点：</p>
+<p>自定义栏用于保存额外的文章数据。您可以在此为它们命名，最多可定义十个。每个自定义栏都会作为独立字段显示在“撰写”面板中，以便将自定义数据与每篇文章关联。</p>
+<p>字段命名可以自由选择，但请注意以下几点：</p>
 <ul>
-<li>使用空格可提高在写入面板的可见性，但这些字段可能 <em>不能</em> 用于在文章自定义标签中排序或过滤参数。如果您想要使用这些功能，请考虑使用下划线。</li>
-<li>请小心命名字段不与Textpattern中的保留字段名称冲突。例如，不要使用 <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> 等，否则您获得奇怪的结果或破损的站点。</li>
-<li>每个字段中的数据仅限文本255个字符。</li>
+<li>在字段名称中使用空格有助于在“撰写”面板中提高可读性，但此类字段<em>不能</em>在 <code>article_custom</code> 标签中用作排序或过滤参数。如果需要使用这些功能，请考虑使用下划线。</li>
+<li>命名字段时要避免与 Textpattern 中的保留字段名冲突。例如，不要使用 <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> 等，否则可能出现异常结果甚至导致站点出错。</li>
+<li>每个字段中的数据仅限文本，最长 255 个字符。</li>
 </ul>
         ]]></item>
         <item id="dateformat" title="日期格式"><![CDATA[
 <h2>日期格式</h2>
-<p>此选项将仅影响文章日期怎样显示在您网站的首页。</p>
+<p>此选项仅影响文章日期在您网站首页上的显示方式。</p>
         ]]></item>
         <item id="default_event" title="默认面板"><![CDATA[
 <h2>默认面板</h2>
-<p> Textpattern管理界面面板将在任何人登录时首次出现。</p>
+<p>当任何人登录 Textpattern 时首先显示的管理界面面板。</p>
         ]]></item>
         <item id="default_publish_status" title="默认发布状态"><![CDATA[
 <h2>默认发布状态</h2>
-<p>定义新建 Textpattern 文章的发布可见性状态。</p>
-<p>请注意，此首选项设置不会影响在更改之前已创建或编辑的文章及其状态。</p>
+<p>定义新建 Textpattern 文章的发布可见状态。</p>
+<p>请注意，此首选项不会影响在更改之前已经创建或编辑的文章及其状态。</p>
 <p>默认发布状态可以是以下之一：</p>
 <ul>
     <li>草稿</li>
@@ -686,11 +721,11 @@
     <li>公开</li>
     <li>置顶</li>
 </ul>
-<p><strong>草稿</strong>文章被视为仍在进行中的工作，在 Textpattern 管理端之外不可见（即在 Textpattern 前台不可见，也不会在订阅源中被聚合）。</p>
-<p><strong>隐藏</strong>文章在 Textpattern 管理端之外不可见。</p>
-<p><strong>待审</strong>文章被视为已准备好发布并等待批准，但在 Textpattern 管理端之外不可见。</p>
-<p><strong>公开</strong>文章通常在 Textpattern 管理端之外可见（即在 Textpattern 前台可见，如果首选项允许，则会在订阅源中聚合）。如果一篇文章为公开状态并设置了到期日，当到达该日期后其状态仍然保持为公开，但只有在允许发布已过期文章的情况下，它才会继续在管理端之外显示。</p>
-<p><strong>置顶</strong>文章与<strong>公开</strong>文章类似，同样可以在 Textpattern 管理端之外查看，但<strong>不会</strong>出现在文章列表中，除非相应的 <code>article</code> 或 <code>article_custom</code> 标签包含 <code>status</code> 属性且其值为 <code>sticky</code>。</p>
+<p><strong>草稿</strong>文章被视为进行中的工作，在 Textpattern 管理区之外不可见（即在网站前台不可见，且不会在订阅源中分发）。</p>
+<p><strong>隐藏</strong>文章在 Textpattern 管理区之外不可见。</p>
+<p><strong>待审</strong>文章被视为已准备好发布并等待批准，但在 Textpattern 管理区之外不可见。</p>
+<p><strong>公开</strong>文章通常在 Textpattern 管理区之外可见（即在网站前台可见，如果偏好设置允许，也会在订阅源中分发）。如果一篇文章为公开状态并设置了到期时间，到期后状态仍保持为公开，但只有在允许发布已过期文章的情况下，它才会继续在管理区之外显示。</p>
+<p><strong>置顶</strong>文章类似于<strong>公开</strong>文章，同样可以在 Textpattern 管理区之外查看，但<strong>不会</strong>出现在文章列表中，除非相应的 <code>article</code> 或 <code>article_custom</code> 标签包含 <code>status</code> 属性且其值为 <code>sticky</code>。</p>
         ]]></item>
         <item id="doctype" title="文档类型声明（Doctype）"><![CDATA[
 <h2>Doctype</h2>
@@ -698,12 +733,12 @@
         ]]></item>
         <item id="enable_dev_preview" title="启用开发主题预览？"><![CDATA[
 <h2>启用开发主题预览？</h2>
-<p>具有足够权限的用户（默认是“发布者”和“设计师”角色）可以在不影响其他用户看到的旧主题的前提下，安全地开发和预览新主题（直到新主题被部署）。</p>
-<p>但是，不希望参与主题开发的高权限用户可以禁用开发主题预览。此后他们将与普通站点访客一样，使用当前的“公共”主题。</p>
+<p>具有足够权限的用户（默认是“发布者”和“设计师”角色）可以在不影响其他用户继续看到旧主题的前提下，安全地开发并预览新主题（直到新主题被部署）。</p>
+<p>不过，不希望参与主题开发的高权限用户可以关闭开发主题预览。此后他们将与普通访客一样，看到当前的“公共”主题。</p>
         ]]></item>
-        <item id="enable_short_tags" title="启用短标签支持?"><![CDATA[
+        <item id="enable_short_tags" title="启用短标签支持？"><![CDATA[
 <h2>启用短标签支持？</h2>
-<p>Textpattern 标签的形式为 <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>。通过启用一种简写记法，可以在满足一些简单规则的前提下省略 <code>txp:</code> 前缀，从而减少输入量。下面的示例演示了这一概念：</p>
+<p>Textpattern 标签的形式为 <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>。通过启用一种简写记法，在遵循一些简单规则的前提下可以省略 <code>txp:</code> 前缀，从而减少输入量。下面的示例演示了这一概念：</p>
 <ul>
     <li><code>&lt;txp:article_id /&gt;</code> 变为 <code>&lt;article::id /&gt;</code></li>
     <li><code>&lt;txp:recent_articles/&gt;</code> 变为 <code>&lt;recent::articles /&gt;</code></li>
@@ -716,31 +751,31 @@
     <li>移除 <code>txp:</code> 前缀。</li>
     <li>将标签名中首次出现的下划线替换为 <code>::</code>。</li>
 </ol>
-<p>请注意，设置此首选项不会影响使用 <code>&lt;txp:output_form /&gt;</code> 短代码来渲染表单片段的能力。您仍然可以使用 <code>&lt;txp::shortcode /&gt;</code>，它会被解析为 <code>&lt;txp:output_form form="shortcode" /&gt;</code>。</p>
+<p>请注意，设置此首选项不会影响使用 <code>&lt;txp:output_form /&gt;</code> 短代码渲染表单片段的能力。您仍可使用 <code>&lt;txp::shortcode /&gt;</code>，它会被解析为 <code>&lt;txp:output_form form="shortcode" /&gt;</code>。</p>
         ]]></item>
         <item id="enable_xmlrpc_server" title="启用 XML-RPC 服务器？"><![CDATA[
 <h2>启用 XML-RPC 服务器？</h2>
-<p>如果您希望使用 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 远程控制 Textpattern（例如通过桌面或移动应用），则必须将此项设置为“是”以开启 XML-RPC 服务器。</p>
+<p>如果您希望使用 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 远程控制 Textpattern（例如通过桌面或移动应用），则必须将此项设置为“是”以启用 XML-RPC 服务器。</p>
         ]]></item>
         <item id="enhanced_email" title="使用增强型邮件功能"><![CDATA[
 <h2>使用增强型邮件功能</h2>
-<p>将此项设置为“否”时，所有邮件——例如帐户密码重置请求以及 com_connect 等插件发送的邮件——都会通过 PHP 的 <code>mail()</code> 函数发送。选择“是”则会改用内置的 PHPMailer，这样可以打开通过外部 SMTP 服务器路由邮件的可选设置。</p>
-<p>如果您在收取邮件方面遇到问题（尤其是在 gmail、hotmail 等在线邮箱服务中），很可能是因为您的域名未被视为可信来源。切换为“是”可以改善投递成功率，而使用 SMTP 通常会进一步提高可达性。</p>
+<p>将此项设置为“否”时，所有邮件——例如账户密码重置请求以及 com_connect 等插件发送的邮件——都会通过 PHP 的 <code>mail()</code> 函数发送。选择“是”则会改为使用捆绑的 PHPMailer，从而开启通过外部 SMTP 服务器路由邮件的可选设置。</p>
+<p>如果您在邮件可达性方面遇到问题（尤其是 Gmail、Outlook、Yahoo! 等在线邮箱服务），很可能是因为您的域名未被视为可信来源。切换为“是”可以改善投递成功率。此外，使用 SMTP 通常能够提升与部分邮件服务的兼容性，并进一步提高邮件到达率。</p>
         ]]></item>
         <item id="expire_logs_after" title="记录在多少天后过期？"><![CDATA[
 <h2>记录在多少天后过期？</h2>
-<p>启用 Textpattern 访问记录功能后，您可以指定日志应保留多长时间（以天为单位）。例如，设置为“7”则表示保留最近 7 天的访问记录。</p>
-<p><strong>注意：</strong>只有在查看“访问日志”面板时，旧日志才会被清理，否则日志会持续增长。</p>
+<p>启用 Textpattern 访问记录功能后，您可以指定日志的保留时长（以天为单位）。例如，设置为“7”则表示保留最近 7 天的日志。</p>
+<p><strong>注意：</strong>只有在查看“访问日志”面板时，旧日志才会被清理；否则日志会持续增长。</p>
         ]]></item>
         <item id="file_base_path" title="文件目录路径"><![CDATA[
 <h2>文件目录路径</h2>
-<p>此处设置文件上传后永久保存的目录的<strong>绝对路径</strong>。PHP 必须对该目录拥有写权限。</p>
+<p>设置文件上传后永久保存目录的<strong>绝对路径</strong>。PHP 必须对该目录具有写权限。</p>
 <p><strong>注意：</strong>出于安全考虑，建议将该目录移到站点可公开访问的文档根目录之外。</p>
         ]]></item>
         <item id="file_download_header" title="文件下载头"><![CDATA[
 <h2>文件下载头</h2>
 <p>允许您自定义文件下载的处理方式。</p>
-<p>通常所有下载都会被视为附件并启动下载（具体行为取决于浏览器对该文件类型的处理方式）。如果您希望为某些或全部文件类型提供处理方式上的提示，可以在此处填写标签代码。例如，您可以让被分配到 Textpattern 类别 “inline-pdf” 的 PDF 文件以内联方式显示，而不是直接下载：</p>
+<p>通常所有下载都会被视为附件并触发下载（具体行为取决于浏览器对该文件类型的处理方式）。如果您希望为某些或全部文件类型提供处理提示，可以在此处填写标签代码。例如，可以让被分配到 Textpattern 分类 “inline-pdf” 的 PDF 文件以内联方式显示，而不是直接下载：</p>
 <pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
     &lt;txp:header name="Content-Disposition" value="inline" /&gt;
     &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
@@ -749,40 +784,40 @@
         ]]></item>
         <item id="file_max_upload_size" title="最大上传文件大小（字节）"><![CDATA[
 <h2>最大上传文件大小（字节）</h2>
-<p>您可以限制文件上传的最大体积（以字节为单位）。请注意，此值也受 PHP 配置的限制。如果 Textpattern 检测到 PHP 配置中的上传限制更小，它会自动向下调整。如果您希望通过浏览器上传更大的文件，请联系您的主机商（<code>php.ini</code> 中相关配置项包括 <code>post_max_size</code>、<code>upload_max_filesize</code> 和 <code>memory_limit</code>）。</p>
+<p>您可以限制文件上传的最大体积（以字节为单位）。请注意，该数值也会受到 PHP 配置的限制。如果 Textpattern 检测到 PHP 配置中的上传大小上限更小，它会自动向下修正。如果希望通过浏览器上传更大的文件，请联系主机服务商（<code>php.ini</code> 中相关配置项包括 <code>post_max_size</code>、<code>upload_max_filesize</code> 和 <code>memory_limit</code>）。</p>
         ]]></item>
         <item id="gmtoffset" title="时区"><![CDATA[
 <h2>时区</h2>
-<p>为了以您的本地时区显示日期，请选择您的时区。</p>
+<p>为了以本地时间显示日期，请选择您的时区。</p>
         ]]></item>
         <item id="img_dir" title="图片目录"><![CDATA[
 <h2>图片目录</h2>
-<p>如果您希望自定义图片目录的名称，可以在此进行设置。您必须首先在 Textpattern 安装根目录下创建该目录，并确保 PHP 对该目录具有写权限。</p>
+<p>如果希望自定义图片目录名称，可以在此进行设置。您必须首先在 Textpattern 安装根目录下创建该目录，并确保 PHP 对该目录具有写权限。</p>
 <p>此路径始终是一个<strong>相对路径</strong>（相对于 Textpattern 安装根目录）。</p>
 <p>默认值为 <code>images</code>。</p>
         ]]></item>
-        <item id="include_email_atom" title="在 Atom 供稿中包含电子邮件地址？"><![CDATA[
+        <item id="include_email_atom" title="在 Atom 订阅源中包含电子邮件地址？"><![CDATA[
 <h2>在 Atom 订阅源中包含电子邮件地址？</h2>
-<p>此项允许在 Atom 订阅源的 <code>author</code> 部分中，包含文章作者（其用户帐户中设置的）的电子邮件地址。</p>
+<p>此选项允许在 Atom 订阅源的 <code>author</code> 部分，包含文章作者（其用户账户中设置的）的电子邮件地址。</p>
         ]]></item>
         <item id="is_dst" title="启用夏令时？"><![CDATA[
 <h2>启用夏令时？</h2>
-<p>当前时区是否启用了 DST（夏令时）。</p>
+<p>当前时区是否启用 DST（夏令时）。</p>
         ]]></item>
         <item id="logging" title="访问记录"><![CDATA[
 <h2>访问记录</h2>
-<p>您可以选择 Textpattern 对访客访问进行记录的级别：</p>
+<p>您可以选择 Textpattern 记录访客访问的级别：</p>
 <ul>
     <li><strong>全部访问：</strong> Textpattern 会记录站点上的所有页面浏览</li>
     <li><strong>仅引荐来源：</strong> Textpattern 只记录从其他站点引荐而来的访问</li>
     <li><strong>无：</strong> Textpattern 不记录任何页面浏览</li>
 </ul>
-<p>从 Textpattern 4.7.0 起，Textpattern 不再收集或存储任何访客 IP 地址信息。如果您在 Textpattern 之外收集或存储 IP 地址，请采取适当措施，根据适用法律（例如 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>）安全地存储和使用这些数据，并在服务器和 Textpattern 安装的各个环节采用强有力的安全措施，防止数据泄露。</p>
-<p>强烈建议您将此设置保持在默认值“无”，除非您确实需要这些信息，并且在公开场合说明您打算如何使用它们。</p>
+<p>自 Textpattern 4.7.0 起，Textpattern 不再收集或存储任何访客 IP 地址信息。如果您在 Textpattern 之外收集或存储 IP 地址，请采取适当措施，根据适用法律（例如 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>）安全地存储和使用这些数据，并在服务器和 Textpattern 安装的各个环节采用强有力的安全措施，防止数据泄露。</p>
+<p>强烈建议将此设置保持为默认值“无”，除非您确实需要这些信息，并且公开说明将如何使用它们。</p>
         ]]></item>
-        <item id="max_url_len" title="最大 URL 长度（字符）"><![CDATA[
+        <item id="max_url_len" title="最大 URL 长度"><![CDATA[
 <h2>最大 URL 长度（字符）</h2>
-<p>此设置会阻止超过指定长度的 URL 正常工作，可帮助限制潜在破坏并提升站点安全性。</p>
+<p>此设置会阻止超过指定长度的 URL 正常工作，有助于限制潜在破坏并提升站点安全性。</p>
         ]]></item>
         <item id="module_pophelp" title="显示管理端内联帮助链接"><![CDATA[
 <h2>显示管理端内联帮助链接</h2>
@@ -791,41 +826,41 @@
         <item id="never_display_email" title="隐藏评论者的电子邮件地址？"><![CDATA[
 <h2>隐藏评论者的电子邮件地址？</h2>
 <p>此设置控制是否公开显示评论者的电子邮件地址。</p>
-<p>出于对用户的尊重，建议不要公开显示电子邮件地址，但在某些情况下，显示评论者的电子邮件地址也可能是有用或必要的。</p>
+<p>出于对用户的尊重，建议不要公开显示电子邮件地址，但在某些情况下，显示评论者的电子邮件地址也可能是有益或必要的。</p>
         ]]></item>
         <item id="override_emailcharset" title="电子邮件使用 ISO-8859-1 编码？（默认 UTF-8）"><![CDATA[
 <h2>电子邮件使用 ISO-8859-1 编码？（默认 UTF-8）</h2>
-<p>Textpattern 默认尽可能使用 UTF-8 编码，包括外发电子邮件。然而，一些较旧的邮件客户端（包括某些版本的 Microsoft Outlook）对 UTF-8 的支持并不完善。如果您在邮件中遇到乱码，可以启用此设置，在发送前将文本转换为 ISO-8859-1 编码。</p>
-<p><strong>注意：</strong>如果您使用的语言包含 ISO-8859-1 无法表示的字符，则此设置无济于事。您应尝试使用支持 UTF-8（或 Unicode）的邮件客户端。</p>
+<p>Textpattern 默认在所有可行场景中使用 UTF-8 编码，包括外发电子邮件。然而，一些较旧的邮件客户端（包括某些版本的 Microsoft Outlook）对 UTF-8 的支持并不完善。如果您在邮件中遇到乱码情况，可以启用此设置，在发送前将文本转换为 ISO-8859-1 编码。</p>
+<p><strong>注意：</strong>如果您使用的语言包含 ISO-8859-1 无法表示的字符，则此设置无济于事。应尝试使用支持 UTF-8（或 Unicode）的邮件客户端。</p>
         ]]></item>
         <item id="override_form_types" title="覆盖表单类型"><![CDATA[
 <h2>覆盖表单类型</h2>
 <p>选择哪些表单类型的模板可以在“撰写”面板中作为覆盖表单使用。</p>
         ]]></item>
         <item id="permlink_format" title="永久链接标题 URL 模式"><![CDATA[
-<h2>固定链接标题 URL 模式</h2>
-<p>此项定义在非“凌乱（messy）”模式下生成并分配文章 URL 的方式。</p>
-<p>当文章发布时，如果未在“仅 URL 标题”字段中提供特定 URL，则系统会根据文章标题生成 URL。</p>
-<p>例如，文章标题为：<em>Ann and Bob eat cake</em></p>
-<p>当固定链接标题 URL 模式设置为“短横线分隔（title-like-this）”时，该文章的 URL 为：</p>
+<h2>永久链接标题 URL 模式</h2>
+<p>此项定义在使用非“凌乱（messy）”模式时生成并分配文章 URL 的方式。</p>
+<p>当文章发布时，如果未在“仅 URL 标题”字段中提供特定 URL，则会根据文章标题生成 URL。</p>
+<p>例如，假设文章标题为：<em>Ann and Bob eat cake</em></p>
+<p>当永久链接标题 URL 模式设置为“短横线分隔（title-like-this）”时，该文章的 URL 为：</p>
 <pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
-<p>当固定链接标题 URL 模式设置为“驼峰格式（TitleLikeThis）”时，该文章的 URL 为：</p>
+<p>当永久链接标题 URL 模式设置为“驼峰格式（TitleLikeThis）”时，该文章的 URL 为：</p>
 <pre><code>https://example.com/AnnandBobeatcake</code></pre>
         ]]></item>
-        <item id="permlink_mode" title="文章的 URL 模式"><![CDATA[
+        <item id="permlink_mode" title="文章 URL 模式"><![CDATA[
 <h2>文章 URL 模式</h2>
 <p>此项定义如何通过 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 显示的 URL 访问单篇文章。</p>
-<p>“?=messy” 模式兼容性最高——几乎无需配置即可工作——但在 URL 可读性和搜索引擎优化（SEO）方面最不理想。在此模式下，站点上的文章 URL 如下所示：</p>
+<p>“?=messy” 模式的兼容性最高——几乎无需配置即可工作——但在 URL 可读性和搜索引擎优化（SEO）方面最不理想。在此模式下，站点上的文章 URL 如下所示：</p>
 <pre><code>https://example.com/index.php?id=123</code></pre>
-<p>其他所有模式都需要 Web 服务器提供 URL 重写功能（例如 Apache 的 <code>mod_rewrite</code> 或 NGINX 在 <code>server</code> 块中的 rewrite 指令）。如果您的服务器不支持 URL 重写，请联系主机商，或使用上面提到的 “?=messy” 模式。</p>
+<p>其他所有模式都需要 Web 服务器的 URL 重写功能（例如 Apache 的 <code>mod_rewrite</code> 模块或 NGINX 在 <code>server</code> 块中的 rewrite 指令）。如果服务器不支持 URL 重写，请联系主机商，或使用上述 “?=messy” 模式。</p>
         ]]></item>
         <item id="plugin_cache_dir" title="插件缓存目录路径"><![CDATA[
 <h2>插件缓存目录路径</h2>
-<p>此设置主要供插件开发者使用。指定目录后，您可以将插件源文件（未编译版本）放入该目录，Textpattern 会自动加载它，这样您就可以轻松编辑插件并立即看到效果，而无需安装／启用插件。<strong>但要注意</strong>，使用这种方式时，如果插件存在问题（无法编译），也可能导致 Textpattern 整站出错！</p>
+<p>此设置主要供插件开发者使用。配置后，您可以将插件源文件（未编译版本）放入该目录，Textpattern 会自动加载它，从而可以轻松编辑插件并立即查看效果，无需安装／启用插件。<strong>但请注意</strong>，使用此方式时，如果插件存在问题（无法编译），也可能导致 Textpattern 本身出错！</p>
 <p>在生产站点上，建议通过标准的“插件”面板加载插件，而不要使用插件缓存目录。</p>
-<p><strong>注意：</strong>不要为“临时目录”和“插件缓存目录”指定同一目录，否则会导致问题（Textpattern 会尝试将临时日志文件内容当作插件执行）。</p>
+<p><strong>注意：</strong>不要将“临时目录”和“插件缓存目录”设置为同一目录，否则会导致问题（Textpattern 会尝试将临时日志文件内容当作插件执行）。</p>
         ]]></item>
-        <item id="production_status" title="网站状态"><![CDATA[
+        <item id="production_status" title="运行状态"><![CDATA[
 <h2>运行状态</h2>
 <p>Textpattern 站点有三种模式：</p>
 <ol>
@@ -834,7 +869,7 @@
     <li>“正式上线（Live）”</li>
 </ol>
 <h3>调试模式</h3>
-<p>线上站点上所有 PHP 错误报告及关于代码或插件运行异常的警告都会可见。此外，在查看线上页面的 HTML 源码时，还会显示以下信息：</p>
+<p>线上站点上的所有 PHP 错误报告以及关于代码或插件运行异常的警告都会可见。此外，在查看线上页面的 HTML 源码时，还会显示以下信息：</p>
 <ul>
     <li>服务器生成页面所用时间（“Runtime”）</li>
     <li>执行的 MySQL 查询数量</li>
@@ -849,28 +884,28 @@
     <li>大致的峰值内存使用量</li>
 </ul>
 <h3>正式上线模式</h3>
-<p>不会向页面输出任何错误报告或诊断信息。通常建议使用正式上线模式，因为它能提供最佳的用户体验，并对服务器的额外负担最小。</p>
+<p>不会向页面输出任何错误报告或诊断信息。通常建议使用正式上线模式，因为它能提供最佳用户体验，并将服务器开销降到最低。</p>
         ]]></item>
-        <item id="public_theme_name" title="前端主题"><![CDATA[
+        <item id="public_theme_name" title="前台主题"><![CDATA[
 <h2>前台主题</h2>
-<p>当任何人访问您的对外网站时所使用的默认前台主题。Textpattern 自带一个预装默认主题，并提供不使用主题的选项。您也可以将主题包添加到 <code>textpattern/themes</code> 目录中，使其可供使用。</p>
+<p>当任何人访问您的对外网站时所使用的默认前台主题。Textpattern 自带一个预装默认主题，并提供不使用主题的选项。您也可以将主题包放入 <code>textpattern/themes</code> 目录，使其可供使用。</p>
         ]]></item>
-        <item id="publish_expired_articles" title="发布过期的文章？"><![CDATA[
+        <item id="publish_expired_articles" title="发布已过期的文章？"><![CDATA[
 <h2>发布已过期的文章？</h2>
-<p>当设置为“是”时，文章过期后仍会在站点上显示。您可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>，为已过期文章显示替代内容或标记。</p>
-<p>当设置为“否”时，已过期文章将从公共站点中移除，并返回 HTTP “410 Gone” 状态码。默认设置为“否”。</p>
+<p>当设置为“是”时，文章在到达过期日期后仍会在站点上显示。可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> 标签 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>，为已过期文章显示替代内容或标记。</p>
+<p>当设置为“否”时，已过期文章会从公共站点中移除，并返回 HTTP “410 Gone” 状态码。默认设置为“否”。</p>
         ]]></item>
         <item id="publisher_email" title="从此电子邮件地址发送登录信息"><![CDATA[
 <h2>从此电子邮件地址发送登录信息</h2>
-<p>指定系统在向新用户发送包含登录信息的邮件时所使用的发件人 “From:” 地址。</p>
-<p>如果此首选项留空或包含无效电子邮件地址，Textpattern 将使用当前登录用户的姓名和电子邮件地址。</p>
+<p>指定一个电子邮件地址，用作向新用户发送登录信息邮件时的发件人 “From:” 地址。</p>
+<p>如果该首选项留空或包含无效邮箱地址，Textpattern 会改用当前登录用户的姓名和地址。</p>
         ]]></item>
-        <item id="rss_how_many" title="Feed 中应包含多少篇文章？"><![CDATA[
+        <item id="rss_how_many" title="Feed 中的文章数目"><![CDATA[
 <h2>Feed 中应包含多少篇文章？</h2>
-<p>这是在 RSS 和 Atom 格式中一次可被聚合的当前文章的最大数量。</p>
+<p>这是一次性在 RSS 和 Atom 格式中进行聚合的当前文章最大数量。</p>
 <p>建议使用较小的数值，例如 <code>5</code> 至 <code>15</code>。</p>
         ]]></item>
-        <item id="secondpass" title="额外的解析器扫描的次数"><![CDATA[
+        <item id="secondpass" title="额外解析遍历次数"><![CDATA[
 <h2>额外解析遍历次数</h2>
 <p>Textpattern 标签解析器通常只需对页面模板进行一次遍历，就能将所有标签替换为来自数据库的内容。在某些情况下，这可能还不够，例如：</p>
 <ul>
@@ -878,26 +913,26 @@
     <li>在 <code>&lt;txp:php&gt;</code> 标签内部进行代码替换时</li>
     <li>跳过页面前部的某些元素，以便它们接收来自稍后解析标签所产生的内容时</li>
 </ul>
-<p>出于历史原因，Textpattern 传统上会再进行一次额外遍历（称为 “secondpass”），因此该首选项的默认值为 <code>1</code>。然而，更多遍历会增加意外标签被解析执行的概率。标签解析器的近期改进已降低了对第二次遍历的需求。因此，除非您确实基于特定目的需要第二次遍历，请将该值降低为 <code>0</code>，以提高站点安全性。</p>
-<p>如果随后发现站点上有未解析的标签被直接输出（并且在测试／调试模式下没有因标签配对不当而导致的其他标签错误），请将您的页面模板／代码／插件示例提供给我们。我们正致力于消除对额外解析遍历的需求，这些信息将对我们非常有帮助。</p>
+<p>出于历史原因，Textpattern 传统上会再进行一次额外遍历（称为“secondpass”），因此该首选项的默认值为 <code>1</code>。然而，更多遍历会增加意外标签被解析执行的概率。近期对标签解析器的改进已降低对第二次遍历的需求。因此，除非您确因特定目的需要第二次遍历，请将此值降低为 <code>0</code>，以提高站点安全性。</p>
+<p>如果之后发现站点上有未解析的标签被直接输出（并且在测试／调试模式下没有因标签配对不当而导致的其他标签错误），请将您的页面模板／代码／插件示例提供给我们。我们正致力于消除对额外解析遍历的依赖，这些信息将对我们非常有帮助。</p>
         ]]></item>
-        <item id="send_lastmod" title="发送 &quot;最后修改的&quot; 页眉？"><![CDATA[
+        <item id="send_lastmod" title="发送 &quot;Last-Modified&quot; 头？"><![CDATA[
 <h2>发送 "Last-Modified" 头？</h2>
-<p>启用后，Textpattern 会读取访客的 HTTP <code>If-Modified-Since</code> 头（如果存在），并将其与站点的最后更新时间进行比较。如果自访客上次加载页面以来内容未发生变化（即浏览器发送的时间戳与站点最后更新时间相同），则会返回一个响应头，指示访客的浏览器使用其缓存中的页面副本。</p>
+<p>启用后，Textpattern 会读取访客请求中的 HTTP <code>If-Modified-Since</code> 头（若存在），并将其与站点的最后更新时间进行比较。如果自访客上次加载页面以来内容未发生变化（即浏览器发送的时间戳与站点最后更新时间相同），则返回响应头，指示访客的浏览器使用其缓存中的页面副本。</p>
 <p>这可以减少带宽消耗、缩短页面加载时间并降低 Web 服务器负载。</p>
         ]]></item>
-        <item id="show_comment_count_in_feed" title="在 Feed 中显示评论计数？"><![CDATA[
+        <item id="show_comment_count_in_feed" title="在订阅源中显示评论数量？"><![CDATA[
 <h2>在订阅源中显示评论数量？</h2>
 <p>当设置为“是”时，此设置会在 RSS／Atom 订阅源中的文章标题后附加评论数量。</p>
         ]]></item>
         <item id="site_slogan" title="网站标语"><![CDATA[
 <h2>网站标语</h2>
-<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">网站标语 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>是对站点的简要概述或描述。它会在需要时用作站点描述，例如在 RSS／Atom 订阅源中，也可以根据需要在站点的任意位置使用。</p>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">网站标语 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>是对站点的简要概述或描述。它会在需要时用作站点描述，例如在 RSS／Atom 订阅源中，并且您也可以根据需要在站点的任意位置使用。</p>
 <p><strong>注意：</strong>网站标语是可选的，但在生成合法的 RSS 或 Atom 订阅源时可能是必需的。</p>
         ]]></item>
         <item id="sitename" title="网站名称"><![CDATA[
 <h2>网站名称</h2>
-<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">您网站的名称或标题 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>。它会出现在访客浏览器或订阅阅读器的标题栏中，也可以根据需要在站点的任意位置显示。</p>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">您网站的名称或标题 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a>。它会出现在访客的浏览器或订阅阅读器的标题栏中，您也可以根据需要在站点的任意位置显示。</p>
         ]]></item>
         <item id="siteurl" title="网站 URL"><![CDATA[
 <h2>网站 URL</h2>
@@ -906,64 +941,64 @@
         ]]></item>
         <item id="skin_dir" title="主题目录"><![CDATA[
 <h2>主题目录</h2>
-<p>如果您希望自定义前台主题平面文件的保存目录名称，可以在此进行设置。您必须首先在 Textpattern 安装根目录下创建该目录，并确保 PHP 对该目录具有写权限。</p>
+<p>如果希望自定义前台主题平面文件的保存目录名称，可以在此进行设置。您必须首先在 Textpattern 安装根目录下创建该目录，并确保 PHP 对该目录具有写权限。</p>
 <p>此路径始终是一个<strong>相对路径</strong>（相对于 Textpattern 安装根目录）。</p>
 <p>默认值为 <code>themes</code>。</p>
         ]]></item>
         <item id="smtp_from" title="SMTP 信封发件人地址"><![CDATA[
 <h2>SMTP 信封发件人地址</h2>
-<p>除非在 Textpattern 中发送邮件时遇到问题（完全无法发送邮件），否则应将此首选项留空。如果出现此类问题，您可以在此填写任意有效电子邮件地址，但最好使用与安装 Textpattern 的网站同一域名的地址（例如，如果网站为 <code>https://example.com</code>，可以使用 <code>you@example.com</code>）。</p>
+<p>除非在 Textpattern 中发送邮件时遇到问题（完全无法发送邮件），否则应将此首选项留空。如果出现此类问题，可以在此输入任意有效电子邮件地址，但最好使用与安装 Textpattern 的网站同一域名的邮箱地址（例如，如果网站为 <code>https://example.com</code>，可以使用 <code>you@example.com</code>）。</p>
 <p>针对感兴趣的技术细节：</p>
 <ul>
-    <li>在类 UNIX／macOS 服务器上，填写的电子邮件地址会作为第 4 个参数（带 “-f” 前缀）传递给 PHP 的 <code>mail()</code> 函数</li>
-    <li>在 Windows 服务器上，填写的电子邮件地址会用于设置（或覆盖）php.ini 中的 <code>sendmail_from</code> 设置</li>
+    <li>在类 UNIX／macOS 服务器上，此地址会作为第 4 个参数（带 "-f" 前缀）传递给 PHP 的 <code>mail()</code> 函数</li>
+    <li>在 Windows 服务器上，此地址会用于设置（或覆盖）php.ini 中的 <code>sendmail_from</code> 设置</li>
 </ul>
-<p>这可确保 SMTP 信封发件人地址（不一定与您在邮件中通常看到的 “From:” 头相同）被设置为您在此填写的地址——某些 Web 服务器要求这样才能发送邮件。</p>
+<p>这样可以确保 SMTP 信封发件人地址（不一定与您在邮件中通常看到的 "From:" 头相同）被设置为此处填写的地址——某些 Web 服务器要求这样才能发送邮件。</p>
         ]]></item>
         <item id="smtp_host" title="SMTP 主机"><![CDATA[
 <h2>SMTP 主机</h2>
-<p>若要提高邮件投递成功率并利用外部服务（如 SendGrid、AWS SES、Mailchimp、Mailgun 等）路由邮件，请在此填写 SMTP 托管端点 URL。请查阅您的 SMTP 服务提供商获取该值。</p>
-<p>该值也可以在 config.php 中通过定义 <code>SMTP_HOST</code> 常量来提供，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
+<p>若要提高邮件投递成功率，并利用 SendGrid、AWS SES、Mailchimp、Mailgun 等外部服务来路由邮件，请在此填写 SMTP 服务器地址。请查阅 SMTP 服务提供商的文档获取该值。</p>
+<p>也可以在 <code>config.php</code> 中通过定义 <code>SMTP_HOST</code> 常量来提供该值，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
         ]]></item>
         <item id="smtp_pass" title="SMTP 密码"><![CDATA[
 <h2>SMTP 密码</h2>
-<p>如果您的 SMTP 连接要求为指定的用户名提供密码，请在此输入。具体要求请查阅服务商文档。</p>
-<p>注意：虽然此处不会显示密码，但它<em>会</em>以明文形式存储在数据库的首选项表中。如果您希望提高安全性，可以改为在 config.php 中定义 <code>SMTP_PASS</code> 常量。</p>
+<p>如果 SMTP 连接要求为指定用户名提供密码，请在此输入。详细信息请查阅服务提供商文档。</p>
+<p>注意：虽然此处不会显示密码，但它<em>会</em>以明文形式存储在数据库的首选项表中。如果希望提高安全性，可以在 <code>config.php</code> 中定义 <code>SMTP_PASS</code> 常量代替。</p>
         ]]></item>
         <item id="smtp_port" title="SMTP 端口"><![CDATA[
 <h2>SMTP 端口</h2>
-<p>如果已指定了 SMTP 主机，则必须设置端口才能启用 SMTP 路由。常见端口包括：</p>
+<p>如果已指定 SMTP 主机，则必须设置端口才能启用 SMTP 路由。常见端口包括：</p>
 <ul>
     <li>25 - 非加密邮件</li>
-    <li>465 - 传统（非官方）安全邮件端口</li>
+    <li>465 - 传统（非官方）的安全邮件端口</li>
     <li>587 - 默认（推荐）用于安全 TLS 邮件</li>
 </ul>
-<p>您的 SMTP 服务商可能会使用不同端口，请查阅其文档。</p>
-<p>该值也可以在 config.php 中通过定义 <code>SMTP_PORT</code> 常量来提供，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
+<p>您的 SMTP 服务商可能使用不同端口，请查阅其文档。</p>
+<p>也可以在 <code>config.php</code> 中通过定义 <code>SMTP_PORT</code> 常量来提供该值，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
         ]]></item>
         <item id="smtp_sectype" title="SMTP 安全方式"><![CDATA[
 <h2>SMTP 安全方式</h2>
-<p>请选择 SMTP 服务提供商所采用的邮件安全协议机制。具体信息请查阅服务商文档。</p>
-<p>该值也可以在 config.php 中通过定义 <code>SMTP_SECTYPE</code> 常量来提供，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
+<p>请选择 SMTP 服务提供商采用的邮件安全协议机制。详细信息请查阅其文档。</p>
+<p>也可以在 <code>config.php</code> 中通过定义 <code>SMTP_SECTYPE</code> 常量来提供该值，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
         ]]></item>
         <item id="smtp_user" title="SMTP 用户名"><![CDATA[
 <h2>SMTP 用户名</h2>
-<p>如果您的 SMTP 连接需要用户／登录名，请在此填写。详细信息请查阅服务商文档。</p>
-<p>该值也可以在 config.php 中通过定义 <code>SMTP_USER</code> 常量来提供，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
+<p>如果 SMTP 连接需要用户／登录名，请在此填写。详细信息请查阅服务提供商文档。</p>
+<p>也可以在 <code>config.php</code> 中通过定义 <code>SMTP_USER</code> 常量来提供该值，此时在“首选项”面板中该项会呈灰色不可编辑。</p>
         ]]></item>
         <item id="spam_blocklists" title="Spam 黑名单（以逗号分隔）"><![CDATA[
 <h2>Spam 黑名单（以逗号分隔）</h2>
-<p>此处填写的 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">黑名单 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 服务会在有评论提交到您的博客时被查询，并检查评论提交者的 IP 地址。如果该 IP 地址在列表中，说明过去已有一个或多个针对该 IP 的垃圾信息报告，评论会被拒绝。不论检查结果如何，Textpattern 都不会存储评论提交者的 IP 地址。</p>
+<p>此处填写的 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">黑名单 <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 服务会在有评论提交到您的博客时被查询，并检查评论提交者的 IP 地址。如果该 IP 地址在黑名单中，说明过去已有一个或多个针对该 IP 的垃圾信息报告，评论将被拒绝。无论检查结果如何，Textpattern 都不会存储评论提交者的 IP 地址。</p>
 <p>您可以在此输入以逗号分隔的域名列表。请注意，确保所用黑名单适合用途是您的责任。</p>
         ]]></item>
-        <item id="syndicate_body_or_excerpt" title="仅同步文章摘要？"><![CDATA[
+        <item id="syndicate_body_or_excerpt" title="仅订阅文章摘要？"><![CDATA[
 <h2>仅订阅文章摘要？</h2>
-<p>如果设置为“否”，订阅项将包含完整的文章正文。</p>
-<p>如果设置为“是”，在有摘要的情况下，订阅项将包含文章摘要而非正文。</p>
+<p>如果设置为“否”，订阅条目将包含完整的文章正文。</p>
+<p>如果设置为“是”，在存在摘要的情况下，订阅条目将使用文章摘要而非正文。</p>
         ]]></item>
-        <item id="tempdir" title="临时目录"><![CDATA[
+        <item id="tempdir" title="临时目录路径"><![CDATA[
 <h2>临时目录路径</h2>
-<p>设置一个临时目录（有时称为 “tmp” 或 “temp”）的<strong>绝对路径</strong>。PHP 必须对该目录具有写权限。该目录用于存放临时文件，例如各种类型的上传（插件、文件或图片）。</p>
+<p>设置一个临时目录（有时称为 “tmp” 或 “temp”）的<strong>绝对路径</strong>。PHP 必须对该目录具有写权限。该目录用于存放临时文件，例如上传的插件、文件或图片。</p>
 <p><strong>注意：</strong></p>
 <ul>
     <li>不要为“临时目录”和“插件缓存目录”指定同一目录，否则会导致问题（Textpattern 会尝试将临时日志文件内容当作插件执行）。</li>
@@ -972,41 +1007,41 @@
         ]]></item>
         <item id="theme_name" title="管理端主题"><![CDATA[
 <h2>管理端主题</h2>
-<p>当任何人登录 Textpattern 时所使用的默认管理端主题。Textpattern 自带若干预装管理主题，您也可以将自定义主题包添加到 <code>textpattern/admin-themes</code> 目录中，使其可供使用。</p>
+<p>当任何人登录 Textpattern 时所使用的默认管理端主题。Textpattern 自带若干预装管理主题，您也可以将自定义主题包放入 <code>textpattern/admin-themes</code> 目录，使其可供使用。</p>
         ]]></item>
         <item id="trailing_slash" title="为 URL 添加结尾斜杠"><![CDATA[
 <h2>为 URL 添加结尾斜杠</h2>
-<p>控制 Textpattern 是否自动为其生成的 URL 添加结尾斜杠。可用选项包括：</p>
+<p>控制 Textpattern 是否自动为其生成的 URL 添加结尾斜杠。可选项包括：</p>
 <ul>
-    <li><strong>否</strong> - 从不添加</li>
+    <li><strong>否</strong> - 从不</li>
+    <li><strong>列表</strong> - 仅在基于列表的落地页面上添加（即非单篇文章视图）</li>
     <li><strong>是</strong> - 始终添加</li>
-    <li><strong>列表</strong> - 仅在基于列表的落地页（即非单篇文章视图）上添加</li>
 </ul>
         ]]></item>
-        <item id="txp_evaluate_functions" title="PHP功能已在txp:evaluate中启用"><![CDATA[
+        <item id="txp_evaluate_functions" title="在 txp:evaluate 中允许的 PHP 函数"><![CDATA[
 <h2>在 txp:evaluate 中允许的 PHP 函数</h2>
-<p>这是一个逗号分隔的 <code>function</code> 或 <code>alias=function</code> 项列表，例如 <code>md5</code>、<code>replace=str_replace</code>。列表中的项目可以在 <code>&lt;txp:evaluate /&gt;</code> 标签的 <code>query</code> 属性中使用：</p>
+<p>这是一个以逗号分隔的 <code>function</code> 或 <code>alias=function</code> 项列表，例如：<code>md5</code>、<code>replace=str_replace</code>。列表中的项目可以在 <code>&lt;txp:evaluate /&gt;</code> 标签的 <code>query</code> 属性中使用：</p>
 <pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
-<p><code>function</code> 必须返回标量值（<strong>不能</strong>返回数组／对象）。</p>
+<p><code>function</code> 必须返回标量值（<strong>不能</strong>返回数组或对象）。</p>
         ]]></item>
         <item id="use_comments" title="接受评论？"><![CDATA[
 <h2>接受评论？</h2>
 <p>此项设置 Textpattern 的评论功能是启用还是禁用。</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="使用 E-mail 地址作为 Feed ID？（默认为网站 URL）"><![CDATA[
+        <item id="use_mail_on_feeds_id" title="使用电子邮件地址构建订阅源 ID（默认使用站点 URL）？"><![CDATA[
 <h2>使用电子邮件地址构建订阅源 ID（默认使用站点 URL）？</h2>
 <p>Atom 订阅源中的项目需要唯一 ID。</p>
-<p>为生成在站点范围内唯一的 ID，Textpattern 允许您在这些 ID 中选择使用电子邮件地址或域名。该电子邮件地址为创建站点时首先使用的地址。除非您未来很可能会更换域名，否则一般可以放心将此项设置为“否”。</p>
+<p>为生成在站点范围内唯一的 ID，Textpattern 允许您在这些 ID 中选择使用电子邮件地址或域名。这里使用的电子邮件地址为创建站点时首先使用的那个地址。除非您未来很可能会更换域名，否则一般可以放心将此项设置为“否”。</p>
         ]]></item>
         <item id="use_plugins" title="使用插件？"><![CDATA[
 <h2>使用插件？</h2>
-<p>此项允许您关闭对所有 Textpattern 插件的支持。这在调试站点错误、需要确认是否由某些插件引起时非常有用。</p>
+<p>此项允许您关闭对所有 Textpattern 插件的支持。在调试站点错误、需要确认是否由某些插件引发问题时，这一选项非常有用。</p>
         ]]></item>
         <item id="use_textile" title="默认文本格式"><![CDATA[
 <h2>默认文本格式</h2>
-<p>此处选择的文本格式设置将成为“撰写”面板中摘要和正文标记的默认格式。您可以选择启用完整 Textile 处理、仅将换行转换为 HTML 段落标记，或完全不转换文本。</p>
+<p>此处选择的文本格式将成为“撰写”面板中摘要和正文标记的默认处理方式。您可以选择启用完整 Textile 处理，将换行转换为 HTML 段落标记，或完全不做转换。</p>
 <p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(在新窗口中打开外部链接)</span></a> 是一款用于简化纯文本到 HTML 转换的工具。启用后，Textile 会处理文章正文文本并返回结构良好的 HTML。</p>
-<p>Textile 还提供了一套功能强大但易于学习的指令，用于格式化文本、定义列表、标题和引用块等结构，并插入链接和图片。</p>
+<p>Textile 还提供了一套功能强大但易于学习的标记语法，用于格式化文本，定义列表、标题和引用块等结构，并插入链接和图片。</p>
         ]]></item>
     </group>
 
@@ -1054,7 +1089,7 @@
         ]]></item>
         <item id="section_uses_page" title="使用页面"><![CDATA[
 <h2>使用页面</h2>
-<p>在 Textpattern 中，分区与页面模板是“成对绑定”的。这其实还挺“甜蜜”的……</p>
+<p>在 Textpattern 中，分区与页面模板是一一绑定的。</p>
         ]]></item>
         <item id="section_uses_skin" title="使用主题"><![CDATA[
 <h2>使用主题</h2>
@@ -1063,31 +1098,41 @@
     </group>
 
     <group id="setup" title="安装面板">
-        <item id="setup_user_login" title="用户登录"><![CDATA[
+        <item id="setup_admin_url" title="管理子域"><![CDATA[
+<h2>管理子域</h2>
+<p>用于访问 Textpattern 管理界面的子域，例如：<code>admin.example.com</code>。</p>
+<p>更多详情请参阅 <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern 多站点安装</a> 文档。</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie 域"><![CDATA[
+<h2>Cookie 域</h2>
+<p>用于 Textpattern Cookie 的（子）域名。</p>
+<p>更多详情请参阅 <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern 多站点安装</a> 文档。</p>
+        ]]></item>
+        <item id="setup_user_login" title="用户登录名"><![CDATA[
 <h2>用户登录名</h2>
-<p>用于管理站点的管理员（“发布者”）帐户的登录名。</p>
-<p>虽然对名称没有硬性限制，但最好避免过于复杂的字符组合以及易被猜到的用户名（例如 <code>admin</code>、<code>administrator</code> 等）。</p>
+<p>用于管理站点的管理员（“发布者”）账户的登录名。</p>
+<p>虽然名称没有强制限制，但最好避免过于复杂的字符组合以及易被猜出的用户名（例如 <code>admin</code>、<code>administrator</code> 等）。</p>
         ]]></item>
         <item id="setup_user_pass" title="用户密码"><![CDATA[
 <h2>用户密码</h2>
-<p>由于此帐户在 Textpattern 中拥有最高级别的访问权限，请务必选择一个非常强的密码，或者更好地使用密码短语。</p>
+<p>由于此账户在 Textpattern 中拥有最高级别的访问权限，请务必选择一个非常强的密码，或者更好地使用密码短语。</p>
 <h3>提示</h3>
 <ul>
     <li>混合使用大写和小写字母</li>
     <li>使用数字</li>
     <li>使用符号</li>
     <li>长度至少为 8 个字符</li>
-    <li><strong>避免</strong>任何个人信息（日期、姓名、地点、家人、宠物等）</li>
-    <li><strong>避免</strong>任何单一或重复的字典词，不论拼写、语言或大小写</li>
+    <li><strong>避免</strong>使用任何个人信息（日期、姓名、地点、家庭成员、宠物等）</li>
+    <li><strong>避免</strong>单一或重复的字典词，不论拼写、语言或大小写</li>
 </ul>
         ]]></item>
-        <item id="table_prefix" title="表前缀"><![CDATA[
+        <item id="table_prefix" title="数据表前缀"><![CDATA[
 <h2>数据表前缀</h2>
-    <p>只有在同一数据库中需要安装多个 Textpattern 实例时，才需要使用数据表前缀。每个 Textpattern 安装都必须使用唯一的前缀。</p>
+    <p>只有在同一数据库中需要安装多个 Textpattern 实例时，才需要使用数据表前缀。每个 Textpattern 安装都必须使用唯一前缀。</p>
     <p>请注意，前缀必须遵守以下规则：</p>
 <ul>
-    <li><strong>第 1 个字符：</strong> 必须是 a-z、A-Z 或下划线</li>
-    <li><strong>后续字符：</strong> 只能是 a-z、A-Z、0-9 或下划线</li>
+    <li><strong>第 1 个字符：</strong>必须是 a-z、A-Z 或下划线</li>
+    <li><strong>后续字符：</strong>只能是 a-z、A-Z、0-9 或下划线</li>
 </ul>
         ]]></item>
     </group>
