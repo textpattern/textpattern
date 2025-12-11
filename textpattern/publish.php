@@ -461,14 +461,14 @@ function preText($store, $prefs = null)
                         if ($permlink_mode === 'messy') {
                             parse_str($out['qs'], $parts);
                             unset($parts['token']);
-                            $u5 = basename($parts['i']);
+                            $u4 = basename($parts['i']);
                             unset($parts['i']);
                             $u3 = implode('-', array_map(function($k, $v){
                                 return "$k$v";
                             }, array_keys($parts), array_values($parts)));
                         }
 
-                        output_thumb(array('param' => $u3, 'img' => $u5));
+                        output_thumb(array('param' => $u3, 'img' => $u4));
                         exit;
                     }
                 default:
