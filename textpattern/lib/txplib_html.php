@@ -1863,11 +1863,12 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
 
     if ($breakform) {
-        array_walk($list, function (&$item, $key) use ($breakform) {
+        $thing = is_array($breakform) ? $breakform[0] : null;
+        array_walk($list, function (&$item, $key) use ($breakform, $thing) {
             global $txp_item;
             $txp_item['count'] = $key + 1;
             $txp_item[true] = $item;
-            $item = str_replace('<+>', $item, parse_form($breakform));
+            $item = str_replace('<+>', $item, isset($thing) ? parse($thing) : parse_form($breakform));
             unset($txp_item);
         });
     }

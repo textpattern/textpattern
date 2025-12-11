@@ -3050,9 +3050,7 @@ function variable($atts, $thing = null)
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
 
-    if (empty($name)) {
-        trigger_error(gTxt('variable_name_empty'));
-    } elseif (!$set && !isset($var) && !isset($output)) {
+    if ($name !== '' && !$set && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
@@ -3073,6 +3071,7 @@ function variable($atts, $thing = null)
             $var = isset($value) ?
                 $value :
                 (isset($thing) ? parse($thing) : $var);
+            $breakform = isset($value) && isset($thing) ? array($thing) : null;
         }
     }
 
@@ -3092,18 +3091,21 @@ function variable($atts, $thing = null)
         global $txp_atts;
 
         if ($txp_atts) {
+            $txp_atts += isset($breakform) ? compact('breakform') : array();
             $var = txp_wraptag($txp_atts, $var);
         }
 
-        if (isset($reset)) {
-            $variable[$name] = $reset === true ? null : $reset;
-            isset($output) or $output = 1;
-        } else {
-            $variable[$name] = $var;
+        if ($name !== '') {
+            if (isset($reset)) {
+                $variable[$name] = $reset === true ? null : $reset;
+                isset($output) or $output = 1;
+            } else {
+                $variable[$name] = $var;
+            }
         }
-    } else {
-        isset($output) or $output = 1;
     }
+
+    (isset($output) || $set && $name !== '') or $output = 1;
 
     return !$output ? '' : ((int)$output ? $var : txp_escape(array('escape' => $output), $var));
 }
