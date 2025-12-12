@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="is">
+    <group id="admin" title="Notendaborð">
+        <item id="about_privileges" title="Um hlutverk"><![CDATA[
+<h2>Um hlutverk</h2>
+<h3>Útgefandi</h3>
+<ul>
+    <li>getur stjórnað greinum, athugasemdum og tenglum</li>
+    <li>getur notað PHP í greinum ef stjórnandastillingin „Leyfa PHP í greinum?“ er stillt á „Já“</li>
+    <li>getur stjórnað myndum og skrám</li>
+    <li>getur stjórnað hlutum (sections) og flokkum</li>
+    <li>getur stjórnað síðum, eyðuformum og stílum</li>
+    <li>getur skoðað greiningarupplýsingar</li>
+    <li>getur stjórnað stillingum vefsvæðis</li>
+    <li>getur stjórnað notendum</li>
+    <li>getur stjórnað heimsóknaskrám (visitor logs)</li>
+    <li>getur stjórnað viðbótum</li>
+    <li>getur flutt inn gögn</li>
+</ul>
+<h3>Yfirritstjóri</h3>
+<ul>
+    <li>getur stjórnað greinum, athugasemdum og tenglum</li>
+    <li>getur notað PHP í greinum ef stjórnandastillingin „Leyfa PHP í greinum?“ er stillt á „Já“</li>
+    <li>getur stjórnað myndum og skrám</li>
+    <li>getur stjórnað hlutum (sections) og flokkum</li>
+    <li>getur stjórnað síðum, eyðuformum og stílum</li>
+    <li>getur skoðað greiningarupplýsingar</li>
+    <li>getur stjórnað stillingum vefsvæðis</li>
+    <li>getur skoðað notendur</li>
+    <li>getur stjórnað heimsóknaskrám (visitor logs)</li>
+    <li>getur stjórnað viðbótum</li>
+    <li>getur flutt inn gögn</li>
+</ul>
+<h3>Prófarkalesari</h3>
+<ul>
+    <li>getur stjórnað greinum með einni takmörkun:
+        <ul>
+            <li>getur ekki eytt greinum sem tilheyra öðrum notendum</li>
+        </ul>
+    </li>
+    <li>getur stjórnað athugasemdum og tenglum</li>
+    <li>getur stjórnað myndum og skrám</li>
+    <li>getur stjórnað flokkum</li>
+    <li>getur stjórnað síðum og eyðuformum</li>
+    <li>getur skoðað notendur</li>
+    <li>getur stjórnað heimsóknaskrám (visitor logs)</li>
+</ul>
+<h3>Starfsritari</h3>
+<ul>
+    <li>getur stjórnað eigin greinum og skoðað greinar annarra notenda</li>
+    <li>getur stjórnað myndum og skrám</li>
+</ul>
+<h3>Frilansari</h3>
+<ul>
+    <li>getur stjórnað eigin greinum að takmörkuðu leyti:
+        <ul>
+            <li>getur aðeins breytt grein þar til hún hefur verið birt</li>
+            <li>getur aðeins sett stöðu sem <em>aðeins</em> Uppkast (Draft), Falin (Hidden) eða Í bið (Pending)</li>
+        </ul>
+    </li>
+    <li>getur skoðað greinar annarra notenda</li>
+</ul>
+<h3>Hönnuður</h3>
+<ul>
+    <li>getur stjórnað eigin greinum að takmörkuðu leyti:
+        <ul>
+            <li>getur aðeins breytt grein þar til hún hefur verið birt</li>
+            <li>getur aðeins sett stöðu sem <em>aðeins</em> Uppkast (Draft), Falin (Hidden) eða Í bið (Pending)</li>
+        </ul>
+    </li>
+    <li>getur skoðað greinar annarra notenda</li>
+    <li>getur stjórnað myndum</li>
+    <li>getur stjórnað hlutum (sections)</li>
+    <li>getur stjórnað síðum, eyðuformum og stílum</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Stofna höfund"><![CDATA[
+<h2>Bæta við nýjum höfundi</h2>
+<p>Velkomuboð og leiðbeiningar um innskráningu verða sendar í tölvupósti til nýja höfundarins.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Skrifaborð">
+        <item id="article_image" title="Greinamynd"><![CDATA[
+<h2>Greinamynd</h2>
+<p>Til að tengja myndir við þessa grein skaltu setja eitt af eftirfarandi hér:</p>
+<ol>
+    <li>eitt eða fleiri Textpattern-myndakenni (ID), aðskilin með kommum (t.d. <code>12, 25, 18</code>)</li>
+    <li>eina eða fleiri afstæðar slóðir á myndina, aðskildar með kommum (t.d. <code>/images/my_pic.jpg</code>)</li>
+    <li>eina eða fleiri fullar (fully-qualified) slóðir, aðskildar með kommum (t.d. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Fyrstu myndina má birta með því að setja <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> merkið <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> inn í greinasnið. Sjálfgefið skilar það fullu HTML <code>&lt;img&gt;</code> merki í valda mynd.</p>
+<p>Þú getur birt myndasöfn með því að nota <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> merkið <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Meginmál"><![CDATA[
+<h2>Meginmál</h2>
+<p>Aðalefni greinar er innihaldið í meginmáli greinarinnar.</p>
+<p>Þegar unnið er að greinum í Textpattern, hvort sem er við gerð eða undirbúning birtingar, getur höfundur skipt á milli þriggja sýna af greininni: hreins texta, HTML-merkingar (kóðans sem vafrinn notar til að birta greinina) og forskoðunar.</p>
+        ]]></item>
+        <item id="description" title="Lýsing"><![CDATA[
+<h2>Lýsing</h2>
+<p>Lýsing greinar er valkvætt atriði sem getur hjálpað leitarvélum og vafraróbotum að bera betur kennsl á efni og raða því.</p>
+<p>Lýsing greinar er hámark 255 stafir. Athugaðu að sumar leitarvélar setja takmörk á lengd <code>meta description</code> síðu af henti við birtingu í leitarniðurstöðum (SERP) og það takmark getur verið lægra en 255 stafa hámark Textpattern.</p>
+<p>Athugaðu að lýsing greinar er önnur en útdráttur greinar, þó að bæði sviðin taki svipað efni. Lýsing greinar er fyrst og fremst hugsuð fyrir leitarvélar og vafraróbot en útdráttur greinar hentar betur sem stuttur, læsilegur samandráttur fyrir fólk þar sem þess er óskað.</p>
+        ]]></item>
+        <item id="excerpt" title="Útdráttur"><![CDATA[
+<h2>Útdráttur</h2>
+<p>Útdrættir greina eru valkvæðir. Útdrætti má t.d. nota sem stuttan samandreginn texta greinar sem birtist sem hluti af efnisyfirliti, er notaður í stað fulls meginmáls greinar í RSS/Atom straumum vefsvæðisins eða í ýmsum öðrum tilgangi.</p>
+        ]]></item>
+        <item id="expire_date" title="Gildistími rennur út"><![CDATA[
+<h2>Gildistími rennur út</h2>
+<p>Sá tími þegar grein er merkt sem útrunnin. Tímasetningin er valkvæð og má stilla á hvaða liðna eða framtíðarstund sem er.</p>
+<p>Reitirnir samsvara eftirfarandi upplýsingum:</p>
+<ul>
+    <li>Ár / Mánuður / Dagur</li>
+    <li>Klukkustund (24h snið) : Mínúta : Sekúnda</li>
+</ul>
+<p>Þegar tiltekinn tími rennur upp, eða ef valinn er tími í fortíð, rennur grein út.</p>
+<p>Ef valkosturinn um að birta útrunnar greinar er virkur, heldur greinin áfram að vera sýnileg. Ef hann er óvirkur munu gestir á síðu greinarinnar fá HTTP 410 villu í stað innihalds greinarinnar.</p>
+        ]]></item>
+        <item id="keywords" title="Lykilorð"><![CDATA[
+<h2>Lykilorð</h2>
+<p>Lykilorð nýtast til að fínstilla tengsl á milli greina umfram það sem flokkar gera.</p>
+<p>Lykilorð verða að vera stök orð, aðskilin með kommum.</p>
+        ]]></item>
+        <item id="override_form" title="Yfirskrifa snið"><![CDATA[
+<h2>Yfirskrifa snið</h2>
+<p>Grein getur valkvætt notað annað snið en sjálfgefna sniðið – til dæmis til að birta útdrátt greinar með <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> í stað meginmáls greinar með <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> – þetta er stillt hér.</p>
+        ]]></item>
+        <item id="publish_date" title="Birt dagsetning"><![CDATA[
+<h2>Birt dagsetning</h2>
+<p>Sú stund þegar grein eða skrá er birt eða síðast uppfærð. Hægt er að stilla tímann annaðhvort á augnablikið þegar atriðið er birt eða á hvaða liðna eða framtíðarstund sem er.</p>
+<p>Reitirnir samsvara eftirfarandi upplýsingum:</p>
+<ul>
+    <li>Ár / Mánuður / Dagur</li>
+    <li>Klukkustund (24h snið) : Mínúta : Sekúnda</li>
+</ul>
+<p>Atriði með tímastimpil sem er stærri en núverandi tími (þ.e. í framtíðinni) birtist hvorki á framhliðinni né í RSS/Atom straumum fyrr en sá tími er kominn.</p>
+        ]]></item>
+        <item id="status" title="Staða"><![CDATA[
+<h2>Staða</h2>
+<p>Skilgreinir birtingarsýnileika þessarar Textpattern-greinar.</p>
+<p>Birtingarstaðan er ein af eftirfarandi:</p>
+<ul>
+<li><strong>Uppkast (Draft)</strong>: litið á sem vinnsluútgáfu og er ekki sýnileg utan stjórnsvæðis Textpattern (þ.e. hvorki á vefnum né í straumum).</li>
+<li><strong>Falin (Hidden)</strong>: grein er ekki sýnileg utan stjórnsvæðis Textpattern. Gagnlegt til að fjarlægja efni af vefnum án þess að eyða því endilega.</li>
+<li><strong>Í bið (Pending)</strong>: litið á sem tilbúið til birtingar og bíður samþykkis, en er ekki sýnilegt utan stjórnsvæðis Textpattern.</li>
+<li><strong>Í birtingu (Live)</strong>: yfirleitt sýnileg utan stjórnsvæðis Textpattern (þ.e. sýnileg á vefnum, birt í straumum ef stillingar leyfa). Ef grein er „Live“ og hefur gildistíma, helst staðan „Live“ eftir að dagsetningin er liðin, en greinin birtist aðeins utan stjórnsvæðis ef leyft er að birta útrunnar greinar.</li>
+<li><strong>Fest (Sticky)</strong>: svipað og <strong>Live</strong> grein að því leyti að hún er sýnileg gestum, en hún birtist <strong>ekki</strong> í greinalistum nema <code>article</code> eða <code>article_custom</code> tögin innihaldi <code>status</code> eigindi með gildinu <code>sticky</code>.</li>
+</ul>
+<p>Athugaðu: efni sem ekki er opinberlega sýnilegt á vefnum má samt forskoða af innskráðum notendum.</p>
+        ]]></item>
+        <item id="title" title="Titill"><![CDATA[
+<h2>Titill</h2>
+<p>Bættu við viðeigandi titli fyrir þessa grein.</p>
+<p>Titill greinar má mest vera 255 stafir.</p>
+        ]]></item>
+        <item id="url_title" title="Slóðartitill"><![CDATA[
+<h2>Slóðartitill</h2>
+<p>Ef nota á sérstakan titil í fastatengils-slóð (permalink URL) greinar, skaltu slá hann inn hér. Ef þetta er skilið eftir autt, verður slóðartitillinn búinn til sjálfkrafa út frá greinatitlinum.</p>
+<p>Þetta er sérstaklega gagnlegt ef titill greinarinnar notar stafi utan ASCII-stafasafns.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Flokkaborð">
+        <item id="article_category" title="Greinar"><![CDATA[
+<h2>Greinar</h2>
+<p>Ólíkt hlutum (sections), sem skilgreina leiðsagnarskipan vefsvæðis, gera flokkar greina kleift að skipuleggja greinar eftir efni þeirra. Þegar búið er að úthluta flokkum er hægt að vafra um lista yfir greinar sem tilheyra tilteknum flokkum.</p>
+<p>Til dæmis gætu líklegir greinaflokkar á matarvef verið:</p>
+<ul>
+    <li>hráefni</li>
+    <li>innkaup</li>
+    <li>uppskriftir</li>
+    <li>framhreinsun / framsetning</li>
+    <li>veitingastaðir</li>
+    <li>kokkar</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Lýsing"><![CDATA[
+<h2>Lýsing flokks</h2>
+<p>Lýsing flokks er valkvætt atriði sem getur hjálpað leitarvélum og vafraróbotum að bera betur kennsl á efni og raða því.</p>
+<p>Lýsingflokkur er hámark 255 stafir. Athugaðu að sumar leitarvélar setja takmörk á lengd <code>meta description</code> síðu af henti við birtingu í leitarniðurstöðum (SERP) og það takmark getur verið lægra en 255 stafa hámark Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Skrár"><![CDATA[
+<h2>Skrár</h2>
+<p>Flokkar skráa eru valkvæðir og nýtast til að hópa saman völdum upphlaðnum skrám.</p>
+        ]]></item>
+        <item id="image_category" title="Myndir"><![CDATA[
+<h2>Myndir</h2>
+<p>Myndaflokkar eru valkvæðir og nýtast bæði til innri skipulags og til að skilgreina myndasett sem má birta með merkinu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Tenglar"><![CDATA[
+<h2>Tenglar</h2>
+<p>Flokkar tengla eru valkvæðir og gagnast til að birta mismunandi tenglahópa, t.d. „Vinir“, „Rómverjar“, „Landsmenn“.</p>
+<p>Valdar tenglalista eins og þessa má birta með <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> merkinu <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> á eftirfarandi hátt:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Greiningarborð">
+        <item id="clean_url_data_failed" title="Hreinslóðagögn mistókust"><![CDATA[
+<h2>Hreinslóðagögn mistókust</h2>
+<p>Það virðist sem annaðhvort séu hreinar slóðir vefsvæðisins (t.d. <code>https://example.com/section/article</code>) ekki að virka sem stendur eða netþjónninn styðji ekki prófunaraðferðina sem notuð er til að ákvarða hvort hreinar slóðir virki; ef hreinar slóðir á vefnum virka eins og ætlast er til má hunsa þennan boðskap.</p>
+<p>Ef hreinar slóðir virka <em>ekki</em> getur það þýtt að annaðhvort:</p>
+<ul>
+    <li>stillt „Site URL“ sé rangt, eða að síðan á þeirri slóð sé ekki stýrt af þessari Textpattern-uppsetningu</li>
+    <li>þjónninn þurfi breytingar á <code>.htaccess</code> eða sambærilegri þjónsstillingu til að gera hreinar slóðir virkar</li>
+    <li>þjónninn styðji alls ekki hreinar slóðir</li>
+</ul>
+<p>Prófun hreinna slóða reynir að sækja síðu af vefslóðinni sem er tilgreind í stillingunni „Site URL“ til að athuga hvort allar breytur hreinna slóða virki rétt. Ef sú slóð vísar á annað vefsvæði eða hefur verið skipt út fyrir kyrrstæða síðu eður álíka mun prófunin bregðast. Þar til vandinn hefur verið leystur ætti að nota „óreinar“ slóðir (t.d. <code>https://example.com?s=section&amp;id=4</code>). Gakktu úr skugga um að „Permanent link mode“ í stjórnandastillingum sé stillt í samræmi við það.</p>
+<p>Athugaðu að notkun viðbótar sem setur vefinn í „viðhaldsham“ getur kallað fram þessa viðvörun.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Próf hreinna slóða mistókst"><![CDATA[
+<h2>Próf hreinna slóða mistókst</h2>
+<p>Það virðist sem annaðhvort séu hreinar slóðir vefsvæðisins (t.d. <code>https://example.com/section/article</code>) ekki að virka sem stendur eða netþjónninn styðji ekki prófunaraðferðina sem notuð er til að ákvarða hvort hreinar slóðir virki; ef hreinar slóðir á vefnum virka eins og ætlast er til má hunsa þennan boðskap.</p>
+<p>Ef hreinar slóðir virka <em>ekki</em> getur það þýtt að annaðhvort:</p>
+<ul>
+    <li>stillt „Site URL“ sé rangt, eða að síðan á þeirri slóð sé ekki stýrt af þessari Textpattern-uppsetningu</li>
+    <li>þjónninn þurfi breytingar á <code>.htaccess</code> eða sambærilegri þjónsstillingu til að gera hreinar slóðir virkar</li>
+    <li>þjónninn styðji alls ekki hreinar slóðir</li>
+</ul>
+<p>Prófun hreinna slóða reynir að sækja síðu af vefslóðinni sem er tilgreind í stillingunni „Site URL“ til að athuga hvort allar breytur hreinna slóða virki rétt. Ef sú slóð vísar á annað vefsvæði eða hefur verið skipt út fyrir kyrrstæða síðu eður álíka mun prófunin bregðast. Þar til vandinn hefur verið leystur ætti að nota „óreinar“ slóðir (t.d. <code>https://example.com?s=section&amp;id=4</code>). Gakktu úr skugga um að „Permanent link mode“ í stjórnandastillingum sé stillt í samræmi við það.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Samtímis innskráningar á lifandi þjóni"><![CDATA[
+<h2>Samtímis innskráningar á lifandi þjóni</h2>
+<p>Að leyfa notendaaðgangi að skrá sig inn í mörgum setum samtímis er öryggisáhætta og ekki mælt með því. Slökktu á þessum eiginleika í „ítarlegum stillingum“ nema þú skiljir og sættir þig við áhættuna.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Fela einkaupplýsingar"><![CDATA[
+<h2>Fela einkaupplýsingar</h2>
+<p>Felur einkaupplýsingar til að auka öryggi. Ef greiningarupplýsingum er deilt opinberlega – til dæmis í Textpattern notenda- eða stuðningsþráðum – minnkar þetta öryggisáhættu með því að sleppa viðkvæmum þjónsupplýsingum.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Þróunarkóði á lifandi þjóni"><![CDATA[
+<h2>Þróunarkóði á lifandi þjóni</h2>
+<p>Útgáfur Textpattern sem eru í þróun eru ekki mæltar með fyrir framleiðsluvefi. Þessa viðvörun má hunsa ef áhættan er skilin og ásættanleg.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Mappa er ekki skrifanleg"><![CDATA[
+<h2>Mappa er ekki skrifanleg</h2>
+<p>Til að nota upphleðslugetu fyrir skrár og myndir verða þessar möppur að vera skrifanlegar af PHP undir notanda vefþjónsins. Hægt er að gera þetta með (S)FTP-forriti eða, að öðrum kosti, á skipanalínu með því að keyra skipun á borð við <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS uppfletting mistókst"><![CDATA[
+<h2>DNS-uppfletting mistókst</h2>
+<p>Það virðist sem vefslóðin sem tilgreind er sem heimilisfang vefsvæðisins sé ekki aðgengileg.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Upphleðsla skráa ekki leyfð"><![CDATA[
+<h2>Upphleðsla skráa ekki leyfð</h2>
+<p>Núverandi þjónsstilling gefur til kynna að upphleðsla skráa sé óvirk. Athugaðu og breyttu stillingunni <code>file_uploads</code> í <code>php.ini</code> eða hafðu samband við hýsingaraðila.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess vantar"><![CDATA[
+<h2>.htaccess vantar</h2>
+<p>Valið er fastatenglasnið sem krefst <code>.htaccess</code>-skrár og hún finnst ekki. Skráin er innifalin með Textpattern og er í rót Textpattern-uppsetningar, við hliðina á <code>index.php</code> og <code>textpattern</code>-möppunni. Mælt er með eftirfarandi forskrift:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Yfirlitssíða vefsvæðis óaðgengileg"><![CDATA[
+<h2>Yfirlitssíða vefsvæðis óaðgengileg</h2>
+<p>Rótarskráin <code>index.php</code>, sem tilgreind er sem yfirlitssíða (index) vefsvæðisins, er ólæsileg fyrir þjóninn. Athugaðu hvort hún sé til staðar og hafi réttan aðgang.</p>
+        ]]></item>
+        <item id="missing_files" title="Skrár vantar"><![CDATA[
+<h2>Skrár vantar</h2>
+<p>Ein eða fleiri nauðsynlegar skrár vantar í Textpattern. Gakktu úr skugga um að allar skráðar skrár séu til á þjóninum og á réttum stöðum.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite vantar"><![CDATA[
+<h2>Apache mod_rewrite vantar</h2>
+<p><code>mod_rewrite</code>-eining Apache er ekki uppsett eða óvirk. Mælt er með henni svo Textpattern virki rétt. Gakktu úr skugga um að hún sé til staðar og virk eða hafðu samband við hýsingaraðila.</p>
+        ]]></item>
+        <item id="modified_files" title="Breyttar skrár"><![CDATA[
+<h2>Breyttar skrár</h2>
+<p>Skjöl eru talin breytt ef gátstafasumma (checksum) þeirra er frábrugðin þekktri gátstafasummu sem fylgir Textpattern. Ef einhverjar skrár í Textpattern-uppsetningunni eru öðruvísi en búist er við verða þær skráðar hér.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL-töfluvillur"><![CDATA[
+<h2>MySQL-töfluvillur</h2>
+<p>Hugsanlega eru skemmdir eða gölluð gögn í MySQL-gagnagrunni Textpattern. Reyndu að gera við viðkomandi töflur með MySQL-viðmóti, t.d. <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> eða <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Bráðabirgðamappa ekki skilgreind"><![CDATA[
+<h2>Bráðabirgðamappa ekki skilgreind</h2>
+<p>Þó Textpattern geti keyrt án bráðabirgðamöppu (temporary directory) kann sum virkni að hegða sér óvænt ef þessi stilling er ekki skilgreind. Farðu í stjórnandastillingar og settu „Temporary directory path“.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Hluti ber sama nafn og mappa"><![CDATA[
+<h2>Hluti ber sama nafn og mappa</h2>
+<p>Tilkoma nú þegar til staðar möppuheita getur rekist á heiti hluta (sections) sem notuð eru í greinaperma-slóðakerfinu. Til að forðast vandamál skaltu skoða og eyða viðkomandi möppum ef það er öruggt eða breyta heitum hluta svo þau stangist ekki á.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Vefsmappa ólæsileg"><![CDATA[
+<h2>Vefsmappa ólæsileg</h2>
+<p>Mappan sem inniheldur rótarskrána <code>index.php</code>, sem tilgreind er sem yfirlitssíða vefsvæðisins, er ólæsileg fyrir þjóninn. Athugaðu skráaaðgang.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP-skriftur virkar"><![CDATA[
+<h2>PHP-skriftur virkar</h2>
+<p>Textpattern leyfir höfundum og stjórnendum að fella PHP-kóða inn í greinar og síður/snið, ef þessi eiginleiki er virkur. Þar sem þetta er öryggisáhætta – hvaða PHP sem er gæti keyrt, þar með talið skaðlegur/hættulegur kóði sem gæti eyðilagt uppsetninguna eða lekið upplýsingum til þriðju aðila – er eindregið mælt með að þú slekkir á þessum valkostum í <a href="?event=prefs#prefs_group_publish">stillingaborðinu</a> nema þú þurfir hann í alvöru.</p>
+<p>Flestar útfærslur sem áður þurftu lítil PHP-brot má nú framkvæma með <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">kjarnatagum</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Lágmarksútgáfukröfur"><![CDATA[
+<h2>Lágmarksútgáfukröfur</h2>
+<p>Textpattern krefst ákveðinnar virkni í PHP-forritunarmálinu og MySQL-gagnagrunnsþjóninum. Skoðaðu eftirfarandi töflu til að sjá lágmarks kerfiskröfur:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern-útgáfa</th>
+                <th scope="col">Lágmarks PHP-útgáfa</th>
+                <th scope="col">Lágmarks MySQL-útgáfa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Til viðbótar við ofangreindar kröfur um kerfi eru eftirfarandi PHP-viðbætur nauðsynlegar:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a></li>
+</ul>
+<p><code>php.ini</code>-skrá vefþjónsins, hvort sem hún er almenn eða staðbundin, þarf að innihalda stillingu <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Setup-mappa enn til staðar"><![CDATA[
+<h2>Setup-mappa enn til staðar</h2>
+<p>Þegar Textpattern hefur verið sett upp er <code>textpattern/setup</code>-mappan og innihald hennar óþarft og ætti að vera eytt af öryggisástæðum.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Misræmi í Site URL"><![CDATA[
+<h2>Misræmi í Site URL</h2>
+<p>„Site URL“ eins og það er stillt á „Stillingaborðinu“ samsvarar ekki raunslóð sem notuð er til að heimsækja vefinn.</p>
+<p>Ef hægt er að ná í vefinn í gegnum margar mismunandi slóðir og allt virkar eins og búist er við má hunsa þennan boðskap.</p>
+<p>Að öðrum kosti skaltu athuga og breyta stillingunni „Site URL“ á stjórnandastillingaborðinu eftir þörfum. Umtalsverð tilgáta um rétta „Site URL“ er sýnd í viðvöruninni á „Diagnostics“-borðinu.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP-föll [&#8230;] óvirk á þjóninum"><![CDATA[
+<h2>PHP-föll [&#8230;] óvirk á þjóninum</h2>
+<p>Hýsingaraðili eða þjónsstjóri hefur gert eitt eða fleiri PHP-föll óvirk og sum þeirra geta haft áhrif á rekstur Textpattern.</p>
+<p>Skoðaðu <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern notandaleiðbeiningar <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> fyrir frekari upplýsingar.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Ný Textpattern-útgáfa tiltæk"><![CDATA[
+<h2>Ný Textpattern-útgáfa tiltæk</h2>
+<p>Nýrri Textpattern-útgáfa er tiltæk. Til að nýta nýjustu eiginleika og öryggisuppfærslur er mælt með að þú uppfærir.</p>
+<p>Athugaðu að þó við reynum að gera uppfærsluferlið eins sársaukalaust og mögulegt er:</p>
+<ul>
+    <li>Ef aðeins síðasti tölustafurinn er annar en núverandi útgáfa er uppfærslan líkleg til að vera samhæfð eldri viðbótum og þemum.</li>
+    <li>Ef tveir síðustu tölustafirnir eru frábrugðnir núverandi útgáfu gæti uppfærslan krafist uppfærslu á sumum viðbótum og/eða þemum, þó líklegt sé að þau haldi áfram að virka að einhverju leyti.</li>
+    <li>Ef fyrsti tölustafurinn er annar en núverandi útgáfa er líklegt að uppfærsla krefjist uppfærslu á flestum viðbótum og þemum. Ef þú treystir mjög á ákveðna viðbót eða þemaaðgerð skaltu hafa samband við höfund viðbótarinnar eða aðra notendur áður en uppfært er.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern forútgáfa tiltæk"><![CDATA[
+<h2>Textpattern forútgáfa tiltæk</h2>
+<p>Nýrri forútgáfa (pre-release) af Textpattern er tiltæk. Við leitum að virkjum sjálfboðaliðum til að prófa þessa útgáfu svo við getum gert lokaútgáfuna eins trausta og hægt er. Við reynum að halda uppfærsluferlinu eins snurðulausu og sársaukalausu og hægt er, jafnvel fyrir beta-kóða.</p>
+<p>Ef þú ákveður að taka þátt skaltu hafa eftirfarandi í huga:</p>
+<ul>
+    <li>Ekki nota þessa beta-útgáfu á framleiðsluvef nema þú hafir virka öryggisafrit af bæði skrám og gagnagrunni og vitir hvernig á að endurheimta þau.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Skráðu allar villur</a> og tilgreindu hvaða beta-útgáfu þú notar. Þá gætu komið út fleiri beta-útgáfur áður en stöðug útgáfa kemur út, eftir því hvaða vandamál finnast.</li>
+    <li>Gakktu úr skugga um að ef þú setur þessa beta-útgáfu upp uppfærir þú einnig í lokaútgáfuna þegar hún kemur út.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Bráðabirgðamappa og viðbótarbiðminni mega ekki vera sú sama"><![CDATA[
+<h2>Bráðabirgðamappa og viðbótarbiðminni mega ekki vera sú sama</h2>
+<p>Viðbætur eiga að hafa eigin möppu og ekki deila bráðabirgðamöppu. Þetta er möguleg öryggisáhætta og getur haft neikvæð áhrif á vefinn ef bráðabirgðamappan er tæmd. Gakktu úr skugga um að slóð bráðabirgðamöppu sé önnur en slóð viðbótarbiðminnis.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Uppfærsluþjónn óaðgengilegur"><![CDATA[
+<h2>Uppfærsluþjónn óaðgengilegur</h2>
+<p>Að athuga með uppfærslur mistókst, oft vegna álags á netið eða vegna tengitímamarka. Yfirleitt lagast þetta innan klukkustundar eða tveggja; reyndu að heimsækja þetta borð aftur síðar.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="PHP-uppsetningin vantar mail() fallið"><![CDATA[
+<h2>PHP-uppsetningin vantar mail() fallið</h2>
+<p><a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>-fall PHP er óvirkt. Því getur Textpattern ekki sent tölvupóst og sumir eiginleikar verða ekki tiltækir. Til dæmis verða ekki sendar tilkynningar um nýjar athugasemdir og nýir notendur fá ekki velkomubréf. Hægt er þó áfram að bæta við notendum.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Skráaborð">
+        <item id="file_reassign" title="Endurúthluta skrá"><![CDATA[
+<h2>Endurúthluta skrá</h2>
+<p>Þegar þú hleður upp skrá í stað þeirrar sem merkt er „Vantar“, verður valda skráin hlaðið inn á þjóninn og tengd upprunalegum skráarupplýsingum í gagnagrunninum. Þetta þýðir að skráarheiti upprunalegu skrárinnar helst óbreytt, sem og allar aðrar tengdar upplýsingar eins og fjöldi niðurhals og flokkur. Skráarstærðin verður þó uppfærð til að endurspegla nýju skrána.</p>
+        ]]></item>
+        <item id="file_replace" title="Skipta um skrá"><![CDATA[
+<h2>Skipta um skrá</h2>
+<p>Ef skrá er hlaðið upp hér mun innihald núverandi skrár á þjóninum verða skipt út, en skráarheitið helst það sama og áður. Fjöldi niðurhala og aðrar tengdar upplýsingar við skrána haldast óbreyttar.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Birt dagsetning"><![CDATA[
+<h2>Birt dagsetning</h2>
+<p>Sú stund þegar skrá er birt eða síðast uppfærð. Hægt er að stilla tímann annaðhvort á augnablikið þegar atriðið er birt eða á hvaða liðna eða framtíðarstund sem er.</p>
+<p>Reitirnir samsvara eftirfarandi upplýsingum:</p>
+<ul>
+    <li>Ár / Mánuður / Dagur</li>
+    <li>Klukkustund (24h snið) : Mínúta : Sekúnda</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Hlaða upp skrá"><![CDATA[
+<h2>Hlaða upp skrá</h2>
+<p>Notaðu þetta eyðuform til að hlaða skrám eða myndum upp á þjóninn þinn.</p>
+<p>Notaðu Textile-kóða til að birta grafík í greinum, Textpattern-tags til að setja grafík inn í sniðmát síðna og HTML-kóða til að setja grafík annars staðar.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Sniðaborð">
+        <item id="forms_overview" title="Inngangur að sniðum"><![CDATA[
+<h2>Inngangur að sniðum</h2>
+<p>Í Textpattern er snið (form) endurnýtanlegur textabútur, HTML og Textpattern-tög sem má nota aftur og aftur til að birta efni.</p>
+<p>Hér er dæmi um snið sem gæti heitið <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Þú gætir notað það til að birta HTML óraðaðan lista yfir tengdar greinar:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Þar sem hlutverk þessa sniðs er að skila lista yfir titla má einnig nota það innan annarra taga, til dæmis til að birta 20 greinar úr núverandi hluta:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Þú getur einnig valið að nota snið til að birta endurtekið efni, eins og haus og fót í sniðmátum síðna. Þá er efnið aðeins til á einum stað og ef þú ákveður að breyta því þarftu aðeins að gera það einu sinni. Yfirleitt er notað eftirfarandi til að birta efni úr sniði:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Hámarksstærð sniðs er 64KB. Dæmi um fót gæti innihaldið fyrirsagnir, málsgreinar, tengla, skilorðatög (conditional tags) og tilvísanir í önnur snið eins og <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Myndaborð">
+        <item id="create_thumbnail" title="Búa til smámynd"><![CDATA[
+<h2>Búa til smámynd</h2>
+<p>Geri þér kleift að búa til (eða endurskapa) smámynd með tilteknum stærðum úr fullstórri mynd.</p>
+<p>Fyrir sérsniðnar stærðir verður smámyndin sköluð til að passa þær stærðir sem þú velur, nema þú hakir við „Skera“ (Crop). Þá verður smámyndin búin til úr miðju myndarinnar án kvarðunar.</p>
+<p>Fyrir sjálfvirkar stærðir verður smámyndin sköluð samkvæmt stærðar- og (valkvæðum) skurðstillingum núverandi stjórnþema.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Skipta um mynd"><![CDATA[
+<h2>Skipta um mynd</h2>
+<p>Mynd sem er hlaðið upp hér mun einfaldlega leysa af hólmi þá sem nú er tengd þessari færslu í gagnagrunninum.</p>
+        ]]></item>
+        <item id="upload_image" title="Hlaða upp mynd"><![CDATA[
+<h2>Hlaða upp mynd</h2>
+<p>Hladdu einni eða fleiri myndum upp á þjóninn þinn.</p>
+<p>Þegar mynd er hlaðið upp í möppuna <code>images</code> verður skráarheiti upprunalegu myndarinnar aðeins varðveitt innvortis í gagnagrunni Textpattern; sjálf myndaskráin verður endurnefnd í samfellda tölu + skráarendingu.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Hlaða upp smámynd"><![CDATA[
+<h2>Hlaða upp smámynd</h2>
+<p>Fullstórum myndum má úthluta eigin smámyndum. Þær nýtast til að tengja við – og skrásetja – fullstórar myndir.</p>
+<p>Tilvísun í smámynd er nákvæmlega sú sama og tilvísun í fullstóra mynd, nema að <code>t</code> er bætt aftan við skráarheitið. Til að vísa í smámynd sem tilheyrir fullstórri mynd í <code>/images/12.jpg</code> myndirðu t.d. nota <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Tungumálaborð">
+        <item id="get_textpack" title="Setja upp Textpack"><![CDATA[
+<h2>Setja upp Textpack</h2>
+<p>Límdu auka tungumálastrengi fyrir vefsvæðið þitt í þennan reit og veldu „Hlaða upp“ til að setja þá inn.</p>
+<p>Strengirnir koma oft í formi niðurhals Textpack-skjal, sem dreift er með viðbót til að gera tungumálastrengi viðbótarinnar nothæfa beint í Textpattern.</p>
+<p>Þýðendur geta síðan þýtt þessa pakka eftir þörfum og dreift staðfærðu efni áfram til samfélagsins.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Tenglabörð">
+        <item id="link_description" title="Lýsing"><![CDATA[
+<h2>Lýsing</h2>
+<p>Lýsingar fyrir tengla eru valkvæðar, en gagnast til að setja myndtexta við tengla, búa til <code>title=""</code> (áminningarglugga) eigindi fyrir tengla eða einfaldlega halda eigin innri skráningu.</p>
+        ]]></item>
+        <item id="link_sort" title="Röðunargildi"><![CDATA[
+<h2>Röðunargildi</h2>
+<p>Nýtist til náttúrulegrar röðunar tenglalista, t.d. eftir eftirnafni en ekki eiginnafni, eða eftir orðasamböndum sem byrja á ákveðnum greinum.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Vefslóð tengilsins. Ef tengillinn vísar á annað vefsvæði þarf hún að byrja á <code>http://</code> eða <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Birt dagsetning"><![CDATA[
+<h2>Birt dagsetning</h2>
+<p>Sú stund þegar tengill er birtur eða síðast uppfærður. Hægt er að stilla tímann annaðhvort á augnablikið þegar atriðið er birt eða á hvaða liðna eða framtíðarstund sem er.</p>
+<p>Reitirnir samsvara eftirfarandi upplýsingum:</p>
+<ul>
+    <li>Ár / Mánuður / Dagur</li>
+    <li>Klukkustund (24h snið) : Mínúta : Sekúnda</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Innskráningaborð">
+        <item id="remember_login" title="Muna innskráningu í þessum vafra"><![CDATA[
+<h2>Muna innskráningu í þessum vafra</h2>
+<p>Þegar hakað er við heldurðu þér innskráðum í Textpattern-aðganginn þinn í núverandi vafra þar til þú velur að skrá þig út. Ef óhakið ertu sjálfkrafa skráður út eftir ákveðinn óvirknitíma.</p>
+<p>Krefst þess að vafrinn þinn leyfi vefkökur.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Viðbótarborð">
+        <item id="install_plugin" title="Setja upp viðbót"><![CDATA[
+<h2>Setja upp viðbót</h2>
+<p>Límdu innihald samsettrar viðbótartextaskrár hér og veldu svo „Hlaða upp“ til að hefja uppsetningu. Allri viðbót sem þú hleður upp með sama nafni og önnur sem þegar er sett upp verður skipt út fyrir nýju útgáfuna.</p>
+<p>Viðbótartextinn sem þú límir hér er <strong>ekki</strong> hrái PHP-kóðinn heldur Base64-dulkóðaður texti, yfirleitt með haus sem inniheldur upplýsingar um viðbótina (svo sem heiti, útgáfu og lýsingu, höfundarnafn o.s.frv.).</p>
+<p>Samsettar útgáfur viðbóta má oft nálgast úr <a rel="external" target="_blank" href="https://plugins.textpattern.com/">viðbótarspjaldinu (Plugins repository) <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> eða á tilgreindum vettvangi höfundar viðbótar, t.d. á heimasíðu hans eða GitHub.</p>
+<p>Þú getur líka límt slóð á samsetta textaskrá Textpattern-viðbótar hér, ef utanaðkomandi vefur leyfir það.</p>
+<p>Allar upphlaðnar viðbætur fara í gegnum sannprófunarskref þar sem þú færð tækifæri til að skoða kóða og innihald viðbótarinnar áður en hún er sett upp.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Hlaða upp viðbót"><![CDATA[
+<h2>Hlaða upp viðbót</h2>
+<p>Notaðu þetta eyðuform til að hlaða upp viðbótarskrá. Upphlaðar viðbætur (og önnur fylgiskjöl) eru vistuð í möppunni „plugins“.</p>
+<p>Viðbótarform sem má hlaða upp hér eru:</p>
+<ul>
+<li>Textpattern PHP-sniðmátsskrár (template) sem innihalda fullan kóða, lýsigögn, Textpack-strengi og hjálpartexta.</li>
+<li>Samsettar Textpattern-textaskrár sem innihalda fullan kóða, lýsigögn, Textpack-strengi og hjálpartexta.</li>
+<li>Textpattern-zip skrár sem innihalda manifest-upplýsingar og kóða, lýsigögn, Textpack-strengi, hjálpartexta og stoðskrár.</li>
+<li>Hráar PHP-skrár (þó þær fylli ekki út auka-lýsigögn og eru ekki mælt með þeim).</li>
+</ul>
+<p>Allri viðbót sem þú hleður upp með sama nafni og önnur sem þegar er sett upp verður skipt út fyrir nýju útgáfuna.</p>
+<p>Allar upphlaðnar viðbætur fara í gegnum sannprófunarskref þar sem þú færð tækifæri til að skoða kóða og innihald viðbótarinnar áður en hún er sett upp.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Stillingaborð">
+        <item id="admin_side_plugins" title="Nota stjórnborðsviðbætur?"><![CDATA[
+<h2>Nota stjórnborðsviðbætur?</h2>
+<p>Viðbætur fyrir stjórnborðið geta breytt virkni stjórnunarsniðsins. Þær geta tengst við fyrirliggjandi aðgerðir, eins og að breyta eða birta greinar, eða bætt við nýjum stjórnunarsíðum fyrir aukna/útvíkkaða virkni.</p>
+<p>Ef þú vilt vita meira um stjórnborðsviðbætur skaltu skoða síðuna <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> í <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern notandaleiðbeiningum <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>. Viðbætur af ýmsu tagi eru skráðar á vefnum <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Ítarlegri valkostir"><![CDATA[
+<h2>Ítarlegri valkostir</h2>
+<p>Sýna flokkinn „ítarlegar stillingar“, þar sem hægt er að stilla ýmislegt, til dæmis:</p>
+<ul>
+    <li>PHP-föll sem leyfð eru í <code>txp:evaluate</code>.</li>
+    <li>Sérhæfð form-sniðmátstegund.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Leyfa PHP í greinum?"><![CDATA[
+<h2>Leyfa PHP í greinum?</h2>
+<p>Þegar þetta er virkt má nota PHP innan greina. Höfundur verður að hafa næg réttindi til þess (sjálfgefið aðeins <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Útgefendur“ <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Yfirritstjórar“ <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> og <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Prófarkalesarar“ <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>).</p>
+<p><strong>Eindregið er mælt með að þú slökkvir á þessum valkosti</strong> nema þú þurfir hann í alvöru. Hvers konar hugsanlega skaðlegur/hættulegur PHP-kóði sem gæti eyðilagt vefinn eða lekið upplýsingum til þriðju aðila gæti þá verið settur inn af hvaða höfundi sem er og keyrður af hverjum þeim sem skoðar greinina.</p>
+<p>PHP-kóði verður að sleppa opnunar- og lokunar-PHP-mörkum og vera umvafinn <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> merkjum <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Leyfa yfirskrif sniðs?"><![CDATA[
+<h2>Leyfa yfirskrif sniðs?</h2>
+<p>Þessi stilling leyfir höfundum að velja annað snið til að birta greinina en það sem er sjálfgefið. Ef hún er virk verður fellilisti „Yfirskrifa snið“ tiltækur þegar grein er breytt.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Leyfa PHP á síðum?"><![CDATA[
+<h2>Leyfa PHP á síðum?</h2>
+<p>Þegar þetta er virkt er leyft að nota PHP-kóða í síðusniðmátum og formsniðmátum.</p>
+<p><strong>Eindregið er mælt með að þú slökkvir á þessum valkosti</strong> nema þú þurfir hann í alvöru. Hvers konar hugsanlega skaðlegur/hættulegur PHP-kóði sem gæti eyðilagt vefinn eða lekið upplýsingum til þriðju aðila gæti þá verið settur inn af hvaða öðrum notanda sem er og keyrður af óafvitandi stjórnanda eða gesti.</p>
+<p>PHP-kóði verður að sleppa opnunar- og lokunar-PHP-mörkum og vera umvafinn <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> merkjum <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Dagsetningarsnið safns"><![CDATA[
+<h2>Dagsetningarsnið safns</h2>
+<p>Hvernig dagsetningar á greinum birtast í hlutum (sections) vefsvæðisins.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Sýna útdrátt á greina-breytisíðu?"><![CDATA[
+<h2>Sýna útdrátt á greina-breytisíðu?</h2>
+<p>Ef valið er „Nei“ verður útdráttarreiturinn ekki sýndur höfundi á greinabreytingarskjánum.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Nota titla í fastatengla?"><![CDATA[
+<h2>Nota titla í fastatengla?</h2>
+<p>Þessi stilling bætir sjálfkrafa útbúinni útgáfu af greinatitlinum við slóðina. Hún er annaðhvort búin til sjálfkrafa eða hægt er að yfirskrifa hana handvirkt í „Slóðartitli“ þegar grein er breytt.</p>
+<p>Stillingin hefur aðeins áhrif ef þú notar hreinar slóðir. Fyrir tiltekin tungumál getur þetta leitt til langra og ljótlegra slóða; í slíkum tilvikum er líklega best að stilla þetta á „Af“.</p>
+        ]]></item>
+        <item id="auto_dst" title="Stillt sjálfvirkan sumar-/vetrartíma?"><![CDATA[
+<h2>Stillt sjálfvirkan sumar-/vetrartíma?</h2>
+<p>Þessi stilling leyfir Textpattern að breyta því hvenær sumar-/vetrartími (DST) tekur gildi á þínu svæði. Ef hún er stillt á „Nei“ getur þú breytt stillingunni „DST virkt“ handvirkt.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ný athugasemd þýðir að vefsvæðið hafi verið uppfært?"><![CDATA[
+<h2>Ný athugasemd þýðir að vefsvæðið hafi verið uppfært?</h2>
+<p>Textpattern-gagnagrunnurinn heldur utan um hvenær síðustu breytingar á vefnum áttu sér stað. Þegar þessi stilling er „Já“ mun ný athugasemd einnig uppfæra þetta gildi. Þetta gildi er t.d. notað fyrir <code>"Send Last-Modified header"</code> virkni.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Nota rel=&quot;nofollow&quot; í athugasemdum?"><![CDATA[
+<h2>Nota rel="nofollow" í athugasemdum?</h2>
+<p>Ef stillt er á „Já“ bætist við auka-eiginleiki við tengla í athugasemdum. Markmiðið er að minnka hvata fyrir ruslpóstaritara í athugasemdakerfum og var þetta frumkvæði nokkurra leitarvéla og hugbúnaðarþróenda. Þú getur lesið nánar í <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">tilkynningu Google <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+<p><strong>Athugaðu:</strong> Þessi stilling hefur engin áhrif á virkni vefsvæðisins. Hún getur þó minnkað eða komið í veg fyrir áhrif athugasemda þegar sumar leitarvélar raða vefsvæðum sem eru tengd úr þeim athugasemdum.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Birta athugasemdir sem númeraðan lista?"><![CDATA[
+<h2>Birta athugasemdir sem númeraðan lista?</h2>
+<p>Ákvarðar hvort athugasemdir greinar verða umvafðar HTML-merkinu <code>&lt;ol&gt;</code> og hver athugasemd merkinu <code>&lt;li&gt;</code> (sem birtir athugasemdir sem númeraðan lista), eða hvort hver og ein athugasemd verður umvafin <code>&lt;div&gt;</code>-merki í staðinn.</p>
+<p>Óháð stillingunni geturðu yfirskrifað notuð merki í einstökum sniðum með því að breyta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> merkinu <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> sem er að finna í sniðinu <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Bæta athugasemdum sjálfvirkt aftan við greinar?"><![CDATA[
+<h2>Bæta athugasemdum sjálfvirkt aftan við greinar?</h2>
+<p>Þessi stilling ákvarðar hvort athugasemdir og athugasemdaeyðuformið séu sjálfkrafa bætt við allar einstakar greinar (með því að fella innihald sniðsins <code>comments_display</code> inn sjálfkrafa).</p>
+<p>Yfirleitt er best að hafa þetta stillt á „Nei“, því þannig færðu meiri sveigjanleika í því hvar athugasemdir birtast í hönnun vefsvæðisins. Þá þarftu að bæta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> merkinu <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> handvirkt inn í öll sniðmát sem byggja á greinum þar sem þú vilt að athugasemdir birtist.</p>
+<p>Ef tvítekin birting athugasemda kemur fram í grein er líklegt að sniðmátin þín innihaldi <code>&lt;txp:comments /&gt;</code> merkið en stillingin „Bæta athugasemdum sjálfvirkt aftan við greinar?“ sé jafnframt stillt á „Já“.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Dagsetningarsnið athugasemda"><![CDATA[
+<h2>Dagsetningarsnið athugasemda</h2>
+<p>Hvernig dagsetningar athugasemda birtast gestum vefsvæðisins.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Sjálfgefið innboð athugasemda"><![CDATA[
+<h2>Sjálfgefið innboð athugasemda</h2>
+<p>Ef þú leyfir gestum að skilja eftir athugasemdir á vefnum er þetta sjálfgefinn texti innboðsins. Til dæmis:</p>
+<ul>
+    <li>Athugasemdir</li>
+    <li>Bæta við athugasemd</li>
+    <li>Viðbrögð</li>
+    <li>Skrifa skýringar</li>
+</ul>
+<p>Athugaðu að ávallt er hægt að breyta boðstextanum fyrir hverja grein.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Athugasemdir afvirkar eftir"><![CDATA[
+<h2>Athugasemdir afvirkar eftir</h2>
+<p>Notaðu þetta til að stilla þann tíma sem líður þar til slökkt er á möguleikanum á að skrifa athugasemdir við greinar (hægt er að stilla á „Aldrei“ til að leyfa ótakmarkaðan tíma).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Leyfa myndir í athugasemdum?"><![CDATA[
+<h2>Leyfa myndir í athugasemdum?</h2>
+<p>Ef þessi stilling er „Nei“ verða allar myndir sem eru í athugasemdum fjarlægðar.</p>
+        ]]></item>
+        <item id="comments_mode" title="Snið athugasemda"><![CDATA[
+<h2>Snið athugasemda</h2>
+<p>Ef „nopopup“ er valið (mælt með) verður núverandi gluggi uppfærður til að birta aðeins núverandi grein, með athugasemdum fyrir neðan.</p>
+<p>Ef „popup“ er valið opnast nýr vafragluggi þegar smellt er á tengil á athugasemdir (hann notar sniðið <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Stjórna athugasemdum?"><![CDATA[
+<h2>Stjórna athugasemdum?</h2>
+<p>Ef þetta er „Já“ verða allar nýjar athugasemdir ósýnilegar þar til þær hafa verið yfirfarnar. Þú þarft að samþykkja og gera hverja athugasemd sýnilega handvirkt (skilaboð verða send höfundum greinar í tölvupósti þegar ný athugasemd berst).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Athugasemdir sjálfgefið virkar?"><![CDATA[
+<h2>Athugasemdir sjálfgefið virkar?</h2>
+<p>Ef þetta er „Já“ verða athugasemdir sjálfkrafa virkar fyrir hverja grein sem birt er. Ef þetta er „Nei“ verður þú að virkja athugasemdir á „Skrifaborðinu“ í hvert sinn sem þú vilt samþykkja athugasemdir.</p>
+<p>Hægt er að virkja/svita athugasemdir hvenær sem er, fyrir hverja grein.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Athugasemdir krefjast tölvupóstfangs höfundar?"><![CDATA[
+<h2>Athugasemdir krefjast tölvupóstfangs notanda?</h2>
+<p>Ef stillt er á „Já“ verða þeir sem vilja gera athugasemd við grein að slá inn tölvupóstfang í eyðuformi athugasemda. Þeir geta ekki sent inn athugasemd nema þeir gefi upp póstfang.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Athugasemdir krefjast nafns höfundar?"><![CDATA[
+<h2>Athugasemdir krefjast nafns höfundar?</h2>
+<p>Ef stillt er á „Já“ verða þeir sem vilja gera athugasemd við grein að slá inn nafn í eyðuformi athugasemda. Þeir geta ekki sent inn athugasemd nema þeir gefi upp nafn.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Senda athugasemdir í tölvupósti til höfundar?"><![CDATA[
+<h2>Senda athugasemdir í tölvupósti til höfundar?</h2>
+<p>Ef stillt er á „Já“ verður afrit af hverri nýrri athugasemd sem berst við grein sent í tölvupósti til höfundar greinarinnar.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Leyfa meiri Textile-merkingu í athugasemdum?"><![CDATA[
+<h2>Leyfa meiri Textile-merkingu í athugasemdum?</h2>
+<p>Þegar stillt er á „Já“ mega athugasemdir innihalda <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> þætti sem annars væru meðhöndlaðir sem hreinn texti, svo sem:</p>
+<ul>
+    <li>fyrirsagnir</li>
+    <li>raðaða og óröðaða lista</li>
+    <li>neðanmálsgreinar</li>
+    <li>töflur</li>
+    <li>kóða</li>
+    <li>útvíkkaða blokkaskipan (<code>bc..</code>, <code>bq..</code> o.s.frv.)</li>
+</ul>
+<p><strong>Athugaðu:</strong> Af öryggisástæðum er hráu HTML breytt í venjulegan texta.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Notendaaðgangar sem mega skrá sig inn samtímis"><![CDATA[
+<h2>Notendaaðgangar sem mega skrá sig inn samtímis</h2>
+<p>Kommu-aðskilinn listi innskráningarnafna sem mega skrá sig inn í mörgum vöfrum/setum samtímis. Þetta er gagnlegt í þróun til að deila innskráningu með viðskiptavinum.</p>
+<p>Notkun þessa eiginleika er öryggisáhætta og <strong>ekki mælt með á lifandi vefum</strong>. Greiningar (Diagnostics) munu sýna viðvörun ef notendaaðgangur þinn er stilltur fyrir samtímisinnskráningu á lifandi vef.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Sérsniðnar form-sniðmátstegundir"><![CDATA[
+<h2>Sérsniðnar form-sniðmátstegundir</h2>
+<p>Til viðbótar við staðlaðar form-sniðmátstegundir (article, file, misc o.s.frv.) geta útgefendur skilgreint sérsniðnar tegundir. Tilgangur sérsniðinna form-sniðmátstegunda er tvíþættur: auðveldari flokkun sniðs og skilgreining sérsniðinna eigna.</p>
+<p>Sniðið á þessari stillingu er <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>, þar sem hver hluti samsvarar einni form-sniðmátstegund.</p>
+<p>Til að skilgreina sérsniðna formtegund (t.d. <code>js</code>) þarf að bæta við (í sérlínu) <code>[js]</code>-hluta. Sjálfgefinn titill má tilgreina með færslu <code>title="Javascript"</code> í viðkomandi hluta. Ef þarf má bæta við staðfærðum titlum líka (t.d. <code>ru="Скрипт"</code>).</p>
+<p>Að auki má tilgreina <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">miðlategund (media type) <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> fyrir sniðmát, t.d. <code>mediatype="application/javascript"</code>. Þetta umbreytir form-sniðmátum af þessari tegund í sérsniðnar eignir sem má þjóna sem viðkomandi miðlategund, annaðhvort úr gagnagrunni eða af diski (flatar skrár) með merkinu <code>&lt;txp:output_form /&gt;</code>. Til dæmis má fella sniðmát sem heitir <code>myscript.js</code> af tegund <code>[js]</code> með miðlategund <code>application/javascript</code> inn í kóða á eftirfarandi hátt:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Þetta býr til eftirfarandi HTML <code>&lt;script&gt;</code> merki:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Aðeins form-sniðmát með skráarendingu sem samsvarar tegund þeirra (t.d. <code>myscript.js</code>) er hægt að þjóna sem flatar skrár. Í slíku tilviki eru þau ekki unnin af Textpattern og eru aðgengileg beint í gegnum slóð.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Sérsniðnir reitir"><![CDATA[
+<h2>Sérsniðnir reitir</h2>
+<p>Sérsniðnir reitir eru notaðir til að geyma viðbótar-gögn greina. Þú getur skilgreint allt að tíu slíka með því að gefa þeim heiti hér. Hver þeirra birtist sem sérstakur reitur á „Skrifaborði“ til að tengja sérsniðin gögn við hverja grein.</p>
+<p>Þú getur nefnt reitina eins og þú vilt, en athugaðu eftirfarandi:</p>
+<ul>
+<li>Notkun bila bætir læsileika á „Skrifaborði“ en reitir með bil í heiti má þá <em>ekki</em> nota til röðunar eða síunar í article_custom-merki. Íhugaðu frekar að nota undirstrik ef þú þarft þá virkni.</li>
+<li>Gættu að því að heiti reita stangist ekki á við frátekin reitaheiti í Textpattern. Til dæmis má ekki nota <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> o.s.frv., því það gæti valdið sérkennilegri hegðun eða brotnum síðum.</li>
+<li>Gögn í hverjum reit eru takmörkuð við 255 stafi af texta eingöngu.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Dagsetningarsnið"><![CDATA[
+<h2>Dagsetningarsnið</h2>
+<p>Þessi valkostur hefur áhrif á hvernig dagsetningar greina birtast á forsíðu vefsvæðisins.</p>
+        ]]></item>
+        <item id="default_event" title="Sjálfgefið borð"><![CDATA[
+<h2>Sjálfgefið borð</h2>
+<p>Það stjórnborð (admin panel) Textpattern sem birtist fyrst þegar einhver skráir sig inn.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Sjálfgefin birtingarstaða"><![CDATA[
+<h2>Sjálfgefin birtingarstaða</h2>
+<p>Skilgreinir birtingarsýnileika nýrra Textpattern-greina.</p>
+<p>Athugaðu að þessi stilling hefur ekki áhrif á stöðu greina sem búnar eru til eða breytt fyrir breytingu.</p>
+<p>Sjálfgefin birtingarstaða er ein af eftirfarandi:</p>
+<ul>
+    <li>Uppkast (Draft)</li>
+    <li>Falin (Hidden)</li>
+    <li>Í bið (Pending)</li>
+    <li>Í birtingu (Live)</li>
+    <li>Fest (Sticky)</li>
+</ul>
+<p><strong>Uppkastsgrein</strong> er litið á sem vinnsluútgáfu og er ekki sýnileg utan stjórnsvæðis Textpattern (þ.e. hvorki á framhliðinni né í straumum).</p>
+<p><strong>Falin grein</strong> er ekki sýnileg utan stjórnsvæðis Textpattern.</p>
+<p><strong>Grein í bið</strong> er litið á sem tilbúna til birtingar og bíður samþykkis, en er ekki sýnileg utan stjórnsvæðis Textpattern.</p>
+<p><strong>Í birtingu (Live) grein</strong> er yfirleitt sýnileg utan stjórnsvæðis Textpattern (þ.e. á framhlið vefs og í straumum ef stillingar leyfa). Ef slík grein hefur gildistíma helst staðan „live“ eftir að dagsetningin er liðin, en greinin birtist aðeins utan stjórnsvæðis ef leyft er að birta útrunnar greinar.</p>
+<p><strong>Fest grein</strong> er svipuð og <strong>live</strong> grein að því leyti að hún er sýnileg utan stjórnsvæðis Textpattern en birtist <strong>ekki</strong> í greinalistum nema <code>article</code> eða <code>article_custom</code> merkið innihaldi <code>status</code>-eigindi með gildinu <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Veldu hvaða HTML-doctype þú vilt nota (HTML5 eða XHTML). Þetta hefur áhrif á athugasemdareyðuform, Textile-úrvinnslu á <code>&lt;abbr&gt;</code> eða <code>&lt;acronym&gt;</code> og <code>&lt;link&gt;</code>-merki sem búin eru til af <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> merkinu <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Virkja forskoðun á þróunarþema?"><![CDATA[
+<h2>Virkja forskoðun á þróunarþema?</h2>
+<p>Notendur með næg réttindi (sjálfgefið þeir sem hafa hlutverkin Útgefandi og Hönnuður) geta örugglega þróað og forskoðað nýtt þema á meðan aðrir notendur sjá áfram gamla þemað (þar til því nýja er beint út á vefinn).</p>
+<p>Þeir forréttindahafar sem ekki vilja taka þátt í þemaþróun geta slökkt á forskoðun þróunarþema. Þeim verður þá þjónað núverandi „opinberu“ þema, líkt og venjulegum gestum vefsins.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Virkja stuðning við stutt tög?"><![CDATA[
+<h2>Virkja stuðning við stutt tög?</h2>
+<p>Textpattern-tög eru á forminu <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Hægt er að stytta innslátt með því að virkja stutt snið þar sem hægt er að sleppa forliðnum <code>txp:</code> samkvæmt nokkrum einföldum reglum. Hér eru dæmi til að sýna hugmyndina:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> verður <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> verður <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> verður <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> verður <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> verður <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (athugaðu að viðbótarforliðurinn má einnig nota fyrir <code>else</code>-merkið).</li>
+</ul>
+<p>Ef merki inniheldur undirstrik og þú virkjar stutt tög er grunnhugmyndin:</p>
+<ol>
+    <li>Fjarlægja <code>txp:</code>-forliðinn.</li>
+    <li>Skipta fyrstu tilviki undirstriks út fyrir <code>::</code>.</li>
+</ol>
+<p>Athugaðu að þessi stilling hefur ekki áhrif á möguleikann á að nota <code>&lt;txp:output_form /&gt;</code> stuttkóða til að birta form-búta. Þú getur áfram notað <code>&lt;txp::shortcode /&gt;</code>, sem verður túlkað sem <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Virkja XML-RPC-þjón?"><![CDATA[
+<h2>Virkja XML-RPC-þjón?</h2>
+<p>Ef þú vilt nota <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> til að stjórna Textpattern fjarstýrt (t.d. úr borð- eða farsímaforritum) verður þú að kveikja á XML-RPC-þjóninum með því að stilla þetta á „Já“.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Nota útfærð póstsendingarviðmót"><![CDATA[
+<h2>Nota útfærð póstsendingarviðmót</h2>
+<p>Ef þetta er „Nei“ mun allur tölvupóstur – eins og beiðnir um endurstillingu lykilorða og póstur frá viðbótum á borð við com_connect – fara í gegnum <code>mail()</code>-fall PHP. Ef valið er „Já“ verður notað meðfylgjandi PHPMailer í staðinn sem opnar fyrir valkosti til að senda póst í gegnum ytri SMTP-þjóna.</p>
+<p>Ef þú átt í vandræðum með afhendingu tölvupósts (sérstaklega til netþjónustu eins og Gmail, Outlook, Yahoo! o.s.frv.) er líklegt að lén þitt sé ekki talið traust uppspretta. Að breyta þessu í „Já“ getur bætt heimtur. Auk þess getur SMTP gefið betri samhæfni við suma póstveitendur og bætt afhendingu enn frekar.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Hve lengi haldast atburðaskrár (logs)?"><![CDATA[
+<h2>Hve lengi haldast atburðaskrár (logs)?</h2>
+<p>Þegar Textpattern-skráning er virk má tilgreina hversu lengi (í dögum) loggskrár skuli varðveittar. „7“ heldur loggum tiltækum í sjö daga.</p>
+<p><strong>Athugaðu:</strong> Loggarnir eru aðeins minnkaðir þegar þú skoðar „Visitor logs“-borðið, annars halda þeir áfram að vaxa.</p>
+        ]]></item>
+        <item id="file_base_path" title="Slóð á skráamöppu"><![CDATA[
+<h2>Slóð á skráamöppu</h2>
+<p>Stillir <strong>algilda slóð</strong> á möppuna þar sem upphlaðnum skrám verður varanlega komið fyrir. PHP þarf að hafa skrifréttindi í þeirri möppu.</p>
+<p><strong>Athugaðu:</strong> Íhugaðu að færa þessa möppu út fyrir aðgengilegt rótarvistartré vefsvæðisins til að auka öryggi.</p>
+        ]]></item>
+        <item id="file_download_header" title="HTTP-haus fyrir niðurhal skráa"><![CDATA[
+<h2>HTTP-haus fyrir niðurhal skráa</h2>
+<p>Gerir þér kleift að sérsníða hvernig niðurhal skráa er meðhöndlað.</p>
+<p>Venjulega eru öll niðurhöl meðhöndluð sem „attachments“ og vistað (fer eftir því hvernig vafrinn þinn er stilltur fyrir viðkomandi skráartegund). Ef þú vilt gefa vísbendingar um hvernig þú viljir frekar að sum eða allar tegundir séu meðhöndlaðar geturðu sett inn tag-kóða hér. Dæmi væri að birta PDF-skrár sem þú hefur sett í Textpattern-flokkinn „inline-pdf“ beint í vafra í stað niðurhals:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Hámarksstærð upphlaðinna skráa (í bætum)"><![CDATA[
+<h2>Hámarksstærð upphlaðinna skráa (í bætum)</h2>
+<p>Þú getur takmarkað stærstu leyfilegu skráarstærð (í bætum) fyrir upphlaðnar skrár. Athugaðu að þetta gildi er einnig takmarkað af stillingum PHP. Ef Textpattern greinir að PHP-stillingar takmarki upphleðslustærð í lægra gildi, verður stillingin sjálfkrafa lækkuð. Ef þú vilt leyfa stærri upphleðslur úr vafra skaltu hafa samband við hýsingaraðila (viðeigandi stillingar í <code>php.ini</code> eru <code>post_max_size</code>, <code>upload_max_filesize</code> og <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Tímabelti"><![CDATA[
+<h2>Tímabelti</h2>
+<p>Til að birta dagsetningar í þínu staðartímabelti skaltu velja það hér.</p>
+        ]]></item>
+        <item id="img_dir" title="Myndamappa"><![CDATA[
+<h2>Myndamappa</h2>
+<p>Ef þú vilt sérsníða heiti myndamöppunnar geturðu gert það hér. Þú þarft fyrst að búa til möppuna í rót Textpattern-uppsetningar og ganga úr skugga um að PHP hafi skrifréttindi í hana.</p>
+<p>Þessi slóð er alltaf <strong>afstæð slóð</strong> (miðað við rót Textpattern-uppsetningarinnar).</p>
+<p>Sjálfgefið heiti er <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Setja tölvupóstfang inn í Atom-strauma?"><![CDATA[
+<h2>Setja tölvupóstfang inn í Atom-strauma?</h2>
+<p>Þetta gerir þér kleift að innihalda tölvupóstfang höfundar (eins og það er skilgreint í notandareikningi hans) í <code>author</code>-hluta Atom-strauma.</p>
+        ]]></item>
+        <item id="is_dst" title="Sumar-/vetrartími virkur?"><![CDATA[
+<h2>Sumar-/vetrartími virkur?</h2>
+<p>Hvort sumar-/vetrartími (DST) sé virkur í dag fyrir þitt tímabelti.</p>
+        ]]></item>
+        <item id="logging" title="Skráning (logging)"><![CDATA[
+<h2>Skráning (logging)</h2>
+<p>Þú getur stillt hversu ítarlega Textpattern skráir heimsóknir:</p>
+<ul>
+    <li><strong>Allar heimsóknir:</strong> Textpattern skráir allar blaðsíðuskoðanir á vefnum</li>
+    <li><strong>Aðeins tilvísanir:</strong> Textpattern skráir aðeins heimsóknir sem koma með tilvísun (referrer) frá öðrum síðum</li>
+    <li><strong>Ekkert:</strong> Textpattern skráir engar blaðsíðuskoðanir</li>
+</ul>
+<p>Frá og með Textpattern 4.7.0 eru engar IP-tölur gesta safnaðar eða vistaðar af Textpattern. Ef þú safnar eða vistar IP-tölur utan Textpattern skaltu gæta fyllsta öryggis og fylgja gildandi lögum, t.d. <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>, og beita sterku öryggi í allri þjóns- og Textpattern-uppsetningunni til að koma í veg fyrir að gögnin séu brotin.</p>
+<p>Eindregið er mælt með að halda þessari stillingu á sjálfgefnu gildi, „Ekkert“, nema þú þurfir þessi gögn í alvöru og upplýsir opinberlega til hvers þú hyggst nota þau.</p>
+        ]]></item>
+        <item id="max_url_len" title="Hámarkslengd slóða (í stöfum)"><![CDATA[
+<h2>Hámarkslengd slóða (í stöfum)</h2>
+<p>Þetta kemur í veg fyrir að slóðir sem eru lengri en tilgreind lengd virki. Getur hjálpað til við að draga úr tjóni og auka öryggi vefsvæðisins.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Birta innbyggða hjálpartengla á stjórnborði"><![CDATA[
+<h2>Birta innbyggða hjálpartengla á stjórnborði</h2>
+<p>Ef þú vilt fela innbyggða hjálpartengla (Textpattern-hjálparglugga) á stjórnsvæðinu alls staðar skaltu stilla þetta á „Ekkert“.</p>
+        ]]></item>
+        <item id="never_display_email" title="Fela póstfang athugasemdahöfundar?"><![CDATA[
+<h2>Fela póstfang athugasemdahöfundar?</h2>
+<p>Þessi stilling stýrir því hvort sýna skuli tölvupóstfang athugasemdahöfundar opinberlega.</p>
+<p>Mælt er með að fela póstföng, út af kurteisi við notendur, en í vissum tilvikum getur verið æskilegt að birta póstföng athugasemdahöfunda.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Nota ISO-8859-1 stafatöflu í tölvupósti (sjálfgefið er UTF-8)?"><![CDATA[
+<h2>Nota ISO-8859-1 stafatöflu í tölvupósti (sjálfgefið er UTF-8)?</h2>
+<p>Textpattern notar UTF-8 stafatöflu hvar sem það er hægt, þar með talið í útgöngupósti. Sum eldri póstforrit (þar á meðal sumar útgáfur af Microsoft Outlook) styðja þó ekki UTF-8 nægilega. Ef þú sérð brenglaða stafi í póstum mun þessi stilling umbreyta texta í ISO-8859-1 áður en hann er sendur.</p>
+<p><strong>Athugaðu:</strong> Ef þú notar tungumál þar sem stafir ekki er hægt að tákna í ISO-8859-1 mun þessi stilling því miður ekki hjálpa. Þú ættir þá að leita að póstforriti sem styður UTF-8 (eða Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Tegundir yfirskrifa-sniðs"><![CDATA[
+<h2>Tegundir yfirskrifa-sniðs</h2>
+<p>Veldu fyrir hvaða tegundir sniða sniðmát þeirra verða tiltæk á „Skrifaborði“ sem yfirskrifasnið (Override forms).</p>
+        ]]></item>
+        <item id="permlink_format" title="Mynstur slóðartitils í fastatengli"><![CDATA[
+<h2>Mynstur slóðartitils í fastatengli</h2>
+<p>Þetta skilgreinir aðferðina sem notuð er til að búa til og úthluta slóðum greina þegar notað er annað en „messy“ snið.</p>
+<p>Þegar grein er birt er slóð hennar búin til út frá greinatitlinum nema tiltekin slóð sé slegin inn í reitinn „Slóðartitill“.</p>
+<p>Tökum eftirfarandi greinatitil: <em>Ann and Bob eat cake</em></p>
+<p>Ef mynstur er stillt á „Skipt með bandstrikum (title-like-this)“ verður slóðin fyrir greinina:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Ef mynstur er stillt á „Intercapped (TitleLikeThis)“ verður slóðin fyrir greinina:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Mynstur greinaslóða"><![CDATA[
+<h2>Mynstur greinaslóða</h2>
+<p>Þetta skilgreinir aðferðina sem notuð er til að ná í einstakar greinar með slóð sem er búin til með merkinu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>.</p>
+<p>„?=messy“-hamur er samhæfastur – virkar með litlum eða engum stillingum – en minnst hagstæður hvað varðar læsileika slóða og leitarvélabestun (SEO). Í þessum ham myndu greinaslóðir líta út svona:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Aðrir hamir krefjast endurskriftargetu vefþjóns (t.d. Apache <code>mod_rewrite</code> eða NGINX endurskriftarstillingar í <code>server</code>-blokk). Ef þjónninn styður ekki slíka virkni skaltu hafa samband við hýsingaraðila eða nota „?=messy“ haminn hér að ofan.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Slóð á viðbótarbiðminni"><![CDATA[
+<h2>Slóð á viðbótarbiðminni</h2>
+<p>Þessi stilling er fyrst og fremst ætluð viðbótarþróendum. Þegar hún er stillt má setja upprunalega viðbótar-skrá (ekki samsetta) í þessa möppu og Textpattern mun hlaða henni sjálfkrafa, þannig að þú getur auðveldlega breytt viðbótinni og strax séð áhrifin án þess að þurfa að setja hana upp/virkja hana. <strong>Varastu</strong> þó að ef viðbót sem er notuð á þennan hátt er gölluð (tekst ekki að þýða) getur hún einnig brotið Textpattern!</p>
+<p>Mælt er með því að hlaða viðbótum inn í gegnum venjulega „Plugins“-borðið á framleiðsluvefjum í stað þess að nota viðbótarbiðminni.</p>
+<p><strong>Athugaðu:</strong> Ekki skilgreina sömu möppu fyrir bæði „temporary“ og „plugin cache“, þar sem það mun valda vandræðum (Textpattern myndi reyna að keyra innihald bráðabirgðaskráa sem viðbætur).</p>
+        ]]></item>
+        <item id="production_status" title="Framleiðslustaða"><![CDATA[
+<h2>Framleiðslustaða</h2>
+<p>Textpattern-vefur er í einu af þremur stillingum:</p>
+<ol>
+    <li>„Aflúsun“ (Debugging)</li>
+    <li>„Prófun“ (Testing)</li>
+    <li>„Live“</li>
+</ol>
+<h3>Aflúsunarhamur</h3>
+<p>Allar PHP-villur og viðvaranir um bilaðan kóða og viðbætur verða sýnilegar á lifandi vefnum. Að auki verða eftirfarandi upplýsingar sýnilegar í HTML-frumkóða lifandi síðna:</p>
+<ul>
+    <li>tími sem tók að byggja síðuna („Runtime“)</li>
+    <li>fjöldi MySQL-fyrirspurna</li>
+    <li>áætlað hámarksminnisnotkun</li>
+    <li>öll Textpattern-tög sem fundust við uppbyggingu síðunnar (svokallaður tag trace)</li>
+</ul>
+<h3>Prófunarhamur</h3>
+<p>Allar PHP-villur og viðvaranir um bilaðan kóða og viðbætur verða sýnilegar á lifandi vefnum. Eftirfarandi upplýsingar verða sýnilegar í HTML-frumkóða:</p>
+<ul>
+    <li>tími sem tók að byggja síðuna („Runtime“)</li>
+    <li>fjöldi MySQL-fyrirspurna</li>
+    <li>áætluð hámarksminnisnotkun</li>
+</ul>
+<h3>Live-hamur</h3>
+<p>Engar villuskýrslur eða greiningarupplýsingar verða sendar til síðunnar. Yfirleitt er Live-hamur æskilegur, því hann veitir bestu notendaupplifun og minnsta álag á þjóninn.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Framhliðarthema"><![CDATA[
+<h2>Framhliðarthema</h2>
+<p>Sjálfgefið þema framhliðar sem notað er þegar einhver heimsækir opinbera vefsíðuna. Eitt eða fleiri sjálfgefin þemu fylgja Textpattern, auk möguleika á að byrja án þema. Einnig getur þú bætt við þemum í möppuna <code>textpattern/themes</code> til að gera þau tiltæk.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Birta útrunnar greinar?"><![CDATA[
+<h2>Birta útrunnar greinar?</h2>
+<p>Ef stillt er á „Já“ munu útrunnar greinar áfram sjást á vefnum eftir að gildistími þeirra er liðinn. Þú getur notað merkið <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> til að birta annað efni eða annað HTML fyrir útrunnar greinar.</p>
+<p>Ef stillt er á „Nei“ verða útrunnar greinar fjarlægðar af opinberu vefsvæðinu og skila HTTP-stöðunni „410 Gone“. Sjálfgefin stilling er „Nei“.</p>
+        ]]></item>
+        <item id="publisher_email" title="Senda innskráningarupplýsingar frá þessu póstfangi"><![CDATA[
+<h2>Senda innskráningarupplýsingar frá þessu póstfangi</h2>
+<p>Tilgreindu tölvupóstfang sem notað er sem „From:“-fang í skilaboðum sem innihalda innskráningarupplýsingar fyrir nýja notendur.</p>
+<p>Ef þessi stilling er skilin eftir auð eða inniheldur ógilt póstfang notar Textpattern nafn og póstfang núverandi innskráðs notanda í staðinn.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Hve margar greinar eiga að vera í straumum?"><![CDATA[
+<h2>Hve margar greinar eiga að vera í straumum?</h2>
+<p>Þetta er hámarksfjöldi nýlegra greina sem eru miðlaðar í einu, í RSS- og Atom-sniðum.</p>
+<p>Lágt gildi, t.d. <code>5</code> upp í <code>15</code>, er mælt með.</p>
+        ]]></item>
+        <item id="secondpass" title="Fjöldi aukasveipa í tag-þýðara"><![CDATA[
+<h2>Fjöldi aukasveipa í tag-þýðara</h2>
+<p>Textpattern-tag-þýðarinn skiptir venjulega út öllum tögum fyrir efni úr gagnagrunni í einni yfirferð á síðusniðmátið. Í sumum tilvikum kann það ekki að vera nægjanlegt, til dæmis:</p>
+<ul>
+    <li>Þegar notaðar eru viðbætur með lágu „load order“ sem eigindir í tögum</li>
+    <li>Kóðaskipti innan <code>&lt;txp:php&gt;</code>-taga</li>
+    <li>Hætta við síðuhluta fyrr í síðunni svo þeir geti tekið á móti efni sem er leitt af tagi sem er unnið síðar</li>
+</ul>
+<p>Textpattern hefur sögulega keyrt eina auka yfirferð (nefnda „secondpass“) af hefðarrökum, þess vegna er sjálfgefið gildi þessarar stillingar <code>1</code>. Fleiri yfirferðir auka þó líkurnar á að óvænt tög fái að renna í gegn og verði unnin. Nýlegar umbætur á þýðaranum hafa dregið úr þörf á þessari annarri yfirferð. Nema þú notir hana í sérstökum tilgangi er því mælt með að þú lækkir þetta gildi í <code>0</code> til að auka öryggi vefsvæðisins.</p>
+<p>Ef þú tekur síðar eftir óunnum tögum á vefnum (og engar aðrar tógavillur koma fram í Testing/Debugging-ham vegna ósamstæðra tagapara) skaltu hafa samband við okkur með dæmi um síðusniðmát/kóða/viðbót. Við erum að reyna að útrýma þörfinni fyrir aukasveipi þýðarans og slíkar upplýsingar hjálpa okkur við það.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Senda &quot;Last-Modified&quot;-haus?"><![CDATA[
+<h2>Senda "Last-Modified"-haus?</h2>
+<p>Ef þetta er stillt mun Textpattern lesa HTTP-haus gests <code>If-Modified-Since</code> (ef hann er til staðar) og bera hann saman við síðustu uppfærslu vefsvæðisins. Ef ekkert hefur breyst síðan gesturinn hlaðaði síðuna síðast (þ.e. tímastimpillinn sem vafrinn sendir er sá sami og síðasta uppfærsla) er sendur haus til baka sem segir vafra gestsins að nota heimasafnaðan (cached) útgáfu af síðunni.</p>
+<p>Þetta getur minnkað gagnaflutning, stytt hleðslutíma og dregið úr álagi á vefþjón.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Sýna fjölda athugasemda í straumum?"><![CDATA[
+<h2>Sýna fjölda athugasemda í straumum?</h2>
+<p>Ef þetta er „Já“ bætist fjöldi athugasemda við greinatitla í RSS/Atom-straumum.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slagorð vefsvæðis"><![CDATA[
+<h2>Slagorð vefsvæðis</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slagorð vefsvæðis <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> er samandregin lýsing á vefnum. Það verður notað sem lýsing vefsins þar sem þörf er á, t.d. í RSS/Atom-straumum, og má nota hvar sem er á vefnum að eigin vali.</p>
+<p><strong>Athugaðu:</strong> Slagorð vefsvæðis er valkvætt, en gæti verið nauðsynlegt til að RSS- eða Atom-straumur sé gildur.</p>
+        ]]></item>
+        <item id="sitename" title="Heiti vefsvæðis"><![CDATA[
+<h2>Heiti vefsvæðis</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Heiti eða titill vefsvæðis <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a>. Það birtist í titilstiku vafra eða RSS/Atom-lesara gesta og hvar sem þú kýst að birta það á vefnum.</p>
+        ]]></item>
+        <item id="siteurl" title="Site URL"><![CDATA[
+<h2>Site URL</h2>
+<p>Þetta er heimilisfang Textpattern-vefsins, til dæmis <code>www.example.com</code>.</p>
+<p><strong>Athugaðu:</strong> Ekki þarf að setja <code>http://</code>, <code>https://</code> eða skástrik <code>/</code> aftast.</p>
+        ]]></item>
+        <item id="skin_dir" title="Þemuskráamappa"><![CDATA[
+<h2>Þemuskráamappa</h2>
+<p>Ef þú vilt sérsníða heiti möppunnar þar sem flatar skrár framhliðarthema eru varanlega vistaðar geturðu gert það hér. Þú þarft fyrst að búa möppuna til í rót Textpattern-uppsetningar og ganga úr skugga um að PHP hafi skrifréttindi í hana.</p>
+<p>Þessi slóð er alltaf <strong>afstæð slóð</strong> (miðað við rót Textpattern-uppsetningarinnar).</p>
+<p>Sjálfgefið heiti er <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP envelope sendandi"><![CDATA[
+<h2>SMTP envelope sendandi</h2>
+<p>Þessi stilling ætti að vera auð nema þú lendir í vandræðum með að senda tölvupóst í Textpattern (ef enginn póstur fer út). Ef slíkt gerist geturðu slegið inn hvaða gilt netfang sem er hér, helst með sama léni og vefurinn sem Textpattern er á (þ.e. ef vefurinn er <code>https://example.com</code> gætirðu notað <code>you@example.com</code>).</p>
+<p>Fyrir þá sem vilja tæknilegar upplýsingar:</p>
+<ul>
+    <li>Á UNIX-líkum/macos-þjónum er póstfangið notað sem 4. viðfang (með forliðnum „-f“) fyrir <code>mail()</code>-fall PHP</li>
+    <li>Á Windows-þjónum er póstfangið notað til að setja (eða yfirskrifa) <code>sendmail_from</code> stillingu í php.ini</li>
+</ul>
+<p>Þetta tryggir að SMTP envelope-sendarinn (sem er ekki endilega sá sami og „From:“-hausinn sem þú sérð yfirleitt í tölvupósti) sé stilltur á póstfangið sem þú tilgreindir hér, sem er krafa hjá sumum vefþjónum.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP-þjónn"><![CDATA[
+<h2>SMTP-þjónn</h2>
+<p>Til að bæta afhendingu pósts og nýta möguleika á að senda póst í gegnum ytri þjónustu (t.d. SendGrid, AWS SES, Mailchimp, Mailgun o.s.frv.) skaltu tilgreina SMTP-þjón hér. Leitaðu í leiðbeiningum SMTP-veitunnar til að fá þetta gildi.</p>
+<p>Hægt er að tilgreina þetta gildi með <code>SMTP_HOST</code> fastagildi í <code>config.php</code>. Þá verður reiturinn gráður í stillingaborði.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP-lykilorð"><![CDATA[
+<h2>SMTP-lykilorð</h2>
+<p>Ef SMTP-tenging þín krefst lykilorðs fyrir tilgreindan notanda skaltu setja það hér. Leitaðu í leiðbeiningum þjónustuaðilans fyrir nánari upplýsingar.</p>
+<p>Athugaðu: Þótt lykilorðið birtist ekki hér er það <em>geymt</em> sem ódulritaður texti í prefs-töflu gagnagrunnsins. Til að auka öryggi geturðu í staðinn skilgreint fastagildið <code>SMTP_PASS</code> í <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP-gátt (port)"><![CDATA[
+<h2>SMTP-gátt (port)</h2>
+<p>Ef þú hefur tilgreint SMTP-þjón þarftu að tilgreina gátt til að virkja SMTP-routingu. Algengar gáttir eru:</p>
+<ul>
+    <li>25 – ótryggður póstur</li>
+    <li>465 – eldri (óopinber) fyrir öruggan póst</li>
+    <li>587 – sjálfgefin (mælt með) fyrir öruggan TLS-póst</li>
+</ul>
+<p>SMTP-veitan þín gæti notað aðra gátt; farðu eftir leiðbeiningum hennar.</p>
+<p>Hægt er að tilgreina þetta gildi með <code>SMTP_PORT</code> fastagildi í <code>config.php</code>. Þá verður reiturinn gráður í stillingaborði.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Öryggisaðferð SMTP"><![CDATA[
+<h2>Öryggisaðferð SMTP</h2>
+<p>Veldu öryggisprótokoll sem SMTP-veitan þín notar. Skoðaðu leiðbeiningar hennar til að fá upplýsingar.</p>
+<p>Hægt er að tilgreina þetta gildi með <code>SMTP_SECTYPE</code> fastagildi í <code>config.php</code>. Þá verður reiturinn gráður í stillingaborði.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP-notendanafn"><![CDATA[
+<h2>SMTP-notendanafn</h2>
+<p>Ef SMTP-tenging þín krefst notanda/innskráningarnafns skaltu setja það hér. Skoðaðu leiðbeiningar þjónustuaðilans til að fá upplýsingar.</p>
+<p>Hægt er að tilgreina þetta gildi með <code>SMTP_USER</code> fastagildi í <code>config.php</code>. Þá verður reiturinn gráður í stillingaborði.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Svartlistar gegn ruslpósti (kommu-aðskilin)"><![CDATA[
+<h2>Svartlistar gegn ruslpósti (kommu-aðskilin)</h2>
+<p><a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">Svartlistarveitur <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> sem settar eru hér verða spurðar í hvert skipti sem athugasemd er send inn á bloggið og IP-tala höfundar athugasemdarinnar verður athuguð. Ef IP-talan finnst á listanum þýðir það að einn eða fleiri hafi kvartað yfir ruslpósti frá þessari IP í fortíðinni og athugasemdin verður hafnað. Óháð niðurstöðu athugunar er IP-tala höfundar ekki geymd af Textpattern.</p>
+<p>Þú getur sett inn lista yfir lén, aðskilin með kommum. Athugaðu að það er á þína ábyrgð að ganga úr skugga um að svartlistar séu viðeigandi fyrir þinn tilgang.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Fréttamiðla aðeins útdrætti greina?"><![CDATA[
+<h2>Fréttamiðla aðeins útdrætti greina?</h2>
+<p>Ef þetta er „Nei“ munu færslur í straumum innihalda full meginmál greina.</p>
+<p>Ef þetta er „Já“ munu færslur í straumum innihalda útdrátt greinar í stað meginmáls, ef hann er til staðar.</p>
+        ]]></item>
+        <item id="tempdir" title="Slóð á bráðabirgðamöppu"><![CDATA[
+<h2>Slóð á bráðabirgðamöppu</h2>
+<p>Stillir <strong>algilda slóð</strong> á bráðabirgðamöppu (stundum nefnda „tmp“ eða „temp“). PHP þarf að hafa skrifréttindi í henni. Þessi mappa er notuð fyrir bráðabirgðaskrár, til dæmis við upphleðslur (viðbætur, skrár, myndir).</p>
+<p><strong>Athugaðu:</strong>
+<ul>
+    <li>Ekki skilgreina sömu möppu fyrir „temporary“ og „plugin cache“, þar sem það mun valda vandræðum (Textpattern myndi reyna að keyra innihald bráðabirgðaskráa sem viðbætur).</li>
+    <li>Íhugaðu að færa þessa möppu út fyrir aðgengilegt rótarvistartré vefsvæðisins til að auka öryggi.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Stjórnborðsþema"><![CDATA[
+<h2>Stjórnborðsþema</h2>
+<p>Sjálfgefið þema stjórnsvæðis sem notað er þegar einhver skráir sig inn í Textpattern. Nokkur innbyggð stjórnþemu fylgja Textpattern og þú getur líka bætt við eigin þemum í möppuna <code>textpattern/admin-themes</code> til að gera þau tiltæk.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Bæta skástriki aftan við slóðir"><![CDATA[
+<h2>Bæta skástriki aftan við slóðir</h2>
+<p>Hvort Textpattern bæti sjálfkrafa skástriki aftast við slóðir sem það býr til. Valkostirnir eru:</p>
+<ul>
+    <li><strong>Nei</strong> – Aldrei</li>
+    <li><strong>Listi</strong> – Aðeins á lista-lendingarsíðum (þ.e. ekki þegar einstakar greinar eru skoðaðar)</li>
+    <li><strong>Já</strong> – Alltaf</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP-föll virk í txp:evaluate"><![CDATA[
+<h2>PHP-föll virk í txp:evaluate</h2>
+<p>Þetta er kommu-aðskilinn listi af <code>function</code> eða <code>alias=function</code> atriðum, t.d. <code>md5</code> eða <code>replace=str_replace</code>. Hægt er að nota atriðin í listanum í <code>query</code>-eigindinu á merkinu <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> á að skila stakri niðurstöðu (<strong>ekki</strong> fylki/objekt).</p>
+        ]]></item>
+        <item id="use_comments" title="Leyfa athugasemdir?"><![CDATA[
+<h2>Leyfa athugasemdir?</h2>
+<p>Þetta stillir hvort athugasemdakerfi Textpattern sé virkt eða óvirkt.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Nota netfang til að búa til ID í straumum (sjálfgefið er Site URL)?"><![CDATA[
+<h2>Nota netfang til að búa til ID í straumum (sjálfgefið er Site URL)?</h2>
+<p>Færslur í Atom-straumi þurfa einstakt ID.</p>
+<p>Til að mynda ID sem eru einstök fyrir vefsvæðið gerir Textpattern þér kleift að velja annaðhvort netfang eða lén sem hluta af þessum auðkennum. Netfangið verður það fyrsta sem notað var við uppsetningu vefsins. Nema líklegt sé að þú breytir léni vefsins í framtíðinni er öruggt að stilla þetta á „Nei“.</p>
+        ]]></item>
+        <item id="use_plugins" title="Nota viðbætur?"><![CDATA[
+<h2>Nota viðbætur?</h2>
+<p>Þetta gerir þér kleift að slökkva á allri stuðningi við Textpattern-viðbætur. Gagnlegt við aflúsun þegar þú vilt kanna hvort villa stafi af einni eða fleiri viðbótum.</p>
+        ]]></item>
+        <item id="use_textile" title="Sjálfgefið textasnið"><![CDATA[
+<h2>Sjálfgefið textasnið</h2>
+<p>Textasniðið sem þú velur hér verður sjálfgefið fyrir útdrátt og meginmál á „Skrifaborðinu“. Þú getur valið heila Textile-úrvinnslu, að umbreyta línuskiptum í HTML-p-merki eða að umbreyta texta alls ekki.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> er verkfæri sem á að einfalda umbreytingu á hreinum texta í HTML. Þegar það er virkt vinnur Textile með meginmál greina og skilar vel mótuðu HTML.</p>
+<p>Textile býður einnig öflugt en auðlæranlegt safn skipana til að forsníða texta, skilgreina uppbyggingu eins og lista, fyrirsagnir og tilvitnanir (blockquotes) og setja inn tengla og myndir.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Hlutaborð">
+        <item id="section_category" title="Inngangur"><![CDATA[
+<h2>Inngangur</h2>
+<p>Hlutar (sections) í Textpattern má hugsanlega líkja við dálka í dagblaði; allir tilheyra sama útgáfuefni en gætu haft mismunandi uppsetningu, mismunandi tegund greina o.s.frv.</p>
+<p>Fyrir flest vefsvæði þarf aðeins lágmarksfjölda hluta.</p>
+<h3>Líklegt dæmi fyrir vefsvæði með þremur hlutum:</h3>
+<ol>
+    <li><strong>Safn:</strong> „Hluti“ sem allar greinar sem birtast á forsíðu tilheyra. Þegar lesandi smellir á fastan tengil greinar birtist hún í síðusniðinu sem úthlutað er þessum „hluta“. Til að fara á flettanlegan lista yfir nýjustu greinar í hlutanum „Archive“ væri slóðin <code>https://example.com/archive/</code>.</li>
+    <li><strong>Um:</strong> „Um vefinn“ síða sem er frábrugðin forsíðu og „Archive“-hluta að því leyti að hún er kyrrstæðari, gæti haft aðra uppsetningu og inniheldur líklegast aðeins eina grein. Hlutinn „About“ væri aðgengilegur á <code>https://example.com/about/</code>.</li>
+    <li><strong>Ljósmyndir:</strong> „Hluti“ með annarri uppsetningu (og mögulega öðru CSS) sem birtir ljósmyndir í stað greina.</li>
+</ol>
+<p>Athugaðu að sérstakur faldur hluti, nefndur default, er ávallt til staðar. Sá hluti notar síðuna default og stílinn default og hann býr til forsíðu vefsvæðisins.</p>
+        ]]></item>
+        <item id="section_default" title="Sjálfgefinn hluti við birtingu"><![CDATA[
+<h2>Sjálfgefinn hluti við birtingu</h2>
+<p>Þessi stilling stýrir hvaða hluti verður fyrirfram valinn í hlutavalinu þegar ný grein er búin til á „Skrifaborði“.</p>
+<p>Ef flestar greinar enda í tilteknum hluta skaltu velja hann hér. Breytingar taka gildi samstundis.</p>
+<p>Þú getur breytt þessu fyrir hverja grein á „Skrifaborðinu“ með því að velja annan hluta í „Flokka og birta“ hlutanum.</p>
+        ]]></item>
+        <item id="section_description" title="Lýsing"><![CDATA[
+<h2>Lýsing</h2>
+<p>Lýsing hluta er valkvætt atriði sem getur hjálpað leitarvélum og vafraróbotum að bera betur kennsl á efni og raða því.</p>
+<p>Lýsing greinar er hámark 255 stafir. Athugaðu að sumar leitarvélar setja takmörk á lengd <code>meta description</code> síðu af henti við birtingu í leitarniðurstöðum (SERP) og það takmark getur verið lægra en 255 stafa hámark Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Greinar þessa hluta birtast á forsíðu?"><![CDATA[
+<h2>Greinar þessa hluta birtast á forsíðu?</h2>
+<p>Greinar í tilteknum hlutum, t.d. þeim sem líkjast fremur „kyrrstæðum“ vefsíðum, geta virst óviðeigandi í tímaröð frontsíðu vefsvæðisins.</p>
+<p>Ef þetta er stillt á „Nei“ birtast greinar sem tilheyra þessum hluta ekki á forsíðunni.</p>
+        ]]></item>
+        <item id="section_searchable" title="Taka þennan hluta með í leitarniðurstöðum?"><![CDATA[
+<h2>Taka þennan hluta með í leitarniðurstöðum?</h2>
+<p>Þetta ræður því hvort greinar sem tilheyra þessum hluta birtist í heildar leitarniðurstöðum vefsvæðisins.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Fréttamiðla greinum í þessum hluta?"><![CDATA[
+<h2>Fréttamiðla greinum í þessum hluta?</h2>
+<p>Stýrir því hvort greinar í þessum hluta birtast í RSS- og Atom-straumum vefsvæðisins.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Notar stíl"><![CDATA[
+<h2>Notar stíl</h2>
+<p>Ef þú vilt yfirskrifa sjálfgefna stílsniðmát fyrir tiltekinn hluta má stilla það hér.</p>
+<p>Þetta á aðeins við stílsniðmát sem eru varðveitt á „Stílar“-borðinu í Textpattern – ef þú hýsir CSS utan Textpattern (sem er mjög mælt með) hefur þessi stilling engin áhrif.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Notar síðu"><![CDATA[
+<h2>Notar síðu</h2>
+<p>Í Textpattern eru hlutar (sections) tengdir síðusniðmátum.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Notar þema"><![CDATA[
+<h2>Notar þema</h2>
+<p>Ef þú vilt breyta þema sem er notað fyrir tiltekinn hluta má stilla það hér úr lista uppsetttra þema.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Uppsetningarborð">
+        <item id="setup_admin_url" title="Undirlén stjórnborðs"><![CDATA[
+<h2>Undirlén stjórnborðs</h2>
+<p>Undirlénið sem þú vilt nota til að nálgast stjórnborð Textpattern (t.d. <code>admin.example.com</code>).</p>
+<p>Skoðaðu <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> fyrir nánari upplýsingar.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Lén vefkaka"><![CDATA[
+<h2>Lén vefkaka</h2>
+<p>(Undir)lénið sem þú vilt nota fyrir Textpattern-vefkökurnar.</p>
+<p>Skoðaðu <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> fyrir nánari upplýsingar.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Innskráning notanda"><![CDATA[
+<h2>Innskráning notanda</h2>
+<p>Innskráningarnafn aðalstjórnanda („Publisher“), aðgangurinn sem þú notar til að stjórna vefnum.</p>
+<p>Þó að ekkert sérstakt bann sé við nafni er best að forðast flókin táknamynstur og auðgiska notendanöfn (t.d. <code>admin</code>, <code>administrator</code> o.s.frv.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Lykilorð notanda"><![CDATA[
+<h2>Lykilorð notanda</h2>
+<p>Þar sem þessi aðgangur hefur hæstu réttindi í Textpattern skaltu velja mjög sterkt lykilorð eða helst lykilsetningu (passphrase).</p>
+<h3>Ábendingar</h3>
+<ul>
+    <li>Notaðu blöndu af hástöfum og lágstöfum</li>
+    <li>Notaðu tölur</li>
+    <li>Notaðu tákn</li>
+    <li>Hafðu að minnsta kosti átta stafi</li>
+    <li><strong>Forðastu</strong> persónulegar upplýsingar (dagsetningar, nöfn, staði, fjölskyldumeðlimi, gæludýr o.s.frv.)</li>
+    <li><strong>Forðastu</strong> stök eða endurtekin orð úr orðabókum, óháð stafsetningu, tungumáli eða há/lágstöfum</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Forskeyti töflu"><![CDATA[
+<h2>Forskeyti töflu</h2>
+    <p>Þú þarft aðeins að nota forskeyti taflna ef þú þarft margar Textpattern-uppsetningar í einum gagnagrunni. Hver Textpattern-uppsetning þarf einstakt forskeyti.</p>
+    <p>Athugaðu að forskeytið verður að uppfylla eftirfarandi skilyrði:</p>
+<ul>
+    <li><strong>1. stafur:</strong> verður að vera a-z, A-Z eða undirstrik</li>
+    <li><strong>Eftirfarandi stafir:</strong> mega einungis vera a-z, A-Z, 0-9 eða undirstrik</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Þemaborð">
+        <item id="skin_author" title="Höfundur þema"><![CDATA[
+<h2>Höfundur þema</h2>
+<p>Höfundur eða höfundar þessa þema (valkvætt).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Vefsíða þema"><![CDATA[
+<h2>Vefsíða þema</h2>
+<p>Vefslóðin þar sem hægt er að finna ítarlegar upplýsingar og/eða nýjustu útgáfur þessa þema (valkvætt).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Eyða þemasniðmátum af diski líka"><![CDATA[
+<h2>Eyða þemasniðmátum af diski líka</h2>
+<p>Ef hakað er við verða öll sniðmátsskrá í völdu þema (eða þemum) endanlega fjarlægð af diski. Þemuskrár og undirmöppur þeirra verða þó ekki fjarlægðar ef aðrar skrár (eins og JavaScript, myndir o.s.frv.) eru þar inni.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Eyða ónotuðum sniðmátum úr gagnagrunni við innflutning"><![CDATA[
+<h2>Eyða ónotuðum sniðmátum úr gagnagrunni við innflutning</h2>
+<p>Ef hakað er við verður hverju sniðmáti í völdu þema (eða þemum) sem ekki á sér samsvarandi skrá á diski eytt varanlega úr gagnagrunninum. Niðurstaðan að lokinni aðgerð verður sú að gagnagrunnssniðmátin endurspegla eins náið og hægt er það sem er á diski.</p>
+<p>Athugaðu að ef þú hefur fjarlægt sniðmátsskrár sem Textpattern þarf munu tómar útgáfur þeirra verða búnar til fyrir þig í gagnagrunninum.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Eyða ónotuðum sniðmátum af diski við útflutning"><![CDATA[
+<h2>Eyða ónotuðum sniðmátum af diski við útflutning</h2>
+<p>Ef hakað er við verður hverri sniðmátsskrá í völdu þema (eða þemum) sem ekki á sér samsvarandi færslu í gagnagrunninum eytt varanlega úr þema-skráasafninu á diski. Niðurstaðan að lokinni aðgerð verður sú að sniðmát í skráakerfi endurspegla nákvæmlega það sem er í gagnagrunninum.</p>
+        ]]></item>
+        <item id="skin_description" title="Lýsing þema"><![CDATA[
+<h2>Lýsing þema</h2>
+<p>Hægt er að gefa stutta lýsingu á hönnun/uppsetningu þessa þema (valkvætt).</p>
+<p>Lýsing þema er hámark 255 stafir.</p>
+        ]]></item>
+        <item id="skin_import" title="Flytja inn þema"><![CDATA[
+<h2>Flytja inn þema af diski</h2>
+<p>Þetta eyðuform gerir þér kleift að flytja inn þema í Textpattern-gagnagrunninn úr þemu-möppunni þinni.</p>
+<p>Innanfæranlegt þema verður að samanstanda af lesanlegri yfirmöppu sem notar heiti þemans sem möppuheiti og innan hennar lesanlegri <code>manifest.json</code>-skrá í væntu sniði. Þemu-mappan ætti einnig að innihalda síður, snið og stíla í samnefndum undirmöppum.</p>
+<p>Síður og snið ættu að nota skráarendinguna <code>.txp</code>, en stílsniðmát eru vænt sem <code>.css</code> skrár. Snið ætti einnig að hópa eftir gerð í sérstakar undirmöppur. Textpattern mun búa til öll nauðsynleg sniðmát sem vantar við innflutning.</p>
+<p>Skoðaðu <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">þemaleiðbeiningar <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> fyrir frekari upplýsingar um gerð, uppsetningu og notkun þema í Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Nafn þema"><![CDATA[
+<h2>Nafn þema</h2>
+<p>Nafn þema er notað sem heiti möppunnar og í tæknilegum tilgangi (áskilið).</p>
+<p>Nafnið ætti hvorki að innihalda sértákn né bil.</p>
+        ]]></item>
+        <item id="skin_overview" title="Inngangur að þemum"><![CDATA[
+<h2>Inngangur að þemum</h2>
+<p>Textpattern-þema er safn síðna (Pages), sniða (Forms) og stílsniðmáta (Stylesheets). Þemu gera þér kleift að skipta eignum vefsvæðisins skipulega niður í hópa til að auðvelda aðgreiningu eða deilingu með öðrum. Að búa til eða flytja inn þema og öll sniðmát/stíla sem því fylgja hefur <em>engin</em> áhrif á núverandi vefsvæði. Þú getur frjálst breytt eða aðlagað hvaða eign sem er sem ekki er tengd hlutum (Sections) vefsvæðisins án þess að það hafi áhrif á vefinn sjálfan.</p>
+<p>Til að breyta eignum í þema skaltu fara á Pages-, Forms- eða Styles-borðið og nota fellilistann til að velja það þema sem þú vilt vinna með. Þemað sem þú vinnur með er munað um allt stjórnsvæðið sem gerir þér kleift að hoppa á milli gerða eigna hratt og auðveldlega. Það er nefnt <em>vinnuþemað</em>.</p>
+<p>Skoðaðu <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern notandaleiðbeiningar <span class="ui-icon ui-icon-extlink">(opnast í nýjum glugga)</span></a> fyrir frekari upplýsingar.</p>
+        ]]></item>
+        <item id="skin_title" title="Titill þema"><![CDATA[
+<h2>Titill þema</h2>
+<p>Lýsandi titill þema, notaður til að auðkenna þemað innan borða Textpattern.</p>
+<p>Titillinn má innihalda sértákn og bil.</p>
+        ]]></item>
+        <item id="skin_version" title="Útgáfa þema"><![CDATA[
+<h2>Útgáfa þema</h2>
+<p>Útgáfunúmer uppsettrar útgáfu þessa þema (valkvætt).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
