@@ -3071,7 +3071,7 @@ function variable($atts, $thing = null)
             $var = isset($value) ?
                 $value :
                 (isset($thing) ? parse($thing) : $var);
-            $breakform = isset($value) && isset($thing) ? array($thing) : null;
+            $breakform = isset($value) && isset($thing) ? array(trim($thing)) : null;
         }
     }
 
