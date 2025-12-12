@@ -83,131 +83,543 @@
 
     <group id="article" title="Panell d’escritura">
         <item id="article_image" title="Imatge de l’article"><![CDATA[
-<h2>Imatge de l'article</h2>
-<p>Per associar una sola imatge amb aquest article, col·loca un dels següents aquí:</p>
+<h2>Imatge de l’article</h2>
+<p>Per associar imatges amb aquest article, introdueix aquí una de les opcions següents:</p>
 <ol>
-   <li>una identificació de la imatge Textpattern (e.g.<code>12</code>)</li>
-   <li>un URL relatiu a la imatge (e.g.<code>/imatges/la_meva _foto.jpg</code>)</li>
-   <li>un URL completo (e.g.<code>https://exemple.com/ruta/a/imatge/la_meva_foto.jpg</code></li>
+    <li>un o més identificadors d’imatge de Textpattern, separats per comes (p. ex. <code>12, 25, 18</code>)</li>
+    <li>una o més URL relatives a la imatge, separades per comes (p. ex. <code>/images/my_pic.jpg</code>)</li>
+    <li>una o més URL completes, separades per comes (p. ex. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
 </ol>
-<p>La imatge pot mostrar-se col·locant una <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code>etiqueta<span class="ui-icon ui-icon-extlink">(s'obre un enllaç extern en una nova finestra)</span></a>dins el mòdul de l'article.  Es crearà una etiqueta HTML completa<code>&lt;img&gt;</code>a la imatge seleccionada.</p>        ]]></item>
+<p>La primera imatge es pot mostrar col·locant una etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> dins d’un formulari d’article. Per defecte, generarà una etiqueta HTML <code>&lt;img&gt;</code> completa que apunta a la imatge triada.</p>
+<p>Pots mostrar galeries utilitzant l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
         <item id="body" title="Cos"><![CDATA[
 <h2>Cos</h2>
 <p>El contingut principal d'un article està contingut dins del cos de l'article.</p>
 <p>Quan es redacten o es preparen articles per a publicar en Textpattern, l'autor pot canviar entre tres vistes d'article: text pla, format HTML (el codi amb el qual un navegador web llegeix l'article) i mode presentació.</p>
         ]]></item>
         <item id="description" title="Descripció"><![CDATA[
-<h2> Descripció </h2>
- <p> La descripció de l’article és un component opcional que pot ajudar als motors de cerca i rastrejadors de llocs web a identificar i classificar millor el contingut. </p>
- <p> La descripció de l’article està limitada a un màxim de 255 caràcters. Tingues en compte que alguns motors de cerca tenen límits de caràcters en la longitud de la <code> meta descripció </code> d’una pàgina per raons pràctiques degudes a la visualització en les pàgines de resultats del motor de cerca (SERP) i aquest pot ser menor que el límit de 255 caràcters en Textpattern. </p>
- <p> Tingues en compte que la descripció de l’article difereix de l’extracte de l’article, encara que ambdós accepten un contingut similar. La descripció de l’article ha d’estar destinada principalment pel seu ús amb motors de cerca i rastrejadors, mentres que l’extracte de l’article és més adequat per un resum de l’article llegible per humans allà on es vulgui. </p>        ]]></item>
+<h2>Descripció</h2>
+<p>La descripció de l’article és un component opcional que pot ajudar els motors de cerca i els rastrejadors de llocs web a identificar i classificar millor el contingut.</p>
+<p>La descripció de l’article està limitada a un màxim de 255 caràcters. Tingues en compte que alguns motors de cerca imposen límits de caràcters a la longitud de la <code>meta description</code> d’una pàgina per motius pràctics de visualització a les pàgines de resultats del motor de cerca (SERP), i aquest límit pot ser inferior al límit de 255 caràcters en Textpattern.</p>
+<p>Tingues en compte que la descripció de l’article és diferent de l’extracte de l’article, encara que tots dos accepten un contingut similar. La descripció de l’article hauria d’estar destinada principalment a l’ús amb motors de cerca i rastrejadors, mentre que l’extracte de l’article és més adequat per a un resum llegible de l’article quan es desitja.</p>
+        ]]></item>
         <item id="excerpt" title="Extracte"><![CDATA[
 <h2> Extracte </h2>
 <p> Els extractes d'articles són opcionals. Els extractes podrien usar-se com un breu resum de l'article que es mostra com a part d'una taula de contingut, en lloc del cos complet de l'article en els canals RSS / Atom del lloc, o una sèrie d'altres usos. </p>        ]]></item>
-        <item id="expire_date" title="Data de caducitat"><![CDATA[]]></item>
-        <item id="keywords" title="Paraules clau"><![CDATA[]]></item>
-        <item id="override_form" title="Sobreescriu formulari"><![CDATA[]]></item>
-        <item id="publish_date" title="Data de publicació"><![CDATA[]]></item>
-        <item id="status" title="Estat"><![CDATA[]]></item>
-        <item id="title" title="Títol"><![CDATA[]]></item>
-        <item id="url_title" title="Títol només per URL"><![CDATA[]]></item>
+        <item id="expire_date" title="Data de caducitat"><![CDATA[
+<h2>Data de caducitat</h2>
+<p>El moment en què un article es marca com a caducat. L’hora és opcional i es pot establir en qualsevol moment del passat o del futur.</p>
+<p>Les caselles corresponen a la informació següent:</p>
+<ul>
+    <li>Any / Mes / Dia</li>
+    <li>Hora (format de 24 hores) : Minut : Segon</li>
+</ul>
+<p>Quan arriba el moment indicat, o en el cas que s’hagi indicat un moment en el passat, l’article caduca.</p>
+<p>Si l’opció de mostrar articles caducats està activada, l’article continua sent visible. Si l’opció de mostrar articles caducats està desactivada, els visitants de la pàgina de l’article veuran un error HTTP 410 en lloc del contingut de l’article.</p>
+        ]]></item>
+        <item id="keywords" title="Paraules clau"><![CDATA[
+<h2>Paraules clau</h2>
+<p>Les paraules clau són útils per refinar les relacions entre articles més enllà de les que proporcionen les categories.</p>
+<p>Les paraules clau han de ser paraules individuals separades per comes.</p>
+        ]]></item>
+        <item id="override_form" title="Sobreescriu formulari"><![CDATA[
+<h2>Formulari de sobreescriptura</h2>
+<p>Un article pot utilitzar opcionalment un formulari diferent del que té assignat per defecte – per exemple, per mostrar un extracte de l’article amb <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> en lloc del cos de l’article amb <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>; això es pot definir aquí.</p>
+        ]]></item>
+        <item id="publish_date" title="Data de publicació"><![CDATA[
+<h2>Data de publicació</h2>
+<p>El moment en què un article o fitxer es publica o es revisa més recentment. L’hora es pot establir al moment en què l’element es publica o en qualsevol moment del passat o del futur.</p>
+<p>Les caselles corresponen a la informació següent:</p>
+<ul>
+    <li>Any / Mes / Dia</li>
+    <li>Hora (format de 24 hores) : Minut : Segon</li>
+</ul>
+<p>Un element amb una marca horària posterior a l’hora actual (és a dir, en el futur) no apareixerà a la part pública ni als canals RSS/Atom fins que arribi aquest moment.</p>
+        ]]></item>
+        <item id="status" title="Estat"><![CDATA[
+<h2>Estat</h2>
+<p>Defineix l’estat de visibilitat de publicació d’aquest article de Textpattern.</p>
+<p>L’estat de publicació és un dels següents:</p>
+<ul>
+<li><strong>Esborrany</strong>: es considera un treball en curs i no és visible fora de l’àrea d’administració de Textpattern (és a dir, no és visible al lloc web ni als canals).</li>
+<li><strong>Amagat</strong>: l’article no és visible fora de l’àrea d’administració de Textpattern. És útil per retirar contingut del lloc web que no vols eliminar necessàriament.</li>
+<li><strong>Pendent</strong>: es considera llest per a la publicació i a l’espera d’aprovació, però no és visible fora de l’àrea d’administració de Textpattern.</li>
+<li><strong>Publicat</strong>: normalment és visible fora de l’àrea d’administració de Textpattern (és a dir, visible al lloc web, i sindicat en canals si la preferència ho permet). Si un article és en estat Publicat i té una data de caducitat, l’estat continuarà sent Publicat un cop s’hagi assolit aquesta data, però l’article només apareixerà fora de l’àrea d’administració si es permet publicar articles caducats.</li>
+<li><strong>Fixat</strong>: similar a un article <strong>Publicat</strong> en el sentit que el poden veure els visitants del lloc web, però <strong>no</strong> apareixerà a les llistes d’articles tret que l’etiqueta <code>article</code> o <code>article_custom</code> corresponent inclogui un atribut <code>status</code> amb el valor <code>sticky</code>.</li>
+</ul>
+<p>Nota: el contingut que no és visible públicament al lloc web encara pot ser previsualitzat per usuaris amb sessió iniciada.</p>
+        ]]></item>
+        <item id="title" title="Títol"><![CDATA[
+<h2>Títol</h2>
+<p>Afegeix un títol adequat per a aquest article.</p>
+<p>El títol d’un article està limitat a un màxim de 255 caràcters.</p>
+        ]]></item>
+        <item id="url_title" title="Títol només per URL"><![CDATA[
+<h2>Títol només per a la URL</h2>
+<p>Per utilitzar un títol específic al permalink de la URL d’un article, introdueix-lo aquí. Si es deixa en blanc, el títol de la URL es generarà automàticament a partir del títol de l’article.</p>
+<p>Això és especialment útil si el títol de l’article utilitza caràcters no ASCII.</p>
+        ]]></item>
     </group>
 
-    <group id="category" title="">
-        <item id="article_category" title="Articles"><![CDATA[]]></item>
-        <item id="category_description" title="Descripció"><![CDATA[]]></item>
-        <item id="file_category" title="Fitxers"><![CDATA[]]></item>
-        <item id="image_category" title="Imatges"><![CDATA[]]></item>
-        <item id="link_category" title="Enllaços"><![CDATA[]]></item>
+    <group id="category" title="Panell de categories">
+        <item id="article_category" title="Articles"><![CDATA[
+<h2>Articles</h2>
+<p>A diferència de les seccions, que defineixen l’estructura de navegació d’un lloc, les categories d’articles permeten organitzar els articles pel seu tema. Un cop assignades les categories, es poden consultar llistes d’articles que pertanyen a categories concretes.</p>
+<p>Per exemple, en un lloc sobre menjar, algunes categories d’articles probables podrien ser:</p>
+<ul>
+    <li>ingredients crus</li>
+    <li>compres</li>
+    <li>receptes</li>
+    <li>presentació</li>
+    <li>restaurants</li>
+    <li>cuiners</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Descripció"><![CDATA[
+<h2>Descripció de la categoria</h2>
+<p>La descripció de la categoria és un component opcional que pot ajudar els motors de cerca i els rastrejadors web a identificar i classificar millor el contingut.</p>
+<p>La descripció de la categoria està limitada a un màxim de 255 caràcters. Tingues en compte que alguns motors de cerca imposen límits de caràcters a la longitud de la <code>meta description</code> d’una pàgina per motius pràctics de visualització a les pàgines de resultats (SERP), i aquest límit pot ser inferior al límit de 255 caràcters de Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Fitxers"><![CDATA[
+<h2>Fitxers</h2>
+<p>Les categories de fitxers són opcionals i són útils per agrupar conjuntament determinats fitxers pujats.</p>
+        ]]></item>
+        <item id="image_category" title="Imatges"><![CDATA[
+<h2>Imatges</h2>
+<p>Les categories d’imatges són opcionals i útils tant per a l’organització interna com per definir conjunts d’imatges que es poden mostrar utilitzant l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Enllaços"><![CDATA[
+<h2>Enllaços</h2>
+<p>Les categories d’enllaços són opcionals i útils per mostrar agrupacions diferents d’enllaços, p. ex. «Amics», «Romans», «Compatriotes».</p>
+<p>Llistes selectives d’enllaços com aquestes es mostren amb l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>, així:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
-    <group id="diag" title="">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="La prova d’URL neta ha fallat"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Amagar la informació privada"><![CDATA[]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
-        <item id="dir_not_writable" title=""><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title=""><![CDATA[]]></item>
-        <item id="htaccess_missing" title=""><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title="Fitxers perduts"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title=""><![CDATA[]]></item>
-        <item id="mysql_table_errors" title=""><![CDATA[]]></item>
-        <item id="no_temp_dir" title=""><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
+    <group id="diag" title="Panell de diagnòstic">
+        <item id="clean_url_data_failed" title="Les dades d’URL netes han fallat"><![CDATA[
+<h2>Les dades d’URL netes han fallat</h2>
+<p>Sembla que les URL del lloc (p. ex. <code>https://example.com/section/article</code>) actualment no funcionen o bé que el servidor web no admet el procediment de prova per determinar si les URL netes funcionen o no; si les URL netes del lloc funcionen com s’esperava, es pot ignorar aquest missatge sense problema.</p>
+<p>Si les URL netes <em>no</em> funcionen pot ser degut a:</p>
+<ul>
+    <li>la configuració de «URL del lloc» és incorrecta, o la pàgina d’aquesta adreça no està gestionada per aquesta instància de Textpattern</li>
+    <li>el servidor requereix alguns canvis a <code>.htaccess</code> o a una altra directiva de servidor similar perquè les URL netes funcionin</li>
+    <li>el servidor no admet en absolut URL netes</li>
+</ul>
+<p>La prova d’URL netes intenta recuperar una pàgina de l’adreça web especificada a la preferència «URL del lloc» per comprovar que tots els paràmetres d’URL netes funcionen correctament. Si aquesta URL correspon a un lloc diferent, o s’ha substituït per una pàgina estàtica o similar, la prova fallarà. Fins que el problema no es resolgui, s’haurien d’utilitzar URL brutes (p. ex. <code>https://example.com?s=section&amp;id=4</code>). Assegura’t que el «Mode d’enllaç permanent» a les preferències d’administració està configurat en conseqüència.</p>
+<p>Tingues en compte que utilitzar un connector per posar un lloc en «mode manteniment» pot desencadenar aquest avís.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="La prova d’URL neta ha fallat"><![CDATA[
+<h2>La prova d’URL netes ha fallat</h2>
+<p>Sembla que les URL del lloc (p. ex. <code>https://example.com/section/article</code>) actualment no funcionen o bé que el servidor web no admet el procediment de prova per determinar si les URL netes funcionen o no; si les URL netes del lloc funcionen com s’esperava, es pot ignorar aquest missatge sense problema.</p>
+<p>Si les URL netes <em>no</em> funcionen pot ser degut a:</p>
+<ul>
+    <li>la configuració de «URL del lloc» és incorrecta, o la pàgina d’aquesta adreça no està gestionada per aquesta instància de Textpattern</li>
+    <li>el servidor requereix alguns canvis a <code>.htaccess</code> o a una altra directiva de servidor similar perquè les URL netes funcionin</li>
+    <li>el servidor no admet en absolut URL netes</li>
+</ul>
+<p>La prova d’URL netes intenta recuperar una pàgina de l’adreça web especificada a la preferència «URL del lloc» per comprovar que tots els paràmetres d’URL netes funcionen correctament. Si aquesta URL correspon a un lloc diferent, o s’ha substituït per una pàgina estàtica o similar, la prova fallarà. Fins que el problema no es resolgui, s’haurien d’utilitzar URL brutes (p. ex. <code>https://example.com?s=section&amp;id=4</code>). Assegura’t que el «Mode d’enllaç permanent» a les preferències d’administració està configurat en conseqüència.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Inicis de sessió simultanis en un servidor en producció"><![CDATA[
+<h2>Inicis de sessió simultanis en un servidor en producció</h2>
+<p>Permetre que el teu compte d’usuari iniciï sessió des de diverses sessions és un risc de seguretat i no es recomana. Desactiva aquesta funcionalitat des del panell de preferències avançades, tret que entenguis i acceptis els riscos.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Amagar la informació privada"><![CDATA[
+<h2>Amagar la informació privada</h2>
+<p>Amaga la informació privada per obtenir més seguretat. Si la informació de diagnòstic s’ha de compartir en un format visible públicament, per exemple al fòrum de suport de Textpattern, això redueix el risc de seguretat ometent informació sensible del servidor.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Codi de desenvolupament en un servidor en producció"><![CDATA[
+<h2>Codi de desenvolupament en un servidor en producció</h2>
+<p>No es recomana utilitzar versions en desenvolupament de Textpattern en llocs en producció. Aquest avís es pot ignorar sense problema si entens i acceptes els riscos.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="No es pot escriure al directori"><![CDATA[
+<h2>No es pot escriure al directori</h2>
+<p>Per utilitzar les funcionalitats de pujada de fitxers i imatges, aquests directoris han de ser escrivibles per PHP a través de l’usuari del servidor web. Això es pot fer amb un client (S)FTP o, alternativament, per línia d’ordres amb una instrucció <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Error de DNS"><![CDATA[
+<h2>Ha fallat la cerca DNS</h2>
+<p>Sembla que la URL especificada com a adreça del lloc és inabastable.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="La pujada de fitxers està desactivada"><![CDATA[
+<h2>La pujada de fitxers està desactivada</h2>
+<p>La configuració actual del servidor indica que la pujada de fitxers està desactivada. Comprova i modifica el paràmetre <code>file_uploads</code> al fitxer <code>php.ini</code> o consulta l’allotjador del lloc per obtenir ajuda.</p>
+        ]]></item>
+        <item id="htaccess_missing" title="Falta el fitxer .htaccess"><![CDATA[
+<h2>Falta el fitxer .htaccess</h2>
+<p>S’està utilitzant un mode d’enllaç permanent que requereix un fitxer <code>.htaccess</code>, i el fitxer no es pot trobar. El fitxer s’inclou amb Textpattern i resideix a l’arrel de Textpattern, al costat de <code>index.php</code> i del directori <code>textpattern</code>. Les directrius recomanades són:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Índex del lloc inabastable"><![CDATA[
+<h2>Índex del lloc inabastable</h2>
+<p>El fitxer arrel <code>index.php</code> especificat com a índex del lloc no és llegible pel servidor. Comprova’n l’existència i els permisos.</p>
+        ]]></item>
+        <item id="missing_files" title="Fitxers que falten"><![CDATA[
+<h2>Fitxers que falten</h2>
+<p>Falten un o més fitxers essencials de Textpattern. Assegura’t que tots els fitxers indicats són presents al servidor i es troben a les ubicacions correctes.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Falta Apache mod_rewrite"><![CDATA[
+<h2>Falta Apache mod_rewrite</h2>
+<p>El mòdul <code>mod_rewrite</code> d’Apache no està instal·lat o està desactivat. Es recomana tenir-lo per tal que Textpattern funcioni correctament. Comprova que existeix i que està activat, o bé contacta amb l’allotjador del lloc per obtenir ajuda.</p>
+        ]]></item>
+        <item id="modified_files" title="Fitxers modificats"><![CDATA[
+<h2>Fitxers modificats</h2>
+<p>Es considera que els fitxers estan modificats si la seva suma de verificació difereix de la llista de sumes de verificació conegudament correctes que proporciona Textpattern. Si algun fitxer de la instal·lació de Textpattern és diferent del que s’espera, es ressaltarà aquí.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Errors de taules MySQL"><![CDATA[
+<h2>Errors de taules MySQL</h2>
+<p>Pot haver-hi corrupció o danys a la base de dades MySQL de Textpattern. Intenta reparar les taules afectades amb una eina d’accés a MySQL, com ara <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> o <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="No s’ha definit cap directori temporal"><![CDATA[
+<h2>No s’ha definit cap directori temporal</h2>
+<p>Tot i que Textpattern es pot executar sense un directori temporal, algunes funcionalitats poden no funcionar com s’espera si aquesta preferència no està definida. Visita les preferències d’administració i configura el «Camí del directori temporal».</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Secció amb el mateix nom que un directori"><![CDATA[
+<h2>Secció amb el mateix nom que un directori</h2>
+<p>Els noms de directori existents poden entrar en conflicte amb els noms de secció utilitzats a l’esquema d’enllaç permanent dels articles. Per evitar problemes, comprova i suprimeix els directoris afectats si és segur fer-ho, o bé canvia el nom de les seccions perquè no coincideixin.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Directori del lloc il·legible"><![CDATA[
+<h2>Directori del lloc il·legible</h2>
+<p>El directori que conté el fitxer arrel <code>index.php</code> especificat com a índex del lloc no és llegible pel servidor. Comprova’n els permisos.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Execució de PHP activada"><![CDATA[
+<h2>Execució de PHP activada</h2>
+<p>Textpattern permet als autors i administradors incrustar codi PHP dins d’articles i pàgines/formularis si aquestes funcionalitats estan activades. Atès que això és un problema de seguretat – es podria executar qualsevol tipus de PHP, incloent-hi codi potencialment perjudicial/perillós que podria destruir la instal·lació o filtrar informació a tercers – és molt recomanable que desactivis aquestes opcions al <a href="?event=prefs#prefs_group_publish">panell de preferències</a> tret que necessitis absolutament la funcionalitat.</p>
+<p>Moltes millores dels llocs Textpattern que abans requeria fragments de PHP ara es poden fer amb <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">etiquetes del nucli</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Requisits mínims de versió"><![CDATA[
+<h2>Requisits mínims de versió</h2>
+<p>Textpattern requereix que el llenguatge de programació PHP i el servidor de base de dades MySQL tinguin determinada funcionalitat. Consulta la taula següent per determinar els requisits mínims del sistema:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Versió de Textpattern</th>
+                <th scope="col">Versió mínima de PHP</th>
+                <th scope="col">Versió mínima de MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>A més dels requisits anteriors del sistema, també calen les extensions PHP següents:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a></li>
+</ul>
+<p>El fitxer <code>php.ini</code> del lloc, ja sigui global o local, ha de contenir un paràmetre <code>date.timezone</code>.</p>
+        ]]></item>
         <item id="setup_still_exists" title="El directori d’instal·lació (setup) encara existeix"><![CDATA[
 <h2>El directori d’instal·lació (setup) encara existeix</h2>
-<p>Un cop instal·lat Textpattern, el directori  <code>textpattern/setup</code> i el seu contingut ja no es necessiten més, i cal esborrar-los per raons de seguretat.</p>
+<p>Un cop instal·lat Textpattern, el directori <code>textpattern/setup</code> i el seu contingut ja no es necessiten i s’han d’esborrar per motius de seguretat.</p>
         ]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title="Les funcions de PHP [&#8230;] són desactivades al teu servidor"><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Actualització de Textpattern"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title="Hi ha disponible una versió prèvia (pre-release) de Textpattern"><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir"><![CDATA[<h2>La ruta del directori temporal i la ruta del directori pel caché del plugins NO haurien de coincidir</h2>
-<p>Els plugins haurien de tenir el seu propi directori i no compartir el directori temporal. És un risc potencial de seguretat i pot afectar negativament el teu lloc web si es buida el directori temporal. Sisplau, fes que la ruta del directori temporal sigui diferent que la ruta del caché dels plugins.</p>]]></item>
-        <item id="update_server_inaccessible" title="El servidor d'actualitzacions no és accesible"><![CDATA[<h2>El servidor d'actualitzacions no és accesible</h2>
-<p>Ha fallat la comprovació d'actualitzacions, potser per congestió de la xarxa o perquè s'ha tallat la connexió. Aquesta situació generalment es soluciona per si sola en una hora o dues. Prova-ho un altre cop més endavant.</p>]]></item>
-        <item id="warn_mail_unavailable" title="A la teva instal·lació de PHP li manca la funció mail()"><![CDATA[<h2>A la teva instal·lació de PHP li manca la funció mail()</h2>
-<p>La funció <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> del PHP està desactivada. Per tant, Textpattern no pot enviar correus i algunes funcionalitats no estaran disponibles. Per exemple, no s'enviaran notificacions pels nous comentaris, i els nous usuaris no rebran un missatge de benvinguda. Tanmateix, es podran afegir nous usuaris.</p>]]></item>
+        <item id="site_url_mismatch" title="No coincideix la URL del lloc"><![CDATA[
+<h2>No coincideix la URL del lloc</h2>
+<p>La URL del lloc definida al panell «Preferències» no coincideix amb la URL real utilitzada per visitar el lloc.</p>
+<p>Si es pot accedir al lloc mitjançant diverses URL diferents, i el lloc es comporta com s’espera, es pot ignorar aquest missatge sense problema.</p>
+<p>Altrament, comprova i corregeix la configuració «URL del lloc» a les preferències d’administració segons calgui. A l’avís previ del panell «Diagnòstic» es mostra una proposta informada de la URL correcta del lloc.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Les funcions de PHP [&#8230;] estan desactivades al servidor"><![CDATA[
+<h2>Les funcions de PHP [&#8230;] estan desactivades al servidor</h2>
+<p>L’allotjador del lloc o l’administrador del servidor ha desactivat una o més funcions PHP, algunes de les quals poden afectar el funcionament de Textpattern.</p>
+<p>Consulta la <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">documentació d’usuari de Textpattern <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> per obtenir més informació.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Actualització de versió de Textpattern"><![CDATA[
+<h2>Actualització de versió de Textpattern</h2>
+<p>Hi ha disponible una versió més recent de Textpattern. Per aprofitar les últimes funcionalitats i millores de seguretat, és recomanable que actualitzis.</p>
+<p>Tingues en compte que, tot i que intentem fer que l’experiència d’actualització sigui tan fluida i indolora com sigui possible:</p>
+<ul>
+    <li>Si només difereix l’últim dígit de la teva versió actual, probablement l’actualització serà compatible cap enrere amb connectors i temes.</li>
+    <li>Si difereixen els dos últims dígits de la teva versió actual, pot ser que l’actualització requereixi actualitzacions d’alguns connectors i/o temes, encara que probablement continuaran funcionant, encara que sigui amb capacitat limitada.</li>
+    <li>Si el primer dígit és diferent de la teva versió actual, probablement l’actualització requerirà actualitzacions de la majoria de connectors i temes. Si depens molt d’una funcionalitat concreta d’un connector o tema, consulta l’autor o els membres de la comunitat abans de començar l’actualització.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Hi ha disponible una versió prèvia (pre-release) de Textpattern"><![CDATA[
+<h2>Actualització de versió prèvia de Textpattern disponible</h2>
+<p>Hi ha disponible una versió prèvia més recent de Textpattern. Busquem voluntaris actius per provar aquesta versió perquè puguem fer que la versió final sigui tan sòlida com sigui possible. Intentem que l’experiència d’actualització sigui fluida i indolora, fins i tot per a codi beta.</p>
+<p>Si decideixes participar-hi, tingues en compte:</p>
+<ul>
+    <li>No utilitzis aquesta versió beta en un lloc en producció tret que tinguis una còpia de seguretat funcional tant dels fitxers del lloc com de la base de dades, i sàpigues com restaurar-la.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Informa de qualsevol problema</a>, indicant la versió beta que estàs utilitzant. Es poden requerir més versions beta abans de la versió estable, depenent dels problemes que es reportin.</li>
+    <li>Assegura’t que, si desplegues aquesta versió beta, també actualitzes a la versió final quan es publiqui.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Les rutes del directori temporal i del directori de memòria cau dels connectors no haurien de coincidir"><![CDATA[
+<h2>Les rutes del directori temporal i del directori de memòria cau dels connectors no haurien de coincidir</h2>
+<p>Els connectors haurien de tenir el seu propi directori i no compartir el directori temporal. Això és un potencial risc de seguretat i pot afectar negativament el teu lloc si es buida el directori temporal. Assegura’t que el camí del directori temporal és diferent del camí de la memòria cau de connectors.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="El servidor d’actualitzacions no és accessible"><![CDATA[
+<h2>El servidor d’actualitzacions no és accessible</h2>
+<p>La comprovació d’actualitzacions ha fallat, sovint a causa de congestió de xarxa o d’un temps d’espera de connexió excedit. Aquesta situació normalment es resol sola en una hora o dues; torna a visitar aquest panell més tard.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="A la teva instal·lació de PHP li manca la funció mail()"><![CDATA[
+<h2>A la teva instal·lació de PHP li manca la funció mail()</h2>
+<p>La funció <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> de PHP està desactivada. Per tant, Textpattern no pot enviar correus electrònics i algunes funcionalitats no estaran disponibles. Per exemple, no s’enviaran notificacions per correu dels nous comentaris i els usuaris nous no rebran un correu de benvinguda. No obstant això, encara es poden afegir usuaris.</p>
+        ]]></item>
     </group>
 
-    <group id="file" title="">
-        <item id="file_reassign" title=""><![CDATA[]]></item>
-        <item id="file_replace" title="Substitueix el fitxer"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Data de publicació"><![CDATA[]]></item>
-        <item id="upload" title="Puja fitxer"><![CDATA[]]></item>
+    <group id="file" title="Panell de fitxers">
+        <item id="file_reassign" title="Reassigna fitxer"><![CDATA[
+<h2>Reassigna fitxer</h2>
+<p>Quan puges un fitxer en lloc d’un que està marcat com a «Falta», el fitxer que triïs es pujarà al servidor i s’enllaçarà a la informació del fitxer original a la base de dades. Això vol dir que el nom del fitxer original es mantindrà, igual que tota la resta d’informació associada, com ara el recompte de descàrregues i la categoria. La mida del fitxer, però, s’actualitzarà per reflectir el nou fitxer.</p>
+        ]]></item>
+        <item id="file_replace" title="Substitueix el fitxer"><![CDATA[
+<h2>Reemplaça fitxer</h2>
+<p>Pujar un fitxer aquí substituirà el contingut del fitxer existent al servidor, però en mantindrà el mateix nom. El recompte de descàrregues i altra informació associada al fitxer no es veuran afectats.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Data de publicació"><![CDATA[
+<h2>Data de publicació</h2>
+<p>El moment en què un fitxer es publica o es revisa més recentment. L’hora es pot establir al moment en què l’element es publica o en qualsevol moment del passat o del futur.</p>
+<p>Les caselles corresponen a la informació següent:</p>
+<ul>
+    <li>Any / Mes / Dia</li>
+    <li>Hora (format de 24 hores) : Minut : Segon</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Puja fitxer"><![CDATA[
+<h2>Puja fitxer</h2>
+<p>Utilitza aquest formulari per pujar fitxers o imatges al teu servidor.</p>
+<p>Utilitza codi Textile per mostrar els gràfics dins els articles, codi de Textpattern per col·locar gràfics en les plantilles de pàgina, o codi HTML per col·locar els gràfics en altres llocs.</p>
+        ]]></item>
     </group>
 
-    <group id="form" title="">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+    <group id="form" title="Panell de formularis">
+        <item id="forms_overview" title="Introducció als formularis"><![CDATA[
+<h2>Introducció als formularis</h2>
+<p>A Textpattern, un formulari és un fragment o bloc de text, HTML i etiquetes de Textpattern que es pot reutilitzar per mostrar contingut.</p>
+<p>Aquí tens un exemple de formulari que es podria anomenar <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>El podries utilitzar per mostrar una llista HTML desordenada d’articles relacionats:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Com que la funció d’aquest formulari és mostrar una llista de títols, també es pot utilitzar dins d’altres etiquetes, com ara per mostrar 20 articles de la secció actual:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>També pots fer servir un formulari per mostrar contingut repetit, com ara la capçalera i el peu de pàgina de les teves plantilles. Això vol dir que el contingut només existeix en un sol lloc i, si decideixes canviar-lo, només ho hauràs de fer una vegada. Normalment, el contingut d’un formulari es mostra amb:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Un formulari pot tenir fins a 64 KB de mida. Un exemple de peu de pàgina podria incloure encapçalaments, paràgrafs, enllaços, etiquetes condicionals i referències a altres formularis com ara <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="image" title="">
-        <item id="create_thumbnail" title="Crea miniatura"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Substitueix imatge"><![CDATA[]]></item>
-        <item id="upload_image" title="Puja imatge"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Puja miniatura"><![CDATA[]]></item>
+    <group id="image" title="Panell d’imatges">
+        <item id="create_thumbnail" title="Crea miniatura"><![CDATA[
+<h2>Crea miniatura</h2>
+<p>Et permet (re)crear una miniatura de les dimensions especificades a partir de la imatge a mida completa.</p>
+<p>Per a la mida personalitzada, la miniatura s’escalarà per ajustar-se a les dimensions que triïs, tret que seleccionis la casella «Escapça». En aquest cas, la miniatura es crearà a partir del centre de la imatge sense cap escalat.</p>
+<p>Per a la mida automàtica, la miniatura s’escalarà a les dimensions i (opcionalment) opcions d’escapçat del tema d’administració actual.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Substitueix imatge"><![CDATA[
+<h2>Reemplaça imatge</h2>
+<p>Una imatge pujada aquí simplement substituirà l’existent associada amb aquesta entrada a la base de dades.</p>
+        ]]></item>
+        <item id="upload_image" title="Puja imatge"><![CDATA[
+<h2>Puja imatge</h2>
+<p>Puja una o més imatges al teu servidor.</p>
+<p>Quan es pugen al directori <code>images</code>, el nom del fitxer de la teva imatge original només es conservarà internament a la base de dades de Textpattern; el fitxer d’imatge es reanomenarà amb un número seqüencial + extensió de fitxer.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Puja miniatura"><![CDATA[
+<h2>Puja miniatura</h2>
+<p>Es poden assignar miniatures pròpies a les imatges a mida completa. Són útils per enllaçar i per indexar imatges a mida completa.</p>
+<p>Una referència a la miniatura és exactament la mateixa que la referència a la imatge a mida completa, amb una <code>t</code> afegida al nom del fitxer. Per exemple, per fer referència a una miniatura associada amb una imatge a mida completa emmagatzemada a <code>/images/12.jpg</code> hauries d’utilitzar <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
-    <group id="lang" title="">
-        <item id="get_textpack" title="Instal·lar Textpack"><![CDATA[]]></item>
+    <group id="lang" title="Panell d’idiomes">
+        <item id="get_textpack" title="Instal·lar Textpack"><![CDATA[
+<h2>Instal·la Textpack</h2>
+<p>Enganxa cadenes d’idioma addicionals per al teu lloc en aquest quadre i selecciona «Puja» per instal·lar-les.</p>
+<p>Les cadenes sovint vénen en forma d’un Textpack descarregable, distribuït amb un connector per permetre que les cadenes d’idioma del connector s’utilitzin de manera nativa dins de Textpattern.</p>
+<p>A continuació, els traductors poden traduir aquests paquets segons calgui i tornar a distribuir el contingut localitzat a la comunitat.</p>
+        ]]></item>
     </group>
 
-    <group id="link" title="">
-        <item id="link_description" title="Descripció"><![CDATA[]]></item>
-        <item id="link_sort" title="Ordena per valor"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title="Data de publicació"><![CDATA[]]></item>
+    <group id="link" title="Panell d’enllaços">
+        <item id="link_description" title="Descripció"><![CDATA[
+<h2>Descripció</h2>
+<p>Les descripcions d’enllaços són opcionals i útils per afegir llegendes als enllaços, per crear atributs <code>title=""</code> (informació sobre eines) per als enllaços o simplement per mantenir la teva pròpia documentació interna.</p>
+        ]]></item>
+        <item id="link_sort" title="Ordena per valor"><![CDATA[
+<h2>Valor d’ordenació</h2>
+<p>Útil per a l’ordenació en llenguatge natural de llistes d’enllaços, p. ex. pel cognom d’una persona en lloc del seu nom, o per frases que comencen amb un article determinat o indeterminat.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>L’adreça de l’enllaç. Si l’enllaç apunta a un lloc diferent, s’ha de precedir de <code>http://</code> o <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Data de publicació"><![CDATA[
+<h2>Data de publicació</h2>
+<p>El moment en què un enllaç es publica o es revisa més recentment. L’hora es pot establir al moment en què l’element es publica o en qualsevol moment del passat o del futur.</p>
+<p>Les caselles corresponen a la informació següent:</p>
+<ul>
+    <li>Any / Mes / Dia</li>
+    <li>Hora (format de 24 hores) : Minut : Segon</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="login" title="">
-        <item id="remember_login" title="Continuar registrat en aquest navegador"><![CDATA[]]></item>
+    <group id="login" title="Panell d’inici de sessió">
+        <item id="remember_login" title="Continuar registrat en aquest navegador"><![CDATA[
+<h2>Roman iniciar la sessió amb aquest navegador</h2>
+<p>Quan està marcat, romandràs connectat al teu compte de Textpattern amb el navegador web actual fins que decideixis tancar la sessió. Si es deixa sense marcar, se’t tancarà la sessió automàticament després d’un període d’inactivitat.</p>
+<p>Cal que les galetes estiguin habilitades al navegador.</p>
+        ]]></item>
     </group>
 
-    <group id="plugin" title="">
-        <item id="install_plugin" title="Instal·la plugin"><![CDATA[]]></item>
-        <item id="upload_plugin" title=""><![CDATA[]]></item>
+    <group id="plugin" title="Panell de connectors">
+        <item id="install_plugin" title="Instal·la plugin"><![CDATA[
+<h2>Instal·la connector</h2>
+<p>Enganxa aquí el contingut del fitxer de text del connector compilat i després fes servir «Puja» per començar la instal·lació. Qualsevol connector que pugis amb el mateix nom que un que hagis instal·lat prèviament se sobreescriurà amb la versió pujada.</p>
+<p>El text del connector que enganxes aquí <strong>no</strong> és el codi PHP cru, sinó text codificat en Base64, normalment precedit per una capçalera amb informació del connector (com el nom, la versió i la descripció del connector, el nom de l’autor, etc.).</p>
+<p>Sovint pots obtenir versions compilades de connectors al <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repositori de connectors <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> o al canal designat de l’autor del connector, com ara el seu lloc web o GitHub.</p>
+<p>També pots enganxar aquí una URL a un fitxer de text compilat de Textpattern, si el lloc extern ho permet.</p>
+<p>Tots els connectors pujats passaran per un pas de verificació que et permetrà inspeccionar el codi i el contingut del connector abans de la instal·lació.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Puja el connector"><![CDATA[
+<h2>Puja connector</h2>
+<p>Utilitza aquest formulari per pujar un fitxer de connector. Els connectors pujats (i qualsevol recurs associat) s’emmagatzemen al directori «plugins».</p>
+<p>Els tipus de connector que es poden pujar aquí són:</p>
+<ul>
+<li>Fitxers Textpattern PHP Template que contenen codi complet, metadades, cadenes Textpack i text d’ajuda.</li>
+<li>Fitxers de text compilats de Textpattern que contenen codi complet, metadades, cadenes Textpack i text d’ajuda.</li>
+<li>Paquets zip de Textpattern que contenen informació de manifest i codi, metadades, cadenes Textpack, text d’ajuda i fitxers addicionals.</li>
+<li>Fitxers PHP crus (tot i que aquests no ompliran metadades addicionals i no es recomanen).</li>
+</ul>
+<p>Qualsevol connector que pugis amb el mateix nom que un que hagis instal·lat prèviament se sobreescriurà amb la versió pujada.</p>
+<p>Tots els connectors pujats passaran per un pas de verificació que et permetrà inspeccionar el codi i el contingut del connector abans de la instal·lació.</p>
+        ]]></item>
     </group>
 
-    <group id="prefs" title="">
-        <item id="admin_side_plugins" title="Utilitzar els plugins administratius?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Opcions avançades"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Permetre PHP en els articles?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Permetre la sobreescritura de formularis?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Permetre PHP en les pàgines?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Format de data dels arxius"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Els articles utilitzen extracte?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Afegir títols als enllaços permanents?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Ajustar automàticament la configuració de l'horari d'estiu?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Un comentari nou es considera actualització del lloc web?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Presentar comentaris como llista numerada?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title=""><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Format de data per comentaris"><![CDATA[]]></item>
+    <group id="prefs" title="Panell de preferències">
+        <item id="admin_side_plugins" title="Utilitzar els plugins administratius?"><![CDATA[
+<h2>Fer servir connectors al costat d’administració?</h2>
+<p>Els connectors del costat d’administració poden canviar el funcionament de la interfície d’administració. Poden enganxar-se a accions ja existents, com l’edició o publicació d’articles, o poden afegir nous panells per obtenir funcionalitat afegida/ampliada.</p>
+<p>Si vols obtenir més informació sobre els connectors del costat d’administració, consulta la pàgina <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extensió de Textpattern <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> a la <a rel="external" target="_blank" href="https://docs.textpattern.com/">documentació d’usuari de Textpattern <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>. Els connectors de tot tipus figuren al lloc <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opcions avançades"><![CDATA[
+<h2>Opcions avançades</h2>
+<p>Mostra el grup de preferències avançades, on es poden configurar opcions addicionals, com ara:</p>
+<ul>
+    <li>funcions PHP habilitades a <code>txp:evaluate</code>.</li>
+    <li>Tipus de plantilla de formulari personalitzats.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Permetre PHP en els articles?"><![CDATA[
+<h2>Permetre PHP als articles?</h2>
+<p>Quan està activat, aquest paràmetre permet utilitzar PHP dins dels articles. L’autor ha de tenir prou privilegis per fer-ho (per defecte, només ho poden fer els <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Publishers» <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>, els <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Managing Editors» <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> i els <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Copy Editors» <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>).</p>
+<p><strong>És molt recomanable desactivar aquesta opció</strong> tret que necessitis absolutament la funcionalitat. Qualsevol codi PHP potencialment perjudicial/perillós que pugui destruir el teu lloc web o filtrar informació a tercers podria ser afegit per qualsevol autor i executat per qualsevol persona que vegi aquell article.</p>
+<p>El codi PHP ha d’ometre les etiquetes d’obertura i tancament de PHP i també ha d’estar envoltat per etiquetes <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Permetre la sobreescritura de formularis?"><![CDATA[
+<h2>Permetre sobreescriure el formulari?</h2>
+<p>Aquest paràmetre permet als autors dels articles sobreescriure el formulari que s’utilitzarà quan es renderitzi el seu article. Si està activat, quan s’editi un article hi haurà disponible un desplegable «Formulari de sobreescriptura».</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Permetre PHP en les pàgines?"><![CDATA[
+<h2>Permetre PHP a les pàgines?</h2>
+<p>Quan està activat, aquest paràmetre permet utilitzar codi PHP dins de plantilles de pàgina i plantilles de formulari.</p>
+<p><strong>És molt recomanable desactivar aquesta opció</strong> tret que necessitis absolutament la funcionalitat. Qualsevol codi PHP potencialment perjudicial/perillós que pugui destruir el teu lloc web o filtrar informació a tercers podria ser afegit per qualsevol altre usuari i executat per un administrador o visitant desprevingut.</p>
+<p>El codi PHP ha d’ometre les etiquetes d’obertura i tancament de PHP i també ha d’estar envoltat per etiquetes <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Format de data dels arxius"><![CDATA[
+<h2>Format de data d’arxiu</h2>
+<p>Com es mostraran les dates dels articles a les seccions del teu lloc.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Mostrar l’extracte a la pàgina d’edició de l’article?"><![CDATA[
+<h2>Mostrar l’extracte a la pàgina d’edició de l’article?</h2>
+<p>Si tries «No», el camp Extracte no es mostrarà a l’autor a la pantalla d’edició de l’article.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Afegir títols als enllaços permanents?"><![CDATA[
+<h2>Adjuntar títols als enllaços permanents?</h2>
+<p>Aquest paràmetre adjuntarà una versió generada automàticament del títol de l’article a la URL. Es genera automàticament o bé es pot sobreescriure manualment al camp «Títol només per a la URL» quan s’edita un article.</p>
+<p>El paràmetre només tindrà efecte quan utilitzes URL netes. Per a determinades llengües això pot donar lloc a URL llargues i lletges; en aquest cas probablement voldràs establir-ho a «Desactivat».</p>
+        ]]></item>
+        <item id="auto_dst" title="Ajustar automàticament la configuració de l'horari d'estiu?"><![CDATA[
+<h2>Ajustar automàticament l’horari d’estiu?</h2>
+<p>Aquest paràmetre permet que Textpattern modifiqui quan es produeix l’horari d’estiu (DST) a la teva zona. Si s’estableix a «No», podràs canviar manualment la preferència «Horari d’estiu activat».</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Un comentari nou es considera actualització del lloc web?"><![CDATA[
+<h2>Un comentari nou vol dir lloc actualitzat?</h2>
+<p>La base de dades de Textpattern registra quan es va produir el canvi més recent al teu lloc. Quan aquest paràmetre està en «Sí», un comentari nou també actualitzarà aquest valor. Aquest valor s’utilitza, per exemple, per a la funcionalitat <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Aplicar rel=&quot;nofollow&quot; als comentaris?"><![CDATA[
+<h2>Aplicar rel="nofollow" als comentaris?</h2>
+<p>Si s’estableix a «Sí», això afegirà un atribut addicional als enllaços creats en els comentaris. Està pensat com una mesura que elimina l’incentiu dels enviadors de brossa en comentaris i va ser iniciada per diversos motors de cerca i desenvolupadors de programari. Pots obtenir més informació llegint <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">l’anunci de Google <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+<p><strong>Nota:</strong> Aquest paràmetre no influeix en la funcionalitat del teu lloc. Pot impedir o reduir la influència dels teus comentaris quan alguns motors de cerca classifiquin llocs enllaçats des d’aquests comentaris.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Presentar comentaris como llista numerada?"><![CDATA[
+<h2>Presentar els comentaris com una llista numerada?</h2>
+<p>Determina si els comentaris dels articles s’embolcallaran amb l’etiqueta HTML <code>&lt;ol&gt;</code> i cada comentari amb l’etiqueta <code>&lt;li&gt;</code> (fet que farà que els comentaris es presentin com una llista numerada), o si els comentaris individuals s’embolcallaran amb l’etiqueta <code>&lt;div&gt;</code> en lloc d’això.</p>
+<p>Amb qualsevol valor, pots sobreescriure les etiquetes utilitzades cas per cas als formularis modificant l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>, que es troba al formulari <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Afegir automàticament comentaris als articles?"><![CDATA[
+<h2>Afegir automàticament comentaris als articles?</h2>
+<p>Aquest paràmetre determina si els comentaris i el formulari de comentaris s’afegeixen automàticament a tots els articles individuals (incloent automàticament el contingut del formulari <code>comments_display</code>).</p>
+<p>La majoria de vegades voldràs tenir això en «No», ja que permet una flexibilitat més gran en la posició dels comentaris dins el disseny del teu lloc. Hauràs d’afegir manualment l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> a qualsevol plantilla basada en articles on vulguis que apareguin comentaris.</p>
+<p>Si estàs veient comentaris duplicats en un article, probablement és perquè les teves plantilles tenen l’etiqueta <code>&lt;txp:comments /&gt;</code> en una plantilla i, alhora, el paràmetre «Afegir automàticament comentaris als articles?» està en «Sí».</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Format de data per comentaris"><![CDATA[
+<h2>Format de data dels comentaris</h2>
+<p>Com es mostraran les dates dels comentaris als visitants del lloc.</p>
+        ]]></item>
         <item id="comments_default_invite" title="Invitació a comentar predeterminada"><![CDATA[
 <h2>Invitació a comentar predeterminada</h2>
 <p>Si permets que els visitants deixin comentaris al teu lloc web, aquest és el text d’invitació predeterminat. Per exemple:</p>
@@ -219,97 +631,573 @@
 </ul>
 <p>Tingues present que el text d’invitació sempre es pot modificar article per article.</p>
         ]]></item>
-        <item id="comments_disabled_after" title="Desactivats després de"><![CDATA[]]></item>
+        <item id="comments_disabled_after" title="Desactivats després de"><![CDATA[
+<h2>Comentaris desactivats després de</h2>
+<p>Utilitza això per establir la quantitat de temps després de la qual es desactivaran els comentaris per als articles (es pot establir a «Mai» per permetre un temps indefinit per comentar).</p>
+        ]]></item>
         <item id="comments_disallow_images" title="Es permeten imatges dins dels comentaris?"><![CDATA[
 <h2>Es permeten imatges dins dels comentaris?</h2>
 <p>Si aquest opció es deixa en ‘No’, qualsevol imatge que s'inclogui en els comentaris serà eliminada.</p>
         ]]></item>
-        <item id="comments_mode" title="Mode de comentaris"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Moderar comentaris"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Actiu per defecte?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Cal l’adreça de correu de l’usuari per comentar?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Cal el nom de l’usuari per comentar?"><![CDATA[]]></item>
-        <item id="comments_sendmail" title="Envia comentaris a l’autor?"><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title="Permetre utilizar Textile als comentaris?"><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title="Personalitzat"><![CDATA[]]></item>
-        <item id="dateformat" title="Format de data"><![CDATA[]]></item>
-        <item id="default_event" title="Panell predeterminat"><![CDATA[]]></item>
-        <item id="default_publish_status" title="Estat de publicació predeterminat"><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Activar el suport per etiquetes curtes?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="Permetre servidor de XML-RPC?"><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Tamany màxim del fitxers per pujar (en bytes)"><![CDATA[]]></item>
-        <item id="gmtoffset" title="Zona horària"><![CDATA[]]></item>
-        <item id="img_dir" title="Directori d’imatges"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Incloure l’adreça de correu en les fonts Atom?"><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title=""><![CDATA[]]></item>
-        <item id="max_url_len" title=""><![CDATA[]]></item>
-        <item id="module_pophelp" title=""><![CDATA[]]></item>
-        <item id="never_display_email" title="No mostrar mai l’adreça de correu?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title="Format URL del títol del Permalink"><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Ruta del directori caché dels plugins"><![CDATA[]]></item>
-        <item id="production_status" title="Estat del sistema"><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Publicar els articles caducats?"><![CDATA[]]></item>
-        <item id="publisher_email" title="Enviar la informació d'accés a aquesta direcció de correu electrònic"><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Mostrar comptador de comentaris en feeds?"><![CDATA[]]></item>
-        <item id="site_slogan" title="Eslògan del lloc"><![CDATA[]]></item>
-        <item id="sitename" title="Nom del lloc"><![CDATA[]]></item>
-        <item id="siteurl" title="URL del lloc"><![CDATA[]]></item>
-        <item id="skin_dir" title="Directori de temes"><![CDATA[]]></item>
-        <item id="smtp_from" title="Adreça d'enviament SMTP"><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Llista negra de spam (separades amb comes)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title="Directori temporal"><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title="Funcions PHP associades a txp:evaluate"><![CDATA[]]></item>
-        <item id="use_comments" title="Permet comentaris?"><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title="Utilitzar plugins?"><![CDATA[]]></item>
-        <item id="use_textile" title="Usa Textile en?"><![CDATA[]]></item>
+        <item id="comments_mode" title="Mode de comentaris"><![CDATA[
+<h2>Mode de comentaris</h2>
+<p>Si se selecciona «nopopup» (recomanat), la finestra actual es tornarà a carregar per mostrar només l’article actual, amb els comentaris a sota.</p>
+<p>Si se selecciona «popup», s’obrirà una finestra nova del navegador quan es faci clic a l’enllaç de comentaris (això utilitza el formulari <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderar comentaris"><![CDATA[
+<h2>Moderar comentaris?</h2>
+<p>Si això està en «Sí», cada comentari nou tindrà la seva visibilitat desactivada fins que s’hagi revisat. Hauràs de moderar manualment i fer visible cada comentari (s’enviarà un missatge al correu electrònic de l’autor de l’article quan s’hagi rebut un comentari nou).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Actiu per defecte?"><![CDATA[
+<h2>Comentaris activats per defecte?</h2>
+<p>Si això està en «Sí», els comentaris s’activaran automàticament per a cada article publicat. Si està en «No», hauràs d’activar els comentaris al panell «Escriure» de l’article cada vegada que vulguis acceptar comentaris.</p>
+<p>Els comentaris es poden activar/desactivar en qualsevol moment, article per article.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Cal l’adreça de correu de l’usuari per comentar?"><![CDATA[
+<h2>Els comentaris requereixen l’adreça de correu de l’usuari?</h2>
+<p>Si s’estableix a «Sí», la gent que vulgui comentar el teu article haurà d’introduir una adreça de correu electrònic al formulari de comentaris. No podran publicar cap comentari si no proporcionen una adreça de correu.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Cal el nom de l’usuari per comentar?"><![CDATA[
+<h2>Els comentaris requereixen el nom de qui comenta?</h2>
+<p>Si s’estableix a «Sí», la gent que vulgui comentar el teu article haurà d’introduir un nom al formulari de comentaris. No podran enviar cap comentari si no proporcionen un nom.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Envia comentaris a l’autor?"><![CDATA[
+<h2>Enviar comentaris per correu a l’autor?</h2>
+<p>Si s’estableix a «Sí», sempre que es rebi un comentari nou en un article, se n’enviarà una còpia per correu electrònic a l’autor d’aquell article.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Permetre utilizar Textile als comentaris?"><![CDATA[
+<h2>Permetre més marcatge Textile als comentaris?</h2>
+<p>Quan està en «Sí», els comentaris poden contenir elements <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> que altrament es tractarien com a text pla, com ara:</p>
+<ul>
+    <li>encapçalaments</li>
+    <li>llistes ordenades i desordenades</li>
+    <li>notes al peu</li>
+    <li>taules</li>
+    <li>codi</li>
+    <li>syntaxi de bloc ampliada (<code>bc..</code>, <code>bq..</code>, etc.)</li>
+</ul>
+<p><strong>Nota:</strong> Per motius de seguretat, l’HTML en cru es transforma en text normal.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Comptes amb permís per iniciar sessió simultàniament"><![CDATA[
+<h2>Comptes amb permís per iniciar sessió simultàniament</h2>
+<p>Una llista separada per comes de noms de compte d’inici de sessió que poden iniciar sessió en diversos navegadors/sessions. Això és útil durant el desenvolupament per compartir un inici de sessió amb clients.</p>
+<p>Utilitzar aquesta funcionalitat és un risc de seguretat i <strong>no es recomana en llocs en producció</strong>. El diagnòstic emetrà un avís si el teu compte d’usuari està configurat per a concurrència en un lloc web en producció.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Tipus de plantilla de formulari personalitzats"><![CDATA[
+<h2>Tipus de plantilla de formulari personalitzats</h2>
+<p>A més dels tipus de plantilla de formulari estàndard (article, fitxer, varis, etc.), els Editors principals (Publishers) poden definir tipus personalitzats. El propòsit dels tipus de plantilla de formulari personalitzats és doble: una classificació de plantilles més fàcil i definicions de recursos personalitzats.</p>
+<p>El format de la preferència és <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>, amb cada secció corresponent a un tipus de plantilla de formulari.</p>
+<p>Per definir un tipus de formulari personalitzat (p. ex. <code>js</code>) cal afegir (en una línia separada) una secció <code>[js]</code>. Es pot definir un títol per defecte mitjançant una entrada <code>title="Javascript"</code> a la secció corresponent. Si cal, també es poden afegir títols localitzats (p. ex. <code>ru="Скрипт"</code>).</p>
+<p>A més, es pot especificar un <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">tipus de suport (media type) <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> (anteriorment conegut com a tipus MIME) per a la plantilla de formulari, p. ex. <code>mediatype="application/javascript"</code>. Això converteix les plantilles de formulari d’aquest tipus en recursos personalitzats que es poden servir amb el tipus de suport establert, ja sigui des de la base de dades o des del disc (fitxers plans) a través de l’etiqueta <code>&lt;txp:output_form /&gt;</code>. Per exemple, una plantilla de formulari anomenada <code>myscript.js</code> de tipus <code>[js]</code> amb un tipus de suport <code>application/javascript</code> es pot incloure al teu codi així:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Això generarà l’etiqueta HTML <code>&lt;script&gt;</code> següent:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Només les plantilles de formulari amb l’extensió del nom que correspongui al seu tipus (p. ex. <code>myscript.js</code>) es poden servir com a fitxers plans. En aquest cas, Textpattern no les processarà i seran accessibles per la seva URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Camps personalitzats"><![CDATA[
+<h2>Camps personalitzats</h2>
+<p>Els camps personalitzats s’utilitzen per contenir dades addicionals d’un article. En pots definir fins a deu donant-los un nom aquí. Cadascun apareixerà com un camp separat al panell Escriure, per permetre associar dades personalitzades a cada article.</p>
+<p>Pots anomenar els camps com vulguis, però tingues en compte el següent:</p>
+<ul>
+<li>Fer servir espais millora la llegibilitat al panell Escriure, però aleshores els camps <em>no</em> es poden utilitzar com a paràmetres d’ordenació o filtratge en una etiqueta article_custom. Considera usar guions baixos si vols utilitzar aquesta funcionalitat.</li>
+<li>Vigila en escollir noms de camps que no entrin en conflicte amb noms de camps reservats de Textpattern. Per exemple, no utilitzis <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, etc., perquè obtindries resultats estranys o llocs trencats.</li>
+<li>Les dades de cada camp es limiten a 255 caràcters de text.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Format de data"><![CDATA[
+<h2>Format de data</h2>
+<p>Aquesta opció afectarà només la manera com es mostren les dates dels articles a la portada del lloc.</p>
+        ]]></item>
+        <item id="default_event" title="Panell predeterminat"><![CDATA[
+<h2>Panell predeterminat</h2>
+<p>El panell de la interfície d’administració de Textpattern que apareixerà primer quan algú iniciï sessió.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Estat de publicació predeterminat"><![CDATA[
+<h2>Estat de publicació predeterminat</h2>
+<p>Defineix l’estat de visibilitat de publicació dels articles de Textpattern creats recentment.</p>
+<p>Tingues en compte que aquesta preferència no afecta l’estat dels articles creats o editats abans de qualsevol canvi.</p>
+<p>L’estat de publicació predeterminat és un dels següents:</p>
+<ul>
+    <li>Esborrany</li>
+    <li>Amagat</li>
+    <li>Pendent</li>
+    <li>Publicat</li>
+    <li>Fixat</li>
+</ul>
+<p>Un article <strong>esborrany</strong> es considera un treball en curs i no és visible fora de l’àrea d’administració de Textpattern (és a dir, no és visible a la part pública de Textpattern ni es sindica als canals).</p>
+<p>Un article <strong>amagat</strong> no és visible fora de l’àrea d’administració de Textpattern.</p>
+<p>Un article <strong>pendent</strong> es considera llest per a la publicació i a l’espera d’aprovació, però no és visible fora de l’àrea d’administració de Textpattern.</p>
+<p>Un article <strong>publicat</strong> normalment és visible fora de l’àrea d’administració de Textpattern (és a dir, visible a la part pública de Textpattern i sindicat als canals si la preferència ho permet). Si un article està en estat publicat i té una data de caducitat, l’estat continuarà sent publicat després que s’hagi assolit aquesta data, però l’article només apareixerà fora de l’àrea d’administració si es permet publicar articles caducats.</p>
+<p>Un article <strong>fixat</strong> és similar a un article <strong>publicat</strong> en el sentit que es pot veure fora de l’àrea d’administració de Textpattern, però <strong>no</strong> apareixerà a les llistes d’articles tret que l’etiqueta <code>article</code> o <code>article_custom</code> corresponent inclogui un atribut <code>status</code> amb el valor <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Selecciona el doctype HTML que vols utilitzar (HTML5 o XHTML). Això afecta els formularis d’entrada de comentaris, la renderització Textile de <code>&lt;abbr&gt;</code> o <code>&lt;acronym&gt;</code> i les etiquetes <code>&lt;link&gt;</code> generades per l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Activar la previsualització del tema en mode desenvolupament?"><![CDATA[
+<h2>Activar la previsualització del tema en mode desenvolupament?</h2>
+<p>Els usuaris amb prou privilegis (per defecte, els que tenen rols de Publisher i Designer) poden desenvolupar i previsualitzar de manera segura un tema nou mentre la resta d’usuaris continuaran veient el tema antic (fins que es desplegui el nou).</p>
+<p>Tanmateix, els usuaris amb privilegis que no vulguin participar en el desenvolupament de temes poden desactivar la previsualització del tema de desenvolupament. Aleshores se’ls servirà el tema «públic» actual, igual que als visitants estàndard del lloc.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Activar el suport per etiquetes curtes?"><![CDATA[
+<h2>Activar el suport per etiquetes curtes?</h2>
+<p>Les etiquetes Textpattern tenen la forma <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. És possible reduir la quantitat d’escriptura necessària activant una notació abreujada en què es pot ometre <code>txp:</code> seguint unes quantes directrius senzilles. Aquí tens alguns exemples per demostrar el concepte:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> esdevé <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> esdevé <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> esdevé <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> esdevé <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> esdevé <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (tingues en compte que es pot utilitzar el prefix del connector per a l’etiqueta <code>else</code>).</li>
+</ul>
+<p>Si una etiqueta conté un guió baix i actives les etiquetes curtes, el concepte bàsic és:</p>
+<ol>
+    <li>Elimina el prefix <code>txp:</code>.</li>
+    <li>Substitueix la primera aparició del guió baix per <code>::</code>.</li>
+</ol>
+<p>Tingues en compte que configurar aquesta preferència no afecta la possibilitat d’utilitzar els codis curts <code>&lt;txp:output_form /&gt;</code> per renderitzar fragments de formulari. Encara pots utilitzar <code>&lt;txp::shortcode /&gt;</code>, que s’interpretarà com <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Permetre servidor de XML-RPC?"><![CDATA[
+<h2>Permetre servidor de XML-RPC?</h2>
+<p>Si vols utilitzar <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> per controlar Textpattern remotament (p. ex. amb aplicacions d’escriptori o mòbils) has d’activar el servidor XML-RPC posant aquesta opció en «Sí».</p>
+        ]]></item>
+        <item id="enhanced_email" title="Utilitzar funcionalitats de correu millorades"><![CDATA[
+<h2>Utilitzar funcionalitats de correu millorades</h2>
+<p>Posar això en «No» farà que tot el correu – com ara sol·licituds de restabliment de contrasenya de compte i correus de connectors com com_connect – passi per la funció <code>mail()</code> de PHP. Seleccionar «Sí» utilitzarà en canvi PHPMailer, que obre opcions per encaminar el correu a través de servidors SMTP externs.</p>
+<p>Si tens problemes amb el lliurament de correus (especialment amb proveïdors en línia com Gmail, Outlook, Yahoo!, etc.), el culpable probable és que el teu domini no es veu com una font de confiança. Posar això en «Sí» pot millorar el lliurament. A més, utilitzar SMTP pot oferir una millor compatibilitat amb alguns proveïdors de correu i millorar encara més el lliurament.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Els fitxers de registre caduquen després de quants dies?"><![CDATA[
+<h2>Els fitxers de registre caduquen després de quants dies?</h2>
+<p>Quan el registre de Textpattern està activat, pots especificar durant quant de temps (en dies) s’han de mantenir els registres. «7» mantindrà els registres disponibles durant set dies.</p>
+<p><strong>Nota:</strong> Els registres només es retallen quan visualitzes el panell «Registres de visitants»; en cas contrari continuaran creixent en mida.</p>
+        ]]></item>
+        <item id="file_base_path" title="Ruta del directori de fitxers"><![CDATA[
+<h2>Ruta del directori de fitxers</h2>
+<p>Això estableix el <strong>camí absolut</strong> al directori on s’emmagatzemaran permanentment les pujades de fitxers. PHP ha de tenir permís d’escriptura en aquest directori.</p>
+<p><strong>Nota:</strong> Considera moure aquest directori fora de la carpeta de documents pública del teu lloc web per obtenir més seguretat.</p>
+        ]]></item>
+        <item id="file_download_header" title="Capçalera de descàrrega de fitxer"><![CDATA[
+<h2>Capçalera de descàrrega de fitxer</h2>
+<p>Et permet personalitzar com es gestionen les descàrregues de fitxers.</p>
+<p>Normalment totes les descàrregues es tracten com a adjunts i es descarreguen (segons com tingui configurat el navegador aquest tipus de fitxer). Si vols donar pistes sobre com t’agradaria que es tractessin alguns tipus de fitxer o tots, pots proporcionar aquí codi d’etiquetes. Un exemple podria ser mostrar els fitxers PDF que hagis afegit a la categoria de Textpattern «inline-pdf» en línia, en lloc de descarregar-los:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Mida màxima dels fitxers per pujar (en bytes)"><![CDATA[
+<h2>Mida màxima dels fitxers per pujar (en bytes)</h2>
+<p>Pots restringir la mida màxima (en bytes) de les pujades de fitxers. Tingues en compte que aquest valor també està limitat per la configuració de PHP. Si Textpattern detecta que la configuració de PHP limita la mida de pujada a un valor més petit, l’ajustarà automàticament a la baixa. Si vols permetre pujades de fitxers més grans des del navegador, contacta amb el teu allotjador (els valors rellevants al fitxer <code>php.ini</code> són <code>post_max_size</code>, <code>upload_max_filesize</code> i <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Zona horària"><![CDATA[
+<h2>Zona horària</h2>
+<p>Per mostrar les dates a la teva zona horària local, selecciona la teva zona horària.</p>
+        ]]></item>
+        <item id="img_dir" title="Directori d’imatges"><![CDATA[
+<h2>Directori d’imatges</h2>
+<p>Si vols personalitzar el nom del teu directori d’imatges, ho pots fer aquí. Primer has de crear el directori a l’arrel de la instal·lació de Textpattern, i també t’has d’assegurar que PHP hi pugui escriure.</p>
+<p>Aquest camí és sempre un <strong>camí relatiu</strong> (al directori de la teva instal·lació arrel de Textpattern).</p>
+<p>El valor per defecte és <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Incloure l’adreça de correu a les fonts Atom?"><![CDATA[
+<h2>Incloure l’adreça de correu a les fonts Atom?</h2>
+<p>Això et permet incloure l’adreça de correu de l’autor (tal com està definida al seu compte d’usuari) d’un article a la part <code>author</code> de les fonts Atom.</p>
+        ]]></item>
+        <item id="is_dst" title="Horari d’estiu activat?"><![CDATA[
+<h2>Horari d’estiu activat?</h2>
+<p>Indica si l’horari d’estiu (DST) està actualment activat per a la teva zona horària.</p>
+        ]]></item>
+        <item id="logging" title="Registre"><![CDATA[
+<h2>Registre</h2>
+<p>Pots seleccionar el nivell de registre de visitants que realitza Textpattern:</p>
+<ul>
+    <li><strong>Tots els accessos:</strong> Textpattern registrarà totes les visualitzacions de pàgina del teu lloc</li>
+    <li><strong>Només referències:</strong> Textpattern només registrarà les visites provinents d’altres llocs</li>
+    <li><strong>Cap:</strong> Textpattern no registrarà cap visualització de pàgina</li>
+</ul>
+<p>A partir de Textpattern 4.7.0, Textpattern no recull ni emmagatzema informació de l’adreça IP dels visitants. Si reculls o emmagatzemes adreces IP fora de Textpattern, pren les precaucions adequades per emmagatzemar i/o utilitzar les dades d’acord amb les lleis aplicables, com ara el <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>, i aplica una seguretat robusta a tots els àmbits del teu servidor i la instal·lació de Textpattern per evitar que es comprometin aquestes dades.</p>
+<p>Es recomana fermament que deixis aquest paràmetre al seu valor per defecte, «Cap», tret que necessitis absolutament aquesta informació i, a més, declaris públicament l’ús que en faràs.</p>
+        ]]></item>
+        <item id="max_url_len" title="Longitud màxima de les URL (en caràcters)"><![CDATA[
+<h2>Longitud màxima de les URL (en caràcters)</h2>
+<p>Això impedeix que les URL més llargues que la longitud especificada funcionin. Pot ser útil per limitar danys i per a la seguretat del lloc.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Mostrar els enllaços d’ajuda inline a la part d’administració"><![CDATA[
+<h2>Mostrar els enllaços d’ajuda inline a la part d’administració</h2>
+<p>Si vols amagar els enllaços d’ajuda en línia del costat d’administració (finestres emergents d’ajuda de Textpattern) a tot el sistema, canvia aquest paràmetre a «Cap».</p>
+        ]]></item>
+        <item id="never_display_email" title="Amagar l’adreça de correu de qui comenta?"><![CDATA[
+<h2>Amagar l’adreça de correu de qui comenta?</h2>
+<p>Aquest paràmetre controla si l’adreça de correu electrònic de qui fa el comentari s’ha de mostrar públicament.</p>
+<p>Es recomana no mostrar adreces de correu, per cortesia envers els teus usuaris, però pot haver-hi situacions en què mostrar-les sigui desitjable.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Utilitzar codificació ISO-8859-1 als correus (per defecte és UTF-8)?"><![CDATA[
+<h2>Utilitzar codificació ISO-8859-1 als correus (per defecte és UTF-8)?</h2>
+<p>Textpattern utilitza codificació UTF-8 sempre que és possible per defecte, també per als correus sortints. Tot i això, alguns clients de correu antics (incloses algunes versions de Microsoft Outlook) no tenen un suport adequat per UTF-8. Si trobes caràcters distorsionats als correus, aquest paràmetre convertirà el text a codificació ISO-8859-1 abans d’enviar-los.</p>
+<p><strong>Nota:</strong> Si utilitzes una llengua els caràcters de la qual no es poden representar en ISO-8859-1, aquest paràmetre malauradament no t’ajudarà. Hauries de buscar un client de correu compatible amb UTF-8 (o Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Tipus de formularis de sobreescriptura"><![CDATA[
+<h2>Tipus de formularis de sobreescriptura</h2>
+<p>Tria quins tipus de formulari tindran les seves plantilles disponibles al panell Escriure com a formularis de sobreescriptura.</p>
+        ]]></item>
+        <item id="permlink_format" title="Patró d’URL del títol de l’enllaç permanent"><![CDATA[
+<h2>Patró d’URL del títol de l’enllaç permanent</h2>
+<p>Això defineix el mètode amb què es construeixen i s’assignen les URL dels articles quan s’utilitza un mode no brut.</p>
+<p>Quan es publica un article, la seva URL es genera a partir del títol de l’article tret que s’hagi proporcionat una URL específica al camp de títol només per a la URL.</p>
+<p>Fixa’t en el títol d’article següent: <em>Ann and Bob eat cake</em></p>
+<p>Quan l’opció de patró d’URL del títol de l’enllaç permanent està en «Separat per guions (titol-així)», la URL de l’article seria:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Quan l’opció de patró d’URL del títol de l’enllaç permanent està en «Intercalat en majúscules (TitolAixí)», la URL de l’article seria:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Patró d’URL de l’article"><![CDATA[
+<h2>Patró d’URL de l’article</h2>
+<p>Això defineix el mètode amb què s’accedeix als articles individuals mitjançant la URL mostrada amb l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
+<p>El mode «?=messy» és el més compatible – funcionarà amb poca o cap configuració requerida – però és el menys beneficiós pel que fa a la llegibilitat de la URL i a l’optimització per a motors de cerca (SEO). En aquest mode, les URL dels articles del teu lloc tindrien aquest aspecte:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Tots els altres modes requereixen la funcionalitat de reescriptura d’URL del servidor web (p. ex. el mòdul <code>mod_rewrite</code> d’Apache o directives de reescriptura NGINX al bloc <code>server</code>). Si el teu servidor no admet funcionalitat de reescriptura d’URL, contacta amb el teu allotjador o utilitza el mode «?=messy» esmentat anteriorment.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Ruta del directori de memòria cau dels connectors"><![CDATA[
+<h2>Ruta del directori de memòria cau dels connectors</h2>
+<p>Aquest paràmetre s’utilitza principalment per a desenvolupadors de connectors. Quan s’especifica, pots posar el fitxer font del connector (no compilat) en aquest directori i Textpattern el carregarà automàticament, de manera que podràs editar fàcilment el connector i veure immediatament l’efecte que té sense haver d’instal·lar/activar el connector. <strong>Compte</strong>, però, que fent-ho així, un connector trencat (que no es compili) també pot trencar Textpattern!</p>
+<p>Es recomana que, en un lloc en producció, carreguis els connectors a través del panell estàndard «Connectors» en lloc d’utilitzar el directori de memòria cau de connectors.</p>
+<p><strong>Nota:</strong> No especifiquis el mateix directori tant per al «temporal» com per a la «memòria cau de connectors», ja que això causaria problemes (Textpattern intentaria executar el contingut dels fitxers de registre temporals com si fossin connectors).</p>
+        ]]></item>
+        <item id="production_status" title="Estat del sistema"><![CDATA[
+<h2>Estat del sistema</h2>
+<p>Un lloc Textpattern té un dels tres modes següents:</p>
+<ol>
+    <li>«Depuració»</li>
+    <li>«Proves»</li>
+    <li>«Producció»</li>
+</ol>
+<h3>Mode de depuració</h3>
+<p>Tots els missatges d’error de PHP al teu lloc públic seran visibles, igual que els avisos sobre codi i connectors que no funcionin correctament. A més, la informació següent serà visible quan visualitzis el codi HTML font de les pàgines públiques:</p>
+<ul>
+    <li>el temps que ha trigat el servidor a generar la pàgina («Runtime»)</li>
+    <li>el nombre de consultes MySQL executades</li>
+    <li>l’ús aproximat màxim de memòria</li>
+    <li>totes les etiquetes de Textpattern trobades mentre es construïa la pàgina (també conegut com a traça d’etiquetes)</li>
+</ul>
+<h3>Mode de proves</h3>
+<p>Tots els missatges d’error de PHP al teu lloc públic seran visibles, igual que els avisos sobre codi i connectors que no funcionin correctament. La informació següent serà visible quan visualitzis el codi HTML font de les pàgines públiques:</p>
+<ul>
+    <li>el temps que ha trigat el servidor a generar la pàgina («Runtime»)</li>
+    <li>el nombre de consultes MySQL executades</li>
+    <li>l’ús aproximat màxim de memòria</li>
+</ul>
+<h3>Mode de producció</h3>
+<p>No s’enviarà a la pàgina cap informació de diagnòstic ni de registre d’errors. En general, el mode Producció és el preferit, ja que ofereix la millor experiència d’usuari i imposa la menor càrrega al servidor.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema de la web pública"><![CDATA[
+<h2>Tema de la web pública</h2>
+<p>El tema de front-end predeterminat que s’utilitzarà quan algú visiti el teu lloc web públic. Textpattern inclou un tema predeterminat preinstal·lat, a més de l’opció de començar sense tema. També pots afegir paquets de temes al directori <code>textpattern/themes</code> perquè estiguin disponibles per utilitzar.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publicar els articles caducats?"><![CDATA[
+<h2>Publicar els articles caducats?</h2>
+<p>Quan està en «Sí», els articles caducats continuaran mostrant-se al lloc un cop hagi passat la seva data de caducitat. Pots utilitzar l’etiqueta <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> per mostrar contingut o marcatge alternatiu per als articles caducats.</p>
+<p>Quan està en «No», els articles caducats s’eliminaran del lloc públic i retornaran un codi d’estat HTTP "410 Gone". El valor per defecte és «No».</p>
+        ]]></item>
+        <item id="publisher_email" title="Enviar les dades d’inici de sessió des d’aquesta adreça de correu"><![CDATA[
+<h2>Enviar les dades d’inici de sessió des d’aquesta adreça de correu</h2>
+<p>Especifica una adreça de correu electrònic que s’utilitzarà com a adreça «From:» del remitent als missatges amb informació d’inici de sessió per a usuaris nous.</p>
+<p>Si aquesta preferència es deixa en blanc o conté una adreça de correu electrònic no vàlida, Textpattern utilitzarà el nom i l’adreça de l’usuari actualment connectat.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Quants articles s’han d’incloure als canals?"><![CDATA[
+<h2>Quants articles s’han d’incloure als canals?</h2>
+<p>Aquest és el nombre màxim d’articles actuals que es sindicaran alhora, en formats RSS i Atom.</p>
+<p>Es recomana un valor baix, com ara de <code>5</code> a <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Nombre de passades addicionals del parsejador"><![CDATA[
+<h2>Nombre de passades addicionals del parsejador</h2>
+<p>El parsejador d’etiquetes de Textpattern normalment substitueix totes les etiquetes pel contingut de la base de dades en una sola passada de la plantilla de pàgina. En alguns casos, això pot ser insuficient, per exemple:</p>
+<ul>
+    <li>quan es fan servir connectors amb ordre de càrrega baix com a atributs d’etiquetes</li>
+    <li>substitucions de codi dins d’etiquetes <code>&lt;txp:php&gt;</code></li>
+    <li>omissió d’elements de pàgina anteriors a la pàgina perquè puguin rebre contingut derivat d’una etiqueta que es processa més tard</li>
+</ul>
+<p>Tradicionalment, Textpattern executa una passada addicional (anomenada «secondpass») per motius d’herència, d’aquí el valor predeterminat d’aquesta preferència de <code>1</code>. No obstant això, més passades augmenten les possibilitats que etiquetes no desitjades se surtin i es processin. Millores recents al parsejador d’etiquetes han reduït la necessitat d’aquesta segona passada. Per tant, tret que utilitzis la segona passada per a un motiu concret, redueix aquest valor a <code>0</code> per fer el teu lloc més segur.</p>
+<p>Si posteriorment trobes etiquetes sense processar que es mostren al teu lloc web (i no hi ha altres errors d’etiquetes en els modes de Proves/Depuració a causa de parelles d’etiquetes que no coincideixen), contacta’ns amb la plantilla de pàgina/codi/exemple de connector. Intentem eliminar la necessitat de passades addicionals del parsejador, i aquesta informació ens ajudarà a aconseguir-ho.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Enviar la capçalera &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Enviar la capçalera "Last-Modified"?</h2>
+<p>Quan està activat, Textpattern llegirà la capçalera HTTP <code>If-Modified-Since</code> d’un visitant (si existeix) i la compararà amb l’última actualització del lloc. Si no ha canviat res des de l’última vegada que el visitant va carregar la pàgina (és a dir, si la marca temporal que envia el navegador és la mateixa que l’última actualització del lloc), s’enviarà una capçalera indicant al navegador del visitant que faci servir la versió en memòria cau de la pàgina.</p>
+<p>Això pot reduir el consum d’ample de banda, els temps de càrrega de pàgina i la càrrega del servidor web.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Mostrar el recompte de comentaris als canals?"><![CDATA[
+<h2>Mostrar el recompte de comentaris als canals?</h2>
+<p>Quan està en «Sí», aquest paràmetre afegirà el nombre de comentaris als títols dels teus articles als canals RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Eslògan del lloc"><![CDATA[
+<h2>Eslògan del lloc</h2>
+<p>L’<a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">eslògan del lloc <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> és un resum o descripció del teu lloc. S’utilitzarà com a descripció del lloc quan calgui, com ara als canals RSS/Atom, i es pot utilitzar a qualsevol nombre de llocs del teu lloc, segons vulguis.</p>
+<p><strong>Nota:</strong> L’eslògan del lloc és opcional, però pot ser necessari per tenir un canal RSS o Atom vàlid.</p>
+        ]]></item>
+        <item id="sitename" title="Nom del lloc"><![CDATA[
+<h2>Nom del lloc</h2>
+<p>El <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">nom o títol del teu lloc <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>. Aquest apareixerà a la barra de títol del navegador del visitant o al lector de canals, i a qualsevol nombre d’altres llocs del teu lloc, segons vulguis.</p>
+        ]]></item>
+        <item id="siteurl" title="URL del lloc"><![CDATA[
+<h2>URL del lloc</h2>
+<p>Aquesta és l’adreça del teu lloc Textpattern, per exemple <code>www.example.com</code>.</p>
+<p><strong>Nota:</strong> No cal incloure <code>http://</code>, <code>https://</code> ni una barra final <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Directori de temes"><![CDATA[
+<h2>Directori de temes</h2>
+<p>Si vols personalitzar el nom del directori on s’emmagatzemaran permanentment els fitxers plans dels temes de front-end, ho pots fer aquí. Primer has de crear el directori a l’arrel de la instal·lació de Textpattern, i també t’has d’assegurar que PHP hi pugui escriure.</p>
+<p>Aquest camí és sempre un <strong>camí relatiu</strong> (al directori de la instal·lació arrel de Textpattern).</p>
+<p>El valor per defecte és <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Adreça d’enviament SMTP"><![CDATA[
+<h2>Adreça d’enviament SMTP</h2>
+<p>Aquesta preferència s’ha de deixar en blanc tret que tinguis problemes per enviar correus electrònics des de Textpattern (si no s’envia cap correu). Si es produeix aquest problema, pots introduir qualsevol adreça de correu vàlida aquí, tot i que preferiblement amb el mateix nom de domini que el lloc on has instal·lat Textpattern (és a dir, si el teu lloc és <code>https://example.com</code>, podries utilitzar <code>you@example.com</code>).</p>
+<p>Per als qui estiguin interessats en els detalls tècnics:</p>
+<ul>
+    <li>En servidors UNIX-like/macOS, l’adreça de correu introduïda s’utilitza com a quart paràmetre (prefixat amb "-f") de la funció <code>mail()</code> de PHP</li>
+    <li>En servidors Windows, l’adreça de correu introduïda s’utilitza per establir (o sobreescriure) el paràmetre <code>sendmail_from</code> de php.ini</li>
+</ul>
+<p>Això garanteix que l’adreça d’enviament SMTP (que no necessàriament és la mateixa que la capçalera "From:" que normalment veus als correus) s’estableix a l’adreça de correu que has introduït aquí, cosa que és un requisit per enviar correus electrònics en alguns servidors web.</p>
+        ]]></item>
+        <item id="smtp_host" title="Servidor SMTP"><![CDATA[
+<h2>Servidor SMTP</h2>
+<p>Per millorar el lliurament de missatges i aprofitar l’encaminament de correu a través d’un servei extern (com SendGrid, AWS SES, Mailchimp, Mailgun, etc.), especifica aquí el servidor SMTP. Consulta el teu proveïdor SMTP per obtenir aquest valor.</p>
+<p>Aquest valor es pot proporcionar definint una constant <code>SMTP_HOST</code> al fitxer <code>config.php</code>; en aquest cas, el valor apareixerà en gris al panell Preferències.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Contrasenya SMTP"><![CDATA[
+<h2>Contrasenya SMTP</h2>
+<p>Si la connexió SMTP requereix una contrasenya per al nom d’usuari especificat, proporciona-la aquí. Consulta la documentació del teu proveïdor per obtenir detalls.</p>
+<p>Nota: encara que la contrasenya no es mostrarà aquí, <em>s</em>emmagatzemarà en text pla a la taula de preferències de la base de dades. Si vols augmentar la seguretat, pots definir una constant <code>SMTP_PASS</code> al fitxer <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>Port SMTP</h2>
+<p>Si has especificat un servidor SMTP, has d’especificar un port per habilitar l’encaminament SMTP. Els ports més habituals són:</p>
+<ul>
+    <li>25 - per a correu sense seguretat</li>
+    <li>465 - llegat (no oficial) per a correu segur</li>
+    <li>587 - per defecte (recomanat) per a correu TLS segur</li>
+</ul>
+<p>El teu proveïdor SMTP pot utilitzar un port diferent; consulta’n la documentació.</p>
+<p>Aquest valor es pot proporcionar definint una constant <code>SMTP_PORT</code> al fitxer <code>config.php</code>; en aquest cas, el valor es mostrarà en gris al panell Preferències.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Mètode de seguretat SMTP"><![CDATA[
+<h2>Mètode de seguretat SMTP</h2>
+<p>Tria el mecanisme que el teu proveïdor SMTP utilitza com a protocol de seguretat del correu electrònic. Consulta’n la documentació per obtenir detalls.</p>
+<p>Aquest valor es pot proporcionar definint una constant <code>SMTP_SECTYPE</code> al fitxer <code>config.php</code>; en aquest cas, el valor es mostrarà en gris al panell Preferències.</p>
+        ]]></item>
+        <item id="smtp_user" title="Nom d’usuari SMTP"><![CDATA[
+<h2>Nom d’usuari SMTP</h2>
+<p>Si la connexió SMTP requereix un nom d’usuari/entrada, proporciona’l aquí. Consulta la documentació del proveïdor per obtenir detalls.</p>
+<p>Aquest valor es pot proporcionar definint una constant <code>SMTP_USER</code> al fitxer <code>config.php</code>; en aquest cas, el valor es mostrarà en gris al panell Preferències.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Llistes negres de spam (separades per comes)"><![CDATA[
+<h2>Llistes negres de spam (separades per comes)</h2>
+<p>Els proveïdors de <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">llistes negres <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> que s’introdueixin aquí es consultaran quan es publiqui un comentari al teu blog, i es comprovarà l’adreça IP de qui fa el comentari. Si l’adreça IP hi figura, vol dir que hi ha hagut un o més informes de spam associats a aquesta IP en el passat, i el comentari serà rebutjat. Independentment del resultat de la comprovació, Textpattern no emmagatzema l’adreça IP de qui fa el comentari.</p>
+<p>Pots introduir una llista de noms de domini aquí, separats per comes. Tingues en compte que és responsabilitat teva assegurar que les llistes negres són adequades per a la seva finalitat.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindicar només l’extracte de l’article?"><![CDATA[
+<h2>Sindicar <strong>només</strong> l’extracte de l’article?</h2>
+<p>Si això està en «No», els elements del canal contindran el cos complet dels articles.</p>
+<p>Si això està en «Sí», els elements del canal contindran l’extracte de l’article en lloc del cos quan estigui disponible.</p>
+        ]]></item>
+        <item id="tempdir" title="Directori temporal"><![CDATA[
+<h2>Directori temporal</h2>
+<p>Estableix un <strong>camí absolut</strong> a un directori temporal (de vegades conegut com a «tmp» o «temp»). PHP ha de tenir permís d’escriptura en aquest directori. Aquest directori s’utilitza per a fitxers temporals, per exemple per a pujades de qualsevol tipus (connectors, fitxers o imatges).</p>
+<p><strong>Notes:</strong>
+<ul>
+    <li>No especifiquis el mateix directori per a «temporal» i «memòria cau de connectors», ja que això causaria problemes (Textpattern intentaria executar el contingut dels fitxers de registre temporals com si fossin connectors).</li>
+    <li>Considera moure aquest directori fora de la carpeta de documents pública del teu lloc web per obtenir més seguretat.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema per a l’administració"><![CDATA[
+<h2>Tema per a l’administració</h2>
+<p>El tema predeterminat del costat d’administració que s’utilitzarà quan algú iniciï sessió a Textpattern. Textpattern inclou diversos temes d’administració preinstal·lats i també pots afegir paquets de temes personalitzats al directori <code>textpattern/admin-themes</code> perquè estiguin disponibles per utilitzar.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Afegir una barra final a les URL"><![CDATA[
+<h2>Afegir una barra final a les URL</h2>
+<p>Si Textpattern afegirà automàticament una barra final a les URL que genera. Les opcions són:</p>
+<ul>
+    <li><strong>No</strong> - Mai</li>
+    <li><strong>Llista</strong> - Només a les pàgines de destinació basades en llistes (és a dir, no quan es visualitzen articles individuals)</li>
+    <li><strong>Sí</strong> - Sempre</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Funcions PHP associades a txp:evaluate"><![CDATA[
+<h2>Funcions PHP associades a txp:evaluate</h2>
+<p>Això és una llista separada per comes d’elements <code>function</code> o <code>alias=function</code>, p. ex. <code>md5</code>, <code>replace=str_replace</code>. Els elements especificats en aquesta llista es poden utilitzar a l’atribut <code>query</code> de l’etiqueta <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> ha de retornar un valor escalar (<strong>no</strong> una matriu/objecte).</p>
+        ]]></item>
+        <item id="use_comments" title="Permetre comentaris?"><![CDATA[
+<h2>Permetre comentaris?</h2>
+<p>Això defineix si s’ha d’activar o desactivar la funcionalitat de comentaris de Textpattern.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Utilitzar l’adreça de correu per construir identificadors de canals (per defecte es fa servir l’URL del lloc)?"><![CDATA[
+<h2>Utilitzar l’adreça de correu per construir identificadors de canals (per defecte es fa servir l’URL del lloc)?</h2>
+<p>Els elements d’un canal Atom requereixen un identificador únic.</p>
+<p>Per generar identificadors únics per al teu lloc, Textpattern et permet triar entre una adreça de correu o el nom de domini per incloure en aquests identificadors. L’adreça de correu serà la primera que es va utilitzar en crear el lloc. A menys que prevegis canviar el nom de domini en el futur, probablement és segur posar-ho en «No».</p>
+        ]]></item>
+        <item id="use_plugins" title="Utilitzar connectors?"><![CDATA[
+<h2>Utilitzar connectors?</h2>
+<p>Això et permet desactivar tot el suport per als connectors de Textpattern. És útil si estàs depurant errors al teu lloc i vols comprovar si hi ha un o més connectors implicats.</p>
+        ]]></item>
+        <item id="use_textile" title="Format de text predeterminat"><![CDATA[
+<h2>Format de text predeterminat</h2>
+<p>El format de text que triïs aquí esdevindrà el predeterminat per al marcatge d’extracte i cos al panell «Escriure». Pots optar per permetre el processament complet de Textile, convertir salts de línia en marques de paràgraf HTML o bé no convertir cap text.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> és una utilitat destinada a simplificar la conversió de text pla a HTML. Quan està activat, Textile processarà el text del cos dels articles i en retornarà HTML estructuralment correcte.</p>
+<p>Textile també ofereix un conjunt de comandaments potent però fàcil d’aprendre per formatar text, definir estructures com llistes, encapçalaments i cites en bloc, i inserir enllaços i imatges.</p>
+        ]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title="Introducció"><![CDATA[]]></item>
-        <item id="section_default" title="Secció predeterminada per a publicar"><![CDATA[]]></item>
-        <item id="section_description" title="Descripció"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title="Incloure en la cerca dins el lloc"><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title="Utilitza estils"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Utilitza pàgina"><![CDATA[]]></item>
-        <item id="section_uses_skin" title="Utilitza el tema"><![CDATA[]]></item>
+    <group id="section" title="Panell de seccions">
+        <item id="section_category" title="Introducció"><![CDATA[
+<h2>Introducció</h2>
+<p>Les seccions de Textpattern és millor entendre-les com a anàlogues a les seccions d’un diari; totes pertanyen a la mateixa publicació, però cadascuna pot tenir un disseny diferent, un estil d’article diferent, etc.</p>
+<p>Per a la majoria de llocs web, només cal crear el mínim nombre necessari de seccions.</p>
+<h3>Un escenari probable per a un lloc web amb tres seccions:</h3>
+<ol>
+    <li><strong>Arxiu:</strong> la «Secció» a la qual pertanyen tots els articles que apareixen a la pàgina principal. Quan un lector fa clic a l’enllaç permanent d’un article, aquest es mostrarà amb el disseny de pàgina assignat a aquesta «Secció». Per anar a una llista paginada dels articles més recents assignats a la secció «Archive», la URL seria <code>https://example.com/archive/</code>.</li>
+    <li><strong>Quant a:</strong> una pàgina «quant a aquest lloc», que difereix de la pàgina principal i de la secció «Archive» en què és més estàtica, pot tenir un disseny diferent i probablement només contindrà un article. La secció «About» s’accediria a <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotos:</strong> una «Secció» amb un disseny diferent (i possiblement CSS diferent) que mostrarà fotos en lloc d’articles.</li>
+</ol>
+<p>Tingues en compte que sempre existeix una secció especial oculta, anomenada default. Aquesta secció per defecte utilitza la pàgina anomenada default i l’estil anomenat default, i construeix la pàgina principal del teu lloc.</p>
+        ]]></item>
+        <item id="section_default" title="Secció predeterminada per a publicar"><![CDATA[
+<h2>Secció de publicació predeterminada</h2>
+<p>Aquesta opció determina quina secció es preseleccionarà al menú Secció quan es creï un article nou al panell «Escriure».</p>
+<p>Si la majoria dels teus articles acaben pertanyent a una secció concreta, selecciona-la a la llista d’aquí. Els canvis es reflectiran immediatament.</p>
+<p>Pots sobreescriure això article per article al panell «Escriure» seleccionant una secció diferent al panell «Ordena i mostra».</p>
+        ]]></item>
+        <item id="section_description" title="Descripció"><![CDATA[
+<h2>Descripció</h2>
+<p>La descripció de la secció és un component opcional que pot ajudar els motors de cerca i els rastrejadors web a identificar i classificar millor el contingut.</p>
+<p>La descripció de l’article està limitada a un màxim de 255 caràcters. Tingues en compte que alguns motors de cerca imposen límits de caràcters a la longitud de la <code>meta description</code> d’una pàgina per motius pràctics de visualització a les pàgines de resultats (SERP), i aquest límit pot ser inferior al límit de 255 caràcters de Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Els articles de la secció apareixen a la portada?"><![CDATA[
+<h2>Els articles de la secció apareixen a la portada?</h2>
+<p>Els articles d’algunes seccions, com les que s’assemblen més a pàgines web «estàtiques», poden semblar fora de lloc en el flux sensible al temps de la portada del lloc.</p>
+<p>Posar-ho en «No» impedirà que els articles assignats a aquesta secció apareguin a la portada.</p>
+        ]]></item>
+        <item id="section_searchable" title="Incloure en la cerca dins el lloc"><![CDATA[
+<h2>Incloure aquesta secció en la cerca del lloc?</h2>
+<p>Això determina si els articles que pertanyen a aquesta secció han d’aparèixer com a part dels resultats de la cerca global del lloc.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindicarem els articles d’aquesta secció?"><![CDATA[
+<h2>Sindicarem els articles d’aquesta secció?</h2>
+<p>Determina si els articles d’aquesta secció apareixeran als canals RSS i Atom del lloc.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Utilitza estils"><![CDATA[
+<h2>Utilitza l’estil</h2>
+<p>Si vols sobreescriure la fulla d’estil predeterminada per a una secció concreta, ho pots fer aquí.</p>
+<p>Això només és rellevant per a fulls d’estil que es mantenen dins el panell «Estils» de Textpattern; si allotges el teu CSS fora de Textpattern (cosa altament recomanada), aquesta opció no té cap efecte.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Utilitza pàgina"><![CDATA[
+<h2>Utilitza la pàgina</h2>
+<p>A Textpattern, les seccions estan lligades a plantilles de pàgina.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Utilitza el tema"><![CDATA[
+<h2>Utilitza el tema</h2>
+<p>Si vols canviar el tema utilitzat per a una secció determinada, ho pots establir aquí a partir de la llista de temes instal·lats actualment.</p>
+        ]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+    <group id="setup" title="Panell de configuració">
+        <item id="setup_admin_url" title="Subdomini d’admin"><![CDATA[
+<h2>Subdomini d’admin</h2>
+<p>El subdomini que vols utilitzar per accedir a la interfície d’administració de Textpattern (p. ex. <code>admin.example.com</code>).</p>
+<p>Consulta la pàgina <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instal·lació multisite de Textpattern</a> per obtenir més detalls.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domini de les galetes"><![CDATA[
+<h2>Domini de les galetes</h2>
+<p>El (sub)domini que vols utilitzar per a les galetes de Textpattern.</p>
+<p>Consulta la pàgina <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instal·lació multisite de Textpattern</a> per obtenir més detalls.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Nom d’usuari"><![CDATA[
+<h2>Nom d’usuari</h2>
+<p>El nom d’usuari del compte d’administrador («Publisher») que utilitzaràs per administrar el lloc.</p>
+<p>Tot i que no hi ha restriccions sobre el nom, és millor evitar seqüències de caràcters complicades i noms d’usuari fàcilment endevinables (p. ex. <code>admin</code>, <code>administrator</code>, etc.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Contrasenya d’usuari"><![CDATA[
+<h2>Contrasenya d’usuari</h2>
+<p>Atès que aquest compte té el nivell d’accés més alt a Textpattern, tria una contrasenya molt robusta o, preferentment, una frase de pas.</p>
+<h3>Consells</h3>
+<ul>
+    <li>Utilitza una barreja de majúscules i minúscules</li>
+    <li>Utilitza números</li>
+    <li>Utilitza símbols</li>
+    <li>Fes-la d’almenys vuit caràcters de longitud</li>
+    <li><strong>Evita</strong> qualsevol informació personal (dates, noms, llocs, familiars, mascotes, etc.)</li>
+    <li><strong>Evita</strong> qualsevol paraula de diccionari sola o repetida, independentment de l’ortografia, la llengua o les majúscules</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Prefix de taula"><![CDATA[
+<h2>Prefix de taula</h2>
+    <p>Només cal utilitzar un prefix de taula si necessites diverses instal·lacions de Textpattern en una sola base de dades. Cada instal·lació de Textpattern necessita un prefix únic.</p>
+    <p>Tingues en compte que el prefix ha d’obeir les regles següents:</p>
+<ul>
+    <li><strong>1r caràcter:</strong> ha de ser a-z, A-Z o guió baix</li>
+    <li><strong>Caràcters següents:</strong> només poden ser a-z, A-Z, 0-9 o guió baix</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title="Autor del tema"><![CDATA[]]></item>
-        <item id="skin_author_uri" title="Lloc web de tema"><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title="Esborrar també les plantilles de tema del servidor"><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title="Tema descripció"><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title="Nom del tema"><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title="Títol del tema"><![CDATA[]]></item>
-        <item id="skin_version" title="Versió del tema"><![CDATA[]]></item>
+    <group id="skin" title="Panell de temes">
+        <item id="skin_author" title="Autor del tema"><![CDATA[
+<h2>Autor del tema</h2>
+<p>L’autor o autors d’aquest tema (opcional).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Lloc web de tema"><![CDATA[
+<h2>Lloc web del tema</h2>
+<p>La URL on es pot trobar informació completa i/o les últimes versions d’aquest tema (opcional).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Esborrar també les plantilles de tema del servidor"><![CDATA[
+<h2>Suprimeix també del disc les plantilles del tema</h2>
+<p>Si està marcat, tots els fitxers de plantilla del(s) tema(es) seleccionat(s) se suprimiran definitivament del disc. No obstant això, els directoris relacionats amb temes i els seus subdirectoris no s’eliminaran si contenen altres fitxers (com JavaScript, imatges, ...).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Suprimir les plantilles no utilitzades de la base de dades en importar"><![CDATA[
+<h2>Suprimir les plantilles no utilitzades de la base de dades en importar</h2>
+<p>Si està marcat, cada plantilla del(s) tema(es) seleccionat(s) que no tingui un fitxer corresponent al disc se suprimirà definitivament de la base de dades. El resultat, en finalitzar l’acció, serà que les plantilles de la base de dades reflectiran tant com sigui possible el que hi ha al disc.</p>
+<p>Tingues en compte que, si has eliminat fitxers de plantilla que Textpattern requereix, se’n crearan versions buides a la base de dades.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Suprimir les plantilles no utilitzades del disc en exportar"><![CDATA[
+<h2>Suprimir les plantilles no utilitzades del disc en exportar</h2>
+<p>Si està marcat, cada fitxer de plantilla del(s) tema(es) seleccionat(s) que no tingui un element corresponent a la base de dades se suprimirà definitivament del tema basat en fitxers. El resultat, en finalitzar l’acció, serà que les plantilles del sistema de fitxers reflectiran exactament el que hi ha a la base de dades.</p>
+        ]]></item>
+        <item id="skin_description" title="Tema descripció"><![CDATA[
+<h2>Descripció del tema</h2>
+<p>Es pot proporcionar un resum breu del disseny/maquetació d’aquest tema (opcional).</p>
+<p>La descripció del tema està limitada a un màxim de 255 caràcters.</p>
+        ]]></item>
+        <item id="skin_import" title="Importa tema"><![CDATA[
+<h2>Importa un tema des del disc</h2>
+<p>Aquest formulari et permet importar un tema a la base de dades de Textpattern des del directori de temes.</p>
+<p>Un tema importable ha de constar d’una carpeta principal llegible que utilitzi el nom del tema com a nom de carpeta i, dins la carpeta, un fitxer <code>manifest.json</code> llegible en el format esperat. La carpeta del tema també hauria de contenir pàgines, formularis i estils en subcarpetes epònimes.</p>
+<p>Tot i que les pàgines i els formularis han de fer servir l’extensió <code>.txp</code>, s’espera que les fulles d’estil siguin fitxers <code>.css</code>. Els formularis també s’han d’agrupar per tipus en directoris dedicats. Textpattern crearà qualsevol plantilla essencial que falti durant la importació.</p>
+<p>Consulta la <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">documentació de temes <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> per obtenir més informació sobre com crear, instal·lar i utilitzar temes dins de Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Nom del tema"><![CDATA[
+<h2>Nom del tema</h2>
+<p>El nom d’un tema s’utilitza per al nom del directori del tema i per a altres propòsits tècnics (obligatori).</p>
+<p>El nom no ha de contenir caràcters especials ni espais.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introducció als temes"><![CDATA[
+<h2>Introducció als temes</h2>
+<p>Un tema de Textpattern és una col·lecció de pàgines, formularis i fulles d’estil. Els temes et permeten separar lògicament els recursos del lloc en grups per facilitar-ne la identificació o per compartir-los amb altres persones. L’acció de crear o importar un tema, i qualsevol recurs que contingui, <em>no</em> té cap impacte en el teu lloc existent. Pots editar o modificar lliurement qualsevol recurs que no estigui associat a una secció del teu lloc, i això no afectarà el lloc en si.</p>
+<p>Per editar recursos d’un tema, visita el panell Pàgines, Formularis o Estils i utilitza el selector desplegable per triar el tema sobre el qual vols treballar. El tema en què estàs treballant es recorda a tota l’àrea d’administració, cosa que et permet canviar ràpidament entre tipus de recursos. Es coneix com el teu <em>tema de treball</em>.</p>
+<p>Consulta la <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">documentació d’usuari de Textpattern <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a> per obtenir més informació.</p>
+        ]]></item>
+        <item id="skin_title" title="Títol del tema"><![CDATA[
+<h2>Títol del tema</h2>
+<p>El títol descriptiu d’un tema, utilitzat per identificar el tema dins dels panells de Textpattern.</p>
+<p>El títol pot contenir caràcters especials i espais.</p>
+        ]]></item>
+        <item id="skin_version" title="Versió del tema"><![CDATA[
+<h2>Versió del tema</h2>
+<p>El número de versió de la versió instal·lada d’aquest tema (opcional).</p>
+        ]]></item>
     </group>
 </help>
 </resources>

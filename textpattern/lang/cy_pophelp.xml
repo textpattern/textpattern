@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="cy">
+    <group id="admin" title="Panel defnyddwyr">
+        <item id="about_privileges" title="Ynghylch rolau"><![CDATA[
+<h2>Ynghylch rolau</h2>
+<h3>Cyhoeddwr</h3>
+<ul>
+    <li>gall reoli erthyglau, sylwadau a dolennau</li>
+    <li>gall ddefnyddio PHP mewn erthyglau os yw’r dewis gweinyddol ‘Caniatáu PHP mewn erthyglau?’ wedi’i osod i ‘Ie’</li>
+    <li>gall reoli delweddau a ffeiliau</li>
+    <li>gall reoli adrannau a chategorïau</li>
+    <li>gall reoli tudalennau, ffurflenni ac arddull</li>
+    <li>gall weld gwybodaeth diagnostig</li>
+    <li>gall reoli hoffterau’r wefan</li>
+    <li>gall reoli defnyddwyr</li>
+    <li>gall reoli logiau ymwelwyr</li>
+    <li>gall reoli ategion</li>
+    <li>gall mewnforio data</li>
+</ul>
+<h3>Golygydd Rheoli</h3>
+<ul>
+    <li>gall reoli erthyglau, sylwadau a dolennau</li>
+    <li>gall ddefnyddio PHP mewn erthyglau os yw’r dewis gweinyddol ‘Caniatáu PHP mewn erthyglau?’ wedi’i osod i ‘Ie’</li>
+    <li>gall reoli delweddau a ffeiliau</li>
+    <li>gall reoli adrannau a chategorïau</li>
+    <li>gall reoli tudalennau, ffurflenni ac arddull</li>
+    <li>gall weld gwybodaeth diagnostig</li>
+    <li>gall reoli hoffterau’r wefan</li>
+    <li>gall weld defnyddwyr</li>
+    <li>gall reoli logiau ymwelwyr</li>
+    <li>gall reoli ategion</li>
+    <li>gall mewnforio data</li>
+</ul>
+<h3>Golygydd Copïo</h3>
+<ul>
+    <li>gall reoli erthyglau gyda chyfyngiad un:
+        <ul>
+            <li>ni all ddileu’r rhai sy’n perthyn i ddefnyddwyr eraill</li>
+        </ul>
+    </li>
+    <li>gall reoli sylwadau a dolennau</li>
+    <li>gall reoli delweddau a ffeiliau</li>
+    <li>gall reoli categorïau</li>
+    <li>gall reoli tudalennau a ffurflenni</li>
+    <li>gall weld defnyddwyr</li>
+    <li>gall reoli logiau ymwelwyr</li>
+</ul>
+<h3>Awdur Staff</h3>
+<ul>
+    <li>gall reoli ei erthyglau ei hun, gweld erthyglau defnyddwyr eraill</li>
+    <li>gall reoli delweddau a ffeiliau</li>
+</ul>
+<h3>Ffrelanser</h3>
+<ul>
+    <li>gall reoli ei erthyglau ei hun mewn ystyr gyfyngedig:
+        <ul>
+            <li>dim ond golygu’r erthygl nes ei bod wedi’i chyhoeddi y gall</li>
+            <li>gall gymhwyso statws <em>dim ond</em> Drafft, Cudd neu Dan sylw</li>
+        </ul>
+    </li>
+    <li>gall weld erthyglau defnyddwyr eraill</li>
+</ul>
+<h3>Dylunydd</h3>
+<ul>
+    <li>gall reoli ei erthyglau ei hun mewn ystyr gyfyngedig:
+        <ul>
+            <li>dim ond golygu’r erthygl nes ei bod wedi’i chyhoeddi y gall</li>
+            <li>gall gymhwyso statws <em>dim ond</em> Drafft, Cudd neu Dan sylw</li>
+        </ul>
+    </li>
+    <li>gall weld erthyglau defnyddwyr eraill</li>
+    <li>gall reoli delweddau</li>
+    <li>gall reoli adrannau</li>
+    <li>gall reoli tudalennau, ffurflenni ac arddull</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Creu awdur"><![CDATA[
+<h2>Ychwanegu awdur newydd</h2>
+<p>Anfonir neges groeso a chyfarwyddiadau mewngofnodi at yr awdur newydd drwy e-bost.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Panel Ysgrifennu">
+        <item id="article_image" title="Delwedd erthygl"><![CDATA[
+<h2>Delwedd erthygl</h2>
+<p>I gysylltu delweddau â’r erthygl hon, rhowch un o’r canlynol yma:</p>
+<ol>
+    <li>un neu fwy o IDau delwedd Textpattern, wedi’u gwahanu gan goma (e.e. <code>12, 25, 18</code>)</li>
+    <li>un neu fwy o URLau cymharol i’r ddelwedd, wedi’u gwahanu gan goma (e.e. <code>/images/my_pic.jpg</code>)</li>
+    <li>un neu fwy o URLau llawn eu cymhwyso, wedi’u gwahanu gan goma (e.e. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Gellir dangos y ddelwedd gyntaf drwy roi tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> y tu mewn i ffurflen erthygl. Yn ddiofyn, bydd yn allbynnu tag HTML <code>&lt;img&gt;</code> cyflawn i’r ddelwedd a ddewiswyd.</p>
+<p>Gallwch ddangos orielau gan ddefnyddio tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Corff"><![CDATA[
+<h2>Corff</h2>
+<p>Cynnwys prif ran yr erthygl sydd yn nghorff yr erthygl.</p>
+<p>Wrth lunio neu baratoi erthyglau i’w cyhoeddi yn Textpattern, gall awdur newid rhwng tair golwg ar yr erthygl: testun plaen, marcio HTML (y cod y mae porwr gwe yn ei ddefnyddio i rendro’r erthygl), a rhagolwg wedi’i rendro.</p>
+        ]]></item>
+        <item id="description" title="Disgrifiad"><![CDATA[
+<h2>Disgrifiad</h2>
+<p>Mae disgrifiad yr erthygl yn elfen ddewisol a all helpu peiriannau chwilio a chrwlariaid gwe i nodi a didoli cynnwys yn well.</p>
+<p>Cyfyngir disgrifiad yr erthygl i uchafswm o 255 o gymeriadau. Sylwer bod rhai peiriannau chwilio yn gosod terfynau cymeriadau ar hyd <code>meta description</code> tudalen er mwyn hwyluso ei dangos ar dudalennau canlyniadau peiriannau chwilio (SERPs), a gall hyn fod yn llai na’r terfyn 255 o gymeriadau yn Textpattern.</p>
+<p>Sylwer bod disgrifiad yr erthygl yn wahanol i ddyfyniad yr erthygl, er eu bod ill dau yn derbyn cynnwys tebyg. Dylai disgrifiad yr erthygl fod wedi’i fwriadu’n bennaf at ddefnydd peiriannau chwilio a chrwlariaid, tra bod dyfyniad yr erthygl yn fwy addas fel crynodeb darllenadwy gan bobl lle bo hynny’n ddymunol.</p>
+        ]]></item>
+        <item id="excerpt" title="Dyfyniad"><![CDATA[
+<h2>Dyfyniad</h2>
+<p>Mae dyfyniadau erthygl yn ddewisol. Gellid defnyddio dyfyniadau fel crynodeb byr o’r erthygl sy’n cael ei dangos fel rhan o fynegai cynnwys, ei defnyddio yn lle corff llawn yr erthygl mewn llifau RSS/Atom y safle, neu ar gyfer nifer o ddefnyddiau eraill.</p>
+        ]]></item>
+        <item id="expire_date" title="Dyddiad dod i ben"><![CDATA[
+<h2>Dyddiad dod i ben</h2>
+<p>Yr amser y labelir erthygl fel un sydd wedi dod i ben. Mae’r amser yn ddewisol a gellir ei osod i unrhyw amser yn y gorffennol neu’r dyfodol.</p>
+<p>Mae’r blychau’n cyfateb i’r wybodaeth ganlynol:</p>
+<ul>
+    <li>Blwyddyn / Mis / Diwrnod</li>
+    <li>Awr (fformat 24-awr) : Munud : Eiliad</li>
+</ul>
+<p>Pan ddaw’r amser, neu os darperir amser yn y gorffennol, daw’r erthygl i ben.</p>
+<p>Os yw’r dewis i ddangos erthyglau sydd wedi dod i ben wedi’i alluogi, bydd yr erthygl yn parhau i fod yn weladwy. Os yw’r dewis i ddangos erthyglau sydd wedi dod i ben wedi’i analluogi, bydd ymwelwyr â thudalen yr erthygl yn cael gwall HTTP 410 yn lle cynnwys yr erthygl.</p>
+        ]]></item>
+        <item id="keywords" title="Allweddeiriau"><![CDATA[
+<h2>Allweddeiriau</h2>
+<p>Mae allweddeiriau’n ddefnyddiol ar gyfer mireinio’r cysylltiadau rhwng erthyglau y tu hwnt i’r rhai a ddarperir gan gategorïau.</p>
+<p>Rhaid i allweddeiriau fod yn eiriau unigol wedi’u gwahanu gan goma.</p>
+        ]]></item>
+        <item id="override_form" title="Ffurflen darostwng"><![CDATA[
+<h2>Ffurflen darostwng</h2>
+<p>Yn ddewisol, gall erthygl ddefnyddio ffurflen wahanol i’r un a neilltuwyd yn ddiofyn – er enghraifft i ddangos dyfyniad erthygl gyda tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> yn lle corff yr erthygl gyda tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> – gellir gosod hyn yma.</p>
+        ]]></item>
+        <item id="publish_date" title="Dyddiad cyhoeddi"><![CDATA[
+<h2>Dyddiad cyhoeddi</h2>
+<p>Yr amser y caiff erthygl neu ffeil ei chyhoeddi neu ei diwygio am y tro mwyaf diweddar. Gellir gosod yr amser i eiliad cyhoeddi’r eitem, neu i unrhyw amser yn y gorffennol neu’r dyfodol.</p>
+<p>Mae’r blychau’n cyfateb i’r wybodaeth ganlynol:</p>
+<ul>
+    <li>Blwyddyn / Mis / Diwrnod</li>
+    <li>Awr (fformat 24-awr) : Munud : Eiliad</li>
+</ul>
+<p>Ni fydd eitem sydd â stamp amser sy’n fwy na’r amser presennol (h.y. yn y dyfodol) yn ymddangos ar yr ochr flaen ac yn y llifau RSS/Atom nes daw’r amser hwnnw.</p>
+        ]]></item>
+        <item id="status" title="Statws"><![CDATA[
+<h2>Statws</h2>
+<p>Yn diffinio statws gwelededd cyhoeddi’r erthygl Textpattern hon.</p>
+<p>Mae statws cyhoeddi yn un o’r canlynol:</p>
+<ul>
+<li><strong>Drafft</strong>: ystyrir ei fod yn waith ar y gweill ac nid yw’n weladwy y tu allan i ardal weinyddu Textpattern (h.y. nid yw’n weladwy ar y wefan ac ni chaiff ei syndiceiddio mewn llifau).</li>
+<li><strong>Cudd</strong>: nid yw’r erthygl yn weladwy y tu allan i ardal weinyddu Textpattern. Yn ddefnyddiol i dynnu cynnwys o’r wefan nad ydych o reidrwydd am ei ddileu.</li>
+<li><strong>Dan sylw</strong>: ystyrir ei fod yn barod i’w gyhoeddi ac yn aros am gymeradwyaeth, ond nid yw’n weladwy y tu allan i ardal weinyddu Textpattern.</li>
+<li><strong>Byw</strong>: fel rheol yn weladwy y tu allan i ardal weinyddu Textpattern (h.y. yn weladwy ar y wefan, yn cael ei syndiceiddio mewn llifau os yw’r ddewis yn caniatáu). Os yw erthygl yn fyw ac mae ganddi ddyddiad dod i ben, bydd y statws yn aros yn Fyw ar ôl cyrraedd y dyddiad hwnnw, ond dim ond os caniateir cyhoeddi erthyglau sydd wedi dod i ben y bydd yr erthygl yn ymddangos y tu allan i’r ardal weinyddu.</li>
+<li><strong>Glyn</strong>: yn debyg i erthygl <strong>Fyw</strong> o ran y gall gael ei gweld gan ymwelwyr y wefan, ond ni fydd yn ymddangos mewn rhestrau erthyglau oni bai fod tag <code>article</code> neu <code>article_custom</code> yn cynnwys priodoledd <code>status</code> gyda gwerth <code>sticky</code>.</li>
+</ul>
+<p>Nodyn: gall defnyddwyr sydd wedi mewngofnodi barhau i ragweld cynnwys nad yw’n weladwy’n gyhoeddus ar y wefan.</p>
+        ]]></item>
+        <item id="title" title="Teitl"><![CDATA[
+<h2>Teitl</h2>
+<p>Ychwanegwch deitl priodol ar gyfer yr erthygl hon.</p>
+<p>Cyfyngir teitl erthygl i uchafswm o 255 o gymeriadau.</p>
+        ]]></item>
+        <item id="url_title" title="Teitl ar gyfer URL yn unig"><![CDATA[
+<h2>Teitl ar gyfer URL yn unig</h2>
+<p>I ddefnyddio teitl penodol yn y URL dolen barhaol ar gyfer erthygl, rhowch ef yma. Os caiff ei adael yn wag, bydd teitl yr URL yn cael ei gynhyrchu’n awtomatig o deitl yr erthygl.</p>
+<p>Mae hyn yn arbennig o ddefnyddiol os yw teitl yr erthygl yn defnyddio nodau nad ydynt yn ASCII.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Panel Categorïau">
+        <item id="article_category" title="Erthyglau"><![CDATA[
+<h2>Erthyglau</h2>
+<p>Yn wahanol i adrannau, sy’n diffinio strwythur llywio safle, mae categorïau erthyglau yn caniatáu trefnu erthyglau yn ôl eu pwnc. Unwaith y neilltuwyd categorïau, gellir pori rhestrau o erthyglau sy’n perthyn i gategorïau penodol.</p>
+<p>Er enghraifft, ar safle am fwyd, mae’n debygol y bydd y categorïau erthyglau canlynol:</p>
+<ul>
+    <li>cynhwysion crai</li>
+    <li>siopa</li>
+    <li>ryseitiau</li>
+    <li>cynllunio arddangos</li>
+    <li>bwytai</li>
+    <li>cogyddion</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Disgrifiad"><![CDATA[
+<h2>Disgrifiad categori</h2>
+<p>Mae disgrifiad y categori yn elfen ddewisol a all helpu peiriannau chwilio a chrwlariaid gwe i nodi a didoli cynnwys yn well.</p>
+<p>Cyfyngir disgrifiad y categori i uchafswm o 255 o gymeriadau. Sylwer bod rhai peiriannau chwilio yn gosod terfynau cymeriadau ar hyd <code>meta description</code> tudalen er mwyn hwyluso ei dangos ar dudalennau canlyniadau peiriannau chwilio (SERPs), a gall hyn fod yn llai na’r terfyn 255 o gymeriadau yn Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Ffeiliau"><![CDATA[
+<h2>Ffeiliau</h2>
+<p>Mae categorïau ffeiliau yn ddewisol, ac yn ddefnyddiol ar gyfer grwpio rhai ffeiliau llwytho i fyny ynghyd.</p>
+        ]]></item>
+        <item id="image_category" title="Delweddau"><![CDATA[
+<h2>Delweddau</h2>
+<p>Mae categorïau delweddau yn ddewisol, ac yn ddefnyddiol ar gyfer trefnu mewnol a diffinio setiau delweddau y gellir eu harddangos gan ddefnyddio tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Dolennau"><![CDATA[
+<h2>Dolennau</h2>
+<p>Mae categorïau dolenni yn ddewisol, ac yn ddefnyddiol ar gyfer dangos gwahanol grwpiau o ddolenni, e.e. ‘Cyfeillion’, ‘Rhufeiniaid’, ‘Cydwladwyr’.</p>
+<p>Caiff rhestrau dolenni dethol fel hyn eu hallbwn gyda’r tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> fel hyn:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Panel Diagnosteg">
+        <item id="clean_url_data_failed" title="Methwyd data URL glân"><![CDATA[
+<h2>Methwyd data URL glân</h2>
+<p>Ymddengys naill ai nad yw URLau’r safle (e.e. <code>https://example.com/section/article</code>) yn gweithio ar hyn o bryd neu nad yw’r gweinydd gwe yn cefnogi’r weithdrefn brawf i bennu a yw URLau glân yn gweithio ai peidio; os yw URLau glân ar y safle yn gweithio fel y disgwylir, gellir anwybyddu’r neges hon yn ddiogel.</p>
+<p>Os nad yw URLau glân yn gweithio gall olygu naill ai:</p>
+<ul>
+    <li>bod y gosodiad ‘URL y safle’ yn anghywir, neu nad yw’r dudalen yn y cyfeiriad hwnnw’n cael ei rheoli gan y gosodiad Textpattern hwn</li>
+    <li>bodd angen gwneud rhai newidiadau i <code>.htaccess</code> neu gyfarwyddeb weinydd debyg er mwyn gwneud i URLau glân weithio</li>
+    <li>nad yw’r gweinydd yn cefnogi URLau glân o gwbl</li>
+</ul>
+<p>Mae’r prawf URL glân yn ceisio nôl tudalen o’r cyfeiriad gwe a nodwyd yn y dewis ‘URL y safle’ er mwyn gwirio bod pob paramedr URL glân yn gweithio’n gywir. Os yw’r URL hwnnw’n safle gwahanol, neu wedi’i ddisodli gan dudalen statig neu debyg, bydd y prawf yn methu. Nes y caiff y broblem ei datrys dylid defnyddio URLau annaclus (e.e. <code>https://example.com?s=section&amp;id=4</code>). Sicrhewch fod y ‘Modd dolen barhaol’ yn Hoffterau Gweinyddol wedi’i osod yn unol â hynny.</p>
+<p>Sylwer y gall defnyddio ategyn i roi safle yn ‘modd cynnal a chadw’ sbarduno’r rhybudd hwn.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Methwyd prawf URL glân"><![CDATA[
+<h2>Methwyd prawf URL glân</h2>
+<p>Ymddengys naill ai nad yw URLau’r safle (e.e. <code>https://example.com/section/article</code>) yn gweithio ar hyn o bryd neu nad yw’r gweinydd gwe yn cefnogi’r weithdrefn brawf i bennu a yw URLau glân yn gweithio ai peidio; os yw URLau glân ar y safle yn gweithio fel y disgwylir, gellir anwybyddu’r neges hon yn ddiogel.</p>
+<p>Os nad yw URLau glân yn gweithio gall olygu naill ai:</p>
+<ul>
+    <li>bod y gosodiad ‘URL y safle’ yn anghywir, neu nad yw’r dudalen yn y cyfeiriad hwnnw’n cael ei rheoli gan y gosodiad Textpattern hwn</li>
+    <li>bodd angen gwneud rhai newidiadau i <code>.htaccess</code> neu gyfarwyddeb weinydd debyg er mwyn gwneud i URLau glân weithio</li>
+    <li>nad yw’r gweinydd yn cefnogi URLau glân o gwbl</li>
+</ul>
+<p>Mae’r prawf URL glân yn ceisio nôl tudalen o’r cyfeiriad gwe a nodwyd yn y dewis ‘URL y safle’ er mwyn gwirio bod pob paramedr URL glân yn gweithio’n gywir. Os yw’r URL hwnnw’n safle gwahanol, neu wedi’i ddisodli gan dudalen statig neu debyg, bydd y prawf yn methu. Nes y caiff y broblem ei datrys dylid defnyddio URLau annaclus (e.e. <code>https://example.com?s=section&amp;id=4</code>). Sicrhewch fod y ‘Modd dolen barhaol’ yn Hoffterau Gweinyddol wedi’i osod yn unol â hynny.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Mewngofnodiadau cydamserol ar weinydd byw"><![CDATA[
+<h2>Mewngofnodiadau cydamserol ar weinydd byw</h2>
+<p>Mae caniatáu i’ch cyfrif defnyddiwr fewngofnodi o sawl sesiwn yn risg diogelwch ac nid yw’n cael ei argymell. Analluogwch y nodwedd hon o’r panel dewisiadau uwch, oni bai bod y risgiau’n cael eu deall ac yn dderbyniol.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Cuddio gwybodaeth breifat"><![CDATA[
+<h2>Cuddio gwybodaeth breifat</h2>
+<p>Cuddio gwybodaeth breifat ar gyfer diogelwch ychwanegol. Os caiff gwybodaeth diagnostig ei rhannu mewn fformat sydd i’w weld yn gyhoeddus, er enghraifft ar fforwm cymorth Textpattern, mae hyn yn lleihau’r risg diogelwch drwy hepgor gwybodaeth sensitif am y gweinydd.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Cod datblygu ar weinydd byw"><![CDATA[
+<h2>Cod datblygu ar weinydd byw</h2>
+<p>Nid argymhellir defnyddio fersiynau ar gam datblygu o Textpattern ar safleoedd cynhyrchu. Gellir anwybyddu’r rhybudd hwn yn ddiogel os caiff y risgiau eu deall ac ystyrir eu bod yn dderbyniol.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Nid yw’r cyfeiriadur yn ysgrifenadwy"><![CDATA[
+<h2>Nid yw’r cyfeiriadur yn ysgrifenadwy</h2>
+<p>I ddefnyddio galluoedd llwytho ffeiliau a delweddau i fyny, rhaid i PHP allu ysgrifennu i’r cyfeiriaduron hyn drwy ddefnyddiwr y gweinydd gwe. Gellir gwneud hyn gyda chleient (S)FTP, neu fel arall ar y llinell orchymyn drwy roi gorchymyn <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Methiant DNS"><![CDATA[
+<h2>Methwyd chwilio DNS</h2>
+<p>Ymddengys nad oes modd cyrraedd yr URL a nodwyd fel cyfeiriad y safle.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Mae llwytho ffeiliau i fyny wedi’i analluogi"><![CDATA[
+<h2>Mae llwytho ffeiliau i fyny wedi’i analluogi</h2>
+<p>Mae ffurfweddiad presennol y gweinydd yn dangos bod llwytho ffeiliau i fyny wedi’i analluogi. Gwiriwch ac addaswch y gosodiad <code>file_uploads</code> yn <code>php.ini</code> neu ymgynghorwch â gwesteiwr y safle am gymorth.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess ar goll"><![CDATA[
+<h2>.htaccess ar goll</h2>
+<p>Mae modd dolen barhaol sy’n gofyn am ffeil <code>.htaccess</code> yn cael ei ddefnyddio, ac ni ellir dod o hyd i’r ffeil. Caiff y ffeil ei chynnwys gyda Textpattern ac mae’n byw yng nghwraidd Textpattern, ochr yn ochr â <code>index.php</code> a’r cyfeiriadur <code>textpattern</code>. Y cyfarwyddiadau argymelledig yw:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Mynegai’r safle yn anhygyrch"><![CDATA[
+<h2>Mynegai’r safle yn anhygyrch</h2>
+<p>Nid yw’r ffeil wraidd <code>index.php</code> a nodwyd fel mynegai’r safle yn ddarllenadwy gan y gweinydd. Gwiriwch ei bodolaeth a’i chaniatadau.</p>
+        ]]></item>
+        <item id="missing_files" title="Ffeiliau ar goll"><![CDATA[
+<h2>Ffeiliau ar goll</h2>
+<p>Mae un neu ragor o ffeiliau hanfodol ar goll o Textpattern. Sicrhewch fod pob un o’r ffeiliau a restrir yn bresennol ar y gweinydd ac yn y lleoliadau cywir.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite ar goll"><![CDATA[
+<h2>Apache mod_rewrite ar goll</h2>
+<p>Nid yw modiwl <code>mod_rewrite</code> Apache wedi’i osod neu mae wedi’i analluogi. Argymhellir hyn er mwyn i Textpattern weithredu’n gywir. Sicrhewch ei fodolaeth a’i gyflwr wedi’i alluogi, neu cysylltwch â gwesteiwr y safle am gymorth.</p>
+        ]]></item>
+        <item id="modified_files" title="Ffeiliau wedi’u haddasu"><![CDATA[
+<h2>Ffeiliau wedi’u haddasu</h2>
+<p>Penderfynir bod ffeiliau wedi’u haddasu os yw eu gwirio swm cyfatebol yn wahanol i’r rhestr gwirio swm hysbys-a-god sy’n dod gyda Textpattern. Os yw unrhyw ffeiliau yn y gosodiad Textpattern yn wahanol i’r disgwyl, caiff y ffeiliau eu hamlygu yma.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Gwallau tablau MySQL"><![CDATA[
+<h2>Gwallau tablau MySQL</h2>
+<p>Mae’n bosibl bod rhywfaint o lygredd neu ddifrod yng ngronfa ddata MySQL Textpattern. Ceisiwch atgyweirio’r tabl(au) yr effeithir arnynt gyda theclyn mynediad MySQL, megis <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> neu <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Dim cyfeiriadur dros dro wedi’i ddiffinio"><![CDATA[
+<h2>Dim cyfeiriadur dros dro wedi’i ddiffinio</h2>
+<p>Er y bydd Textpattern yn rhedeg heb gyfeiriadur dros dro, efallai na fydd rhai swyddogaethau’n gweithio fel y disgwylir os na chaiff y dewisiad hwn ei osod. Ewch i Hoffterau Gweinyddol a chadwch lwybr ‘Cyfeiriadur dros dro’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Adran â’r un enw â chyfeiriadur"><![CDATA[
+<h2>Adran â’r un enw â chyfeiriadur</h2>
+<p>Gall enwau cyfeiriaduron presennol wrthdaro ag enwau adrannau a ddefnyddir yng nghynllun dolen barhaol erthygl. I osgoi problemau, gwiriwch a dileu enwau’r cyfeiriaduron yr effeithir arnynt os yw’n ddiogel gwneud hynny, neu newidiwch enwau adrannau fel nad ydynt yn gwrthdaro.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Cyfeiriadur y safle yn an ddarllenadwy"><![CDATA[
+<h2>Cyfeiriadur y safle yn an ddarllenadwy</h2>
+<p>Nid yw’r cyfeiriadur sy’n cynnwys y ffeil wraidd <code>index.php</code> a nodwyd fel mynegai’r safle yn ddarllenadwy gan y gweinydd. Gwiriwch y caniatadau.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Sgriptio PHP wedi’i alluogi"><![CDATA[
+<h2>Sgriptio PHP wedi’i alluogi</h2>
+<p>Mae Textpattern yn caniatáu i awduron a gweinyddwyr fewnosod cod PHP mewn erthyglau a thudalennau/ffurflenni os yw’r nodweddion hyn wedi’u galluogi. Gan fod hyn yn bryder diogelwch – gallai unrhyw fath o god PHP gael ei weithredu, gan gynnwys cod niweidiol/peryglus a allai arwain at ddinistrio’ch gosodiad neu ollwng gwybodaeth i drydydd partïon – argymhellir yn gryf eich bod yn troi’r dewisiadau hyn i ffwrdd yn y <a href="?event=prefs#prefs_group_publish">panel Dewisiadau</a> oni bai eich bod yn gwbl sicr eich bod eu hangen.</p>
+<p>Gellir cyflawni llawer o welliannau i safleoedd Textpattern nad oeddent ar un adeg ond yn bosibl gyda snippets o PHP bellach gan ddefnyddio <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">tagiau craidd</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Gofynion fersiwn leiaf"><![CDATA[
+<h2>Gofynion fersiwn leiaf</h2>
+<p>Mae angen i Textpattern gael rhai swyddogaethau sydd yn y iaith raglennu PHP a’r gweinydd cronfa ddata MySQL. Cyfeiriwch at y tabl canlynol i bennu’r gofynion system lleiaf:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Fersiwn Textpattern</th>
+                <th scope="col">Fersiwn PHP leiaf</th>
+                <th scope="col">Fersiwn MySQL leiaf</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Yn ogystal â’r gofynion system uchod, mae angen yr estyniadau PHP canlynol:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a></li>
+</ul>
+<p>Mae angen i ffeil <code>php.ini</code> y safle, naill ai’n fyd-eang neu’n lleol, gynnwys gosodiad <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Cyfeiriadur Setup yn dal i fodoli"><![CDATA[
+<h2>Cyfeiriadur Setup yn dal i fodoli</h2>
+<p>Ar ôl i Textpattern gael ei osod, nid oes angen y cyfeiriadur <code>textpattern/setup</code> a’i gynnwys mwyach, a dylech ei ddileu am resymau diogelwch.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Anghydweddiad URL y safle"><![CDATA[
+<h2>Anghydweddiad URL y safle</h2>
+<p>Nid yw URL y Safle fel y’i pennir yn y panel ‘Dewisiadau’ yn cyfateb i’r URL gwirioneddol a ddefnyddir i ymweld â’r safle.</p>
+<p>Os oes modd cyrraedd y safle drwy sawl URL gwahanol, ac os yw’r safle’n ymddwyn fel y disgwylir, gellir anwybyddu’r neges hon yn ddiogel.</p>
+<p>Fel arall, gwiriwch ac addaswch y gosodiad ‘URL y safle’ yn Hoffterau Gweinyddol yn ôl yr angen. Dangosir dyfaliad gwybodus o’r URL Safle cywir yn y neges rhybudd cyn hedfan ar y panel ‘Diagnosteg’.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Mae swyddogaethau PHP [&#8230;] wedi’u hanalluogi ar eich gweinydd"><![CDATA[
+<h2>Mae swyddogaethau PHP [&#8230;] wedi’u hanalluogi ar eich gweinydd</h2>
+<p>Mae gwesteiwr y safle neu weinyddwr y gweinydd wedi analluogi un neu fwy o swyddogaethau PHP, a gall rhai ohonynt effeithio ar redeg Textpattern.</p>
+<p>Cyfeiriwch at <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Ddogfennaeth Defnyddwyr Textpattern <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> i gael rhagor o wybodaeth.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Diweddariad fersiwn Textpattern"><![CDATA[
+<h2>Diweddariad fersiwn Textpattern</h2>
+<p>Mae fersiwn mwy newydd o Textpattern ar gael. Er mwyn manteisio ar y nodweddion a’r diogelwch diweddaraf, argymhellir eich bod yn uwchraddio.</p>
+<p>Sylwer, er ein bod yn ymdrechu i wneud y profiad uwchraddio mor ddidrafferth a di-boen â phosibl:</p>
+<ul>
+    <li>Os mai’r digid olaf yn unig sy’n wahanol i’ch fersiwn bresennol, mae’n debygol y bydd yr uwchraddiad yn gydnaws yn ôl â hen ategion a themâu.</li>
+    <li>Os yw’r ddau ddigid olaf yn wahanol i’ch fersiwn bresennol, efallai y bydd angen diweddaru rhai ategion a/neu themâu, er ei bod yn debygol y byddant yn parhau i weithio beth bynnag i ryw raddau.</li>
+    <li>Os yw’r digid cyntaf yn wahanol i’ch fersiwn bresennol, mae’n debygol y bydd yr uwchraddiad yn mynnu diweddaru’r rhan fwyaf o ategion a themâu. Os ydych yn dibynnu’n drwm ar nodwedd benodol mewn ategyn neu thema, gwiriwch gyda’r awdur neu aelodau’r gymuned cyn dechrau’r uwchraddiad.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Rhag-ryddhad Textpattern ar gael"><![CDATA[
+<h2>Diweddariad rhag-ryddhad Textpattern ar gael</h2>
+<p>Mae fersiwn rhag-ryddhad mwy newydd o Textpattern ar gael. Rydym yn chwilio am wirfoddolwyr gweithgar i brofi’r fersiwn hon fel y gallwn wneud y rhyddhad terfynol mor gadarn â phosibl. Rydym yn ymdrechu i wneud y profiad uwchraddio yn ddi-dor ac yn ddi-boen, hyd yn oed ar gyfer cod beta.</p>
+<p>Os penderfynwch gymryd rhan, cofiwch:</p>
+<ul>
+    <li>Peidiwch â defnyddio’r rhyddhad beta hwn ar safle cynhyrchu oni bai bod gennych gefn wrth gefn gweithredol o ffeiliau’r safle a’i gronfa ddata, a’ch bod yn gwybod sut i’w defnyddio.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Adroddwch unrhyw broblemau</a>, gan nodi’r fersiwn beta rydych yn ei ddefnyddio. Efallai y bydd angen rhyddhadau beta pellach cyn y rhyddhad sefydlog, yn dibynnu ar y problemau a adroddir.</li>
+    <li>Sicrhewch, os byddwch yn defnyddio’r rhyddhad beta hwn, eich bod hefyd yn diweddaru i’r fersiwn terfynol pan gaiff ei ryddhau.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Ni ddylai llwybrau’r cyfeiriadur dros dro a storfa ategion gydweddu"><![CDATA[
+<h2>Ni ddylai llwybrau’r cyfeiriadur dros dro a storfa ategion gydweddu</h2>
+<p>Dylai ategion fod â’u cyfeiriadur eu hunain ac nid rhannu’r cyfeiriadur dros dro. Mae hyn yn risg diogelwch bosibl a gall effeithio’n andwyol ar eich safle os caiff y cyfeiriadur dros dro ei wagio. Sicrhewch fod llwybr y cyfeiriadur dros dro yn wahanol i lwybr storfa ategion.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Methu cyrraedd gweinydd diweddaru"><![CDATA[
+<h2>Methu cyrraedd gweinydd diweddaru</h2>
+<p>Methodd y prawf am ddiweddariadau, yn aml oherwydd tagfeydd rhwydwaith neu amser allan o gysylltiad. Fel rheol bydd y sefyllfa hon yn datrys ei hun o fewn awr neu ddwy felly ceisiwch ymweld â’r panel hwn eto’n hwyrach.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Mae swyddogaeth mail() ar goll o’ch gosodiad PHP"><![CDATA[
+<h2>Mae swyddogaeth mail() ar goll o’ch gosodiad PHP</h2>
+<p>Mae swyddogaeth <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> PHP wedi’i hanalluogi. Felly, ni all Textpattern anfon e-byst ac ni fydd rhai swyddogaethau ar gael. Er enghraifft, ni fydd hysbysiadau e-bost am sylwadau newydd yn cael eu hanfon, ac ni fydd defnyddwyr newydd yn derbyn e-bost croeso. Fodd bynnag, mae modd parhau i ychwanegu defnyddwyr.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Panel Ffeiliau">
+        <item id="file_reassign" title="Ailddyrannu ffeil"><![CDATA[
+<h2>Ailddyrannu ffeil</h2>
+<p>Pan fyddwch yn llwytho ffeil i fyny yn lle un sydd wedi’i labelu yn ‘Ar goll’, caiff y ffeil o’ch dewis ei llwytho i’r gweinydd a’i chysylltu â gwybodaeth wreiddiol y ffeil yn y gronfa ddata. Mae hyn yn golygu y bydd enw ffeil y ffeil wreiddiol yn aros, yn ogystal â’r holl wybodaeth gysylltiedig arall fel cyfrif llwytho i lawr a chategori. Fodd bynnag, caiff maint y ffeil ei ddiweddaru i adlewyrchu’r ffeil newydd.</p>
+        ]]></item>
+        <item id="file_replace" title="Amnewid ffeil"><![CDATA[
+<h2>Amnewid ffeil</h2>
+<p>Bydd llwytho ffeil i fyny yma yn disodli cynnwys y ffeil bresennol ar y gweinydd ond yn cadw’r enw ffeil yr un fath ag yr oedd o’r blaen. Ni fydd y cyfrif llwytho i lawr a gwybodaeth arall sy’n gysylltiedig â’r ffeil yn cael eu heffeithio.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Dyddiad cyhoeddi"><![CDATA[
+<h2>Dyddiad cyhoeddi</h2>
+<p>Yr amser y caiff ffeil ei chyhoeddi neu ei diwygio am y tro mwyaf diweddar. Gellir gosod yr amser i eiliad cyhoeddi’r eitem, neu i unrhyw amser yn y gorffennol neu’r dyfodol.</p>
+<p>Mae’r blychau’n cyfateb i’r wybodaeth ganlynol:</p>
+<ul>
+    <li>Blwyddyn / Mis / Diwrnod</li>
+    <li>Awr (fformat 24-awr) : Munud : Eiliad</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Llwytho ffeil i fyny"><![CDATA[
+<h2>Llwytho ffeil i fyny</h2>
+<p>Defnyddiwch y ffurflen hon i lwytho ffeiliau neu ddelweddau i’ch gweinydd.</p>
+<p>Defnyddiwch god Textile i rendro graffeg o fewn erthyglau, cod Textpattern i osod graffeg ar eich templedi tudalen, neu god HTML i osod y graffeg mewn mannau eraill.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Panel Ffurflenni">
+        <item id="forms_overview" title="Cyflwyniad i Ffurflenni"><![CDATA[
+<h2>Cyflwyniad i Ffurflenni</h2>
+<p>Yn Textpattern, mae ffurflen yn snippet neu ddarn o destun, HTML, a thagiau Textpattern y gellir ei ailddefnyddio i ddangos cynnwys.</p>
+<p>Dyma enghraifft o ffurflen a allai gael yr enw <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Gallech ei defnyddio i ddangos rhestr HTML heb ei threfnu o erthyglau cysylltiedig:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Gan mai rôl y ffurflen hon yw allbynnu rhestr o deitlau, gallai fod yn berthnasol y tu mewn i dagiau eraill, megis dangos 20 erthygl o’r adran gyfredol:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Efallai y byddwch hefyd yn dewis defnyddio ffurflen i ddangos cynnwys ailadroddus, megis pennawd a throedyn yn eich templedi tudalen. Mae hyn yn golygu mai mewn un lle yn unig y mae’r cynnwys, ac os byddwch yn penderfynu ei newid, dim ond unwaith y mae angen ichi ei wneud. Fel rheol, caiff cynnwys o ffurflen ei ddangos gyda:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Gall ffurflen fod hyd at 64KB o ran maint. Gallai enghraifft ar gyfer troedyn gynnwys penawdau, paragraffau, dolennau, tagiau amodol, a chyfeiriadau at ffurflenni eraill fel <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Panel Delweddau">
+        <item id="create_thumbnail" title="Creu mân-lun"><![CDATA[
+<h2>Creu mân-lun</h2>
+<p>Yn caniatáu ichi (ail)greu mân-lun o’r dimensiynau penodedig o’r ddelwedd maint llawn.</p>
+<p>Ar gyfer meintiau personol, caiff y mân-lun ei raddfa i ffitio’r dimensiynau a ddewiswch, oni bai eich bod yn dewis y blwch ticio ‘Tocio’. Yn yr achos hwnnw, caiff y mân-lun ei greu o ganol y ddelwedd heb unrhyw raddfa.</p>
+<p>Ar gyfer meintiau awtomatig, caiff y mân-lun ei raddfa i’r dimensiynau a’r gosodiadau tocio (dewisol) yn y thema weinyddol gyfredol.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Amnewid delwedd"><![CDATA[
+<h2>Amnewid delwedd</h2>
+<p>Bydd delwedd a lwythir i fyny yma yn disodli’r un bresennol sy’n gysylltiedig â’r cofnod hwn yn y gronfa ddata yn syml.</p>
+        ]]></item>
+        <item id="upload_image" title="Llwytho delwedd i fyny"><![CDATA[
+<h2>Llwytho delwedd i fyny</h2>
+<p>Llwythwch un neu fwy o ddelweddau i’ch gweinydd.</p>
+<p>Ar ôl llwytho i fyny i’r cyfeiriadur <code>images</code>, cedwir enw ffeil eich delwedd wreiddiol yn fewnol yn unig yng ngronfa ddata Textpattern; caiff y ffeil ddelwedd ei hailenwi i rif dilyniannol + estyniad ffeil.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Llwytho mân-lun i fyny"><![CDATA[
+<h2>Llwytho mân-lun i fyny</h2>
+<p>Gellir neilltuo mân-luniau eu hunain i ddelweddau maint llawn. Maent yn ddefnyddiol ar gyfer cysylltu â – a mynegeio – delweddau maint llawn.</p>
+<p>Mae cyfeiriad at y mân-lun yr un peth yn union â’r cyfeiriad at y ddelwedd maint llawn, gyda <code>t</code> wedi’i atodi at yr enw ffeil. Er enghraifft, i gyfeirio at fân-lun sy’n gysylltiedig â delwedd maint llawn sydd wedi’i storio yn <code>/images/12.jpg</code> byddech yn defnyddio <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Panel Ieithoedd">
+        <item id="get_textpack" title="Gosod Textpack"><![CDATA[
+<h2>Gosod Textpack</h2>
+<p>Gludwch linynnau iaith ychwanegol ar gyfer eich safle yn y blwch hwn a dewiswch ‘Llwytho i fyny’ i’w gosod.</p>
+<p>Fel rheol daw’r llinynnau ar ffurf Textpack y gellir ei lawrlwytho, sy’n cael ei ddosbarthu gydag ategyn i ganiatáu defnyddio llinynnau iaith yr ategyn yn frodorol o fewn Textpattern.</p>
+<p>Gall cyfieithwyr wedyn gyfieithu’r pecynnau hyn yn ôl yr angen a hailddosbarthu’r cynnwys wedi’i leoleiddio i’r gymuned.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Panel Dolennau">
+        <item id="link_description" title="Disgrifiad"><![CDATA[
+<h2>Disgrifiad</h2>
+<p>Mae disgrifiadau ar gyfer dolennau yn ddewisol, ac yn ddefnyddiol ar gyfer teitlo dolennau, ar gyfer creu priodoleddau <code>title=""</code> (amlinell testun) ar gyfer dolennau, neu’n syml ar gyfer cadw’ch dogfennaeth fewnol eich hun.</p>
+        ]]></item>
+        <item id="link_sort" title="Gwerth trefnu"><![CDATA[
+<h2>Gwerth trefnu</h2>
+<p>Yn ddefnyddiol ar gyfer trefnu rhestrau dolenni mewn iaith naturiol, e.e. yn ôl enw olaf person yn hytrach nag enw cyntaf, neu ar ymadroddion sy’n dechrau gyda’r fannod bendant neu amhenodol.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Cyfeiriad y ddolen. Os yw’r ddolen yn pwyntio at safle gwahanol, rhaid iddi gael ei rhagflaenu gan <code>http://</code> neu <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Dyddiad cyhoeddi"><![CDATA[
+<h2>Dyddiad cyhoeddi</h2>
+<p>Yr amser y caiff dolen ei chyhoeddi neu ei diwygio am y tro mwyaf diweddar. Gellir gosod yr amser i eiliad cyhoeddi’r eitem, neu i unrhyw amser yn y gorffennol neu’r dyfodol.</p>
+<p>Mae’r blychau’n cyfateb i’r wybodaeth ganlynol:</p>
+<ul>
+    <li>Blwyddyn / Mis / Diwrnod</li>
+    <li>Awr (fformat 24-awr) : Munud : Eiliad</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Panel Mewngofnodi">
+        <item id="remember_login" title="Parhau i fod wedi mewngofnodi gyda’r porwr hwn"><![CDATA[
+<h2>Parhau i fod wedi mewngofnodi gyda’r porwr hwn</h2>
+<p>Pan fo hwn wedi’i dicio, byddwch yn parhau i fod wedi mewngofnodi i’ch cyfrif Textpattern gyda’r porwr gwe cyfredol, hyd nes y dewiswch allgofnodi. Os caiff ei adael heb ei dicio, cewch eich allgofnodi’n awtomatig ar ôl cyfnod o anweithgarwch.</p>
+<p>Mae angen galluogi cwcis yn eich porwr.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Panel Ategion">
+        <item id="install_plugin" title="Gosod ategyn"><![CDATA[
+<h2>Gosod ategyn</h2>
+<p>Gludwch gynnwys y ffeil testun ategyn wedi’i chyfuno yma, yna defnyddiwch ‘Llwytho i fyny’ i gychwyn y gosodiad. Bydd unrhyw ategyn a lwythwch i fyny sydd â’r un enw ag un rydych wedi’i osod o’r blaen yn cael ei drosysgrifo gyda’r fersiwn a lwythwyd i fyny.</p>
+<p>Nid y cod PHP crai yw’r testun ategyn a lapiwch yma ond testun wedi’i Amgodio Base64, fel rheol gyda phennawd o’i flaen sy’n cynnwys gwybodaeth am yr ategyn (megis enw, fersiwn a disgrifiad yr ategyn, enw’r awdur, ac ati).</p>
+<p>Yn aml gallwch gael fersiynau cyfun o ategion o’r <a rel="external" target="_blank" href="https://plugins.textpattern.com/">storfa Ategion <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> neu sianel dynodedig yr awdur ategyn, megis ei wefan neu GitHub.</p>
+<p>Gallwch hefyd ludo URL i ffeil testun wedi’i chyfuno Textpattern yma, os yw’r safle allanol yn caniatáu hynny.</p>
+<p>Bydd pob ategyn a lwythir i fyny yn mynd drwy gam dilysu sy’n caniatáu ichi archwilio cod a chynnwys yr ategyn cyn ei osod.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Llwytho Ategyn i Fyny"><![CDATA[
+<h2>Llwytho ategyn i fyny</h2>
+<p>Defnyddiwch y ffurflen hon i lwytho ffeil ategyn i fyny. Cedwir ategion a lwythwyd i fyny (a phob ased) o fewn y cyfeiriadur ‘plugins’.</p>
+<p>Mathau o ategion y gellir eu llwytho i fyny yma yw:</p>
+<ul>
+<li>Ffeiliau Templed PHP Textpattern sy’n cynnwys cod cyflawn, metadata, llinynnau Textpack a thestun cymorth.</li>
+<li>Ffeiliau testun cyfun Textpattern sy’n cynnwys cod cyflawn, metadata, llinynnau Textpack a thestun cymorth.</li>
+<li>Bundle zip Textpattern sy’n cynnwys gwybodaeth manifesto a chod, metadata, llinynnau Textpack, testun cymorth a ffeiliau ategol.</li>
+<li>Ffeiliau PHP crai (er na fydd y rhain yn poblogi metadata ychwanegol ac ni chânt eu hargymell).</li>
+</ul>
+<p>Bydd unrhyw ategyn a lwythwch i fyny sydd â’r un enw ag un rydych wedi’i osod o’r blaen yn cael ei drosysgrifo gyda’r fersiwn a lwythwyd i fyny.</p>
+<p>Bydd pob ategyn a lwythir i fyny yn mynd drwy gam dilysu sy’n caniatáu ichi archwilio cod a chynnwys yr ategyn cyn ei osod.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Panel Dewisiadau">
+        <item id="admin_side_plugins" title="Defnyddio ategion ochr weinyddol?"><![CDATA[
+<h2>Defnyddio ategion ochr weinyddol?</h2>
+<p>Gall ategion ochr weinyddol newid gweithrediad y rhyngwyneb gweinyddu. Gallant blygio i weithredoedd sydd eisoes yn bodoli, fel golygu neu gyhoeddi erthyglau, neu gallant ychwanegu paneli newydd ar gyfer swyddogaethau ychwanegol/estynedig.</p>
+<p>Os hoffech ddysgu mwy am ategion ochr weinyddol, gweler y dudalen <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Ehangu Textpattern <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> yn <a rel="external" target="_blank" href="https://docs.textpattern.com/">Dogfennaeth Defnyddwyr Textpattern <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>. Rhestrir ategion o bob math ar safle <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Ategion Textpattern <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Dewisiadau uwch"><![CDATA[
+<h2>Dewisiadau uwch</h2>
+<p>Dangos y grŵp dewisiadau uwch, lle gellir ffurfweddu gosodiadau ychwanegol megis:</p>
+<ul>
+    <li>swyddogaethau PHP wedi’u galluogi yn <code>txp:evaluate</code>.</li>
+    <li>Mathau templed ffurflen arferol.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Caniatáu PHP mewn erthyglau?"><![CDATA[
+<h2>Caniatáu PHP mewn erthyglau?</h2>
+<p>Pan gaiff ei alluogi, bydd y gosodiad hwn yn caniatáu defnyddio PHP o fewn erthyglau. Rhaid i’r awdur fod â breintiau digonol i wneud hynny (yn ddiofyn, dim ond <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Cyhoeddwyr’ <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Golygyddion Rheoli’ <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Golygyddion Copïo’ <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> sy’n gallu gwneud hynny).</p>
+<p><strong>Argymhellir yn gryf eich bod yn troi’r opsiwn hwn i ffwrdd</strong> oni bai eich bod yn gwbl sicr eich bod ei angen. Gallai unrhyw fath o god PHP niweidiol/peryglus a allai ddinistrio’ch gwefan neu ollwng gwybodaeth i drydydd partïon gael ei ychwanegu gan unrhyw awdur a’i weithredu gan unrhyw un sy’n gweld yr erthygl honno.</p>
+<p>Rhaid i god PHP hepgor tagiau PHP agor a chau, a rhaid ei gau hefyd o fewn tagiau <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Caniatáu darostwng ffurflen?"><![CDATA[
+<h2>Caniatáu darostwng ffurflen?</h2>
+<p>Mae’r gosodiad hwn yn caniatáu i awduron erthyglau orfodi’r ffurflen i’w defnyddio pan gaiff eu herthygl ei rendro. Os caiff ei alluogi, bydd gwymplen ‘Ffurflen darostwng’ ar gael wrth olygu erthygl.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Caniatáu PHP mewn tudalennau?"><![CDATA[
+<h2>Caniatáu PHP mewn tudalennau?</h2>
+<p>Pan gaiff ei alluogi, mae’r gosodiad hwn yn caniatáu cod PHP o fewn templedi tudalennau a thempledi ffurflenni.</p>
+<p><strong>Argymhellir yn gryf eich bod yn troi’r opsiwn hwn i ffwrdd</strong> oni bai eich bod yn gwbl sicr eich bod ei angen. Gallai unrhyw fath o god PHP niweidiol/peryglus a allai ddinistrio’ch gwefan neu ollwng gwybodaeth i drydydd partïon gael ei ychwanegu gan unrhyw ddefnyddiwr arall a’i weithredu gan weinyddwr neu ymwelwr â’r safle heb wybod.</p>
+<p>Rhaid i god PHP hepgor tagiau PHP agor a chau, a rhaid ei gau hefyd o fewn tagiau <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Fformat dyddiad archif"><![CDATA[
+<h2>Fformat dyddiad archif</h2>
+<p>Sut y bydd dyddiadau’n ymddangos ar erthyglau mewn adrannau o’ch safle.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Dangos dyfyniad ar dudalen golygu erthygl?"><![CDATA[
+<h2>Dangos dyfyniad ar dudalen golygu erthygl?</h2>
+<p>Trwy ddewis ‘Na’ ni fydd y maes dyfyniad yn cael ei ddangos i’r awdur ar y sgrin golygu erthygl.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Atodi teitlau i ddolenni parhaol?"><![CDATA[
+<h2>Atodi teitlau i ddolenni parhaol?</h2>
+<p>Bydd y gosodiad hwn yn atodi fersiwn wedi’i chynhyrchu’n awtomatig o deitl yr erthygl at yr URL. Caiff ei chynhyrchu’n awtomatig neu gellir ei gor-reoli â llaw yn ‘Teitl ar gyfer URL yn unig’ wrth olygu erthygl.</p>
+<p>Dim ond pan fyddwch yn defnyddio URLau glân y bydd effaith i’r gosodiad. Ar gyfer rhai ieithoedd gall hyn arwain at URLau hir ac hyll, ac yn yr achos hwnnw mae’n debygol yr hoffech ei osod i ‘I ffwrdd’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Addasu Amser Haf (DST) yn awtomatig?"><![CDATA[
+<h2>Addasu Amser Haf (DST) yn awtomatig?</h2>
+<p>Mae’r gosodiad hwn yn caniatáu i Textpattern newid pryd y mae DST (Amser Arbed Golau Dydd) yn digwydd yn eich ardal amser. Os caiff hwn ei osod i ‘Na’, bydd modd ichi newid y dewis ‘DST wedi’i alluogi’ â llaw.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="A yw sylw newydd yn golygu fod y safle wedi’i ddiweddaru?"><![CDATA[
+<h2>A yw sylw newydd yn golygu fod y safle wedi’i ddiweddaru?</h2>
+<p>Mae cronfa ddata Textpattern yn cadw golwg ar bryd y digwyddodd y newid mwyaf diweddar i’ch safle. Pan gaiff y gosodiad hwn ei osod i ‘Ie’, bydd sylw newydd hefyd yn diweddaru’r gwerth hwn. Defnyddir y gwerth hwn er enghraifft ar gyfer swyddogaeth <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Gosod rel=&quot;nofollow&quot; ar sylwadau?"><![CDATA[
+<h2>Gosod rel="nofollow" ar sylwadau?</h2>
+<p>Os caiff ei osod i ‘Ie’, bydd hyn yn ychwanegu priodoledd ychwanegol at y dolennau sy’n cael eu gwneud mewn sylwadau. Bwriad hyn yw bod yn fesur sy’n tynnu’r cymhelliant oddi wrth sbamiwr sylwadau ac fe’i cychwynnwyd gan amrywiaeth o beiriannau chwilio a datblygwyr meddalwedd. Gallwch gael gwybod mwy drwy ddarllen <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">cyhoeddiad Google <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+<p><strong>Nodyn:</strong> Nid yw’r gosodiad hwn yn dylanwadu ar swyddogaeth eich safle. Gall atal neu leihau dylanwad eich sylwadau pan fydd rhai peiriannau chwilio yn graddio safleoedd sy’n gysylltiedig â’r sylwadau hynny.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Cyflwyno sylwadau fel rhestr rifedig?"><![CDATA[
+<h2>Cyflwyno sylwadau fel rhestr rifedig?</h2>
+<p>Penderfynu a ddylid lapio sylwadau erthygl gyda’r tag HTML <code>&lt;ol&gt;</code> a lapio sylwadau unigol yn y tag <code>&lt;li&gt;</code> (sy’n gwneud i sylwadau gael eu cyflwyno fel rhestr rifedig), neu a ddylid lapio sylwadau unigol gyda’r tag <code>&lt;div&gt;</code> yn lle hynny.</p>
+<p>Gyda’r naill werth neu’r llall, gallwch or-reoli’r tagiau a ddefnyddir ar sail ffurflen unigol drwy addasu tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>, sydd i’w ganfod yn y ffurflen <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Atodi sylwadau’n awtomatig at erthyglau?"><![CDATA[
+<h2>Atodi sylwadau’n awtomatig at erthyglau?</h2>
+<p>Mae’r gosodiad hwn yn penderfynu a ddylai sylwadau a’r ffurflen sylwadau gael eu hatodi’n awtomatig at bob erthygl unigol (drwy gynnwys cynnwys y ffurflen <code>comments_display</code> yn awtomatig).</p>
+<p>Y rhan fwyaf o’r amser, byddwch am osod hyn i ‘Na’, gan fod hyn yn rhoi mwy o hyblygrwydd i leoli eich sylwadau yng nghynllun eich safle. Bydd angen ichi ychwanegu tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> â llaw yn unrhyw dempledi sy’n seiliedig ar erthyglau lle rydych am i sylwadau ymddangos.</p>
+<p>Os ydych yn profi dangosiad dyblyg o sylwadau mewn erthygl, mae’n debygol bod eich templedi yn cynnwys y tag <code>&lt;txp:comments /&gt;</code> mewn templed ond bod ‘Atodi sylwadau’n awtomatig at erthyglau?’ hefyd wedi’i osod i ‘Ie’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Fformat dyddiad sylwadau"><![CDATA[
+<h2>Fformat dyddiad sylwadau</h2>
+<p>Sut y bydd dyddiadau sylwadau yn ymddangos i ymwelwyr â’ch safle.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Gwahoddiad sylwadau rhagosodedig"><![CDATA[
+<h2>Gwahoddiad sylwadau rhagosodedig</h2>
+<p>Os ydych yn caniatáu i ymwelwyr adael sylw ar eich safle, dyma’r testun gwahoddiad rhagosodedig. Er enghraifft:</p>
+<ul>
+    <li>Sylwadau</li>
+    <li>Ychwanegu sylw</li>
+    <li>Adborth</li>
+    <li>Nodi</li>
+</ul>
+<p>Sylwer y gellir newid y testun gwahoddiad bob amser ar sail erthygl unigol.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Analluogi sylwadau ar ôl"><![CDATA[
+<h2>Analluogi sylwadau ar ôl</h2>
+<p>Defnyddiwch hwn i osod faint o amser y bydd sylwadau’n cael eu troi i ffwrdd ar ôl i erthyglau gael eu cyhoeddi (gellir ei osod i ‘Byth’ i ganiatáu amser amhenodol i sylwebu).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Caniatáu delweddau’r sylwebydd mewn sylwadau?"><![CDATA[
+<h2>Caniatáu delweddau’r sylwebydd mewn sylwadau?</h2>
+<p>Gyda’r opsiwn hwn wedi’i osod i ‘Na’, caiff unrhyw ddelweddau a gynhwysir mewn sylwadau eu tynnu allan.</p>
+        ]]></item>
+        <item id="comments_mode" title="Modd sylwadau"><![CDATA[
+<h2>Modd sylwadau</h2>
+<p>Os dewisir ‘nopopup’ (argymhellir), caiff y ffenestr gyfredol ei hadnewyddu i ddangos yr erthygl gyfredol yn unig, gyda sylwadau oddi tanynt.</p>
+<p>Os dewisir ‘popup’, bydd ffenestr borwr newydd yn agor pan gaiff y ddolen sylwadau ei chlicio (mae hyn yn defnyddio’r ffurflen <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Cymedroli sylwadau?"><![CDATA[
+<h2>Cymedroli sylwadau?</h2>
+<p>Pan fydd hwn wedi’i osod i ‘Ie’, bydd pob sylw newydd yn cael ei wneud yn anghyhoeddus nes iddo gael ei adolygu. Rhaid ichi gymedroli pob sylw â llaw a’i wneud yn weladwy (anfonir neges e-bost at awdur yr erthygl pan dderbynnir sylw newydd).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Ydy sylwadau ymlaen yn rhagosodedig?"><![CDATA[
+<h2>Ydy sylwadau ymlaen yn rhagosodedig?</h2>
+<p>Os caiff hwn ei osod i ‘Ie’, caiff sylwadau eu galluogi’n awtomatig ar gyfer pob erthygl a gyhoeddir. Os caiff ei osod i ‘Na’, bydd angen ichi alluogi sylwadau ar y panel ‘Ysgrifennu’ erthygl bob tro rydych am dderbyn sylwadau.</p>
+<p>Gellir galluogi/analluogi sylwadau unrhyw bryd, ar sail erthygl unigol.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Oes rhaid i sylwadau gynnwys cyfeiriad e-bost y sylwebydd?"><![CDATA[
+<h2>Oes rhaid i sylwadau gynnwys cyfeiriad e-bost y defnyddiwr?</h2>
+<p>Os caiff ei osod i ‘Ie’, bydd angen i bobl sydd am adael sylw ar eich erthygl roi cyfeiriad e-bost yn y ffurflen fewnbwn sylwadau. Ni fyddant yn gallu postio sylw os na ddarperir cyfeiriad e-bost.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Oes rhaid i sylwadau gynnwys enw’r sylwebydd?"><![CDATA[
+<h2>Oes rhaid i sylwadau gynnwys enw’r sylwebydd?</h2>
+<p>Os caiff ei osod i ‘Ie’, bydd angen i bobl sydd am adael sylw ar eich erthygl roi enw yn y ffurflen fewnbwn sylwadau. Ni fyddant yn gallu cyflwyno sylw os na ddarperir enw.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="E-bostio sylwadau at yr awdur?"><![CDATA[
+<h2>E-bostio sylwadau at yr awdur?</h2>
+<p>Os caiff ei osod i ‘Ie’, bydd copi o bob sylw newydd a dderbynnir ar erthygl yn cael ei anfon drwy e-bost at awdur yr erthygl honno.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Caniatáu mwy o farcio Textile mewn sylwadau?"><![CDATA[
+<h2>Caniatáu mwy o farcio Textile mewn sylwadau?</h2>
+<p>Pan gaiff ei osod i ‘Ie’, gall sylwadau gynnwys elfennau <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> a gaent fel arall eu trin fel testun plaen, megis:</p>
+<ul>
+    <li>penawdau</li>
+    <li>rhestrau trefnedig ac heb eu trefnu</li>
+    <li>troednodiadau</li>
+    <li>tablau</li>
+    <li>cod</li>
+    <li>ystyriaeth bloc estynedig (<code>bc..</code>, <code>bq..</code>, ac ati)</li>
+</ul>
+<p><strong>Nodyn:</strong> Am resymau diogelwch, caiff HTML crai ei drawsnewid yn destun rheolaidd.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Cyfrifon â chaniatâd i fewngofnodi ar y cyd"><![CDATA[
+<h2>Cyfrifon â chaniatâd i fewngofnodi ar y cyd</h2>
+<p>Rhestr o enwau cyfrif mewngofnodi, wedi’u gwahanu gan goma, sydd â hawl i fewngofnodi ar draws sawl porwr/sesiwn. Mae hyn yn ddefnyddiol yn ystod datblygu i rannu mewngofnodi gyda chleientiaid.</p>
+<p>Mae defnyddio’r nodwedd hon yn risg diogelwch ac <strong>nid yw’n cael ei argymell ar safleoedd byw</strong>. Bydd Diagnosteg yn rhoi rhybudd os yw’ch cyfrif defnyddiwr wedi’i ffurfweddu ar gyfer cydamseru ar wefan fyw.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Mathau templed ffurflen arferol"><![CDATA[
+<h2>Mathau templed ffurflen arferol</h2>
+<p>Yn ogystal â’r mathau templed ffurflen safonol (erthygl, ffeil, amrywiol, ac ati), gall Cyhoeddwyr ddiffinio mathau personol. Pwrpas mathau templed ffurflen arferol yw ddwbl: dosbarthu templedi ffurflen yn haws a diffiniadau asedau personol.</p>
+<p>Fformat y ddewis hon yw <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>, gyda phob adran yn cyfateb i fath templed ffurflen.</p>
+<p>I ddiffinio math ffurflen arferol (e.e. <code>js</code>) rhaid ychwanegu adran <code>[js]</code> (ar linell ar wahân). Gellir gosod teitl rhagosodedig drwy fewnbwn <code>title="Javascript"</code> yn yr adran gyfatebol. Os oes angen, gellir ychwanegu teitlau wedi’u lleoleiddio hefyd (e.e. <code>ru="Скрипт"</code>).</p>
+<p>Yn ychwanegol, gellir nodi <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">math cyfryngau templed ffurflen <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> (a elwid gynt yn fath MIME), e.e. <code>mediatype="application/javascript"</code>. Mae hyn yn troi templedi ffurflen o’r math hwn yn asedau personol y gellir eu gwasanaethu fel y math cyfryngau penodedig, naill ai o’r gronfa ddata neu o’r ddisg (ffeiliau gwastad) drwy dag <code>&lt;txp:output_form /&gt;</code>. Er enghraifft, gellir cynnwys templed ffurflen o’r enw <code>myscript.js</code> o fath <code>[js]</code> gyda math cyfryngau <code>application/javascript</code> yn eich cod fel hyn:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Bydd hyn yn cynhyrchu tag HTML <code>&lt;script&gt;</code> canlynol:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Dim ond templedi ffurflen sydd â’r estyniad enw sy’n cyfateb i’w math (e.e. <code>myscript.js</code>) y gellir eu gwasanaethu fel ffeiliau gwastad. Yn yr achos hwn, ni chânt eu prosesu gan Textpattern o gwbl ac maent yn hygyrch drwy eu URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Meysydd cyfaddas"><![CDATA[
+<h2>Meysydd cyfaddas</h2>
+<p>Defnyddir meysydd cyfaddas i ddal data erthygl ychwanegol. Gallwch ddiffinio hyd at ddeg ohonynt drwy roi enw iddynt yma. Bydd pob un yn ymddangos fel maes ar wahân ar y panel Ysgrifennu, i ganiatáu cysylltu data cyfaddas â phob erthygl.</p>
+<p>Gallwch enwi’r meysydd mewn unrhyw fodd yr hoffech, ond byddwch yn ymwybodol o’r canlynol:</p>
+<ul>
+<li>Mae defnyddio bylchau yn gwella darllenadwyedd ar y panel Ysgrifennu, ond <em>ni ellir</em> defnyddio’r meysydd wedyn fel paramedrau trefnu na hidlo mewn tag article_custom. Ystyriwch danlinellu yn lle, os hoffech ddefnyddio’r swyddogaeth hon.</li>
+<li>Byddwch yn ofalus wrth enwi meysydd fel nad ydynt yn gwrthdaro ag enwau meysydd neilltuedig yn Textpattern. Er enghraifft, peidiwch ag defnyddio <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, ac ati gan y byddwch yn cael canlyniadau rhyfedd neu safleoedd wedi torri.</li>
+<li>Cyfyngir data ym mhob maes i 255 o gymeriadau o destun yn unig.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Fformat dyddiad"><![CDATA[
+<h2>Fformat dyddiad</h2>
+<p>Bydd yr opsiwn hwn yn effeithio ar sut y bydd dyddiadau erthygl yn ymddangos ar dudalen flaen eich safle yn unig.</p>
+        ]]></item>
+        <item id="default_event" title="Panel rhagosodedig"><![CDATA[
+<h2>Panel rhagosodedig</h2>
+<p>Y panel rhyngwyneb gweinyddu Textpattern a fydd yn ymddangos gyntaf pan fydd unrhyw un yn mewngofnodi.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Statws cyhoeddi rhagosodedig"><![CDATA[
+<h2>Statws cyhoeddi rhagosodedig</h2>
+<p>Yn diffinio statws gwelededd cyhoeddi erthyglau Textpattern newydd eu creu.</p>
+<p>Sylwer nad yw’r gosodiad dewisiad hwn yn effeithio ar statws nac erthyglau a grewyd neu a olygwyd cyn unrhyw newid.</p>
+<p>Mae’r statws cyhoeddi rhagosodedig yn un o’r canlynol:</p>
+<ul>
+    <li>Drafft</li>
+    <li>Cudd</li>
+    <li>Dan sylw</li>
+    <li>Byw</li>
+    <li>Glyn</li>
+</ul>
+<p>Ystyrir erthygl <strong>ddrafft</strong> yn waith ar y gweill ac nid yw’n weladwy y tu allan i ardal weinyddu Textpattern (h.y. nid yw’n weladwy ar ochr flaen Textpattern ac ni chaiff ei syndiceiddio mewn llifau).</p>
+<p>Nid yw erthygl <strong>gudd</strong> yn weladwy y tu allan i ardal weinyddu Textpattern.</p>
+<p>Ystyrir erthygl <strong>dan sylw</strong> yn barod i’w chyhoeddi ac mae’n aros am gymeradwyaeth, ond nid yw’n weladwy y tu allan i ardal weinyddu Textpattern.</p>
+<p>Fel rheol, mae erthygl <strong>fyw</strong> yn weladwy y tu allan i ardal weinyddu Textpattern (h.y. yn weladwy ar ochr flaen Textpattern, yn cael ei syndiceiddio mewn llifau os yw’r ddewis yn caniatáu). Os yw erthygl yn fyw ac mae ganddi ddyddiad dod i ben, bydd y statws yn aros yn fyw ar ôl i’r dyddiad hwnnw gael ei gyrraedd, ond dim ond os caniateir cyhoeddi erthyglau sydd wedi dod i ben y bydd yr erthygl yn ymddangos y tu allan i’r ardal weinyddu.</p>
+<p>Mae erthygl <strong>glynu</strong> yn debyg i erthygl <strong>fyw</strong> o ran y gellir ei gweld y tu allan i ardal weinyddu Textpattern ond ni fydd yn ymddangos mewn rhestrau erthyglau oni bai fod tag <code>article</code> neu <code>article_custom</code> yn cynnwys priodoledd <code>status</code> gyda gwerth <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Dewiswch pa doctype HTML yr hoffech ei ddefnyddio (naill ai HTML5 neu XHTML). Mae hyn yn effeithio ar ffurflenni mewnbwn sylwadau, rendro Textile o <code>&lt;abbr&gt;</code> neu <code>&lt;acronym&gt;</code>, a thagiau <code>&lt;link&gt;</code> a gynhyrchir gan <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Galluogi rhagolwg thema datblygu?"><![CDATA[
+<h2>Galluogi rhagolwg thema datblygu?</h2>
+<p>Gall defnyddwyr sydd â breintiau digonol (yn ddiofyn, y rhai sydd â rolau Cyhoeddwr a Dylunydd) ddatblygu a rhagweld thema newydd yn ddiogel tra bydd y thema hen yn parhau i’w gweld i’r holl ddefnyddwyr eraill (hyd nes y caiff y newydd ei gosod ar waith).</p>
+<p>Fodd bynnag, gall defnyddwyr breintiedig nad ydynt am gymryd rhan yn natblygiad themâu analluogi rhagolwg thema datblygu. Yna cânt y thema ‘gyhoeddus’ gyfredol, fel ymwelwyr safle safonol.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Galluogi cefnogaeth tag byr?"><![CDATA[
+<h2>Galluogi cefnogaeth tag byr?</h2>
+<p>Mae tagiau Textpattern ar ffurf <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Mae’n bosibl lleihau faint o deipio sy’n angenrheidiol drwy alluogi nodiant byrrach lle gellir hepgor y <code>txp:</code> drwy ddilyn ychydig o ganllawiau syml. Dyma rai enghreifftiau i ddangos y cysyniad:</p>
+<ul>
+    <li>mae <code>&lt;txp:article_id /&gt;</code> yn dod yn <code>&lt;article::id /&gt;</code></li>
+    <li>mae <code>&lt;txp:recent_articles/&gt;</code> yn dod yn <code>&lt;recent::articles /&gt;</code></li>
+    <li>mae <code>&lt;txp:file_download_list /&gt;</code> yn dod yn <code>&lt;file::download_list /&gt;</code></li>
+    <li>mae <code>&lt;txp:smd_if /&gt;</code> yn dod yn <code>&lt;smd::if /&gt;</code></li>
+    <li>mae <code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> yn dod yn <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (sylwer y gellir defnyddio blaenragflaenydd yr ategyn ar gyfer y tag <code>else</code>).</li>
+</ul>
+<p>Os yw tag yn cynnwys tanlinellu ac os byddwch yn galluogi tagiau byr, y cysyniad sylfaenol yw:</p>
+<ol>
+    <li>Tynnwch y blaenragflaenydd <code>txp:</code>.</li>
+    <li>Newidiwch y digwyddiad cyntaf o’r tanlinellu i <code>::</code>.</li>
+</ol>
+<p>Sylwer nad yw gosod y dewisiad hwn yn effeithio ar y gallu i ddefnyddio codau byr <code>&lt;txp:output_form /&gt;</code> i rendro snippetiau ffurflen. Gallwch barhau i ddefnyddio <code>&lt;txp::shortcode /&gt;</code>, a gaiff ei ddehongli fel <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Galluogi gweinydd XML-RPC?"><![CDATA[
+<h2>Galluogi gweinydd XML-RPC?</h2>
+<p>Os hoffech ddefnyddio <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> i reoli Textpattern o bell (e.e. apiau bwrdd gwaith neu symudol) rhaid ichi droi’r gweinydd XML-RPC ymlaen drwy osod hwn i ‘Ie’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Defnyddio nodweddion e-bost uwch"><![CDATA[
+<h2>Defnyddio nodweddion e-bost uwch</h2>
+<p>Bydd gosod hwn i ‘Na’ yn llwybro pob e-bost – megis ceisiadau ailosod cyfrinair cyfrifon, ac e-byst o ategion fel com_connect – drwy swyddogaeth <code>mail()</code> PHP. Bydd dewis ‘Ie’ yn defnyddio PHPMailer sydd wedi’i chynnwys yn lle hynny, sy’n agor gosodiadau dewisol ar gyfer llwybro e-bost drwy weinyddion SMTP allanol.</p>
+<p>Os ydych yn cael trafferth gyda danfon e-byst (yn enwedig gydag adnoddau ar-lein fel Gmail, Outlook, Yahoo!, ac ati), mae’n debygol mai’r rheswm yw nad yw’ch parth yn cael ei weld fel ffynhonnell ddibynadwy. Gall newid i ‘Ie’ wella danfon e-byst. Yn ogystal, gall defnyddio SMTP ddarparu gwell cydnawsedd gyda rhai darparwyr e-bost a gwella danfon e-byst ymhellach.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Ar ôl sawl diwrnod y daw logiau i ben?"><![CDATA[
+<h2>Ar ôl sawl diwrnod y daw logiau i ben?</h2>
+<p>Pan fo logio Textpattern wedi’i alluogi, gallwch bennu am ba hyd (mewn dyddiau) y dylid cadw’r logiau. Bydd ‘7’ yn cadw’r logiau ar gael am saith diwrnod.</p>
+<p><strong>Nodyn:</strong> Dim ond pan fyddwch yn gweld y panel ‘Logiau ymwelwyr’ y caiff y logiau eu torri i lawr, ac fel arall byddant yn parhau i dyfu o ran maint.</p>
+        ]]></item>
+        <item id="file_base_path" title="Llwybr cyfeiriadur ffeiliau"><![CDATA[
+<h2>Llwybr cyfeiriadur ffeiliau</h2>
+<p>Mae hyn yn gosod y <strong>llwybr absoliwt</strong> i’r cyfeiriadur lle caiff llwythi ffeiliau i fyny eu cadw’n barhaol. Mae angen i PHP allu ysgrifennu i’r cyfeiriadur hwn.</p>
+<p><strong>Nodyn:</strong> Ystyriwch symud y cyfeiriadur hwn y tu allan i wraidd dogfennau cyhoeddus eich gwefan, er diogelwch ychwanegol.</p>
+        ]]></item>
+        <item id="file_download_header" title="Pennawd llwytho ffeil i lawrlwytho"><![CDATA[
+<h2>Pennawd llwytho ffeil i lawrlwytho</h2>
+<p>Yn eich galluogi i addasu sut y caiff llwythi ffeil i lawr eu trin.</p>
+<p>Fel rheol, caiff pob llwythiad i lawr ei drin fel atodiad a’i lawrlwytho (yn dibynnu ar sut y ffurfweddwyd eich porwr i drin y math hwnnw o ffeil). Os hoffech roi awgrymiadau ar sut yr hoffech i rai neu bob math o ffeiliau gael eu trin, gallwch gyflenwi cod tag yma i wneud hynny. Enghraifft fyddai dangos ffeiliau PDF yr ydych wedi’u hychwanegu at gategori Textpattern ‘inline-pdf’ mewnol, yn lle’u llwytho i lawr:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maint ffeil mwyaf (mewn beit)"><![CDATA[
+<h2>Maint ffeil mwyaf (mewn beit)</h2>
+<p>Gallwch gyfyngu ar y maint mwyaf (mewn beit) ar gyfer llwytho ffeiliau i fyny. Sylwer bod y gwerth hwn hefyd yn gyfyngedig gan ffurfweddiad PHP. Os bydd Textpattern yn canfod bod ffurfweddiad PHP yn cyfyngu maint llwytho i fyny i werth llai, bydd yn ei gywiro i lawr yn awtomatig. Os hoffech ganiatáu llwytho ffeiliau mwy i fyny drwy’r porwr, cysylltwch â’ch gwesteiwr (y gwerthoedd perthnasol yn <code>php.ini</code> yw <code>post_max_size</code>, <code>upload_max_filesize</code> a <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Cylch amser"><![CDATA[
+<h2>Cylch amser</h2>
+<p>Er mwyn dangos dyddiadau yn eich cylch amser lleol, dewiswch eich cylch amser.</p>
+        ]]></item>
+        <item id="img_dir" title="Cyfeiriadur delweddau"><![CDATA[
+<h2>Cyfeiriadur delweddau</h2>
+<p>Os hoffech addasu enw’ch cyfeiriadur delweddau, gallwch wneud hynny yma. Rhaid ichi greu’r cyfeiriadur yn gyntaf yng nghwraidd eich gosodiad Textpattern, a dylech hefyd sicrhau bod PHP yn gallu ysgrifennu i’r cyfeiriadur hwnnw.</p>
+<p>Mae’r llwybr hwn bob amser yn <strong>llwybr cymharol</strong> (i gyfeiriadur gwraidd eich gosodiad Textpattern).</p>
+<p>Y rhagosodiad yw <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Cynnwys cyfeiriad e-bost mewn llifau Atom?"><![CDATA[
+<h2>Cynnwys cyfeiriad e-bost mewn llifau Atom?</h2>
+<p>Mae hyn yn caniatáu ichi gynnwys cyfeiriad e-bost awdur erthygl (fel y’i nodir yn ei gyfrif defnyddiwr) yn rhan <code>author</code> eich llifau Atom.</p>
+        ]]></item>
+        <item id="is_dst" title="Ydy Amser Arbed Golau Dydd wedi’i alluogi?"><![CDATA[
+<h2>Ydy Amser Arbed Golau Dydd wedi’i alluogi?</h2>
+<p>A yw DST (Amser Arbed Golau Dydd) wedi’i alluogi ar hyn o bryd ar gyfer eich cylch amser.</p>
+        ]]></item>
+        <item id="logging" title="Logio"><![CDATA[
+<h2>Logio</h2>
+<p>Gallwch ddewis lefel logio ymwelwyr a gaiff ei chynnal gan Textpattern:</p>
+<ul>
+    <li><strong>Pob taro:</strong> bydd Textpattern yn logio pob golwg tudalen ar eich safle</li>
+    <li><strong>Cyfeirwyr yn unig:</strong> bydd Textpattern ond yn logio ymweliadau a gyfeirir o safleoedd eraill</li>
+    <li><strong>Dim:</strong> ni fydd Textpattern yn logio unrhyw olygfeydd tudalen</li>
+</ul>
+<p>O Textpattern 4.7.0 ymlaen, nid yw Textpattern yn casglu nac yn storio unrhyw wybodaeth am gyfeiriadau IP ymwelwyr. Os ydych yn casglu neu’n storio cyfeiriadau IP y tu allan i Textpattern, cymerwch ragofalon priodol i storio a/neu ddefnyddio’r data yn unol ag unrhyw gyfreithiau perthnasol, megis <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>, a gweithredwch ddiogelwch cryf ym mhob agwedd ar eich gweinydd a’ch gosodiad Textpattern i osgoi i’r data hwn gael ei beryglu.</p>
+<p>Argymhellir yn gryf eich bod yn gadael y gosodiad hwn ar ei ragosodiad, ‘Dim’, oni bai eich bod wir angen y wybodaeth hon ac, ymhellach, yn datgan yn gyhoeddus eich defnydd bwriedig ohoni.</p>
+        ]]></item>
+        <item id="max_url_len" title="Hyd URL mwyaf (mewn cymeriadau)"><![CDATA[
+<h2>Hyd URL mwyaf (mewn cymeriadau)</h2>
+<p>Mae hyn yn atal URLau sy’n hirach na’r hyd penodedig rhag gweithio. Gall fod yn gymorth ar gyfer cyfyngu niwed a diogelwch safle.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Dangos dolenni cymorth mewnlin ochr weinyddol"><![CDATA[
+<h2>Dangos dolenni cymorth mewnlin ochr weinyddol</h2>
+<p>Os hoffech guddio dolenni cymorth mewnlin ochr weinyddol (ffenestri naid cymorth Textpattern) ledled y system, newidwch y gosodiad hwn i ‘Dim’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Cuddio cyfeiriad e-bost y sylwebydd?"><![CDATA[
+<h2>Cuddio cyfeiriad e-bost y sylwebydd?</h2>
+<p>Mae’r gosodiad hwn yn rheoli a ddylid dangos cyfeiriad e-bost sylwebydd yn gyhoeddus.</p>
+<p>Argymhellir peidio â dangos cyfeiriadau e-bost, fel caredigrwydd i’ch defnyddwyr, ond gall fod sefyllfaoedd penodol lle mae’n ddymunol dangos cyfeiriadau e-bost sylwebyddion.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Defnyddio amgodio ISO-8859-1 mewn e-byst (UTF-8 yw’r rhagosodiad)?"><![CDATA[
+<h2>Defnyddio amgodio ISO-8859-1 mewn e-byst (UTF-8 yw’r rhagosodiad)?</h2>
+<p>Mae Textpattern yn defnyddio amgodio UTF-8 lle bynnag y bo modd yn ddiofyn, gan gynnwys ar gyfer e-byst sy’n cael eu hanfon allan. Fodd bynnag, nid yw rhai cleientiaid e-bost hŷn (gan gynnwys rhai fersiynau o Microsoft Outlook) yn cefnogi UTF-8 yn iawn. Os ydych yn profi nodau annifyr mewn e-byst, bydd y gosodiad hwn yn trawsnewid testun i amgodio ISO-8859-1 cyn ei anfon.</p>
+<p><strong>Nodyn:</strong> Os ydych yn defnyddio iaith nad oes modd cynrychioli ei nodau yn ISO-8859-1, yn anffodus ni fydd y gosodiad hwn o gymorth ichi. Dylech geisio dod o hyd i gleient e-bost sy’n gydnaws â UTF-8 (neu Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Mathau ffurflen darostwng"><![CDATA[
+<h2>Mathau ffurflen darostwng</h2>
+<p>Dewiswch pa fathau o ffurflenni fydd eu templedi ar gael ar y panel Ysgrifennu fel ffurflenni darostwng.</p>
+        ]]></item>
+        <item id="permlink_format" title="Patrwm URL teitl dolen barhaol"><![CDATA[
+<h2>Patrwm URL teitl dolen barhaol</h2>
+<p>Mae hyn yn diffinio’r dull y caiff URLau erthygl eu ffurfio a’u neilltuo pan gaiff modd dim-ansicr ei ddefnyddio.</p>
+<p>Pan gaiff erthygl ei chyhoeddi, caiff ei URL ei chynhyrchu o deitl yr erthygl oni bai bod URL penodol yn cael ei darparu yn y maes teitl URL yn unig.</p>
+<p>Ystyriwch yr enghraifft deitl erthygl ganlynol: <em>Ann and Bob eat cake</em></p>
+<p>Pan osodir yr opsiwn patrwm URL teitl dolen barhaol i ‘Hyphenated (title-like-this)’, byddai’r URL ar gyfer yr erthygl yn:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Pan osodir yr opsiwn patrwm URL teitl dolen barhaol i ‘Intercapped (TitleLikeThis)’, byddai’r URL ar gyfer yr erthygl yn:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Patrwm URL erthyglau"><![CDATA[
+<h2>Patrwm URL erthyglau</h2>
+<p>Mae hyn yn diffinio’r dull y caiff erthyglau unigol eu cyrraedd drwy’r URL a ddangosir gan dag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>.</p>
+<p>Mae modd ‘?=messy’ yn fwyaf cydnaws – bydd yn gweithio gyda fawr ddim ffurfweddiad gofynnol – ond yn lleiaf buddiol o ran darllenadwyedd URL ac optimeiddio peiriannau chwilio (SEO). Yn y modd hwn byddai URLau ar gyfer erthyglau ar eich safle fel hyn:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Mae angen swyddogaeth aildrefnu URL y gweinydd gwe (e.e. <code>mod_rewrite</code> Apache neu gyfarwyddebau aildrefnu NGINX yn y bloc <code>server</code>) ar bob modd arall. Os nad yw’ch gweinydd yn cefnogi swyddogaeth aildrefnu URL naill ai cysylltwch â’ch darparwr gwesteio neu defnyddiwch y modd ‘?=messy’ a amlinellwyd uchod.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Llwybr cyfeiriadur storfa ategion"><![CDATA[
+<h2>Llwybr cyfeiriadur storfa ategion</h2>
+<p>Defnyddir y gosodiad hwn yn bennaf gan ddatblygwyr ategion. Pan gaiff ei bennu, gallwch roi ffeil ffynhonnell yr ategyn (nad yw wedi’i chyfuno) yn y cyfeiriadur hwn a bydd Textpattern yn ei llwytho’n awtomatig, fel y gallwch olygu’r ategyn yn rhwydd a gweld yr effaith ar unwaith heb orfod gosod/gweithredu’r ategyn. <strong>Beware</strong> fodd bynnag wrth ddefnyddio’r dull hwn, gall ategyn wedi torri (sy’n methu cyfuno) dorri Textpattern hefyd!</p>
+<p>Argymhellir eich bod yn llwytho ategion drwy’r panel ‘Ategion’ safonol ar safle cynhyrchu, yn hytrach na defnyddio’r cyfeiriadur storfa ategion.</p>
+<p><strong>Nodyn:</strong> Peidiwch â nodi’r un cyfeiriadur ar gyfer y ‘dros dro’ a ‘storfa ategion’, gan y bydd hyn yn achosi problemau (byddai Textpattern yn ceisio rhedeg cynnwys ffeiliau log dros dro fel ategion).</p>
+        ]]></item>
+        <item id="production_status" title="Statws cynhyrchu"><![CDATA[
+<h2>Statws cynhyrchu</h2>
+<p>Mae gan safle Textpattern un o dri modd:</p>
+<ol>
+    <li>‘Debugging’</li>
+    <li>‘Testing’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Modd Debugging</h3>
+<p>Bydd yr holl adroddiadau gwall PHP ar eich safle byw yn weladwy, ynghyd â rhybuddion am god ac ategion sy’n camweithio. Yn ogystal, bydd y wybodaeth ganlynol yn weladwy pan fyddwch yn gweld ffynhonnell HTML tudalennau byw:</p>
+<ul>
+    <li>yr amser a gymerodd i’r gweinydd adeiladu’r dudalen (‘Runtime’)</li>
+    <li>nifer y ymholiadau MySQL a weithredwyd</li>
+    <li>defnydd cof brig bras</li>
+    <li>pob tag Textpattern a gyfarfu wrth adeiladu’r dudalen (a elwir hefyd yn olrhain tagiau)</li>
+</ul>
+<h3>Modd Testing</h3>
+<p>Bydd yr holl adroddiadau gwall PHP ar eich safle byw yn weladwy, ynghyd â rhybuddion am god ac ategion sy’n camweithio. Bydd y wybodaeth ganlynol yn weladwy pan fyddwch yn gweld ffynhonnell HTML tudalennau byw:</p>
+<ul>
+    <li>yr amser a gymerodd i’r gweinydd adeiladu’r dudalen (‘Runtime’)</li>
+    <li>nifer y ymholiadau MySQL a weithredwyd</li>
+    <li>defnydd cof brig bras</li>
+</ul>
+<h3>Modd Live</h3>
+<p>Ni chaiff unrhyw adroddiadau gwall na gwybodaeth diagnostig ei hanfon i’r dudalen. Yn gyffredinol, mae modd Live yn cael ei ffafrio, gan ei fod yn darparu’r profiad defnyddiwr gorau ac yn gosod y llwyth lleiaf ar y gweinydd.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Thema ochr flaen"><![CDATA[
+<h2>Thema ochr flaen</h2>
+<p>Y thema ochr flaen ddiofyn a gaiff ei defnyddio pan fydd unrhyw un yn ymweld â’ch gwefan gyhoeddus. Mae thema ddiofyn wedi’i chyn-gosod wedi’i chynnwys gyda Textpattern, ynghyd â’r opsiwn i ddechrau heb thema. Gallwch hefyd ychwanegu pecynnau thema at y cyfeiriadur <code>textpattern/themes</code> i’w gwneud ar gael i’w defnyddio.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Cyhoeddi erthyglau sydd wedi dod i ben?"><![CDATA[
+<h2>Cyhoeddi erthyglau sydd wedi dod i ben?</h2>
+<p>Pan gaiff ei osod i ‘Ie’, bydd erthyglau sydd wedi dod i ben yn parhau i ymddangos ar eich safle ar ôl i’w dyddiad dod i ben fynd heibio. Gallwch ddefnyddio tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> i ddangos cynnwys neu farcio arall ar gyfer erthyglau sydd wedi dod i ben.</p>
+<p>Pan gaiff ei osod i ‘Na’, caiff erthyglau sydd wedi dod i ben eu tynnu o’r safle cyhoeddus a dychwelyd statws HTTP "410 Gone" yn eu lle. Y gosodiad rhagosodedig yw ‘Na’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Anfon manylion mewngofnodi o’r cyfeiriad e-bost hwn"><![CDATA[
+<h2>Anfon manylion mewngofnodi o’r cyfeiriad e-bost hwn</h2>
+<p>Manylwch gyfeiriad e-bost a gaiff ei ddefnyddio fel cyfeiriad ‘From:’ yr anfonwr ar negeseuon â gwybodaeth mewngofnodi ar gyfer defnyddwyr newydd.</p>
+<p>Os caiff y dewisiad hwn ei adael yn wag neu os yw’n cynnwys cyfeiriad e-bost annilys, bydd Textpattern yn defnyddio enw a chyfeiriad y defnyddiwr sydd wedi mewngofnodi ar hyn o bryd yn ei le.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Faint o erthyglau a ddylai gael eu cynnwys mewn llifau?"><![CDATA[
+<h2>Faint o erthyglau a ddylai gael eu cynnwys mewn llifau?</h2>
+<p>Dyma’r nifer uchaf o erthyglau cyfredol i’w syndiceiddio ar y tro, mewn fformatau RSS ac Atom.</p>
+<p>Argymhellir gwerth isel, megis <code>5</code> drwy <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Nifer y pasiau dadansoddwr ychwanegol"><![CDATA[
+<h2>Nifer y pasiau dadansoddwr ychwanegol</h2>
+<p>Fel rheol mae dadansoddwr tagiau Textpattern yn disodli eich holl dagiau gyda chynnwys o’r gronfa ddata mewn un pas o’r templed tudalen. Mewn rhai achosion, gall hyn fod yn annigonol, er enghraifft:</p>
+<ul>
+    <li>Pan ddefnyddir ategion â threfn llwytho isel fel priodoleddau tagiau</li>
+    <li>Newidiadau cod y tu mewn i dagiau <code>&lt;txp:php&gt;</code></li>
+    <li>Hepgor elfennau tudalen yn gynharach yn y dudalen fel y gallant dderbyn cynnwys sy’n deillio o dag sy’n cael ei brosesu’n hwyrach</li>
+</ul>
+<p>Yn draddodiadol mae Textpattern wedi rhedeg un pas ychwanegol (a elwir yn ‘secondpass’) am resymau treftadaeth, felly’r gwerth rhagosodedig ar gyfer y ddewis hon yw <code>1</code>. Fodd bynnag, mae mwy o basiau’n cynyddu’r siawns y bydd tagiau nad oedd disgwyl iddynt gael eu prosesu yn sleifio drwodd ac yn cael eu prosesu. Mae gwelliannau diweddar yn y dadansoddwr tagiau wedi lleihau’r angen am yr ail bas hwn. Felly, oni bai eich bod yn defnyddio’r ail bas ar gyfer rheswm penodol, lleihau’r gwerth hwn i <code>0</code> i wneud eich safle’n fwy diogel.</p>
+<p>Os byddwch wedyn yn gweld tagiau heb eu prosesu yn cael eu rendro ar eich gwefan (ac nad oes gwallau tag eraill yn cael eu dangos mewn modd Profi/Dadfygio oherwydd parau tag heb eu paru), cysylltwch â ni gyda’ch templed tudalen/cod/enghraifft ategyn. Rydym yn ceisio dileu’r angen am basiau dadansoddwr ychwanegol, a bydd y wybodaeth hon yn ein helpu i gyflawni hynny.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Anfon pennyn &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Anfon pennyn "Last-Modified"?</h2>
+<p>Pan gaiff ei osod, bydd Textpattern yn darllen pennyn HTTP <code>If-Modified-Since</code> ymwelwr (os yw’n bodoli) a’i gymharu â’r diweddariad safle olaf. Os na fu unrhyw newid ers i’r ymwelwr lwytho’r dudalen ddiwethaf (h.y. os yw’r stamp amser y mae’r porwr yn ei anfon yr un fath â’r diweddariad safle olaf), yna caiff pennyn ei anfon yn ôl yn cyfarwyddo porwr yr ymwelwr i ddefnyddio ei fersiwn mewn storfa o’r dudalen.</p>
+<p>Gall hyn leihau defnydd lled band, amseroedd llwytho tudalen, a llwyth gweinydd gwe.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Dangos cyfrif sylwadau mewn llifau?"><![CDATA[
+<h2>Dangos cyfrif sylwadau mewn llifau?</h2>
+<p>Pan gaiff ei osod i ‘Ie’, bydd y gosodiad hwn yn atodi nifer y sylwadau at deitlau’ch erthyglau mewn llifau RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Broliant gwefan"><![CDATA[
+<h2>Broliant gwefan</h2>
+<p>Mae’r <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">broliant gwefan <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> yn grynodeb neu ddisgrifiad o’ch safle. Bydd yn cael ei ddefnyddio fel disgrifiad o’ch safle lle bynnag y bo angen, megis yn eich llifau RSS/Atom, a gellir ei ddefnyddio mewn nifer o leoedd ledled eich safle, yn ôl eich disgresiwn.</p>
+<p><strong>Nodyn:</strong> Mae broliant y safle yn ddewisol, ond efallai y bydd ei angen ar gyfer llif RSS neu Atom dilys.</p>
+        ]]></item>
+        <item id="sitename" title="Enw gwefan"><![CDATA[
+<h2>Enw gwefan</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Enw neu deitl eich safle <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a>. Bydd hwn yn ymddangos yn bar teitl porwr ymwelwr neu ddarllenydd llif syndiceiddio, ac mewn unrhyw nifer o leoedd eraill ledled eich safle, yn ôl eich disgresiwn.</p>
+        ]]></item>
+        <item id="siteurl" title="URL y wefan"><![CDATA[
+<h2>URL y wefan</h2>
+<p>Dyma gyfeiriad eich safle Textpattern, er enghraifft <code>www.example.com</code>.</p>
+<p><strong>Nodyn:</strong> Nid oes angen <code>http://</code>, <code>https://</code> na slecs olaf <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Cyfeiriadur thema"><![CDATA[
+<h2>Cyfeiriadur thema</h2>
+<p>Os hoffech addasu enw’r cyfeiriadur lle caiff ffeiliau gwastad themâu ochr flaen eu cadw’n barhaol, gallwch wneud hynny yma. Rhaid ichi greu’r cyfeiriadur yn gyntaf yng nghwraidd eich gosodiad Textpattern, a dylech hefyd sicrhau bod PHP yn gallu ysgrifennu i’r cyfeiriadur hwnnw.</p>
+<p>Mae’r llwybr hwn bob amser yn <strong>llwybr cymharol</strong> (i gyfeiriadur gwraidd eich gosodiad Textpattern).</p>
+<p>Y rhagosodiad yw <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Cyfeiriad anfonwr amlen SMTP"><![CDATA[
+<h2>Cyfeiriad anfonwr amlen SMTP</h2>
+<p>Dylid gadael y dewisiad hwn yn wag oni bai eich bod yn profi problemau gyda hanfon e-byst yn Textpattern (os na chaiff unrhyw e-bost ei hanfon o gwbl). Os bydd y broblem hon yn codi, gallwch roi unrhyw gyfeiriad e-bost dilys yma, ond yn ddelfrydol un sydd â’r un enw parth â’r wefan lle rydych wedi gosod Textpattern (h.y. os mai eich gwefan yw <code>https://example.com</code>, gallech ddefnyddio <code>you@example.com</code>).</p>
+<p>Ar gyfer y rhai sydd â diddordeb yn y manylion technegol:</p>
+<ul>
+    <li>Ar weinyddion UNIX-fel/macOS, defnyddir y cyfeiriad e-bost a roddwyd fel y 4ydd paramedr (gyda blaenragflaenydd "-f") ar gyfer swyddogaeth <code>mail()</code> PHP</li>
+    <li>Ar weinyddion Windows, defnyddir y cyfeiriad e-bost a roddwyd i osod (neu ddisodli) y gosodiad <code>sendmail_from</code> yn php.ini</li>
+</ul>
+<p>Mae hyn yn sicrhau bod cyfeiriad anfonwr amlen SMTP (nad yw o reidrwydd yr un peth â’r pennawd "From:" a welwch fel arfer mewn e-byst) wedi’i osod i’r cyfeiriad e-bost a roesoch yma, sy’n ofyniad ar gyfer hanfon e-bost ar rai gweinyddion gwe.</p>
+        ]]></item>
+        <item id="smtp_host" title="Gwesteiwr SMTP"><![CDATA[
+<h2>Gwesteiwr SMTP</h2>
+<p>I wella danfon negeseuon a manteisio ar lwybro e-bost drwy wasanaeth allanol (megis SendGrid, AWS SES, Mailchimp, Mailgun, ac ati), nodwch y gweinydd SMTP yma. Cyfeiriwch at eich darparwr SMTP i gael y gwerth hwn.</p>
+<p>Gellir darparu’r gwerth hwn drwy ddiffinio cysonyn <code>SMTP_HOST</code> yn <code>config.php</code>, ac yn yr achos hwn bydd y gwerth wedi’i fwrw’n llwyd yn y panel Dewisiadau.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Cyfrinair SMTP"><![CDATA[
+<h2>Cyfrinair SMTP</h2>
+<p>Os oes angen cyfrinair ar eich cysylltiad SMTP ar gyfer yr enw defnyddiwr penodedig, darparwch ef yma. Cyfeiriwch at ddogfennaeth y darparwr am fanylion.</p>
+<p>Nodyn: Er na chaiff y cyfrinair ei ddangos yma, caiff ei storio <em>heb ei amgryptio</em> yn y tabl dewisiadau yn y gronfa ddata. Os hoffech gynyddu diogelwch, gallwch ddiffinio cysonyn <code>SMTP_PASS</code> yn eich <code>config.php</code> yn lle hynny.</p>
+        ]]></item>
+        <item id="smtp_port" title="Porthladd SMTP"><![CDATA[
+<h2>Porthladd SMTP</h2>
+<p>Os ydych wedi nodi gwesteiwr SMTP, rhaid ichi nodi porthladd i alluogi llwybro SMTP. Porthladdoedd cyffredin yw:</p>
+<ul>
+    <li>25 - ar gyfer e-bost heb ei ddiogelu</li>
+    <li>465 - (hen) ar gyfer e-bost diogel</li>
+    <li>587 - rhagosodiad (argymhellir) ar gyfer e-bost TLS diogel</li>
+</ul>
+<p>Mae’n bosibl y bydd eich darparwr SMTP yn defnyddio porthladd gwahanol, felly cyfeiriwch at ei ddogfennaeth.</p>
+<p>Gellir darparu’r gwerth hwn drwy ddiffinio cysonyn <code>SMTP_PORT</code> yn <code>config.php</code>, ac yn yr achos hwn bydd y gwerth wedi’i fwrw’n llwyd yn y panel Dewisiadau.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Dull diogelwch SMTP"><![CDATA[
+<h2>Dull diogelwch SMTP</h2>
+<p>Dewiswch y mecanwaith y mae eich darparwr SMTP yn ei ddefnyddio fel ei brotocol diogelwch e-bost. Cyfeiriwch at ei ddogfennaeth am fanylion.</p>
+<p>Gellir darparu’r gwerth hwn drwy ddiffinio cysonyn <code>SMTP_SECTYPE</code> yn <code>config.php</code>, ac yn yr achos hwn bydd y gwerth wedi’i fwrw’n llwyd yn y panel Dewisiadau.</p>
+        ]]></item>
+        <item id="smtp_user" title="Enw defnyddiwr SMTP"><![CDATA[
+<h2>Enw defnyddiwr SMTP</h2>
+<p>Os oes angen enw defnyddiwr/mewngofnodi ar eich cysylltiad SMTP, darparwch ef yma. Cyfeiriwch at ddogfennaeth y darparwr am fanylion.</p>
+<p>Gellir darparu’r gwerth hwn drwy ddiffinio cysonyn <code>SMTP_USER</code> yn <code>config.php</code>, ac yn yr achos hwn bydd y gwerth wedi’i fwrw’n llwyd yn y panel Dewisiadau.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Rhestrau blocio sbam (wedi’u gwahanu gan goma)"><![CDATA[
+<h2>Rhestrau blocio sbam (wedi’u gwahanu gan goma)</h2>
+<p>Bydd y darparwyr <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">rhestru blocio <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> a roddir yma yn cael eu holi pan gaiff sylw ei bostio i’ch blog, a bydd cyfeiriad IP y person sy’n rhoi sylw yn cael ei wirio. Os yw’r cyfeiriad IP wedi’i restru, mae hyn yn golygu bod un neu fwy o adroddiadau sbam wedi’u gwneud am yr IP hwn yn y gorffennol, a chaiff y sylw ei wrthod. Beth bynnag fo canlyniadau’r gwiriad, nid yw Textpattern yn storio cyfeiriad IP y sylwebydd.</p>
+<p>Gallwch roi rhestr o enwau parthau yma, wedi’u gwahanu gan goma. Sylwer mai eich cyfrifoldeb chi yw sicrhau bod rhestrau blocio yn addas at eu diben.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Syndiceiddio dyfyniad yr erthygl yn unig?"><![CDATA[
+<h2>Syndiceiddio dyfyniad yr erthygl <strong>yn unig</strong>?</h2>
+<p>Os caiff hwn ei osod i ‘Na’, bydd eitemau llif yn cynnwys cyrff llawn yr erthyglau.</p>
+<p>Os caiff hwn ei osod i ‘Ie’, bydd eitemau llif yn cynnwys dyfyniad yr erthygl yn lle corff yr erthygl lle bo hwnnw ar gael.</p>
+        ]]></item>
+        <item id="tempdir" title="Llwybr cyfeiriadur dros dro"><![CDATA[
+<h2>Llwybr cyfeiriadur dros dro</h2>
+<p>Yn gosod <strong>llwybr absoliwt</strong> i gyfeiriadur dros dro (a elwir weithiau’n ‘tmp’ neu ‘temp’). Mae angen i PHP allu ysgrifennu i’r cyfeiriadur hwn. Defnyddir y cyfeiriadur hwn ar gyfer ffeiliau dros dro, er enghraifft llwythiadau i fyny o unrhyw fath (ategion, ffeiliau neu ddelweddau).</p>
+<p><strong>Nodiadau:</strong>
+<ul>
+    <li>Peidiwch â nodi’r un cyfeiriadur ar gyfer ‘dros dro’ a ‘storfa ategion’, gan y bydd hyn yn achosi problemau (byddai Textpattern yn ceisio rhedeg cynnwys ffeiliau log dros dro fel ategion).</li>
+    <li>Ystyriwch symud y cyfeiriadur hwn y tu allan i wraidd dogfennau cyhoeddus eich gwefan, er diogelwch ychwanegol.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Thema ochr weinyddol"><![CDATA[
+<h2>Thema ochr weinyddol</h2>
+<p>Y thema ochr weinyddol ddiofyn a gaiff ei defnyddio pan fydd unrhyw un yn mewngofnodi i Textpattern. Mae nifer o themâu gweinyddol wedi’u gosod ymlaen llaw wedi’u cynnwys gyda Textpattern, a gallwch hefyd ychwanegu pecynnau thema personol at y cyfeiriadur <code>textpattern/admin-themes</code> i’w gwneud ar gael i’w defnyddio.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Ychwanegu slecs olaf at URLau"><![CDATA[
+<h2>Ychwanegu slecs olaf at URLau</h2>
+<p>A fydd Textpattern yn ychwanegu slecs olaf yn awtomatig at URLau y mae’n eu cynhyrchu. Yr opsiynau yw:</p>
+<ul>
+    <li><strong>Na</strong> - Byth</li>
+    <li><strong>Rhestr</strong> - Dim ond ar dudalennau glanio ar sail rhestrau (h.y. nid wrth weld erthyglau unigol)</li>
+    <li><strong>Ie</strong> - Bob amser</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Swyddogaethau PHP wedi’u galluogi yn txp:evaluate"><![CDATA[
+<h2>Swyddogaethau PHP wedi’u galluogi yn txp:evaluate</h2>
+<p>Mae hon yn rhestr wedi’i gwahanu gan goma o eitemau <code>function</code> neu <code>alias=function</code>, e.e. <code>md5</code>, <code>replace=str_replace</code>. Gellir defnyddio eitemau a nodir yn y rhestr hon yn yr athriad <code>query</code> o’r tag <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Dylai <code>function</code> ddychwelyd gwerth sgalar (<strong>nid</strong> arae/gwrthrych).</p>
+        ]]></item>
+        <item id="use_comments" title="Derbyn sylwadau?"><![CDATA[
+<h2>Derbyn sylwadau?</h2>
+<p>Mae hyn yn gosod a ddylai swyddogaeth sylwadau Textpattern gael ei galluogi ai peidio.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Defnyddio cyfeiriad e-bost i adeiladu IDau llif (rhagosodiad yw URL y safle)?"><![CDATA[
+<h2>Defnyddio cyfeiriad e-bost i adeiladu IDau llif (rhagosodiad yw URL y safle)?</h2>
+<p>Mae angen ID unigryw ar eitemau mewn llif Atom.</p>
+<p>Er mwyn cynhyrchu IDau sy’n unigryw i’ch safle, mae Textpattern yn caniatáu ichi ddewis rhwng cyfeiriad e-bost neu’ch enw parth i’w gynnwys yn yr IDau hyn. Y cyfeiriad e-bost fydd y cyntaf i’w ddefnyddio wrth greu’r safle. Oni bai eich bod yn debygol o newid eich enw parth yn y dyfodol, mae’n debygol ei bod yn ddiogel gosod hwn i ‘Na’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Defnyddio ategion?"><![CDATA[
+<h2>Defnyddio ategion?</h2>
+<p>Mae hyn yn caniatáu ichi ddiffodd pob cefnogaeth i ategion Textpattern. Mae hyn yn ddefnyddiol os ydych yn dadfygio gwallau ar eich safle, ac am wirio a oes un neu ragor o ategion yn gysylltiedig.</p>
+        ]]></item>
+        <item id="use_textile" title="Fformatio testun rhagosodedig"><![CDATA[
+<h2>Fformatio testun rhagosodedig</h2>
+<p>Y gosodiad fformat testun a ddewiswch yma fydd y rhagosodiad ar gyfer marcio dyfyniad a chorff ar y panel ‘Ysgrifennu’. Gallwch ddewis caniatáu prosesu Textile cyflawn, trosi torri llinell yn farcwyr paragraff HTML neu beidio â throsi unrhyw destun o gwbl.</p>
+<p>Mae <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> yn gyfleuster sydd i’w fwriadu i symleiddio trosi testun plaen i HTML. Pan fydd wedi’i alluogi, bydd Textile yn prosesu testun corff erthyglau ac yn dychwelyd HTML sy’n strwythurol gadarn.</p>
+<p>Mae Textile hefyd yn cynnig set rymus ond hawdd i’w dysgu o orchmynion i fformatio testun, diffino strwythurau fel rhestrau, penawdau a dyfyniadau bloc, a mewnosod dolennau a delweddau.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Panel Adrannau">
+        <item id="section_category" title="Cyflwyniad"><![CDATA[
+<h2>Cyflwyniad</h2>
+<p>Mae adrannau yn Textpattern orau i’w hystyried yn gyfatebol i adrannau mewn papur newydd; maent i gyd yn perthyn i’r un cyhoeddiad, ond gallai pob un gynnwys cynllun gwahanol, neu arddull wahanol o erthygl, ac ati.</p>
+<p>Ar gyfer y rhan fwyaf o wefannau, dim ond lleiafswm o adrannau sydd eu hangen.</p>
+<h3>Senario tebygol ar gyfer gwefan â thair adran:</h3>
+<ol>
+    <li><strong>Archif:</strong> Y ‘Adran’ y mae pob erthygl sy’n ymddangos ar y dudalen flaen yn perthyn iddi. Pryd bynnag y bydd darllenydd yn clicio ar ddolen barhaol erthygl, caiff ei dangos yn y cynllun tudalen a neilltuwyd i’r ‘Adran’ hon. I fynd i restr tudalennog o’r erthyglau mwyaf diweddar sydd wedi’u neilltuo i’r adran "Archive", byddai’r URL yn <code>https://example.com/archive/</code>.</li>
+    <li><strong>Ynghylch:</strong> Tudalen ‘am y safle hwn’, sy’n wahanol i’r dudalen flaen a’r adran "Archif", gan ei bod yn fwy statig, gall fod â chynllun gwahanol, ac yn debygol o gynnwys un erthygl yn unig. Byddai’r adran ‘Ynghylch’ i’w chyrraedd yn <code>https://example.com/about/</code>.</li>
+    <li><strong>Lluniau:</strong> ‘Adran’ y byddai ei chynllun gwahanol (ac o bosibl CSS gwahanol) yn dangos lluniau yn lle erthyglau.</li>
+</ol>
+<p>Sylwer bod adran gudd arbennig, o’r enw default, yn bodoli bob amser. Mae’r adran ddiofyn hon yn defnyddio’r dudalen o’r enw default a’r arddull o’r enw default, ac mae’n adeiladu tudalen flaen eich safle.</p>
+        ]]></item>
+        <item id="section_default" title="Adran gyhoeddi rhagosodedig"><![CDATA[
+<h2>Adran gyhoeddi rhagosodedig</h2>
+<p>Mae’r opsiwn hwn yn rheoli pa adran a gaiff ei rhagddethol yn y ddewislen Adran wrth greu erthygl newydd ar y panel ‘Ysgrifennu’.</p>
+<p>Os bydd y rhan fwyaf o’ch erthyglau yn perthyn i adran benodol, dewiswch honno o’r rhestr yma. Bydd newidiadau’n cael eu hadlewyrchu ar unwaith.</p>
+<p>Gallwch or-reoli hyn ar sail erthygl unigol yn y panel ‘Ysgrifennu’ drwy ddewis adran wahanol yn y blwch ‘Trefnu a dangos’.</p>
+        ]]></item>
+        <item id="section_description" title="Disgrifiad"><![CDATA[
+<h2>Disgrifiad</h2>
+<p>Mae disgrifiad yr adran yn elfen ddewisol a all helpu peiriannau chwilio a chrwlariaid gwe i nodi a didoli cynnwys yn well.</p>
+<p>Cyfyngir disgrifiad yr erthygl i uchafswm o 255 o gymeriadau. Sylwer bod rhai peiriannau chwilio yn gosod terfynau cymeriadau ar hyd <code>meta description</code> tudalen er mwyn hwyluso ei dangos ar dudalennau canlyniadau peiriannau chwilio (SERPs), a gall hyn fod yn llai na’r terfyn 255 o gymeriadau yn Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="A yw erthyglau adran yn ymddangos ar y dudalen flaen?"><![CDATA[
+<h2>A yw erthyglau adran yn ymddangos ar y dudalen flaen?</h2>
+<p>Gall erthyglau mewn rhai adrannau, megis y rheini sy’n debycach i dudalennau gwe ‘statig’, ymddangos y tu allan i lif amser-sensitif tudalen flaen eich safle.</p>
+<p>Bydd gosod hwn i ‘Na’ yn atal erthyglau sydd wedi’u neilltuo i’r adran hon rhag ymddangos ar y dudalen flaen.</p>
+        ]]></item>
+        <item id="section_searchable" title="Cynnwys yr adran hon mewn chwilio safle?"><![CDATA[
+<h2>Cynnwys yr adran hon mewn chwilio safle?</h2>
+<p>Mae hyn yn rheoli a ddylai erthyglau sy’n perthyn i’r adran hon ymddangos fel rhan o ganlyniadau chwilio ar draws y safle.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Syndiceiddio erthyglau yn yr adran hon?"><![CDATA[
+<h2>Syndiceiddio erthyglau yn yr adran hon?</h2>
+<p>Yn rheoli a fydd erthyglau yn yr adran hon yn ymddangos yn llifau RSS ac Atom y safle.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Yn defnyddio arddull"><![CDATA[
+<h2>Yn defnyddio arddull</h2>
+<p>Os hoffech or-reoli’r daflen arddull ddiofyn ar gyfer adran benodol, gellir ei gosod yma.</p>
+<p>Mae hyn yn berthnasol yn unig i ddaflenni arddull a gedwir o fewn panel ‘Arddulliau’ Textpattern – os ydych yn cynnal eich CSS y tu allan i Textpattern (sydd yn cael ei argymell yn fawr), nid oes effaith i’r opsiwn hwn.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Yn defnyddio tudalen"><![CDATA[
+<h2>Yn defnyddio tudalen</h2>
+<p>Yn Textpattern, priodolir adrannau i dempledi tudalennau.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Yn defnyddio thema"><![CDATA[
+<h2>Yn defnyddio thema</h2>
+<p>Os hoffech newid y thema a ddefnyddir ar gyfer adran benodol, gellir ei gosod yma o’r rhestr o themâu sydd wedi’u gosod ar hyn o bryd.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Panel Gosod">
+        <item id="setup_admin_url" title="Is-barth gweinyddol"><![CDATA[
+<h2>Is-barth gweinyddol</h2>
+<p>Yr is-barth yr hoffech ei ddefnyddio i gyrchu rhyngwyneb gweinyddu Textpattern (e.e. <code>admin.example.com</code>).</p>
+<p>Cyfeiriwch at <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">osodiad aml-safle Textpattern</a> i gael rhagor o fanylion.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Parth cwci"><![CDATA[
+<h2>Parth cwci</h2>
+<p>Y (is)barth yr hoffech ei ddefnyddio ar gyfer cwci(au) Textpattern.</p>
+<p>Cyfeiriwch at <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">osodiad aml-safle Textpattern</a> i gael rhagor o fanylion.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Mewngofnodi defnyddiwr"><![CDATA[
+<h2>Mewngofnodi defnyddiwr</h2>
+<p>Enw mewngofnodi’r cyfrif gweinyddu (‘Cyhoeddwr’) y byddwch yn ei ddefnyddio i weinyddu eich safle.</p>
+<p>Er nad oes cyfyngiadau ar yr enw, mae’n well osgoi dilyniannau nodau cymhleth ac enwau defnyddiwr hawdd eu dyfalu (e.e. <code>admin</code>, <code>administrator</code>, ac ati.)</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Cyfrinair defnyddiwr"><![CDATA[
+<h2>Cyfrinair defnyddiwr</h2>
+<p>Gan mai gan y cyfrif hwn y mae’r lefel uchaf o fynediad yn Textpattern, dewiswch gyfrinair cryf iawn neu, yn well fyth, ymadrodd cyfrinair.</p>
+<h3>Awgrymiadau</h3>
+<ul>
+    <li>Defnyddiwch gymysgedd o nodau bach a mawr</li>
+    <li>Defnyddiwch rifau</li>
+    <li>Defnyddiwch symbolau</li>
+    <li>Gwnewch iddo fod o leiaf wyth nod o hyd</li>
+    <li><strong>Osgoi</strong> unrhyw wybodaeth bersonol (dyddiadau, enwau, llefydd, aelodau teulu, anifeiliaid anwes, ac ati.)</li>
+    <li><strong>Osgoi</strong> unrhyw eiriau geiriadur unigol neu ailadroddus, ni waeth beth yw’r sillafu, yr iaith na’r llythyren fawr/bach</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Rhagosodiad tablau"><![CDATA[
+<h2>Rhagosodiad tablau</h2>
+    <p>Dim ond os oes arnoch angen sawl gosodiad Textpattern mewn un gronfa ddata y mae angen defnyddio rhagosodiad tablau. Mae angen rhagosodiad unigryw ar bob gosodiad Textpattern.</p>
+    <p>Sylwer bod yn rhaid i’r rhagosodiad lynu at y rheolau canlynol:</p>
+<ul>
+    <li><strong>1af nod:</strong> rhaid iddo fod yn a-z, A-Z, neu danlinell</li>
+    <li><strong>Nodau dilynol:</strong> dim ond a-z, A-Z, 0-9, neu danlinell sy’n cael eu caniatáu</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Panel Themâu">
+        <item id="skin_author" title="Awdur thema"><![CDATA[
+<h2>Awdur thema</h2>
+<p>Awdur(on) y thema hon (dewisol).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Gwefan thema"><![CDATA[
+<h2>Gwefan thema</h2>
+<p>Yr URL lle y gellir cael hyd i’r wybodaeth lawn a/neu’r fersiynau diweddaraf o’r thema hon (dewisol).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Dileu templedi thema oddi ar y ddisg hefyd"><![CDATA[
+<h2>Dileu templedi thema oddi ar y ddisg hefyd</h2>
+<p>Os caiff ei dicio, caiff pob ffeil templed yn y thema(âu) a ddewiswyd ei dileu’n barhaol oddi ar y ddisg. Fodd bynnag, ni chaiff cyfeiriaduron sy’n ymwneud â themâu a’u his-gyfeiriaduron eu dileu os oes unrhyw ffeiliau eraill (megis JavaScript, delweddau, …) o’u mewn.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Dileu templedi di-faen o’r gronfa ddata wrth fewnforio"><![CDATA[
+<h2>Dileu templedi di-faen o’r gronfa ddata wrth fewnforio</h2>
+<p>Os caiff ei dicio, caiff pob templed yn y thema(âu) a ddewiswyd nad oes ganddo ffeil gyfatebol ar y ddisg ei ddileu’n barhaol o’r gronfa ddata. Y canlyniad ar ôl cwblhau’r weithred fydd bod eich templedi cronfa ddata yn adlewyrchu’r hyn sydd ar y ddisg hyd eithaf y bo modd.</p>
+<p>Sylwer, os ydych wedi dileu ffeiliau templed y mae Textpattern eu hangen, caiff fersiynau gwag eu creu ichi yn y gronfa ddata.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Dileu templedi di-faen o’r ddisg wrth allforio"><![CDATA[
+<h2>Dileu templedi di-faen o’r ddisg wrth allforio</h2>
+<p>Os caiff ei dicio, caiff pob ffeil templed yn y thema(âu) a ddewiswyd nad oes ganddo eitem gyfatebol yn y gronfa ddata ei ddileu’n barhaol o’r thema sy’n seiliedig ar y ddisg. Y canlyniad ar ôl cwblhau’r weithred fydd bod eich templedi system ffeiliau yn adlewyrchu’n union yr hyn sydd yn y gronfa ddata.</p>
+        ]]></item>
+        <item id="skin_description" title="Disgrifiad thema"><![CDATA[
+<h2>Disgrifiad thema</h2>
+<p>Gellir darparu crynodeb byr o gynllun/dyluniad y thema hon (dewisol).</p>
+<p>Cyfyngir disgrifiad y thema i uchafswm o 255 o gymeriadau.</p>
+        ]]></item>
+        <item id="skin_import" title="Mewnforio thema"><![CDATA[
+<h2>Mewnforio thema o’r ddisg</h2>
+<p>Mae’r ffurflen hon yn caniatáu ichi fewnforio thema i gronfa ddata Textpattern o’ch cyfeiriadur themâu.</p>
+<p>Rhaid i thema y gellir ei mewnforio fod yn cynnwys ffolder rhiant darllenadwy sy’n defnyddio enw’r thema fel enw’r ffolder, a thu mewn i’r ffolder ffeil <code>manifest.json</code> darllenadwy yn y fformat disgwyliedig. Dylai’r ffolder thema hefyd gynnwys tudalennau, ffurflenni ac arddulliau mewn is-ffolderi cyfystyr.</p>
+<p>Dylai tudalennau a ffurflenni ddefnyddio estyniad <code>.txp</code>, tra bo disgwyl i daflenni arddull fod yn ffeiliau <code>.css</code>. Dylid grwpio ffurflenni hefyd yn ôl math mewn cyfeiriaduron pwrpasol. Bydd Textpattern yn creu unrhyw dempledi hanfodol coll wrth fewnforio.</p>
+<p>Gweler y <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dogfennaeth themâu <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> i gael rhagor o wybodaeth am greu, gosod a defnyddio themâu o fewn CMS Textpattern.</p>
+        ]]></item>
+        <item id="skin_name" title="Enw thema"><![CDATA[
+<h2>Enw thema</h2>
+<p>Defnyddir enw thema ar gyfer enw cyfeiriadur y thema a dibenion technegol eraill (gofynnol).</p>
+<p>Dylai’r enw beidio â chynnwys unrhyw nodau arbennig na bylchau.</p>
+        ]]></item>
+        <item id="skin_overview" title="Cyflwyniad i Themâu"><![CDATA[
+<h2>Cyflwyniad i Themâu</h2>
+<p>Casgliad o Dudalennau, Ffurflenni a Thaflenni Arddull yw thema Textpattern. Mae themâu yn caniatáu ichi wahanu asedau eich safle yn rhesymegol yn grwpiau i hwyluso adnabod, neu i’w rhannu ag eraill. Nid yw’r weithred o greu neu fewnforio Thema, a’r asedau sydd ynddi, yn cael <em>unrhyw</em> effaith ar eich safle presennol. Gallwch olygu neu addasu unrhyw ased nad yw’n gysylltiedig ag Adran o’ch safle, heb effeithio ar y safle ei hun.</p>
+<p>I olygu asedau mewn thema, ewch i’r panel Tudalennau, Ffurflenni neu Arddulliau a defnyddio’r dewislen gwympo i ddewis y thema yr hoffech weithio arni. Cofir y thema rydych yn gweithio arni ledled yr ardal weinyddu, gan ganiatáu ichi neidio rhwng mathau o asedau’n gyflym ac yn hawdd. Cyfeirir ati fel eich <em>thema waith</em>.</p>
+<p>Cyfeiriwch at <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Ddogfennaeth Defnyddwyr Textpattern <span class="ui-icon ui-icon-extlink">(yn agor cysylltiad allanol mewn ffenestr newydd)</span></a> i gael rhagor o wybodaeth.</p>
+        ]]></item>
+        <item id="skin_title" title="Teitl thema"><![CDATA[
+<h2>Teitl thema</h2>
+<p>Teitl disgrifiadol thema, a ddefnyddir i adnabod y thema o fewn paneli Textpattern.</p>
+<p>Gall y teitl gynnwys nodau arbennig a bylchau.</p>
+        ]]></item>
+        <item id="skin_version" title="Fersiwn thema"><![CDATA[
+<h2>Fersiwn thema</h2>
+<p>Rhif fersiwn y fersiwn sydd wedi’i gosod o’r thema hon (dewisol).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

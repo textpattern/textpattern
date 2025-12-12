@@ -1,0 +1,1203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ff">
+    <group id="admin" title="Alluure huutorɓe">
+        <item id="about_privileges" title="Baɗte darolaji"><![CDATA[
+<h2>Baɗte darolaji</h2>
+<h3>Pabliyisir</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe, jowe e jokke</li>
+    <li>ena waawi huutoraade PHP e binndanɗe so suɓorde jiiloowo ‘Yamir PHP e binndanɗe?’ woni ‘Ee’</li>
+    <li>ena waawi toppitaade nate e piille</li>
+    <li>ena waawi toppitaade seele e kategoorii</li>
+    <li>ena waawi toppitaade kelle, formuuji e mbaydi</li>
+    <li>ena waawi yiyde humpito ceŋorgol</li>
+    <li>ena waawi toppitaade cuɓoraaɗi lowre</li>
+    <li>ena waawi toppitaade kuutorɓe</li>
+    <li>ena waawi toppitaade tonngitte yillaataaɓe</li>
+    <li>ena waawi toppitaade ceŋe</li>
+    <li>ena waawi jiggitaade keɓe</li>
+</ul>
+<h3>Jiiloowo waɗtorde</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe, jowe e jokke</li>
+    <li>ena waawi huutoraade PHP e binndanɗe so suɓorde jiiloowo ‘Yamir PHP e binndanɗe?’ woni ‘Ee’</li>
+    <li>ena waawi toppitaade nate e piille</li>
+    <li>ena waawi toppitaade seele e kategoorii</li>
+    <li>ena waawi toppitaade kelle, formuuji e mbaydi</li>
+    <li>ena waawi yiyde humpito ceŋorgol</li>
+    <li>ena waawi toppitaade cuɓoraaɗi lowre</li>
+    <li>ena waawi yiyde kuutorɓe</li>
+    <li>ena waawi toppitaade tonngitte yillaataaɓe</li>
+    <li>ena waawi toppitaade ceŋe</li>
+    <li>ena waawi jiggitaade keɓe</li>
+</ul>
+<h3>Jiiloowo binndannde</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe, so wonaa:
+        <ul>
+            <li>horiima momtaade binndanɗe ɓe jeyaɓe goɗɗe</li>
+        </ul>
+    </li>
+    <li>ena waawi toppitaade jowe e jokke</li>
+    <li>ena waawi toppitaade nate e piille</li>
+    <li>ena waawi toppitaade kategoorii</li>
+    <li>ena waawi toppitaade kelle e formuuji</li>
+    <li>ena waawi yiyde kuutorɓe</li>
+    <li>ena waawi toppitaade tonngitte yillaataaɓe</li>
+</ul>
+<h3>Binndol rewam (Staff Writer)</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe maako, yiyde binndanɗe kuutorɓe goɗɗe</li>
+    <li>ena waawi toppitaade nate e piille</li>
+</ul>
+<h3>Moofu-ɗimo (Freelancer)</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe maako e no ƴeewtaako tan:
+        <ul>
+            <li>ena waawi wayleede binndannde tan haa nde bayyinaa</li>
+            <li>ena waawi jeyaaɗe ngonka <em>tan</em> Draft, Hidden walla Pending</li>
+        </ul>
+    </li>
+    <li>ena waawi yiyde binndanɗe kuutorɓe goɗɗe</li>
+</ul>
+<h3>Teŋngallitoowo (Designer)</h3>
+<ul>
+    <li>ena waawi toppitaade binndanɗe maako e no ƴeewtaako tan:
+        <ul>
+            <li>ena waawi wayleede binndannde tan haa nde bayyinaa</li>
+            <li>ena waawi jeyaaɗe ngonka <em>tan</em> Draft, Hidden walla Pending</li>
+        </ul>
+    </li>
+    <li>ena waawi yiyde binndanɗe kuutorɓe goɗɗe</li>
+    <li>ena waawi toppitaade nate</li>
+    <li>ena waawi toppitaade seele</li>
+    <li>ena waawi toppitaade kelle, formuuji e mbaydi</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Sos ballifo"><![CDATA[<h2>Ɓeydu ballifo keso</h2>
+<p>Maa ɓatakuru bismaango e tinndinooje ceŋagol neelde e iimeel ballifo keso oo.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Alluure binndol">
+        <item id="article_image" title="Natal winndannde"><![CDATA[
+<h2>Natal binndannde</h2>
+<p>Ngam ɓeydude nate e binndannde ndee, naatnu ɗum gooto e yeeso ɗee:</p>
+<ol>
+    <li>gooto walla keewɗe ID natal Textpattern, ɗe lobbinɗe (hono <code>12, 25, 18</code>)</li>
+    <li>gooto walla keewɗe URL ceertol to natal ngal, ɗe lobbinɗe (hono <code>/images/my_pic.jpg</code>)</li>
+    <li>gooto walla keewɗe URL-ɗi ɗi timmiiɗi, ɗe lobbinɗe (hono <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Natal adannde ena jayta so a ɓeydi tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> e nder formu binndannde. Woowaande, ɗuum maa yaltu tag HTML <code>&lt;img&gt;</code> timmiiɗo e natal suɓaande.</p>
+<p>Aɗa waawi jaytinde gallerii huutoraade tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Ɓanndu"><![CDATA[
+<h2>Kokol</h2>
+<p>Loowdi gulɗo binndannde woni e kokol binndannde.</p>
+<p>So winndorde walla toɗɗorde binndanɗe ngam bayyinere e Textpattern, binndiijo ena waawi waylude e ndesgu tati binndannde: binndi ñiiɓngol, dokkitannde HTML (kod ngol wanngorde geese huutortoo ngam jaytinde binndannde), e yiiltaare hurminde.</p>
+        ]]></item>
+        <item id="description" title="Cifagol"><![CDATA[
+<h2>Ciforgol</h2>
+<p>Ciforgol binndannde ko geɗe suɓaaki ɓe ena waawi wallude yiylitte e geese e ceŋe wiylowe ngam ɓe ƴeewtinde e leñirde loowdi.</p>
+<p>Ciforgol binndannde ena sokli haɗde haanirde 255 karfe. Ɓeydii hol no yiylitte goɗɗi nana joga ɗeena haaɗe e boowal karfe e <code>meta description</code> hello ngam bayningol e nder kelle njiylawel yiylitte (SERPs) tee ɗum ena waawi waɗde seeɗa ko ɓuri haanirde 255 karfe ɗe Textpattern yamiraa.</p>
+<p>Ƴeewto so ciforgol binndannde ena seŋoo e jubbannde binndannde, tawa ɗe ɗiɗi ena jaɓa binndi ñiiɓngol gooto. Ciforgol binndannde foti waɗde ko woɗɓe yeeso yiylitte e geese e ceŋe, tawa jubbannde binndannde ena moƴƴi ko binndi reendem ɗo fahaaɗo e yontiɗagol jaɓɓorgol binndannde ɗe njiɗɗo.</p>
+        ]]></item>
+        <item id="excerpt" title="Jubbannde"><![CDATA[
+<h2>Jubbannde</h2>
+<p>Jubbanɗe binndanɗe ena ko suɓaaki. Ena waawi huutoreede e no ƴettinde binndannde ndu woɗɗi, ngu jaytangol ɗoo farta doggol loowɗe, ngol waɗetee ɗo kokol binndannde fof e biile RSS/Atom lowre, walla gooto e fannuuji goɗɗi.</p>
+        ]]></item>
+        <item id="expire_date" title="Ñalngu kiiɗtugol"><![CDATA[
+<h2>Ñalngu kiiɗtugol</h2>
+<p>Waktu nde binndannde ñiiɓitaama njiɗɓe ɗe kiiɗtii. Waktu oo ena suɓaaki tee ena waawi wonde ko ko ɓennunde sahaa fii yeeso walla ko ɓenniɗo to.</p>
+<p>Kaɓirɗi ɗee peewii ɗum ina ɗee humpito:</p>
+<ul>
+    <li>Hitaande / Lewru / Ñalngu</li>
+    <li>Waktu (formaaji ɓernde ñalngu 24) : Hoɗɗo : Majaango</li>
+</ul>
+<p>So sahaa ndee arii, walla so sahaa ɓenniɗo fii yeeso waɗi, binndannde ena kiiɗta.</p>
+<p>So cuɓorde ngam jaytinde binndanɗe kiiɗtuɗe ena hurmii, binndannde ndee ena waɗi e nder yimɓe ngari. So cuɓorde ngam jaytinde binndanɗe kiiɗtuɗe koko daaƴaa, ɓeyditooɓe binndannde ndee maa heɓ HTTP 410 juume haa ɗo kokol binndannde.</p>
+        ]]></item>
+        <item id="keywords" title="Jiytirɗe"><![CDATA[
+<h2>Kelme cerni</h2>
+<p>Kelme cerni ena waɗi goonga ngam ƴeewtinde ceŋanɗe hakkunde binndanɗe ko ɓurɗe seeɗa ɗe kategoorii ɗe hokii.</p>
+<p>Kelme cerni ena foti wonde kelme goɗɗe, ɗe kuutorii e lobbinɗe.</p>
+        ]]></item>
+        <item id="override_form" title="Lomtito galluleere"><![CDATA[
+<h2>Formu lomtungal</h2>
+<p>Binndannde ena waawi huutoreede formu goɗɗo woɗɗi e mo addiinde e woowaande - gollu nanndu ngam jaytinde jubbannde binndannde ndee huutoraa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> tawa ko kokol binndannde huutoraa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> - ɗum ena waawi taɓaade ɗoo.</p>
+        ]]></item>
+        <item id="publish_date" title="Ñalngu bayyino"><![CDATA[
+<h2>Ñalngu bayyinde</h2>
+<p>Waktu nde binndannde walla fiilde ena bayyinaa walla hesɗitii cakkiti. Waktu oo ena waawi taɓaade ɗum sahaa nde geɗe jooni ndokkii, walla sahaa ɓenniɗo fii yeeso walla ko ɓenniɗo to.</p>
+<p>Kaɓirɗi ɗee peewii ɗum ina ɗee humpito:</p>
+<ul>
+    <li>Hitaande / Lewru / Ñalngu</li>
+    <li>Waktu (formaaji ɓernde ñalngu 24) : Hoɗɗo : Majaango</li>
+</ul>
+<p>Temre ngo ko ɓuri waktu jooni (e gila woni e yeeso) maa hokketeeka e yeeso ngal e biile RSS/Atom haa sahaa ndee arii.</p>
+        ]]></item>
+        <item id="status" title="Ngonka"><![CDATA[
+<h2>Ngonka</h2>
+<p>Ena ñawti ngonka bayyino e binndannde Textpattern ndee.</p>
+<p>Ngonka bayyino ɗe ɗiɗi ko ɗee:</p>
+<ul>
+<li><strong>Draft</strong>: ko gollu e doggol waɗa e gollu, tee ena jaytaaki haa ɗo e nder alluure jiiloore Textpattern (ngol woni e lowre ndee tee e biile ɗe). </li>
+<li><strong>Hidden</strong>: binndannde ena jaytaaki haa ɗo e nder alluure jiiloore Textpattern. Ena moƴƴi ngam momtude loowdi e lowre ndee woɗnde tawa a yiɗaani momta ɗum.</li>
+<li><strong>Pending</strong>: ko binndannde to bannge bayyino tawi mooftaare, tee ena jaytaaki haa ɗo e nder alluure jiiloore.</li>
+<li><strong>Live</strong>: laawol ko binndannde ena jayta yeeso ɗoo (woni e lowre ndee, tee e biile so cuɓorde ena yamira ɗum). So binndannde ena live tee ena jogii ñalngu kiiɗtugol, ngonka maa waawi ooɗde Live ɓooyaani ɓennu ñalngu, kono binndannde maa jayta tan tawi binndanɗe kiiɗtuɗe ena yamira bayyineede.</li>
+<li><strong>Sticky</strong>: renndo ɗum ko <strong>Live</strong> e ɗemngal so yaltugol ɓeyditanɗe, kono maa <strong>wonaa</strong> e doggi binndanɗe so tag <code>article</code> walla <code>article_custom</code> ena njogii joopaare <code>status</code> ndaariindi e <code>sticky</code>.</li>
+</ul>
+<p>Fiilannde: loowdi nde jaytaaka e lowre maa ena waawi jiyteede ko binndanɗe ngoni naatgaaɗo.</p>
+        ]]></item>
+        <item id="title" title="Tiitoonde"><![CDATA[
+<h2>Tiitoonde</h2>
+<p>Ɓeydu tiitoonde moƴƴo e ndee binndannde.</p>
+<p>Tiitoonde binndannde ena sokli haɗde haanirde 255 karfe.</p>
+        ]]></item>
+        <item id="url_title" title="Binndol URL"><![CDATA[
+<h2>Tiitoonde URL tan</h2>
+<p>Ngam huutoraade tiitoonde goɗɗo woni e tiitoonde jokkol duumiiɗo binndannde, naatnu ɗum ɗoo. So ɗum waɗii e jawdi, tiitoonde URL maa waɗɗi e jaajol e tiitoonde binndannde ndee.</p>
+<p>Ɗum ena waawi waawiɗe seeɗa so tiitoonde binndannde ndee huutortoo alkule ɗe wonaa ASCII.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Alluure pelle">
+        <item id="article_category" title="Binndanɗe"><![CDATA[
+<h2>Binndanɗe</h2>
+<p>Tawa seele ɗe reentinoo yiilorde ngol lowre, kategoorii binndanɗe ena addi yamiroore ngam feewnude binndanɗe e mayre maɓɓe. So kategoorii ɗe soklaama, doggi binndanɗe ɓe woodi e kategoorii keeriiɗi ena waawi jiyaade.</p>
+<p>Ngam yiyde, kategoorii binndanɗe yiytaaɗe e lowre baawɗe e nder njaɓɓorgol woni e leñol ballal ena waawi wonde ko ɗee:</p>
+<ul>
+    <li>jeeri ɓesɗi</li>
+    <li>cuɓagol</li>
+    <li>sose</li>
+    <li>jaytindagol</li>
+    <li>sooyre</li>
+    <li>pottiiɓe sose (chefs)</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Cifagol"><![CDATA[
+<h2>Ciforgol kategoorii</h2>
+<p>Ciforgol kategoorii ena ko geɗe moƴƴi ɗe ena waawi wallude yiylitte e geese e ceŋe wiylowe ngam ɓe ƴeewtinde e leñirde loowdi.</p>
+<p>Ciforgol kategoorii ena sokli haɗde haanirde 255 karfe. Ɓeydii hol no yiylitte goɗɗi nana joga ɗeena haaɗe e boowal karfe e <code>meta description</code> hello ngam bayningol e nder kelle njiylawel yiylitte (SERPs) tee ɗum ena waawi waɗde seeɗa ko ɓuri haanirde 255 karfe ɗe Textpattern yamiraa.</p>
+        ]]></item>
+        <item id="file_category" title="Piille"><![CDATA[
+<h2>Piille</h2>
+<p>Kategoorii piille ena suɓaaki, tee ena waawi wallude roɓtindagol piille jolluɗe keftinaaɗe.</p>
+        ]]></item>
+        <item id="image_category" title="Nate"><![CDATA[
+<h2>Nate</h2>
+<p>Kategoorii nate ena suɓaaki, tee ena moƴƴi wota ngam ceŋorgol nder juɓɓe, ngam seŋaade seeɗi nate ɗe ena waawi jaytaade huutoraade tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Jokke"><![CDATA[
+<h2>Jokke</h2>
+<p>Kategoorii jokke ena suɓaaki, tee ena waawi wallude jaytugol rohondirɗe jokke, ngam yiytugol e gootol, hono ‘Jokke ceertu’, ‘Romans’, ‘Ñiiɓɓe leydi’.</p>
+<p>Doggol jokke cuɓeeɗe no ɓe njiya, nana yahde ɗum e tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> no ɓeɗi ɗoo:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Alluure nemmbito">
+        <item id="clean_url_data_failed" title="Keɓe URL keelɗo woorii"><![CDATA[
+<h2>Leemtoore URL ɗiɗiɗiɗi cuuraaɗe woorii</h2>
+<p>Ena wayi ko URLji lowre ndee (hono <code>https://example.com/section/article</code>) wonaa kañum gollortoo walla sarworde geese nde hoolaali jillagol so URL ɓurɗiɗiɗiɗi ena gollaa walla alaa; so URL ɓurɗiɗiɗiɗi e lowre ndee gollota no waawiɗo, aɗa waawi weltaade ɓataku ngol.</p>
+<p>So URL ɓurɗiɗiɗiɗi <em>wonaa</em> golloto ɗum ena waɗti ko walla:</p>
+<ul>
+    <li>teelte ‘URL lowre’ koo moƴƴaani, walla hello e ɗoo ñiiɓtugol wonaa ɗo Textpattern ngol tammbaaki</li>
+    <li>sarworde ndee ena sokli baylugol e <code>.htaccess</code> walla teelte goɗɗo sarworde hono ɗum ngam waɗtude URL ɓurɗiɗiɗiɗi golluuji</li>
+    <li>sarworde ndee wonaa waawɗo jaɓde URL ɓurɗiɗiɗiɗi mbaawka</li>
+</ul>
+<p>Ɗo hoolirta leemtoore URL ɓurɗiɗiɗiɗi ko etaako aawtaade hello iwde e ñiiɓirde geese nde keɓiɗi e cuɓorde ‘URL lowre’ ngam ƴeewtaade so parametere URL ɓurɗiɗiɗiɗi fof ena gollii no moƴƴi. So URL ngal woni lowre woɗnde, walla lomtinaama ngam heɓde hello caasngol walla wonaa ɗum, leemtoore maa wooru. Haa jamanu kala nde caɗeele ndee lomtinaa, URL cuuɗi (hono <code>https://example.com?s=section&amp;id=4</code>) ena mbaawi huutoreede. Ƴeewto ‘Mbayka jokkol peeraaɗo’ e Cuɓe Jiiloowo ngam momtude ɗum ko jaati.</p>
+<p>Kadi, huutoraade ceŋol ngam waɗtude lowre e ‘mbaydi topayru’ ena mbaawi waɗde ɓatakuuji ngol.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Ƴeewndo URL keelɗo woorii"><![CDATA[
+<h2>Leemtoore URL ɗiɗiɗiɗi woorii</h2>
+<p>Ena wayi ko URLji lowre ndee (hono <code>https://example.com/section/article</code>) wonaa kañum gollortoo walla sarworde geese nde hoolaali jillagol so URL ɓurɗiɗiɗiɗi ena gollaa walla alaa; so URL ɓurɗiɗiɗiɗi e lowre ndee gollota no waawiɗo, aɗa waawi weltaade ɓataku ngol.</p>
+<p>So URL ɓurɗiɗiɗiɗi <em>wonaa</em> golloto ɗum ena waɗti ko walla:</p>
+<ul>
+    <li>teelte ‘URL lowre’ koo moƴƴaani, walla hello e ɗoo ñiiɓtugol wonaa ɗo Textpattern ngol tammbaaki</li>
+    <li>sarworde ndee ena sokli baylugol e <code>.htaccess</code> walla teelte goɗɗo sarworde hono ɗum ngam waɗtude URL ɓurɗiɗiɗiɗi golluuji</li>
+    <li>sarworde ndee wonaa waawɗo jaɓde URL ɓurɗiɗiɗiɗi mbaawka</li>
+</ul>
+<p>Leemtoore URL ɓurɗiɗiɗiɗi ko etaako aawtaade hello iwde e ñiiɓirde geese nde keɓiɗi e cuɓorde ‘URL lowre’ ngam ƴeewtaade so parametere URL ɓurɗiɗiɗiɗi fof ena gollii no moƴƴi. So URL ngal woni lowre woɗnde, walla lomtinaama ngam heɓde hello caasngol walla wonaa ɗum, leemtoore maa wooru. Haa jamanu kala nde caɗeele ndee lomtinaa, URL cuuɗi (hono <code>https://example.com?s=section&amp;id=4</code>) ena mbaawi huutoreede. Ƴeewto ‘Mbayka jokkol peeraaɗo’ e Cuɓe Jiiloowo ngam momtude ɗum ko jaati.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Ceŋorgol ɓogginooje e sarworde live"><![CDATA[
+<h2>Ceŋorgol ɓogginooje e sarworde live</h2>
+<p>Yamiroore ngam konte kuutoro maa yo o naat e nder ndesgu keewɗe ko kisnal kammuɗo tee wonaa goonga. Hoto hurmin heeɓre ngal e pane cuɓe ɓetirɗe, so wonaa ko a anndii kisal ɗuum e alaa ɓadyin.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Suuɗ humpito heeriingo"><![CDATA[
+<h2>Suuɗ humpito heeriingo</h2>
+<p>Suuɗ humpito heeriingo ngam ɓeydude kisal. So humpito ceŋorgol ena yettaama e nokku gannaaɗo, hono e juɓɓe walla alluure walla ceŋe ballal Textpattern, ɗuum ko heɓtinde kisal golle maa omnde humpito sarworde ndee ɓurɗi caroore.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Kod topayru e sarworde live"><![CDATA[
+<h2>Kod topayru e sarworde live</h2>
+<p>Yamre Textpattern ena waɗa topayru, ko ɗee etee faaleede e lowre njiɗɗo. Ɗum wonaa goonga ngam lowre ɗe ɓeydaa, tee maa aɗa waawi weltaade ɓataku ngol so a anndii e kisal ɗuum.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Runngere winndotaako"><![CDATA[
+<h2>Runngere winndotaako</h2>
+<p>Ngam huutoraade maaɓe nollugol fiilde e nate, runngere ɗee foti wonde winndotooɗe e PHP dow kuutoro sarworde. Ɗum ena waawi waɗde (S)FTP walla e jawdi bayyinɗo, so a ɓurti ko <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS woorii"><![CDATA[
+<h2>Njiilorgol DNS woorii</h2>
+<p>Ena wayi ko URL nde suɓaa e ñiiɓirde lowre ndee ena waawi heɓaaka.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Jollugol pille koko daaƴaa"><![CDATA[
+<h2>Jollugol piille koko daaƴaa</h2>
+<p>Teelte sarworde jooni ena holli ko jollugol fiilde koko daaƴaa. Tiiɗno ƴeewto e lomtin teelte <code>file_uploads</code> e <code>php.ini</code> walla ƴeewto ko koñngol lowre heɓɓiti e ballal.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess fiilde ena ŋakki"><![CDATA[
+<h2>.htaccess fiilde ena ŋakki</h2>
+<p>Mbayka jokkol peeraaɗo nde sokli fiilde <code>.htaccess</code> ena huutoreede, tee fiilde ndee heɓaaka. Fiilde ndee naatii e Textpattern tee woni e mesel Textpattern, e tawo <code>index.php</code> e runngere <code>textpattern</code>. Teelte labaaɗe ko ɗee:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Hello yeeso lowre heɓaaka"><![CDATA[
+<h2>Hello yeeso lowre heɓaaka</h2>
+<p>Fiilde hakkunde <code>index.php</code> nde suɓaa ko hello yeeso lowre ndee heɓaaka haa tar miijje sarworde. Tiiɗno ƴeewto wonde ndee e teelte mum.</p>
+        ]]></item>
+        <item id="missing_files" title="Ena ŋakki piille"><![CDATA[
+<h2>Piille ena ŋakki</h2>
+<p>Fiilde koolniiɗe gootol walla heewi ena ŋakki e Textpattern. Ɗum soomde yo piille ɗe rewrugol ɗee ena woodi e sarworde ndee tee woodani e nokku moƴƴere.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Ena ŋakki mod_rewrite e teeltol Apache"><![CDATA[
+<h2>Apache mod_rewrite ena ŋakki</h2>
+<p>Moduulu <code>mod_rewrite</code> Apache jom mum aafaa walla daaƴaa. Ɗum ena waɗtii ko Textpattern yo o gollu no feewi. Ɗum soomde yo moduulu ndee ena woodi tee ena hurmii, walla jokkondir koñngol lowre ngam ballal.</p>
+        ]]></item>
+        <item id="modified_files" title="Piille baylaaɗe"><![CDATA[
+<h2>Piille baylaaɗe</h2>
+<p>Piille ena qonɗa no baylaaɗe so limoore naatnuure mum fottaa e limoore naatnuure moƴƴere ɓe Textpattern ariiɗi. So fiilde kala e nder aafgol Textpattern ena wondi ko foti, piille ɗee maa nattinde ɗoo.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Juume taabe MySQL"><![CDATA[
+<h2>Juume taabe MySQL</h2>
+<p>Ena waawi wonde ko huunde walla tijja e banki keɓe MySQL Textpattern. Eto ñawndude taabe ndee (walla taabeje) huutoraade kaɓirgol MySQL, hono <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> walla <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Alaa runngere sabbornde suɓaa"><![CDATA[
+<h2>Alaa runngere sabbornde suɓaa</h2>
+<p>Tawa Textpattern ena waawi dillaade tawa runngere sabbornde alaa, kono fannuuji ɗe keɓa heewi ena waawi waɗde gooto so cuɓorde ndee suɓaaka. Tiiɗno yillo Cuɓe Jiiloowo e lomtin ‘Lappol runngere cabbinorgol’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Catal e runngere nanndi innde wootere"><![CDATA[
+<h2>Catal e runngere nanndi innde wootere</h2>
+<p>Innde runngere ɗee woodi ena waawi waɗa ceɗɗital e innde caɗol kuutorteeɗo e mbayka jokkol binndanɗe. Ngam waɗtude alaa caɗeele, ƴeewto tee momtu innde runngere ndee so ena hisii, walla lomtin innde caɗe yo ɓe husi.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Runngere lowre tarotaako"><![CDATA[
+<h2>Runngere lowre tarotaako</h2>
+<p>Runngere nde jogii fiilde hakkunde <code>index.php</code> nde suɓaa e hello yeeso lowre ndee tarotaako e sarworde. Tiiɗno ƴeewto teelte mum.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP scripting hurmii"><![CDATA[
+<h2>PHP scripting hurmii</h2>
+<p>Textpattern ena yamira binndiijo e jiilooroɓe yo ɓe eeɓndu kod PHP e nder binndanɗe e kelle/formuuji so fannuuji ɗee ena hurmii. Sababbu ɗum ko kisal - PHP wonndaŋŋo kala ena waawi doblude, e waɗde kod eboowo faaɗon ko min, mo ena waawi momtude aafgol maa walla ƴeewtinde humpito to ɓe woɗɓe - ena tanɗinii ko yo a daaƴ cuɓe ɗee e <a href="?event=prefs#prefs_group_publish">Alluure Cuɓe</a> so wonaa ko aɗa sokli ɗum fota.</p>
+<p>Ɓetindagol keewɗi Textpattern ɗe hoolnoo booɗ-ɗe sokli kod PHP ena heɓɓii jooni e <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">tagge cokkal</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Jamiroore yamre woowaande"><![CDATA[
+<h2>Jamiroore yamre woowaande</h2>
+<p>Textpattern ena sokli fannuuji goototo e dogkinal PHP e sarworde MySQL. Ƴeewto tabel ngal ngam yiyde jamiroore woowaande:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Yamre Textpattern</th>
+                <th scope="col">Yamre PHP woowaande</th>
+                <th scope="col">Yamre MySQL woowaande</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Ko ɓeydo e ɗee jamiroore, ɗee ƴeewɗe PHP foti woodde:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a></li>
+</ul>
+<p>Fiilde <code>php.ini</code> lowre ndee, ko meŋol walla kinnewol, ena foti jogii teelte <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Runngere aafgol ena lutti tawo"><![CDATA[
+<h2>Runngere aafgol ena lutti tawo</h2>
+<p>So Textpattern aafaa, runngere <code>textpattern/setup</code> e keɓe mum inaɗa woodaani goɗɗum, tee foti momteede sabu kisal.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="URL lowre ena njiɗaani"><![CDATA[
+<h2>URL lowre ena njiɗaani</h2>
+<p>URL lowre ɗee nde koɗɗaa e alluure ‘Cuɓe’ ena ñiɓɓaani e URL nde huutortoo ngam yillaade lowre ndee.</p>
+<p>So lowre ndee ena waawi heɓde e URLji ceertuɗi, tee so lowre ndee gollota no aɗa yiɗi, aɗa waawi weltaade ɓataku ngol.</p>
+<p>So wonaa ɗuum, tiiɗno ƴeewto tee lomtin teeŋtangal ‘URL lowre’ e Cuɓe Jiiloowo. Jaŋtol woŋngo woni e ɓatakuuji tooɓuɗi e alluure ‘Diyanostik’ ena holli kuutorgol e URL moƴƴere lowre ndee.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Golluɗi PHP [&#8230;] daaƴaa e sarworde maa"><![CDATA[
+<h2>Golluɗi PHP [&#8230;] daaƴaa e sarworde maa</h2>
+<p>Koñngol lowre walla jiiloowo sarworde ena daaƴii golluɗi PHP gootol walla heewi, ɗee ena waawi waɗde ceɗɗital e gollugol Textpattern.</p>
+<p>Tiiɗno ƴeewto <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Juɓɓe Kuutorɓe Textpattern <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ngam ɓeydude humpito.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Kesɗitinal yamre Textpattern"><![CDATA[
+<h2>Kesɗitinal yamre Textpattern</h2>
+<p>Yamre hesere Textpattern ena woodi. Ngam heɓde fannuuji keso e kisal, ena tanɗinii ko yo a kesɗitinnde.</p>
+<p>Tiiɗno ɗaɓɓu ɗe hokku-ɗaa nde min gollotoo no eɗen haa maayo e kesɗitinal:</p>
+<ul>
+    <li>So tan limoore cakkiti heen muuno koye ooɗde e yamre maa jooni, kesɗitinal ngal ena heɓo fayde majje ɗe sakkitiiɗi e ceŋe e siŋkooje.</li>
+    <li>So limooje cakkitiɗi ɗiɗi ooɗiɗi e yamre maa jooni, kesɗitinal ngal ena waawi soklaade kesɗitinal e ceŋe e/maa siŋkooje goɗɗe, kono ena mbaawi ɓeydude gollugol e mbaydi.</li>
+    <li>So limoore jokkondiral ooɗiɗi e yamre maa jooni, kesɗitinal ngal ena mbaawi soklaade kesɗitinal e ceŋe e siŋkooje keewɗe. So aɗaɗii e ceŋol walla fannu siŋkoore gooto, tiiɗno ƴeewto binndiijoo maa walla lowre, hade maa fuɗɗito kesɗitinal.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Yamre jemiije Textpattern ena woodi"><![CDATA[
+<h2>Kesɗitinal yamre jemiije Textpattern ena woodi</h2>
+<p>Yamre jemiije hesere Textpattern ena woodi. Min ena njeyaa kelle jeyaaɓe ngam ƴeewtinde yamre ndee ngam min mbaawa waɗde yamre timminde no keewti. Min tanɗinii ko yo kesɗitinal ngal yo joga jooni e haawtunde, hay so kod ngal woni beta.</p>
+<p>So a suɓii naatna e gollal ngal, tiiɗno ƴeewto ɗee:</p>
+<ul>
+    <li>Hoto huutora yamre beta ngal e lowre ngam ehen kadi so a alaa hunnu ollirde piille e banki keɓe, tee a anndi no nde waawaa huutoraade.</li>
+    <li>Tiiɗno <a href="https://github.com/textpattern/textpattern/issues">jarri caɗeele kala</a>, a wiyaa yamre beta nde a huutortoo. Yamre beta goɗɗi ena waawi soklaade haa nde yamre mofto ooṭii, e lees cooɗii caɗeele ngal.</li>
+    <li>Nde a aafii yamre beta ngal, tiiɗno kadi yo a kesɗitinɗe e yamre timminde nde maa uddita.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Lappol rungere cabbinorgol e runngere moforde  ceŋe potaani gootum"><![CDATA[
+<h2>Lappol runngere cabbinorgol e runngere moforde ceŋe potaani gootum</h2>
+<p>Ceŋe foti jogii runngere maɓɓe tee hoto roɓtineede runngere cabbinorgol. Ɗum ko kisal wonaande tee ena waawi waɗde lowre maa heɓ golle haa so runngere cabbinorgol ndee ñakkitaa. Tiiɗno ƴeewto ko lappol runngere cabbinorgol ena goɗɗi e lappol runngere moforde ceŋe.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Sarworde kesɗitinal heɓaaka"><![CDATA[
+<h2>Sarworde kesɗitinal heɓaaka</h2>
+<p>Njiilorgol kesɗitinal woorii, baawɗo sabu joɓaade laylaytol walla taanorde ceŋorgol. Ɗuum ena tan njoɓittee heɓde heewi e lewru gooto walla ɗiɗi, wonaa ngaññal. Eto artirde alluure ngal so aɗa waawi.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Dokkitannde PHP maa ena ŋakki gollol mail()"><![CDATA[
+<h2>Dokkitannde PHP maa ena ŋakki gollol mail()</h2>
+<p>Gollol <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> PHP daaƴaama. Konɗe ɗum Textpattern horiima neldu iimeel tee fannuuji goototo wooɗi. Ngam yiyde, tintine iimeel paɗɗugol jowe keso ena daaƴa, ngam goɗɗumkuuji keso kadi yoo heɓaaki iimeel jaɓngol. Ko heddii, aɗa waawi ɓeydu kuutorɓe ɗee.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Alluure piille">
+        <item id="file_reassign" title="Wuttefiil"><![CDATA[
+<h2>Wuttefiil</h2>
+<p>So a nolli fiilde e ɗo goɗɗo ɓuri moƴƴude e ɗuum ɓooyaani ñiiɓtaa ko ‘Missing’, fiilde nde a suɓi ena jollita e sarworde nde leeɓi tee toɗɗaama e humpito fiilde jaati ɗe inndinoo e banki keɓe. Ɗum ɗoo wonaa ko innde fiilde jaati maa loowa, haa humpito goɗɗo fof moƴƴi duuɗi, hono limoore gaawtol e kategoorii. Ɓetol fiilde maa lomtinaa kadi ngam ƴeewtude fiilde hesere ndee.</p>
+        ]]></item>
+        <item id="file_replace" title="Lomtin fiilde"><![CDATA[
+<h2>Lomtin fiilde</h2>
+<p>So a jollii fiilde ɗoo maa lomtin loowdi moƴƴirɗi e fiilde goodnde e sarworde ndee kono maa waɗtude innde fiilde nde gootngo no woodi ɗoo. Limoore gaawtol e humpito goɗɗo moƴƴi jeyaɗi e fiilde ndee ena waɗi no ɓe woodi.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Ñalngu bayyino"><![CDATA[
+<h2>Ñalngu bayyinde</h2>
+<p>Waktu nde fiilde ena bayyinaa walla hesɗitii cakkiti. Waktu oo ena waawi taɓaade ɗum sahaa nde geɗe jooni ndokkii, walla sahaa ɓenniɗo fii yeeso walla ko ɓenniɗo to.</p>
+<p>Kaɓirɗi ɗee peewii ɗum ina ɗee humpito:</p>
+<ul>
+    <li>Hitaande / Lewru / Ñalngu</li>
+    <li>Waktu (formaaji ɓernde ñalngu 24) : Hoɗɗo : Majaango</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Yollu fiilde"><![CDATA[
+<h2>Nollu fiilde</h2>
+<p>Huutoro formu ndee ngam nollude piille walla nate to sarworde maa.</p>
+<p>Huutoro kod Textile ngam jaytinde nate e nder binndanɗe, kod Textpattern ngam wonde nate e nder tuugnorɗe kelle maa, walla kod HTML ngam waɗtude nate e alaaɗoo ɗee.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Alluure gallume">
+        <item id="forms_overview" title="Cikkaade e Formuuji"><![CDATA[
+<h2>Cikkaade e Formuuji</h2>
+<p>E Textpattern, formu ko dokkol walla caɗol binndi, HTML, e tagge Textpattern ɗe ena mbaawi huutoreede kadi kadi ngam jaytinde loowdi.</p>
+<p>Ɗoo ko jinnde formu moƴƴere nde mbaawaa inntaade <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Aɗa waawi huutora ndee ngam jaytinde doggol ñiptungol HTML binndanɗe coomɗe:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Ko hono e nder heɓre ndee formu ko jaytinde doggol tiitoonde, ɗum ena waawi huutoreede e nder tagɗe goɗɗe, hono jaytinde binndanɗe 20 iwɗe e catal jooni:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Aɗa waawi kadi huutoraade formu ngam jaytinde loowdi ɓennuɗi, hono tiitoonde e peŋɗorde e nder tuugnorɗe kelle maa. Ɗum ko woni loowdi woni tan e nokku, tee so a yiɗi waylude ɗum, eɓɓere tan mbaawi waylitaade. Jaytinde loowdi iwɗi e formu ena waɗi e tag ngal:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Formu ena waawi heɗɓude haa 64KB e ɓetol. Jinnde moƴƴere ngam peŋɗorde ena waawi waɗde tiitoonde, keɓe, jokke, tagge cakkitiiɗe, e ciɗɗe e formuuji goɗɗe hono <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Alluure nate">
+        <item id="create_thumbnail" title="Sos maanndel"><![CDATA[
+<h2>Sos natal ceertu</h2>
+<p>Yamira yo a (ɓe) sos natal ceertu maayo soklaama iwde e natal ɓetol.</p>
+<p>Ngam ñisde paakare, natal ceertu maa rookaa ngam heɓde e ɓetol ɗe suɓi-ɗaa, so a labo ‘Ɓittu’ (Crop). Ndewo, natal ceertu maa sos e hakkunde hakkunde natal ngal, tawa rookorgol ngal waawaa waɗde.</p>
+<p>Ngam ñisde jaajol, natal ceertu maa rookaa e ɗee diiwaan e teelte (ɓittu) e siŋkoore jiiloowo jooni.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Lomtin natal"><![CDATA[
+<h2>Lomtin natal</h2>
+<p>Natal nde nolliraa ɗoo maa lomtin natal goodnde toɗɗiiɗe e ngol e banki keɓe.</p>
+        ]]></item>
+        <item id="upload_image" title="Yollu natal"><![CDATA[
+<h2>Nollu natal</h2>
+<p>Nollu natal walla keewɗe nate to sarworde maa.</p>
+<p>Nde nolluu e runngere <code>images</code>, innde fiilde natal maa waɗi tan e nder banki keɓe Textpattern; fiilde natal ngal kisa maa innita e limoore ceertol + ɓeydital fiilde.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Yollu maandel"><![CDATA[
+<h2>Nollu natal ceertu</h2>
+<p>Nate ɓetol maa heɓɓu ceertuɗe maɓɓe. Ɗee ena moƴƴi ngam jokkude e - e eetaade - nate ɓetirɗe ɓetol.</p>
+<p>Cakkorgol natal ceertu ena tan waɗi ko cakkorgol natal ɓetol, haa nde <code>t</code> ɓeydaa e innde fiilde. Ngam yiytude natal ceertu moƴƴere e natal ɓetol wonnde e <code>/images/12.jpg</code> aɗa huutora <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Alluure ɗemɗe">
+        <item id="get_textpack" title="Aaf Textpack"><![CDATA[
+<h2>Aaf Textpack</h2>
+<p>Natto ɗee winnditanɗe ɗemngal lowre maa e nder gallol ngal kisa suɓo ‘Nollu’ ngam aafde ɓe.</p>
+<p>Kelme ɗee koy ɗoo no keɓondi ko Textpack aawtagol, ɗe ñoɓɓaama e ceŋol ngam yamirde kuutorɗe ɗemngal ceŋol ngal yo ɓe huutoraa e nder Textpattern no heeriinde.</p>
+<p>Cafayɓe kadi ena mbaawi firɗe cooje ɗee so ena waɗɗa e goonga e ɓe nennyiraa loowdi gannangol ngam saare.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Alluure jokke">
+        <item id="link_description" title="Cifagol"><![CDATA[
+<h2>Ciforgol</h2>
+<p>Ciforgol jokke ena suɓaaki, tee ena waawi huutoreede ngam taggol jokke, ngam taggol hollitte <code>title=""</code> (fattagol) jokke, walla gooto e piilannde maɓɓe nder juɓɓe maa.</p>
+        ]]></item>
+        <item id="link_sort" title="Leemto njaru"><![CDATA[
+<h2>Kiisol leemtol</h2>
+<p>Ena moƴƴi ngam leemtol e ɗemngal mawnude doggol jokke, hono e innde maaɓe hoore maɓɓe e kadi maa yeeso innde mum, walla e caɗe ɗe fuɗɗii e binndannde ɗeen wonaa ñiiɓirde walla feere ñiiɓirde.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Ñiiɓirde jokkol. So jokkol ngal jokkondiri e lowre woɗnde, maa hannee ɗum battinorde <code>http://</code> walla <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Ñalngu bayyino"><![CDATA[
+<h2>Ñalngu bayyinde</h2>
+<p>Waktu nde jokkol ena bayyinaa walla hesɗitii cakkiti. Waktu oo ena waawi taɓaade ɗum sahaa nde geɗe jooni ndokkii, walla sahaa ɓenniɗo fii yeeso walla ko ɓenniɗo to.</p>
+<p>Kaɓirɗi ɗee peewii ɗum ina ɗee humpito:</p>
+<ul>
+    <li>Hitaande / Lewru / Ñalngu</li>
+    <li>Waktu (formaaji ɓernde ñalngu 24) : Hoɗɗo : Majaango</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Alluure ceŋagol">
+        <item id="remember_login" title="Heddo e ceŋol e ndee wanngorde"><![CDATA[
+<h2>Wonaa jokkitaade e ndee wanngorde</h2>
+<p>So a lomtinii ɗum, maa ɗo won tigi naatnaaɗo to konte maa Textpattern huutoraa ndee wanngorde geese haa boo rewɓe tigi naatike. So a yiɗaani ɗum, maa furminaaki e jawdi ñammere cakkiti ɗo waawndo ndee ndee.</p>
+<p>Ena sokli cokkiije daaƴeede e wanngorde maa.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Alluure ceŋe">
+        <item id="install_plugin" title="Aaf seŋre"><![CDATA[
+<h2>Aaf ceŋol</h2>
+<p>Natto loowdi fiilde ceŋol ñemmbaani ɗoo, kisa huutoro ‘Nollu’ ngam fuɗɗo aafgol. Ceŋol kala nde a nollat e innde woɗnde e ngol moofto aafnu-ɗaa maa ɓeydaama e yamre ndee nde nollataa kadi.</p>
+<p>Binndi ceŋol nde a naatnataa ɗoo <strong>wonaa</strong> kod PHP ñiɓnguɗo kono binndi Base64 dokkitaama, ko ko naatnondirɗo e kuutoraade e moore jokke e binndi (hono innde ceŋol, yamre e ciforgol, innde binndiijo e goɗɗe).</p>
+<p>Aɗa waawi heɓde yamre ñemmbaani ceŋe e <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Moforde ceŋe <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> walla koɗe binndiijo ceŋol, hono lowre mum walla GitHub mum.</p>
+<p>Aɗa waawi kadi naatnude URL gooto iwde e fiilde binndi ceŋol Textpattern ɗoo, so lowre heddii ɗum ena jamiraa.</p>
+<p>Ceŋe nolluɗe fof maa yiylaa tammittal ngal haani jogagol ngam a welta kod ceŋol e loowdi mum hade a aafi.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Yollu seŋre"><![CDATA[
+<h2>Nollu ceŋol</h2>
+<p>Huutoro formu ndee ngam nollude fiilde ceŋe. Ceŋe nolluɗe (e keɓe mum) ena jiyaa e runngere ‘plugins’.</p>
+<p>Fannu ceŋe wonaaɗe e ɗoo jogiiɗe ko ɗee:</p>
+<ul>
+<li>Fiilde templet PHP Textpattern ɗe jabɓiiɗe kod timmiiɗo, humpito ceŋol, kelme Textpack e binndi ballal.</li>
+<li>Fiilde binndi Textpattern ñemmbaani ɗe jabɓiiɗe kod timmiiɗo, humpito ceŋol, kelme Textpack e binndi ballal.</li>
+<li>Bunɗe zip Textpattern ɗe jabɓiiɗe humpito manifest e kod, humpito ceŋol, kelme Textpack, binndi ballal e fiilde tammbitaaɗe.</li>
+<li>Fiilde PHP ñiɓnguɗe (ɗe ndi waɗataa humpito ɓeynguɗo e wonaa ñamiraa).</li>
+</ul>
+<p>Ceŋol kala nde a nollat e innde woɗnde e ngol moofto aafnu-ɗaa maa ɓeydaama e yamre ndee nde nollataa kadi.</p>
+<p>Ceŋe nolluɗe fof maa yiylaa tammittal ngal haani jogagol ngam a welta kod ceŋol e loowdi mum hade a aafi.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Alluure cuɓoraaɗe">
+        <item id="admin_side_plugins" title="Huutoro ceŋe senngo-jiiloowo?"><![CDATA[
+<h2>Huutoro ceŋe senngo-jiiloowo?</h2>
+<p>Ceŋe senngo-jiiloowo ena waawi lomtinde gollugol nder ndertuure jiiloore. Ena waawi ceŋaade e golluuji ɓe woodi kisa, hono taƴtingol walla bayyinde binndanɗe, walla ɓe ena mbaawi ɓeydude alluure hesere e fannuuji ɓetiriiɗi.</p>
+<p>So aɗa yiɗi ɓeydude ganndal baɗte ceŋe senngo-jiiloowo, ƴeewto hello <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Ɓetindagol Textpattern <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/">Juɓɓe Kuutorɓe Textpattern <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>. Ceŋe fof ena jogiirol e lowre <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Ceŋe Textpattern <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Cuɓe ceeɓtore"><![CDATA[
+<h2>Cuɓe ɓetirɗe</h2>
+<p>Jaytin renndo cuɓe ɓetirɗe, ɗe njokka e:</p>
+<ul>
+    <li>Golluɗi PHP ɗe ena yamiraama e <code>txp:evaluate</code>.</li>
+    <li>Fannuuji templet gallume huutoraaɗi.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Yamir PHP e binndanɗe?"><![CDATA[
+<h2>Yamir PHP e binndanɗe?</h2>
+<p>So ena hurmi, cuɓorde ndee ena yamira huutoraade PHP e binndanɗe. Binndiijo foti jogii tammunade no feewi ngam waɗde ɗum (woowaande, tan <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Pabliyisere’ <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Jiiloorɓe waɗtorde’ <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> e <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Jiiloorɓe binndannde’ <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ena waɗi ɗum). </p>
+<p><strong>Ena tanɗinii ko yo a daaƴ cuɓorde ndee</strong> so wonaa ko aɗa sokli ɗum fota. Kod PHP kala wooɗi ena waawi waɗde kod eboowo faaɗon ko min, mo ena waawi momtude lowre maa walla ƴeewtinde humpito to ɓe woɗɓe, tee kala kuutoro maa ena waawi ɓeydu ɗum e binndannde ndun tee kala-yimɓe ena waawi huutoraade ɗum.</p>
+<p>Kod PHP foti roŋŋinde tag udditirɗe e udditirɗe PHP, tee ena foti ñuurnude e tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Yamir lomtindo gallluleere?"><![CDATA[
+<h2>Yamir formu lomtungal?</h2>
+<p>Cuɓorde ndee ena yamira binndiijo binndannde yo o lomtindo formu mo huutoree so binndannde makko ena ñawnee. So ena hurmi, doggol labo ‘Formu lomtungal’ maa woodi so a naatnoy binndannde.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Yamir PHP e kelle?"><![CDATA[
+<h2>Yamir PHP e kelle?</h2>
+<p>So ena hurmi, cuɓorde ndee ena yamira kod PHP e tuugnorɗe kelle e tuugnorɗe gallume.</p>
+<p><strong>Ena tanɗinii ko yo a daaƴ cuɓorde ndee</strong> so wonaa ko aɗa sokli ɗum fota. Kod PHP kala wooɗi ena waawi waɗde kod eboowo faaɗon ko min, mo ena waawi momtude lowre maa walla ƴeewtinde humpito to ɓe woɗɓe, tee kala kuutoro woɗɗo ena waawi ɓeydu ɗum tee jiyloowo walla yillaawo lowre ndokkotoo.</p>
+<p>Kod PHP foti roŋŋinde tag udditirɗe e udditirɗe PHP, tee ena foti ñuurnude e tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Mbayka ñalngu joñtorde"><![CDATA[
+<h2>Mbayka ñalngu ko feɗde</h2>
+<p>No ñalngu maa waɗi e binndanɗe e seɗeele lowre maa.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Hollu jubbannde e hello fettugol binndannde?"><![CDATA[
+<h2>Hollu jubbannde e hello fettugol binndannde?</h2>
+<p>So a suɓi ‘Alaa’ gallol jubbannde maa jaytaake binndiijo to hello fettugol binndannde.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Haɓɓu tiitooɗe e jokke duume?"><![CDATA[
+<h2>Ɓeydu tiitoonde e jokke peeraaɗe?</h2>
+<p>Cuɓorde ndee maa ɓeydu e URL ngal ko innde binndannde ndee nde ɓeydaa e jaajol. Ena waɗtunde goonga walla aɗa waawi lomtinde ɗum e ‘Tiitoonde URL tan’ so a fettina binndannde.</p>
+<p>Cuɓorde ndee maa waɗtu tan tuma nde aɗa huutora URL ɓurɗiɗiɗiɗi. E ɗemngal seeɗa ɗee ɗum ena mbaawi waɗde URL ɓe juute e meewɗe, ɗuum ko hol no maa yiɗi jamirde ndee ɗum ‘Daaƴi’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Fonndito Waktu Ceeɗu e jaajol?"><![CDATA[
+<h2>Taƴto Waktu Ceeɗu e jaajol?</h2>
+<p>Cuɓorde ndee ena yamira Textpattern yo o lomtinde hol ɗo ƴellitgol Waktu Ceeɗu (Daylight Savings Time) woni e diiwaan maa. So ɗum waɗii ‘Alaa’, maa waawi lomtinde cuɓorde ‘DST hurmii’ e junngol.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Yowre kesere waɗat kesɗitinal lowre?"><![CDATA[
+<h2>Jowe keso ndee ɗo lowre hesɗitii?</h2>
+<p>Banki keɓe Textpattern ena rewtii sahaa nde lomtinal cakkiti e lowre maa. So cuɓorde ndee waɗi ‘Ee’, jowo keso kadi maa hesɗin ngal kiisol. Ɗum ena huutore haa e fannuuji <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Jammin rel=&quot;nofollow&quot; e jowe?"><![CDATA[
+<h2>Huutoro rel="nofollow" e jokke e jowe?</h2>
+<p>So waɗi ‘Ee’, ɗum maa ɓeydu moƴƴere goɗɗo e jokke waɗi e jowe. Ena foti no jabbannde ngam ñoŋkondirɗe jowe, waɗii ko mangaaji jijjitteeji yiylitte e topayɓe topirɗe. Aɗa waawi ɓeydude humpito haa ɓuri e <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">jaŋtol Google <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+<p><strong>Fiilannde:</strong> Cuɓorde ndee waɗataa e goɗɗo e gollugol lowre maa. Ena waawi faalinde walla ƴeewtinde ko jogiiɗo e jowe ndee so yiylitte goɗɗi nana njoɓiraa lowre ɗe jokkondiraama e jowe ɗee.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Hollir jowe no doggol limtorol?"><![CDATA[
+<h2>Jaytin jowe no doggol limoore ɗee?</h2>
+<p>Ena lomtin so jowe binndannde maa kokkaama e tag HTML <code>&lt;ol&gt;</code> e ndewno jowe fof koccaama e tag <code>&lt;li&gt;</code> (maa waɗu e binndannde e doggol limoore), walla so jowe fof koccaama e tag <code>&lt;div&gt;</code> tan.</p>
+<p>Ko hono e ɗum e kala, aɗa waawi lomtinde tag ɗe ena huutoree e nder formuuji goɗɗi so a lomtina tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>, ngol woodi e formu <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Ɓeydu jowe e binndanɗe e jaajol?"><![CDATA[
+<h2>Ɓeydu jowe e binndanɗe e jaajol?</h2>
+<p>Cuɓorde ndee ena ñawti so jowe e formu jowe maa eɓɓoo njaltorde e nder binndanɗe kala (so a nime teelte formu <code>comments_display</code> e jaajol).</p>
+<p>Haa e geɗe ɓiɓɓe, aɗa yiɗi ɗum maa waɗi ‘Alaa’, ngam waɗtude jamiroore no ɓuri e nokku ɗoggol jowe e nder kala tuugnorɗe lowre maa. Maa siiftu maɓɓe tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> e junngol e tuugnorɗe sawruɗe e binndanɗe ɗe njiɗ-ɗaa jowe yo ɓe yaltu.</p>
+<p>So a yiyoo jowe nana jayta e binndannde gooto ɓooyaani, ena waawi wonde ko tuugnorɗe maa ena jogii tag <code>&lt;txp:comments /&gt;</code> e tuugnor ngal kadi cuɓorde ‘Ɓeydu jowe e binndanɗe e jaajol?’ waɗii ‘Ee’ kadi.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Mbayka ñalngu jowe"><![CDATA[
+<h2>Mbayka ñalngu jowe</h2>
+<p>Hol no ñalngu jowe maa jayta e ɓeydi lowre maa.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Yeru yowre goowaaɗo"><![CDATA[
+<h2>Annoba jowe woowaande</h2>
+<p>So a yamiraa ɓeyditooɓe yo ɓe jowe e lowre maa, ɗum ko binndi annoba woowaande. Ngam yiyde:</p>
+<ul>
+    <li>Jowe</li>
+    <li>Ɓeydu jowre</li>
+    <li>Firtirde</li>
+    <li>Ɓoggi</li>
+</ul>
+<p>Hoolo binndi annoba ɗum ena waawi lomtineede e junngol binndannde fof.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Jowe ndaaƴete ɓaawo"><![CDATA[
+<h2>Jowe ɗe daaƴaa ɓaawo</h2>
+<p>Huutoro ɗum ngam taɓde sahaa ɓe sareede haa waɗɗii jowe maa daaƴaa e binndanɗe (ena waawi waɗtude ‘Hay sahaa’ ngam yamirde laawol so wala sahaa soko jowe). </p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Yamir nate yowooɓe e jowe?"><![CDATA[
+<h2>Yamir nate jowoowo e jowe?</h2>
+<p>So cuɓorde ndee waɗi ‘Alaa’, nate kala waɗi e jowe maa momtaama.</p>
+        ]]></item>
+        <item id="comments_mode" title="Mbayka jowe"><![CDATA[
+<h2>Mbayka jowe</h2>
+<p>So ‘nopopup’ labaa (ko ɗuum njamiraa) henorde jooni maa hesɗito e binndannde jooni tan, e jowe ɗe waɗi les ɗoo.</p>
+<p>So ‘popup’ labaa, kenorɗe wanngorde keso maa uddita so jokkol jowe ndee dobaa (ɗum ena huutora formu <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Horo jowe?"><![CDATA[
+<h2>Humpit jowe?</h2>
+<p>So cuɓorde ndee waɗi ‘Ee’, jowo keso kala maa woodani ko yiytaaka haa nde ƴeewtaama. Aɗa foti humpita jowe kala e jaajol ngam waɗtude ko yiyta (e iimeel maa neldataa binndiijo binndannde ndee so jowo keso ñalti). </p>
+        ]]></item>
+        <item id="comments_on_default" title="Jowe ena kurmi e ngoowaabdi?"><![CDATA[
+<h2>Jowe hurmii e jaajol?</h2>
+<p>So ɗum waɗi ‘Ee’, jowe maa hurmita e binndannde kala nde bayyino. So waɗi ‘Alaa’, aɗa foti hurmin jowe e alluure ‘Winndito’ kala nde a yiɗi jaɓde jowe.</p>
+<p>Jowe ena waawi hurmineede/daaƴaade kala sahaa, e e nder junngol binndannde gootol.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Jowe ena naamnii ñiiɓirde iimeel jowoowe?"><![CDATA[
+<h2>Jowe foti njamira ñiiɓirde iimeel jowoowo?</h2>
+<p>So waɗi ‘Ee’, mon ɗe njiɗ-ɗaa jowe e binndannde maa ena foti naatnude ñiiɓirde iimeel e nder formu naatgol jowe. Maa horiima naatnude jowre so o hokkanii ñiiɓirde iimeel.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Jowe ena naamnii innde jowoowe?"><![CDATA[
+<h2>Jowe foti njamira innde jowoowo?</h2>
+<p>So waɗi ‘Ee’, mon ɗe njiɗ-ɗaa jowe e binndannde maa ena foti naatnude innde e nder formu naatgol jowe. Maa horiima neldu jowre so o hokkanii innde.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Neldu jowe to iimeel ballifo?"><![CDATA[
+<h2>Neldu jowe e binndiijo?</h2>
+<p>So waɗi ‘Ee’, so jowo keso hesɗii e binndannde, koppi jowre ndee maa neldata e iimeel e binndiijo binndannde ndee.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Yarmir ŋesbo Textile  woɗngo e jowe?"><![CDATA[
+<h2>Yamir tagge Textile ɓetiriiɗe e jowe?</h2>
+<p>So cuɓorde ndee waɗi ‘Ee’, jowe ena waawi waɗa <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> keɓe ɗe maa waɗa binndi ñiiɓngol, hono:</p>
+<ul>
+    <li>tiitoonde</li>
+    <li>doggol leemtungol e leemtungol ɗe mbaawka</li>
+    <li>coŋkoje kelewal (footnotes)</li>
+    <li>tabeli</li>
+    <li>kod</li>
+    <li>mbaydi blokke ɓetiriiɗe (<code>bc..</code>, <code>bq..</code>, e goɗɗe)</li>
+</ul>
+<p><strong>Fiilannde:</strong> Sababbu kisnal, HTML ñiɓnguɗo kala maa waylaa binndi ñiiɓngol tan.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Konte ɗe njamiraa naatde e ɓernde goɗɗe"><![CDATA[
+<h2>Konte ɗe njamiraa naatde e ɓernde goɗɗe</h2>
+<p>Doggal lobbinɗe konte ceŋorgol ɗe ena waawi naatde e wanngorɗe/ndesgu goɗɗe. Ɗuum ena moƴƴi e topayru ngam hollirde ceŋorgol e jowɓe.</p>
+<p>Huutoraade heeɓre ngal ko kisal tee <strong>wonaa tanɗinangal e lowre live</strong>. Diyanostik maa hokku ɓatakuuji so konte maa ceŋorgol wallaake ceŋorgol ɓogginooje e lowre live.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Fannuji tuugnorgal peŋtori"><![CDATA[
+<h2>Fannuji tuugnorgal peŋtori</h2>
+<p>Ko ɓeydo e fannuuji templet gallume (binndannde, fiilde, misc, e goɗɗe), Pabliyisere ena waawi tabbitinde fannuji peŋtori. Sarɗiinde fannuji tuugnorgal peŋtori ena woodi e tawre ɗiɗi: leemtugol gallume eɗen e jeytugol piille peŋtori.</p>
+<p>Mbayka cuɓorde ndee ko <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>, peeje kala ena jaɓbit fannu tuugnorgal.</p>
+<p>Ngam tabbitinde fannu tuugnorgal (hono <code>js</code>) aɗa foti ɓeydu (e laylaytol keso) e hendooje <code>[js]</code>. Tiitoonde goowangol ena waawi tabbitaade huutoraade naatal <code>title="Javascript"</code> e hendooje ndee. So soklaama, tiitoonde dokkitinaaɗe ena waawi ɓeydaade kadi (hono <code>ru="Скрипт"</code>).</p>
+<p>Ɓeydo, fannu tuugnorgal ena waawi jogii <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">fannu meya (media type) <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> (gollotooɗo ko MIME type), hono <code>mediatype="application/javascript"</code>. Ɗum ena waɗtu gallume fannu ɗee piille peŋtori ɗe gollii ko meya ɗo suɓaama, so wonaa ko iwde e banki keɓe walla iwde e mbeɗu (fiilde ñiɓnguɗe) huutoraade tag <code>&lt;txp:output_form /&gt;</code>. Ngam yiyde, gallume inndaande <code>myscript.js</code> nder fannu <code>[js]</code> huutora meya <code>application/javascript</code> ena waawi naatnaade e kod maa ɗoo:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Ɗuum maa sos tag HTML <code>&lt;script&gt;</code> ndee:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Tan gallume tuugnorgal jogiiɗe ɓeydital innde nde ceŋortoo e fannu mum (hono <code>myscript.js</code>) ɗee maa waawi jokkondirde e ko fiilde ñiɓnguɗe. Nde ɗuum waɗnoo, ɓe maa waɗataa aasde e Textpattern tee ena heɓaama e URL mum.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Galli peŋtori"><![CDATA[
+<h2>Galli peŋtori</h2>
+<p>Galli peŋtori ena huutoraa ngam weñde keɓe ɓeynguɗi binndannde. Aɗa waawi tabbitinde haa sappo so a inndu maɓɓe ɗee. Ko gollangal galli seeɗa njile alluure Winndito, ngam waɗde lowre keɓe cuɓaaɗe ko binndannde kala.</p>
+<p>Aɗa waawi innde galli kala hono no yiɗ-ɗaa, kono eɓɓere ɗee yo a ɗaɓɓu ɗee ɗee:</p>
+<ul>
+<li>Huutoraade bayle ena ɓeydu leemtugol e alluure Winndito, kono galli ɗee maa <em>wonaa</em> e fannuuji sordeende walla ceɗɗugal e tag article_custom. Maŋŋude e innde doftindagol so a yiɗi huutora ɗum.</li>
+<li>Tiiɗno ñipi e naatnude innde galli yo ɓe husi e innde keɓe tefnangol Textpattern. Hono, hoto huutoro <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, e goɗɗe sabu ɗuum ena waɗɗa lakkugol walla lowre kuural.</li>
+<li>Keɓe e galli kala ena sokli haɗde haanirde 255 karfe binndi tan.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Mbayka ñalngu"><![CDATA[
+<h2>Mbayka ñalngu</h2>
+<p>Cuɓorde ndee maa mbaytu hol no ñalngu binndanɗe maa waɗi e hello yeeso lowre maa tan.</p>
+        ]]></item>
+        <item id="default_event" title="Alluure woowaande"><![CDATA[
+<h2>Alluure woowaande</h2>
+<p>Alluure alluure jiiloore Textpattern ndee maa yiylaa yeeso so kuutoro kala naatii.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Ngonka bayyino ngoowaka"><![CDATA[
+<h2>Ngonka bayyino ngoowaka</h2>
+<p>Ena ñawti ngonka bayyino e binndanɗe Textpattern sosaaɗe hesere.</p>
+<p>Siiftor ko cuɓorde ndee waɗataa e goɗɗo e ngonka binndanɗe sosaaɗe walla lomtinaaɗe adii so lomtin ngal.</p>
+<p>Ngonka bayyino ngoowangol ko ɗuum gooto e ɗee:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>Binndannde <strong>draft</strong> ko gollu e doggol tee ena jaytaaki haa ɗo e nder alluure jiiloore Textpattern (woni e yeeso Textpattern tee e biile ɗe).</p>
+<p>Binndannde <strong>hidden</strong> ena jaytaaki haa ɗo e nder alluure jiiloore Textpattern.</p>
+<p>Binndannde <strong>pending</strong> ko binndannde to bannge bayyino tawi mooftaare, tee ena jaytaaki haa ɗo e nder alluure jiiloore.</p>
+<p>Binndannde <strong>live</strong> laawol ko binndannde ena jayta yeeso ɗoo (woni e yeeso Textpattern, tee e biile so cuɓorde ena yamira ɗum). So binndannde ena live tee ena jogii ñalngu kiiɗtugol, ngonka maa waawi ooɗde live ɓooyaani ɓennu ñalngu, kono binndannde maa jayta tan tawi binndanɗe kiiɗtuɗe ena yamira bayyineede.</p>
+<p>Binndannde <strong>sticky</strong> renndo ɗum ko <strong>live</strong> e ɗemngal so yaltugol ɓeyditanɗe, kono maa <strong>wonaa</strong> e doggi binndanɗe so tag <code>article</code> walla <code>article_custom</code> ena njogii joopaare <code>status</code> ndaariindi e <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Suɓo ko doctype HTML nde aɗa yiɗi huutoraade (HTML5 walla XHTML). Ɗum ena mbaylu formuuji naatgol jowe, naatnugol Textile <code>&lt;abbr&gt;</code> walla <code>&lt;acronym&gt;</code>, e tagge <code>&lt;link&gt;</code> waɗateeɗe e tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Hurmin jiytindol siŋkoore e mbayka topayru?"><![CDATA[
+<h2>Hurmin jiytindol siŋkoore e mbayka topayru?</h2>
+<p>Kuutorɓe jogii soomirde moƴƴi (woowaande, ɓe jogii darol Pabliyisir e Teŋngallitoowo) ena waawi waɗtude e ƴeewtude siŋkoore hesere tuma kala tawi kuutoroɓe goɗɗe njiyata saare fuu siŋkoore ɓooyaani (haa so hesere ngal tabbitinaama).</p>
+<p>Kono, kuutoroɓe moƴƴi ɓe woodaani e topitinde siŋkoore ena waawi daaƴde jiytindol siŋkoore mbayka topayru. ɓe maa heɓo siŋkoore ‘public’ jooni, no ñiɓɓe yillaataaɓe lowre fow njiyata.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Hurmin tammbitol toŋe daɓɓe?"><![CDATA[
+<h2>Hurmin tammbitol toŋe daɓɓe?</h2>
+<p>Tagge Textpattern ko ɗee <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Ena waɗii jooɗnde ngam waɗtude binndi cikkaaku so a hurmi dokkal ummiiɗo, ɗoo <code>txp:</code> maa waawi momtaade so a jaɓi collaaji goɗɗi. Ɗee ko ñiɓe ngam jaytinde ɗee:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> waɗi <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> waɗi <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> waɗi <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> waɗi <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> waɗi <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (niitii no ndokkal ceŋol ena waawi huutoreede e tag <code>else</code>).</li>
+</ul>
+<p>So tag ngal jogii dokkal eɓɓoore tee a hurmii toŋe daɓɓe, dokkal hakkunde ɗuum ko:</p>
+<ol>
+    <li>Momtu hiirorde <code>txp:</code>.</li>
+    <li>Lomtin jjingol adannde dokkal toŋere ko <code>::</code>.</li>
+</ol>
+<p>Siiftor ko tabbitangal ngeen ɗum waɗataa ko honnoɗum e humpito <code>&lt;txp:output_form /&gt;</code> e huutorgol gallume ceŋorɗe. Aɗa waawi huutora <code>&lt;txp::shortcode /&gt;</code> haa noo <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Hurmin sarworde XML-RPC?"><![CDATA[
+<h2>Hurmin sarworde XML-RPC?</h2>
+<p>So aɗa yiɗi huutoraade <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ngam toppitaade Textpattern e maaɓe gannaaɗi (hono jaaɓnirɗe biro walla kenorɗe cinndel) foti yaawtirde sarworde XML-RPC huutoraade ɗum nden cuɓorde ndee waɗi ‘Ee’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Huutora fannuuji iimeel ɓetiriiɗi"><![CDATA[
+<h2>Huutora fannuuji iimeel ɓetiriiɗi</h2>
+<p>So ɗum waɗi ‘Alaa’, iimeel fof - hono ñiiɓde finnde konte, e iimeel iwɗe e ceŋe hono com_connect - maa yahaa ko e gollol <code>mail()</code> PHP. So a suɓii ‘Ee’ ɗum maa huutora PHPMailer naatiiɗo, ndee nayo humpito geɗe ngam yahdude iimeel e sarworde SMTP ceertuɗe.</p>
+<p>So aɗa heɓ caɗeele e yettoragol iimeel (ɓeydoo e njiilawɗe gannaaɗe hono Gmail, Outlook, Yahoo!, e goɗɗe), sabu haɗii no domain maa hulaaɗo ko toɓɓere renndo. Lomtin ɗum e ‘Ee’ ena waawi ɓetindinde heɓgol. Ɓeydu huutoraade SMTP ena waawi ɓeydu ɓoggital e goototo njiilawɗe iimeel e ɓetindinde heɓgol.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Tonngitte kiiɗtat ɓaawo balɗe njelu?"><![CDATA[
+<h2>Tonngitte kiiɗtat ɓaawo balɗe njelu?</h2>
+<p>So tonngitagol Textpattern ena hurmi, aɗa waawi tabbitinde ñalngu (e balɗe) ɗe tonngitte foti neldi. ‘7’ maa waɗi tonngitte ina woodi balɗe jeeɗiɗi.</p>
+<p><strong>Fiilannde:</strong> Tonngitte ena ɓoɗaa tan so aɗa yiyi alluure ‘Tonngitte yillaataaɓe’, tawa ɓe ɗiɗi maa waasira heɓude saatore.</p>
+        ]]></item>
+        <item id="file_base_path" title="Lappol runngere fiilde"><![CDATA[
+<h2>Lappol runngere fiilde</h2>
+<p>Ɗum ena tabbit <strong>lappol timmiiɗo</strong> to runngere nde jollugol fiilde maa yankadi soomay. PHP ena sokli jogii jaɓtugol winndude e runngere ndee.</p>
+<p><strong>Fiilannde:</strong> Ƴeewto yiiltinde runngere ndee e ɗo docroot lowre maa nde ɓeydaa ɗoo lowe, ngam kisal ɓeynguɗo.</p>
+        ]]></item>
+        <item id="file_download_header" title="Tiitoonde gaawtol fiilde"><![CDATA[
+<h2>Tiitoonde gaawtol fiilde</h2>
+<p>Yamira yo a cuɓtitii hol no gaawte fiilde maa waɗi.</p>
+<p>Woowaande gaawte fof nana ɗe-ɗe e ɗimmol ngol tee naatan booɗe (so hollitte wanngorde maa ko ɗuum tee). So aɗa yiɗi hokku humpito baɗte hol no aɗa yiɗi yo fannu gooto walla goodɗe fiilde ɗe neɓɓu-ɗaa njiyata, aɗa waawi hokku kod tag ɗoo. Ɗum ena waawi no waɗi so aɗa yiɗi yo fiilde PDF ɗe ɓe ɓeydi caɗeele Textpattern kategori ‘inline-pdf’ maa jayta ɗi e nder hello tan, tawa ena gaawta:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Kaaɗdi ɓetol fiilde jollanɗe (e bayti)"><![CDATA[
+<h2>Kaaɗdi ɓetol fiilde jollanɗe (e bayti)</h2>
+<p>Aɗa waawi haɗde kaaɗdi ɓetol (e bayti) ngam jollugol fiilde. Siiftor ko ndee kiisol kadi ena haɗaaki e teelte PHP. So Textpattern yiytii dokkitannde PHP ndokkoraa jollugol haa ɗuum, maa toɓɓi ɗum e kiisol ɗum. So aɗa yiɗi yaamirde jollugol fiilde mawɗe e yooje nollugol e wanngorde, jokkondir koñngol lowre maa (teelte foti woodde e <code>php.ini</code> ko <code>post_max_size</code>, <code>upload_max_filesize</code> e <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Diiwaan waktu"><![CDATA[
+<h2>Diiwaan waktu</h2>
+<p>Ngam jaytinde ñalngu e diiwaan waktu maa, tiiɗno suɓo diiwaan maa.</p>
+        ]]></item>
+        <item id="img_dir" title="Runngere nate"><![CDATA[
+<h2>Runngere nate</h2>
+<p>So aɗa yiɗi cikki innde runngere nate maa, aɗa waawi waylude ɗum ɗoo. Aɗa foti yeeso sosde runngere ndee e nder mesel aafgol Textpattern, tee ƴeewto kadi ko PHP ena waawi winndude e runngere ndee.</p>
+<p>Lappol ngol sahaa kala ko <strong>lappol ceertol</strong> (to runngere hakkunde aafgol Textpattern).</p>
+<p>Woowaande ko <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Naatnor ñiiɓirde iimeel e biile Atom?"><![CDATA[
+<h2>Naatnor ñiiɓirde iimeel e biile Atom?</h2>
+<p>Ɗum ena yamira yo ñiiɓirde iimeel binndiijo binndannde ndee (so tabbit tuggi konte mum) yo ɓeydaa e feere <code>author</code> e nder biile Atom maa.</p>
+        ]]></item>
+        <item id="is_dst" title="Hurmin Waktu Ceeɗu?"><![CDATA[
+<h2>Waktu Ceeɗu hurmii?</h2>
+<p>Ɗum ena ñawti so DST (Daylight Saving Time) ena hurmi jooni e diiwaan waktu maa walla alaa.</p>
+        ]]></item>
+        <item id="logging" title="Tonngitagol"><![CDATA[
+<h2>Tonngitagol</h2>
+<p>Aɗa waawi suɓa leñol tonngitagol yillaataaɓe Textpattern ena waɗa:</p>
+<ul>
+    <li><strong>Yiyte fof:</strong> Textpattern maa tonngita jaytugol kelle fof e lowre maa</li>
+    <li><strong>Referrers tan:</strong> Textpattern maa tonngita tan yillaataaɓe iwɗe e lowre ceertuɗe</li>
+    <li><strong>Alaa:</strong> Textpattern maa tonngitaaka jaytugol ndee</li>
+</ul>
+<p>No iwde e Textpattern 4.7.0, humpito ñiiɓirde IP yillaataaɓe ena heɓaaki walla haɗaaki e Textpattern. So aɗa hisii naggitde walla ebuɗde ñiiɓirde IP haa to Textpattern, tiiɗno reɓe ɗe yo ƴeewto kisa moƴƴo ngam keɓe ɗee, tawi e goowal laawol, hono <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>, tee waɗde kisal heeriingo e gooto e gooto e sarworde maa e aafgol Textpattern ngam bellude nde keɓe ɗee ko beltiiɓe.</p>
+<p>Ena tanɗinii no ɓuri ko yo cuɓorde ndee woodi e woowaande mum, ‘Alaa’, so wonaa ko aɗa sokli humpito ɗum ɗee, e ɗo kadi yo a wiyaa e ñiiɓɓe ko hol a njiɗi huutoraade ɗum.</p>
+        ]]></item>
+        <item id="max_url_len" title="Kaaɗdi njuuteendi URL (e karfe)"><![CDATA[
+<h2>Kaaɗdi njuuteendi URL (e karfe)</h2>
+<p>Ɗum ena waɗtude URL ɗi juutaaɗi haa seeɗa ɗuuɗi limɗi ɗum maa waɗaaki. Ena ɗum moƴƴi ngam waɗtude ƴellitaare naatnugol e kisal lowre.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Jaytin jokke ballal coomiiɗe senngo-jiiloowo "><![CDATA[
+<h2>Jaytin jokke ballal coomiiɗe senngo-jiiloowo</h2>
+<p>So aɗa yiɗi suuɗude jokke ballal coomiiɗe senngo-jiiloowo (kenorɗe ballal Textpattern ɗi dow lowre), lomtin cuɓorde ndee yo woni ‘Alaa’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Suuɗ ñiiɓirde iimeel jowoowo?"><![CDATA[
+<h2>Suuɗ ñiiɓirde iimeel jowoowo?</h2>
+<p>Cuɓorde ndee ena ñawti so ñiiɓirde iimeel jowoowo maa jayta yo jogii e yeeso walla alaa.</p>
+<p>Ena tanɗinii ko yo ñiiɓirde iimeel hoto jayta, ngam heɓde ɗo moƴƴi e kuutoroɓe maa, kono ena waawi wonde ko waktu ngoodi so jaytugol ñiiɓirde iimeel jowoowo ena tabbitinaama.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Huutoro dokkitannde ISO-8859-1 e iimeeluuji (woowaande ko UTF-8)?"><![CDATA[
+<h2>Huutoro dokkitannde ISO-8859-1 e iimeeluuji (woowaande ko UTF-8)?</h2>
+<p>Textpattern ena huutora dokkitannde UTF-8 ko woowaande so ŋakki, tee ɗum kadi woni e iimeel yaltuɗe. Kono, jaaɓnirɗe iimeel kese (hono some Microsoft Outlook) ena woodi ɗe ɗi heɓaani dokkitannde UTF-8. So a yiyanɗi alkule banngere e iimeeluuji, cuɓorde ndee maa waylu binndi haa ngoodi dokkitannde ISO-8859-1 hade nelde ɗum.</p>
+<p><strong>Fiilannde:</strong> So aɗa huutora ɗemngal ñiɓe mum waawaa jaytindeede e ISO-8859-1, cuɓorde ndee maa wallaaki ballal. Eto yiyloo kenorɗe iimeel jogaaɗe jokkorde e UTF-8 (walla Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Lomtindo fannuuji gallumeere"><![CDATA[
+<h2>Lomtindo fannuuji gallumeere</h2>
+<p>Suɓo fannuuji gallume nde tuugnor mum maa woodi e alluure Winndito e no formuuji lomtungal.</p>
+        ]]></item>
+        <item id="permlink_format" title="Mbaadi tiitoonde jokke duumiiɗe"><![CDATA[
+<h2>Mbaadi tiitoonde jokke duumiiɗe</h2>
+<p>Ɗum ena ñawti sarɗiinde ɗe jokke binndanɗe ena sosaa e tawa tuma nde daartirde ɗe ŋakki.</p>
+<p>So binndannde ena bayyinaa, URL mum ena sosaa e tiitoonde binndannde ndee so honto tiitoonde URL tan alaa naatnaa.</p>
+<p>Labo tiitoonde binndannde ndee: <em>Ann and Bob eat cake</em></p>
+<p>So cuɓorde mbaadi tiitoonde jokke duumiiɗe waɗi ‘Hyphenated (title-like-this)’, URL binndannde ndee maa waɗi ɗoo:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>So cuɓorde mbaadi tiitoonde jokke duumiiɗe waɗi ‘Intercapped (TitleLikeThis)’, URL binndannde ndee maa waɗi ɗoo:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Mbaadi URL binndanɗe"><![CDATA[
+<h2>Mbaadi URL binndanɗe</h2>
+<p>Ɗum ena ñawti sarɗiinde ɗe binndanɗe gooto-gootoɛ njiyata ko e jokkol permlink tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>.</p>
+<p>Mbayka ‘?=messy’ ko ɓuri binndu - ena gollu ko wonaani suddu ciŋkooje - kono ko ɓuri weeɓteede e ɓinnɗagol URL e yunɓe yiylitte mawnuɗe (SEO). E ndee mbayka URL binndanɗe e lowre maa maa waɗi ɗoo:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Mbayka goɗɗe kala ena sokli gollugol rewite jokke e sarworde (hono Apache <code>mod_rewrite</code> walla jame rewite NGINX e nder blokkere <code>server</code>). So sarworde maa alaa rewite jokkol ena huutoraa, eto jokkondirde koñngol lowre maa walla huutora mbayka ‘?=messy’ ɗee henɗo.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Lappol runngere mofirde ceŋe"><![CDATA[
+<h2>Lappol runngere mofirde ceŋe</h2>
+<p>Cuɓorde ndee ena huutora ɓellude ceŋe. So tabbitii, aɗa waawi nokku-ɗoo fiilde dokkal ceŋol (wonnaa ñemmbaani) e runngere ndee tee Textpattern maa loowa ɗum e jaajol, ngam aɗa waawi lomtinde ceŋol ndu tee heti yillita ko ɓuri waɗde ko nafoore/activated. <strong>Reento</strong> sabu so a huutori holi ɗuum, ceŋol baylaande (woni ko jumɗo) maa waawi kadi baylaade Textpattern!</p>
+<p>Ena tanɗinii ko yo ceŋe loowaaki e alluure ‘Ceŋe’ fota e lowre fadde, wonaa e lappol moforde ceŋe.</p>
+<p><strong>Fiilannde:</strong> Hoto tabbit runngere gootngo ngol ‘cabbinorgol’ e ‘moforde ceŋe’, sabu ɗum maa waɗde caɗeele (Textpattern maa eto waɗtude loowdi jaggitaangol sabbornde hono ceŋe).</p>
+        ]]></item>
+        <item id="production_status" title="Ngonka fagginannde"><![CDATA[
+<h2>Ngonka fagginannde</h2>
+<p>Lowre Textpattern ko e grade tati:</p>
+<ol>
+    <li>‘Debugging’</li>
+    <li>‘Testing’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Ngonka Debugging</h3>
+<p>Humpito juume PHP fof e yeeso lowre maa maa jayta, tee humpito kuutorgol kod e ceŋe kuuɗɗe maa jayta. Ɓeydo, humpito ɗee maa jayta so a yiyi ɓaawo kod HTML kelle yeeso ɗee:</p>
+<ul>
+    <li>waktu nde sarworde ndee naatee hello (‘Runtime’)</li>
+    <li>limoore leemtugol MySQL waɗi ɗum</li>
+    <li>ɓetol banngaadu mbanngol memoire</li>
+    <li>tagge Textpattern fof ɗe natii tuma nde laaɓtol hello ndee ko sosaa (ngol ko trace tag)</li>
+</ul>
+<h3>Ngonka Testing</h3>
+<p>Humpito juume PHP fof e yeeso lowre maa maa jayta, tee humpito kuutorgol kod e ceŋe kuuɗɗe maa jayta. Ɓeydo, humpito ɗee maa jayta so a yiyi ɓaawo kod HTML kelle yeeso ɗee:</p>
+<ul>
+    <li>waktu nde sarworde ndee naatee hello (‘Runtime’)</li>
+    <li>limoore leemtugol MySQL waɗi ɗum</li>
+    <li>ɓetol banngaadu mbanngol memoire</li>
+</ul>
+<h3>Ngonka Live</h3>
+<p>Juume walla humpito diyanostik maa nelditaake e hello. Woowaande, ngel ngonka Live ena moƴƴi, sabu ena ndaara yettinde coofgol kuutoroɓe e ñaawo venaaje e sarworde.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Siŋkoore yeeso"><![CDATA[
+<h2>Siŋkoore yeeso</h2>
+<p>Siŋkoore yeeso woowaande nde maa huutoree so kuutoro kala yillo yeeso lowre maa doggol public. Siŋkoore coowtoraaɗo ena waɗi e Textpattern, ndaariindi fuɗɗaaki so a njiɗi jokku e siŋkoore. Aɗa waawi kadi ɓeydude bunɗe siŋkooje e runngere <code>textpattern/themes</code> ngam waɗde maɓɓe ena woodi ngam huutoraade ɗe.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Bayyin binndanɗe kiiɗtuɗe?"><![CDATA[
+<h2>Bayyin binndanɗe kiiɗtuɗe?</h2>
+<p>So cuɓorde ndee waɗi ‘Ee’, binndanɗe kiiɗtuɗe maa waɗ-ɗe e lowre maa ɓooyaani ɓennande ñalngu kiiɗtugol maɓɓe. Aɗa waawi huutora tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ngam jaytinde loowdi walla dokkol goɗɗo ngam binndanɗe kiiɗtuɗe.</p>
+<p>So cuɓorde ndee waɗi ‘Alaa’, binndanɗe kiiɗtuɗe maa momtama e yeeso lowre maa tee maa artine HTTP "410 Gone" ñaawo hannde. Cuɓorde woowaande ko ‘Alaa’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Neldu ceŋorɗe iwde e ndee ñiiɓirde iimeel"><![CDATA[
+<h2>Neldu ceŋorɗe iwde e ndee ñiiɓirde iimeel</h2>
+<p>Tabbit ñiiɓirde iimeel nde huutortee wonde e gollol ‘Iwde e:’ jogoraango e iimeel ɗe hokke humpito ceŋorgol kuutoro hesere.</p>
+<p>So cuɓorde ndee waɗi jawdi walla jogii ñiiɓirde iimeel ñiɓnguɗo, Textpattern maa huutora innde e ñiiɓirde huutoraa kuutoro jooni.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Njelu binndanɗe poti naatneede e biile?"><![CDATA[
+<h2>Njelu binndanɗe poti naatneede e biile?</h2>
+<p>Ɗuum ko haaɗi binndanɗe cakkiti ɗe foofa jokkondiraa e gollol biile, e mbaydi RSS e Atom.</p>
+<p>Kiisol njelɗo, hono <code>5</code> ɗoo e <code>15</code> ena tanɗinii.</p>
+        ]]></item>
+        <item id="secondpass" title="Limoore reftiwe hefyitordegoɗe"><![CDATA[
+<h2>Limoore reftiwe hefyitordegoɗe</h2>
+<p>Hefyitorgol tag Textpattern ko pillol ndee nde nana lomtin tag maa tuma gooto e hello tuugnor. Ndewo, ɗuum ena waawi waɗde huunde, hono:</p>
+<ul>
+    <li>So a huutora ceŋe dokkitangal ñiiɓtaaɗe ndokkora tagge golluɗe</li>
+    <li>Baylugol kod e nder tag <code>&lt;txp:php&gt;</code></li>
+    <li>Ñaawtugol kelle ɓelleeɗe e hello ngam ɗe heɓ taco iwde e tag nde lomtaa ɓaawo</li>
+</ul>
+<p>Textpattern ko ngon ngoodi amaade e refto gooto (inndaango ‘secondpass’) sabu njaare seeɗa, ɗuum tanɗinira kiisol ndee yo woni <code>1</code>. Refto heewiiɗi, kono, ena ɓeydu helaare e ɗuum yo taggoɗe ñiɓaaɗe ena ɗillii e lomorgol. Ɓetindagol keso e hefyitorgol tag goongɗini ena waɗi ɗum no jaawngal ngam ɗaɓɓude heeɓre ndee gooto. Konno, so a hoto huutora refto ɗe njaɓɓiiɗe ngam udditude motive, tiiɗno neldu kiisol ɗee yoo woni <code>0</code> ngam ɓe koppita kisal lowre maa.</p>
+<p>Ndeen ɓaɗte so a njiyata taggoɗe golluɗe ɗe ƴettiiɗe e yeeso lowre maa (tee juume tag goɗɗi woodaani e ngonka Testing/Debugging sabu meŋude tagge cooɗe), tiiɗno jokkondir e min huutoraade hello template/kod/ceŋol maa. Min njiɗi jaltinde sokkudi e hefyitorgol ɓeynguɗi, tee humpito ndee ena waawi min yimɓinde.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Neldu tiitoore &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Neldu "Last-Modified" tiitoore?</h2>
+<p>So cuɓorde ndee hurmii, Textpattern maa lootori tiitoonde HTTP <code>If-Modified-Since</code> iwde e wanngorde yillaawo (so woodi) tee eta matchde ɗum e ñalngu hesɗitinal lowre. So wala ko heeɓii kadi so lowre ndee hesɗitii sahaa nde wanngorde ndee nde loowtini hello (aɗa heɓti tawi timestamp wanngorde daɓɓitii ko ɗuum woni heɓtangal hesɗitinal lowre), teelti maa neldito ngal njomsa ngam wanngorde ndee yo huutora kaytol ñemmbiiɗo hello ndee.</p>
+<p>Ɗuum ena waawi weɗɗude huusgol bandiraa, sahaa wattooji hello, e tonngitagol sarworde geese.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Hollu limoore jowe e biile?"><![CDATA[
+<h2>Hollu limoore jowe e biile?</h2>
+<p>So waɗi ‘Ee’, cuɓorde ndee maa ɓeydu limoore jowe e tiitoonde binndanɗe e biile RSS/Atom maa.</p>
+        ]]></item>
+        <item id="site_slogan" title="Eeraango lowre"><![CDATA[
+<h2>Eeraango lowre</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Eeraango lowre <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ko reendem walla ciforgol lowre maa. Maa huutoraani ko ciforgol lowre so soklaama, hono e biile RSS/Atom maa, tee ena waawi huutoraade e kelle keewɗe kala e lowre maa, hono aɗa yiɗi.</p>
+<p><strong>Fiilannde:</strong> Eeraango lowre ko suɓaaki, kono ena waawi soklaade ngam waɗde biile RSS walla Atom moƴƴi.</p>
+        ]]></item>
+        <item id="sitename" title="Innde lowre"><![CDATA[
+<h2>Innde lowre</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Innde walla tiitoonde lowre maa <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a>. Ɗum maa jayta e tiitoonde wanngorde yillaawo walla njiilorgol biile, tee kadi haa e kelle keewɗe kala e lowre maa, hono aɗa yiɗi.</p>
+        ]]></item>
+        <item id="siteurl" title="URL lowre"><![CDATA[
+<h2>URL lowre</h2>
+<p>Ɗuum ko ñiiɓirde lowre Textpattern maa, hono <code>www.example.com</code>.</p>
+<p><strong>Fiilannde:</strong> Hoto ɓeydu <code>http://</code>, <code>https://</code> walla Ɓeydital nde ɓokkii <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Runngere ciŋkoore"><![CDATA[
+<h2>Runngere siŋkoore</h2>
+<p>So aɗa yiɗi cikki innde runngere nde soomaa siŋkooje yeeso maa ɗe fiilde ñiɓnguɗi maa woodi e ndee, aɗa waawi waylude ɗum ɗoo. Aɗa foti yeeso sosde runngere ndee e nder mesel aafgol Textpattern, tee ƴeewto kadi ko PHP ena waawi winndude e mum.</p>
+<p>Lappol ngol sahaa kala ko <strong>lappol ceertol</strong> (to runngere hakkunde aafgol Textpattern).</p>
+<p>Woowaande ko <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Ñiiɓirde neldirde soomdu SMTP"><![CDATA[
+<h2>Ñiiɓirde neldirde soomdu SMTP</h2>
+<p>Cuɓorde ndee foti keewtineede so a heɓii caɗeele e neldugol iimeel e Textpattern (so alaa iimeel ndutti). So ɓatakuuji ndee arii, aɗa waawi naatnude ñiiɓirde iimeel ɗo moƴƴo, haa ndee woodi innde domain gooto e lowre nde aafii Textpattern (hono so lowre maa ko <code>https://example.com</code>, maayreɗe <code>you@example.com</code>).</p>
+<p>Ngam ɗeen ko jokkondiral ballal:</p>
+<ul>
+    <li>Dow sarworde UNIX ɗe woɗtaaɗe/macOS, ñiiɓirde ndee naatnaa ndi huutora ko ñiiɓirde goɗɗo (hiirde 4 nde labaa "-f") huutoraa gollol <code>mail()</code> PHP</li>
+    <li>Dow sarworde Windows, ñiiɓirde ndee naatnaa ndi huutora ngam ɗe (walla ɓeydu ɗe) teelte <code>sendmail_from</code> e php.ini</li>
+</ul>
+<p>Ɗuum ena waɗtu yo ñiiɓirde neldirde soomdu SMTP (nde woodaani ko tiitoore "From:" nde aɗa yiyaa jooni e iimeeluuji) woni e ñiiɓirde nde naatnaama ɗoo, ko ɗuum goonga laawol seedtiingo iimeel dow sarworde goototo.</p>
+        ]]></item>
+        <item id="smtp_host" title="Koñngol SMTP"><![CDATA[
+<h2>Koñngol SMTP</h2>
+<p>Ngam ɓetindinde yettoragol iimeel e huutoraade yahde iimeel iwde e topirɗe goɗɗe (hono SendGrid, AWS SES, Mailchimp, Mailgun, e goɗɗe), tabbit sarworde SMTP ɗoo. Ƴeewto ballal jom SMTP maa ngam heɓde ndee kiisol.</p>
+<p>Kiisol ngal ena waawi jokkitaade tabbitirde constant <code>SMTP_HOST</code> e <code>config.php</code>, e ɗuum kisal nde kiisol ngal maa waɗi dogngol e pane Cuɓe.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Finnde SMTP"><![CDATA[
+<h2>Finnde SMTP</h2>
+<p>So ceŋorgol SMTP maa ena sokli finnde ngam kuutoro inndaande, yo a naatnu ɗum ɗoo. Ƴeewto ballal jom topirgol ngam humpito ɗum.</p>
+<p>Fiilannde: Haalankon finnde ndee maa jaytaake ɗoo, ɗum <em>maa</em> ɗoftaako e binndi ñeeɗtuɗi e taabal banki keɓe. So aɗa yiɗi ɓeydude kisal, aɗa waawi tabbitirde constant <code>SMTP_PASS</code> e <code>config.php</code> maa.</p>
+        ]]></item>
+        <item id="smtp_port" title="Poor SMTP"><![CDATA[
+<h2>Poor SMTP</h2>
+<p>So a tabbitii koñngol SMTP, aɗa njamiriɗaa tabbitinde poor ngam hurminde yahdude iimeel e SMTP. Poor ɓurii jeye ko ɗee:</p>
+<ul>
+    <li>25 - ngam iimeel nafiisoŋko</li>
+    <li>465 - legacy (wonaani goonga) ngam iimeel kisaniiɗo</li>
+    <li>587 - woowaande (ena tanɗinii) ngam iimeel TLS kisaniiɗo</li>
+</ul>
+<p>Jom topirgol SMTP maa ina waawi huutora poor goɗɗo, tiiɗno ƴeewto juɓɓe mum.</p>
+<p>Kiiɗi ngal ena waawi jokkitaade tabbitirde constant <code>SMTP_PORT</code> e <code>config.php</code>, e ɗuum maa waɗi kiisol ngal dogngol e pane Cuɓe.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Feere kisnal SMTP"><![CDATA[
+<h2>Feere kisnal SMTP</h2>
+<p>Suɓo mehanism jom SMTP maa huutortoo e ɗuum ko yillaagal kisal iimeel. Ƴeewto juɓɓe mum ngam humpito.</p>
+<p>Kiiɗi ngal ena waawi jokkitaade tabbitirde constant <code>SMTP_SECTYPE</code> e <code>config.php</code>, e ɗuum maa waɗi kiisol ngal dogngol e pane Cuɓe.</p>
+        ]]></item>
+        <item id="smtp_user" title="Innde kuutoro SMTP"><![CDATA[
+<h2>Innde kuutoro SMTP</h2>
+<p>So ceŋorgol SMTP maa ena sokli innde/ceŋorɗe kuutoro, yo a naatnu ɗum ɗoo. Ƴeewto juɓɓe jom topirgol ngam humpito.</p>
+<p>Kiiɗi ngal ena waawi jokkitaade tabbitirde constant <code>SMTP_USER</code> e <code>config.php</code>, e ɗuum maa waɗi kiisol ngal dogngol e pane Cuɓe.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Doggol palol ñoŋkoto (lobbaaɗi-piccal)"><![CDATA[
+<h2>Doggol palol ñoŋkoto (lobbaaɗi-piccal)</h2>
+<p><a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">Jokkondire palol ñoŋkoto <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ɗe naatni-ɗaa ɗoo maa njiiltee so jowe neldataa e blog maa, tee ñiiɓirde IP jowoowo maa labaa. So ñiiɓirde IP ndee heɓta e doggol ngal ɗuum ena waɗti ko enda juume ñoŋkoto gooto walla heewi waɗii ɗee e ñiiɓirde IP ndee e yeeso, tee jowe ndee maa rattaa. Tawa yoɓaande njiilo maa woodaani ko ɓurɗu keɓal IP ñiiɓirde jowoowo.</p>
+<p>Aɗa waawi naatnude doggol innde lowre ɗee ɗee, lobbo-ɗe e lobbinɗe. Tiiɗno siiftor ko ɗuum jibbine maa jogii e jaɓɓitaangal ɗe naatni-ɗaa ɗee.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Wiilndo jubbanɗe winndande tan?"><![CDATA[
+<h2>Wiilndo jubbanɗe binndannde <strong>tan</strong>?</h2>
+<p>So ɗum waɗi ‘Alaa’, loowdi e biile maa jogii kokol binndannde fof.</p>
+<p>So ɗum waɗi ‘Ee’, loowdi e biile maa jogii jubbannde binndannde tan, so ɗum ena woodi.</p>
+        ]]></item>
+        <item id="tempdir" title="Lappol runngere cabbinorgol"><![CDATA[
+<h2>Lappol runngere cabbinorgol</h2>
+<p>Tabbit <strong>lappol timmiiɗo</strong> to runngere sabbornde (so en ganiii e ‘tmp’ walla ‘temp’). PHP ena sokli jogii jaɓtugol winndude e runngere ndee. Runngere ndee ko e jeyaaku piille sabborɗe, hono jollugol haa piille kala (ceŋe, fiilde walla nate).</p>
+<p><strong>Fiilanɗe:</strong>
+<ul>
+    <li>Hoto tabbit runngere gootngo ndee ‘cabbinorgol’ e ndee ‘moforde ceŋe’, sabu ɗuum maa waɗde caɗeele (Textpattern maa eto huutora loowdi tonngitorde sabbornde hono ceŋe).</li>
+    <li>Ƴeewto yiiltinde runngere ndee e ɗo docroot lowre maa nde ɓeydaa ɗoo lowe, ngam kisal ɓeynguɗo.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Siŋkoore senngo-jiiloowo"><![CDATA[
+<h2>Siŋkoore senngo-jiiloowo</h2>
+<p>Siŋkoore senngo-jiiloowo woowaande nde maa huutoree so kuutoro kala naatii e Textpattern. Siŋkooje senngo-jiiloowo keewɗe ena woodi e Textpattern, tee kadi aɗa waawi ɓeydude bunɗe siŋkooje peŋtori e runngere <code>textpattern/admin-themes</code> ngam waɗde maɓɓe ena woodi ngam huutoraade ɗe.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Ɓeydu ɗoɓirde leƴƴol fof e URLs"><![CDATA[
+<h2>Ɓeydu ɗoɓirde leƴƴol fof e URLs</h2>
+<p>Ena ñawti so Textpattern yo o ɓeydu ɗoɓirde leƴƴol automatic e URLji soraande. Cuɓe ɗiɗi ko ɗee:</p>
+<ul>
+    <li><strong>Alaa</strong> - Hoto</li>
+    <li><strong>Doggi</strong> - Tan e kelle jotta doggol (hono so njiyɗo binndannde gootnuko)</li>
+    <li><strong>Ee</strong> - Sahaa kala</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Gollinde PHP kurmii e xp:evaluate"><![CDATA[
+<h2>Gollinde PHP kurmii e txp:evaluate</h2>
+<p>Ɗum ko doggol lobbinɗe-piccal gollol <code>function</code> walla <code>alias=function</code>, hono <code>md5</code>, <code>replace=str_replace</code>. Golle labaaɗe e doggol ngol ena waawi huutoraade e joopaare <code>query</code> tag <code>&lt;txp:evaluate /&gt;</code> ɗoo:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> foti artinde kiisol gootngo (<strong>wonaa</strong> doggol/temre).</p>
+        ]]></item>
+        <item id="use_comments" title="Jaɓ jowe?"><![CDATA[
+<h2>Jaɓ jowe?</h2>
+<p>Ɗum ena ñawti so fannuuji jowe Textpattern maa hurma walla daaƴa.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Huutoro ñiiɓirde iimeel ngam darnude IDji biile (goowaaɗo woni URL lowre)."><![CDATA[
+<h2>Huutoro ñiiɓirde iimeel ngam darnude IDji biile (goowaaɗo woni URL lowre)?</h2>
+<p>Temre e biilu Atom ena sokli ID gootngo.</p>
+<p>Ngam sosde IDji gootoɗi e lowre maa, Textpattern ena yamira yo a suɓo hakkunde ñiiɓirde iimeel walla ɓernde innde domain nde kiɗi ɗe IDndu. Ñiiɓirde iimeel ngal ko ngel ko huutoraa tuma nde a sosii lowre. So a andii tawi wonaa si a labi lomtinde innde domain manga maɓɓe, ena huutoriima ko yo cuɓorde ndee woni ‘Alaa’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Huutoro ceŋe"><![CDATA[
+<h2>Huutoro ceŋe?</h2>
+<p>Ɗuum ena yamira yo a daaƴ walla hurmin jaɓtugol ceŋe Textpattern fof. Ɗum ena moƴƴi so aɗa etiɗi ñawndude juume e lowre maa, tee a yiɗi ƴeewta so ceŋe goototo woni e ballal.</p>
+        ]]></item>
+        <item id="use_textile" title="Mbaydingol binndi goowangol"><![CDATA[
+<h2>Mbaydingol binndi goowangol</h2>
+<p>Cuɓorde mbaydingol binndi nde aɗa suɓo ɗoo maa woni goowangol ngam jubbannde e kokol e alluure ‘Winndito’. Aɗa waawi suɓa yo Textile mooftangol nde njiyee-ɗaa, yo ceŋu juuɗe loowti ndi waɗi tag HTML walla yo binndi hoto wayli heen so wonaa ko.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ko kuutorɗe ndebbo ngam weeɓtinde waylude binndi ñiiɓngol to HTML. So ena hurmi, Textile maa laaɓtu kokol binndanɗe ngam artinde HTML ɗo jarame.</p>
+<p>Textile ena jeyaa ceŋe mawɗi kono waawngol-ɗoo ngam mbaytinde binndi, tabbitde seŋore hono doggi, tiitoonde e blockquote, tee ɓeydu jokke e nate.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Alluure catal">
+        <item id="section_category" title="Cikkaade"><![CDATA[
+<h2>Cikkaade</h2>
+<p>Caɗe e Textpattern ena waawi ɗo waɗa daarti caɗe e piije ñiiɓtorɗe; caɗe fof maɓɓe woodi e ñiiɓnde tan wonaa ɗum, kono kala caɗol ena waawi waɗde seŋorde goɗɗo, walla fannu goɗɗo binndannde, e kadi kadi.</p>
+<p>Ngam lowre keewɗe geɗe ɓiɓɓe, tan caɗe keewɗe ena foti taggitaade.</p>
+<h3>Labo gollal lowre wonndiingo e caɗe tati:</h3>
+<ol>
+    <li><strong>Archive:</strong> ‘Caɗol’ ɗuum ɗum ko ɗum konngi binndanɗe fof ɓe njayta e hello yeeso ɓe ɗee woodi. So jiyɗo doba jokkol peeraaɗo binndannde, maa jayta binndannde ndee e tuugnor hello teginoo e ‘Caɗol’ ɗuum. Ngam yahde doggol kelle njiya binndanɗe cakkitagol iwɗe e caɗol "Archive", URL maa woni <code>https://example.com/archive/</code>.</li>
+    <li><strong>Baɗte:</strong> Hello ‘baɗte lowre ndee’, ngol senaa hello yeeso e "Archive", sabu ɗum ena waɗi sirlaaɗo, ena waawi jogii tuugnor goɗɗo, tee ko ɓuriwino binndannde gooto tan. Caɗol ‘Baɗte’ maa heɓora e <code>https://example.com/about/</code>.</li>
+    <li><strong>Nate:</strong> ‘Caɗol’ ngol tuugnor mum goɗɗo (e waasa CSS goɗɗo) maa jaytinde nate ceebtorɗe waɗataa binndanɗe.</li>
+</ol>
+<p>Hoolo caɗol cuuɗol loowre ena woodi, inndo ko default. Caɗol woo default huutora hello inndiiɗo default e mbaydi inndiiɗo default, tee ɗum ena uddita hello yeeso lowre maa.</p>
+        ]]></item>
+        <item id="section_default" title="Catal bayyino goowangal"><![CDATA[
+<h2>Caɗol bayyino woowangol</h2>
+<p>Cuɓorde ndee ena ñawti hol caɗol maa ɗo cuɓama baɗte, so a sosii binndannde hesere e alluure ‘Winndito’.</p>
+<p>So binndanɗe keewɗe lowre maa jokkitii e caɗol gooto, labo ɗuum e doggol ɗoo. Lomtinɗe ɗee maa jaytaa e sawru.</p>
+<p>Aɗa waawi lomtinde ɗum e junngol binndannde gootol e alluure ‘Winndito’ so a cuɓii caɗol woɗnde e nder pane ‘Leemtol e jaytugol’.</p>
+        ]]></item>
+        <item id="section_description" title="Cifagol"><![CDATA[
+<h2>Ciforgol</h2>
+<p>Ciforgol caɗol ena ko geɗe moƴƴi ɗe ena waawi wallude yiylitte e geese e ceŋe wiylowe ngam ɓe ƴeewtinde e leñirde loowdi.</p>
+<p>Ciforgol binndannde ena sokli haɗde haanirde 255 karfe. Ɓeydii hol no yiylitte goɗɗi nana joga ɗeena haaɗe e boowal karfe e <code>meta description</code> hello ngam bayningol e nder kelle njiylawel yiylitte (SERPs) tee ɗum ena waawi waɗde seeɗa ko ɓuri haanirde 255 karfe ɗe Textpattern yamiraa.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Binndanɗe caɗol ɗee njiyata e hello yeeso?"><![CDATA[
+<h2>Binndanɗe caɗol ɗee njiyata e hello yeeso?</h2>
+<p>Binndanɗe e caɗe goɗɗe, hono ɗe nyeñi e kelle web ‘sirlaaɗe’, ena waawi ɗo waɗa so ɓe heɓii e ceŋol jaati nde kaaƴom woni e loowgol sahaa.»</p>
+<p>So ɗum waɗii ‘Alaa’ binndanɗe ngonaaɗe e caɗol ngal maa newaaka e hello yeeso.</p>
+        ]]></item>
+        <item id="section_searchable" title="Naatnu ngal caɗol e njiilaw lowre?"><![CDATA[
+<h2>Naatnu ngal caɗol e njiilaw lowre?</h2>
+<p>Ɗum ena ñawti so binndanɗe goonga e caɗol ngal foti jayta e nder njiylaw ñiiɓtuɗo lowre.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Wiilndo binndanɗe e ngal caɗol e biile?"><![CDATA[
+<h2>Wiilndo binndanɗe e ngal caɗol?</h2>
+<p>Ena ñawti so binndanɗe e ngal caɗol maa woodi e biile RSS e Atom lowre maa walla alaa.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Huutorto pannol"><![CDATA[
+<h2>Huutora mbaydi</h2>
+<p>So aɗa yiɗi lomtinde mbaydi woowaande ngam caɗol gooto, aɗa waawi taɓde ɗum ɗoo.</p>
+<p>Ɗum ena jogiiɗo tan e mbaydi woodi e alluure ‘Mbodwi’ Textpattern - so a nolli CSS maa kaa heɓtindu Textpattern (ko ɗuum njamiraa), cuɓorde ndee alaa kuutorgol.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Huutora hello"><![CDATA[
+<h2>Huutora hello</h2>
+<p>E Textpattern, caɗe ena waɗi jabɓitii e tuugnorɗe kelle.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Huutorto Siŋkoore"><![CDATA[
+<h2>Huutora siŋkoore</h2>
+<p>So aɗa yiɗi lomtinde siŋkoore huutoragol ngam caɗol gooto, aɗa waawi suɓa ko fii e doggol siŋkooje aafaama jooni.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Alluure Aafgol">
+        <item id="setup_admin_url" title="Lesdomen Jiiloowo"><![CDATA[
+<h2>Lesdomen Jiiloowo</h2>
+<p>Lesdomen nde aɗa yiɗi huutoraade ngam naatde e nder alluure jiiloore Textpattern (hono <code>admin.example.com</code>).</p>
+<p>Ƴeewto <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">aafgol ceertu lowe Textpattern</a> ngam ɓeydude humpito.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domen cokkii"><![CDATA[
+<h2>Domen cokkii</h2>
+<p>(Les) domen nde aɗa yiɗi huutoraade ngam cokkiije Textpattern.</p>
+<p>Ƴeewto <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">aafgol ceertu lowe Textpattern</a> ngam ɓeydude humpito.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Ceŋorgol kuutoro"><![CDATA[
+<h2>Ceŋorgol kuutoro</h2>
+<p>Innde ceŋorgol konte jiiloowo (‘Pabliyisir’) nde huutoraa e ƴeewtude lowre maa.</p>
+<p>Haalankon alkunuuji e innde ena woodi, ko ɓuri moƴƴude yo hoto ñippiɗe jokke kulol e innde tee heddii-ɗaa (hono <code>admin</code>, <code>administrator</code>, e goɗɗe.)</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Finnde kuutoro"><![CDATA[
+<h2>Finnde kuutoro</h2>
+<p>Sabu ngal konte jogii ñiiɓirde jokkondiral ɓurnde e Textpattern, suɓo finnde ɓurnde kisal walla, ɓeydoo, reendigol.</p>
+<h3>Tippuɗi</h3>
+<ul>
+    <li>Huutoro sedeele kuriirɗe e sedeele mawɗe</li>
+    <li>Huutoro limoore</li>
+    <li>Huutoro alkune</li>
+    <li>Ɗum yo won heɓɓe e yeeso jelu karfe</li>
+    <li><strong>Hoto</strong> huutora humpito maa (ñalngu, innde, nokkuji, yokkɓe, e goɗɗe.)</li>
+    <li><strong>Hoto</strong> huutora kelme ɗe woni e caabiŋkere haa kiise gooto, hade e jamma, ɗemngal walla hiirorde</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Daaƴorgol taabe"><![CDATA[
+<h2>Daaƴorgol taabe</h2>
+    <p>Aɗa foti huutora daaƴorgol taabe so aɗa sokli aafde Textpattern ceertuɗe e banki gootngal. Installaa Textpattern kala foti jogii daaƴorgol gootngol.</p>
+    <p>Siiftor ko daaƴorgol ndee foti waɗde ko ɗee:</p>
+<ul>
+    <li><strong>Karfe 1:</strong> ena foti wonde ko a-z, A-Z, walla leemtoonde</li>
+    <li><strong>Karfe goɗɗe ɗee:</strong> ko a-z, A-Z, 0-9, walla leemtoonde tan</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Alluure siŋkooje">
+        <item id="skin_author" title="Ballifo siŋkoore"><![CDATA[
+<h2>Binndiijo siŋkoore</h2>
+<p>Binndiijo (walla binndiijooɓe) ndee siŋkoore (suɓaaki).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Lowre ciŋkooje"><![CDATA[
+<h2>Lowre siŋkoore</h2>
+<p>URL ɗo teewuɗo hol humpito timmiiɗo e/maa yamre keso siŋkoore ndee ena heɓaama (suɓaaki).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Momtu tuugnorɗe siŋkoore e mbeɗu ne"><![CDATA[
+<h2>Momtu tuugnorɗe siŋkoore e mbeɗu ne</h2>
+<p>So a lomtinii ɗum, tuugnorɗe kala e nder siŋkoore suɓaama maa momta e mbeɗu tigi haa duum. Kono runngere siŋkoore e runngere maɓɓe maa momtaa so goonga piille goɗɗe (hono JavaScript, nate, ...) woodi e nder maɓɓe.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Momtu ciŋkooje ɗe kuutoraaka e diiñorde keɓe tuma jiggagol"><![CDATA[
+<h2>Momtu tuugnorɗe njaynande e banki keɓe so a jiggii</h2>
+<p>So a lomtinii ɗum, kala tuugnor e nder siŋkoore suɓaama nde alaa fiilde danaaki e mbeɗu maa momta toɓɓere e banki keɓe. Ɗuum maa waɗno ɗum ko tuugnorɗe e banki maa ena laaɓɗi seeɗa ko waɗi e mbeɗu.</p>
+<p>Siiftor so a momtii fiilde tuugnorɗe ɗe Textpattern ena sokla, tuugnorɗe meemeende maa sosaa e banki maa.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Momtu ciŋkooje ɗe kuutoraaka e mbeɗu tuma jiggitagol"><![CDATA[
+<h2>Momtu tuugnorɗe njaynande e mbeɗu so a jiggitoo</h2>
+<p>So a lomtinii ɗum, kala fiilde tuugnor e nder siŋkoore suɓaama nde alaa temre nana woodi e banki keɓe maa momta toɓɓere e siŋkoore mbeɗu. Ɗuum maa waɗno ɗum ko tuugnorɗe mbeɗu maa ena miijoo fota ko waɗi e banki keɓe.</p>
+        ]]></item>
+        <item id="skin_description" title="Cifagol siŋkoore"><![CDATA[
+<h2>Ciforgol siŋkoore</h2>
+<p>Ɓetoore ngonaaɓe e topirɗe/tuugnor siŋkoore ndee ena waawi jeyaa (suɓaaki).</p>
+<p>Ciforgol siŋkoore ena sokli haɗde haanirde 255 karfe.</p>
+        ]]></item>
+        <item id="skin_import" title="Jiggito siŋkoore"><![CDATA[
+<h2>Jiggito siŋkoore iwde e mbeɗu</h2>
+<p>Formu ndee ena yamira a jiggito siŋkoore iwde e runngere siŋkooje Textpattern e banki keɓe.</p>
+<p>Siŋkoore jogotaama jiggito ko runngere yeɓaare tara wallude tuugnu ɗuum ko innde siŋkoore ndee, tee e nder runngere ndee fiilde <code>manifest.json</code> tara ɗum ko moƴƴere e mbaydi ballal. Rungngere siŋkoore ndee foti kadi jogii kelle, formuuji e mbaydi e runngere innduɗe e innde mum goɗɗo.</p>
+<p>Kelle e formuuji foti huutoraa ɓeydital <code>.txp</code>, mboyɗe kadi ena foti wonde fiilde <code>.css</code>. Formuuji foti kadi roɓtineede e laabi no feewi e runngereje goɗɗe. Textpattern maa sos tuugnorɗe soklaaɗe so ɗe alaa ndee ndee so a nolli.</p>
+<p>Ƴeewto <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">juɓɓe siŋkooje <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ngam ganndude ko ɓurɗi baɗte sosgol, aafgol e huutorgol siŋkooje e nder Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Innde siŋkoore"><![CDATA[
+<h2>Innde siŋkoore</h2>
+<p>Innde siŋkoore ko ɗuum nde huutoraa ngam innde runngere siŋkoore ndee e golluuji toɓɓe (ena soklaa).</p>
+<p>Innde ndee hoto jogii alkunuuji walla bayle.</p>
+        ]]></item>
+        <item id="skin_overview" title="Cikkaade e Siŋkooje"><![CDATA[
+<h2>Cikkaade e Siŋkooje</h2>
+<p>Siŋkoore Textpattern ko seeɗi kelle, Formuuji e Mboyɗe. Siŋkooje ena yamira yo a tiŋtin tuugnorɗe lowre maa e laabi ngam yiyde-ɗere, walla ngam lollinde maɓɓe e ɓe goɗɗe. Sosde walla aafde Siŋkoore e kelma maɓɓe <em>wonaa</em> waɗde goɗɗo e lowre maa goodnde. Aɗa waawi waylude walla lomtinde temre kala mo woodaniiɗo e Caɗol lowre maa, tee ɗum maa waɗataa goɗɗo e lowre.</p>
+<p>Ngam lomtinde temre e nder siŋkoore, yillo kelle, Formuuji walla alluure Mbodwi tee huutor suɓorde ɗe uddita siŋkoore nde aɗa yiɗi gollude to. Siŋkoore nde eɗa gollii to ena siiftoraa e sokanke jiiloore, ngam yo a mbaawi waɗde e laabi temre seeɗa. Ndee ko <em>siŋkoore golluɗo</em>.</p>
+<p>Ƴeewto <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Juɓɓe Kuutorɓe Textpattern <span class="ui-icon ui-icon-extlink">(uddataa jokkol jaaɓnirgal ko woni henorde hesere)</span></a> ngam ɓeydude humpito.</p>
+        ]]></item>
+        <item id="skin_title" title="Tiitoonde siŋkoore"><![CDATA[
+<h2>Tiitoonde siŋkoore</h2>
+<p>Tiitoonde laaɓɗo siŋkoore, ngam heɓde siŋkoore ndee e alluure Textpattern.</p>
+<p>Tiitoonde ndee ena waawi jogii alkunuuji e bayle.</p>
+        ]]></item>
+        <item id="skin_version" title="Yamre siŋkoore"><![CDATA[
+<h2>Yamre siŋkoore</h2>
+<p>Limoore yamre e ndee siŋkoore aafaa (suɓaaki).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

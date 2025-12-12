@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ceb">
+    <group id="admin" title="Panel sa mga tiggamit">
+        <item id="about_privileges" title="Mahitungod sa mga papel (roles)"><![CDATA[
+<h2>Mahitungod sa mga papel (roles)</h2>
+<h3>Publisher</h3>
+<ul>
+    <li>makapagmaneho ug mga artikulo, komento ug mga link</li>
+    <li>makagamit og PHP sa mga artikulo kon ang admin nga pahalipay ‘Allow PHP in articles?’ nakaset sa ‘Yes’</li>
+    <li>makapagmaneho ug mga hulagway ug mga file</li>
+    <li>makapagmaneho ug mga seksyon ug mga kategoriya</li>
+    <li>makapagmaneho ug mga panid, porma ug estilo</li>
+    <li>makatan-aw sa diagnostic nga impormasyon</li>
+    <li>makapagmaneho sa mga pahalipay (site preferences)</li>
+    <li>makapagmaneho sa mga tiggamit</li>
+    <li>makapagmaneho sa mga log sa bisita</li>
+    <li>makapagmaneho sa mga plugin</li>
+    <li>makapag-import ug datos</li>
+</ul>
+<h3>Managing Editor</h3>
+<ul>
+    <li>makapagmaneho ug mga artikulo, komento ug mga link</li>
+    <li>makagamit og PHP sa mga artikulo kon ang admin nga pahalipay ‘Allow PHP in articles?’ nakaset sa ‘Yes’</li>
+    <li>makapagmaneho ug mga hulagway ug mga file</li>
+    <li>makapagmaneho ug mga seksyon ug mga kategoriya</li>
+    <li>makapagmaneho ug mga panid, porma ug estilo</li>
+    <li>makatan-aw sa diagnostic nga impormasyon</li>
+    <li>makapagmaneho sa mga pahalipay sa site</li>
+    <li>makatan-aw sa mga tiggamit</li>
+    <li>makapagmaneho sa mga log sa bisita</li>
+    <li>makapagmaneho sa mga plugin</li>
+    <li>makapag-import ug datos</li>
+</ul>
+<h3>Copy Editor</h3>
+<ul>
+    <li>makapagmaneho ug mga artikulo nga adunay usa ka limitasyon:
+        <ul>
+            <li>dili makapapas sa mga artikulo nga iya sa ubang tiggamit</li>
+        </ul>
+    </li>
+    <li>makapagmaneho ug mga komento ug mga link</li>
+    <li>makapagmaneho ug mga hulagway ug mga file</li>
+    <li>makapagmaneho ug mga kategoriya</li>
+    <li>makapagmaneho ug mga panid ug mga porma</li>
+    <li>makatan-aw sa mga tiggamit</li>
+    <li>makapagmaneho sa mga log sa bisita</li>
+</ul>
+<h3>Staff Writer</h3>
+<ul>
+    <li>makapagmaneho sa kaugalingong mga artikulo, makakita sa mga artikulo sa ubang tiggamit</li>
+    <li>makapagmaneho ug mga hulagway ug mga file</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>makapagmaneho sa kaugalingong mga artikulo sa usa ka pinugos nga paagi:
+        <ul>
+            <li>mausab lang ang artikulo hangtod mapatik (ma-publish)</li>
+            <li>makapahimutang lang sa kahimtang nga <em>only</em> Draft, Hidden o Pending</li>
+        </ul>
+    </li>
+    <li>makakita sa mga artikulo sa ubang tiggamit</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>makapagmaneho sa kaugalingong mga artikulo sa usa ka pinugos nga paagi:
+        <ul>
+            <li>mausab lang ang artikulo hangtod mapatik (ma-publish)</li>
+            <li>makapahimutang lang sa kahimtang nga <em>only</em> Draft, Hidden o Pending</li>
+        </ul>
+    </li>
+    <li>makakita sa mga artikulo sa ubang tiggamit</li>
+    <li>makapagmaneho ug mga hulagway</li>
+    <li>makapagmaneho ug mga seksyon</li>
+    <li>makapagmaneho ug mga panid, porma ug estilo</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Paghimo og awtor"><![CDATA[
+<h2>Pagdugang og bag-ong awtor</h2>
+<p>Usa ka welcome nga mensahe ug mga instruksyon sa pag-login ipadalag email ngadto sa bag-ong awtor.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Write panel">
+        <item id="article_image" title="Imahe sa artikulo"><![CDATA[
+<h2>Imahe sa artikulo</h2>
+<p>Aron i-associate ang mga hulagway niining artikuloha, ibutang dinhi ang usa sa mosunod:</p>
+<ol>
+    <li>usa o daghang Textpattern image ID, gibulag sa mga comma (pananglitan <code>12, 25, 18</code>)</li>
+    <li>usa o daghang relative URL sa hulagway, gibulag sa mga comma (pananglitan <code>/images/my_pic.jpg</code>)</li>
+    <li>usa o daghang fully-qualified nga URL, gibulag sa mga comma (pananglitan <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Ang unang hulagway mahimo ipakita pinaagi sa pagbutang og <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> sulod sa usa ka article form. Sa default, kini mag-output og kompleto nga HTML <code>&lt;img&gt;</code> tag ngadto sa napiling hulagway.</p>
+<p>Mahimo ka magpakita og mga gallery gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Lawas"><![CDATA[
+<h2>Lawas</h2>
+<p>Ang nag-unang sulod sa usa ka artikulo anaa sulod sa lawas sa artikulo.</p>
+<p>Sa pagsulat o pag-andam sa mga artikulo para ipatik sa Textpattern, ang awtor makabalhin taliwala sa tulo ka tan-awon sa artikulo: plain text, HTML markup (ang code nga gigamit sa web browser sa pag-render sa artikulo), ug ang gipakita nga preview.</p>
+        ]]></item>
+        <item id="description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Ang deskripsyon sa artikulo usa ka opsyonal nga bahin nga makatabang sa mga search engine ug mga website crawler sa mas maayong pag-ila ug paghan-ay sa sulod.</p>
+<p>Ang deskripsyon sa artikulo limitado sa labing taas nga 255 ka karakter. Hinumdomi nga ang pipila ka search engine nagbutang og limitasyon sa gidugayon sa <code>meta description</code> sa panid alang sa praktikal nga pagpakita sa search engine results pages (SERPs) ug kini mahimong mas gamay kay sa 255 ka karakter nga limit sa Textpattern.</p>
+<p>Hinumdomi nga lahi ang deskripsyon sa artikulo gikan sa kinutlo sa artikulo, bisan pa og pareho silang modawat og susamang sulod. Ang deskripsyon sa artikulo dapat panguna nga gituyo para sa paggamit sa mga search engine ug crawler, samtang ang kinutlo sa artikulo mas angay para sa human-readable nga summary sa artikulo kon gikinahanglan.</p>
+        ]]></item>
+        <item id="excerpt" title="Kinutlo"><![CDATA[
+<h2>Kinutlo</h2>
+<p>Opsyonal ang mga kinutlo sa artikulo. Ang mga kinutlo mahimong gamiton isip mubo nga summary sa artikulo nga ipakita isip kabahin sa table of contents, gamiton imbes sa tibuok lawas sa artikulo sa RSS/Atom feeds sa site, o sa ubang paagi.</p>
+        ]]></item>
+        <item id="expire_date" title="Petsa sa pag-expire"><![CDATA[
+<h2>Petsa sa pag-expire</h2>
+<p>Ang oras nga ang artikulo ilhanan nga expired. Opsyonal ang oras ug mahimong iset sa bisan unsang oras sa nangagi o sa umaabot.</p>
+<p>Ang mga kahon nagtumong sa mosunod nga impormasyon:</p>
+<ul>
+    <li>Tuig / Bulan / Adlaw</li>
+    <li>Oras (24-hour format) : Minuto : Segundo</li>
+</ul>
+<p>Sa dihang moabot na ang oras, o kon ang oras nga gihatag anaa na sa nangagi, ang artikulo mo-expire.</p>
+<p>Kon gi-enable ang opsyon nga ipakita ang mga na-expire nga artikulo, magpabilin nga makita ang artikulo. Kon gi-disable ang opsyon nga ipakita ang mga na-expire nga artikulo, ang mga bisita sa panid sa artikulo pagaservisyohan og HTTP 410 error imbes sa sulod sa artikulo.</p>
+        ]]></item>
+        <item id="keywords" title="Mga keyword"><![CDATA[
+<h2>Mga keyword</h2>
+<p>Ang mga keyword mapuslanon sa pagpa-pinasaad sa mga relasyon taliwala sa mga artikulo labaw pa sa gihatag sa mga kategoriya.</p>
+<p>Ang mga keyword kinahanglang tagsa-tagsa ka pulong nga gibulag sa mga comma.</p>
+        ]]></item>
+        <item id="override_form" title="Pag-override sa porma"><![CDATA[
+<h2>Pag-override sa porma</h2>
+<p>Usa ka artikulo mahimong opsyonal nga mogamit og porma nga lahi sa gi-assign nga default – pananglitan aron ipakita ang kinutlo sa artikulo gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> imbis sa lawas sa artikulo gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> – kini mahimong iset dinhi.</p>
+        ]]></item>
+        <item id="publish_date" title="Petsa sa pagmantala"><![CDATA[
+<h2>Petsa sa pagmantala</h2>
+<p>Ang oras nga ang artikulo o file gimantala o bag-ohay lang giusab. Mahimong iset ang oras sa takna nga gipatik ang butang, o sa bisan unsang oras sa nangagi o sa umaabot.</p>
+<p>Ang mga kahon nagtumong sa mosunod nga impormasyon:</p>
+<ul>
+    <li>Tuig / Bulan / Adlaw</li>
+    <li>Oras (24-hour format) : Minuto : Segundo</li>
+</ul>
+<p>Ang usa ka butang nga adunay timestamp nga mas dako kaysa kasamtangan nga oras (pananglitan sa umaabot) dili makita sa front side ug sa RSS/Atom feeds hangtod moabot kana nga oras.</p>
+        ]]></item>
+        <item id="status" title="Estado"><![CDATA[
+<h2>Estado</h2>
+<p>Nagadumala sa kahimtang sa visibility sa pagmantala niining Textpattern nga artikulo.</p>
+<p>Ang kahimtang sa pagmantala usa sa mosunod:</p>
+<ul>
+<li><strong>Draft</strong>: giisip nga work-in-progress ug dili makita sa gawas sa Textpattern administration area (i.e. dili makita sa website ug dili apil sa mga feed).</li>
+<li><strong>Hidden</strong>: ang artikulo dili makita sa gawas sa Textpattern administration area. Mapuslanon alang sa pagtangtang sa sulod gikan sa website nga dili nimo gusto nga papason gyud.</li>
+<li><strong>Pending</strong>: giisip nga andam na para sa pagmantala ug naghulat sa pag-aprubar, apan dili makita sa gawas sa Textpattern administration area.</li>
+<li><strong>Live</strong>: kasagarang makita sa gawas sa Textpattern administration area (i.e. makita sa website, gi-syndicate sa mga feed kon tugotan sa pahalipay). Kon ang artikulo live ug adunay petsa sa pag-expire, magpabilin nga Live ang status human maabot ang petsa, apan motungha lang ang artikulo sa gawas sa administration area kon gitugotan nga ipatik ang mga na-expire nga artikulo.</li>
+<li><strong>Sticky</strong>: susama sa <strong>Live</strong> nga artikulo sa dihang mahimong makita sa mga bisita sa website, apan <strong>dili</strong> motungha sa mga lista sa artikulo gawas kon ang tagsa ka <code>article</code> o <code>article_custom</code> nga tag naglakip og <code>status</code> attribute nga adunay kantidad nga <code>sticky</code>.</li>
+</ul>
+<p>Timan-i: ang sulod nga dili publiko nga makita sa website mahimo gihapon ma-preview sa mga naka-login nga tiggamit.</p>
+        ]]></item>
+        <item id="title" title="Titulo"><![CDATA[
+<h2>Titulo</h2>
+<p>Idugang ang angay nga titulo para niining artikuloha.</p>
+<p>Ang titulo sa artikulo limitado sa labing taas nga 255 ka karakter.</p>
+        ]]></item>
+        <item id="url_title" title="URL-only nga titulo"><![CDATA[
+<h2>URL-only nga titulo</h2>
+<p>Aron mogamit og piho nga titulo sa permalink URL para sa artikulo, isulod kini dinhi. Kon biyaan nga walay sulod, ang URL nga titulo awtomatikong paghihimoon gikan sa titulo sa artikulo.</p>
+<p>Ini hilabihan ka mapuslanon kon ang titulo sa artikulo mogamit og mga karakter nga dili ASCII.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Categories panel">
+        <item id="article_category" title="Mga artikulo"><![CDATA[
+<h2>Mga artikulo</h2>
+<p>Lahi sa mga seksyon, nga naghubit sa navigational nga istruktura sa site, ang mga kategoriya sa artikulo nagtugot sa pag-organisar sa mga artikulo sumala sa ilang hilisgutan. Sa higayon nga ma-assign ang mga kategoriya, ang mga lista sa mga artikulo nga sakop sa piho nga mga kategoriya mahimong malibot-libot.</p>
+<p>Pananglitan, posible nga mga kategoriya sa artikulo sa usa ka site bahin sa pagkaon mao ang:</p>
+<ul>
+    <li>hilaw nga mga sagol</li>
+    <li>pagpalit (shopping)</li>
+    <li>mga resipe</li>
+    <li>presentasyon</li>
+    <li>mga restoran</li>
+    <li>mga chef</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon sa kategoriya</h2>
+<p>Ang deskripsyon sa kategoriya opsyonal nga bahin nga makatabang sa mga search engine ug mga website crawler sa mas maayong pag-ila ug paghan-ay sa sulod.</p>
+<p>Ang deskripsyon sa kategoriya limitado sa labing taas nga 255 ka karakter. Hinumdomi nga ang pipila ka search engine nagbutang og limitasyon sa gidugayon sa <code>meta description</code> sa panid alang sa praktikal nga pagpakita sa search engine results pages (SERPs) ug kini mahimong mas gamay kay sa 255 ka karakter nga limit sa Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Mga file"><![CDATA[
+<h2>Mga file</h2>
+<p>Opsyonal ang mga kategoriya sa file, ug mapuslanon sa pag-grupo sa piniling mga gi-upload nga file.</p>
+        ]]></item>
+        <item id="image_category" title="Mga hulagway"><![CDATA[
+<h2>Mga hulagway</h2>
+<p>Opsyonal ang mga kategoriya sa hulagway, ug mapuslanon alang sa internal nga pag-organisar ug sa paghubit sa mga hugpong sa hulagway nga mahimong ipakita gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> nga tag.</p>
+        ]]></item>
+        <item id="link_category" title="Mga link"><![CDATA[
+<h2>Mga link</h2>
+<p>Opsyonal ang mga kategoriya sa link, ug mapuslanon sa pagpakita sa lain-laing mga grupo sa mga link, pananglitan ‘Friends’, ‘Romans’, ‘Countrymen’.</p>
+<p>Ang piniling mga lista sa link sama niini gi-output gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> sama niini:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostics panel">
+        <item id="clean_url_data_failed" title="Napakyas ang limpyo nga datos sa URL"><![CDATA[
+<h2>Napakyas ang limpyo nga datos sa URL</h2>
+<p>Morag ang mga URL sa site (pananglitan <code>https://example.com/section/article</code>) kasamtangan nga dili molihok o ang web server wala nagsuporta sa test procedure aron mahibal-an kon ang clean URLs molihok ba o dili; kon ang clean URLs sa site naglihok sumala sa gilauman, kini nga mensahe mahimong kalimtan nga walay kabalaka.</p>
+<p>Kon ang clean URLs <em>dili</em> naglihok mahimo kini nagpasabot nga alinman sa:</p>
+<ul>
+    <li>sayop ang ‘Site URL’ nga setting, o ang panid niadtong adres wala gi dumala ning instance sa Textpattern</li>
+    <li>ang server nagkinahanglan ug pipila ka kausaban sa <code>.htaccess</code> o susamang direktiba sa server aron mapaandar ang clean URLs</li>
+    <li>ang server dili gyud mosuporta sa clean URLs</li>
+</ul>
+<p>Ang clean URL test mosulay sa pagkuha og panid gikan sa web address nga gispecify sa ‘Site URL’ nga pahalipay aron susihon nga ang tanang parameter sa clean URL naglihok sakto. Kon kana nga URL lain nga site, o napulihan og static nga panid o susama, mapakyas ang test. Hangtod masulbad ang isyu kinahanglan gamiton ang messy URLs (pananglitan <code>https://example.com?s=section&amp;id=4</code>). Siguroha nga ang ‘Permanent link mode’ sa Admin Preferences nakaset sumala sa gikinahanglan.</p>
+<p>Hinumdomi nga ang paggamit og plugin aron ibutang ang site sa ‘maintenance mode’ mahimong mopukaw niining pahimangnoha.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Napakyas ang limpyo nga test sa URL"><![CDATA[
+<h2>Napakyas ang limpyo nga test sa URL</h2>
+<p>Morag ang mga URL sa site (pananglitan <code>https://example.com/section/article</code>) kasamtangan nga dili molihok o ang web server wala nagsuporta sa test procedure aron mahibal-an kon ang clean URLs molihok ba o dili; kon ang clean URLs sa site naglihok sumala sa gilauman, kini nga mensahe mahimong kalimtan nga walay kabalaka.</p>
+<p>Kon ang clean URLs <em>dili</em> naglihok mahimo kini nagpasabot nga alinman sa:</p>
+<ul>
+    <li>sayop ang ‘Site URL’ nga setting, o ang panid niadtong adres wala gi dumala ning instance sa Textpattern</li>
+    <li>ang server nagkinahanglan ug pipila ka kausaban sa <code>.htaccess</code> o susamang direktiba sa server aron mapaandar ang clean URLs</li>
+    <li>ang server dili gyud mosuporta sa clean URLs</li>
+</ul>
+<p>Ang clean URL test mosulay sa pagkuha og panid gikan sa web address nga gispecify sa ‘Site URL’ nga pahalipay aron susihon nga ang tanang parameter sa clean URL naglihok sakto. Kon kana nga URL lain nga site, o napulihan og static nga panid o susama, mapakyas ang test. Hangtod masulbad ang isyu kinahanglan gamiton ang messy URLs (pananglitan <code>https://example.com?s=section&amp;id=4</code>). Siguroha nga ang ‘Permanent link mode’ sa Admin Preferences nakaset sumala sa gikinahanglan.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Sabay-sabay nga mga login sa live server"><![CDATA[
+<h2>Sabay-sabay nga mga login sa live server</h2>
+<p>Ang pagtugot sa imong user account nga mag-login gikan sa daghang session usa ka hulga sa seguridad ug dili girekomenda. Palihug i-disable kini nga feature gikan sa advanced preferences panel, gawas kon nasabtan ug madawat nimo ang mga risgo.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Tagoi ang pribadong impormasyon"><![CDATA[
+<h2>Tagoi ang pribadong impormasyon</h2>
+<p>Tagoi ang pribadong impormasyon para sa dugang nga seguridad. Kon ang diagnostic nga impormasyon ipaambit sa publikong makita nga porma, pananglitan sa Textpattern support forum, kini nagkunhod sa risgo sa seguridad pinaagi sa pagbiya sa sensitibo nga impormasyon sa server.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Development code sa live server"><![CDATA[
+<h2>Development code sa live server</h2>
+<p>Ang mga bersyon sa Textpattern nga anaa pa sa development dili girekomenda gamiton sa production nga mga site. Kini nga pahimangno mahimong kalimtan nga walay kabalaka kon nasabtan ug madawat nimo ang mga risgo.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Dili masuwatan ang direktoryo"><![CDATA[
+<h2>Dili masuwatan ang direktoryo</h2>
+<p>Aron magamit ang abilidad sa pag-upload sa file ug hulagway, kining mga direktoryo kinahanglan masuwatan sa PHP pinaagi sa web server user. Mahimo kini buhaton gamit ang (S)FTP client, o sa command line pinaagi sa pag-issue og <code>chmod 755 /path/to/dir</code> nga command.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Napakyas ang DNS"><![CDATA[
+<h2>Napakyas ang DNS lookup</h2>
+<p>Morag ang URL nga gispecify isip adres sa site dili maabot.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Gi-disable ang pag-upload sa file"><![CDATA[
+<h2>Gi-disable ang pag-upload sa file</h2>
+<p>Ang kasamtangang configuration sa server nagpakita nga gi-disable ang pag-upload sa file. Palihug susiha ug usba ang <code>file_uploads</code> nga setting sa <code>php.ini</code> o pagkonsulta sa host sa site para sa tabang.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess nga file nagkawala"><![CDATA[
+<h2>.htaccess nga file nagkawala</h2>
+<p>Usa ka permanent link mode nga nagkinahanglan og <code>.htaccess</code> file ang gigamit, ug ang file dili makit-an. Ang file giapil sa Textpattern ug anaa sa Textpattern root, tupad sa <code>index.php</code> ug sa <code>textpattern</code> nga direktoryo. Ang girekomendang mga direktiba mao kini:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Dili ma-access ang site index"><![CDATA[
+<h2>Dili ma-access ang site index</h2>
+<p>Ang root nga <code>index.php</code> file nga gispecify isip index para sa site dili mabasa sa server. Palihug susiha ang paglungtad niini ug ang mga permiso.</p>
+        ]]></item>
+        <item id="missing_files" title="Nawala nga mga file"><![CDATA[
+<h2>Nawala nga mga file</h2>
+<p>Usa o labaw pang hinungdanon nga mga file ang nawala gikan sa Textpattern. Siguroha nga tanang gilista nga mga file anaa sa server ug anaa sa husto nga mga lokasyon.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Nawala ang Apache mod_rewrite"><![CDATA[
+<h2>Nawala ang Apache mod_rewrite</h2>
+<p>Ang <code>mod_rewrite</code> module sa Apache wala ma-install o gi-disable. Girekomenda kini aron molihok pag-ayo ang Textpattern. Siguroha ang paglungtad niini ug nga naka-activate, o pagkontak sa host sa site para sa tabang.</p>
+        ]]></item>
+        <item id="modified_files" title="Na-usab nga mga file"><![CDATA[
+<h2>Na-usab nga mga file</h2>
+<p>Ang mga file giisip nga na-usab kon ang ilang tagsa-tagsa ka checksum lahi sa known-good nga checksum list nga gihatag sa Textpattern. Kon bisan unsang mga file sa Textpattern installation lahi sa gilauman, ang mga file ipunting dinhi.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Mga sayop sa MySQL tables"><![CDATA[
+<h2>Mga sayop sa MySQL tables</h2>
+<p>Posible nga adunay pipila ka pagkadaot o kadaut sa MySQL database sa Textpattern. Sulayi ang pag-ayo sa apektadong/nga mga table gamit ang MySQL access tool, sama sa <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> o <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Walay gitakdang temporary nga direktoryo"><![CDATA[
+<h2>Walay gitakdang temporary nga direktoryo</h2>
+<p>Bisan pa og modagan ang Textpattern nga walay temporary nga direktoryo, pipila ka funcionalidad tingali dili molihok sumala sa gilauman kon kini nga pahalipay wala iset. Palihug adto sa Admin Preferences ug iset ang ‘Temporary directory path’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Seksyon nga pareho og ngalan sa direktoryo"><![CDATA[
+<h2>Seksyon nga pareho og ngalan sa direktoryo</h2>
+<p>Ang mga naglungtad nga ngalan sa direktoryo mahimong makabangga sa mga ngalan sa seksyon nga gigamit sa article permlink scheme. Aron malikayan ang mga isyu, susiha ug papasa ang apektadong/nga ngalan sa direktoryo kon luwas buhaton, o usba ang/ang mga ngalan sa seksyon aron dili sila magbangga.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Dili mabasa ang site directory"><![CDATA[
+<h2>Dili mabasa ang site directory</h2>
+<p>Ang direktoryo nga naglangkob sa root nga <code>index.php</code> file nga gispecify isip index para sa site dili mabasa sa server. Palihug susiha ang mga permiso.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Gi-enable ang PHP scripting"><![CDATA[
+<h2>Gi-enable ang PHP scripting</h2>
+<p>Gitugotan sa Textpattern ang mga awtor ug mga administrator sa pag-embed og PHP code sulod sa mga artikulo ug mga panid/form kon gi-enable kining mga feature. Tungod kay kini usa ka kabalaka sa seguridad – bisan unsang matang sa PHP mahimong i-execute, lakip na ang potensyal nga makadaot/delikadong code nga mahimong mosangpot sa pagkaguba sa imong installation o pagtagas sa impormasyon ngadto sa ikatulong mga partido – lig-on nga girekomenda nga imong i-off kining mga opsyon sa <a href="?event=prefs#prefs_group_publish">Preferences panel</a gawas kon tinuod nimong gikinahanglan ang feature.</p>
+<p>Daghang mga pagpalambo sa mga site sa Textpattern nga kaniadto nagkinahanglan og mga snippet sa PHP karon mahimo na sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">core tags</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimum nga mga gikinahanglan nga bersyon"><![CDATA[
+<h2>Minimum nga mga gikinahanglan nga bersyon</h2>
+<p>Ang Textpattern nagkinahanglan og piho nga funcionalidad nga anaa sa PHP programming language ug MySQL database server. Palihug susiha ang mosunod nga lamesa aron mahibal-an ang minimum nga system requirements:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern nga bersyon</th>
+                <th scope="col">Minimum nga PHP nga bersyon</th>
+                <th scope="col">Minimum nga MySQL nga bersyon</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Dugang sa mga system requirements sa ibabaw, gikinahanglan ang mosunod nga mga PHP extension:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a></li>
+</ul>
+<p>Ang <code>php.ini</code> file sa site, global man o lokal, kinahanglan maglangkob og <code>date.timezone</code> nga setting.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Naglungtad pa ang setup directory"><![CDATA[
+<h2>Naglungtad pa ang setup directory</h2>
+<p>Sa dihang na-install na ang Textpattern, ang <code>textpattern/setup</code> nga direktoryo ug ang sulod niini dili na gikinahanglan, ug angay nang papason para sa mga rason sa seguridad.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Dili magtugma ang Site URL"><![CDATA[
+<h2>Dili magtugma ang Site URL</h2>
+<p>Ang Site URL nga gispecify sa ‘Preferences’ panel dili motugma sa aktuwal nga URL nga gigamit sa pagdu-aw sa site.</p>
+<p>Kon ang site maabut pinaagi sa daghang lain-laing URL, ug kon ang site molihok sumala sa gilauman, kini nga mensahe mahimong kalimtan nga walay kabalaka.</p>
+<p>Kung dili, palihug susiha ug usba ang ‘Site URL’ nga setting sa Admin Preferences sumala sa gikinahanglan. Usa ka edukadong pagtag-an sa husto nga Site URL gipakita sa pre-flight warning message sa ‘Diagnostics’ panel.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Ang mga PHP function [&#8230;] gi-disable sa imong server"><![CDATA[
+<h2>Ang mga PHP function [&#8230;] gi-disable sa imong server</h2>
+<p>Ang host sa site o ang server administrator nag-disable sa usa o daghang PHP function, nga pipila niini mahimong makaapekto sa pagdagan sa Textpattern.</p>
+<p>Palihug tan-awa ang <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> para sa dugang nga impormasyon.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Pag-update sa bersyon sa Textpattern"><![CDATA[
+<h2>Pag-update sa bersyon sa Textpattern</h2>
+<p>Adunay mas bag-ong bersyon sa Textpattern nga anaa. Aron mapuslan nimo ang labing bag-ong feature ug seguridad, girekomenda nga imong i-upgrade.</p>
+<p>Palihug hinumdomi nga bisan pa nga among paningkamutan nga ang kasinatian sa pag-upgrade mahimong labing hapsay ug walay kasakit kutob sa mahimo:</p>
+<ul>
+    <li>Kon ang kataposang digit lang ang lahi sa imong kasamtangang bersyon, ang upgrade lagmit nga backward compatible sa mga plugin ug mga tema.</li>
+    <li>Kon ang kataposang duha ka digit lahi sa imong kasamtangang bersyon, ang upgrade tingali nagkinahanglan og pag-update sa pipila ka plugin ug/o tema, bisan pa man lagmit nga magpadayon kini og trabaho sa limitado nga paagi.</li>
+    <li>Kon ang unang digit lahi sa imong kasamtangang bersyon, ang upgrade lagmit nga nagkinahanglan og pag-update sa kadaghanan sa mga plugin ug mga tema. Kon dako ka nga nagsalig sa piho nga feature sa plugin o tema, palihug susiha sa awtor o sa mga miyembro sa komunidad sa dili pa magsugod sa upgrade.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Anaay pre-release sa Textpattern"><![CDATA[
+<h2>Anaa ang Textpattern pre-release update</h2>
+<p>Adunay mas bag-ong pre-release nga bersyon sa Textpattern nga anaa. Nangita kami og aktibong mga boluntaryo aron masulayan kini nga bersyon aron among mahimo ang final release nga pinakabarug ug lig-on kutob sa mahimo. Nangabudlay kami sa paghimo sa kasinatian sa upgrade nga hapsay ug walay kasakit, bisan para sa beta code.</p>
+<p>Kon imong desisyunan nga moapil, palihug hinumdomi:</p>
+<ul>
+    <li>Ayaw gamita kini nga beta release sa production site gawas kon adunay ka nagtrabaho nga backup sa files sa site ug sa database niini, ug kabalo ka sa pagbalik niini.</li>
+    <li>Palihug <a href="https://github.com/textpattern/textpattern/issues">isugilon ang bisan unsang isyu</a>, nga nag-ingon sa beta nga bersyon nga imong gigamit. Posible nga mas gikinahanglan pa ang dugang nga beta release sa dili pa ang stable release, depende sa mga isyu nga gisugilon.</li>
+    <li>Siguroha nga kon imong ideploy kini nga beta release, i-update usab nimo kini ngadto sa final nga bersyon sa dihang ipagawas na.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Ang mga dalan sa Temporary ug Plugin cache nga direktoryo dili angay magtugma"><![CDATA[
+<h2>Ang mga dalan sa Temporary ug Plugin cache nga direktoryo dili angay magtugma</h2>
+<p>Ang mga plugin kinahanglan adunay kaugalingon nilang direktoryo ug dili magbahin sa temporary nga direktoryo. Kini usa ka potensyal nga hulga sa seguridad ug mahimong makadaot sa imong site kon ma-flush ang temporary nga direktoryo. Palihug siguroha nga lahi ang temporary directory path sa plugin cache path.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Dili ma-access ang update server"><![CDATA[
+<h2>Dili ma-access ang update server</h2>
+<p>Napakyas ang pag-check sa mga update, kasagarang tungod sa kahuot sa network o connection timeout. Kining kahimtanga kasagarang malutas sa sulod sa usa ka oras o duha busa sulayi ang pagbisita pag-usab niining panel sa ulahi.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Ang imong pag-install sa PHP kulang sa mail() nga function"><![CDATA[
+<h2>Ang imong pag-install sa PHP kulang sa mail() nga function</h2>
+<p>Ang <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> function sa PHP gi-disable. Busa, dili makapadala og email ang Textpattern ug pipila ka funcionalidad dili magamit. Pananglitan, ang email notification para sa bag-ong mga komento dili ipadala, ug ang mga bag-ong tiggamit dili makadawat og welcome nga email. Bisan pa niana, ang mga tiggamit mahimo gihapon idugang.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Files panel">
+        <item id="file_reassign" title="I-reassign ang file"><![CDATA[
+<h2>I-reassign ang file</h2>
+<p>Sa dihang mag-upload ka og file imbes sa usa nga gi-label nga ‘Missing’, ang file nga imong gipili i-upload sa server ug i-link sa orihinal nga impormasyon sa file sa database. Nagpasabot kini nga ang file name sa orihinal nga file magpabilin, ingon man ang tanang kalabotang impormasyon sama sa gidaghanon sa pag-download ug kategoriya. Ang gidak-on sa file, bisan pa, i-update aron mosanong sa bag-ong file.</p>
+        ]]></item>
+        <item id="file_replace" title="Ilisan ang file"><![CDATA[
+<h2>Ilisan ang file</h2>
+<p>Ang pag-upload og file dinhi mopuli sa sulod sa kasamtangan nga file sa server apan magpabilin nga mao gihapon ang file name. Ang gidaghanon sa pag-download ug uban pang kasayuran nga nalambigit sa file dili maapektuhan.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Petsa sa pagmantala"><![CDATA[
+<h2>Petsa sa pagmantala</h2>
+<p>Ang oras nga ang file gimantala o bag-ohay lang giusab. Mahimong iset ang oras sa takna nga gipatik ang butang, o sa bisan unsang oras sa nangagi o sa umaabot.</p>
+<p>Ang mga kahon nagtumong sa mosunod nga impormasyon:</p>
+<ul>
+    <li>Tuig / Bulan / Adlaw</li>
+    <li>Oras (24-hour format) : Minuto : Segundo</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="I-upload ang file"><![CDATA[
+<h2>I-upload ang file</h2>
+<p>Gamita kini nga porma aron mag-upload og mga file o mga hulagway sa imong server.</p>
+<p>Gamita ang Textile code aron i-render ang mga graphic sulod sa mga artikulo, ang Textpattern code aron ibutang ang mga graphic sa imong mga page template, o HTML code aron ibutang ang mga graphic sa ubang dapit.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Forms panel">
+        <item id="forms_overview" title="Introduksyon sa mga Form"><![CDATA[
+<h2>Introduksyon sa mga Form</h2>
+<p>Sa Textpattern, ang form usa ka snippet o piraso sa text, HTML, ug mga Textpattern tag nga mahimong gamiton pag-usab aron ipakita ang sulod.</p>
+<p>Aniay pananglitan nga form nga mahimong hinganlan og <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Mahimo nimo kini gamiton aron ipakita ang HTML unordered list sa mga may kalabotang artikulo:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Tungod kay ang papel niining form mao ang pag-output sa lista sa mga titulo, kini mahimong gamiton sulod sa ubang mga tag, sama sa pagpakita sa 20 ka artikulo gikan sa kasamtangang seksyon:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Mahimo usab ka nga mogamit og form aron ipakita ang balik-balik nga sulod, sama sa header ug footer sa imong mga page template. Nagpasabot kini nga ang sulod anaa lang sa usa ka lugar ug kon gusto nimo kini usbon, usa ra ka higayon nimo buhaton. Ang pagpakita sa sulod gikan sa usa ka form kasagarang buhaton pinaagi sa:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Ang usa ka form mahimong hangtod 64KB ang gidak-on. Ang pananglitan para sa footer mahimong maglakip og mga heading, mga paragrap, mga link, conditional nga mga tag, ug mga reperensya sa ubang mga form sama sa <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Images panel">
+        <item id="create_thumbnail" title="Paghimo og thumbnail"><![CDATA[
+<h2>Paghimo og thumbnail</h2>
+<p>Nagtugot kanimo nga (usab) paghimo og thumbnail sa gihatag nga dimensyon gikan sa full size nga hulagway.</p>
+<p>Para sa custom nga sizing, ang thumbnail i-scale aron mosanong sa mga dimensyon nga imong gipili, gawas kon imong pilion ang ‘Crop’ nga checkbox. Niadto nga kaso, ang thumbnail paghihimoon gikan sa tunga-tunga sa hulagway nga walay bisan unsang scaling.</p>
+<p>Para sa automatic nga sizing, ang thumbnail i-scale ngadto sa mga dimensyon ug (opsyonal) crop settings sa kasamtangang admin theme.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Ilisan ang hulagway"><![CDATA[
+<h2>Ilisan ang hulagway</h2>
+<p>Ang hulagway nga gi-upload dinhi mopuli lang sa kasamtangan nga nalambigit niining entry sa database.</p>
+        ]]></item>
+        <item id="upload_image" title="I-upload ang hulagway"><![CDATA[
+<h2>I-upload ang hulagway</h2>
+<p>I-upload ang usa o daghang mga hulagway sa imong server.</p>
+<p>Pagkahuman sa pag-upload sa <code>images</code> nga direktoryo, ang file name sa imong orihinal nga hulagway magpabilin lang sulod sa database sa Textpattern; ang hulagway nga file mismo ilisan og ngalan ngadto sa sunod-sunod nga numero + file extension.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Mag-upload sa thumbnail"><![CDATA[
+<h2>Mag-upload sa thumbnail</h2>
+<p>Ang mga hulagway nga full size mahimong ma-assignan sa ilang kaugalingong mga thumbnail. Kini mapuslanon alang sa pag-link ngadto sa – ug pag-indeksar sa – mga hulagway nga full size.</p>
+<p>Ang reperensya sa thumbnail eksakto nga pareho sa reperensya sa hulagway nga full size, nga adunay <code>t</code> nga idugang sa file name. Pananglitan, aron i-reperensya ang thumbnail nga nalambigit sa full size nga hulagway nga natipig sa <code>/images/12.jpg</code> gamiton nimo ang <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Languages panel">
+        <item id="get_textpack" title="I-install ang Textpack"><![CDATA[
+<h2>I-install ang Textpack</h2>
+<p>I-paste ang dugang nga mga string sa pinulongan para sa imong site niini nga kahon ug pilia ang ‘Upload’ aron i-install kini.</p>
+<p>Kasagaran ang mga string moabut isip ma-download nga Textpack, nga giapil sa plugin aron tugotan nga gamiton sa native nga paagi sa Textpattern ang mga string sa pinulongan sa plugin.</p>
+<p>Ang mga taghubad mahimo dayon nga maghubad niining mga pack sumala sa gikinahanglan ug ipanagtag pag-usab ang lokal nga sulod ngadto sa komunidad.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Links panel">
+        <item id="link_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Opsyonal ang mga deskripsyon para sa mga link, ug mapuslanon alang sa pagbutang og caption sa mga link, sa paghimo og <code>title=""</code> (tooltip) nga mga attribute para sa mga link, o simpleng pagtipig sa imong kaugalingong internal nga dokumentasyon.</p>
+        ]]></item>
+        <item id="link_sort" title="Sort value"><![CDATA[
+<h2>Sort value</h2>
+<p>Mapuslanon alang sa natural-language nga paghan-ay sa mga lista sa link, pananglitan base sa apelyido sa tawo imbes sa ilang unang ngalan, o base sa mga hugpong nga sugod sa definite o indefinite article.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Ang adres sa link. Kon ang link nagtudlo sa laing site, kinahanglan kini unahan sa <code>http://</code> o <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Petsa sa pagmantala"><![CDATA[
+<h2>Petsa sa pagmantala</h2>
+<p>Ang oras nga ang link gimantala o bag-ohay lang giusab. Mahimong iset ang oras sa takna nga gipatik ang butang, o sa bisan unsang oras sa nangagi o sa umaabot.</p>
+<p>Ang mga kahon nagtumong sa mosunod nga impormasyon:</p>
+<ul>
+    <li>Tuig / Bulan / Adlaw</li>
+    <li>Oras (24-hour format) : Minuto : Segundo</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Login panel">
+        <item id="remember_login" title="Magpabilin nga nag-login gamit niining browser"><![CDATA[
+<h2>Magpabilin nga nag-login gamit niining browser</h2>
+<p>Kon gi-check, magpabilin kang naka-login sa imong Textpattern account gamit ang kasamtangan nga web browser, hangtod nga mopili ka sa pag-log out. Kon biyaan nga wala gi-check, awtomatikan kang i-log out human sa usa ka yugto sa kawalay kalihokan.</p>
+<p>Nagkinahanglan nga naka-enable ang cookies sa imong browser.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Plugin panel">
+        <item id="install_plugin" title="I-install ang plugin"><![CDATA[
+<h2>I-install ang plugin</h2>
+<p>I-paste dinhi ang mga sulod sa compiled nga plugin text file, unya gamita ang ‘Upload’ aron sugdan ang pag-instalar. Bisan unsang plugin nga imong i-upload nga pareho og ngalan sa usa nga imong gi-install na kaniadto malapsan sa gi-upload nga bersyon.</p>
+<p>Ang plugin text nga imong i-paste dinhi <strong>dili</strong> mao ang raw PHP code kondili Base64-encoded nga text, kasagarang ginasundan sa header nga naglangkob og impormasyon sa plugin (sama sa ngalan sa plugin, bersyon ug deskripsyon, ngalan sa awtor, ug uban pa).</p>
+<p>Kasagaran nimo makuha ang compiled nga mga bersyon sa mga plugin gikan sa <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> o sa gitudlong channel sa plugin author, sama sa ilang website o GitHub.</p>
+<p>Mahimo usab nimong i-paste dinhi ang URL sa Textpattern compiled text file, kon gitugotan sa eksternal nga site.</p>
+<p>Tanang gi-upload nga plugin moagi sa verification step nga nagtugot kanimo sa pagsusi sa plugin code ug mga sulod sa dili pa pag-instalar.</p>
+        ]]></item>
+        <item id="upload_plugin" title="I-upload ang plugin"><![CDATA[
+<h2>I-upload ang plugin</h2>
+<p>Gamita kini nga porma aron mag-upload og plugin file. Ang gi-upload nga mga plugin (ug bisan unsang asset) itipig sulod sa ‘plugins’ nga direktoryo.</p>
+<p>Ang mga type sa plugin nga mahimong i-upload dinhi mao ang:</p>
+<ul>
+<li>Textpattern PHP Template files nga naglangkob og kompleto nga code, metadata, Textpack strings ug help text.</li>
+<li>Textpattern compiled text files nga naglangkob og kompleto nga code, metadata, Textpack strings ug help text.</li>
+<li>Textpattern zip bundles nga naglangkob og manifest information ug code, metadata, Textpack strings, help text ug mga supporting file.</li>
+<li>Raw PHP files (bisan pa nga kini dili magpuno og dugang nga metadata ug dili girekomenda).</li>
+</ul>
+<p>Bisan unsang plugin nga imong i-upload nga pareho og ngalan sa usa nga imong gi-install na kaniadto malapsan sa gi-upload nga bersyon.</p>
+<p>Tanang gi-upload nga plugin moagi sa verification step nga nagtugot kanimo sa pagsusi sa plugin code ug mga sulod sa dili pa pag-instalar.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Preferences panel">
+        <item id="admin_side_plugins" title="Gamiton ang admin-side nga mga plugin?"><![CDATA[
+<h2>Gamita ang admin-side nga mga plugin?</h2>
+<p>Ang mga admin-side nga plugin mahimong usab sa paglihok sa administration interface. Mahimo silang mosakay sa kasamtangan nga mga aksyon, sama sa pag-edit o pagmantala sa mga artikulo, o mahimo silang magdugang og bag-ong mga panel para sa dugang/pinalapad nga funcionalidad.</p>
+<p>Kon gusto nimong mahibalo pa bahin sa admin-side nga mga plugin, tan-awa palihug ang panid nga <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> sa <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>. Ang tanang matang sa plugin nalista sa site nga <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Advanced nga mga kapilian"><![CDATA[
+<h2>Advanced nga mga kapilian</h2>
+<p>Ipakita ang grupo sa advanced nga mga pahalipay, diin ang dugang nga mga setting mahimong i-configure sama sa:</p>
+<ul>
+    <li>Mga PHP function nga gi-enable sa <code>txp:evaluate</code>.</li>
+    <li>Custom nga mga type sa form template.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Tugotan ang PHP sa mga artikulo?"><![CDATA[
+<h2>Tugotan ang PHP sa mga artikulo?</h2>
+<p>Sa dihang gi-enable, kining setting magtugot sa paggamit sa PHP sulod sa mga artikulo. Ang awtor kinahanglan adunay igo nga pribilehiyo aron buhaton kini (sa default, lamang ang <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publishers’ <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editors’ <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> ug <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editors’ <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> makabuhat).</p>
+<p><strong>Lig-on nga girekomenda nga imong i-off kini nga opsyon</strong> gawas kon tinuod nimong gikinahanglan ang feature. Bisan unsang matang sa potensyal nga makadaot/delikadong PHP code nga mahimong maguba sa imong website o magtagas sa impormasyon ngadto sa ikatulong mga partido mahimo idugang sa bisan kinsa nga awtor ug i-execute sa bisan kinsa nga nagtan-aw niadtong artikuloha.</p>
+<p>Ang PHP code kinahanglan nga tangtangon ang opening ug closing nga PHP tag, ug sab ibalot sulod sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> nga mga tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Tugotan ang pag-override sa porma?"><![CDATA[
+<h2>Tugotan ang pag-override sa porma?</h2>
+<p>Kini nga setting nagtugot sa mga awtor sa artikulo sa pag-override sa porma nga gamiton sa dihang i-render ang ilang artikulo. Kon gi-enable, usa ka ‘Override form’ nga dropdown mahimong magamit sa pag-edit sa artikulo.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Tugotan ang PHP sa mga panid?"><![CDATA[
+<h2>Tugotan ang PHP sa mga panid?</h2>
+<p>Sa dihang gi-enable, kining setting nagtugot sa PHP code sulod sa mga page template ug form template.</p>
+<p><strong>Lig-on nga girekomenda nga imong i-off kini nga opsyon</strong> gawas kon tinuod nimong gikinahanglan ang feature. Bisan unsang matang sa potensyal nga makadaot/delikadong PHP code nga mahimong maguba sa imong website o magtagas sa impormasyon ngadto sa ikatulong mga partido mahimo idugang sa lain nga tiggamit ug i-execute sa usa ka wala magdahom nga administrator o bisita sa site.</p>
+<p>Ang PHP code kinahanglan nga wagtangon ang opening ug closing nga PHP tag, ug sab ibalot sulod sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> nga mga tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Pormat sa petsa sa archive"><![CDATA[
+<h2>Pormat sa petsa sa archive</h2>
+<p>Giunsa pagpakita ang mga petsa sa mga artikulo sa mga seksyon sa imong site.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Ipakita ba ang kinutlo sa panid sa pag-edit sa artikulo?"><![CDATA[
+<h2>Ipakita ba ang kinutlo sa panid sa pag-edit sa artikulo?</h2>
+<p>Sa pagpili og ‘No’ ang field sa kinutlo dili ipakita sa awtor sa screen sa pag-edit sa artikulo.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Idugtong ang mga titulo sa mga permalink?"><![CDATA[
+<h2>Idugtong ang mga titulo sa mga permalink?</h2>
+<p>Kini nga setting magdugtong og awtomatikong gihimong bersyon sa titulo sa artikulo ngadto sa URL. Kini awtomatikong gihimo o mahimong ma-override sa kamot sa ‘URL-only title’ sa pag-edit sa artikulo.</p>
+<p>Ang setting adunay epekto lamang kon naggamit ka og clean URLs. Para sa pipila ka pinulongan kini mahimong mopahinabo og taas ug dili nindot nga mga URL, nga sa ingon gusto siguro nimo iset kini sa ‘Off’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Awtomatikong i-adjust ang Daylight Saving Time?"><![CDATA[
+<h2>Awtomatikong i-adjust ang Daylight Saving Time?</h2>
+<p>Kini nga setting nagtugot sa Textpattern sa pag-usab kon kanus-a mahitabo ang DST (Daylight Savings Time) sa imong lugar. Kon kini nakaset sa ‘No’, mahimo nimong usbon ang ‘DST enabled’ nga pahalipay sa kamot.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ang bag-ong komento nagpasabot nga na-update ang site?"><![CDATA[
+<h2>Ang bag-ong komento nagpasabot nga na-update ang site?</h2>
+<p>Ang Textpattern database nagtala kon kanus-a ang labing bag-ong kausaban sa imong site nahitabo. Kon kini nga setting nakaset sa ‘Yes’, ang bag-ong komento usab mag-update niining kantidad. Kini nga kantidad gigamit pananglitan para sa funcionalidad nga <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="I-apply ang rel=&quot;nofollow&quot; sa mga komento?"><![CDATA[
+<h2>I-apply ang rel="nofollow" sa mga komento?</h2>
+<p>Kon nakaset sa ‘Yes’, kini magdugang og dugang nga attribute sa mga link nga gihimo sa mga komento. Gituyo kini nga lakang aron kuhaan ang insentibo sa mga comment spammer ug gisugdan sa daghang search engine ug mga software developer. Mahimo kang makakat-on pa pinaagi sa pagbasa sa <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">pahibalo sa Google <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+<p><strong>Timan-i:</strong> Kini nga setting dili makaapekto sa funcionalidad sa imong site. Mahimo lamang kini makababag o makapaminus sa impluwensya sa imong mga komento sa dihang pipila ka search engine nag-ranggo sa mga site nga gilinkan gikan niadtong mga komento.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Ipresentar ang mga komento isip numbered list?"><![CDATA[
+<h2>Ipresentar ang mga komento isip numbered list?</h2>
+<p>Nagatino kon ang mga komento sa artikulo ibalot ba gamit ang HTML <code>&lt;ol&gt;</code> tag ug ang tagsa-tagsa ka komento ibalot sa <code>&lt;li&gt;</code> tag (nga hinungdan nga ipresentar ang mga komento isip numbered list), o kon ang tagsa-tagsa ka komento ibalot imbes gamit ang <code>&lt;div&gt;</code> tag.</p>
+<p>Sa bisan unsang kantidad, mahimo nimong i-override ang mga tag nga gigamit sa matag form pinaagi sa pag-usab sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>, nga makita sa <code>comments_display</code> nga form.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Awtomatikong idugtong ang mga komento sa mga artikulo?"><![CDATA[
+<h2>Awtomatikong idugtong ang mga komento sa mga artikulo?</h2>
+<p>Kini nga setting nagdeterminar kon ang mga komento ug ang comment form awtomatikong idugtong ba sa tanang indibidwal nga artikulo (pinaagi sa awtomatikong paglakip sa sulod sa <code>comments_display</code> nga form).</p>
+<p>Kasagaran gusto nimo nga nakaset kini sa ‘No’, kay naghatag kini og mas dako nga kagawasan sa pagposisyon sa imong mga komento sa disenyo sa site. Kinahanglan nimo idugang ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> sa kamot sa bisan unsang template nga nakabase sa artikulo diin gusto nimong motungha ang mga komento.</p>
+<p>Kon nakasinati ka nga nadoble ang pagpakita sa mga komento sa usa ka artikulo, dako ang posibilidad nga ang imong mga template adunay <code>&lt;txp:comments /&gt;</code> tag sa template apan nakaset usab ang ‘Automatically append comments to articles?’ sa ‘Yes’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Pormat sa petsa sa mga komento"><![CDATA[
+<h2>Pormat sa petsa sa mga komento</h2>
+<p>Giunsa pagpakita sa imong mga bisita sa site ang mga petsa sa komento.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Default nga paanyaya sa komento"><![CDATA[
+<h2>Default nga paanyaya sa komento</h2>
+<p>Kon gitugotan nimo ang mga bisita nga mokomento sa imong site, kini mao ang default nga teksto sa paanyaya. Pananglitan:</p>
+<ul>
+    <li>Mga komento</li>
+    <li>Pagdugang og komento</li>
+    <li>Feedback</li>
+    <li>Pag-annotate</li>
+</ul>
+<p>Hinumdomi nga ang teksto sa paanyaya mahimong usbon pirmi sa matag artikulo.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Gi-disable ang mga komento human sa"><![CDATA[
+<h2>Gi-disable ang mga komento human sa</h2>
+<p>Gamita kini aron iset ang gidugayon sa oras human niini nga ang pagkomento i-off para sa mga artikulo (mahimong iset sa ‘Never’ aron tugotan ang walay kinutuban nga oras sa pagkomento).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Tugotan ang hulagway sa nagkomento sa mga komento?"><![CDATA[
+<h2>Tugotan ang hulagway sa nagkomento sa mga komento?</h2>
+<p>Kon kini nga opsyon nakaset sa ‘No’, bisan unsang mga hulagway nga gilakip sa mga komento pagatangtangon.</p>
+        ]]></item>
+        <item id="comments_mode" title="Mode sa mga komento"><![CDATA[
+<h2>Mode sa mga komento</h2>
+<p>Kon ‘nopopup’ ang napili (rekomendado) ang kasamtangan nga bintana i-refresh aron ipakita lang ang kasamtangan nga artikulo, nga adunay mga komento sa ubos.</p>
+<p>Kon ‘popup’ ang napili, usa ka bag-ong bintana sa browser magbukas sa dihang i-klik ang link sa mga komento (gamit niini ang <code>popup_comments</code> nga form).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Imoderate ang mga komento?"><![CDATA[
+<h2>Imoderate ang mga komento?</h2>
+<p>Kon kini nakaset sa ‘Yes’, ang matag bag-ong komento awtomatikong i-off ang visibility hangtod marepaso kini. Kinahanglan nimong imoderate sa kamot ug himoong makita ang matag komento (usa ka mensahe ipadala sa email ngadto sa awtor sa artikulo sa dihang madawat ang bag-ong komento).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Ang mga komento naka-on by default?"><![CDATA[
+<h2>Ang mga komento naka-on by default?</h2>
+<p>Kon kini nakaset sa ‘Yes’, awtomatikong ma-enable ang mga komento para sa matag gipatik nga artikulo. Kon nakaset sa ‘No’, kinahanglan nimong i-enable ang mga komento sa article ‘Write’ panel sa matag higayon nga gusto nimo modawat og mga komento.</p>
+<p>Ang mga komento mahimong i-enable/disable sa bisan unsang oras, sa matag artikulo.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Nanginahanglan ba ang mga komento sa email address sa nagkomento?"><![CDATA[
+<h2>Nanginahanglan ba ang mga komento sa email address sa tiggamit?</h2>
+<p>Kon nakaset sa ‘Yes’, ang mga tawo nga gusto mokomento sa imong artikulo kinahanglan mosulod og email address sa comment input form. Dili sila makapadala og komento kon dili sila motugot og email address.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Nanginahanglan ba ang mga komento sa ngalan sa nagkomento?"><![CDATA[
+<h2>Nanginahanglan ba ang mga komento sa ngalan sa nagkomento?</h2>
+<p>Kon nakaset sa ‘Yes’, ang mga tawo nga gusto mokomento sa imong artikulo kinahanglan mosulod og ngalan sa comment input form. Dili sila makasumite og komento kon dili sila maghatag og ngalan.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="I-email ang mga komento ngadto sa awtor?"><![CDATA[
+<h2>I-email ang mga komento ngadto sa awtor?</h2>
+<p>Kon nakaset sa ‘Yes’, sa matag higayon nga adunay bag-ong komento nga madawat sa usa ka artikulo, usa ka kopya ipadala pinaagi sa email ngadto sa awtor nianang artikuloha.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Tugotan ang mas daghang Textile markup sa mga komento?"><![CDATA[
+<h2>Tugotan ang mas daghang Textile markup sa mga komento?</h2>
+<p>Sa dihang nakaset sa ‘Yes’, ang mga komento mahimong maglangkob og mga elemento sa <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> nga sa kasagarang paagi itungha lang isip plain text, sama sa:</p>
+<ul>
+    <li>mga heading</li>
+    <li>mga ordered ug unordered nga lista</li>
+    <li>mga footnote</li>
+    <li>mga lamesa</li>
+    <li>code</li>
+    <li>pinalapad nga block syntax (<code>bc..</code>, <code>bq..</code>, ug uban pa)</li>
+</ul>
+<p><strong>Timan-i:</strong> Alang sa seguridad, ang raw HTML himoon nga ordinaryong text.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Mga account nga gitugotan nga mag-login sabay-sabay"><![CDATA[
+<h2>Mga account nga gitugotan nga mag-login sabay-sabay</h2>
+<p>Usa ka comma-separated nga lista sa mga login account name nga mahimong mag-login sa daghang browser/session. Mapuslanon kini sa development aron maambit ang login uban sa mga kliyente.</p>
+<p>Ang paggamit niining feature usa ka hulga sa seguridad ug <strong>dili girekomenda sa live nga mga site</strong>. Ang Diagnostics magpagawas og pahimangno kon ang imong user account nakakonpigurasyon para sa concurrency sa live nga website.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Custom nga mga type sa form template"><![CDATA[
+<h2>Custom nga mga type sa form template</h2>
+<p>Dugang sa standard nga mga type sa form template (article, file, misc, ug uban pa), ang mga Publisher makahimo sa paghubit sa custom nga mga type. Ang katuyoan sa custom nga mga type sa form template mao ang duha ka butang: mas sayon nga klasipikasyon sa form template ug paghubit sa custom asset.</p>
+<p>Ang pormat sa pahalipay mao ang <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>, nga ang matag seksyon nagtugma sa usa ka type sa form template.</p>
+<p>Aron hubiton ang custom nga form type (pananglitan <code>js</code>) kinahanglan magdugang (sa laing linya) og <code>[js]</code> nga seksyon. Ang default nga titulo mahimong iset pinaagi sa <code>title="Javascript"</code> nga entry sa katugbang nga seksyon. Kon gikinahanglan, ang lokal nga mga titulo mahimo usab idugang (pananglitan <code>ru="Скрипт"</code>).</p>
+<p>Dugang pa, ang form template <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> (kaniadto nailhan nga MIME type) mahimong ispecify, pananglitan <code>mediatype="application/javascript"</code>. Kini nagpa-usab sa mga form template niini nga type ngadto sa custom asset nga mahimong i-serve isip gispecify nga media type, gikan man sa database o gikan sa disk (flat files) pinaagi sa <code>&lt;txp:output_form /&gt;</code> nga tag. Pananglitan, ang form template nga ginganlan og <code>myscript.js</code> sa <code>[js]</code> nga type nga adunay media type nga <code>application/javascript</code> mahimong iapil sa imong code sama niini:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Kini maghimo sa mosunod nga HTML <code>&lt;script&gt;</code> nga tag:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Lamang ang mga form template nga adunay name extension nga nagtugma sa ilang type (pananglitan <code>myscript.js</code>) mahimong i-serve isip flat files. Sa niini nga kaso, dili na sila i-proseso sa Textpattern ug ma-access pinaagi sa ilang URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Mga kostumbre nga field"><![CDATA[
+<h2>Mga kostumbre nga field</h2>
+<p>Ang mga kostumbre nga field gigamit sa pagtipig sa dugang nga datos sa artikulo. Mahimo kang maghubit og hangtod napulo pinaagi sa paghatag og ngalan dinhi. Ang matag usa motungha isip lahi nga field sa Write panel, aron tugotan ang kostumbre nga datos nga i-associate sa matag artikulo.</p>
+<p>Mahimo nimong hinganlan ang mga field sa bisan unsang paagi nga gusto nimo, apan hunahunaa ang mosunod:</p>
+<ul>
+<li>Ang paggamit og mga espasyo nagpalambo sa pagkapasabut sa Write panel, apan ang mga field dayon <em>dili</em> magamit isip sorting o filtering parameter sa article_custom nga tag. Hunahuna ang paggamit og underscore imbes kon gusto nimong gamiton kini nga funcionalidad.</li>
+<li>Pangandami sa pagngalan sa mga field nga dili sila magbangga sa mga reserved field name sa Textpattern. Pananglitan, ayaw gamita ang <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, ug uban pa kay makadawat ka og katingalahan nga resulta o naguba nga mga site.</li>
+<li>Ang datos sa matag field limitado sa 255 ka karakter sa text lamang.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Pormat sa petsa"><![CDATA[
+<h2>Pormat sa petsa</h2>
+<p>Kini nga opsyon makaapekto lamang kon giunsa pagpakita ang mga petsa sa artikulo sa front page sa imong site.</p>
+        ]]></item>
+        <item id="default_event" title="Default nga panel"><![CDATA[
+<h2>Default nga panel</h2>
+<p>Ang Textpattern administration interface panel nga unang motungha sa dihang adunay mag-login.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Default nga kahimtang sa pagmantala"><![CDATA[
+<h2>Default nga kahimtang sa pagmantala</h2>
+<p>Nagadumala sa kahimtang sa visibility sa pagmantala sa bag-ong gihimong mga artikulo sa Textpattern.</p>
+<p>Hinumdomi nga kini nga pahalipay dili makaapekto sa kahimtang sa mga artikulo nga gihimo o gi-edit sa wala pa ang bisan unsang kausaban.</p>
+<p>Ang default nga kahimtang sa pagmantala usa sa mosunod:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>Ang usa ka <strong>draft</strong> nga artikulo giisip nga work-in-progress ug dili makita sa gawas sa Textpattern administration area (i.e. dili makita sa Textpattern front side ug dili gi-syndicate sa mga feed).</p>
+<p>Ang usa ka <strong>hidden</strong> nga artikulo dili makita sa gawas sa Textpattern administration area.</p>
+<p>Ang usa ka <strong>pending</strong> nga artikulo giisip nga andam na para sa pagmantala ug nagpaabot sa pag-aprubar, apan dili makita sa gawas sa Textpattern administration area.</p>
+<p>Ang usa ka <strong>live</strong> nga artikulo kasagarang makita sa gawas sa Textpattern administration area (i.e. makita sa Textpattern front side, gi-syndicate sa mga feed kon tugotan sa pahalipay). Kon ang artikulo live ug adunay petsa sa pag-expire, magpabilin nga live ang status human maabot ang petsa, apan motungha lang ang artikulo sa gawas sa administration area kon gitugotan nga ipatik ang mga na-expire nga artikulo.</p>
+<p>Ang usa ka <strong>sticky</strong> nga artikulo susama sa <strong>live</strong> nga artikulo sa dihang mahimo kini makita sa gawas sa Textpattern administration area apan <strong>dili</strong> motungha sa mga lista sa artikulo gawas kon ang tagsa ka <code>article</code> o <code>article_custom</code> nga tag naglakip og <code>status</code> attribute nga adunay kantidad nga <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Pilia kon unsang HTML doctype ang gusto nimong gamiton (HTML5 o XHTML). Kini makaapekto sa comment input form, Textile rendering sa <code>&lt;abbr&gt;</code> o <code>&lt;acronym&gt;</code>, ug sa <code>&lt;link&gt;</code> nga mga tag nga gihimo sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Enable ba ang development theme preview?"><![CDATA[
+<h2>Enable ba ang development theme preview?</h2>
+<p>Ang mga tiggamit nga adunay igo nga pribilehiyo (sa default, kadtong adunay papel nga Publisher ug Designer) makalami nga magpalambo ug mag-preview sa bag-ong tema samtang ang uban pang tiggamit makita gihapon nila ang daang tema (hangtod nga i-deploy ang bag-o).</p>
+<p>Bisan pa, ang mga pribilehiyado nga tiggamit nga dili gusto moapil sa themes development makapalong sa development theme preview. Silang unya serbisyohan sa kasamtangang ‘public’ nga tema, pareho sa ordinaryong mga bisita sa site.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Enable ba ang suporta sa short tag?"><![CDATA[
+<h2>Enable ba ang suporta sa short tag?</h2>
+<p>Ang mga Textpattern tag naglambigit sa porma nga <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Posible nga maminusan ang gidaghanon sa pag-type pinaagi sa pag-enable sa shorthand notation diin ang <code>txp:</code> mahimong tangtangon pinaagi sa pagsunod sa pipila ka yano nga giya. Ania ang pipila ka pananglitan aron ipakita ang konsepto:</p>
+<ul>
+    <li>Ang <code>&lt;txp:article_id /&gt;</code> mahimong <code>&lt;article::id /&gt;</code></li>
+    <li>Ang <code>&lt;txp:recent_articles/&gt;</code> mahimong <code>&lt;recent::articles /&gt;</code></li>
+    <li>Ang <code>&lt;txp:file_download_list /&gt;</code> mahimong <code>&lt;file::download_list /&gt;</code></li>
+    <li>Ang <code>&lt;txp:smd_if /&gt;</code> mahimong <code>&lt;smd::if /&gt;</code></li>
+    <li>Ang <code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> mahimong <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (timan-i nga ang plugin prefix mahimong gamiton para sa <code>else</code> nga tag).</li>
+</ul>
+<p>Kon ang tag naglangkob og underscore ug imong gi-enable ang short tags, ang batakang konsepto mao ang:</p>
+<ol>
+    <li>Tangtanga ang <code>txp:</code> nga prefix.</li>
+    <li>Ilisi ang unang higayon sa underscore ngadto sa <code>::</code>.</li>
+</ol>
+<p>Timan-i nga ang pag-set niini nga pahalipay dili makaapekto sa abilidad sa paggamit sa <code>&lt;txp:output_form /&gt;</code> nga short code aron i-render ang form snippets. Mahimo gihapon nimo gamiton ang <code>&lt;txp::shortcode /&gt;</code>, nga hubaron isip <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Enable ba ang XML-RPC server?"><![CDATA[
+<h2>Enable ba ang XML-RPC server?</h2>
+<p>Kon gusto nimong gamiton ang <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> para sa remote nga pagkontrol sa Textpattern (pananglitan desktop o mobile apps) kinahanglan nimong i-on ang XML-RPC server pinaagi sa pag-set niini sa ‘Yes’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Gamita ang enhanced mail features"><![CDATA[
+<h2>Gamita ang enhanced mail features</h2>
+<p>Ang pag-set niini sa ‘No’ mag-agpas sa tanang email – sama sa mga request sa pag-reset sa account password, ug email gikan sa mga plugin sama sa com_connect – pinaagi sa PHP nga <code>mail()</code> function. Ang pagpili og ‘Yes’ mogamit sa gi-apil nga PHPMailer imbes, nga nag-abli sa opsyonal nga mga setting para sa pag-agi sa mail pinaagi sa eksternal nga mga SMTP server.</p>
+<p>Kon nasinati nimo ang kalisud sa pag-abot sa mga email (ilabi na sa online nga mga provider sama sa Gmail, Outlook, Yahoo!, ug uban pa), ang lagmit nga hinungdan mao kay ang imong domain dili makita nga kasaligan nga gigikanan. Ang pagbalhin sa ‘Yes’ makapaayo sa deliverability. Dugang pa, ang paggamit sa SMTP makahatag og mas maayo nga compatibility sa pipila ka email provider ug labi pang makapalambo sa deliverability.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Ang mga log mo-expire human sa pila ka adlaw?"><![CDATA[
+<h2>Ang mga log mo-expire human sa pila ka adlaw?</h2>
+<p>Sa dihang gi-enable ang Textpattern logging, mahimo nimong ispecify kon dugay (sa adlaw) ang mga log ang angay ipabilin. Ang ‘7’ magpabilin nga magamit ang mga log sulod sa pito ka adlaw.</p>
+<p><strong>Timan-i:</strong> Ang mga log kutlun ra sa dihang imong tan-awon ang ‘Visitor logs’ panel, ug kung dili magpadayon sila sa pagtubo sa gidak-on.</p>
+        ]]></item>
+        <item id="file_base_path" title="File directory path"><![CDATA[
+<h2>File directory path</h2>
+<p>Kini nag-set sa <strong>absolute path</strong> ngadto sa direktoryo diin ang mga gi-upload nga file permanente nga itipig. Ang PHP nagkinahanglan og write access niini nga direktoryo.</p>
+<p><strong>Timan-i:</strong> Hunahuna ang pagbalhin niining direktoryo gawas sa publiko nga ma-access nga docroot sa imong website, para sa dugang nga seguridad.</p>
+        ]]></item>
+        <item id="file_download_header" title="File download header"><![CDATA[
+<h2>File download header</h2>
+<p>Nagtugot kanimo nga i-customize kon giunsa pagdumala ang pag-download sa file.</p>
+<p>Kasagaran ang tanang download tratuhon isip attachment ug i-download (depende sa kon giunsa pagkonpigurasyon sa imong browser ang pagdumala nianang type sa file). Kon gusto nimo maghatag og mga timailhan kon giunsa nimo gusto tratuhon ang pipila o tanang type sa file, mahimo kang mosuplay og tag code dinhi aron buhaton kini. Ang pananglitan mao ang pagpakita sa PDF file nga imong gidugang sa Textpattern nga kategoriya 'inline-pdf' nga inline, imbes nga i-download:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maximum nga gidak-on sa gi-upload nga file (sa bytes)"><![CDATA[
+<h2>Maximum nga gidak-on sa gi-upload nga file (sa bytes)</h2>
+<p>Mahimo nimong pig-otan ang maximum nga gidak-on (sa bytes) para sa pag-upload sa file. Hinumdomi nga kining kantidad limitado usab sa configuration sa PHP. Kon mahibal-an sa Textpattern nga ang imong PHP configuration naglimit sa upload size sa mas gamay nga kantidad, awtomatikan kini nga i-correct paubos. Kon gusto nimong tugotan ang mas dagkong pag-upload sa file pinaagi sa upload gikan sa browser, kontaka ang imong host (ang may kalabutan nga mga kantidad sa <code>php.ini</code> mao ang <code>post_max_size</code>, <code>upload_max_filesize</code> ug <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Time zone"><![CDATA[
+<h2>Time zone</h2>
+<p>Aron ipakita ang mga petsa sa imong lokal nga time zone, palihug pili-a ang imong time zone.</p>
+        ]]></item>
+        <item id="img_dir" title="Direktoryo sa imahe"><![CDATA[
+<h2>Direktoryo sa imahe</h2>
+<p>Kon gusto nimong i-customize ang ngalan sa imong images nga direktoryo, mahimo nimo kini buhaton dinhi. Kinahanglan una nimong paghimo ang direktoryo sa root sa imong Textpattern installation, kinahanglan sab nga masiguro nimo nga makasulat ang PHP niini nga direktoryo.</p>
+<p>Kining dalan kanunay usa ka <strong>relative path</strong> (padulong sa direktoryo sa imong root Textpattern installation).</p>
+<p>Ang default mao ang <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Iapil ba ang email address sa Atom feeds?"><![CDATA[
+<h2>Iapil ba ang email address sa Atom feeds?</h2>
+<p>Kini nagtugot kanimo sa pag-apil sa email address sa awtor (sumala sa gitakda sa ilang user account) sa artikulo sa bahin nga <code>author</code> sa imong Atom feeds.</p>
+        ]]></item>
+        <item id="is_dst" title="Gitugotan ang Daylight Saving Time?"><![CDATA[
+<h2>Gitugotan ang Daylight Saving Time?</h2>
+<p>Kon naka-enable ba karon ang DST (Daylight Saving Time) para sa imong time zone.</p>
+        ]]></item>
+        <item id="logging" title="Logging"><![CDATA[
+<h2>Logging</h2>
+<p>Mahimo nimong pilion ang lebel sa visitor logging nga gihimo sa Textpattern:</p>
+<ul>
+    <li><strong>All hits:</strong> ang Textpattern motala sa tanang page view sa imong site</li>
+    <li><strong>Referrers only:</strong> ang Textpattern motala lang sa mga pagbisita nga girefer gikan sa ubang site</li>
+    <li><strong>None:</strong> ang Textpattern dili motala sa bisan unsang page view</li>
+</ul>
+<p>Sugod sa Textpattern 4.7.0, walay visitor IP address information ang gi-kolekta o gitipigan sa Textpattern. Kon nagkolekta o nagtipig ka og IP address gawas sa Textpattern, palihug pagkuha sa angay nga mga lakang sa pagtipig ug/o paggamit sa datos sumala sa bisan unsang aplikableng balaod, sama sa <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>, ug pagpatuman og kusgan nga seguridad sa matag bahin sa imong server ug Textpattern installation aron malikayan nga makompromiso kini nga datos.</p>
+<p>Lig-on nga giasoy nga kinahanglan nimo biyaan kini nga setting sa iyang default, ‘None’, gawas kon tinuod nimong gikinahanglan kini nga impormasyon ug, dugang pa, publiko nimong ipahayag ang gitu-yong paggamit niini.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maximum nga gitas-on sa URL (sa karakter)"><![CDATA[
+<h2>Maximum nga gitas-on sa URL (sa karakter)</h2>
+<p>Kini naglikay nga ang mga URL nga mas taas kaysa gispecify nga gitas-on molihok. Mapuslanon kini sa paglimit sa kadaut ug sa seguridad sa site.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Ipakita ang admin-side nga inline help links"><![CDATA[
+<h2>Ipakita ang admin-side nga inline help links</h2>
+<p>Kon gusto nimong tagoon ang admin-side nga inline help links (Textpattern help pop-up windows) sa tibuok sistema, ibalhin kini nga setting sa ‘None’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Tagoon ba ang email address sa nagkomento?"><![CDATA[
+<h2>Tagoon ba ang email address sa nagkomento?</h2>
+<p>Kini nga setting nagkontrol kon ang email address sa nagkomento ipakita ba publiko.</p>
+<p>Girekomenda nga dili ipakita ang mga email address, isip pagrespeto sa imong mga tiggamit, apan adunay pipila ka kahimtang nga gusto nimong ipakita ang email address sa nagkomento.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Gamita ba ang ISO-8859-1 encoding sa mga email (default kay UTF-8)?"><![CDATA[
+<h2>Gamita ba ang ISO-8859-1 encoding sa mga email (default kay UTF-8)?</h2>
+<p>Gigamit sa Textpattern ang UTF-8 encoding kutob sa mahimo sa default, lakip na para sa outgoing email. Bisan pa, pipila ka daang email client (lakip ang pipila ka bersyon sa Microsoft Outlook) walay tarong nga suporta sa UTF-8. Kon maka-encounter ka og mga gubot nga karakter sa email, kini nga setting mag-convert sa text ngadto sa ISO-8859-1 encoding sa dili pa ipadala kini.</p>
+<p><strong>Timan-i:</strong> Kon naggamit ka og pinulongan nga ang mga karakter niini dili ma-representar sa ISO-8859-1, panalitan dili ka matabangan niining setting. Dapat ka mangita og email client nga compatible sa UTF-8 (o Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Mga type sa override form"><![CDATA[
+<h2>Mga type sa override form</h2>
+<p>Pilia kon unsang mga form type ang angay nga adunay ilang template nga mahimong magamit sa Write panel isip override forms.</p>
+        ]]></item>
+        <item id="permlink_format" title="Permalink title URL pattern"><![CDATA[
+<h2>Permalink title URL pattern</h2>
+<p>Kini naghubit sa paagi sa paghimo ug pag-assign sa mga URL sa artikulo sa dihang ang non-messy nga mode gigamit.</p>
+<p>Sa dihang ang artikulo gipatik, ang URL niini gihimo gikan sa titulo sa artikulo gawas kon piho nga URL ang gihatag sa URL-only title nga field.</p>
+<p>Tan-awa ang mosunod nga pananglitan sa titulo sa artikulo: <em>Ann and Bob eat cake</em></p>
+<p>Sa dihang ang permalink title URL pattern nga opsyon nakaset sa ‘Hyphenated (title-like-this)’, ang URL para sa artikulo mao ang:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Sa dihang ang permalink title URL pattern nga opsyon nakaset sa ‘Intercapped (TitleLikeThis)’, ang URL para sa artikulo mao ang:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Article URL pattern"><![CDATA[
+<h2>Article URL pattern</h2>
+<p>Kini naghubit sa paagi sa pag-abot sa indibidwal nga mga artikulo pinaagi sa URL nga gipakita gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
+<p>Ang ‘?=messy’ nga mode mao ang labing compatible – molihok kini nga halos walay gikinahanglan nga configuration – apan labing gamay og benepisyo sa terms sa readability sa URL ug search engine optimization (SEO). Sa niini nga mode ang mga URL para sa mga artikulo sa imong site magtan-aw ingon niini:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Ang tanang uban nga mode nagkinahanglan sa URL rewrite nga funcionalidad sa web server (pananglitan Apache <code>mod_rewrite</code> o NGINX rewrite directives sa <code>server</code> block). Kon ang imong server dili mosuporta sa URL rewrite nga funcionalidad kontaka ang imong web host o gamita ang ‘?=messy’ nga mode nga gihulagway sa ibabaw.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Plugin cache directory path"><![CDATA[
+<h2>Plugin cache directory path</h2>
+<p>Kini nga setting kasagarang gigamit para sa mga developer sa plugin. Sa dihang gispecify, mahimo nimong ibutang ang plugin source file (dili compiled) niini nga direktoryo ug awtomatikong i-load kini sa Textpattern, busa dali nimo ma-edit ang plugin ug dayon makita ang epekto niini nga walay kinahanglan nga i-install/activate ang plugin. <strong>Panagana</strong> apan kay sa paggamit niining pamaagi, ang guba nga plugin (nga mapakyas og compile) mahimong usab maguba sa Textpattern!</p>
+<p>Girekomenda nga imong i-load ang mga plugin pinaagi sa standard nga ‘Plugins’ panel sa production site, imbes sa paggamit sa plugin cache directory.</p>
+<p><strong>Timan-i:</strong> Ayaw ispecify ang parehas nga direktoryo para sa ‘temporary’ ug ‘plugin cache’, kay kini magdangat og problema (sulayan sa Textpattern nga patakbuhon ang sulod sa temporary log file isip mga plugin).</p>
+        ]]></item>
+        <item id="production_status" title="Status sa production"><![CDATA[
+<h2>Status sa production</h2>
+<p>Ang Textpattern site adunay usa sa tulo ka mode:</p>
+<ol>
+    <li>‘Debugging’</li>
+    <li>‘Testing’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Debugging mode</h3>
+<p>Ang tanang PHP error reporting sa imong live nga site makita, ingon man ang mga pahimangno bahin sa nagakalisud nga code ug plugin. Dugang pa, ang mosunod nga impormasyon makita sa dihang imong tan-awon ang HTML source sa live nga mga panid:</p>
+<ul>
+    <li>ang oras nga gigahin sa server sa pagtukod sa panid (‘Runtime’)</li>
+    <li>ang gidaghanon sa MySQL queries nga gi-execute</li>
+    <li>approximate nga peak memory usage</li>
+    <li>tanang Textpattern tag nga naatubang sa dihang gitukod ang panid (gitawag sab nga tag trace)</li>
+</ul>
+<h3>Testing mode</h3>
+<p>Ang tanang PHP error reporting sa imong live nga site makita, ingon man ang mga pahimangno bahin sa nagakalisud nga code ug plugin. Ang mosunod nga impormasyon makita sa dihang imong tan-awon ang HTML source sa live nga mga panid:</p>
+<ul>
+    <li>ang oras nga gigahin sa server sa pagtukod sa panid (‘Runtime’)</li>
+    <li>ang gidaghanon sa MySQL queries nga gi-execute</li>
+    <li>approximate nga peak memory usage</li>
+</ul>
+<h3>Live mode</h3>
+<p>Walay error reporting o diagnostic nga impormasyon nga ipadala sa panid. Kasagarang Live mode ang gipili, tungod kay naghatag kini sa labing maayong kasinatian sa tiggamit ug nagbutang sa labing gamay nga load sa server.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Front-side nga tema"><![CDATA[
+<h2>Front-side nga tema</h2>
+<p>Ang default nga front-side nga tema nga gamiton sa dihang adunay moadto sa imong public-facing nga website. Usa ka pre-installed nga default nga tema ang giapil sa Textpattern, uban ang opsyon nga magsugod nga walay tema. Mahimo usab nimong idugang ang mga theme package sa <code>textpattern/themes</code> nga direktoryo aron himoong magamit.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Ipapublish ba ang mga na-expire nga artikulo?"><![CDATA[
+<h2>Ipapublish ba ang mga na-expire nga artikulo?</h2>
+<p>Kon nakaset sa ‘Yes’, magpadayon nga magpakita sa imong site ang mga na-expire nga artikulo human molabay ang ilang expiry date. Mahimo nimong gamiton ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> aron ipakita ang alternatibong sulod o markup para sa mga na-expire nga artikulo.</p>
+<p>Kon nakaset sa ‘No’, ang mga na-expire nga artikulo tangtangon gikan sa public site ug motubag og "410 Gone" nga HTTP status imbes. Ang default nga setting mao ang ‘No’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Ipadala ang login nga detalye gikan niining email address"><![CDATA[
+<h2>Ipadala ang login nga detalye gikan niining email address</h2>
+<p>Ispecify ang email address nga gamiton isip ‘From:’ address sa mensahe nga adunay login information para sa bag-ong mga tiggamit.</p>
+<p>Kon kini nga pahalipay biyaan nga walay sulod o naglangkob og dili balidong email address, gamiton sa Textpattern ang ngalan ug adres sa kasamtangang naka-login nga tiggamit imbes.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Pila ka artikulo ang angay iapil sa mga feed?"><![CDATA[
+<h2>Pila ka artikulo ang angay iapil sa mga feed?</h2>
+<p>Kini mao ang maximum nga gidaghanon sa kasamtangang mga artikulo nga i-syndicate sa usa ka higayon, sa RSS ug Atom nga pormat.</p>
+<p>Girekomenda ang ubos nga kantidad, sama sa <code>5</code> hangtod <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Gidaghanon sa extra parser sweeps"><![CDATA[
+<h2>Gidaghanon sa extra parser sweeps</h2>
+<p>Kasagarang ang Textpattern tag parser mopuli sa tanang tag gamit ang sulod gikan sa database sa usa ka sweep sa page template. Sa pipila ka kaso, kini mahimong dili igo, pananglitan:</p>
+<ul>
+    <li>Sa paggamit sa low load order nga plugin isip tag attributes</li>
+    <li>Pag-ilis sa code sulod sa <code>&lt;txp:php&gt;</code> nga mga tag</li>
+    <li>Paglikay sa mga elemento sa panid sa sayong bahin sa panid aron makadawat sila og sulod nga gikan sa tag nga gi-proseso sa ulahi</li>
+</ul>
+<p>Tradisyonal nga ang Textpattern modagan og usa ka extra sweep (gitawag og ‘secondpass’) alang sa legacy nga mga rason, busa ang default value sa kini nga pahalipay mao ang <code>1</code>. Bisan pa, ang daghang sweeps nagdugang sa posibilidad nga ang wala tuyoa nga mga tag makatakas ug ma-proseso. Ang bag-ong mga pagpaayo sa tag parser nakapaminus sa panginahanglan niining second pass. Busa, gawas kon gigamit nimo ang second sweep para sa piho nga rason, palihug ibanan kini nga kantidad ngadto sa <code>0</code> aron mas luwas ang imong site.</p>
+<p>Kon sa sunod imong makaplagan nga adunay mga tag nga wala ma-proseso nga gipakita sa imong website (ug walay laing sayop sa tag nga gipakita sa Testing/Debugging nga mga mode tungod sa dili managsama nga pares sa tag) palihug kontaka kami uban sa imong pananglitan sa page template/code/plugin. Nagtinguha kami nga wadan og panginahanglan sa extra parser passes, ug kining impormasyon motabang kanamo sa paglambo niini.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Ipadala ang &quot;Last-Modified&quot; header?"><![CDATA[
+<h2>Ipadala ang "Last-Modified" header?</h2>
+<p>Sa dihang gi-set, ang Textpattern mobasa sa HTTP <code>If-Modified-Since</code> header sa bisita (kon adunay) ug itandi kini sa labing ulahing pag-update sa site. Kon wala gyud kausaban sukad sa katapusang higayon nga nag-load ang bisita sa panid (i.e. kon pareho ang timestamp nga gisend sa browser ug ang last site update), ipadalang balik ang header nga nagsugo sa browser sa bisita nga gamiton ang naka-cache nga bersyon sa panid.</p>
+<p>Makapaminus kini sa konsumo sa bandwidth, oras sa page load, ug load sa web server.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Ipakita ba ang ihap sa komento sa mga feed?"><![CDATA[
+<h2>Ipakita ba ang ihap sa komento sa mga feed?</h2>
+<p>Kon nakaset sa ‘Yes’, kini nga setting magdugtong sa gidaghanon sa mga komento sa imong mga titulo sa artikulo sa RSS/Atom feeds.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan sa site"><![CDATA[
+<h2>Slogan sa site</h2>
+<p>Ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">slogan sa site <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> usa ka summary o deskripsyon sa imong site. Gamitos kini isip deskripsyon sa imong site bisan asa nga gikinahanglan, sama sa imong RSS/Atom feeds, ug mahimong gamiton sa bisan pilay dapit sa imong site, sumala sa imong pagbuot.</p>
+<p><strong>Timan-i:</strong> Opsyonal ang site slogan, apan mahimo nga gikinahanglan para sa balidong RSS o Atom feed.</p>
+        ]]></item>
+        <item id="sitename" title="Ngalan sa site"><![CDATA[
+<h2>Ngalan sa site</h2>
+<p>Ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">ngalan o titulo sa imong site <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>. Kini motungha sa title bar sa browser sa bisita o sa syndication feed reader, ug sa bisan pilay laing dapit sa imong site, sumala sa imong pagbuot.</p>
+        ]]></item>
+        <item id="siteurl" title="URL sa site"><![CDATA[
+<h2>URL sa site</h2>
+<p>Kini mao ang adres sa imong Textpattern nga site, pananglitan <code>www.example.com</code>.</p>
+<p><strong>Timan-i:</strong> Wala nay gikinahanglan nga <code>http://</code>, <code>https://</code> o trailing slash <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Direktoryo sa tema"><![CDATA[
+<h2>Direktoryo sa tema</h2>
+<p>Kon gusto nimong i-customize ang ngalan sa direktoryo diin ang front-side themes nga flat files permanente nga itipig, mahimo nimong buhaton kini dinhi. Kinahanglan una nimong paghimo ang direktoryo sa root sa imong Textpattern installation, kinahanglan sab nga masiguro nimo nga makasulat ang PHP niini nga direktoryo.</p>
+<p>Kining dalan kanunay usa ka <strong>relative path</strong> (padulong sa direktoryo sa imong root Textpattern installation).</p>
+<p>Ang default mao ang <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
+<h2>SMTP envelope sender address</h2>
+<p>Kini nga pahalipay angay biyaan nga walay sulod gawas kon maka-encounter ka og problema sa pagpadala og email sa Textpattern (kon walay email nga mapadala). Sa dihang moabut kining problemaha, mahimo nimong isulod dinhi ang bisan unsang balidong email address, mas maayo nga adunay parehas nga domain name sa website diin nimo gi-install ang Textpattern (i.e. kon ang imong website mao ang <code>https://example.com</code>, mahimo nimong gamiton ang <code>you@example.com</code>).</p>
+<p>Para sa mga interesado sa teknikal nga detalye:</p>
+<ul>
+    <li>Sa UNIX-like/macOS nga mga server, ang gisulod nga email address gamiton isip ika-upat nga parameter (giuna sa "-f") para sa PHP <code>mail()</code> function</li>
+    <li>Sa Windows nga mga server, ang gisulod nga email address gamiton aron iset (o i-override) ang <code>sendmail_from</code> nga php.ini setting</li>
+</ul>
+<p>Kini nagsiguro nga ang SMTP envelope sender address (nga dili pirmi pareho sa "From:" header nga kasagarang imong makita sa mga email) iset sa email address nga imong gisulod dinhi, nga usa ka panginahanglan para sa pagpadala og email sa pipila ka web server.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP host"><![CDATA[
+<h2>SMTP host</h2>
+<p>Aroon mapauswag ang pag-abot sa mensahe ug magamit ang pag-agi sa email pinaagi sa eksternal nga serbisyo (sama sa SendGrid, AWS SES, Mailchimp, Mailgun, ug uban pa), ispecify dinhi ang SMTP server. Konsultaha ang imong SMTP provider aron makuha kini nga kantidad.</p>
+<p>Kining kantidad mahimong ihatag pinaagi sa paghubit og <code>SMTP_HOST</code> nga constant sa <code>config.php</code>, diin ang kantidad kay himuon nga greyed out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP password"><![CDATA[
+<h2>SMTP password</h2>
+<p>Kon ang imong SMTP connection nagkinahanglan og password para sa gispecify nga user name, ihatag kini dinhi. Konsultaha ang dokumentasyon sa provider para sa detalye.</p>
+<p>Timan-i: Bisan pa nga ang password dili ipakita dinhi, kini <em>pagatipigan</em> isip plaintext sa prefs table sa database. Kon gusto nimong madugangan ang seguridad, mahimo nimong hubiton ang <code>SMTP_PASS</code> nga constant sa imong <code>config.php</code> imbes.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP port"><![CDATA[
+<h2>SMTP port</h2>
+<p>Kon nagbutang ka og SMTP host, kinahanglan nimong ispecify ang port aron ma-enable ang SMTP routing. Kasagarang mga port mao ang:</p>
+<ul>
+    <li>25 - para sa wala segurong mail</li>
+    <li>465 - legacy (dili opisyal) para sa secure nga mail</li>
+    <li>587 - default (girekomenda) para sa secure TLS email</li>
+</ul>
+<p>Ang imong napiling SMTP provider lagmit mogamit og lain nga port, busa konsultaha ang ilang dokumentasyon.</p>
+<p>Kining kantidad mahimong ihatag pinaagi sa paghubit og <code>SMTP_PORT</code> nga constant sa <code>config.php</code>, diin ang kantidad kay himuon nga greyed out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP security method"><![CDATA[
+<h2>SMTP security method</h2>
+<p>Pilia ang mekanismo nga gigamit sa imong SMTP provider isip email security protocol. Konsultaha ang ilang dokumentasyon para sa detalye.</p>
+<p>Kining kantidad mahimong ihatag pinaagi sa paghubit og <code>SMTP_SECTYPE</code> nga constant sa <code>config.php</code>, diin ang kantidad kay himuon nga greyed out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP user name"><![CDATA[
+<h2>SMTP user name</h2>
+<p>Kon ang imong SMTP connection nagkinahanglan og user/login name, ihatag kini dinhi. Konsultaha ang dokumentasyon sa provider para sa detalye.</p>
+<p>Kining kantidad mahimong ihatag pinaagi sa paghubit og <code>SMTP_USER</code> nga constant sa <code>config.php</code>, diin ang kantidad kay himuon nga greyed out sa Preferences panel.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spam blocklists (gibulag sa comma)"><![CDATA[
+<h2>Spam blocklists (gibulag sa comma)</h2>
+<p>Ang <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> nga mga provider nga imong gisulod dinhi pangutan-on sa dihang ang komento ipost sa imong blog, ug ang IP address sa nag-post nga komento susihon. Kon ang IP address nalista nagpasabot kini nga adunay usa o daghang report sa spam nga nabuhat bahin niini nga IP sa nangagi, ug ang komento ilimod. Bisan unsa pa man ang resulta sa check, ang IP address sa nag-post nga komento dili itipig sa Textpattern.</p>
+<p>Mahimo nimong isulod dinhi ang lista sa mga domain name, nga gibulag sa mga comma. Palihug timan-i nga responsibilidad nimo ang pagsiguro nga ang mga blocklist angay gamiton.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="I-syndicate ba ang kinutlo sa artikulo lamang?"><![CDATA[
+<h2>I-syndicate ba ang kinutlo sa artikulo <strong>lamang</strong>?</h2>
+<p>Kon kini nakaset sa ‘No’, ang feed items maglangkob sa tibuok lawas sa artikulo.</p>
+<p>Kon kini nakaset sa ‘Yes’, ang feed items maglangkob sa kinutlo sa artikulo imbes sa lawas sa artikulo kon anaa kini.</p>
+        ]]></item>
+        <item id="tempdir" title="Temporary directory path"><![CDATA[
+<h2>Temporary directory path</h2>
+<p>Nagtakda og <strong>absolute path</strong> ngadto sa temporary (usahay gitawag nga ‘tmp’ o ‘temp’) nga direktoryo. Kinahanglan nga adunay write access ang PHP niini nga direktoryo. Kini nga direktoryo gigamit para sa temporary nga mga file, pananglitan mga upload sa bisan unsang klase (plugin, file o hulagway).</p>
+<p><strong>Mga timan-i:</strong>
+<ul>
+    <li>Ayaw ispecify ang parehas nga direktoryo para sa ‘temporary’ ug ‘plugin cache’, kay kini magdangat og problema (sulayan sa Textpattern nga patakbuhon ang sulod sa temporary log file isip mga plugin).</li>
+    <li>Hunahuna ang pagbalhin niining direktoryo gawas sa publiko nga ma-access nga docroot sa imong website, para sa dugang nga seguridad.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Admin-side nga tema"><![CDATA[
+<h2>Admin-side nga tema</h2>
+<p>Ang default nga admin-side nga tema nga gamiton sa dihang adunay mag-login sa Textpattern. Daghang pre-installed nga admin theme ang giapil sa Textpattern, ug mahimo ka sab magdugang og custom theme package sa <code>textpattern/admin-themes</code> nga direktoryo aron himoong magamit.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Dugangan og trailing slash ang mga URL"><![CDATA[
+<h2>Dugangan og trailing slash ang mga URL</h2>
+<p>Kon awtomatikong idugang ba sa Textpattern ang trailing slash sa mga URL nga iyang gihimo. Ang mga opsyon mao ang:</p>
+<ul>
+    <li><strong>No</strong> - Wala gayud</li>
+    <li><strong>List</strong> - Sa list-based nga landing pages ra (i.e. dili sa dihang nagtan-aw og indibidwal nga mga artikulo)</li>
+    <li><strong>Yes</strong> - Kanunay</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Mga PHP function nga gi-enable sa txp:evaluate"><![CDATA[
+<h2>Mga PHP function nga gi-enable sa txp:evaluate</h2>
+<p>Kini usa ka comma-separated nga lista sa <code>function</code> o <code>alias=function</code> nga mga item, pananglitan <code>md5</code>, <code>replace=str_replace</code>. Ang mga item nga gispecify sulod niining lista mahimong magamit sa <code>query</code> attribute sa <code>&lt;txp:evaluate /&gt;</code> nga tag:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Ang <code>function</code> kinahanglan mobalik og scalar value (<strong>dili</strong> array/object).</p>
+        ]]></item>
+        <item id="use_comments" title="Modawat ba og mga komento?"><![CDATA[
+<h2>Modawat ba og mga komento?</h2>
+<p>Kini nagtakda kon ang funcionalidad sa pagkomento sa Textpattern angay ba nga i-enable o i-disable.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Gamita ba ang email address sa paghimo sa feed IDs (default kay site URL)?"><![CDATA[
+<h2>Gamita ba ang email address sa paghimo sa feed IDs (default kay site URL)?</h2>
+<p>Ang mga item sa Atom feed nagkinahanglan og unique nga ID.</p>
+<p>Aroon maghimo og ID nga talagsaon sa imong site, gitugotan ka sa Textpattern nga mopili tali sa email address o sa imong domain name nga iapil niining mga ID. Ang email address mao ang unang gigamit sa dihang naghimo sa site. Gawas kon lagmit nga usbon nimo ang imong domain name sa umaabot, lagmit nga luwas nga iset kini sa ‘No’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Gamiton ba ang mga plugin?"><![CDATA[
+<h2>Gamiton ba ang mga plugin?</h2>
+<p>Kini nagtugot kanimo sa pag-off sa tanang suporta para sa mga plugin sa Textpattern. Mapuslanon kini kon nag-debug ka og mga sayop sa imong site, ug gusto nimong susihon kon nalambigit ba ang usa o daghang mga plugin.</p>
+        ]]></item>
+        <item id="use_textile" title="Default nga pag-format sa text"><![CDATA[
+<h2>Default nga pag-format sa text</h2>
+<p>Ang text format setting nga imong pilion dinhi mahimong default para sa markup sa kinutlo ug lawas sa ‘Write’ panel. Mahimo nimong pilion kon tugotan ba ang kompleto nga Textile processing, kon i-convert ang line breaks ngadto sa HTML paragraph markers o dili gyud mag-convert sa bisan unsang text.</p>
+<p>Ang <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> usa ka utility nga gituyo aron pasayonon ang pag-convert sa plain text ngadto sa HTML. Sa dihang gi-enable, ang Textile moproseso sa body text sa mga artikulo ug mobalik og structural nga lig-on nga HTML.</p>
+<p>Ang Textile nagtanyag usab og gamhanan apan sayon nga kat-unan nga hugpong sa mga mando aron mag-format sa text, maghubit sa mga istruktura sama sa mga lista, mga header ug blockquote, ug ipasulod ang mga link ug hulagway.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Sections panel">
+        <item id="section_category" title="Introduksyon"><![CDATA[
+<h2>Introduksyon</h2>
+<p>Ang mga seksyon sa Textpattern labing maayo nga hunahunaon nga susama sa mga seksyon sa mantalaan; ang matag usa sakop sa parehas nga publikasyon, apan ang matag usa mahimong magpakita og lain-laing layout, o lain-laing estilo sa artikulo, ug uban pa.</p>
+<p>Para sa kadaghanan sa mga website, gamay ra kaayo nga ihap sa mga seksyon ang kinahanglan himoon.</p>
+<h3>Usa ka posible nga senaryo para sa usa ka website nga adunay tulo ka seksyon:</h3>
+<ol>
+    <li><strong>Archive:</strong> Ang ‘Section’ diin tanang artikulo nga motungha sa front page sakop. Sa dihang ang magbasa mo-klik sa permanent link sa artikulo, ipakita kini sa page layout nga gi-assign niining ‘Section’. Aron moadto sa paged list sa labing bag-ong mga artikulo nga gi-assign sa seksyon nga "Archive", ang URL mao ang <code>https://example.com/archive/</code>.</li>
+    <li><strong>About:</strong> Usa ka ‘about this site’ nga panid, nga lahi sa front page ug sa "Archive" nga seksyon, tungod kay mas static kini, tingali adunay lahi nga layout, ug lagmit nga naglangkob lang og usa ka artikulo. Ang ‘About’ nga seksyon maabot sa <code>https://example.com/about/</code>.</li>
+    <li><strong>Photos:</strong> Usa ka ‘Section’ nga adunay lain nga layout (ug tingali lain nga CSS) nga magpakita og mga hulagway imbes nga mga artikulo.</li>
+</ol>
+<p>Hinumdomi nga adunay espesyal nga tinago nga seksyon nga ginganlan og default, nga kanunay maglungtad. Kini nga default nga seksyon mogamit sa panid nga ginganlan og default ug sa estilo nga gitawag og default, ug niini pagtukuron ang front page sa imong site.</p>
+        ]]></item>
+        <item id="section_default" title="Default nga seksyon sa pagmantala"><![CDATA[
+<h2>Default nga seksyon sa pagmantala</h2>
+<p>Kini nga opsyon nagdumala kon asa nga seksyon ang pre-selected sa Section menu sa dihang naghimo og bag-ong artikulo sa ‘Write’ panel.</p>
+<p>Kon kadaghanan sa imong mga artikulo mahuman nga sakop sa piho nga seksyon, pili-a kini gikan sa lista dinhi. Ang mga kausaban makita dayon.</p>
+<p>Mahimo nimong i-override kini sa matag artikulo sa ‘Write’ panel pinaagi sa pagpili og lain nga seksyon sa ‘Sort and display’ nga pane.</p>
+        ]]></item>
+        <item id="section_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Ang deskripsyon sa seksyon usa ka opsyonal nga bahin nga makatabang sa mga search engine ug mga website crawler sa mas maayong pag-ila ug paghan-ay sa sulod.</p>
+<p>Ang deskripsyon sa artikulo limitado sa labing taas nga 255 ka karakter. Hinumdomi nga ang pipila ka search engine nagbutang og limitasyon sa gidugayon sa <code>meta description</code> sa panid alang sa praktikal nga pagpakita sa search engine results pages (SERPs) ug kini mahimong mas gamay kay sa 255 ka karakter nga limit sa Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Ang mga artikulo sa seksyon motungha ba sa front page?"><![CDATA[
+<h2>Ang mga artikulo sa seksyon motungha ba sa front page?</h2>
+<p>Ang mga artikulo sa pipila ka seksyon, sama sa mga susama sa mas ‘static’ nga mga panid sa web, mahimong daw dili angay sa time-sensitive nga agos sa front page sa imong site.</p>
+<p>Ang pag-set niini sa ‘No’ mopugong sa mga artikulo nga gi-assign niining seksyon nga motunga sa front page.</p>
+        ]]></item>
+        <item id="section_searchable" title="Iapil ba kining seksyon sa site search?"><![CDATA[
+<h2>Iapil ba kining seksyon sa site search?</h2>
+<p>Kini nagdumala kon ang mga artikulo nga sakop niining seksyon dapat ba motungha isip bahin sa site-wide search results.</p>
+        ]]></item>
+        <item id="section_syndicate" title="I-syndicate ba ang mga artikulo niining seksyon?"><![CDATA[
+<h2>I-syndicate ba ang mga artikulo niining seksyon?</h2>
+<p>Nagadumala kon motungha ba o dili ang mga artikulo sa niining seksyon sa RSS ug Atom feeds sa site.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Nagagamit og estilo"><![CDATA[
+<h2>Naggamit og estilo</h2>
+<p>Kon gusto nimong i-override ang default nga stylesheet para sa piho nga seksyon, mahimo kini iset dinhi.</p>
+<p>May kalabutan lamang kini sa mga stylesheet nga anaa sulod sa Textpattern nga ‘Styles’ panel – kon imo nimong i-host ang imong CSS gawas sa Textpattern (nga hilabihan nga girekomenda), kini nga opsyon walay epekto.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Naggamit og panid"><![CDATA[
+<h2>Naggamit og panid</h2>
+<p>Sa Textpattern, ang mga seksyon gisumpay sa page templates.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Naggamit og tema"><![CDATA[
+<h2>Naggamit og tema</h2>
+<p>Kon gusto nimong usbon ang tema nga gigamit para sa piho nga seksyon, mahimo kini iset dinhi gikan sa lista sa kasamtangang na-install nga mga tema.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Setup panel">
+        <item id="setup_admin_url" title="Admin subdomain"><![CDATA[
+<h2>Admin subdomain</h2>
+<p>Ang subdomain nga gusto nimong gamiton aron ma-access ang Textpattern administration interface (pananglitan <code>admin.example.com</code>).</p>
+<p>Palihug tan-awa ang <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> para sa dugang nga detalye.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+<h2>Cookie domain</h2>
+<p>Ang (sub)domain nga gusto nimong gamiton para sa Textpattern cookie(s).</p>
+<p>Palihug tan-awa ang <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> para sa dugang nga detalye.</p>
+        ]]></item>
+        <item id="setup_user_login" title="User login"><![CDATA[
+<h2>User login</h2>
+<p>Ang login name sa administrator (‘Publisher’) account nga imong gamiton alang sa pagdumala sa imong site.</p>
+<p>Bisan pa og walay limitasyon sa ngalan, labing maayo nga likayan ang lisod nga kombinsasyon sa karakter ug sayon nga matagna nga username (pananglitan <code>admin</code>, <code>administrator</code>, ug uban pa.)</p>
+        ]]></item>
+        <item id="setup_user_pass" title="User password"><![CDATA[
+<h2>User password</h2>
+<p>Tungod kay kining account adunay labing taas nga lebel sa access sa Textpattern, pili og lig-on kaayo nga password o, mas maayo pa, passphrase.</p>
+<h3>Mga tip</h3>
+<ul>
+    <li>Gamita ang kombinasyon sa uppercase ug lowercase nga mga karakter</li>
+    <li>Gamita ang mga numero</li>
+    <li>Gamita ang mga simbolo</li>
+    <li>Himuang dili moubos sa walo ka karakter ang gitas-on</li>
+    <li><strong>Likayi</strong> ang bisan unsang personal nga impormasyon (mga petsa, mga ngalan, mga lugar, mga miembro sa pamilya, mga binuhi, ug uban pa.)</li>
+    <li><strong>Likayi</strong> ang bisan unsang usa o balik-balik nga dictionary words, bisan unsa pa ang spelling, pinulongan o case</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Table prefix"><![CDATA[
+<h2>Table prefix</h2>
+    <p>Kinahanglan ra nimo gamiton ang table prefix kon nagkinahanglan ka og daghang Textpattern installation sa usa ka database. Ang matag Textpattern installation nagkinahanglan og talagsaong prefix.</p>
+    <p>Hinumdomi nga ang prefix kinahanglan mosunod sa mosunod nga mga lagda:</p>
+<ul>
+    <li><strong>1st character:</strong> kinahanglan a-z, A-Z, o underscore</li>
+    <li><strong>Sunod nga mga karakter:</strong> mahimong a-z, A-Z, 0-9, o underscore lang</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Themes panel">
+        <item id="skin_author" title="Awtor sa tema"><![CDATA[
+<h2>Awtor sa tema</h2>
+<p>Ang/ang mga awtor niining tema (opsyonal).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Website sa tema"><![CDATA[
+<h2>Website sa tema</h2>
+<p>Ang URL diin makita ang tibuok nga impormasyon ug/o labing bag-ong bersyon sa niining tema (opsyonal).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Papason usab gikan sa disk ang mga template sa tema"><![CDATA[
+<h2>Papason usab gikan sa disk ang mga template sa tema</h2>
+<p>Kon gi-check, tanang template file sa napiling/napiling mga tema permanente nga papason gikan sa disk. Bisan pa, ang mga direktoryo nga may kalabutan sa tema ug ilang mga subdirectory dili papason kon adunay laing mga file (sama sa JavaScript, mga hulagway, ...) nga anaa sulod nila.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Papason ang wala magamit nga mga template gikan sa database sa pag-import"><![CDATA[
+<h2>Papason ang wala magamit nga mga template gikan sa database sa pag-import</h2>
+<p>Kon gi-check, ang matag template sa napiling/napiling mga tema nga walay katugbang nga file sa disk permanente nga papason gikan sa database. Ang resulta human makompleto ang aksyon mao nga ang imong mga template sa database mosanong kutob sa mahimo sa anaa sa disk.</p>
+<p>Hinumdomi nga kon imong gihawa ang mga template file nga gikinahanglan sa Textpattern, ang walay sulod nga mga bersyon paghihimoon para kanimo sa database.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Papason ang wala magamit nga mga template gikan sa disk sa pag-export"><![CDATA[
+<h2>Papason ang wala magamit nga mga template gikan sa disk sa pag-export</h2>
+<p>Kon gi-check, ang matag template file sa napiling/napiling mga tema nga walay katugbang nga item sa database permanente nga papason gikan sa theme nga nakabase sa disk. Ang resulta human makompleto ang aksyon mao nga ang imong mga template sa file system eksaktong mosanong sa anaa sa database.</p>
+        ]]></item>
+        <item id="skin_description" title="Deskripsyon sa tema"><![CDATA[
+<h2>Deskripsyon sa tema</h2>
+<p>Mahimo nimo ihatag ang mubo nga summary sa disenyo/layout niining tema (opsyonal).</p>
+<p>Ang deskripsyon sa tema limitado sa labing taas nga 255 ka karakter.</p>
+        ]]></item>
+        <item id="skin_import" title="Pag-import og tema"><![CDATA[
+<h2>Pag-import og tema gikan sa disk</h2>
+<p>Kini nga porma nagtugot kanimo sa pag-import og tema ngadto sa Textpattern database gikan sa imong themes nga direktoryo.</p>
+<p>Ang ma-import nga tema kinahanglan nga gilangkuban og readable nga ginikanan nga folder nga naggamit sa ngalan sa tema isip ngalan sa folder, ug sulod sa folder usa ka readable nga <code>manifest.json</code> file sa gilauman nga pormat. Ang theme folder kinahanglan usab maglangkob og mga panid, mga form ug mga estilo sulod sa tagsa-tagsa nga subfolder nga pareho og ngalan.</p>
+<p>Samtang ang mga panid ug mga form kinahanglan mogamit sa <code>.txp</code> nga extension, ang mga stylesheet gilauman nga <code>.css</code> nga mga file. Ang mga form kinahanglan sab iggrupong sumala sa type sulod sa dedicated nga mga direktoryo. Ang Textpattern maghimo sa bisan unsang kulang nga hinungdanong mga template sa pag-import.</p>
+<p>Tan-awa ang <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> para sa dugang nga impormasyon sa paghimo, pag-instalar ug paggamit sa mga tema sulod sa Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Ngalan sa tema"><![CDATA[
+<h2>Ngalan sa tema</h2>
+<p>Ang ngalan sa tema gigamit para sa ngalan sa direktoryo sa tema ug sa ubang teknikal nga katuyoan (gikinahanglan).</p>
+<p>Ang ngalan dili angay maglangkob og espesyal nga mga karakter o mga espasyo.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introduksyon sa mga Tema"><![CDATA[
+<h2>Introduksyon sa mga Tema</h2>
+<p>Ang tema sa Textpattern usa ka koleksyon sa mga Page, mga Form ug mga Stylesheet. Ang mga tema nagtugot kanimo sa lohikal nga pagbulag sa imong mga asset sa site ngadto sa mga grupo para sa sayon nga pag-ila, o pagpaambit sa uban. Ang pagbuhat o pag-import og Tema, ug bisan unsang asset nga anaa niini, <em>dili</em> adunay epekto sa imong kasamtangang site. Libre ka sa pag-edit o pag-usab sa bisan unsang asset nga wala nakig-associate sa seksyon sa imong site, ug dili kini makaapekto sa site mismo.</p>
+<p>Aron i-edit ang mga asset sa usa ka tema, adto sa Pages, Forms o Styles panel ug gamita ang dropdown selector aron pilion ang tema nga gusto nimong trabahuan. Ang tema nga imong gitrabahuan hinumdoman sa tibuok administration area, nga nagtugot kanimo sa paglukso taliwala sa mga type sa asset sa dali ug sayon nga paagi. Gitawag kini nga imong <em>working theme</em>.</p>
+<p>Palihug tan-awa ang <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a> para sa dugang nga impormasyon.</p>
+        ]]></item>
+        <item id="skin_title" title="Titulo sa tema"><![CDATA[
+<h2>Titulo sa tema</h2>
+<p>Ang deskriptibo nga titulo sa tema, nga gigamit aron mailhan ang tema sulod sa mga panel sa Textpattern.</p>
+<p>Ang titulo mahimong maglangkob og espesyal nga mga karakter ug mga espasyo.</p>
+        ]]></item>
+        <item id="skin_version" title="Bersyon sa tema"><![CDATA[
+<h2>Bersyon sa tema</h2>
+<p>Ang numero sa bersyon sa na-install nga bersyon niining tema (opsyonal).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
