@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="et">
+    <group id="admin" title="Kasutajate paneel">
+        <item id="about_privileges" title="Rollidest"><![CDATA[
+<h2>Rollidest</h2>
+<h3>Väljaandja</h3>
+<ul>
+    <li>saab hallata artikleid, kommentaare ja linke</li>
+    <li>saab kasutada artiklites PHP-d, kui administraatori eelistus „Luba PHP artiklites?“ on seatud väärtusele „Jah“</li>
+    <li>saab hallata pilte ja faile</li>
+    <li>saab hallata sektsioone ja kategooriaid</li>
+    <li>saab hallata lehti, vorme ja stiile</li>
+    <li>saab vaadata diagnostikainfot</li>
+    <li>saab hallata saidi eelistusi</li>
+    <li>saab hallata kasutajaid</li>
+    <li>saab hallata külastusloge</li>
+    <li>saab hallata pluginaid</li>
+    <li>saab andmeid importida</li>
+</ul>
+<h3>Vastutav toimetaja</h3>
+<ul>
+    <li>saab hallata artikleid, kommentaare ja linke</li>
+    <li>saab kasutada artiklites PHP-d, kui administraatori eelistus „Luba PHP artiklites?“ on seatud väärtusele „Jah“</li>
+    <li>saab hallata pilte ja faile</li>
+    <li>saab hallata sektsioone ja kategooriaid</li>
+    <li>saab hallata lehti, vorme ja stiile</li>
+    <li>saab vaadata diagnostikainfot</li>
+    <li>saab hallata saidi eelistusi</li>
+    <li>saab kasutajaid vaadata</li>
+    <li>saab hallata külastusloge</li>
+    <li>saab hallata pluginaid</li>
+    <li>saab andmeid importida</li>
+</ul>
+<h3>Koopiat toimetaja</h3>
+<ul>
+    <li>saab hallata artikleid ühe piiranguga:
+        <ul>
+            <li>ei saa kustutada teiste kasutajate artikleid</li>
+        </ul>
+    </li>
+    <li>saab hallata kommentaare ja linke</li>
+    <li>saab hallata pilte ja faile</li>
+    <li>saab hallata kategooriaid</li>
+    <li>saab hallata lehti ja vorme</li>
+    <li>saab kasutajaid vaadata</li>
+    <li>saab hallata külastusloge</li>
+</ul>
+<h3>Toimetaja</h3>
+<ul>
+    <li>saab hallata oma artikleid, vaadata teiste kasutajate artikleid</li>
+    <li>saab hallata pilte ja faile</li>
+</ul>
+<h3>Vabakutseline</h3>
+<ul>
+    <li>saab hallata oma artikleid piiratud ulatuses:
+        <ul>
+            <li>saab artiklit muuta ainult seni, kuni see ei ole avaldatud</li>
+            <li>saab määrata olekuks <em>ainult</em> mustandi, peidetud või ootel</li>
+        </ul>
+    </li>
+    <li>saab vaadata teiste kasutajate artikleid</li>
+</ul>
+<h3>Disainer</h3>
+<ul>
+    <li>saab hallata oma artikleid piiratud ulatuses:
+        <ul>
+            <li>saab artiklit muuta ainult seni, kuni see ei ole avaldatud</li>
+            <li>saab määrata olekuks <em>ainult</em> mustandi, peidetud või ootel</li>
+        </ul>
+    </li>
+    <li>saab vaadata teiste kasutajate artikleid</li>
+    <li>saab hallata pilte</li>
+    <li>saab hallata sektsioone</li>
+    <li>saab hallata lehti, vorme ja stiile</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Loo autor"><![CDATA[
+<h2>Lisa uus autor</h2>
+<p>Tervitussõnum ja sisselogimisjuhised saadetakse uuele autorile e-kirjaga.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Kirjutamise paneel">
+        <item id="article_image" title="Artikli pilt"><![CDATA[
+<h2>Artikli pilt</h2>
+<p>Artikli külge piltide sidumiseks sisesta siia üks järgmistest variantidest:</p>
+<ol>
+    <li>üks või mitu Textpatterni pildi ID-d, komadega eraldatult (nt <code>12, 25, 18</code>)</li>
+    <li>üks või mitu suhtelist pildi-URL-i, komadega eraldatult (nt <code>/images/my_pic.jpg</code>)</li>
+    <li>üks või mitu täielikku URL-i, komadega eraldatult (nt <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Esimese pildi kuvamiseks lisa artiklivormi sisse silt <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>. Vaikimisi väljastab see valitud pildi jaoks täieliku HTML-sildi <code>&lt;img&gt;</code>.</p>
+<p>Galerii võid kuvada sildi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil.</p>
+        ]]></item>
+        <item id="body" title="Sisu"><![CDATA[
+<h2>Sisu</h2>
+<p>Artikli põhisisu asub artikli kehas.</p>
+<p>Kui autor koostab või ette valmistab artikleid Textpatternis avaldamiseks, saab ta artikli vaatamiseks valida kolme vaate vahel: lihttekst, HTML-märgendus (kood, mille abil veebibrauser artikli kuvab) ja renderdatud eelvaade.</p>
+        ]]></item>
+        <item id="description" title="Kirjeldus"><![CDATA[
+<h2>Kirjeldus</h2>
+<p>Artikli kirjeldus on valikuline komponent, mis aitab otsingumootoritel ja veebirobotitel sisu paremini tuvastada ja sortida.</p>
+<p>Artikli kirjeldus on maksimaalselt 255 tähemärgi pikkune. Pange tähele, et mõned otsingumootorid piiravad lehe <code>meta description</code> pikkust otsingutulemuste lehtedel (SERP-ides) praktilisuse huvides ja see võib olla väiksem kui Textpatterni 255 märgi piirang.</p>
+<p>Märka, et artikli kirjeldus erineb artikli kokkuvõttest, ehkki mõlemad aktsepteerivad sarnast sisu. Artikli kirjeldus on suunatud eelkõige otsingumootoritele ja robotitele, samas kui artikli kokkuvõte sobib pigem inimestele loetava lühikokkuvõttena.</p>
+        ]]></item>
+        <item id="excerpt" title="Kokkuvõte"><![CDATA[
+<h2>Kokkuvõte</h2>
+<p>Artikli kokkuvõtted on valikulised. Kokkuvõtet saab kasutada artikli lühikese sisukokkuvõttena, mida kuvatakse sisukorra osana, kasutatakse saidi RSS/Atom voogudes artikli põhiteksti asemel või mitmel muul viisil.</p>
+        ]]></item>
+        <item id="expire_date" title="Aegumise kuupäev"><![CDATA[
+<h2>Aegumise kuupäev</h2>
+<p>Aeg, millal artikkel märgitakse aegunuks. Aeg on valikuline ja selle saab seada meelevaldsele mineviku- või tulevikulehele.</p>
+<p>Kastid vastavad järgmisele teabele:</p>
+<ul>
+    <li>Aasta / kuu / päev</li>
+    <li>Tund (24-tunnine formaat) : minut : sekund</li>
+</ul>
+<p>Kui määratud aeg saabub või kui määratakse aeg minevikus, aegub artikkel.</p>
+<p>Kui aegunud artiklite kuvamise valik on lubatud, jääb artikkel nähtavaks. Kui aegunud artiklite kuvamise valik on keelatud, kuvatakse artikli lehele tulnud külastajatele artikli sisu asemel HTTP 410 veateade.</p>
+        ]]></item>
+        <item id="keywords" title="Märksõnad"><![CDATA[
+<h2>Märksõnad</h2>
+<p>Märksõnad on kasulikud artiklitevaheliste seoste täpsustamiseks lisaks neile, mida pakuvad kategooriad.</p>
+<p>Märksõnad peavad olema üksiksõnad, mis on eraldatud komadega.</p>
+        ]]></item>
+        <item id="override_form" title="Tühista vaikimisi vorm"><![CDATA[
+<h2>Tühista vaikimisi vorm</h2>
+<p>Artikkel võib soovi korral kasutada vaikimisi määratust erinevat vormi – näiteks näidata artikli põhiteksti asemel <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil kokkuvõtet või <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil põhiteksti – seda saab siin määrata.</p>
+        ]]></item>
+        <item id="publish_date" title="Avaldamise kuupäev"><![CDATA[
+<h2>Avaldamise kuupäev</h2>
+<p>Aeg, mil artikkel või fail avaldatakse või viimati üle vaadatakse. Aja saab seada hetkele, mil üksus avaldatakse, või meelevaldsele mineviku- või tulevikuajale.</p>
+<p>Kastid vastavad järgmisele teabele:</p>
+<ul>
+    <li>Aasta / kuu / päev</li>
+    <li>Tund (24-tunnine formaat) : minut : sekund</li>
+</ul>
+<p>Üksus, mille ajatempel on praegusest ajast suurem (s.t tulevikus), ei ilmu esiküljel ega RSS/Atom voogudes enne, kui määratud aeg on käes.</p>
+        ]]></item>
+        <item id="status" title="Staatus"><![CDATA[
+<h2>Olek</h2>
+<p>Määrab selle Textpatterni artikli avaliku nähtavuse oleku.</p>
+<p>Avaldamise olek on üks järgmistest:</p>
+<ul>
+<li><strong>Mustand</strong>: käsitletakse poolelioleva tööna ega ole Textpatterni haldusalast väljaspool nähtav (s.t ei ole nähtav veebisaidil ega sünkroniseerita voogudesse).</li>
+<li><strong>Peidetud</strong>: artikkel ei ole Textpatterni haldusala välisel saidil nähtav. Kasulik sisu saidilt eemaldamiseks, kui sa ei soovi seda tingimata kustutada.</li>
+<li><strong>Ootel</strong>: käsitletakse avaldamiseks valmis ja kinnitamist ootava artiklina, kuid see ei ole Textpatterni haldusalast väljaspool nähtav.</li>
+<li><strong>Avalik</strong>: tavaliselt väljaspool Textpatterni haldusala nähtav (s.t nähtav veebisaidil, sünkroniseeritakse voogudesse, kui eelistus seda lubab). Kui artikkel on avalik ja tal on aegumiskuupäev, jääb olek ka pärast selle kuupäeva saabumist avalikuks, kuid artikkel ilmub haldusalast väljaspool ainult siis, kui aegunud artiklite avaldamine on lubatud.</li>
+<li><strong>Kinnitatud</strong>: sarnaneb <strong>avaliku</strong> artikliga niivõrd, et seda saab veebikülastajatele näidata, kuid see <strong>ei</strong> ilmu artikliloendites, välja arvatud juhul, kui siltidel <code>article</code> või <code>article_custom</code> on atribuut <code>status</code> väärtusega <code>sticky</code>.</li>
+</ul>
+<p>Märkus: sisu, mis ei ole avalikult veebisaidil nähtav, võib siiski olla eelvaadatav sisse loginud kasutajatele.</p>
+        ]]></item>
+        <item id="title" title="Pealkiri"><![CDATA[
+<h2>Pealkiri</h2>
+<p>Lisa sellele artiklile sobiv pealkiri.</p>
+<p>Artikli pealkiri on piiratud maksimaalselt 255 tähemärgiga.</p>
+        ]]></item>
+        <item id="url_title" title="Ainult URL-i pealkiri"><![CDATA[
+<h2>Ainult URL-i pealkiri</h2>
+<p>Kui soovid kasutada püsilingi URL-is artikli jaoks konkreetset pealkirja, sisesta see siia. Kui väli jäetakse tühjaks, luuakse URL-i pealkiri automaatselt artikli pealkirja põhjal.</p>
+<p>See on eriti kasulik, kui artikli pealkirjas kasutatakse mitte-ASCII märke.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategooriate paneel">
+        <item id="article_category" title="Artiklid"><![CDATA[
+<h2>Artiklid</h2>
+<p>Erinevalt sektsioonidest, mis määratlevad saidi navigeerimisstruktuuri, võimaldavad artiklikategooriad artikleid teema järgi rühmitada. Kui kategooriad on määratud, saab sirvida loendeid artiklitest, mis kuuluvad konkreetsetesse kategooriatesse.</p>
+<p>Näiteks võivad toiduteemalise saidi tõenäolised artiklikategooriad olla:</p>
+<ul>
+    <li>toorained</li>
+    <li>ostlemine</li>
+    <li>retseptid</li>
+    <li>serveerimine</li>
+    <li>restoranid</li>
+    <li>kokad</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Kirjeldus"><![CDATA[
+<h2>Kategooria kirjeldus</h2>
+<p>Kategooria kirjeldus on valikuline komponent, mis aitab otsingumootoritel ja veebirobotitel sisu paremini tuvastada ja sortida.</p>
+<p>Kategooria kirjeldus on maksimaalselt 255 tähemärgi pikkune. Pange tähele, et mõned otsingumootorid piiravad lehe <code>meta description</code> pikkust otsingutulemuste lehtedel (SERP-ides) praktilisuse huvides ja see võib olla väiksem kui Textpatterni 255 märgi piirang.</p>
+        ]]></item>
+        <item id="file_category" title="Failid"><![CDATA[
+<h2>Failid</h2>
+<p>Failikategooriad on valikulised ja kasulikud valitud üleslaaditud failide koondamiseks rühmadesse.</p>
+        ]]></item>
+        <item id="image_category" title="Pildid"><![CDATA[
+<h2>Pildid</h2>
+<p>Pildikategooriad on valikulised ja kasulikud nii sisemiseks organiseerimiseks kui ka pildikomplektide määratlemiseks, mida saab kuvada sildi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil.</p>
+        ]]></item>
+        <item id="link_category" title="Lingid"><![CDATA[
+<h2>Lingid</h2>
+<p>Linkide kategooriad on valikulised ja kasulikud eri linkide rühmituste kuvamiseks, nt „Sõbrad“, „Roomlased“, „Kaaskodanikud“.</p>
+<p>Sellised valikulised linkide loendid väljastatakse <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> sildi <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil näiteks nii:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostika paneel">
+        <item id="clean_url_data_failed" title="Puhaste URL-andmete kontroll ebaõnnestus"><![CDATA[
+<h2>Puhaste URL-ide andmete kontroll ebaõnnestus</h2>
+<p>Tundub, et saidi URL-id (nt <code>https://example.com/section/article</code>) kas praegu ei tööta või veebiserver ei toeta testiprotseduuri, millega tehakse kindlaks, kas puhtad URL-id töötavad; kui saidi puhtad URL-id toimivad ootuspäraselt, võib seda teadet ohutult eirata.</p>
+<p>Kui puhtad URL-id <em>ei</em> tööta, võib põhjus olla kas:</p>
+<ul>
+    <li>„Saidi URL“ seadistus on vale või sellel aadressil olevat lehte ei halda see Textpatterni eksemplar</li>
+    <li>server vajab <code>.htaccess</code> faili või mõne sarnase serveridirektiivi muutmist, et puhtad URL-id töötaksid</li>
+    <li>server ei toeta üldse puhtaid URL-e</li>
+</ul>
+<p>Puhaste URL-ide test püüab tuua lehe „Saidi URL“ eelistuses määratud veebiaadressilt, et kontrollida, kas kõik puhaste URL-ide parameetrid töötavad õigesti. Kui see URL viitab mõnele teisele saidile või on asendatud staatilise lehe vms-ga, siis test ebaõnnestub. Kuni probleem on lahendamata, tuleks kasutada räpaseid URL-e (nt <code>https://example.com?s=section&amp;id=4</code>). Veendu, et „Püsilingi režiim“ oleks administraatori eelistustes vastavalt seatud.</p>
+<p>Pane tähele, et plugina kasutamine saidi „hooldusrežiimi“ viimiseks võib selle hoiatuse esile kutsuda.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Puhaste URL-ide test ebaõnnestus"><![CDATA[
+<h2>Puhaste URL-ide test ebaõnnestus</h2>
+<p>Tundub, et saidi URL-id (nt <code>https://example.com/section/article</code>) kas praegu ei tööta või veebiserver ei toeta testiprotseduuri, millega tehakse kindlaks, kas puhtad URL-id töötavad; kui saidi puhtad URL-id toimivad ootuspäraselt, võib seda teadet ohutult eirata.</p>
+<p>Kui puhtad URL-id <em>ei</em> tööta, võib põhjus olla kas:</p>
+<ul>
+    <li>„Saidi URL“ seadistus on vale või sellel aadressil olevat lehte ei halda see Textpatterni eksemplar</li>
+    <li>server vajab <code>.htaccess</code> faili või mõne sarnase serveridirektiivi muutmist, et puhtad URL-id töötaksid</li>
+    <li>server ei toeta üldse puhtaid URL-e</li>
+</ul>
+<p>Puhaste URL-ide test püüab tuua lehe „Saidi URL“ eelistuses määratud veebiaadressilt, et kontrollida, kas kõik puhaste URL-ide parameetrid töötavad õigesti. Kui see URL viitab mõnele teisele saidile või on asendatud staatilise lehe vms-ga, siis test ebaõnnestub. Kuni probleem on lahendamata, tuleks kasutada räpaseid URL-e (nt <code>https://example.com?s=section&amp;id=4</code>). Veendu, et „Püsilingi režiim“ oleks administraatori eelistustes vastavalt seatud.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Reastatud sisselogimised aktiivses serveris"><![CDATA[
+<h2>Mitmekordsed sama konto sisselogimised aktiivses serveris</h2>
+<p>Kasutajakonto lubamine mitmest seansist sisse logida on turvarisk ja ei ole soovitatav. Lülita see funktsioon keerukamate eelistuste paneelil välja, välja arvatud juhul, kui riskid on sulle teada ja vastuvõetavad.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Peida privaatne info"><![CDATA[
+<h2>Peida privaatne info</h2>
+<p>Peida privaatne teave täiendava turvalisuse huvides. Kui diagnostikainfot jagatakse avalikult nähtaval kujul, näiteks Textpatterni tugifoorumis, vähendab see turvariski, jättes välja tundliku serveriteabe.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Arenduskood aktiivses serveris"><![CDATA[
+<h2>Arenduskood aktiivses serveris</h2>
+<p>Textpatterni arendusversioonid ei ole soovitatavad tootmissaidi jaoks. Seda hoiatust võib turvariskidest teadlik olles ja neid aktsepteerides siiski eirata.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Kaust pole kirjutatav"><![CDATA[
+<h2>Kaust pole kirjutatav</h2>
+<p>Faili- ja pildiüleslaadimise võimaluste kasutamiseks peavad need kataloogid olema PHP jaoks veebiserveri kasutaja kaudu kirjutatavad. Seda saab teha (S)FTP kliendi abil või käsurealt käsuga <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS ebaõnnestub"><![CDATA[
+<h2>DNS-päring ebaõnnestus</h2>
+<p>Paistab, et saidi aadressiks määratud URL ei ole kättesaadav.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Failide üleslaadimine on keelatud"><![CDATA[
+<h2>Failide üleslaadimine on keelatud</h2>
+<p>Praegune serveriseadistus näitab, et failide üleslaadimine on keelatud. Palun kontrolli ja muuda seadistust <code>file_uploads</code> failis <code>php.ini</code> või pöördu abi saamiseks serveri haldaja poole.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess fail puudub"><![CDATA[
+<h2>.htaccess fail puudub</h2>
+<p>Kasutusel on püsilingi režiim, mis nõuab faili <code>.htaccess</code>, kuid seda faili ei leitud. Fail on Textpatterniga kaasas ja asub Textpatterni juurkataloogis koos failiga <code>index.php</code> ja kataloogiga <code>textpattern</code>. Soovitatud direktiivid on järgmised:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Saidi indeks pole kättesaadav"><![CDATA[
+<h2>Saidi indeks pole kättesaadav</h2>
+<p>Saidi indeksiks määratud juurfail <code>index.php</code> ei ole serveri jaoks loetav. Palun kontrolli faili olemasolu ja õigusi.</p>
+        ]]></item>
+        <item id="missing_files" title="Puuduvad failid"><![CDATA[
+<h2>Puuduvad failid</h2>
+<p>Mõned Textpatterni jaoks vajalikud failid puuduvad. Veendu, et kõik loetelus toodud failid oleksid serveris olemas ja õiges asukohas.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite puudub"><![CDATA[
+<h2>Apache mod_rewrite puudub</h2>
+<p>Apache moodul <code>mod_rewrite</code> ei ole paigaldatud või on välja lülitatud. Textpatterni korrektseks toimimiseks on see soovitatav. Veendu, et moodul eksisteerib ja on lubatud, või võta abi saamiseks ühendust serveri haldajaga.</p>
+        ]]></item>
+        <item id="modified_files" title="Muudetud failid"><![CDATA[
+<h2>Muudetud failid</h2>
+<p>Faile loetakse muudetuks, kui nende kontrollsumma erineb Textpatterniga kaasas olevast teada heade kontrollsummade loendist. Kui mõni Textpatterni installatsioonis olev fail erineb oodatust, tuuakse see siin esile.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL tabeli veateated"><![CDATA[
+<h2>MySQL tabeli veateated</h2>
+<p>Textpatterni MySQL-andmebaasis võib esineda rikutud või kahjustatud tabeleid. Proovi mõjutatud tabeleid parandada mõne MySQL-i haldusvahendiga, näiteks <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> või <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> abil.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Ühtegi ajutiste failide kausta pole määratud"><![CDATA[
+<h2>Ühtegi ajutiste failide kausta pole määratud</h2>
+<p>Kuigi Textpattern töötab ka ilma ajutise kataloogita, ei pruugi osa funktsionaalsust ilma selle eelistuseta ootuspäraselt toimida. Mine administraatori eelistustesse ja määra „Ajutise kataloogi asukoht“.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sektsiooni nimi kattub kataloogiga"><![CDATA[
+<h2>Sektsiooni nimi kattub kataloogiga</h2>
+<p>Olemasolevad katalooginimed võivad sattuda konflikti artikli püsilingi skeemis kasutatavate sektsiooninimedega. Probleemide vältimiseks kontrolli ja kustuta võimalikud vastuolulised katalooginimed (kui see on ohutu) või muuda sektsioonide nimesid nii, et need ei kattuks.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Saidi kaust pole loetav"><![CDATA[
+<h2>Saidi kaust pole loetav</h2>
+<p>Kataloog, mis sisaldab saidi indeksiks määratud juurfaili <code>index.php</code>, ei ole serveri jaoks loetav. Palun kontrolli kataloogi õigusi.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP-skriptimine on lubatud"><![CDATA[
+<h2>PHP-skriptimine on lubatud</h2>
+<p>Textpattern lubab autoritel ja administraatoritel lisada PHP-koodi artiklites ja lehtedel/vormides, kui need võimalused on lubatud. Kuna see on turvarisk – käivitada võib suvalist PHP-d, sh potentsiaalselt kahjustavat/ohu­likku koodi, mis võib viia sinu paigalduse hävimiseni või teabe lekkimiseni kolmandatele osapooltele –, on tungivalt soovitatav need valikud <a href="?event=prefs#prefs_group_publish">eelistuste paneelis</a> välja lülitada, välja arvatud juhul, kui seda on hädasti vaja.</p>
+<p>Paljud Textpatterni täiustused, mis varem nõudsid PHP-lõike, on nüüd teostatavad <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">põhisiltidega</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Miinimumversiooni nõuded"><![CDATA[
+<h2>Miinimumversiooni nõuded</h2>
+<p>Textpattern vajab teatud funktsionaalsust PHP programmeerimiskeeles ja MySQL-andmebaasiserveris. Vaata järgmist tabelit, et teha kindlaks minimaalsed süsteeminõuded:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpatterni versioon</th>
+                <th scope="col">Minimaalne PHP versioon</th>
+                <th scope="col">Minimaalne MySQL versioon</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Lisaks ülaltoodud süsteeminõuetele on vajalikud järgmised PHP-laiendid:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a></li>
+</ul>
+<p>Saidi <code>php.ini</code> failis – kas globaalses või lokaalses – peab olema seade <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Seadistuse kataloog on endiselt alles"><![CDATA[
+<h2>Seadistuse kataloog on endiselt alles</h2>
+<p>Pärast Textpatterni paigaldamist ei ole kataloogi <code>textpattern/setup</code> ja selle sisu enam vaja ning turvalisuse huvides tuleks see kustutada.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Saidi URL ei ühti"><![CDATA[
+<h2>Saidi URL ei ühti</h2>
+<p>„Eelistuste“ paneelil määratud saidi URL ei ühti tegeliku URL-iga, mille kaudu saiti külastatakse.</p>
+<p>Kui saidile pääseb ligi mitme erineva URL-i kaudu ja sait käitub ootuspäraselt, võib seda teadet ohutult eirata.</p>
+<p>Vastasel juhul kontrolli ja muuda vajadusel eelistustes „Saidi URL“ seadet. Õigesti tuvastatud saidi URL-i pakkumine on toodud nõuandena „Diagnostika“ paneeli hoiatuses.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP funktsioonid [&#8230;] on sinu serveris keelatud"><![CDATA[
+<h2>PHP funktsioonid [&#8230;] on sinu serveris keelatud</h2>
+<p>Serveri haldaja on keelanud ühe või mitu PHP-funktsiooni, millest mõned võivad mõjutada Textpatterni tööd.</p>
+<p>Vaata lisateavet lehelt <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpatterni versiooniuuendus"><![CDATA[
+<h2>Textpatterni versiooniuuendus</h2>
+<p>Saadaval on Textpatterni uuem versioon. Et kasutada uusimaid funktsioone ja turvaparandusi, on soovitatav teha uuendus.</p>
+<p>Pane tähele, et kuigi püüame uuendamise kogemuse muuta võimalikult sujuvaks ja valutuks:</p>
+<ul>
+    <li>Kui erineb ainult versiooninumbri viimane number, on uuendus tõenäoliselt tagasiühilduv pluginate ja teemadega.</li>
+    <li>Kui erinevad kaks viimast numbrit, võib uuendus vajada mõne plugina ja/või teema uuendamist, ehkki need võivad piiratud kujul edasi töötada.</li>
+    <li>Kui erineb esimene number, vajab uuendus tõenäoliselt enamiku pluginate ja teemade uuendamist. Kui tugined tugevalt mõnele konkreetsele plugina või teema funktsioonile, kontrolli enne uuendamist autori või kogukonnaga.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpatterni eelväljalase on saadaval"><![CDATA[
+<h2>Saadaval on Textpatterni eelväljalaske uuendus</h2>
+<p>Saadaval on Textpatterni uuem eelväljalaske versioon. Otsime aktiivseid vabatahtlikke selle versiooni testimiseks, et muuta lõppväljalase võimalikult töökindlaks. Püüame teha uuendamise kogemuse sujuvaks ja valutuks ka beetakoodi puhul.</p>
+<p>Kui otsustad osaleda, siis arvesta järgneva(te)ga:</p>
+<ul>
+    <li>Ära kasuta seda beeta­väljalaset tootmissaidil, välja arvatud juhul, kui sul on toimiv varukoopia nii saidi failidest kui ka andmebaasist ja sa tead, kuidas seda taastamiseks kasutada.</li>
+    <li>Palun <a href="https://github.com/textpattern/textpattern/issues">teata probleemidest</a>, märkides kasutatava beetaversiooni. Sõltuvalt teatatud probleemidest võib enne stabiilset versiooni olla vaja täiendavaid beetaversioone.</li>
+    <li>Kui rakendad selle beetaversiooni, veendu, et uuendad hiljem ka lõppversioonile.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Ajutise kataloogi ja plugina vahemälu kataloogi teed ei tohiks kattuda"><![CDATA[
+<h2>Ajutise kataloogi ja plugina vahemälu kataloogi teed ei tohiks kattuda</h2>
+<p>Pluginatel peaks olema oma kataloog ega tohi jagada ajutist kataloogi. See on potentsiaalne turvarisk ja võib kahjustada sinu saiti, kui ajutine kataloog tühjendatakse. Veendu, et ajutise kataloogi tee erineb plugina vahemälu teest.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Uuenduste server pole kättesaadav"><![CDATA[
+<h2>Uuenduste server pole kättesaadav</h2>
+<p>Uuenduste kontroll nurjus, sageli võrgu ülekoormuse või ühenduse aegumise tõttu. See olukord laheneb tavaliselt tunni-paari jooksul iseenesest, seega proovi seda paneeli hiljem uuesti külastada.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Sinu PHP paigaldusel puudub funktsioon mail()"><![CDATA[
+<h2>Sinu PHP paigaldusel puudub funktsioon mail()</h2>
+<p>PHP funktsioon <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> on keelatud. Seetõttu ei saa Textpattern saata e-kirju ja osa funktsionaalsust ei ole kättesaadav. Näiteks ei saadeta e-posti teavitusi uutest kommentaaridest ja uued kasutajad ei saa tervituskirja. Kasutajaid saab siiski lisada.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Failide paneel">
+        <item id="file_reassign" title="Määra fail uuesti"><![CDATA[
+<h2>Määra fail uuesti</h2>
+<p>Kui laadid üles faili mõne „Puuduva“ märgisega faili asemele, laaditakse sinu valitud fail serverisse ja seotakse andmebaasis algse faili infoga. See tähendab, et algse faili failinimi jääb samaks, nagu ka muu seotud info, näiteks allalaadimiste arv ja kategooria. Faili suurus uuendatakse aga vastavalt uuele failile.</p>
+        ]]></item>
+        <item id="file_replace" title="Asenda fail"><![CDATA[
+<h2>Asenda fail</h2>
+<p>Siin faili üleslaadimine asendab serveris olemasoleva faili sisu, kuid jätab failinime samaks. Failiga seotud allalaadimiste arv ja muu teave jäävad muutmata.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Avaldamise kuupäev"><![CDATA[
+<h2>Avaldamise kuupäev</h2>
+<p>Aeg, mil fail avaldatakse või viimati üle vaadatakse. Aja saab seada hetkele, mil üksus avaldatakse, või meelevaldsele mineviku- või tulevikuajale.</p>
+<p>Kastid vastavad järgmisele teabele:</p>
+<ul>
+    <li>Aasta / kuu / päev</li>
+    <li>Tund (24-tunnine formaat) : minut : sekund</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Lae fail üles"><![CDATA[
+<h2>Lae fail üles</h2>
+<p>Kasuta seda vormi failide või piltide serverisse üleslaadimiseks.</p>
+<p>Kasuta graafika kuvamiseks artiklites Textile koodi, lehemallidel graafika paigutamiseks Textpatterni koodi või mujal HTML-koodi.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Vormide paneel">
+        <item id="forms_overview" title="Vormide tutvustus"><![CDATA[
+<h2>Vormide tutvustus</h2>
+<p>Textpatternis on vorm korduvkasutatav tekstilõik või plokk, mis võib sisaldada teksti, HTML-i ja Textpatterni silte ning mida saab kasutada sisu kuvamiseks.</p>
+<p>Siin on näide vormist, mille nimi võiks olla <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Vormi saab kasutada HTML-i korrastamata loendi kuvamiseks seotud artiklitest:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Kuna selle vormi roll on väljastada pealkirjade loend, võib see sobida ka teiste siltide sees kasutamiseks, näiteks 20 artikli kuvamiseks aktiivsest sektsioonist:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Samuti võid vormi kasutada korduva sisu, näiteks päise ja jaluse, kuvamiseks oma lehemallides. See tähendab, et sisu asub ainult ühes kohas ja kui otsustad seda muuta, tuleb seda teha vaid kord. Sisu kuvamine vormist toimub tavaliselt nii:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Vormi suurus võib olla kuni 64 KB. Jaluse näites võivad olla pealkirjad, lõigud, lingid, tingimuslikud sildid ja viited teistele vormidele, näiteks <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Piltide paneel">
+        <item id="create_thumbnail" title="Loo pisipilt"><![CDATA[
+<h2>Loo pisipilt</h2>
+<p>Võimaldab (taas)luua täissuuruses pildist soovitud mõõtmetega pisipildi.</p>
+<p>Kohandatud suuruse korral skaleeritakse pisipilt sinu valitud mõõtmetesse, välja arvatud juhul, kui märgid ruudu „Kärbi“. Sel juhul luuakse pisipilt pildi keskosast ilma skaleerimiseta.</p>
+<p>Automaatse suuruse korral skaleeritakse pisipilt aktiivse admin-teema määratud mõõtmete ja (valikuliste) kärpeseadete järgi.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Asenda pilt"><![CDATA[
+<h2>Asenda pilt</h2>
+<p>Siia üles laaditud pilt asendab lihtsalt selle kirjega seotud olemasoleva pildi andmebaasis.</p>
+        ]]></item>
+        <item id="upload_image" title="Laadi pilt üles"><![CDATA[
+<h2>Laadi pilt üles</h2>
+<p>Laadi üks või mitu pilti oma serverisse.</p>
+<p>Pärast üleslaadimist kataloogi <code>images</code> säilitatakse sinu algse pildi failinimi ainult Textpatterni andmebaasisiseselt; pildifail ise nimetatakse ümber jooksvaks numbriks + faililaiendiks.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Lae üles pisipilt"><![CDATA[
+<h2>Lae üles pisipilt</h2>
+<p>Täissuuruses piltidele saab määrata oma pisipildid. Need on kasulikud täissuuruses piltidele linkimiseks ja nende indekseerimiseks.</p>
+<p>Pisipildi viide on täpselt sama mis täissuuruses pildi viide, lisaks ainult <code>t</code> failinime lõpus. Näiteks kui täissuuruses pilt asub aadressil <code>/images/12.jpg</code>, siis seotud pisipildi aadress oleks <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Keelte paneel">
+        <item id="get_textpack" title="Paigalda tekstipakk"><![CDATA[
+<h2>Paigalda tekstipakk</h2>
+<p>Kleebi siia oma saidi täiendavad keelestringid ja vali nende paigaldamiseks „Laadi üles“.</p>
+<p>Stringid on sageli allalaaditava tekstipaki kujul, mis jaotatakse plugina koosseisus, et plugina keelestringe saaks Textpatternis natiivsel kujul kasutada.</p>
+<p>Tõlkijad saavad neid pakke seejärel vajadusel tõlkida ja lokaliseeritud sisu kogukonnaga jagada.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Linkide paneel">
+        <item id="link_description" title="Kirjeldus"><![CDATA[
+<h2>Kirjeldus</h2>
+<p>Linkide kirjeldused on valikulised ja kasulikud linkide varustamiseks pealdistega, linkidele <code>title=""</code> (kohta selgitava hüpikteksti) atribuutide loomiseks või lihtsalt oma sisemise dokumentatsiooni hoidmiseks.</p>
+        ]]></item>
+        <item id="link_sort" title="Järjestusväärtus"><![CDATA[
+<h2>Järjestusväärtus</h2>
+<p>Kasulik linkide loendite loomuliku keele järgi sortimiseks, näiteks inimese perekonnanime, mitte eesnime järgi, või väljendite järgi, mis algavad määrava või umbmäärase artikliga.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Lingi aadress. Kui link osutab mõnele teisele saidile, peab selle ees olema <code>http://</code> või <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Avaldamise kuupäev"><![CDATA[
+<h2>Avaldamise kuupäev</h2>
+<p>Aeg, mil link avaldatakse või viimati üle vaadatakse. Aja saab seada hetkele, mil üksus avaldatakse, või meelevaldsele mineviku- või tulevikuajale.</p>
+<p>Kastid vastavad järgmisele teabele:</p>
+<ul>
+    <li>Aasta / kuu / päev</li>
+    <li>Tund (24-tunnine formaat) : minut : sekund</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Sisselogimise paneel">
+        <item id="remember_login" title="Mäleta mind"><![CDATA[
+<h2>Mäleta mind</h2>
+<p>Kui see on märgitud, jääd Textpatterni kontoga praeguse veebibrauseri kaudu sisse logituks seni, kuni valid väljalogimise. Kui seda ei märgita, logitakse sind pärast mõningast tegevusetust automaatselt välja.</p>
+<p>Nõuab, et sinu brauseris oleks küpsiste kasutamine lubatud.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Pluginate paneel">
+        <item id="install_plugin" title="Installeeri plugin"><![CDATA[
+<h2>Installeeri plugin</h2>
+<p>Kleebi siia kompileeritud pluginatekstifaili sisu ja kasuta paigaldamise alustamiseks nuppu „Laadi üles“. Iga sama nimega plugin, mis on juba paigaldatud, kirjutatakse üleslaaditud versiooniga üle.</p>
+<p>Siia kleebitav pluginatekst ei ole <strong>mitte</strong> toores PHP-kood, vaid Base64-kodeeritud tekst, mille ees on tavaliselt päis plugina teabega (näiteks plugina nimi, versioon, kirjeldus, autori nimi jne).</p>
+<p>Kompileeritud pluginaid leiab sageli <a rel="external" target="_blank" href="https://plugins.textpattern.com/">pluginate repositooriumist <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> või plugina autori määratud kanalist, näiteks tema veebisaidilt või GitHubist.</p>
+<p>Võid siia kleepida ka Textpatterni kompileeritud tekstifaili URL-i, kui väline sait seda lubab.</p>
+<p>Kõik üleslaaditud pluginad läbivad enne paigaldamist kontrollietapi, mis võimaldab sul plugina koodi ja sisu üle vaadata.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Laadi plugin üles"><![CDATA[
+<h2>Lae plugin üles</h2>
+<p>Kasuta seda vormi pluginafaili üleslaadimiseks. Üleslaaditud pluginad (ja nende ressursid) salvestatakse kataloogi „plugins“.</p>
+<p>Siia saab üles laadida järgmisi pluginate tüüpe:</p>
+<ul>
+<li>Textpatterni PHP-mallifailid, mis sisaldavad täielikku koodi, metaandmeid, Textpacki stringe ja abiteksti.</li>
+<li>Textpatterni kompileeritud tekstifailid, mis sisaldavad täielikku koodi, metaandmeid, Textpacki stringe ja abiteksti.</li>
+<li>Textpatterni zip-pakid, mis sisaldavad manifestinfot, koodi, metaandmeid, Textpacki stringe, abiteksti ja tugifaile.</li>
+<li>Toored PHP-failid (need ei täida metaandmeid ja ei ole soovitatavad).</li>
+</ul>
+<p>Iga sama nimega plugin, mis on juba paigaldatud, kirjutatakse üleslaaditud versiooniga üle.</p>
+<p>Kõik üleslaaditud pluginad läbivad enne paigaldamist kontrollietapi, mis võimaldab sul plugina koodi ja sisu üle vaadata.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Seaded">
+        <item id="admin_side_plugins" title="Kasuta admin-ala pluginaid?"><![CDATA[
+<h2>Kasuta admin-ala pluginaid?</h2>
+<p>Admin-ala pluginad võivad muuta haldusliidese toimimist. Need võivad haakuda juba olemasolevate toimingutega, nagu artiklite muutmine või avaldamine, või lisada uusi paneele lisafunktsionaalsuse jaoks.</p>
+<p>Kui soovid admin-ala pluginate kohta rohkem teada, vaata lehte <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpatterni kasutajadokumentatsiooni <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>. Erinevat tüüpi pluginaid on loetletud saidil <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Keerukamad seaded"><![CDATA[
+<h2>Keerukamad seaded</h2>
+<p>Kuva täiendavate seadete rühm, kus saab häälestada lisavalikuid, näiteks:</p>
+<ul>
+    <li>PHP-funktsioonid, mis on lubatud sildis <code>txp:evaluate</code>.</li>
+    <li>Kohandatud vormimallide tüübid.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Luba PHP artiklites?"><![CDATA[
+<h2>Luba PHP artiklites?</h2>
+<p>Kui see on lubatud, saab artiklites kasutada PHP-d. Autoril peab selleks olema piisav rolliõigus (vaikimisi saavad seda teha ainult <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„väljaandjad“ <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„vastutavad toimetajad“ <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> ja <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„koopiat toimetajad“ <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>).</p>
+<p><strong>Tungivalt soovitame see valik välja lülitada</strong>, välja arvatud juhul, kui seda funktsiooni on hädasti vaja. Iga autor võib lisada suvalist potentsiaalselt ohtlikku/kahjulikku PHP-koodi, mis võib sinu veebisaidi hävitada või infot kolmandatele osapooltele lekkida, ja seda saab käivitada igaüks, kes artiklit vaatab.</p>
+<p>PHP-koodis tuleb jätta ära PHP algus- ja lõpusildid ning see tuleb ümbritseda siltega <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Luba vormide ülekirjutamist?"><![CDATA[
+<h2>Luba vormide ülekirjutamist?</h2>
+<p>See säte lubab artiklite autoritel muuta vormi, mida nende artikli kuvamisel kasutatakse. Kui see on lubatud, on artikli muutmise ajal saadaval rippmenüü „Tühista vaikimisi vorm“.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Luba PHP lehtedel?"><![CDATA[
+<h2>Luba PHP lehtedel?</h2>
+<p>Kui see on lubatud, võib PHP-koodi kasutada lehemallides ja vormimallides.</p>
+<p><strong>Tungivalt soovitame see valik välja lülitada</strong>, välja arvatud juhul, kui seda funktsiooni on hädasti vaja. Iga teine kasutaja võib lisada suvalist potentsiaalselt ohtlikku/kahjulikku PHP-koodi, mis võib sinu veebisaidi hävitada või infot kolmandatele osapooltele lekkida, ja see võib käivituda mõne administraatori või saidi külastaja teadmata.</p>
+<p>PHP-koodis tuleb jätta ära PHP algus- ja lõpusildid ning see tuleb ümbritseda siltega <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arhiivi kuupäeva formaat"><![CDATA[
+<h2>Arhiivi kuupäeva formaat</h2>
+<p>Viis, kuidas kuupäevi näidatakse sinu saidi sektsioonide artiklitel.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Kuva artikli muutmislehel kokkuvõte?"><![CDATA[
+<h2>Kuva artikli muutmislehel kokkuvõte?</h2>
+<p>Kui valid „Ei“, ei näidata autorile artikli muutmisekraanil kokkuvõtte välja.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Lisa pealkirjad püsilinkidele?"><![CDATA[
+<h2>Lisa pealkirjad püsilinkidele?</h2>
+<p>See säte lisab URL-i automaatselt genereeritud versiooni artikli pealkirjast. See luuakse kas automaatselt või seda saab muuta käsitsi välja „Ainult URL-i pealkiri“ kaudu artiklit toimetades.</p>
+<p>See säte mõjutab ainult juhul, kui kasutad puhtaid URL-e. Teatud keelte puhul võib see tekitada pikad ja kohmakad URL-id, sel juhul võib olla mõistlik seada see väärtusele „Väljas“.</p>
+        ]]></item>
+        <item id="auto_dst" title="Reguleeri suveaega automaatselt?"><![CDATA[
+<h2>Reguleeri suveaega automaatselt?</h2>
+<p>See säte lubab Textpatternil kohandada, millal sinu asukohas rakendub suveaeg (DST). Kui see on seatud väärtusele „Ei“, saad eelistust „Suveaeg lubatud“ muuta käsitsi.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Uus kommentaar tähendab saidi uuendamist?"><![CDATA[
+<h2>Uus kommentaar tähendab saidi uuendamist?</h2>
+<p>Textpatterni andmebaas peab arvestust sellest, millal tehti sinu saidil viimati muudatus. Kui see säte on „Jah“, uuendab ka uus kommentaar seda väärtust. Seda väärtust kasutatakse näiteks funktsiooni <code>"Send Last-Modified header"</code> jaoks.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Rakenda kommentaarides rel=&quot;nofollow&quot;?"><![CDATA[
+<h2>Rakenda kommentaarides rel="nofollow"?</h2>
+<p>Kui see on „Jah“, lisatakse kommentaarides tehtud linkidele täiendav atribuut. Selle eesmärk on vähendada kommentaarispämmiga tegelemise motivatsiooni; algatuse taga on rida otsingumootoreid ja tarkvaraarendajaid. Rohkem infot leiad <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google’i teadaandest <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+<p><strong>Märkus:</strong> See säte ei mõjuta sinu saidi funktsionaalsust. See võib siiski vähendada või muuta mõne otsingumootori jaoks kommentaarides olevate linkide mõju.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Esita kommentaarid nummerdatud loeteluna?"><![CDATA[
+<h2>Esita kommentaarid nummerdatud loeteluna?</h2>
+<p>Määrab, kas artiklikommentaarid ümbritsetakse HTML-i sildiga <code>&lt;ol&gt;</code> ja iga kommentaar sildiga <code>&lt;li&gt;</code> (mis kuvab kommentaarid nummerdatud loeteluna) või kasutatakse iga kommentaari ümbritsemiseks hoopis silti <code>&lt;div&gt;</code>.</p>
+<p>Mõlemal juhul saad vormipõhiselt kasutatavaid silte üle kirjutada, muutes sildi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> atribuute vormis <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automaatselt lisa artiklitele kommentaarid?"><![CDATA[
+<h2>Automaatselt lisa artiklitele kommentaarid?</h2>
+<p>See säte määrab, kas kommentaarid ja kommentaarivorm lisatakse automaatselt kõigile üksikartiklitele (lisades automaatselt vormi <code>comments_display</code> sisu).</p>
+<p>Enamasti tasub see seada väärtusele „Ei“, et saada saidi kujunduses kommentaaride paigutamisel suurem paindlikkus. Sellisel juhul pead any artiklipõhistesse mallidesse, kus soovid kommentaare kuvada, lisama sildi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> käsitsi.</p>
+<p>Kui märkad artiklis kommentaaride topeltkuvamist, on tõenäoline, et mallis on juba silt <code>&lt;txp:comments /&gt;</code>, ja lisaks on säte „Automaatselt lisa artiklitele kommentaarid?“ samuti väärtusel „Jah“.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Kommentaaride kuupäeva formaat"><![CDATA[
+<h2>Kommentaaride kuupäeva formaat</h2>
+<p>Kuidas kuupäevi kommentaarides sinu saidi külastajatele kuvatakse.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Vaikimisi kommentaarikutse"><![CDATA[
+<h2>Vaikimisi kommentaarikutse</h2>
+<p>Kui lubad külastajatel sinu saidil kommenteerida, on see vaikimisi üleskutse tekst. Näiteks:</p>
+<ul>
+    <li>Kommentaarid</li>
+    <li>Lisa kommentaar</li>
+    <li>Tagasiside</li>
+    <li>Kommenteeri</li>
+</ul>
+<p>Märkus: üleskutse teksti saab alati artiklipõhiselt muuta.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Kommentaarid keelatakse pärast"><![CDATA[
+<h2>Kommentaarid keelatakse pärast</h2>
+<p>Kasuta seda, et määrata ajavahemik, pärast mida kommenteerimine artiklite juures välja lülitatakse (väärtusega „Mitte kunagi“ võimaldad kommentaare tähtajatult).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Lubada kommenteerija pilte kommentaarides?"><![CDATA[
+<h2>Lubada kommenteerija pilte kommentaarides?</h2>
+<p>Kui see valik on „Ei“, eemaldatakse kommentaarides olevad pildid.</p>
+        ]]></item>
+        <item id="comments_mode" title="Kommentaarirežiim"><![CDATA[
+<h2>Kommentaarirežiim</h2>
+<p>Kui on valitud „nopopup“ (soovitatav), värskendatakse aktiivne aken, et kuvada ainult praegust artiklit koos all olevate kommentaaridega.</p>
+<p>Kui on valitud „popup“, avatakse kommentaarilingile klõpsates uus brauseriaken (see kasutab vormi <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Modereeri kommentaare?"><![CDATA[
+<h2>Modereeri kommentaare?</h2>
+<p>Kui see on „Jah“, lülitatakse iga uue kommentaari nähtavus välja, kuni see on üle vaadatud. Pead iga kommentaari käsitsi läbi vaatama ja nähtavaks tegema (artiklikirjutajale saadetakse e-kiri, kui tema artiklile on lisatud uus kommentaar).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Vaikimisi lubatud kommentaarid?"><![CDATA[
+<h2>Vaikimisi lubatud kommentaarid?</h2>
+<p>Kui see on „Jah“, lubatakse kommentaarid automaatselt iga avaldatud artikli jaoks. Kui see on „Ei“, pead iga kord, kui soovid artikli juures kommentaare lubada, selle „Kirjutamise“ paneelil käsitsi sisse lülitama.</p>
+<p>Kommentaare saab igal ajal artiklipõhiselt sisse või välja lülitada.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Kommenteerimine nõuab meiliaadressi?"><![CDATA[
+<h2>Kommentaar vajab kasutaja e-posti aadressi?</h2>
+<p>Kui see on „Jah“, peavad kommenteerijad kommentaarivormil sisestama e-posti aadressi. Ilma e-posti aadressita ei saa nad kommentaari esitada.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Kommenteerimine nõuab nime?"><![CDATA[
+<h2>Kommentaar vajab kommenteerija nime?</h2>
+<p>Kui see on „Jah“, peavad kommenteerijad kommentaarivormil sisestama nime. Ilma nimeta ei saa nad kommentaari esitada.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Saada kommentaar autorile e-postiga?"><![CDATA[
+<h2>Saada kommentaar autorile e-postiga?</h2>
+<p>Kui see on „Jah“, saadetakse igast artiklile tulnud uuest kommentaarist koopia e-postiga selle artikli autorile.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Luba kommentaarides rohkem Textile’i märgendust?"><![CDATA[
+<h2>Luba kommentaarides rohkem Textile’i märgendust?</h2>
+<p>Kui see on „Jah“, võivad kommentaarid sisaldada <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile’i <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> elemente, mida muidu käsitletaks lihttekstina, näiteks:</p>
+<ul>
+    <li>pealkirjad</li>
+    <li>järjestatud ja järjestamata loendid</li>
+    <li>allmärkused</li>
+    <li>tabelid</li>
+    <li>kood</li>
+    <li>laiendatud plokksüntaks (<code>bc..</code>, <code>bq..</code> jne)</li>
+</ul>
+<p><strong>Märkus:</strong> Turvalisuse kaalutlustel teisendatakse toores HTML tavalisteks tekstimärkideks.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Korraga sisselogimiseks lubatud kontod"><![CDATA[
+<h2>Korraga sisselogimiseks lubatud kontod</h2>
+<p>Komaeraldusega loend kasutajakontode sisselogimisnimedest, mis võivad sisse logida mitmest brauserist/seansist. See on arenduse ajal kasulik, et jagada kliendiga ühte sisselogimist.</p>
+<p>Selle funktsiooni kasutamine on turvarisk ja <strong>ei ole aktiivsetel saitidel soovitatav</strong>. Kui sinu konto on aktiivsel saidil samaaegseks kasutamiseks lubatud, kuvatakse diagnostikas hoiatus.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Kohandatud vormi malli liigid"><![CDATA[
+<h2>Kohandatud vormi malli liigid</h2>
+<p>Lisaks standardsetele vormimallide tüüpidele (article, file, misc jne) saavad väljaandjad määrata kohandatud tüübid. Kohandatud vormimallide tüüpide eesmärk on kahetine: vormimallide lihtsam liigitamine ja kohandatud ressursside määratlemine.</p>
+<p>Eelistuse vorming on <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>, kus iga sektsioon vastab ühele vormimalli tüübile.</p>
+<p>Kohandatud vormitüübi (nt <code>js</code>) lisamiseks tuleb eraldi reale lisada sektsioon <code>[js]</code>. Vaikimisi pealkirja saab määrata samanimelises sektsioonis kirje <code>title="Javascript"</code> abil. Vajaduse korral saab lisada ka lokaliseeritud pealkirjad (nt <code>ru="Скрипт"</code>).</p>
+<p>Lisaks võib vormimalli jaoks määrata <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">meediatüübi <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> (varem tuntud kui MIME-tüüp), nt <code>mediatype="application/javascript"</code>. See muudab sellesse tüüpi vormimallid kohandatud ressurssideks, mida saab määratud meediatüübi all väljastada kas andmebaasist või kettalt (lamefailidena) sildi <code>&lt;txp:output_form /&gt;</code> abil. Näiteks saab vormimalli nimega <code>myscript.js</code> tüübist <code>[js]</code>, mille meediatüüp on <code>application/javascript</code>, kaasata koodis järgmiselt:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Sellisel juhul genereeritakse järgmine HTML-silt <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Ainult vormimallid, mille nimelaiend vastab nende tüübile (nt <code>myscript.js</code>), saab väljastada lamefailidena. Sel juhul ei töötle Textpattern neid üldse ja neid saab avada otse URL-i kaudu.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Kohandatud väljad"><![CDATA[
+<h2>Kohandatud väljad</h2>
+<p>Kohandatud väljad on mõeldud artiklite lisainfo salvestamiseks. Võid määrata kuni kümme sellist välja, pannes neile siin nimed. Igaüks kuvatakse „Kirjutamise“ paneelil eraldi väljana, et igale artiklile saaks lisada kohandatud andmeid.</p>
+<p>Väljadele võib anda mis tahes nimetuse, kuid arvesta järgmisega:</p>
+<ul>
+<li>Tühikute kasutamine parandab loetavust „Kirjutamise“ paneelil, kuid selliseid välju ei saa <em>kasutada</em> sildi article_custom sortimis- või filtreerimisparameetritena. Kui soovid seda võimalust kasutada, kaalu tühikute asemel alakriipse.</li>
+<li>Välju nimetades ole ettevaatlik, et need ei kattuks Textpatterni reserveeritud väljade nimedega. Näiteks ära kasuta <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> jne, vastasel juhul võid saada kummalisi tulemusi või katkise saidi.</li>
+<li>Iga välja andmed on piiratud 255 tähemärgiga ning võivad sisaldada ainult teksti.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Kuupäeva formaat"><![CDATA[
+<h2>Kuupäeva formaat</h2>
+<p>See säte mõjutab ainult seda, kuidas kuupäevad esilehe artiklitel kuvatakse.</p>
+        ]]></item>
+        <item id="default_event" title="Vaikimisi paneel"><![CDATA[
+<h2>Vaikimisi paneel</h2>
+<p>Textpatterni haldusliidese paneel, mis kuvatakse esimesena iga sisselogimise järel.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Vaikimisi avaldamise staatus"><![CDATA[
+<h2>Vaikimisi avaldamise staatus</h2>
+<p>Määrab uute Textpatterni artiklite vaikimisi nähtavuse oleku.</p>
+<p>Pange tähele, et see eelistus ei mõjuta enne muudatust loodud või muudetud artiklite olekut.</p>
+<p>Vaikimisi avaldamise olek on üks järgmistest:</p>
+<ul>
+    <li>Mustand</li>
+    <li>Peidetud</li>
+    <li>Ootel</li>
+    <li>Avalik</li>
+    <li>Kinnitatud</li>
+</ul>
+<p><strong>Mustand</strong> on pooleliolev artikkel, mis ei ole Textpatterni haldusala väliselt nähtav (s.t ei ole nähtav esilehel ega sünkroniseerita voogudesse).</p>
+<p><strong>Peidetud</strong> artikkel ei ole Textpatterni haldusala väliselt nähtav.</p>
+<p><strong>Ootel</strong> artikkel on avaldamiseks valmis ja ootab kinnitamist, kuid ei ole Textpatterni haldusala väliselt nähtav.</p>
+<p><strong>Avalik</strong> artikkel on tavaliselt Textpatterni haldusala väliselt nähtav (s.t nähtav esiküljel, sünkroniseeritakse voogudesse, kui eelistus seda lubab). Kui artikkel on avalik ja tal on aegumiskuupäev, jääb olek ka pärast selle kuupäeva saabumist avalikuks, kuid artikkel ilmub haldusalast väljaspool ainult siis, kui aegunud artiklite avaldamine on lubatud.</p>
+<p><strong>Kinnitatud</strong> artikkel on sarnane <strong>avalikule</strong>, sest seda saab Textpatterni haldusala väliselt kuvada, kuid see <strong>ei</strong> ilmu artikliloendites, välja arvatud juhul, kui vastaval sildil <code>article</code> või <code>article_custom</code> on atribuut <code>status</code> väärtusega <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Vali, millist HTML-doctype’i soovid kasutada (HTML5 või XHTML). See mõjutab kommentaarivorme, Textile’i renderdust siltide <code>&lt;abbr&gt;</code> või <code>&lt;acronym&gt;</code> puhul ja silte <code>&lt;link&gt;</code>, mida genereerib silt <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Luba arendatava teema eelvaade?"><![CDATA[
+<h2>Luba arendatava teema eelvaade?</h2>
+<p>Piisavate õigustega kasutajad (vaikimisi rollid Väljaandja ja Disainer) saavad turvaliselt arendada ja eelvaadata uut teemat, samal ajal kui kõik teised kasutajad näevad endiselt vana teemat (kuni uus välja lastakse).</p>
+<p>Privilegeeritud kasutajad, kes ei soovi teemade arendamisest osa võtta, võivad arendatava teema eelvaate keelata. Siis näevad nad nagu tavalised saidi külastajad alati aktiivset „avalikku“ teemat.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Luba lühisiltide tugi?"><![CDATA[
+<h2>Luba lühisiltide tugi?</h2>
+<p>Textpatterni sildid on kujul <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Kirjutamist saab lihtsustada, lubades lühi­märgenduse, mille korral võib <code>txp:</code> ära jätta, järgides mõnda lihtsat reeglit. Mõned näited:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> muutub kujule <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> muutub kujule <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> muutub kujule <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> muutub kujule <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> muutub kujule <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (pane tähele, et plugina eesliidet saab kasutada ka sildi <code>else</code> puhul).</li>
+</ul>
+<p>Kui silt sisaldab alakriipsu ja lühisildid on lubatud, on põhimõte järgmine:</p>
+<ol>
+    <li>Eemalda eesliide <code>txp:</code>.</li>
+    <li>Asenda esimene alakriips sümboliga <code>::</code>.</li>
+</ol>
+<p>Pane tähele, et see eelistus ei mõjuta võimalust kasutada lühikoode sildi <code>&lt;txp:output_form /&gt;</code> abil vormilõikude renderdamiseks. Võid endiselt kasutada vormi <code>&lt;txp::shortcode /&gt;</code>, mida tõlgendatakse kujul <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Kas kasutada XML-RPC serverit?"><![CDATA[
+<h2>Kas kasutada XML-RPC serverit?</h2>
+<p>Kui soovid kasutada <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>-i Textpatterni kaugjuhtimiseks (nt lauaarvuti või mobiilirakendustega), pead XML-RPC serveri siin väärtusega „Jah“ sisse lülitama.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Kasuta täiustatud e-posti funktsioone"><![CDATA[
+<h2>Kasuta täiustatud e-posti funktsioone</h2>
+<p>Kui seada see „Ei“, suunatakse kõik e-kirjad – näiteks konto parooli lähtestamise taotlused ja pluginate (nt com_connect) kaudu saadetud kirjad – PHP funktsiooni <code>mail()</code> kaudu. Valik „Jah“ kasutab selle asemel kaasasolevat PHPMailerit, mis avab võimaluse e-posti suunamiseks väliste SMTP-serverite kaudu.</p>
+<p>Kui sul on probleeme e-kirjade kohalejõudmisega (eriti veebipõhiste teenusepakkujate, nt Gmail, Outlook, Yahoo! jne puhul), võib põhjus olla selles, et sinu domeeni ei peeta usaldusväärseks saatjaks. Seadmine väärtusele „Jah“ võib kohaletoimetamist parandada. Lisaks võib SMTP kasutamine pakkuda mõne e-posti pakkujaga paremat ühilduvust ja seeläbi veelgi parandada kirjade kohalejõudmist.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Logid aeguvad mitme päeva pärast?"><![CDATA[
+<h2>Logid aeguvad mitme päeva pärast?</h2>
+<p>Kui Textpatterni logimine on lubatud, saad määrata, kui kaua (päevades) logisid säilitatakse. Näiteks väärtus „7“ hoiab logid seitsme päeva jooksul kättesaadavatena.</p>
+<p><strong>Märkus:</strong> Logisid kärbitakse ainult siis, kui vaatad paneeli „Külastuslogid“ – vastasel juhul kasvab logitabel edasi.</p>
+        ]]></item>
+        <item id="file_base_path" title="Faili üleslaadimistee"><![CDATA[
+<h2>Faili üleslaadimistee</h2>
+<p>See määrab <strong>absoluutse tee</strong> kataloogile, kuhu üleslaaditud failid püsivalt salvestatakse. PHP-l peab olema sellesse kataloogi kirjutamise õigus.</p>
+<p><strong>Märkus:</strong> Turvalisuse tõstmiseks tasub see kataloog viia veebisaidi avalikust dokumendijuurkataloogist väljapoole.</p>
+        ]]></item>
+        <item id="file_download_header" title="Faili allalaadimise päis"><![CDATA[
+<h2>Faili allalaadimise päis</h2>
+<p>Võimaldab kohandada, kuidas failide allalaadimine käitub.</p>
+<p>Tavaliselt käsitletakse kõiki allalaadimisi manusena ja need laaditakse alla (sõltuvalt brauseri seadistusest antud failitüübi jaoks). Kui soovid vihjata, kuidas peaksid eelistatavalt teatud failitüüpe käsitletama, võid selleks siia sisestada sildikoodi. Näiteks võid määrata, et Textpatterni kategooriasse „inline-pdf“ lisatud PDF-faile kuvaks brauser otse, mitte ei laadiks neid alla:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Suurim üleslaetava faili suurus (baitides)"><![CDATA[
+<h2>Suurim üleslaetava faili suurus (baitides)</h2>
+<p>Siin saad piirata failide üleslaadimise maksimaalset suurust (baitides). Pane tähele, et seda väärtust piirab ka PHP seadistus. Kui Textpattern tuvastab, et sinu PHP seadistus seab väiksema piiri, korrigeeritakse seda väärtust automaatselt allapoole. Kui soovid lubada brauseri kaudu suuremaid üleslaadimisi, võta ühendust serveri haldajaga (olulised seaded failis <code>php.ini</code> on <code>post_max_size</code>, <code>upload_max_filesize</code> ja <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Ajatsoon"><![CDATA[
+<h2>Ajatsoon</h2>
+<p>Et kuupäevi ja kellaaegu kuvada sinu kohalikus ajavööndis, vali palun oma ajatsoon.</p>
+        ]]></item>
+        <item id="img_dir" title="Piltide kataloog"><![CDATA[
+<h2>Piltide kataloog</h2>
+<p>Kui soovid oma piltide kataloogi nime kohandada, saad seda siin teha. Enne pead selle kataloogi Textpatterni juurkausta looma ja veenduma, et PHP saab sinna kirjutada.</p>
+<p>See tee on alati <strong>suhteline tee</strong> (Textpatterni juurpaigalduse kataloogi suhtes).</p>
+<p>Vaikimisi väärtus on <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Lisa e-posti aadress Atom-voogudesse?"><![CDATA[
+<h2>Lisa e-posti aadress Atom-voogudesse?</h2>
+<p>See võimaldab lisada artikli autori (nagu on määratud tema kasutajakontol) e-posti aadressi Atom-voo <code>author</code> plokki.</p>
+        ]]></item>
+        <item id="is_dst" title="Kasuta suveaega?"><![CDATA[
+<h2>Kasuta suveaega?</h2>
+<p>Määrab, kas sinu ajatsoonis rakendub praegu suveaeg (DST).</p>
+        ]]></item>
+        <item id="logging" title="Statistika"><![CDATA[
+<h2>Statistika</h2>
+<p>Saad valida, millisel tasemel Textpattern külastajaid logib:</p>
+<ul>
+    <li><strong>Kõik tabamused:</strong> Textpattern logib kõik saidi lehevaatamised</li>
+    <li><strong>Vaid viitajad:</strong> Textpattern logib ainult külastused, mis tulevad viitelt mõnel teisel saidil</li>
+    <li><strong>Puudub:</strong> Textpattern ei logi ühtegi lehevaatamist</li>
+</ul>
+<p>Alates versioonist Textpattern 4.7.0 ei kogu ega salvesta Textpattern enam külastajate IP-aadresse. Kui kogud või salvestad IP-aadresse väljaspool Textpatterni, hoia neid kooskõlas asjakohaste seadustega, näiteks <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR-ga <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>, ning kasuta kogu oma serveris ja Textpatterni paigaldises tugevaid turvameetmeid, et vältida andmete lekkeid.</p>
+<p>On tungivalt soovitatav jätta selle sätte väärtuseks vaikimisi „Puudub“, välja arvatud juhul, kui sul on seda infot tõesti vaja ja sa avalikustad selgelt oma kava selle kasutamiseks.</p>
+        ]]></item>
+        <item id="max_url_len" title="Suurim URL-i pikkus (tähemärkides)"><![CDATA[
+<h2>Suurim URL-i pikkus (tähemärkides)</h2>
+<p>See takistab selliste URL-ide toimimist, mis on määratud pikkusest pikemad. See võib aidata kahjustuste piiramist ja saidi turvalisust parandada.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Näida adminiliideses linke abiinfole"><![CDATA[
+<h2>Näita adminiliideses abiinfoviiteid</h2>
+<p>Kui soovid peita kogu süsteemi ulatuses admin-ala abiinfot (Textpatterni hüpikakendena kuvatav abi), sea see säte väärtusele „Puudub“.</p>
+        ]]></item>
+        <item id="never_display_email" title="Kas peita kommenteerija e-posti aadress?"><![CDATA[
+<h2>Kas peita kommenteerija e-posti aadress?</h2>
+<p>See säte juhib, kas kommenteerija e-posti aadress peaks olema avalikult nähtav.</p>
+<p>Soovitatav on kommentaatorite e-posti aadresse mitte näidata – see on viisakas suhtumine sinu kasutajatesse –, kuid on olukordi, kus nende kuvamine võib olla soovitav.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Kasuta e-kirjades ISO-8859-1 kodeeringut (vaikimisi UTF-8)?"><![CDATA[
+<h2>Kasuta e-kirjades ISO-8859-1 kodeeringut (vaikimisi UTF-8)?</h2>
+<p>Textpattern kasutab vaikimisi võimalusel UTF-8 kodeeringut, sh väljaminevate e-kirjade jaoks. Mõnel vanemal e-posti kliendil (mh mõnede Microsoft Outlooki versioonidel) puudub aga korrektne UTF-8 tugi. Kui märkad e-kirjades rikutud märke, teisendab see säte tekstid enne saatmist ISO-8859-1 kodeeringusse.</p>
+<p><strong>Märkus:</strong> Kui kasutad keelt, mille märke ei saa ISO-8859-1-s esitada, ei aita see säte kahjuks kuidagi. Sel juhul peaksid kasutama UTF-8 (või Unicode’i) ühilduvat e-posti klienti.</p>
+        ]]></item>
+        <item id="override_form_types" title="Ülekirjutatavad vormitüübid"><![CDATA[
+<h2>Ülekirjutatavad vormitüübid</h2>
+<p>Vali, milliste vormitüüpide mallid tehakse „Kirjutamise“ paneelil ülekirjutatavate vormidena kättesaadavaks.</p>
+        ]]></item>
+        <item id="permlink_format" title="Püsilingi pealkirja URL-i muster"><![CDATA[
+<h2>Püsilingi pealkirja URL-i muster</h2>
+<p>See määrab, kuidas artiklite URL-id luuakse ja omistatakse, kui kasutatakse mitte-räpast režiimi.</p>
+<p>Kui artikkel avaldatakse, luuakse selle URL artikli pealkirjast, välja arvatud juhul, kui välja „Ainult URL-i pealkiri“ on sisestatud konkreetne URL-tekst.</p>
+<p>Näide artikli pealkirjast: <em>Ann and Bob eat cake</em></p>
+<p>Kui püsilingi pealkirja URL-i muster on „Kriipsudega (title-like-this)“, oleks artikli URL:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Kui muster on „Suurte esitähtedega (TitleLikeThis)“, oleks artikli URL:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Artikli URL-i muster"><![CDATA[
+<h2>Artikli URL-i muster</h2>
+<p>See määrab, kuidas üksikutele artiklitele pääseb ligi URL-iga, mida väljastab silt <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+<p>Režiim „?=messy“ on kõige ühilduvam – see töötab vähese või olematu lisaseadistusega –, kuid annab vähem loetavaid URL-e ja kehvemaid SEO tulemusi. Selles režiimis näevad saidi artiklite URL-id välja näiteks sellised:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Teised režiimid nõuavad veebiserveri URL-ide ülekirjutamise funktsionaalsust (nt Apache <code>mod_rewrite</code> või NGINX-i ümbersuunamise direktiivid <code>server</code>-plokis). Kui sinu server ei toeta URL-ide ülekirjutamist, võta ühendust veebimajutajaga või kasuta ülal kirjeldatud režiimi „?=messy“.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Plugina vahemälu kaust"><![CDATA[
+<h2>Plugina vahemälu kaust</h2>
+<p>See säte on mõeldud eelkõige pluginaarendajatele. Kui tee on määratud, võid panna plugina lähtekoodifaili (mitte kompileeritud) sellesse kataloogi ja Textpattern laeb selle automaatselt – nii saad plugina koodi mugavalt muuta ja kohe näha mõju ilma plugina paigaldamise/aktiveerimiseta. <strong>Pane aga tähele</strong>, et sellisel viisil laadides võib vigane plugin (mis ei kompileeru) Textpatterni töö samuti katkestada!</p>
+<p>Tootmissaidil on soovitatav pluginaid laadida tavapärase „Pluginate“ paneeli kaudu, mitte plugina vahemälu kataloogi kasutades.</p>
+<p><strong>Märkus:</strong> Ära määra sama kataloogi nii „ajutiseks“ kui ka „plugina vahemäluks“, sest see põhjustaks probleeme (Textpattern püüaks ajutiste logifailide sisu pluginateks käivitada).</p>
+        ]]></item>
+        <item id="production_status" title="Staatus"><![CDATA[
+<h2>Staatus</h2>
+<p>Textpatterni saidil on kolm režiimi:</p>
+<ol>
+    <li>„Silumine“</li>
+    <li>„Testimine“</li>
+    <li>„Aktiivne“</li>
+</ol>
+<h3>Silumisrežiim</h3>
+<p>Kõik PHP veateated on sinu elaval saidil nähtavad, samuti hoiatusteated vigase koodi ja pluginate kohta. Lisaks on HTML-i lähtekoodis nähtav järgmine teave:</p>
+<ul>
+    <li>lehe genereerimiseks kulunud aeg („Runtime“)</li>
+    <li>sooritatud MySQL-i päringute arv</li>
+    <li>mälu kasutuse ligikaudne haripunkt</li>
+    <li>kõik Textpatterni sildid, mida lehe genereerimisel töödeldi (nn sildijälg)</li>
+</ul>
+<h3>Testimisrežiim</h3>
+<p>Kõik PHP veateated on sinu elaval saidil nähtavad, samuti hoiatusteated vigase koodi ja pluginate kohta. Lehe HTML-i lähtekoodis on nähtav järgmine teave:</p>
+<ul>
+    <li>lehe genereerimiseks kulunud aeg („Runtime“)</li>
+    <li>sooritatud MySQL-i päringute arv</li>
+    <li>mälu kasutuse ligikaudne haripunkt</li>
+</ul>
+<h3>Aktiivne režiim</h3>
+<p>Lehele ei saadeta ühtegi veateadet ega diagnostikainfot. Üldiselt on eelistatud kasutada aktiivset režiimi, sest see pakub parimat kasutajakogemust ja koormab serverit kõige vähem.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Saidipoolne teema"><![CDATA[
+<h2>Saidipoolne teema</h2>
+<p>Vaikimisi esikülje teema, mida kasutatakse, kui keegi sinu avalikku veebisaiti külastab. Textpatterniga tuleb kaasa eelseadistatud vaiketeema ning võimalus alustada ilma teemata. Samuti võid lisada teemapakette kataloogi <code>textpattern/themes</code>, et need kasutamiseks kättesaadavaks teha.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Kas avaldada aegunud artiklid?"><![CDATA[
+<h2>Kas avaldada aegunud artiklid?</h2>
+<p>Kui see on „Jah“, jätkatakse aegunud artiklite kuvamist ka pärast aegumiskuupäeva möödumist. Saad kasutada silti <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>, et kuvada aegunud artiklite jaoks teistsugust sisu või märgendust.</p>
+<p>Kui see on „Ei“, eemaldatakse aegunud artiklid avalikult nähtavalt saidilt ja nende asemel tagastatakse HTTP olek „410 Gone“. Vaikesäte on „Ei“.</p>
+        ]]></item>
+        <item id="publisher_email" title="Saada sisselogimisandmed sellelt e-posti aadressilt"><![CDATA[
+<h2>Saada sisselogimisandmed sellelt e-posti aadressilt</h2>
+<p>Määra e-posti aadress, mida kasutatakse uutele kasutajatele sisselogimisandmetega kirjade „From:“ aadressina.</p>
+<p>Kui see eelistus jäetakse tühjaks või sisaldab vigast aadressi, kasutab Textpattern saatjana parajasti sisse loginud kasutaja nime ja e-posti aadressi.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Mitu artiklit RSS-is?"><![CDATA[
+<h2>Mitu artiklit voogudesse kaasata?</h2>
+<p>See on korraga sünkroniseeritavate artiklite maksimaalne arv RSS- ja Atom-vormingus.</p>
+<p>Soovitatav on kasutada väikest väärtust, näiteks <code>5</code> kuni <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Täiendavate parseri läbimiste arv"><![CDATA[
+<h2>Täiendavate parseri läbimiste arv</h2>
+<p>Textpatterni sildiparser asendab tavaliselt kõik sildid andmebaasist pärit sisuga ühekordse lehemalli läbimisega. Mõnel juhul võib sellest siiski väheks jääda, näiteks:</p>
+<ul>
+    <li>kui kasutatakse madala laadimisjärjekorraga pluginaid sildi atribuutidena</li>
+    <li>koodiasendused siltide <code>&lt;txp:php&gt;</code> sees</li>
+    <li>lehe varasemate plokkide vahelejätmine, et need saaksid hiljem töödelda siltide põhjal tekkinud sisu</li>
+</ul>
+<p>Traditsiooniliselt on Textpattern teinud pärandpõhjustel ühe lisaläbimise (nn „secondpass“), mistõttu on selle eelistuse vaikeväärtus <code>1</code>. Rohkem läbimisi suurendab aga ohtu, et tahtmatud sildid jäävad parserile „lõksu“ ja saavad samuti töödeldud. Hiljutised täiustused sildiparseris on vähendanud vajadust teise läbimise järele. Kui sul ei ole teist läbimist otseselt vaja, vähenda see väärtus <code>0</code>-ni, et muuta sait turvalisemaks.</p>
+<p>Kui märkad seejärel, et saidil kuvatakse töötlemata silte (ja Testimis-/Silumisrežiimis ei kuvata muid sildiveateateid, mis tuleneks siltide paaritust kasutusest), võta meiega ühendust ja jaga oma lehemalli/koodi/plugina näidet. Püüame täiendavate läbimiste vajadust kaotada ning sinu info aitab meid selle eesmärgi poole.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Saada &quot;Last-Modified&quot; HTTP-päis?"><![CDATA[
+<h2>Saada "Last-Modified" HTTP-päis?</h2>
+<p>Kui see on lubatud, loeb Textpattern külastaja HTTP-päist <code>If-Modified-Since</code> (kui see eksisteerib) ja võrdleb seda saidi viimase uuenduse ajamärgiga. Kui lehel ei ole pärast külastaja eelmist laadimist midagi muutunud (s.t brauseri saadetud ajamärk on sama, mis saidi viimane uuendus), saadetakse brauserile päis, mis käsib kasutada lehe vahemälus olevat koopiat.</p>
+<p>See võib vähendada ribalaiuse kasutust, lehe laadimisaega ja veebiserveri koormust.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Näita kommentaaride arvu voogudes?"><![CDATA[
+<h2>Näita kommentaaride arvu voogudes?</h2>
+<p>Kui see on „Jah“, lisatakse RSS/Atom voogudes artikli pealkirjadele kommentaaride arv.</p>
+        ]]></item>
+        <item id="site_slogan" title="Saidi hüüdlause"><![CDATA[
+<h2>Saidi hüüdlause</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Saidi hüüdlause <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> on sinu saidi lühikirjeldus või kokkuvõte. Seda kasutatakse vajadusel saidi kirjelduseks, näiteks RSS/Atom voogudes, ja seda võib omal äranägemisel kuvada paljudes eri kohtades.</p>
+<p><strong>Märkus:</strong> Saidi hüüdlause ei ole kohustuslik, kuid võib olla nõutav kehtiva RSS- või Atom-voo jaoks.</p>
+        ]]></item>
+        <item id="sitename" title="Saidi nimi"><![CDATA[
+<h2>Saidi nimi</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Sinu saidi nimi või pealkiri <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>. See kuvatakse külastaja brauseri pealkirjaribal või voo­lugeja peas ning seda võib omal äranägemisel kasutada paljudes kohtades saidil.</p>
+        ]]></item>
+        <item id="siteurl" title="Saidi URL"><![CDATA[
+<h2>Saidi URL</h2>
+<p>See on sinu Textpatterni saidi aadress, näiteks <code>www.example.com</code>.</p>
+<p><strong>Märkus:</strong> Alguses ei pea olema <code>http://</code>, <code>https://</code> ega lõpus kaldkriipsu <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Teema kaust"><![CDATA[
+<h2>Teema kaust</h2>
+<p>Kui soovid kohandada kataloogi nime, kuhu teema lamefailid püsivalt salvestatakse, saad seda siin teha. Kataloogi pead esmalt looma Textpatterni juurkausta ning veenduma, et PHP saab sinna kirjutada.</p>
+<p>See tee on alati <strong>suhteline tee</strong> (Textpatterni juurpaigalduse kataloogi suhtes).</p>
+<p>Vaikimisi väärtus on <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP ümbriku saatja aadress"><![CDATA[
+<h2>SMTP ümbriku saatja aadress</h2>
+<p>See eelistus tuleks jätta tühjaks, välja arvatud juhul, kui Textpatternis e-kirjade saatmine üldse ei toimi. Sellisel juhul saad siia sisestada suvalise kehtiva e-posti aadressi, eelistatavalt oma veebisaidi domeeniga (s.t kui sinu sait on <code>https://example.com</code>, võid kasutada aadressi <code>you@example.com</code>).</p>
+<p>Tehnilise tausta huvilistele:</p>
+<ul>
+    <li>UNIX-i ja macOS-iga sarnastel serveritel kasutatakse sisestatud aadressi PHP funktsiooni <code>mail()</code> neljanda parameetrina (eesliitega "-f")</li>
+    <li>Windowsi serverites kasutatakse sisestatud aadressi seadistuse <code>sendmail_from</code> määramiseks (või ülekirjutamiseks) failis php.ini</li>
+</ul>
+<p>Nii tagatakse, et SMTP ümbriku saatja aadress (mis ei pruugi olla sama, mis e-kirjades nähtav „From:“ päis) seatakse siia sisestatud aadressile – mõnel serveril on see e-kirjade edukaks saatmiseks nõue.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP host"><![CDATA[
+<h2>SMTP host</h2>
+<p>Et parandada kirjade kohalejõudmist ja kasutada välise teenuse (nt SendGrid, AWS SES, Mailchimp, Mailgun jne) e-posti marsruutimist, määra siia SMTP-server. Teenusepakkuja annab sulle vajaliku väärtuse.</p>
+<p>Seda väärtust saab määrata ka, lisades faili <code>config.php</code> konstandi <code>SMTP_HOST</code>; sel juhul on väärtus eelistuste paneelil hallina ja seda ei saa muuta.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP parool"><![CDATA[
+<h2>SMTP parool</h2>
+<p>Kui sinu SMTP-ühendus nõuab kasutajanime jaoks parooli, sisesta see siia. Vaata täpsemat infot teenusepakkuja dokumentatsioonist.</p>
+<p>Märkus: Kuigi parooli ei kuvata siin väljal, salvestatakse see <em>selges tekstis</em> andmebaasi eelistuste tabelisse. Kui soovid turvalisust tõsta, määra parool hoopis konstanti <code>SMTP_PASS</code> oma failis <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP port"><![CDATA[
+<h2>SMTP port</h2>
+<p>Kui oled määranud SMTP hosti, pead SMTP-routingu lubamiseks määrama ka pordi. Levinud pordid on:</p>
+<ul>
+    <li>25 – turvamata e-posti jaoks</li>
+    <li>465 – ajalooline (mitteametlik) port turvalise e-posti jaoks</li>
+    <li>587 – vaikimisi (soovitatav) port turvalise TLS-i e-posti jaoks</li>
+</ul>
+<p>Sinu SMTP-teenusepakkuja võib kasutada ka teisi porte, seega vaata nende dokumentatsiooni.</p>
+<p>Seda väärtust saab määrata ka, lisades faili <code>config.php</code> konstandi <code>SMTP_PORT</code>; sel juhul on väärtus eelistuste paneelil hallina ja seda ei saa muuta.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP turvameetod"><![CDATA[
+<h2>SMTP turvameetod</h2>
+<p>Vali turvaprotokoll, mida sinu SMTP-teenusepakkuja kasutab. Vaata nende dokumentatsiooni täiendavate üksikasjade jaoks.</p>
+<p>Seda väärtust saab määrata ka, lisades faili <code>config.php</code> konstandi <code>SMTP_SECTYPE</code>; sel juhul on väärtus eelistuste paneelil hallina ja seda ei saa muuta.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP kasutajanimi"><![CDATA[
+<h2>SMTP kasutajanimi</h2>
+<p>Kui SMTP-ühendus nõuab kasutaja/sisselogimisnime, sisesta see siia. Vaata täpsemat infot teenusepakkuja dokumentatsioonist.</p>
+<p>Seda väärtust saab määrata ka, lisades faili <code>config.php</code> konstandi <code>SMTP_USER</code>; sel juhul on väärtus eelistuste paneelil hallina ja seda ei saa muuta.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spämmijate must nimekiri (komadega eraldatud)"><![CDATA[
+<h2>Spämmijate must nimekiri (komadega eraldatud)</h2>
+<p>Siia sisestatud <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">mustade nimekirjade teenuseid <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> kontrollitakse iga sinu blogisse postitatud kommentaari puhul ja võrreldakse kommenteerija IP-aadressi. Kui aadress on nimekirjas, tähendab see, et selle IP vastu on varem esitatud vähemalt üks spämmiteade ning kommentaar lükatakse tagasi. Sõltumata kontrolli tulemustest ei salvesta Textpattern kommenteerija IP-aadressi.</p>
+<p>Võid siia sisestada komadega eraldatud loendi domeeninimedest. Pane tähele, et vastutus nimekirjade sobivuse eest sinu eesmärkidele lasub sinul.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Liida RSS-i ainult artikli kokkuvõte?"><![CDATA[
+<h2>Liida RSS-i ainult artikli kokkuvõte?</h2>
+<p>Kui see on „Ei“, sisaldavad vooüksused kogu artikli põhiteksti.</p>
+<p>Kui see on „Jah“, sisaldavad vooüksused artikli kokkuvõtet artikli põhiteksti asemel, kui kokkuvõte on olemas.</p>
+        ]]></item>
+        <item id="tempdir" title="Temp kataloog"><![CDATA[
+<h2>Temp kataloog</h2>
+<p>Määrab <strong>absoluutse tee</strong> ajutistele failidele (tuntud ka kui „tmp“ või „temp“). PHP-l peab olema sellesse kataloogi kirjutamise õigus. Seda kataloogi kasutatakse ajutiste failide jaoks, näiteks eri tüüpi üleslaadimiste (pluginad, failid, pildid) ajutiseks salvestamiseks.</p>
+<p><strong>Märkused:</strong>
+<ul>
+    <li>Ära määra sama kataloogi nii „ajutiseks“ kui ka „plugina vahemäluks“, sest see tekitab probleeme (Textpattern püüab ajutiste logifailide sisu pluginateks käivitada).</li>
+    <li>Turvalisuse tõstmiseks tasub see kataloog viia veebisaidi avalikust dokumendijuurkataloogist väljapoole.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Adminiliidese teema"><![CDATA[
+<h2>Adminiliidese teema</h2>
+<p>Vaikimisi admin-ala teema, mida kasutatakse iga sisselogimise korral. Textpatterniga tuleb kaasa mitu admin-teemat ja lisaks saad lisada kohandatud teemapakette kataloogi <code>textpattern/admin-themes</code>, et need kasutuseks kättesaadavaks teha.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Lisa URL-idele lõppkaldkriips"><![CDATA[
+<h2>Lisa URL-idele lõppkaldkriips</h2>
+<p>Määrab, kas Textpattern lisab genereeritud URL-idele automaatselt lõppkaldkriipsu. Võimalikud valikud:</p>
+<ul>
+    <li><strong>Ei</strong> – mitte kunagi</li>
+    <li><strong>Nimekirjalehed</strong> – ainult loendipõhistele maandumislehtedele (st mitte üksikartiklite vaatamisel)</li>
+    <li><strong>Jah</strong> – alati</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="txp:evaluate lubatud PHP-funktsioonid"><![CDATA[
+<h2>txp:evaluate lubatud PHP-funktsioonid</h2>
+<p>See on komadega eraldatud loend elementidest <code>function</code> või <code>alias=function</code>, nt <code>md5</code>, <code>replace=str_replace</code>. Selles nimekirjas toodud elemente saab kasutada sildi <code>&lt;txp:evaluate /&gt;</code> atribuudis <code>query</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> peab tagastama skalaarväärtuse (<strong>mitte</strong> massiivi/objekti).</p>
+        ]]></item>
+        <item id="use_comments" title="Kommentaarid lubatud?"><![CDATA[
+<h2>Kommentaarid lubatud?</h2>
+<p>See säte määrab, kas Textpatterni kommenteerimisfunktsioon on lubatud või keelatud.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Kasuta voogude ID-des e-posti aadressi (vaikimisi saidi URL)?"><![CDATA[
+<h2>Kasuta voogude ID-des e-posti aadressi (vaikimisi saidi URL)?</h2>
+<p>Atom-voos peab igal üksusel olema kordumatu ID.</p>
+<p>Et luua sinu saidile unikaalsed ID-d, lubab Textpattern valida, kas kasutada nendes ID-des e-posti aadressi või domeeninime. E-posti aadressiks on see, millega sait esmakordselt loodi. Kui pole tõenäoline, et vahetad tulevikus domeeninime, on ilmselt ohutu seada see „Ei“.</p>
+        ]]></item>
+        <item id="use_plugins" title="Kasuta pluginaid?"><![CDATA[
+<h2>Kasuta pluginaid?</h2>
+<p>See säte lubab kõik Textpatterni pluginate toed korraga välja lülitada. See on kasulik veaotsingul, et kontrollida, kas probleem võib olla põhjustatud mõnest pluginast.</p>
+        ]]></item>
+        <item id="use_textile" title="Vaikimisi tekstitöötlus"><![CDATA[
+<h2>Vaikimisi tekstitöötlus</h2>
+<p>Siin valitud teksti vormingu seade määratakse „Kirjutamise“ paneelil vaikimisi kokkuvõtte ja põhiteksti märgendusviisiks. Saad lubada täieliku Textile’i töötlemise, lihtsa reavahetuste teisendamise HTML-lõikudeks või jätta teksti üldse muutmata.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a> on tööriist, mis lihtsustab lihtteksti teisendamist HTML-iks. Kui Textile on lubatud, töötleb see artiklite põhiteksti ja tagastab struktuurselt korrektse HTML-i.</p>
+<p>Textile pakub ka võimsat, kuid hõlpsasti omandatavat käskude komplekti teksti vormindamiseks, struktuuride (nt loendid, pealkirjad, plokkmärgistus) määratlemiseks ning linkide ja piltide lisamiseks.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Sektsioonid">
+        <item id="section_category" title="Tutvustus"><![CDATA[
+<h2>Tutvustus</h2>
+<p>Textpatterni sektsioone on kõige lihtsam mõista nagu ajalehe sektsioone; need kõik kuuluvad sama väljaande alla, kuid igal sektsioonil võib olla erinev paigutus, erinev artikli stiil jne.</p>
+<p>Enamiku veebisaitide jaoks on vaja luua vaid miinimumarv sektsioone.</p>
+<h3>Näide kolmesektsioonilisest veebisaidist:</h3>
+<ol>
+    <li><strong>Arhiiv:</strong> „Sektsioon“, kuhu kuuluvad kõik esilehel ilmuvad artiklid. Kui lugeja klõpsab artikli püsilingil, kuvatakse see selle „sektsiooni“ lehemalli järgi. Et minna sektsiooni „Archive“ uusimate artiklite lehitsetava loendini, oleks URL <code>https://example.com/archive/</code>.</li>
+    <li><strong>Meist:</strong> „Selle saidi kohta“ leht, mis erineb esilehest ja sektsioonist „Archive“ selle poolest, et see on staatilisem, võib kasutada teistsugust paigutust ja sisaldab tõenäoliselt ainult üht artiklit. Sektsioon „About“ oleks kättesaadav aadressil <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotod:</strong> „Sektsioon“, mille erinev paigutus (ja võimalik, et erinev CSS) kuvab artiklite asemel fotosid.</li>
+</ol>
+<p>Pööra tähelepanu, et alati eksisteerib eriline peidetud sektsioon nimega default. See vaikimisi sektsioon kasutab lehte nimega default ja stiili nimega default ning moodustab sinu saidi esilehe.</p>
+        ]]></item>
+        <item id="section_default" title="Vaikimisi avaldamise sektsioon"><![CDATA[
+<h2>Vaikimisi avaldamise sektsioon</h2>
+<p>See valik määrab, milline sektsioon on uue artikli loomisel „Kirjutamise“ paneeli sektsioonimenüüs vaikimisi valitud.</p>
+<p>Kui enamik artikleid kuulub mingisse konkreetsesse sektsiooni, vali see siit loendist. Muudatus rakendub kohe.</p>
+<p>Saad selle igale artiklile eraldi üle kirjutada „Kirjutamise“ paneelil, valides paneelis „Sortimine ja kuvamine“ mõne teise sektsiooni.</p>
+        ]]></item>
+        <item id="section_description" title="Kirjeldus"><![CDATA[
+<h2>Kirjeldus</h2>
+<p>Sektsiooni kirjeldus on valikuline komponent, mis aitab otsingumootoritel ja veebirobotitel sisu paremini tuvastada ja sortida.</p>
+<p>Artikli kirjeldus on piiratud maksimaalselt 255 tähemärgiga. Pange tähele, et mõned otsingumootorid piiravad lehe <code>meta description</code> pikkust otsingutulemuste lehtedel (SERP-ides) praktilisuse huvides ja see võib olla väiksem kui Textpatterni 255 märgi piirang.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Kas sektsiooni artiklid on esilehel nähtavad?"><![CDATA[
+<h2>Kas sektsiooni artiklid on esilehel nähtavad?</h2>
+<p>Mõne sektsiooni artiklid – näiteks need, mis meenutavad pigem „staatilisi“ veebilehti – võivad tunduda sinu saidi ajast sõltuvale esilehele mitte sobivat.</p>
+<p>Kui seada see „Ei“, ei kuvata selle sektsiooni artikleid esilehel.</p>
+        ]]></item>
+        <item id="section_searchable" title="Kaasa see sektsioon saidi otsingusse?"><![CDATA[
+<h2>Kaasa see sektsioon saiti hõlmavasse otsingusse?</h2>
+<p>See määrab, kas sellesse sektsiooni kuuluvad artiklid kuvatakse kogu saiti hõlmavates otsingutulemustes.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Kas selle sektsiooni artiklid sünkroniseeritakse (voogudesse)?"><![CDATA[
+<h2>Kas selle sektsiooni artiklid sünkroniseeritakse (voogudesse)?</h2>
+<p>Määrab, kas selle sektsiooni artiklid ilmuvad saidi RSS- ja Atom-voogudes.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Kasutab stiili"><![CDATA[
+<h2>Kasutab stiili</h2>
+<p>Kui soovid mõne sektsiooni jaoks vaikimisi stiililehe üle kirjutada, saad seda siin teha.</p>
+<p>See on asjakohane ainult nende stiililehtede puhul, mis on hallatud Textpatterni „Stiilide“ paneeli kaudu – kui hoiad oma CSS-i Textpatternist eraldi (mis on väga soovitatav), ei avalda see säte mingit mõju.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Kasutab lehte"><![CDATA[
+<h2>Kasutab lehte</h2>
+<p>Textpatternis on sektsioonid seotud lehemallidega.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Kasutab teemat"><![CDATA[
+<h2>Kasutab teemat</h2>
+<p>Kui soovid mõne sektsiooni puhul muuta kasutatavat teemat, saad valida selle siit paigaldatud teemade loendist.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Seadistamine">
+        <item id="setup_admin_url" title="Admini alamdomeen"><![CDATA[
+<h2>Admini alamdomeen</h2>
+<p>Alamdomeen, mida soovid kasutada Textpatterni haldusliidesele juurdepääsuks (nt <code>admin.example.com</code>).</p>
+<p>Vaata lisainfot lehelt <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpatterni multisait-paigalduse juhend</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Küpsise domeen"><![CDATA[
+<h2>Küpsise domeen</h2>
+<p>(Alam)domeen, mida soovid kasutada Textpatterni küpsiste jaoks.</p>
+<p>Vaata lisainfot lehelt <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpatterni multisait-paigalduse juhend</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Kasutajanimi"><![CDATA[
+<h2>Kasutajanimi</h2>
+<p>Administraatori („väljaandja“) konto sisselogimisnimi, mida kasutad oma saidi haldamiseks.</p>
+<p>Kuigi nimele ei ole rangeid piiranguid, tasub vältida nii keerukaid märkide jadasid kui ka kergesti äraarvatavaid kasutajanimesid (nt <code>admin</code>, <code>administrator</code> jne).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Kasutaja parool"><![CDATA[
+<h2>Kasutaja parool</h2>
+<p>Kuna sellel kontol on Textpatternis kõrgeimad õigused, vali väga tugev parool või veel parem – pääselause.</p>
+<h3>Näpunäited</h3>
+<ul>
+    <li>kasuta suuri ja väikseid tähti</li>
+    <li>kasuta numbreid</li>
+    <li>kasuta sümboleid</li>
+    <li>tee parool vähemalt kaheksa märgi pikkuseks</li>
+    <li><strong>väldi</strong> isiklikku infot (kuupäevad, nimed, kohad, pereliikmed, lemmikloomad jne)</li>
+    <li><strong>väldi</strong> üksikuid või korduvaid sõnu sõnaraamatust, sõltumata keelest, kirjapildist või tähesuurusest</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tabeli eesliide"><![CDATA[
+<h2>Tabeli eesliide</h2>
+    <p>Tabeli eesliidet on vaja ainult siis, kui kasutad ühes andmebaasis mitut Textpatterni paigaldust. Iga paigaldus vajab unikaalset eesliidet.</p>
+    <p>Pange tähele, et eesliide peab vastama järgmistele reeglitele:</p>
+<ul>
+    <li><strong>1. märk:</strong> peab olema a-z, A-Z või alakriips</li>
+    <li><strong>Järgmised märgid:</strong> võivad olla ainult a-z, A-Z, 0-9 või alakriips</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Teemad">
+        <item id="skin_author" title="Teema autor"><![CDATA[
+<h2>Teema autor</h2>
+<p>Selle teema autor(id) (valikuline).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Teema veebisait"><![CDATA[
+<h2>Teema veebisait</h2>
+<p>URL, kust leiab selle teema täieliku teabe ja/või uusimad versioonid (valikuline).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Kustuta ka teema mallid kettalt"><![CDATA[
+<h2>Kustuta ka teema mallid kettalt</h2>
+<p>Kui see on märgitud, kustutatakse kõigi valitud teemade mallifailid kettalt jäädavalt. Teemakatalooge ega nende alamkatalooge ei kustutata, kui nendes on muid faile (nt JavaScript, pildid jne).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Kustuta importimisel kasutamata mallid andmebaasist"><![CDATA[
+<h2>Kustuta importimisel kasutamata mallid andmebaasist</h2>
+<p>Kui see on märgitud, kustutatakse valitud teemade iga mall, millel pole kettal vastavat faili, andmebaasist jäädavalt. Pärast toimingu lõppemist vastab andmebaasis olev mallide komplekt võimalikult täpselt kettal olevale.</p>
+<p>Pane tähele, et kui oled eemaldanud Textpatterni jaoks kohustuslikke mallifaile, luuakse nende jaoks andmebaasi tühjad versioonid.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Kustuta eksportimisel kasutamata mallid kettalt"><![CDATA[
+<h2>Kustuta eksportimisel kasutamata mallid kettalt</h2>
+<p>Kui see on märgitud, kustutatakse valitud teemade iga mallifail, millel pole andmebaasis vastavat kirjet, kettalt jäädavalt. Pärast toimingu lõppemist vastavad failisüsteemis olevad mallid täpselt sellele, mis on andmebaasis.</p>
+        ]]></item>
+        <item id="skin_description" title="Teema kirjeldus"><![CDATA[
+<h2>Teema kirjeldus</h2>
+<p>Võid lisada lühikese kokkuvõtte selle teema kujundusest/paigutusest (valikuline).</p>
+<p>Teema kirjeldus on maksimaalselt 255 tähemärgi pikkune.</p>
+        ]]></item>
+        <item id="skin_import" title="Impordi teema"><![CDATA[
+<h2>Impordi teema kettalt</h2>
+<p>See vorm võimaldab sul importida teema Textpatterni andmebaasi teemade kataloogist.</p>
+<p>Imporditav teema peab koosnema loetavast ülemkataloogist, mille nimi on sama mis teema nimi, ning selles kataloogis peab olema loetav fail <code>manifest.json</code> eeldatud vormingus. Teemakataloog peaks sisaldama ka lehti, vorme ja stiile samanimelistes alamkataloogides.</p>
+<p>Lehed ja vormid peaksid kasutama laiendit <code>.txp</code>, stiililehed aga olema <code>.css</code> failid. Vormid tuleks rühmitada tüübi järgi eraldi kataloogidesse. Textpattern loob importimisel kõik puuduvad hädavajalikud mallid.</p>
+<p>Vaata lisateavet teemade loomise, paigaldamise ja kasutamise kohta Textpattern CMS-is lehelt <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">themes documentation <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Teema nimi"><![CDATA[
+<h2>Teema nimi</h2>
+<p>Teema nimi, mida kasutatakse teema kataloogi nimena ja muudel tehnilistel eesmärkidel (kohustuslik).</p>
+<p>Nimi ei tohiks sisaldada erimärke ega tühikuid.</p>
+        ]]></item>
+        <item id="skin_overview" title="Teemade tutvustus"><![CDATA[
+<h2>Teemade tutvustus</h2>
+<p>Textpatterni teema on lehtede, vormide ja stiililehtede kogum. Teemad võimaldavad sinu saidi ressursid loogiliselt rühmitada, et neid oleks lihtsam tuvastada või teistega jagada. Teema loomine või importimine ja selle ressursid ei mõjuta <em>mingil moel</em> sinu olemasolevat saiti. Võid vabalt muuta kõiki ressursse, mis ei ole ühegi saidi sektsiooniga seotud, ilma et see saiti mõjutaks.</p>
+<p>Teema ressursse saad muuta „Lehtede“, „Vormide“ või „Stiilide“ paneelil, valides rippmenüüst teema, millega soovid töötada. Teema, millega töötad, jäetakse admin-ala ulatuses meelde, et saaksid eri ressursside tüüpide vahel kiiresti ja mugavalt liikuda. Seda nimetatakse sinu <em>töötavaks teemaks</em>.</p>
+<p>Vaata lisainfot lehelt <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(avaneb uues aknas)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Teema pealkiri"><![CDATA[
+<h2>Teema pealkiri</h2>
+<p>Teema kirjeldav pealkiri, mida kasutatakse teema tuvastamiseks Textpatterni paneelides.</p>
+<p>Pealkiri võib sisaldada erimärke ja tühikuid.</p>
+        ]]></item>
+        <item id="skin_version" title="Teema versioon"><![CDATA[
+<h2>Teema versioon</h2>
+<p>Paigaldatud teema versiooninumber (valikuline).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

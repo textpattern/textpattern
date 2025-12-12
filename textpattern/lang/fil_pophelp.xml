@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="fil">
+    <group id="admin" title="Panel ng mga user">
+        <item id="about_privileges" title="Tungkol sa mga role"><![CDATA[
+<h2>Tungkol sa mga role</h2>
+<h3>Publisher</h3>
+<ul>
+    <li>maaaring mag-manage ng mga artikulo, komento at link</li>
+    <li>maaaring gumamit ng PHP sa mga artikulo kung ang admin preference na ‘Payagan ang PHP sa mga artikulo?’ ay nakatakda sa ‘Oo’</li>
+    <li>maaaring mag-manage ng mga imahe at file</li>
+    <li>maaaring mag-manage ng mga seksyon at kategorya</li>
+    <li>maaaring mag-manage ng mga pahina, form at istilo</li>
+    <li>maaaring makita ang impormasyong diagnostiko</li>
+    <li>maaaring mag-manage ng mga site preference</li>
+    <li>maaaring mag-manage ng mga user</li>
+    <li>maaaring mag-manage ng visitor logs</li>
+    <li>maaaring mag-manage ng mga plugin</li>
+    <li>maaaring mag-import ng data</li>
+</ul>
+<h3>Managing Editor</h3>
+<ul>
+    <li>maaaring mag-manage ng mga artikulo, komento at link</li>
+    <li>maaaring gumamit ng PHP sa mga artikulo kung ang admin preference na ‘Payagan ang PHP sa mga artikulo?’ ay nakatakda sa ‘Oo’</li>
+    <li>maaaring mag-manage ng mga imahe at file</li>
+    <li>maaaring mag-manage ng mga seksyon at kategorya</li>
+    <li>maaaring mag-manage ng mga pahina, form at istilo</li>
+    <li>maaaring makita ang impormasyong diagnostiko</li>
+    <li>maaaring mag-manage ng mga site preference</li>
+    <li>maaaring tingnan ang mga user</li>
+    <li>maaaring mag-manage ng visitor logs</li>
+    <li>maaaring mag-manage ng mga plugin</li>
+    <li>maaaring mag-import ng data</li>
+</ul>
+<h3>Copy Editor</h3>
+<ul>
+    <li>maaaring mag-manage ng mga artikulo na may isang limitasyon:
+        <ul>
+            <li>hindi maaaring mag-delete ng mga artikulong pag-aari ng ibang mga user</li>
+        </ul>
+    </li>
+    <li>maaaring mag-manage ng mga komento at link</li>
+    <li>maaaring mag-manage ng mga imahe at file</li>
+    <li>maaaring mag-manage ng mga kategorya</li>
+    <li>maaaring mag-manage ng mga pahina at form</li>
+    <li>maaaring tingnan ang mga user</li>
+    <li>maaaring mag-manage ng visitor logs</li>
+</ul>
+<h3>Staff Writer</h3>
+<ul>
+    <li>maaaring mag-manage ng sariling mga artikulo, tingnan ang mga artikulo ng ibang mga user</li>
+    <li>maaaring mag-manage ng mga imahe at file</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>maaaring mag-manage ng sariling mga artikulo sa limitadong paraan:
+        <ul>
+            <li>maaaring baguhin lamang ang artikulo hanggang sa ito ay mailathala</li>
+            <li>maaaring magtakda ng status na <em>tanging</em> Draft, Hidden o Pending lamang</li>
+        </ul>
+    </li>
+    <li>maaaring tingnan ang mga artikulo ng ibang mga user</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>maaaring mag-manage ng sariling mga artikulo sa limitadong paraan:
+        <ul>
+            <li>maaaring baguhin lamang ang artikulo hanggang sa ito ay mailathala</li>
+            <li>maaaring magtakda ng status na <em>tanging</em> Draft, Hidden o Pending lamang</li>
+        </ul>
+    </li>
+    <li>maaaring tingnan ang mga artikulo ng ibang mga user</li>
+    <li>maaaring mag-manage ng mga imahe</li>
+    <li>maaaring mag-manage ng mga seksyon</li>
+    <li>maaaring mag-manage ng mga pahina, form at istilo</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Gumawa ng may-akda"><![CDATA[
+<h2>Magdagdag ng bagong may-akda</h2>
+<p>Isang welcome message at mga tagubilin sa pag-login ang ipapadala sa email ng bagong may-akda.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Write panel">
+        <item id="article_image" title="Imahe ng artikulo"><![CDATA[
+<h2>Imahe ng artikulo</h2>
+<p>Para iugnay ang mga imahe sa artikulong ito, ilagay dito ang isa sa mga sumusunod:</p>
+<ol>
+    <li>isa o higit pang Textpattern image ID, na pinaghihiwalay ng kuwit (hal. <code>12, 25, 18</code>)</li>
+    <li>isa o higit pang relative URL papunta sa imahe, na pinaghihiwalay ng kuwit (hal. <code>/images/my_pic.jpg</code>)</li>
+    <li>isa o higit pang fully-qualified na URL, na pinaghihiwalay ng kuwit (hal. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Maipapakita ang unang imahe sa pamamagitan ng paglalagay ng <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> sa loob ng isang article form. Bilang default, maglalabas ito ng kumpletong HTML <code>&lt;img&gt;</code> tag patungo sa napiling imahe.</p>
+<p>Maaari kang magpakita ng mga gallery gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Katawan"><![CDATA[
+<h2>Katawan</h2>
+<p>Ang pangunahing nilalaman ng isang artikulo ay nakapaloob sa katawan ng artikulo.</p>
+<p>Kapag bumubuo o naghahanda ng mga artikulo para sa paglathala sa Textpattern, maaaring magpalit ang isang may-akda sa tatlong view ng artikulo: plain text, HTML markup (ang code na ginagamit ng web browser para i-render ang artikulo), at isang rendered preview.</p>
+        ]]></item>
+        <item id="description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Ang deskripsyon ng artikulo ay isang opsyonal na bahagi na makakatulong sa mga search engine at website crawler na mas mahusay na tukuyin at ayusin ang nilalaman.</p>
+<p>Ang deskripsyon ng artikulo ay limitado sa pinakamataas na 255 karakter. Tandaan na ang ilang search engine ay naglalagay ng limitasyon sa bilang ng karakter ng <code>meta description</code> ng isang pahina para sa praktikal na pagdisplay sa mga search engine results pages (SERP) at ito ay maaaring mas mababa sa 255 karakter na limitasyon sa Textpattern.</p>
+<p>Tandaan na naiiba ang deskripsyon ng artikulo sa sipi ng artikulo, kahit na tumatanggap sila ng magkatulad na nilalaman. Ang deskripsyon ng artikulo ay dapat pangunahing nakalaan para sa paggamit ng mga search engine at crawler, samantalang ang sipi ng artikulo ay mas angkop para sa buod na nababasa ng tao ng artikulo kung gugustuhin.</p>
+        ]]></item>
+        <item id="excerpt" title="Sipi"><![CDATA[
+<h2>Sipi</h2>
+<p>Opsyonal ang mga sipi ng artikulo. Maaaring gamitin ang mga sipi bilang maikling buod ng artikulo na ipinapakita bilang bahagi ng talaan ng nilalaman, ginagamit kapalit ng buong katawan ng artikulo sa mga RSS/Atom feed ng site, o sa iba pang iba’t ibang gamit.</p>
+        ]]></item>
+        <item id="expire_date" title="Petsa ng pag-expire"><![CDATA[
+<h2>Petsa ng pag-expire</h2>
+<p>Ang oras kung kailan matatandang (expired) markahan ang isang artikulo. Opsyonal ang oras at maaaring itakda sa kahit anong oras sa nakaraan o hinaharap.</p>
+<p>Ang mga kahon ay tumutugma sa sumusunod na impormasyon:</p>
+<ul>
+    <li>Taon / Buwan / Araw</li>
+    <li>Oras (24-oras na format) : Minuto : Segundo</li>
+</ul>
+<p>Kapag dumating na ang oras, o kung oras sa nakaraan ang ibinigay, mag-e-expire ang artikulo.</p>
+<p>Kung pinagana ang opsyon na ipakita ang mga nag-expire na artikulo, mananatiling nakikita ang artikulo. Kung hindi pinagana ang opsyong ito, ang mga bisita sa pahina ng artikulo ay makakatanggap ng HTTP 410 error kapalit ng nilalaman ng artikulo.</p>
+        ]]></item>
+        <item id="keywords" title="Mga keyword"><![CDATA[
+<h2>Mga keyword</h2>
+<p>Kapaki-pakinabang ang mga keyword para mas pinuhin ang mga ugnayan sa pagitan ng mga artikulo lagpas sa ibinibigay ng mga kategorya.</p>
+<p>Dapat ay magkakahiwalay na salita ang mga keyword na pinaghihiwalay ng kuwit.</p>
+        ]]></item>
+        <item id="override_form" title="Patungan ang form"><![CDATA[
+<h2>Patungan ang form</h2>
+<p>Opsyonal na maaaring gumamit ang isang artikulo ng form na naiiba sa nakatakda bilang default - halimbawa, para ipakita ang sipi ng artikulo gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> sa halip na katawan ng artikulo gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> - maaari itong itakda dito.</p>
+        ]]></item>
+        <item id="publish_date" title="Petsa ng paglathala"><![CDATA[
+<h2>Petsa ng paglathala</h2>
+<p>Ang oras kung kailan nailathala o huling binago ang isang artikulo o file. Maaaring itakda ang oras sa mismong sandaling ilathala ang item, o sa kahit anong oras sa nakaraan o hinaharap.</p>
+<p>Ang mga kahon ay tumutugma sa sumusunod na impormasyon:</p>
+<ul>
+    <li>Taon / Buwan / Araw</li>
+    <li>Oras (24-oras na format) : Minuto : Segundo</li>
+</ul>
+<p>Ang isang item na may timestamp na mas malaki kaysa sa kasalukuyang oras (ibig sabihin nasa hinaharap) ay hindi lilitaw sa front side at sa mga RSS/Atom feed hanggang sa dumating ang oras na iyon.</p>
+        ]]></item>
+        <item id="status" title="Estado"><![CDATA[
+<h2>Estado</h2>
+<p>Tinutukoy ang katayuan ng visibility sa paglathala ng Textpattern article na ito.</p>
+<p>Ang publishing status ay isa sa mga sumusunod:</p>
+<ul>
+<li><strong>Draft</strong>: itinuturing na work-in-progress at hindi makikita sa labas ng Textpattern administration area (ibig sabihin hindi nakikita sa website at hindi isinasama sa mga feed).</li>
+<li><strong>Hidden</strong>: hindi makikita ang artikulo sa labas ng Textpattern administration area. Kapaki-pakinabang ito para alisin ang nilalaman mula sa website na ayaw mo pa namang burahin.</li>
+<li><strong>Pending</strong>: itinuturing na handa para sa paglathala at naghihintay ng pag-apruba, ngunit hindi makikita sa labas ng Textpattern administration area.</li>
+<li><strong>Live</strong>: karaniwang makikita sa labas ng Textpattern administration area (ibig sabihin nakikita sa website, isinasama sa mga feed kung pinapayagan ng preference). Kung ang isang artikulo ay live at may petsa ng pag-expire, mananatiling Live ang status matapos maabot ang petsang iyon, ngunit lilitaw lamang ang artikulo sa labas ng administration area kung pinapayagan na mailathala ang mga nag-expire na artikulo.</li>
+<li><strong>Sticky</strong>: kahalintulad ng <strong>Live</strong> article sa paraang maaari itong makita ng mga bisita ng website, ngunit <strong>hindi</strong> lalabas sa mga listahan ng artikulo maliban kung ang kaukulang <code>article</code> o <code>article_custom</code> tag ay may kasamang <code>status</code> attribute na may halagang <code>sticky</code>.</li>
+</ul>
+<p>Tandaan: ang nilalamang hindi makikita nang publiko sa website ay maaari pa ring i-preview ng mga naka-log in na user.</p>
+        ]]></item>
+        <item id="title" title="Pamagat"><![CDATA[
+<h2>Pamagat</h2>
+<p>Magdagdag ng angkop na pamagat para sa artikulong ito.</p>
+<p>Ang pamagat ng artikulo ay limitado sa pinakamataas na 255 karakter.</p>
+        ]]></item>
+        <item id="url_title" title="URL lamang na pamagat"><![CDATA[
+<h2>URL lamang na pamagat</h2>
+<p>Para gumamit ng partikular na pamagat sa permalink URL para sa isang artikulo, ilagay ito rito. Kung ito ay iiwang blangko, ang URL na pamagat ay awtomatikong gagawin batay sa pamagat ng artikulo.</p>
+<p>Lalo itong kapaki-pakinabang kung ang pamagat ng artikulo ay gumagamit ng mga non-ASCII na karakter.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Panel ng mga kategorya">
+        <item id="article_category" title="Mga artikulo"><![CDATA[
+<h2>Mga artikulo</h2>
+<p>Hindi tulad ng mga seksyon, na nagtatakda ng istruktura ng pag-navigate ng isang site, pinapayagan ng mga kategorya ng artikulo ang pag-oorganisa ng mga artikulo ayon sa kanilang paksa. Kapag naitalaga na ang mga kategorya, maaaring i-browse ang mga listahan ng artikulong kabilang sa partikular na mga kategorya.</p>
+<p>Halimbawa, ang mga malamang na kategorya ng artikulo sa isang site tungkol sa pagkain ay maaaring:</p>
+<ul>
+    <li>mga hilaw na sangkap</li>
+    <li>pamimili</li>
+    <li>mga resipe</li>
+    <li>presentasyon</li>
+    <li>mga restawran</li>
+    <li>mga chef</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon ng kategorya</h2>
+<p>Ang deskripsyon ng kategorya ay isang opsyonal na bahagi na makakatulong sa mga search engine at website crawler na mas mahusay na tukuyin at ayusin ang nilalaman.</p>
+<p>Ang deskripsyon ng kategorya ay limitado sa pinakamataas na 255 karakter. Tandaan na ang ilang search engine ay naglalagay ng limitasyon sa bilang ng karakter ng <code>meta description</code> ng isang pahina para sa praktikal na pagdisplay sa mga search engine results pages (SERP) at ito ay maaaring mas mababa sa 255 karakter na limitasyon sa Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Mga file"><![CDATA[
+<h2>Mga file</h2>
+<p>Opsyonal ang mga kategorya ng file, at kapaki-pakinabang para sa paggrupo ng piling mga na-upload na file.</p>
+        ]]></item>
+        <item id="image_category" title="Mga imahe"><![CDATA[
+<h2>Mga imahe</h2>
+<p>Opsyonal ang mga kategorya ng imahe, at kapaki-pakinabang kapwa para sa internal na pag-oorganisa at para sa pagtukoy ng mga set ng imahe na maaaring ipakita gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> tag.</p>
+        ]]></item>
+        <item id="link_category" title="Mga link"><![CDATA[
+<h2>Mga link</h2>
+<p>Opsyonal ang mga kategorya ng link, at kapaki-pakinabang para ipakita ang iba’t ibang paggrupo ng mga link, hal. ‘Kaibigan’, ‘Romans’, ‘Countrymen’.</p>
+<p>Ang mga piling listahan ng link na katulad nito ay inilalabas gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> gaya nito:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostics panel">
+        <item id="clean_url_data_failed" title="Nabigo ang malinis na datos ng URL"><![CDATA[
+<h2>Nabigo ang malinis na datos ng URL</h2>
+<p>Mukhang alinman sa mga URL ng site (hal. <code>https://example.com/section/article</code>) ay kasalukuyang hindi gumagana o hindi sinusuportahan ng web server ang test procedure para matukoy kung gumagana o hindi ang malinis na mga URL; kung gumagana naman nang ayon sa inaasahan ang malilinis na URL sa site, maaari mong balewalain nang ligtas ang mensaheng ito.</p>
+<p>Kung ang mga malinis na URL ay <em>hindi</em> gumagana, maaari itong mangahulugang alinman sa mga sumusunod:</p>
+<ul>
+    <li>mali ang setting na ‘Site URL’, o ang pahina sa adres na iyon ay hindi mina-manage ng instance na ito ng Textpattern</li>
+    <li>nangangailangan ang server ng ilang pagbabago sa <code>.htaccess</code> o katulad na direktiba ng server para mapagana ang malilinis na URL</li>
+    <li>hindi sinusuportahan ng server ang malilinis na URL kahit kailan</li>
+</ul>
+<p>Sinusubukan ng clean URL test na kunin ang isang pahina mula sa web address na tinukoy sa preference na ‘Site URL’ para i-check na gumagana nang tama ang lahat ng parameter ng malilinis na URL. Kung ibang site ang URL na iyon, o napalitan ito ng static na pahina o katulad, mabibigo ang test. Hangga’t hindi nalulutas ang isyu, dapat gamitin ang messy URLs (hal. <code>https://example.com?s=section&amp;id=4</code>). Tiyaking ang ‘Permanent link mode’ sa Admin Preferences ay naaayon ang pagkakatakda.</p>
+<p>Tandaan na ang paggamit ng plugin para ilagay ang site sa ‘maintenance mode’ ay maaaring mag-trigger ng babalang ito.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Nabigo ang pagsubok sa malinis na URL"><![CDATA[
+<h2>Nabigo ang pagsubok sa malinis na URL</h2>
+<p>Mukhang alinman sa mga URL ng site (hal. <code>https://example.com/section/article</code>) ay kasalukuyang hindi gumagana o hindi sinusuportahan ng web server ang test procedure para matukoy kung gumagana o hindi ang malinis na mga URL; kung gumagana naman nang ayon sa inaasahan ang malilinis na URL sa site, maaari mong balewalain nang ligtas ang mensaheng ito.</p>
+<p>Kung ang mga malinis na URL ay <em>hindi</em> gumagana, maaari itong mangahulugang alinman sa mga sumusunod:</p>
+<ul>
+    <li>mali ang setting na ‘Site URL’, o ang pahina sa adres na iyon ay hindi mina-manage ng instance na ito ng Textpattern</li>
+    <li>nangangailangan ang server ng ilang pagbabago sa <code>.htaccess</code> o katulad na direktiba ng server para mapagana ang malilinis na URL</li>
+    <li>hindi sinusuportahan ng server ang malilinis na URL kahit kailan</li>
+</ul>
+<p>Sinusubukan ng clean URL test na kunin ang isang pahina mula sa web address na tinukoy sa preference na ‘Site URL’ para i-check na gumagana nang tama ang lahat ng parameter ng malilinis na URL. Kung ibang site ang URL na iyon, o napalitan ito ng static na pahina o katulad, mabibigo ang test. Hangga’t hindi nalulutas ang isyu, dapat gamitin ang messy URLs (hal. <code>https://example.com?s=section&amp;id=4</code>). Tiyaking ang ‘Permanent link mode’ sa Admin Preferences ay naaayon ang pagkakatakda.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Sabay-sabay na mga login sa isang live server"><![CDATA[
+<h2>Sabay-sabay na mga login sa isang live server</h2>
+<p>Ang pagpapahintulot sa iyong user account na mag-log in mula sa maramihang session ay isang panganib sa seguridad at hindi inirerekomenda. Paki-disable ang feature na ito mula sa advanced preferences panel, maliban na lang kung nauunawaan at katanggap-tanggap ang mga panganib.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Itago ang pribadong impormasyon"><![CDATA[
+<h2>Itago ang pribadong impormasyon</h2>
+<p>Itago ang pribadong impormasyon para sa dagdag na seguridad. Kung ang impormasyong diagnostiko ay ibabahagi sa pampublikong nakikitang anyo, halimbawa ang Textpattern support forum, binabawasan nito ang panganib sa seguridad sa pamamagitan ng hindi pagsama ng sensitibong impormasyon ng server.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Development code sa isang live server"><![CDATA[
+<h2>Development code sa isang live server</h2>
+<p>Ang mga bersyong nasa pag-develop pa lang ng Textpattern ay hindi inirerekomendang gamitin sa production site. Ang babalang ito ay maaari mong balewalain nang ligtas kung nauunawaan at katanggap-tanggap ang mga panganib.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Hindi nasusulatan ang direktoryo"><![CDATA[
+<h2>Hindi nasusulatan ang direktoryo</h2>
+<p>Para magamit ang kakayahan sa pag-upload ng file at imahe, dapat masusulatan ang mga direktoryong ito ng PHP sa pamamagitan ng user ng web server. Magagawa ito gamit ang (S)FTP client, o bilang alternatibo sa command line sa pamamagitan ng paglabas ng command na <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Nabigo ang DNS"><![CDATA[
+<h2>Nabigo ang DNS lookup</h2>
+<p>Mukhang hindi maabot ang URL na tinukoy bilang address ng site.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Hindi pinagana ang file uploads"><![CDATA[
+<h2>Hindi pinagana ang file uploads</h2>
+<p>Ipinapakita ng kasalukuyang configuration ng server na hindi pinagana ang file uploads. Paki-check at baguhin ang setting na <code>file_uploads</code> sa <code>php.ini</code> o kumunsulta sa host ng site para sa tulong.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess file ay nawawala"><![CDATA[
+<h2>.htaccess file ay nawawala</h2>
+<p>Isang permanent link mode na nangangailangan ng <code>.htaccess</code> file ang kasalukuyang ginagamit, at hindi makita ang file. Kasama ang file sa Textpattern at nakalagay ito sa Textpattern root, katabi ng <code>index.php</code> at ng <code>textpattern</code> na direktoryo. Ang inirerekomendang mga direktiba ay:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Hindi ma-access ang site index"><![CDATA[
+<h2>Hindi ma-access ang site index</h2>
+<p>Ang root na <code>index.php</code> file na tinukoy bilang index para sa site ay hindi mabasa ng server. Paki-check ang pag-iral at mga permission nito.</p>
+        ]]></item>
+        <item id="missing_files" title="Nawawalang mga file"><![CDATA[
+<h2>Nawawalang mga file</h2>
+<p>Isa o higit pang mahahalagang file ang nawawala mula sa Textpattern. Tiyakin na lahat ng nakalistang file ay naroroon sa server at nasa tamang lokasyon.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Wala ang Apache mod_rewrite"><![CDATA[
+<h2>Wala ang Apache mod_rewrite</h2>
+<p>Hindi naka-install o naka-disable ang <code>mod_rewrite</code> module ng Apache. Inirerekomenda ito para gumana nang tama ang Textpattern. Tiyakin ang pag-iral at naka-activate na estado nito, o makipag-ugnayan sa host ng site para sa tulong.</p>
+        ]]></item>
+        <item id="modified_files" title="Binagong mga file"><![CDATA[
+<h2>Binagong mga file</h2>
+<p>Itinuturing na binago ang mga file kung ang kani-kanilang checksum ay naiiba sa kilalang-mabuting listahan ng checksum na ibinigay kasama ng Textpattern. Kung ang anumang file sa Textpattern installation ay naiiba sa inaasahan, maiha-highlight ang mga file dito.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Mga error sa MySQL table"><![CDATA[
+<h2>Mga error sa MySQL table</h2>
+<p>Maaaring may ilang corruption o pinsala sa MySQL database ng Textpattern. Subukang ayusin ang apektadong table/s gamit ang MySQL access tool, tulad ng <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> o <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Walang pansamantalang direktoryo ang natukoy"><![CDATA[
+<h2>Walang pansamantalang direktoryo ang natukoy</h2>
+<p>Kahit tatakbo ang Textpattern nang walang pansamantalang direktoryo, maaaring may ilang functionality na hindi gagana ayon sa inaasahan kung hindi nakatakda ang preference na ito. Paki-bisitahin ang Admin Preferences at itakda ang ‘Temporary directory path’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="May seksyon na may parehong pangalan gaya ng direktoryo"><![CDATA[
+<h2>May seksyon na may parehong pangalan gaya ng direktoryo</h2>
+<p>Maaaring mag-clash ang mga umiiral na pangalan ng direktoryo sa mga pangalan ng seksyong ginagamit sa article permlink scheme. Para maiwasan ang mga isyu, i-check at i-delete ang mga apektadong pangalan ng direktoryo kung ligtas itong gawin, o baguhin ang/ang mga pangalan ng seksyon para hindi sila magbanggaan.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Hindi mabasa ang site directory"><![CDATA[
+<h2>Hindi mabasa ang site directory</h2>
+<p>Ang direktoryong naglalaman ng root na <code>index.php</code> file na tinukoy bilang index para sa site ay hindi mabasa ng server. Paki-check ang mga permission.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Pinagana ang PHP scripting"><![CDATA[
+<h2>Pinagana ang PHP scripting</h2>
+<p>Pinapayagan ng Textpattern ang mga may-akda at administrator na mag-embed ng PHP code sa loob ng mga artikulo at page/form kung pinagana ang mga feature na ito. Dahil ito ay isyu sa seguridad - maaaring ma-execute ang kahit anong uri ng PHP, kabilang ang potensyal na nakakasira/mapanganib na code na maaaring humantong sa pagkasira ng iyong installation o pagtagas ng impormasyon sa ikatlong partido - mariing inirerekomenda na patayin mo ang mga opsyong ito sa <a href="?event=prefs#prefs_group_publish">Preferences panel</a> maliban na lang kung talagang kailangan mo ang feature.</p>
+<p>Marami sa mga enhancement sa mga Textpattern site na dati’y nangangailangan ng mga piraso ng PHP ay maaari na ngayong gawin sa pamamagitan ng mga <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">core tag</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimum na kinakailangang bersyon"><![CDATA[
+<h2>Minimum na kinakailangang bersyon</h2>
+<p>Nangangailangan ang Textpattern ng ilang functionality na naroroon sa PHP programming language at MySQL database server. Paki-sangguni ang sumusunod na talaan para matukoy ang minimum na system requirement:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Bersyon ng Textpattern</th>
+                <th scope="col">Minimum na PHP na bersyon</th>
+                <th scope="col">Minimum na MySQL na bersyon</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Bukod pa sa mga system requirement sa itaas, ang sumusunod na mga PHP extension ay kailangan:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a></li>
+</ul>
+<p>Kailangang maglaman ang <code>php.ini</code> file ng site, alinman sa global o local, ng setting na <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Umiiral pa rin ang setup directory"><![CDATA[
+<h2>Umiiral pa rin ang setup directory</h2>
+<p>Kapag na-install na ang Textpattern, hindi na kailangan ang direktoryong <code>textpattern/setup</code> at ang mga nilalaman nito, at dapat itong burahin para sa mga layunin ng seguridad.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Hindi tugma ang Site URL"><![CDATA[
+<h2>Hindi tugma ang Site URL</h2>
+<p>Ang Site URL na itinakda sa ‘Preferences’ panel ay hindi tumutugma sa aktuwal na URL na ginamit para bisitahin ang site.</p>
+<p>Kung maaaring maabot ang site sa pamamagitan ng maramihang iba’t ibang URL, at kung kumikilos ang site ayon sa inaasahan, maaari mong balewalain nang ligtas ang mensaheng ito.</p>
+<p>Kung hindi, paki-check at baguhin ang setting na ‘Site URL’ sa Admin Preferences ayon sa kinakailangan. Ang isang tinatayang hula sa tamang Site URL ay ipinapakita sa pre-flight warning message sa ‘Diagnostics’ panel.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Hindi pinagana sa iyong server ang mga PHP function na [&#8230;]"><![CDATA[
+<h2>Hindi pinagana sa iyong server ang mga PHP function na [&#8230;]</h2>
+<p>Hindi pinagana ng host ng site o administrator ng server ang isa o higit pang PHP function, na ang ilan ay maaaring makaapekto sa pagpapatakbo ng Textpattern.</p>
+<p>Paki-sangguni ang <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> para sa karagdagang impormasyon.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Update sa bersyon ng Textpattern"><![CDATA[
+<h2>Update sa bersyon ng Textpattern</h2>
+<p>May mas bagong bersyon ng Textpattern na magagamit. Para makinabang sa pinakabagong feature at seguridad, inirerekomenda na mag-upgrade ka.</p>
+<p>Paki-tandaan na kahit sinisikap naming gawing walang aberya at walang sakit hangga’t maaari ang karanasan sa pag-upgrade:</p>
+<ul>
+    <li>Kung huling digit lang ang naiiba sa kasalukuyan mong bersyon, malamang na backward compatible ang upgrade sa mga plugin at tema.</li>
+    <li>Kung huling dalawang digit ang naiiba sa kasalukuyan mong bersyon, maaaring mangailangan ang upgrade ng mga update sa ilang plugin at/o tema, bagaman malamang na patuloy pa rin itong gagana sa isang limitadong kapasidad.</li>
+    <li>Kung unang digit ang naiiba sa kasalukuyan mong bersyon, malamang na mangangailangan ang upgrade ng mga update sa karamihan ng plugin at tema. Kung malaki ang iyong pagdepende sa isang partikular na feature ng plugin o tema, paki-check muna sa may-akda o sa mga miyembro ng komunidad bago simulan ang pag-upgrade.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="May magagamit na Textpattern pre-release"><![CDATA[
+<h2>May magagamit na Textpattern pre-release update</h2>
+<p>May mas bagong pre-release na bersyon ng Textpattern na magagamit. Naghahanap kami ng mga aktibong boluntaryo para subukin ang bersyong ito upang magawa naming mas matatag hangga’t maaari ang final release. Sinisikap naming gawing walang aberya at walang sakit ang karanasan sa pag-upgrade, kahit para sa beta code.</p>
+<p>Kung magpasya kang lumahok, pakitandaan:</p>
+<ul>
+    <li>Huwag gamitin ang beta release na ito sa production site maliban kung mayroon kang gumaganang backup ng parehong mga file ng site at ng database nito, at alam kung paano ito gamitin.</li>
+    <li>Paki-<a href="https://github.com/textpattern/textpattern/issues">ulat ang anumang isyu</a>, na binabanggit ang beta na bersyong ginagamit mo. Maaaring kailanganin ang iba pang beta release bago ang stable release, depende sa mga naiulat na isyu.</li>
+    <li>Tiyakin na kung i-de-deploy mo ang beta release na ito, ia-update mo rin ito sa final na bersyon kapag inilabas.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Hindi dapat magtugma ang Temporary at Plugin cache directory paths"><![CDATA[
+<h2>Hindi dapat magtugma ang Temporary at Plugin cache directory paths</h2>
+<p>Dapat may sarili silang direktoryo ang mga plugin at hindi pinaghahatian ang pansamantalang direktoryo. Isa itong potensyal na panganib sa seguridad at maaaring makasama sa iyong site kung ma-flush ang pansamantalang direktoryo. Pakitiyak na iba ang temporary directory path sa plugin cache path.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Hindi ma-access ang update server"><![CDATA[
+<h2>Hindi ma-access ang update server</h2>
+<p>Nabigo ang pag-check para sa mga update, na kadalasang dulot ng pagsisikip ng network o connection timeout. Karaniwang nalulutas ang sitwasyong ito sa loob ng isa o dalawang oras kaya subukang balikan ulit ang panel na ito sa ibang pagkakataon.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Wala sa iyong PHP installation ang mail() function"><![CDATA[
+<h2>Wala sa iyong PHP installation ang mail() function</h2>
+<p>Hindi pinagana ang <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> function ng PHP. Samakatuwid, hindi makakapagpadala ng email ang Textpattern at hindi magagamit ang ilang functionality. Halimbawa, hindi ipapadala ang mga email notification para sa mga bagong komento, at hindi makakatanggap ng welcome email ang mga bagong user. Gayunpaman, maaari pa ring magdagdag ng mga user.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Files panel">
+        <item id="file_reassign" title="Muling italaga ang file"><![CDATA[
+<h2>Muling italaga ang file</h2>
+<p>Kapag nag-upload ka ng isang file kapalit ng isang may label na ‘Missing’, ang pinili mong file ay ia-upload sa server at iuugnay sa orihinal na impormasyon ng file sa database. Ibig sabihin, mananatili ang pangalan ng orihinal na file, gayundin ang lahat ng iba pang kaugnay na impormasyon gaya ng bilang ng download at kategorya. Gayunpaman, ia-update ang laki ng file para sumasalamin sa bagong file.</p>
+        ]]></item>
+        <item id="file_replace" title="Palitan ang file"><![CDATA[
+<h2>Palitan ang file</h2>
+<p>Ang pag-upload ng file dito ay papalit sa nilalaman ng kasalukuyang file sa server ngunit mananatili ang pangalan ng file gaya ng dati. Ang bilang ng download at iba pang impormasyong kaugnay ng file ay hindi maaapektuhan.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Petsa ng paglathala"><![CDATA[
+<h2>Petsa ng paglathala</h2>
+<p>Ang oras kung kailan ang isang file ay nailathala o huling na-revise. Maaaring itakda ang oras sa mismong sandaling mailathala ang item, o sa kahit anong oras sa nakaraan o hinaharap.</p>
+<p>Ang mga kahon ay tumutugma sa sumusunod na impormasyon:</p>
+<ul>
+    <li>Taon / Buwan / Araw</li>
+    <li>Oras (24-oras na format) : Minuto : Segundo</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Mag-upload ng file"><![CDATA[
+<h2>Mag-upload ng file</h2>
+<p>Gamitin ang form na ito para mag-upload ng mga file o imahe sa iyong server.</p>
+<p>Gamitin ang Textile code para i-render ang mga graphic sa loob ng mga artikulo, ang Textpattern code para ilagay ang mga graphic sa iyong mga page template, o HTML code para ilagay ang mga graphic sa ibang lugar.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Forms panel">
+        <item id="forms_overview" title="Panimula sa Mga Form"><![CDATA[
+<h2>Panimula sa Mga Form</h2>
+<p>Sa Textpattern, ang form ay isang snippet o piraso ng text, HTML, at mga Textpattern tag na maaaring i-reuse para magpakita ng nilalaman.</p>
+<p>Hetong isang halimbawa ng form na maaaring pangalanang <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Maaari mo itong gamitin para magpakita ng HTML unordered list ng magkakaugnay na artikulo:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Dahil ang tungkulin ng form na ito ay maglabas ng listahan ng mga pamagat, maaari itong gamitin sa loob ng ibang mga tag, tulad ng pagpapakita ng 20 artikulo mula sa kasalukuyang seksyon:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Maaari ka ring pumili na gumamit ng form para magpakita ng paulit-ulit na nilalaman, tulad ng header at footer sa iyong mga page template. Ibig sabihin, umiiral lang ang nilalaman sa isang lugar at kung magpasya kang baguhin ito, minsan mo lang itong gagawin. Karaniwan itong ginagawa sa pamamagitan ng:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Maaaring hanggang 64KB ang laki ng isang form. Ang halimbawa para sa footer ay maaaring maglaman ng mga heading, talata, link, conditional tag, at mga sanggunian sa iba pang form gaya ng <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Images panel">
+        <item id="create_thumbnail" title="Lumikha ng thumbnail"><![CDATA[
+<h2>Lumikha ng thumbnail</h2>
+<p>Binibigyang-daan kang (muling) lumikha ng thumbnail ng tinukoy na dimensyon mula sa full size na imahe.</p>
+<p>Para sa custom na pag-size, i-sescaling ang thumbnail para magkasya sa mga dimensyong pipiliin mo, maliban na lang kung pipiliin mo ang checkbox na ‘Crop’. Sa kasong iyon, ang thumbnail ay lilikhain mula sa gitna ng imahe nang walang anumang pag-scaling.</p>
+<p>Para sa awtomatikong pag-size, i-sescaling ang thumbnail sa mga dimensyon at (opsyonal) na crop setting sa kasalukuyang admin theme.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Palitan ang imahe"><![CDATA[
+<h2>Palitan ang imahe</h2>
+<p>Ang imaheng ia-upload dito ay papalit lamang sa kasalukuyang imaheng kaugnay ng entry na ito sa database.</p>
+        ]]></item>
+        <item id="upload_image" title="I-upload ang imahe"><![CDATA[
+<h2>I-upload ang imahe</h2>
+<p>Mag-upload ng isa o higit pang imahe sa iyong server.</p>
+<p>Sa pag-upload sa <code>images</code> na direktoryo, ang filename ng orihinal mong imahe ay mananatiling internal lamang sa database ng Textpattern; ang mismong image file ay papalitan ng sunud-sunod na numero + file extension.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="I-upload ang thumbnail"><![CDATA[
+<h2>I-upload ang thumbnail</h2>
+<p>Maaaring italaga sa mga full size na imahe ang sarili nilang mga thumbnail. Ang mga ito ay kapaki-pakinabang para sa pag-link sa - at pag-index ng - mga full size na imahe.</p>
+<p>Ang sanggunian sa thumbnail ay eksaktong kapareho ng sanggunian sa full size na imahe, na may idinadagdag na <code>t</code> sa pangalan ng file. Halimbawa, para sumangguni sa thumbnail na kaugnay ng full size na imahe na nakaimbak sa <code>/images/12.jpg</code> gagamitin mo ang <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Languages panel">
+        <item id="get_textpack" title="I-install ang Textpack"><![CDATA[
+<h2>I-install ang Textpack</h2>
+<p>I-paste ang karagdagang mga language string para sa iyong site sa kahong ito at piliin ang ‘Upload’ para i-install ang mga ito.</p>
+<p>Madalas na dumarating ang mga string sa anyo ng nada-download na Textpack, na ipinamamahagi kasama ng plugin upang payagan na gamitin ang mga language string ng plugin nang katutubo sa loob ng Textpattern.</p>
+<p>Pagkatapos ay maaaring isalin ng mga tagasalin ang mga pack na ito ayon sa kinakailangan at muling ipamahagi ang lokal na nilalaman sa komunidad.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Links panel">
+        <item id="link_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Opsyonal ang mga deskripsyon para sa mga link, at kapaki-pakinabang para sa paglalagay ng caption sa mga link, sa paggawa ng mga <code>title=""</code> (tooltip) na attribute para sa mga link, o simpleng pagpapanatili ng sarili mong internal na dokumentasyon.</p>
+        ]]></item>
+        <item id="link_sort" title="Halaga ng pag-aayos"><![CDATA[
+<h2>Halaga ng pag-aayos</h2>
+<p>Kapaki-pakinabang para sa natural-language na pag-aayos ng mga listahan ng link, hal. batay sa apelyido ng isang tao sa halip na unang pangalan, o batay sa mga pariralang nagsisimula sa isang tiyak o hindi tiyak na artikulo.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Ang address ng link. Kung ang link ay tuturo sa ibang site, dapat itong unahan ng <code>http://</code> o <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Petsa ng paglathala"><![CDATA[
+<h2>Petsa ng paglathala</h2>
+<p>Ang oras kung kailan ang isang link ay nailathala o huling na-revise. Maaaring itakda ang oras sa mismong sandaling mailathala ang item, o sa kahit anong oras sa nakaraan o hinaharap.</p>
+<p>Ang mga kahon ay tumutugma sa sumusunod na impormasyon:</p>
+<ul>
+    <li>Taon / Buwan / Araw</li>
+    <li>Oras (24-oras na format) : Minuto : Segundo</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Login panel">
+        <item id="remember_login" title="Manatiling naka-log in gamit ang browser na ito"><![CDATA[
+<h2>Manatiling naka-log in gamit ang browser na ito</h2>
+<p>Kapag naka-check, mananatili kang naka-log in sa iyong Textpattern account gamit ang kasalukuyang web browser, hanggang piliin mong mag-log out. Kung hindi naka-check, awtomatiko kang ili-log out matapos ang isang yugto ng kawalang-ginagawa.</p>
+<p>Nangangailangan na ang cookies ay pinagana sa iyong browser.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Plugin panel">
+        <item id="install_plugin" title="I-install ang plugin"><![CDATA[
+<h2>I-install ang plugin</h2>
+<p>I-paste ang nilalaman ng compiled na plugin text file dito, pagkatapos ay gamitin ang ‘Upload’ para simulan ang pag-install. Anumang plugin na iyong i-upload na may kaparehong pangalan ng isang na-install mo na dati ay mapapalitan ng in-upload na bersyon.</p>
+<p>Ang plugin text na ipe-paste mo rito ay <strong>hindi</strong> raw PHP code kundi Base64-encoded na text, na kadalasang sinusundan ng header na naglalaman ng impormasyon tungkol sa plugin (tulad ng pangalan ng plugin, bersyon at deskripsyon, pangalan ng may-akda, atbp.).</p>
+<p>Madalas kang makakakuha ng compiled na mga bersyon ng plugin mula sa <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> o sa itinalagang channel ng may-akda ng plugin, tulad ng kanilang website o GitHub.</p>
+<p>Maaari ka ring mag-paste dito ng URL papunta sa Textpattern compiled text file, kung pinapahintulutan ito ng panlabas na site.</p>
+<p>Daraan ang lahat ng in-upload na plugin sa hakbang ng beripikasyon na nagbibigay-daan sa iyong suriin ang plugin code at nilalaman bago ang pag-install.</p>
+        ]]></item>
+        <item id="upload_plugin" title="I-upload ang plugin"><![CDATA[
+<h2>I-upload ang plugin</h2>
+<p>Gamitin ang form na ito para mag-upload ng plugin file. Ang mga in-upload na plugin (at anumang asset) ay iniimbak sa loob ng direktoryong ‘plugins’.</p>
+<p>Ang mga uri ng plugin na maaaring i-upload dito ay:</p>
+<ul>
+<li>Mga Textpattern PHP Template file na naglalaman ng kumpletong code, metadata, Textpack string at help text.</li>
+<li>Mga Textpattern compiled text file na naglalaman ng kumpletong code, metadata, Textpack string at help text.</li>
+<li>Mga Textpattern zip bundle na naglalaman ng manifest information at code, metadata, Textpack string, help text at mga supporting file.</li>
+<li>Mga raw PHP file (bagaman hindi nito pupunuin ang karagdagang metadata at hindi inirerekomenda).</li>
+</ul>
+<p>Anumang plugin na i-upload mo na may kaparehong pangalan ng isang na-install mo na dati ay mapapalitan ng in-upload na bersyon.</p>
+<p>Daraan ang lahat ng in-upload na plugin sa hakbang ng beripikasyon na nagbibigay-daan sa iyong suriin ang plugin code at nilalaman bago ang pag-install.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Preferences panel">
+        <item id="admin_side_plugins" title="Gamitin ang mga admin-side na plugins?"><![CDATA[
+<h2>Gamitin ang mga admin-side na plugins?</h2>
+<p>Maaaring baguhin ng mga admin-side plugin ang operasyon ng administration interface. Maaari silang kumabit sa umiiral nang mga aksyon, gaya ng pag-edit o paglathala ng mga artikulo, o maaari silang magdagdag ng mga bagong panel para sa karagdagang/pinalawak na functionality.</p>
+<p>Kung gusto mong matuto pa tungkol sa mga admin-side plugin, pakitingnan ang pahinang <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> sa <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>. Ang iba’t ibang uri ng plugin ay nakalista sa site na <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Mga advanced na opsyon"><![CDATA[
+<h2>Mga advanced na opsyon</h2>
+<p>Ipakita ang pangkat ng advanced na mga preference, kung saan maaaring i-configure ang mga karagdagang setting gaya ng:</p>
+<ul>
+    <li>Mga PHP function na pinagana sa <code>txp:evaluate</code>.</li>
+    <li>Mga custom na uri ng template ng form.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Payagan ang PHP sa mga artikulo?"><![CDATA[
+<h2>Payagan ang PHP sa mga artikulo?</h2>
+<p>Kapag pinagana, papayagan ng setting na ito ang paggamit ng PHP sa loob ng mga artikulo. Dapat ay may sapat na pribilehiyo ang may-akda para gawin ito (bilang default, tanging mga <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Publisher’ <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Managing Editor’ <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> at <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Copy Editor’ <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> lamang ang maaaring gawin ito).</p>
+<p><strong>Mariing inirerekomenda na patayin mo ang opsyong ito</strong> maliban na lang kung talagang kailangan mo ang feature. Maaaring magdagdag ng anumang uri ng potensyal na nakakasira/mapanganib na PHP code na maaaring sumira sa iyong website o maglabas ng impormasyon sa ikatlong partido ang sinumang may-akda, at ma-e-execute ito ng sinumang titingin sa artikulong iyon.</p>
+<p>Dapat tanggalin sa PHP code ang opening at closing PHP tag, at kailangan din itong nakapaloob sa mga <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Payagan na mapatungan ang form?"><![CDATA[
+<h2>Payagan na mapatungan ang form?</h2>
+<p>Pinapayagan ng setting na ito ang mga may-akda ng artikulo na patungan ang form na gagamitin kapag nirender ang kanilang artikulo. Kung pinagana, magiging available ang dropdown na ‘Patungan ang form’ kapag nag-e-edit ng artikulo.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Payagan ang PHP sa mga pahina?"><![CDATA[
+<h2>Payagan ang PHP sa mga pahina?</h2>
+<p>Kapag pinagana, pinapayagan ng setting na ito ang PHP code sa loob ng mga page template at form template.</p>
+<p><strong>Mariing inirerekomenda na patayin mo ang opsyong ito</strong> maliban na lang kung talagang kailangan mo ang feature. Maaaring magdagdag ng anumang uri ng potensyal na nakakasira/mapanganib na PHP code na maaaring sumira sa iyong website o maglabas ng impormasyon sa ikatlong partido ang sinumang ibang user, at ma-e-execute ito ng walang kamalay-malay na administrator o bisita ng site.</p>
+<p>Dapat tanggalin sa PHP code ang opening at closing PHP tag, at kailangan din itong nakapaloob sa mga <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Pormat ng archive na petsa"><![CDATA[
+<h2>Pormat ng archive na petsa</h2>
+<p>Kung paano lilitaw ang mga petsa sa mga artikulo sa mga seksyon ng iyong site.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Ipakita ang sipi sa pahina ng pag-edit ng artikulo?"><![CDATA[
+<h2>Ipakita ang sipi sa pahina ng pag-edit ng artikulo?</h2>
+<p>Sa pagpili ng ‘Hindi’ hindi ipapakita ang field ng sipi sa may-akda sa screen ng pag-edit ng artikulo.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Ikabit ang mga pamagat sa mga permalink?"><![CDATA[
+<h2>Ikabit ang mga pamagat sa mga permalink?</h2>
+<p>Ididikit ng setting na ito ang isang awtomatikong-ginawang bersyon ng pamagat ng artikulo sa URL. Ito ay alinman sa awtomatikong ginagawa o maaaring mano-manong patungan sa ‘URL lamang na pamagat’ kapag nag-e-edit ng artikulo.</p>
+<p>Magkakaroon lamang ng epekto ang setting kapag gumagamit ka ng malilinis na URL. Para sa ilang wika maaari itong magresulta sa mahahaba at hindi magandang tingnan na URL, kung saan maaaring gusto mong itakda ito sa ‘Off’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Awtomatikong isaayos ang setting ng Daylight Saving Time?"><![CDATA[
+<h2>Awtomatikong isaayos ang Daylight Saving Time?</h2>
+<p>Pinapayagan ng setting na ito ang Textpattern na baguhin kung kailan nagaganap ang DST (Daylight Saving Time) sa iyong lokasyon. Kung ito ay nakatakda sa ‘Hindi’, magagawa mong manu-manong baguhin ang preference na ‘DST enabled’.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ang bagong komento ay nangangahulugang na-update ang site?"><![CDATA[
+<h2>Ang bagong komento ay nangangahulugang na-update ang site?</h2>
+<p>Itinatala ng Textpattern database kung kailan naganap ang pinakahuling pagbabago sa iyong site. Kapag nakatakda ito sa ‘Oo’, mag-uupdate din ang isang bagong komento sa halagang ito. Ginagamit ang halagang ito, halimbawa, para sa functionality na <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Gamitin ang rel=&quot;nofollow&quot; sa mga komento?"><![CDATA[
+<h2>Gamitin ang rel="nofollow" sa mga komento?</h2>
+<p>Kung nakatakda sa ‘Oo’, magdadagdag ito ng karagdagang attribute sa mga link na ginawa sa mga komento. Layunin nito na bawasan ang insentibo para sa mga spammer sa komento at pinauso ito ng iba’t ibang search engine at software developer. Maaari kang magbasa pa sa <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">anunsyo ng Google <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+<p><strong>Tandaan:</strong> Hindi naaapektuhan ng setting na ito ang functionality ng iyong site. Maaaring pigilan o bawasan nito ang impluwensya ng iyong mga komento kapag niraranggo ng ilang search engine ang mga site na naka-link mula sa mga komentong iyon.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Ipakita ang mga komento bilang isang de-numerong listahan?"><![CDATA[
+<h2>Ipakita ang mga komento bilang isang de-numerong listahan?</h2>
+<p>Tinutukoy kung ang mga komento sa artikulo ay ibabalot gamit ang HTML na <code>&lt;ol&gt;</code> tag at ang bawat komento ay ibabalot sa <code>&lt;li&gt;</code> tag (na nagiging sanhi upang maipakita ang mga komento bilang isang de-numerong listahan), o kung ang bawat komento ay ibabalot sa halip ng <code>&lt;div&gt;</code> tag.</p>
+<p>Sa alinmang halaga, maaari mong patungan ang mga tag na ginagamit batay sa bawat form sa pamamagitan ng pagbago sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>, na makikita sa form na <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Awtomatikong isama ang mga komento sa mga artikulo?"><![CDATA[
+<h2>Awtomatikong isama ang mga komento sa mga artikulo?</h2>
+<p>Tinutukoy ng setting na ito kung awtomatikong idaragdag ang mga komento at ang form ng komento sa lahat ng indibidwal na artikulo (sa pamamagitan ng awtomatikong pag-include sa nilalaman ng form na <code>comments_display</code>).</p>
+<p>Karamihan sa oras, gugustuhin mong naka-set ito sa ‘Hindi’, dahil nagbibigay ito ng mas malawak na kalayaan sa pagpoposisyon ng iyong mga komento sa disenyo ng iyong site. Kailangan mong manu-manong idagdag ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> sa anumang template batay sa artikulo kung saan mo gustong lumabas ang mga komento.</p>
+<p>Kung nakakaranas ka ng dobleng pagpapakita ng mga komento sa isang artikulo, malamang na mayroon kang <code>&lt;txp:comments /&gt;</code> tag sa template ngunit naka-set din ang ‘Awtomatikong isama ang mga komento sa mga artikulo?’ sa ‘Oo’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Pormat ng petsa ng mga komento"><![CDATA[
+<h2>Pormat ng petsa ng mga komento</h2>
+<p>Kung paano lilitaw ang mga petsa ng komento sa mga bisita ng iyong site.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Default na imbitasyon sa mga komento"><![CDATA[
+<h2>Default na imbitasyon sa mga komento</h2>
+<p>Kung pinapayagan mong magkomento ang mga bisita sa iyong site, ito ang default na text ng imbitasyon. Halimbawa:</p>
+<ul>
+    <li>Mga komento</li>
+    <li>Magdagdag ng komento</li>
+    <li>Feedback</li>
+    <li>Mag-annotate</li>
+</ul>
+<p>Tandaan na ang text ng imbitasyon ay palaging maaaring baguhin batay sa bawat artikulo.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Huwag paganahin ang mga komento pagkatapos ng"><![CDATA[
+<h2>Huwag paganahin ang mga komento pagkatapos ng</h2>
+<p>Gamitin ito para itakda ang haba ng panahon kung kailan papatayin ang pagkomento para sa mga artikulo (maaaring itakda sa ‘Never’ para payagan ang walang hanggang oras sa pagkomento).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Payagan ang mga larawan ng taga-komento sa mga komento?"><![CDATA[
+<h2>Payagan ang mga larawan ng taga-komento sa mga komento?</h2>
+<p>Kapag ang opsyong ito ay nakatakda sa ‘Hindi’, anumang mga larawan na kasama sa mga komento ay aalisin.</p>
+        ]]></item>
+        <item id="comments_mode" title="Paraan ng mga komento"><![CDATA[
+<h2>Paraan ng mga komento</h2>
+<p>Kung ‘nopopup’ ang pinili (inirerekomenda) ang kasalukuyang window ay mare-refresh para ipakita lamang ang kasalukuyang artikulo, na may mga komento sa ibaba.</p>
+<p>Kung ‘popup’ ang pinili, magbubukas ang isang bagong window ng browser kapag na-click ang link na mga komento (ginagamit nito ang form na <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="I-moderate ang mga komento?"><![CDATA[
+<h2>I-moderate ang mga komento?</h2>
+<p>Kapag nakatakda ito sa ‘Oo’, ang bawat bagong komento ay magkakaroon ng visibility nito na naka-off hanggang ito ay ma-review. Dapat mong manu-manong i-moderate at gawing nakikita ang bawat komento (isang mensahe ang ipapadala sa email ng may-akda ng artikulo kapag may natanggap na bagong komento).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Default na nakabukas ang mga komento?"><![CDATA[
+<h2>Default na nakabukas ang mga komento?</h2>
+<p>Kung ito ay nakatakda sa ‘Oo’, awtomatikong papaganahin ang mga komento para sa bawat naisapublikong artikulo. Kung nakatakda sa ‘Hindi’, kailangan mong paganahin ang mga komento sa article ‘Write’ panel sa tuwing nais mong tumanggap ng mga komento.</p>
+<p>Maaaring paganahin/huwag paganahin ang mga komento anumang oras, batay sa bawat artikulo.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Ang mga komento ay nangangailan ng email address ng mga taga-komento?"><![CDATA[
+<h2>Ang mga komento ay nangangailangan ng email address ng user?</h2>
+<p>Kung nakatakda sa ‘Oo’, ang mga taong gustong magkomento sa iyong artikulo ay kailangang maglagay ng email address sa form ng pag-input ng komento. Hindi sila makakapag-post ng komento kung hindi sila magbibigay ng email address.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Ang mga komento ay nangangailangan ng pangalan ng taga-komento?"><![CDATA[
+<h2>Ang mga komento ay nangangailangan ng pangalan ng taga-komento?</h2>
+<p>Kung nakatakda sa ‘Oo’, ang mga taong gustong magkomento sa iyong artikulo ay kailangang maglagay ng pangalan sa form ng pag-input ng komento. Hindi sila makakapagsumite ng komento kung hindi sila magbibigay ng pangalan.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="I-email ang mga komento sa may-akda?"><![CDATA[
+<h2>I-email ang mga komento sa may-akda?</h2>
+<p>Kung nakatakda sa ‘Oo’, sa tuwing may matatanggap na bagong komento sa isang artikulo, isang kopya ang ipapadala sa pamamagitan ng email sa may-akda ng artikulong iyon.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Payagan ang mas maraming Textile markup sa mga komento?"><![CDATA[
+<h2>Payagan ang mas maraming Textile markup sa mga komento?</h2>
+<p>Kapag nakatakda sa ‘Oo’, maaaring maglaman ang mga komento ng mga elementong <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> na kung hindi ay ituturing na plain text, gaya ng:</p>
+<ul>
+    <li>mga heading</li>
+    <li>ordered at unordered na mga listahan</li>
+    <li>mga footnote</li>
+    <li>mga talahanayan</li>
+    <li>code</li>
+    <li>pinalawak na block syntax (<code>bc..</code>, <code>bq..</code>, atbp.)</li>
+</ul>
+<p><strong>Tandaan:</strong> Para sa mga dahilan ng seguridad, ang raw HTML ay ginagawang karaniwang text.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Mga account na pinapayagang mag-login nang sabay-sabay"><![CDATA[
+<h2>Mga account na pinapayagang mag-login nang sabay-sabay</h2>
+<p>Isang listahang pinaghihiwalay ng kuwit ng mga login account name na maaaring mag-log in sa maraming browser/session. Kapaki-pakinabang ito sa panahon ng development upang maibahagi ang isang login sa mga kliyente.</p>
+<p>Ang paggamit ng feature na ito ay isang panganib sa seguridad at <strong>hindi inirerekomenda sa mga live site</strong>. Maglalabas ng babala ang Diagnostics kung naka-configure ang iyong user account para sa concurrency sa live na website.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Mga custom na uri ng template ng form"><![CDATA[
+<h2>Mga custom na uri ng template ng form</h2>
+<p>Bilang karagdagan sa mga standard na uri ng form template (article, file, misc, atbp.), maaaring magtakda ng mga custom na uri ang mga Publisher. Dalawahang layunin ng mga custom na uri ng form template: mas madali ang pag-uuri ng form template at custom na depinisyon ng asset.</p>
+<p>Ang format ng preference ay <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>, kung saan ang bawat seksyon ay tumutugma sa isang uri ng form template.</p>
+<p>Para magtakda ng custom na uri ng form (hal. <code>js</code>) kailangan munang magdagdag (sa hiwalay na linya) ng seksyong <code>[js]</code>. Maaaring magtakda ng default na pamagat sa pamamagitan ng <code>title="Javascript"</code> entry sa kaukulang seksyon. Kung kinakailangan, maaari ring idagdag ang mga lokal na pamagat (hal. <code>ru="Скрипт"</code>).</p>
+<p>Dagdag pa rito, maaaring tukuyin ang isang <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">media type <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> (dating kilala bilang MIME type) para sa form template, hal. <code>mediatype="application/javascript"</code>. Ginagawa nitong mga custom asset ang mga form template ng ganitong uri na maaaring i-serve bilang itinakdang media type, alinman mula sa database o mula sa disk (flat file) sa pamamagitan ng <code>&lt;txp:output_form /&gt;</code> tag. Halimbawa, maaaring isama sa iyong code ang isang form template na pinangalanang <code>myscript.js</code> na uri <code>[js]</code> at may media type na <code>application/javascript</code> gaya nito:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Lilikha ito ng sumusunod na HTML <code>&lt;script&gt;</code> tag:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Tanging mga form template na may name extension na katugma ng kanilang uri (hal. <code>myscript.js</code>) lamang ang maaaring i-serve bilang mga flat file. Sa kasong ito, hindi sila ipo-proseso ng Textpattern at maa-access sila sa pamamagitan ng kanilang URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Mga custom na field"><![CDATA[
+<h2>Mga custom na field</h2>
+<p>Ginagamit ang mga custom na field para maglaman ng karagdagang data ng artikulo. Maaari kang magtakda ng hanggang sampu sa pamamagitan ng pagbibigay sa mga ito ng pangalan dito. Lilitaw ang bawat isa bilang hiwalay na field sa Write panel, para payagan na maiugnay ang custom na data sa bawat artikulo.</p>
+<p>Maaari mong pangalanan ang mga field sa kahit anong paraan na nais mo, ngunit tandaan ang mga sumusunod:</p>
+<ul>
+<li>Pinapaganda ng paggamit ng mga espasyo ang nababasang anyo sa Write panel, ngunit <em>hindi</em> na magagamit ang mga field bilang mga parameter ng pag-sort o pag-filter sa article_custom tag. Isaalang-alang ang paggamit ng underscore kung nais mong gamitin ang functionality na ito.</li>
+<li>Mag-ingat sa pagpapangalan ng mga field na hindi sila mag-clash sa mga reserved na pangalan ng field sa Textpattern. Halimbawa, huwag gamitin ang <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, atbp. dahil magkakaroon ka ng kakaibang resulta o sira na mga site.</li>
+<li>Limitado sa 255 karakter ng text lamang ang data sa bawat field.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Format ng petsa"><![CDATA[
+<h2>Format ng petsa</h2>
+<p>Apektado ng opsyong ito kung paano lilitaw ang mga petsa ng artikulo sa front page lamang ng iyong site.</p>
+        ]]></item>
+        <item id="default_event" title="Default na entrepanyo"><![CDATA[
+<h2>Default na entrepanyo</h2>
+<p>Ang panel ng Textpattern administration interface na unang lilitaw kapag may nag-log in.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Default na estado ng paglathala"><![CDATA[
+<h2>Default na estado ng paglathala</h2>
+<p>Tinutukoy ang katayuan ng visibility sa paglathala ng mga bagong-gawang Textpattern article.</p>
+<p>Tandaan na hindi naaapektuhan ng preference setting na ito ang status ng mga artikulong ginawa o in-edit bago ang anumang pagbabago.</p>
+<p>Ang default na estado ng paglathala ay isa sa mga sumusunod:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p>Ang artikulong <strong>draft</strong> ay itinuturing na work-in-progress at hindi makikita sa labas ng Textpattern administration area (ibig sabihin hindi nakikita sa front side ng Textpattern at hindi isinasama sa mga feed).</p>
+<p>Ang artikulong <strong>hidden</strong> ay hindi makikita sa labas ng Textpattern administration area.</p>
+<p>Ang artikulong <strong>pending</strong> ay itinuturing na handa na para sa paglathala at naghihintay ng pag-apruba, ngunit hindi makikita sa labas ng Textpattern administration area.</p>
+<p>Ang artikulong <strong>live</strong> ay karaniwang makikita sa labas ng Textpattern administration area (ibig sabihin nakikita sa front side ng Textpattern, isinasama sa mga feed kung pinapayagan ng preference). Kung ang isang artikulo ay live at may petsa ng pag-expire, mananatili ang status nito bilang live matapos maabot ang petsang iyon, ngunit lilitaw lamang ang artikulo sa labas ng administration area kung pinapayagan na mailathala ang mga nag-expire na artikulo.</p>
+<p>Ang artikulong <strong>sticky</strong> ay kahalintulad ng <strong>live</strong> article sa paraang maaari itong makita sa labas ng Textpattern administration area ngunit <strong>hindi</strong> lalabas sa mga listahan ng artikulo maliban kung ang kaukulang <code>article</code> o <code>article_custom</code> tag ay may kasamang <code>status</code> attribute na may halagang <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Piliin kung aling HTML doctype ang nais mong gamitin (HTML5 o XHTML). Naiimpluwensyahan nito ang mga form ng pag-input ng komento, Textile rendering ng <code>&lt;abbr&gt;</code> o <code>&lt;acronym&gt;</code>, at mga <code>&lt;link&gt;</code> tag na ginagawa ng <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Paganahin ang preview ng development theme?"><![CDATA[
+<h2>Paganahin ang preview ng development theme?</h2>
+<p>Maaaring ligtas na mag-develop at mag-preview ng bagong tema ang mga user na may sapat na pribilehiyo (bilang default, yaong may mga role na Publisher at Designer) habang lahat ng ibang user ay makakakita pa rin ng lumang tema (hanggang sa ma-deploy ang bago).</p>
+<p>Gayunpaman, maaaring i-disable ng mga pribilehiyadong user na hindi gustong lumahok sa development ng tema ang preview ng development theme. Sa gayon, ang kasalukuyang ‘public’ na tema ang ibibigay sa kanila, gaya ng sa mga karaniwang bisita ng site.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Paganahin ang suporta sa maikling tag?"><![CDATA[
+<h2>Paganahin ang suporta sa maikling tag?</h2>
+<p>Ang mga Textpattern tag ay nasa anyong <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Posibleng bawasan ang dami ng pag-type sa pamamagitan ng pagpapagana ng shorthand notation kung saan maaaring alisin ang <code>txp:</code> sa pamamagitan ng pagsunod sa ilang simpleng panuntunan. Narito ang ilang halimbawa para ipakita ang konsepto:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> nagiging <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> nagiging <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> nagiging <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> nagiging <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> nagiging <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (tandaan na maaaring gamitin ang plugin prefix para sa <code>else</code> tag).</li>
+</ul>
+<p>Kung ang isang tag ay naglalaman ng underscore at pinagana mo ang short tag, ang pangunahing konsepto ay:</p>
+<ol>
+    <li>Alisin ang prefix na <code>txp:</code>.</li>
+    <li>Palitan ang unang occurrence ng underscore ng <code>::</code>.</li>
+</ol>
+<p>Tandaan na hindi naaapektuhan ng setting na ito ang kakayahang gumamit ng <code>&lt;txp:output_form /&gt;</code> short code para mag-render ng mga form snippet. Maaari mo pa ring gamitin ang <code>&lt;txp::shortcode /&gt;</code>, na ituturing na <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Paganahin ang XML-RPC server?"><![CDATA[
+<h2>Paganahin ang XML-RPC server?</h2>
+<p>Kung nais mong gumamit ng <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> para kontrolin ang Textpattern nang malayuan (hal. desktop o mobile app) kailangan mong buksan ang XML-RPC server sa pamamagitan ng pagtatakda nito sa ‘Oo’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Gamitin ang pinahusay na mga tampok sa mail"><![CDATA[
+<h2>Gamitin ang pinahusay na mga tampok sa mail</h2>
+<p>Ang pagtatakda nito sa ‘Hindi’ ay iruruta ang lahat ng email - tulad ng mga kahilingan sa pag-reset ng password ng account, at email mula sa mga plugin tulad ng com_connect - sa pamamagitan ng <code>mail()</code> function ng PHP. Ang pagpili sa ‘Oo’ ay gagamit sa halip ng bundled na PHPMailer, na magbubukas ng mga opsyonal na setting para i-ruta ang mail sa pamamagitan ng panlabas na mga SMTP server.</p>
+<p>Kung nagkakaproblema ka sa deliverability ng mga email (lalo na sa mga online provider tulad ng Gmail, Outlook, Yahoo!, atbp.), malamang na dahil hindi nakikita ang iyong domain bilang trusted source. Ang paglipat sa ‘Oo’ ay makakatulong na mapabuti ang deliverability. Bukod pa rito, maaaring magbigay ang paggamit ng SMTP ng mas mabuting compatibility sa ilang email provider at lalo pang mapahusay ang deliverability.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Ang mga tala ay mawawalan ng bisa pagkatapos ng ilang araw?"><![CDATA[
+<h2>Ang mga tala ay mawawalan ng bisa pagkatapos ng ilang araw?</h2>
+<p>Kapag pinagana ang pag-log ng Textpattern, maaari mong tukuyin kung gaano katagal (sa araw) dapat panatilihin ang mga log. Ang ‘7’ ay magpapanatili sa mga log na available sa loob ng pitong araw.</p>
+<p><strong>Tandaan:</strong> Ang mga log ay na-ti-trim lamang kapag tiningnan mo ang ‘Visitor logs’ panel, at kung hindi ay patuloy lang silang lalaki ang sukat.</p>
+        ]]></item>
+        <item id="file_base_path" title="Landas sa direktoryo ng file"><![CDATA[
+<h2>Landas sa direktoryo ng file</h2>
+<p>Itinakda nito ang <strong>absolute path</strong> sa direktoryo kung saan permanenteng ise-save ang mga pag-upload ng file. Dapat may write access ang PHP sa direktoryong ito.</p>
+<p><strong>Tandaan:</strong> Isaalang-alang ang paglipat sa direktoryong ito sa labas ng publicly accessible na docroot ng iyong website, para sa dagdag na seguridad.</p>
+        ]]></item>
+        <item id="file_download_header" title="Header ng pag-download ng file"><![CDATA[
+<h2>Header ng pag-download ng file</h2>
+<p>Binibigyang-daan ka na i-customize kung paano hinahawakan ang mga pag-download ng file.</p>
+<p>Karaniwang itinuturing na attachment ang lahat ng pag-download at ida-download (depende sa kung paano naka-configure ang browser mo na hawakan ang uri ng file na iyon). Kung nais mong magbigay ng pahiwatig kung paano mo mas gugustuhing tratuhin ang ilan o lahat ng uri ng file, maaari kang magbigay ng tag code dito para gawin iyon. Isang halimbawa ang pagpapakita ng mga PDF file na idinagdag mo sa Textpattern category na 'inline-pdf' bilang inline, sa halip na i-download ang mga ito:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Pinakamataas na laki ng uploads (sa bytes)"><![CDATA[
+<h2>Pinakamataas na laki ng uploads (sa bytes)</h2>
+<p>Maaari mong limitahan ang pinakamataas na sukat (sa bytes) para sa pag-upload ng file. Tandaan na ang halagang ito ay limitado rin ng configuration ng PHP. Kung nade-detect ng Textpattern na nililimitahan ng configuration ng PHP mo ang laki ng upload sa mas maliit na halaga, awtomatiko nitong babaan ito. Kung nais mong payagan ang mas malalaking pag-upload ng file sa pamamagitan ng upload mula sa browser, makipag-ugnayan sa iyong host (ang mga kaukulang halaga sa <code>php.ini</code> ay <code>post_max_size</code>, <code>upload_max_filesize</code> at <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Sona ng oras"><![CDATA[
+<h2>Sona ng oras</h2>
+<p>Para maipakita ang mga petsa sa iyong lokal na sona ng oras, pakipili ang iyong time zone.</p>
+        ]]></item>
+        <item id="img_dir" title="Direktoryo ng mga imahe"><![CDATA[
+<h2>Direktoryo ng mga imahe</h2>
+<p>Kung nais mong i-customize ang pangalan ng iyong images directory, maaari mo itong gawin dito. Kailangan mo munang likhain ang direktoryo sa root ng iyong Textpattern installation, at dapat mo ring tiyakin na nasusulatan ito ng PHP.</p>
+<p>Laging isang <strong>relative path</strong> (patungo sa direktoryo ng root Textpattern installation) ang path na ito.</p>
+<p>Ang default ay <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Isama ang email address sa mga Atom feed?"><![CDATA[
+<h2>Isama ang email address sa mga Atom feed?</h2>
+<p>Binibigyang-daan ka nitong isama ang email address ng may-akda (gaya ng nakatakda sa kanilang user account) ng isang artikulo sa bahagi ng <code>author</code> ng iyong mga Atom feed.</p>
+        ]]></item>
+        <item id="is_dst" title="Paganahin ang Daylight Saving Time?"><![CDATA[
+<h2>Paganahin ang Daylight Saving Time?</h2>
+<p>Kung naka-enable sa kasalukuyan ang DST (Daylight Saving Time) para sa iyong time zone.</p>
+        ]]></item>
+        <item id="logging" title="Nagtatala"><![CDATA[
+<h2>Nagtatala</h2>
+<p>Maaari mong piliin ang antas ng visitor logging na isasagawa ng Textpattern:</p>
+<ul>
+    <li><strong>Lahat ng hit:</strong> itatala ng Textpattern ang lahat ng page view sa iyong site</li>
+    <li><strong>Mga referrer lang:</strong> itatala lang ng Textpattern ang mga bisitang galing sa ibang site</li>
+    <li><strong>Wala:</strong> hindi magtatala ang Textpattern ng anumang page view</li>
+</ul>
+<p>Mula Textpattern 4.7.0, walang impormasyon sa IP address ng bisita ang kinokolekta o iniimbak ng Textpattern. Kung nangongolekta o nag-iimbak ka ng mga IP address sa labas ng Textpattern, mangyaring gumawa ng angkop na pag-iingat sa pag-imbak at/o paggamit ng data alinsunod sa anumang naaangkop na batas, tulad ng <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>, at gumamit ng matibay na seguridad sa bawat aspeto ng iyong server at Textpattern installation para hindi makompromiso ang data na ito.</p>
+<p>Mariing inirerekomenda na iwan mo ang setting na ito sa default nitong ‘Wala’, maliban na lang kung talagang kailangan mo ang impormasyong ito at, higit pa rito, hayagang ipahayag ang balak mong paggamit nito.</p>
+        ]]></item>
+        <item id="max_url_len" title="Pinakamahabang lawak ng URL (sa character)"><![CDATA[
+<h2>Pinakamahabang lawak ng URL (sa character)</h2>
+<p>Pipigilan nito ang mga URL na mas mahaba kaysa sa tinukoy na haba na gumana. Makakatulong ito sa damage limitation at seguridad ng site.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Idispley ang mga tulong na link ng admin-side"><![CDATA[
+<h2>Idispley ang mga tulong na link ng admin-side</h2>
+<p>Kung nais mong itago ang mga admin-side inline help link (mga pop-up window ng tulong ng Textpattern) sa buong sistema, ilipat ang setting na ito sa ‘Wala’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Itago ang email address ng taga-komento?"><![CDATA[
+<h2>Itago ang email address ng taga-komento?</h2>
+<p>Kinokontrol ng setting na ito kung dapat bang ipakita nang publiko ang email address ng isang taga-komento.</p>
+<p>Inirerekomenda na huwag ipakita ang mga email address, bilang paggalang sa iyong mga user, ngunit maaaring may ilang sitwasyon kung kailan kanais-nais na ipakita ang email address ng taga-komento.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Gamitin ang ISO-8859-1 encoding sa mga email (ang default ay UTF-8)?"><![CDATA[
+<h2>Gamitin ang ISO-8859-1 encoding sa mga email (ang default ay UTF-8)?</h2>
+<p>Gumagamit ang Textpattern ng UTF-8 encoding saanman posible bilang default, kabilang na para sa mga papalabas na email. Gayunpaman, ang ilang lumang email client (kabilang ang ilang bersyon ng Microsoft Outlook) ay walang wastong suporta sa UTF-8. Kung nakakaranas ka ng mga baluktot na karakter sa mga email, iko-convert ng setting na ito ang text sa ISO-8859-1 encoding bago ito ipadala.</p>
+<p><strong>Tandaan:</strong> Kung gumagamit ka ng wikang ang mga karakter ay hindi maaaring katawanin sa ISO-8859-1, sa kasamaang-palad ay hindi ka matutulungan ng setting na ito. Dapat kang maghanap ng email client na compatible sa UTF-8 (o Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Patungan ang mga uri ng form"><![CDATA[
+<h2>Patungan ang mga uri ng form</h2>
+<p>Pumili kung aling mga uri ng form ang magkakaroon ng kanilang mga template na magagamit sa Write panel bilang mga override form.</p>
+        ]]></item>
+        <item id="permlink_format" title="Pattern ng URL ng pamagat na permalink"><![CDATA[
+<h2>Pattern ng URL ng pamagat na permalink</h2>
+<p>Tinutukoy nito ang paraan kung paano binubuo at itinatakda ang mga URL ng artikulo kapag ginagamit ang non-messy mode.</p>
+<p>Kapag nalathala ang artikulo, ang URL nito ay ginagawa mula sa pamagat ng artikulo maliban na lang kung may ibinigay na partikular na URL sa URL-only title field.</p>
+<p>Kunin ang sumusunod na halimbawa ng pamagat ng artikulo: <em>Ann and Bob eat cake</em></p>
+<p>Kapag ang opsyong permalink title URL pattern ay nakatakda sa ‘Hyphenated (title-like-this)’, ang URL para sa artikulo ay magiging:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Kapag ang opsyong permalink title URL pattern ay nakatakda sa ‘Intercapped (TitleLikeThis)’, ang URL para sa artikulo ay magiging:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Huwaran ng URL ng artikulo"><![CDATA[
+<h2>Huwaran ng URL ng artikulo</h2>
+<p>Tinutukoy nito ang paraan kung paano naaabot ang mga indibidwal na artikulo sa pamamagitan ng URL na ipinapakita gamit ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>.</p>
+<p>Ang ‘?=messy’ mode ang pinaka-compatible - gagana ito na halos walang kinakailangang configuration - ngunit hindi gaanong kapaki-pakinabang sa larangan ng readability ng URL at search engine optimization (SEO). Sa mode na ito ang mga URL para sa mga artikulo sa iyong site ay magiging ganito ang hitsura:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Ang lahat ng ibang mode ay nangangailangan ng URL rewrite functionality ng web server (hal. Apache <code>mod_rewrite</code> o NGINX rewrite directive sa <code>server</code> block). Kung hindi sinusuportahan ng server mo ang URL rewrite functionality, alinman sa makipag-ugnayan sa iyong web host o gamitin ang ‘?=messy’ mode na inilarawan sa itaas.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Landas ng direktoryo ng plugin cache"><![CDATA[
+<h2>Landas ng direktoryo ng plugin cache</h2>
+<p>Pangunahing ginagamit ang setting na ito para sa mga developer ng plugin. Kapag tinukoy, maaari mong ilagay ang plugin source file (hindi compiled) sa direktoryong ito at awtomatikong ilo-load ito ng Textpattern, upang madali mong mai-edit ang plugin at agad na makita ang epekto nito nang hindi kinakailangang i-install/aktibahin ang plugin. <strong>Mag-ingat</strong> gayunpaman, dahil sa paggamit ng pamamaraang ito, maaaring sirain din ng sira na plugin (na nabigong mag-compile) ang Textpattern!</p>
+<p>Inirerekomenda na i-load mo ang mga plugin sa pamamagitan ng standard na ‘Plugins’ panel sa production site, sa halip na gamitin ang plugin cache directory.</p>
+<p><strong>Tandaan:</strong> Huwag tukuyin ang parehong direktoryo para sa parehong ‘temporary’ at ‘plugin cache’, dahil magdudulot ito ng mga problema (susubukan ng Textpattern na patakbuhin ang nilalaman ng pansamantalang log file bilang mga plugin).</p>
+        ]]></item>
+        <item id="production_status" title="Katayuan ng produksyon"><![CDATA[
+<h2>Katayuan ng produksyon</h2>
+<p>Ang Textpattern site ay may isa sa tatlong mode:</p>
+<ol>
+    <li>‘Debugging’</li>
+    <li>‘Testing’</li>
+    <li>‘Live’</li>
+</ol>
+<h3>Debugging mode</h3>
+<p>Lahat ng PHP error reporting sa iyong live site ay makikita, gayundin ang mga babala tungkol sa hindi maayos na code at plugin. Bukod pa rito, ang sumusunod na impormasyon ay makikita kapag tiningnan mo ang HTML source ng mga live na pahina:</p>
+<ul>
+    <li>ang oras na ginugol ng server para buuin ang pahina (‘Runtime’)</li>
+    <li>ang bilang ng mga MySQL query na na-execute</li>
+    <li>tinatayang peak memory usage</li>
+    <li>lahat ng Textpattern tag na nadatnan habang binubuo ang pahina (kilala rin bilang tag trace)</li>
+</ul>
+<h3>Testing mode</h3>
+<p>Lahat ng PHP error reporting sa iyong live site ay makikita, gayundin ang mga babala tungkol sa hindi maayos na code at plugin. Makikita ang sumusunod na impormasyon kapag tiningnan mo ang HTML source ng mga live na pahina:</p>
+<ul>
+    <li>ang oras na ginugol ng server para buuin ang pahina (‘Runtime’)</li>
+    <li>ang bilang ng mga MySQL query na na-execute</li>
+    <li>tinatayang peak memory usage</li>
+</ul>
+<h3>Live mode</h3>
+<p>Walang error reporting o impormasyong diagnostiko ang ipapadala sa pahina. Sa pangkalahatan, mas pinipili ang Live mode, dahil nagbibigay ito ng pinakamahusay na karanasan sa user at may pinakamababang overhead sa server.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema ng front-side"><![CDATA[
+<h2>Tema ng front-side</h2>
+<p>Ang default na front-side theme na gagamitin kapag may bumisita sa iyong public-facing na website. Kasama sa Textpattern ang isang pre-installed na default theme, kasama ang opsyon na magsimula nang walang tema. Maaari ka ring magdagdag ng mga theme package sa direktoryong <code>textpattern/themes</code> upang magamit ang mga ito.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Ilathala ang mga lumipas na artikulo?"><![CDATA[
+<h2>Ilathala ang mga lumipas na artikulo?</h2>
+<p>Kapag nakatakda sa ‘Oo’, magpapatuloy na lumabas sa iyong site ang mga nag-expire na artikulo matapos lumipas ang kanilang expiry date. Maaari mong gamitin ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> para magpakita ng alternatibong nilalaman o markup para sa mga nag-expire na artikulo.</p>
+<p>Kapag nakatakda sa ‘Hindi’, aalisin ang mga nag-expire na artikulo mula sa public site at magbabalik sila ng HTTP status na "410 Gone" sa halip. Ang default na setting ay ‘Hindi’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Magpadala ng mga detalye ng login mula sa email address na ito"><![CDATA[
+<h2>Magpadala ng mga detalye ng login mula sa email address na ito</h2>
+<p>Tukuyin ang email address na gagamitin bilang ‘From:’ address ng nagpadala sa mga mensahe na may impormasyon sa login para sa mga bagong user.</p>
+<p>Kung ang preference na ito ay iiwang blangko o naglalaman ng hindi wastong email address, gagamitin ng Textpattern ang pangalan at address ng kasalukuyang naka-log in na user sa halip.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Ilang artikulo ang dapat isama sa mga feed?"><![CDATA[
+<h2>Ilang artikulo ang dapat isama sa mga feed?</h2>
+<p>Ito ang pinakamataas na bilang ng kasalukuyang artikulong i-syndicate nang sabay-sabay, sa mga format na RSS at Atom.</p>
+<p>Inirerekomenda ang mababang halaga, tulad ng <code>5</code> hanggang <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Bilang ng karagdagang parser sweeps"><![CDATA[
+<h2>Bilang ng karagdagang parser sweeps</h2>
+<p>Karaniwang pinapalitan ng Textpattern tag parser ang lahat ng tag mo ng nilalamang mula sa database sa isang sweep ng page template. Sa ilang kaso, maaaring hindi ito sapat, halimbawa:</p>
+<ul>
+    <li>Kapag gumagamit ng low load order plugin bilang mga tag attribute</li>
+    <li>Pagpapalit ng code sa loob ng mga <code>&lt;txp:php&gt;</code> tag</li>
+    <li>Pag-skip sa mga elemento ng pahina nang mas maaga sa pahina upang makatanggap sila ng nilalamang nagmumula sa tag na naproseso nang mas huli</li>
+</ul>
+<p>Tradisyonal na nagpapatakbo ang Textpattern ng isang karagdagang sweep (tinatawag na ‘secondpass’) para sa legacy na dahilan, kaya default ang halaga ng preference na ito sa <code>1</code>. Subalit, pinapataas ng mas maraming sweep ang tsansang may mga hindi inaasahang tag na madadaan at maproseso. Ang mga kamakailang pagbuti sa tag parser ay nagbawas sa pangangailangan para sa second pass na ito. Kaya, maliban na lang kung ginagamit mo ang second sweep para sa isang tiyak na dahilan, pakibabaan ang halagang ito sa <code>0</code> para gawing mas secure ang iyong site.</p>
+<p>Kung sakaling makakita ka ng mga hindi naprosesong tag na nirender sa iyong website (at walang iba pang error sa tag na ipinapakita sa Testing/Debugging mode dahil sa hindi magkatugmang pares ng tag) pakikontak kami na may kasamang halimbawa ng iyong page template/code/plugin. Sinisikap naming alisin ang pangangailangan para sa karagdagang parser pass, at makakatulong sa amin ang impormasyong ito para magawa iyon.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Magpadala ng &quot;Last-Modified&quot; na header?"><![CDATA[
+<h2>Magpadala ng "Last-Modified" na header?</h2>
+<p>Kapag nakatakda, babasahin ng Textpattern ang HTTP <code>If-Modified-Since</code> header ng bisita (kung mayroon) at ihahambing ito sa huling pag-update ng site. Kung walang nagbago mula nang huli itong i-load ng bisita (ibig sabihin kung pareho ang timestamp na ipinadala ng browser at ang huling pag-update ng site), magpapadala ng header na mag-uutos sa browser ng bisita na gamitin ang naka-cache nitong bersyon ng pahina.</p>
+<p>Makakabawas ito sa bandwidth consumption, oras ng pag-load ng pahina, at load sa web server.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Ipakita ang bilang ng komento sa mga feed?"><![CDATA[
+<h2>Ipakita ang bilang ng komento sa mga feed?</h2>
+<p>Kapag nakatakda sa ‘Oo’, idaragdag ng setting na ito ang bilang ng mga komento sa mga pamagat ng artikulo mo sa mga RSS/Atom feed.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan ng site"><![CDATA[
+<h2>Slogan ng site</h2>
+<p>Ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">slogan ng site <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> ay buod o deskripsyon ng iyong site. Gagamitin ito bilang deskripsyon ng iyong site saanman kinakailangan, tulad sa mga RSS/Atom feed mo, at maaari itong gamitin sa kahit ilang lugar sa buong site mo, ayon sa iyong pagpapasya.</p>
+<p><strong>Tandaan:</strong> Opsyonal ang site slogan, ngunit maaaring kailangan ito para sa valid na RSS o Atom feed.</p>
+        ]]></item>
+        <item id="sitename" title="Pangalan ng site"><![CDATA[
+<h2>Pangalan ng site</h2>
+<p>Ang <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">pangalan o pamagat ng iyong site <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a>. Lilitaw ito sa title bar ng browser ng bisita o syndication feed reader, at sa kahit ilang iba pang lugar sa buong site mo, ayon sa iyong pagpapasya.</p>
+        ]]></item>
+        <item id="siteurl" title="URL ng site"><![CDATA[
+<h2>URL ng site</h2>
+<p>Ito ang address ng iyong Textpattern site, halimbawa <code>www.example.com</code>.</p>
+<p><strong>Tandaan:</strong> Hindi kailangan ng <code>http://</code>, <code>https://</code> o trailing slash na <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Direktoryo ng tema"><![CDATA[
+<h2>Direktoryo ng tema</h2>
+<p>Kung nais mong i-customize ang pangalan ng direktoryong pinaglalagyan ng front-side theme flat file, maaari mo itong gawin dito. Kailangan mo munang likhain ang direktoryo sa root ng iyong Textpattern installation, at dapat mo ring tiyakin na nasusulatan ito ng PHP.</p>
+<p>Laging isang <strong>relative path</strong> (patungo sa direktoryo ng root Textpattern installation) ang path na ito.</p>
+<p>Ang default ay <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP envelope sender address"><![CDATA[
+<h2>SMTP envelope sender address</h2>
+<p>Dapat iwanang blangko ang preference na ito maliban na lang kung makararanas ka ng mga problema sa pagpapadala ng email sa Textpattern (kung walang naipapadalang email). Kung mangyari ang problemang iyon, maaari kang maglagay dito ng anumang valid na email address, kahit mas mainam na isa na may parehong domain name ng website kung saan mo na-install ang Textpattern (ibig sabihin kung ang website mo ay <code>https://example.com</code>, maaari mong gamitin ang <code>you@example.com</code>).</p>
+<p>Para sa mga interesadong malaman ang teknikal na detalye:</p>
+<ul>
+    <li>Sa mga UNIX-like/macOS server, ang email address na inilagay ay ginagamit bilang ika-4 na parameter (may prefix na "-f") para sa PHP <code>mail()</code> function</li>
+    <li>Sa mga Windows server, ang email address na inilagay ay ginagamit para itakda (o patungan) ang setting na <code>sendmail_from</code> sa php.ini</li>
+</ul>
+<p>Tinitiyak nito na ang SMTP envelope sender address (na hindi kailangang kapareho ng "From:" header na karaniwang nakikita mo sa email) ay nakatakda sa email address na inilagay mo rito, na isang kinakailangan para makapagpadala ng email sa ilang web server.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP host"><![CDATA[
+<h2>SMTP host</h2>
+<p>Para mapabuti ang deliverability ng mensahe at magamit ang pag-route ng email sa pamamagitan ng panlabas na serbisyo (tulad ng SendGrid, AWS SES, Mailchimp, Mailgun, atbp.), tukuyin dito ang SMTP server. Kumonsulta sa iyong SMTP provider para makuha ang halagang ito.</p>
+<p>Maaaring ibigay ang halagang ito sa pamamagitan ng pagde-define ng constant na <code>SMTP_HOST</code> sa <code>config.php</code>, kung saan makikita ang halagang naka-grey out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP password"><![CDATA[
+<h2>SMTP password</h2>
+<p>Kung nangangailangan ang iyong koneksyong SMTP ng password para sa tinukoy na username, ilagay ito rito. Kumonsulta sa dokumentasyon ng provider para sa mga detalye.</p>
+<p>Tandaan: Kahit hindi ipapakita rito ang password, <em>iimbakin</em> ito sa plaintext sa prefs table ng database. Kung gusto mong dagdagan ang seguridad, maaari kang mag-define ng constant na <code>SMTP_PASS</code> sa iyong <code>config.php</code> sa halip.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP port"><![CDATA[
+<h2>SMTP port</h2>
+<p>Kung nagtakda ka ng SMTP host, dapat kang magtakda ng port para paganahin ang SMTP routing. Karaniwang mga port ay:</p>
+<ul>
+    <li>25 - para sa unsecured mail</li>
+    <li>465 - legacy (hindi opisyal) para sa secure mail</li>
+    <li>587 - default (inirerekomenda) para sa secure na TLS email</li>
+</ul>
+<p>Maaaring ibang port ang ginagamit ng napili mong SMTP provider, kaya kumonsulta sa kanilang dokumentasyon.</p>
+<p>Maaaring ibigay ang halagang ito sa pamamagitan ng pagde-define ng constant na <code>SMTP_PORT</code> sa <code>config.php</code>, kung saan makikita ang halagang naka-grey out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Paraan ng seguridad ng SMTP"><![CDATA[
+<h2>Paraan ng seguridad ng SMTP</h2>
+<p>Piliin ang mekanismong ginagamit ng iyong SMTP provider bilang email security protocol nito. Kumonsulta sa kanilang dokumentasyon para sa mga detalye.</p>
+<p>Maaaring ibigay ang halagang ito sa pamamagitan ng pagde-define ng constant na <code>SMTP_SECTYPE</code> sa <code>config.php</code>, kung saan makikita ang halagang naka-grey out sa Preferences panel.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP username"><![CDATA[
+<h2>SMTP username</h2>
+<p>Kung nangangailangan ang iyong koneksyong SMTP ng user/login name, ilagay ito rito. Kumonsulta sa dokumentasyon ng provider para sa mga detalye.</p>
+<p>Maaaring ibigay ang halagang ito sa pamamagitan ng pagde-define ng constant na <code>SMTP_USER</code> sa <code>config.php</code>, kung saan makikita ang halagang naka-grey out sa Preferences panel.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Ang mga blocklists na spam (pinaghihiwalay ng kuwit)"><![CDATA[
+<h2>Ang mga blocklists na spam (pinaghihiwalay ng kuwit)</h2>
+<p>Ang mga <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> provider na inilagay rito ay tatanungin kapag may na-post na komento sa iyong blog, at iche-check ang IP address ng nag-post ng komento. Kung nakalista ang IP address, ibig sabihin may isa o higit pang ulat ng spam na ginawa tungkol sa IP na ito sa nakaraan, at mare-reject ang komento. Anuman ang resulta ng pag-check, hindi iniimbak ng Textpattern ang IP address ng nag-post ng komento.</p>
+<p>Maaari kang maglagay dito ng listahan ng mga domain name, na pinaghihiwalay ng kuwit. Tandaan na responsibilidad mo ang tiyakin na ang mga blocklist ay angkop sa layunin.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="I-syndicate ang sipi ng artikulo lamang?"><![CDATA[
+<h2>I-syndicate ang sipi ng artikulo <strong>lamang</strong>?</h2>
+<p>Kung ito ay nakatakda sa ‘Hindi’, ang mga item sa feed ay magkakaroon ng buong katawan ng artikulo.</p>
+<p>Kung ito ay nakatakda sa ‘Oo’, ang mga item sa feed ay magkakaroon ng sipi ng artikulo sa halip na katawan ng artikulo kung ito ay available.</p>
+        ]]></item>
+        <item id="tempdir" title="Pansamantalang landas ng direktoryo"><![CDATA[
+<h2>Pansamantalang landas ng direktoryo</h2>
+<p>Itinatakda ang isang <strong>absolute path</strong> papunta sa pansamantalang direktoryo (minsan tinatawag na ‘tmp’ o ‘temp’). Kailangan ng PHP na magkaroon ng write access sa direktoryong ito. Ginagamit ang direktoryong ito para sa mga pansamantalang file, halimbawa mga upload ng kahit anong uri (plugin, file o imahe).</p>
+<p><strong>Mga Tala:</strong>
+<ul>
+    <li>Huwag tukuyin ang parehong direktoryo para sa parehong ‘temporary’ at ‘plugin cache’, dahil magdudulot ito ng mga problema (susubukan ng Textpattern na patakbuhin ang nilalaman ng pansamantalang log file bilang mga plugin).</li>
+    <li>Isaalang-alang ang paglipat sa direktoryong ito sa labas ng publicly accessible na docroot ng iyong website, para sa dagdag na seguridad.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema ng admin-side"><![CDATA[
+<h2>Tema ng admin-side</h2>
+<p>Ang default na admin-side theme na gagamitin kapag may nag-log in sa Textpattern. Kasama sa Textpattern ang ilang pre-installed na admin theme, at maaari ka ring magdagdag ng mga custom theme package sa direktoryong <code>textpattern/admin-themes</code> upang magamit ang mga ito.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Magdagdag ng trailing slash sa mga URL"><![CDATA[
+<h2>Magdagdag ng trailing slash sa mga URL</h2>
+<p>Kung awtomatikong magdaragdag ang Textpattern ng trailing slash sa mga URL na ginagawa nito. Ang mga opsyon ay:</p>
+<ul>
+    <li><strong>Hindi</strong> - Huwag kailanman</li>
+    <li><strong>List</strong> - Sa mga landing page na nakabatay sa listahan lang (ibig sabihin hindi kapag titingin sa indibidwal na mga artikulo)</li>
+    <li><strong>Oo</strong> - Palagi</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Mga function ng PHP na pinagana sa txp:evaluate"><![CDATA[
+<h2>Mga function ng PHP na pinagana sa txp:evaluate</h2>
+<p>Ito ay listahang pinaghihiwalay ng kuwit ng mga item na <code>function</code> o <code>alias=function</code>, hal. <code>md5</code>, <code>replace=str_replace</code>. Maaaring gamitin ang mga item na tinukoy sa listahang ito sa <code>query</code> attribute ng <code>&lt;txp:evaluate /&gt;</code> tag:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Dapat magbalik ang <code>function</code> ng scalar value (<strong>hindi</strong> array/object).</p>
+        ]]></item>
+        <item id="use_comments" title="Tumatanggap ng mga komento?"><![CDATA[
+<h2>Tumatanggap ng mga komento?</h2>
+<p>Itinatakda nito kung dapat bang paganahin o huwag paganahin ang commenting functionality ng Textpattern.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Gamitin ang email address upang makabuo ng mga feed IDs (ang default ay URL ng site)?"><![CDATA[
+<h2>Gamitin ang email address upang makabuo ng mga feed IDs (ang default ay URL ng site)?</h2>
+<p>Nangangailangan ang mga item sa Atom feed ng natatanging ID.</p>
+<p>Para makabuo ng mga ID na natatangi sa iyong site, binibigyang-daan ka ng Textpattern na pumili sa pagitan ng email address o domain name mo para isama sa mga ID na ito. Ang email address ay magiging unang ginamit kapag ginagawa ang site. Maliban na lang kung malamang na babaguhin mo ang domain name mo sa hinaharap, malamang na ligtas na itakda ito sa ‘Hindi’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Gumamit ng plugins?"><![CDATA[
+<h2>Gumamit ng plugins?</h2>
+<p>Binibigyang-daan ka nitong patayin ang lahat ng suporta para sa mga Textpattern plugin. Kapaki-pakinabang ito kung nagde-debug ka ng mga error sa iyong site at nais mong i-check kung may kinalaman ang isa o higit pang plugin.</p>
+        ]]></item>
+        <item id="use_textile" title="Default na pag-format ng teksto"><![CDATA[
+<h2>Default na pag-format ng teksto</h2>
+<p>Ang text format setting na pipiliin mo rito ang magiging default para sa excerpt at body markup sa ‘Write’ panel. Maaari kang pumili na payagan ang kumpletong Textile processing, na i-convert ang line break sa HTML paragraph marker o huwag i-convert ang anumang text.</p>
+<p>Ang <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> ay isang utility na idinisenyo upang pasimplihin ang conversion ng plain text sa HTML. Kapag pinagana, ipo-proseso ng Textile ang body text ng mga artikulo at magbabalik ito ng structurally sound HTML.</p>
+<p>Nag-aalok din ang Textile ng makapangyarihan ngunit madaling matutunang hanay ng mga command para i-format ang text, tukuyin ang mga estruktura gaya ng mga listahan, header at blockquote, at magpasok ng mga link at imahe.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Sections panel">
+        <item id="section_category" title="Panimula"><![CDATA[
+<h2>Panimula</h2>
+<p>Ang mga seksyon sa Textpattern ay pinakamainam na isipin na katulad ng mga seksyon sa isang pahayagan; kabilang ang bawat isa sa parehong publikasyon, ngunit bawat isa ay maaaring magtatampok ng ibang layout, o ibang istilo ng artikulo, at iba pa.</p>
+<p>Para sa karamihan ng mga website, ilang seksyon lamang ang kailangang gawin.</p>
+<h3>Isang malamang na senaryo para sa isang website na may tatlong seksyon:</h3>
+<ol>
+    <li><strong>Archive:</strong> Ang ‘Section’ na kinabibilangan ng lahat ng artikulong lumilitaw sa front page. Sa tuwing magki-click ang mambabasa sa permanent link ng artikulo, ipapakita ito sa page layout na nakatalaga sa ‘Section’ na ito. Para pumunta sa isang pahinang naka-paging listahan ng pinakabagong mga artikulong nakatalaga sa seksyong "Archive", ang URL ay magiging <code>https://example.com/archive/</code>.</li>
+    <li><strong>About:</strong> Isang ‘about this site’ page, na naiiba sa front page at sa seksyong "Archive", dahil mas static ito, maaaring may ibang layout, at malamang na naglalaman lamang ng isang artikulo. Maaabot ang seksyong ‘About’ sa <code>https://example.com/about/</code>.</li>
+    <li><strong>Photos:</strong> Isang ‘Section’ na ang naiibang layout (at posibleng ibang CSS) ay magpapakita ng mga larawan sa halip na mga artikulo.</li>
+</ol>
+<p>Tandaan na isang espesyal na nakatagong seksyon, na pinangalanang default, ay palaging umiiral. Ang default na seksyon na ito ay gumagamit ng pahinang pinangalanang default at istilong tinatawag na default, at ito ang bumubuo ng front page ng iyong site.</p>
+        ]]></item>
+        <item id="section_default" title="Default na bahagi ng paglathala"><![CDATA[
+<h2>Default na bahagi ng paglathala</h2>
+<p>Pinamamahalaan ng opsyong ito kung aling seksyon ang magiging pre-selected sa Section menu kapag gumagawa ng bagong artikulo sa ‘Write’ panel.</p>
+<p>Kung karamihan ng iyong mga artikulo ay napupunta sa isang partikular na seksyon, piliin ito mula sa listahan dito. Mismong agad na makikita ang mga pagbabago.</p>
+<p>Maaari mong patungan ito batay sa bawat artikulo sa ‘Write’ panel sa pamamagitan ng pagpili ng ibang seksyon sa ‘Sort and display’ pane.</p>
+        ]]></item>
+        <item id="section_description" title="Deskripsyon"><![CDATA[
+<h2>Deskripsyon</h2>
+<p>Ang deskripsyon ng seksyon ay isang opsyonal na bahagi na makakatulong sa mga search engine at website crawler na mas mahusay na tukuyin at ayusin ang nilalaman.</p>
+<p>Ang deskripsyon ng artikulo ay limitado sa pinakamataas na 255 karakter. Tandaan na ang ilang search engine ay naglalagay ng limitasyon sa bilang ng karakter ng <code>meta description</code> ng isang pahina para sa praktikal na pagdisplay sa mga search engine results pages (SERP) at ito ay maaaring mas mababa sa 255 karakter na limitasyon sa Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Lalabas ba sa front page ang mga artikulo sa seksyong ito?"><![CDATA[
+<h2>Lalabas ba sa front page ang mga artikulo sa seksyong ito?</h2>
+<p>Ang mga artikulo sa ilang seksyon, gaya ng mga kahawig ng mas ‘static’ na web page, ay maaaring mukhang wala sa lugar sa time-sensitive na daloy ng front page ng iyong site.</p>
+<p>Ang pagtatakda nito sa ‘Hindi’ ay pipigil sa mga artikulong nakatalaga sa seksyong ito na lumabas sa front page.</p>
+        ]]></item>
+        <item id="section_searchable" title="Isama ba ang seksyong ito sa site search?"><![CDATA[
+<h2>Isama ba ang seksyong ito sa site search?</h2>
+<p>Pinamamahalaan nito kung ang mga artikulong kabilang sa seksyong ito ay dapat lumabas bilang bahagi ng mga site-wide na resulta ng paghahanap.</p>
+        ]]></item>
+        <item id="section_syndicate" title="I-syndicate ang mga artikulo sa seksyong ito?"><![CDATA[
+<h2>I-syndicate ang mga artikulo sa seksyong ito?</h2>
+<p>Pinamamahalaan kung lalabas o hindi ang mga artikulo sa seksyong ito sa mga RSS at Atom feed ng site.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Gumagamit ng istilo"><![CDATA[
+<h2>Gumagamit ng istilo</h2>
+<p>Kung nais mong patungan ang default na stylesheet para sa isang partikular na seksyon, maaari itong itakda dito.</p>
+<p>Nauugnay lamang ito sa mga stylesheet na nasa loob ng Textpattern na ‘Styles’ panel - kung ina-host mo ang iyong CSS sa labas ng Textpattern (na lubos na inirerekomenda), walang epekto ang opsyong ito.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Gumagamit ng pahina"><![CDATA[
+<h2>Gumagamit ng pahina</h2>
+<p>Sa Textpattern, ang mga seksyon ay nakapareha sa mga page template.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Gumagamit ng tema"><![CDATA[
+<h2>Gumagamit ng tema</h2>
+<p>Kung nais mong baguhin ang temang ginagamit para sa isang partikular na seksyon, maaari itong itakda dito mula sa listahan ng kasalukuyang naka-install na mga tema.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Setup panel">
+        <item id="setup_admin_url" title="Subdomain ng admin"><![CDATA[
+<h2>Subdomain ng admin</h2>
+<p>Ang subdomain na nais mong gamitin para ma-access ang Textpattern administration interface (hal. <code>admin.example.com</code>).</p>
+<p>Mangyaring sumangguni sa <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> para sa karagdagang detalye.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie domain"><![CDATA[
+<h2>Cookie domain</h2>
+<p>Ang (sub)domain na nais mong gamitin para sa/mga Textpattern cookie.</p>
+<p>Mangyaring sumangguni sa <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a> para sa karagdagang detalye.</p>
+        ]]></item>
+        <item id="setup_user_login" title="User login"><![CDATA[
+<h2>User login</h2>
+<p>Ang login name ng administrator (‘Publisher’) account na gagamitin mo para sa pag-administer ng iyong site.</p>
+<p>Bagaman walang limitasyon sa pangalan, pinakamainam na iwasan ang kumplikadong sunod-sunod ng karakter at madaling mahulaan na username (hal. <code>admin</code>, <code>administrator</code>, atbp.)</p>
+        ]]></item>
+        <item id="setup_user_pass" title="User password"><![CDATA[
+<h2>User password</h2>
+<p>Dahil ang account na ito ang may pinakamataas na antas ng access sa Textpattern, pumili ng napakalakas na password o, mas mabuti, isang passphrase.</p>
+<h3>Mga Tip</h3>
+<ul>
+    <li>Gumamit ng halo ng uppercase at lowercase na mga karakter</li>
+    <li>Gumamit ng mga numero</li>
+    <li>Gumamit ng mga simbolo</li>
+    <li>Gawing hindi bababa sa walong karakter ang haba</li>
+    <li><strong>Iwasan</strong> ang anumang personal na impormasyon (mga petsa, pangalan, lugar, kasapi ng pamilya, alagang hayop, atbp.)</li>
+    <li><strong>Iwasan</strong> ang anumang nag-iisa o inuulit na salita sa diksyunaryo, anuman ang spelling, wika o case</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Table prefix"><![CDATA[
+<h2>Table prefix</h2>
+    <p>Kailangan mo lang gumamit ng table prefix kung kailangan mo ng maramihang Textpattern installation sa iisang database. Bawat Textpattern installation ay nangangailangan ng natatanging prefix.</p>
+    <p>Tandaan na dapat tumalima ang prefix sa mga sumusunod na tuntunin:</p>
+<ul>
+    <li><strong>1st karakter:</strong> dapat a-z, A-Z, o underscore</li>
+    <li><strong>Kasunod na mga karakter:</strong> maaari lamang a-z, A-Z, 0-9, o underscore</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Themes panel">
+        <item id="skin_author" title="May-akda ng tema"><![CDATA[
+<h2>May-akda ng tema</h2>
+<p>Ang/ang mga may-akda ng temang ito (opsyonal).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Website ng tema"><![CDATA[
+<h2>Website ng tema</h2>
+<p>Ang URL kung saan makikita ang buong impormasyon at/o pinakabagong bersyon ng temang ito (opsyonal).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Tanggalin din ang mga template ng tema mula sa disk"><![CDATA[
+<h2>Tanggalin din ang mga template ng tema mula sa disk</h2>
+<p>Kung naka-check, lahat ng template file sa piniling/piniling mga tema ay permanenteng matatanggal mula sa disk. Gayunpaman, ang mga direktoryong may kaugnayan sa tema at kanilang mga subdirectory ay hindi mabubura kung may iba pang file (tulad ng JavaScript, mga imahe, ...) sa loob ng mga ito.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Tanggalin ang mga hindi nagagamit na template mula sa database kapag nag-i-import"><![CDATA[
+<h2>Tanggalin ang mga hindi nagagamit na template mula sa database kapag nag-i-import</h2>
+<p>Kung naka-check, bawat template sa piniling/piniling mga tema na walang katumbas na file sa disk ay permanenteng matatanggal mula sa database. Ang magiging resulta pagkatapos makumpleto ang aksyon ay masasalamin ng mga template sa iyong database ang kung ano ang nasa disk hangga’t maaari.</p>
+<p>Tandaan na kung nakapag-alis ka ng mga template file na kailangan ng Textpattern, lilikha ito ng mga walang-lamang bersyon para sa iyo sa database.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Tanggalin ang mga hindi nagagamit na template mula sa disk kapag nag-e-export"><![CDATA[
+<h2>Tanggalin ang mga hindi nagagamit na template mula sa disk kapag nag-e-export</h2>
+<p>Kung naka-check, bawat template file sa piniling/piniling mga tema na walang katumbas na item sa database ay permanenteng matatanggal mula sa theme na nakabase sa disk. Ang magiging resulta pagkatapos makumpleto ang aksyon ay eksaktong masasalamin ng iyong mga template sa file system ang kung ano ang nasa database.</p>
+        ]]></item>
+        <item id="skin_description" title="Paglalarawan ng tema"><![CDATA[
+<h2>Paglalarawan ng tema</h2>
+<p>Maaaring magbigay ng maikling buod ng disenyo/layout ng temang ito (opsyonal).</p>
+<p>Ang paglalarawan ng tema ay limitado sa pinakamataas na 255 karakter.</p>
+        ]]></item>
+        <item id="skin_import" title="I-import ang tema"><![CDATA[
+<h2>I-import ang tema mula sa disk</h2>
+<p>Ang form na ito ay nagbibigay-daan sa iyong mag-import ng isang tema sa Textpattern database mula sa iyong themes directory.</p>
+<p>Ang isang tema na maaaring i-import ay dapat na binubuo ng mababasang parent folder na gumagamit ng pangalan ng tema bilang pangalan ng folder, at sa loob ng folder isang mababasang <code>manifest.json</code> na file sa inaasahang format. Dapat ding naglalaman ang theme folder ng mga page, form at style sa mga subfolder na kapangalan nila.</p>
+<p>Habang ang mga page at form ay dapat gumamit ng <code>.txp</code> extension, inaasahan na ang mga stylesheet ay <code>.css</code> na file. Dapat ding pangkatin ang mga form ayon sa uri sa nakalaang mga direktoryo. Lilikha ang Textpattern ng anumang nawawalang mahahalagang template sa pag-import.</p>
+<p>Tingnan ang <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentasyon ng mga tema <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> para sa karagdagang impormasyon tungkol sa paggawa, pag-install at paggamit ng mga tema sa loob ng Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Pangalan ng tema"><![CDATA[
+<h2>Pangalan ng tema</h2>
+<p>Ang pangalan ng isang tema ay ginagamit para sa pangalan ng direktoryo ng tema at iba pang teknikal na layunin (kailangan).</p>
+<p>Hindi dapat maglaman ang pangalan ng anumang espesyal na karakter o espasyo.</p>
+        ]]></item>
+        <item id="skin_overview" title="Panimula sa Mga Tema"><![CDATA[
+<h2>Panimula sa Mga Tema</h2>
+<p>Ang Textpattern theme ay isang koleksyon ng Mga Pahina, Mga Form at Mga Stylesheet. Pinapayagan ka ng mga tema na lohikong paghiwa-hiwalayin ang mga asset ng iyong site sa mga grupo para sa madaling pagkakakilanlan, o pagbabahagi sa iba. Ang aksyon ng paglikha o pag-import ng Tema, at anumang asset na nilalaman nito, ay <em>walang</em> epekto sa iyong umiiral na site. Malaya kang i-edit o baguhin ang anumang asset na hindi nauugnay sa isang Seksiyon ng iyong site, at hindi nito maaapektuhan ang mismong site.</p>
+<p>Para mag-edit ng mga asset sa isang tema, bisitahin ang Pages, Forms o Styles panel at gamitin ang dropdown selector para piliin ang temang gusto mong pagtrabahuhan. Naaalala ang temang pinagtatrabahuhan mo sa buong administration area, na nagbibigay-daan sa iyong tumalon sa pagitan ng mga uri ng asset nang mabilis at madali. Tinatawag itong iyong <em>working theme</em>.</p>
+<p>Pakisangguni ang <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(nagbubukas ng panlabas na link sa bagong window)</span></a> para sa karagdagang impormasyon.</p>
+        ]]></item>
+        <item id="skin_title" title="Pamagat ng tema"><![CDATA[
+<h2>Pamagat ng tema</h2>
+<p>Isang deskriptibong pamagat ng tema, na ginagamit para kilalanin ang tema sa loob ng mga panel ng Textpattern.</p>
+<p>Maaaring maglaman ang pamagat ng mga espesyal na karakter at espasyo.</p>
+        ]]></item>
+        <item id="skin_version" title="Bersyon ng tema"><![CDATA[
+<h2>Bersyon ng tema</h2>
+<p>Ang numero ng bersyon ng naka-install na bersyon ng temang ito (opsyonal).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
