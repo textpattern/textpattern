@@ -117,10 +117,21 @@ class SLIRRequest
     private $isUsingDefaultImagePath  = false;
 
     /**
+     * Supplied request - overrides the URL
+     *
+     * @since 2.0
+     * @var string
+     */
+    private $request = null;
+
+    /**
      * @since 2.0
      */
-    final public function __construct()
+    final public function __construct($request = null)
     {
+        if ($request !== null) {
+            $this->request = $request;
+        }
     }
 
     /**
@@ -344,7 +355,8 @@ class SLIRRequest
         $params = array();
 
         // The parameters should be the first set of characters after the SLIR path
-        $request    = preg_replace('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`', '', (string) $_SERVER['REQUEST_URI'], 1);
+        $request = preg_replace('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`', '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
+
         $paramString  = strtok($request, '/');
 
         if ($paramString === false || $paramString === $request) {
@@ -368,6 +380,7 @@ Example usage:
 
         // The parameters are separated by hyphens
         $rawParam   = strtok($paramString, '-');
+
         while ($rawParam !== false) {
             if (strlen($rawParam) > 1) {
                 // The name of each parameter should be the first character of the parameter string and the value of each parameter should be the remaining characters of the parameter string
@@ -424,7 +437,7 @@ Example usage:
             // Make sure the image file exists
             if (SLIRConfig::$defaultImagePath !== null && !$this->isUsingDefaultImagePath()) {
                 $this->isUsingDefaultImagePath  = true;
-                return $this->setPath(SLIRConfig::$defaultImagePath);
+                return $this->setPath(SLIRConfig::$defaultImagePath.$this->path);
             } else {
                 throw new \RuntimeException('Image does not exist: ' . $this->fullPath());
             }

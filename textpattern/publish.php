@@ -405,6 +405,7 @@ function preText($store, $prefs = null)
         } else {
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
+            $imgParts = explode('/', $img_dir);
 
             switch (strtolower($u1)) {
                 case 'atom':
@@ -454,21 +455,27 @@ function preText($store, $prefs = null)
                     $out['filename'] = (!empty($u3)) ? $u3 : '';
                     break;
 
-                case $img_dir:
-                    if ($u2 === TEXTPATTERN_THUMB_DIR) {
+                case $imgParts[0]:
+                    $matchImg = array_intersect($url, $imgParts);
+                    $offset = substr_count($img_dir, '/') + 2;
+
+                    if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
                         $out['imgref'] = TEXTPATTERN_THUMB_DIR;
 
                         if ($permlink_mode === 'messy') {
                             parse_str($out['qs'], $parts);
                             unset($parts['token']);
-                            $un = basename($parts['i']);
+                            $imgfile = basename($parts['i']);
                             unset($parts['i']);
-                            $u3 = implode('-', array_map(function($k, $v){
+                            $xform = implode('-', array_map(function($k, $v){
                                 return "$k$v";
                             }, array_keys($parts), array_values($parts)));
+                        } else {
+                            $xform = ${'u' . ++$offset};
+                            $imgfile = basename($u0);
                         }
 
-                        output_thumb(array('param' => $u3, 'img' => $un));
+                        output_thumb(array('param' => $xform, 'img' => $imgfile));
                         exit;
                     }
                 default:

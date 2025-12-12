@@ -5361,10 +5361,8 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
         }
 
-        $pathParts = parse_url(ihu);
-
         if ($permlink_mode === 'messy') {
-            $params['i'] = $pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'];
+            $params['i'] = $img['id'].$img['ext'];
 
             if (!empty($token)) {
                 $params['token'] = $token;
@@ -5372,7 +5370,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
 
             $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.TEXTPATTERN_THUMB_DIR.'?'.http_build_query($params);
         } else {
-            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.$pathParts['path'].$img_dir.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
+            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
         }
     } elseif ($thumbnail == THUMB_CUSTOM) {
         $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];

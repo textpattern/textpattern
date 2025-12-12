@@ -205,17 +205,32 @@ class SLIR
     private $headers = array();
 
     /**
+     * URL to process. Uses the $_GET URL if not set
+     *
+     * @since 2.0
+     * @var array
+     */
+    private $url = null;
+
+    /**
      * The magic starts here
      *
      * @since 2.0
      */
-    final public function __construct($path = null)
+    final public function __construct($path = null, $url = null)
     {
         if ($path !== null) {
             if (empty($this->source)) {
                 $this->source = new SLIRGDImage($path);
             }
         }
+
+        if ($url !== null) {
+            if (empty($this->url)) {
+                $this->url = $url;
+            }
+        }
+
     }
 
     /**
@@ -299,7 +314,7 @@ class SLIR
     private function getRequest()
     {
         if (empty($this->request)) {
-            $this->request  = new SLIRRequest();
+            $this->request = new SLIRRequest($this->url);
             $this->request->initialize();
         }
 
@@ -456,7 +471,7 @@ class SLIR
         // The request cache can't be used if the request is falling back to the
         // default image path because it will prevent the actual image from being
         // shown if it eventually ends up on the server
-        if (SLIRConfig::$enableRequestCache === true && !$this->getRequest()->isUsingDefaultImagePath()) {
+        if (SLIRConfig::$enableRequestCache == true && !$this->getRequest()->isUsingDefaultImagePath()) {
             return true;
         } else {
             return false;
@@ -1057,10 +1072,16 @@ class SLIR
      */
     private function requestURI($remove = array())
     {
-        if (SLIRConfig::$forceQueryString === true) {
-            $url = $_SERVER['SCRIPT_NAME'] . '?' . http_build_query($_GET);
+        global $img_dir;
+
+        if ($this->url === null) {
+            if (SLIRConfig::$forceQueryString === true) {
+                $url = $_SERVER['SCRIPT_NAME'] . '?' . http_build_query($_GET);
+            } else {
+                $url = $_SERVER['REQUEST_URI'];
+            }
         } else {
-            $url = $_SERVER['REQUEST_URI'];
+            $url = $this->url;
         }
 
         $parsedUrl = parse_url($url);
@@ -1075,7 +1096,7 @@ class SLIR
             }
         }
 
-        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/'.$img_dir;
         $query = !empty($query) ? '?'. http_build_query($query) : '';
 
         return (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '') .
