@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="sl">
+    <group id="admin" title="Plošča uporabnikov">
+        <item id="about_privileges" title="O vlogah"><![CDATA[
+<h2>O vlogah</h2>
+<h3>Publisher</h3>
+<ul>
+    <li>lahko upravlja članke, komentarje in povezave</li>
+    <li>lahko uporablja PHP v člankih, če je skrbniška možnost »Dovoli PHP v člankih?« nastavljena na »Da«</li>
+    <li>lahko upravlja slike in datoteke</li>
+    <li>lahko upravlja razdelke in kategorije</li>
+    <li>lahko upravlja strani, obrazce in sloge</li>
+    <li>lahko si ogleduje diagnostične informacije</li>
+    <li>lahko upravlja nastavitve spletišča</li>
+    <li>lahko upravlja uporabnike</li>
+    <li>lahko upravlja dnevnike obiskovalcev</li>
+    <li>lahko upravlja vtičnike</li>
+    <li>lahko uvaža podatke</li>
+</ul>
+<h3>Managing Editor</h3>
+<ul>
+    <li>lahko upravlja članke, komentarje in povezave</li>
+    <li>lahko uporablja PHP v člankih, če je skrbniška možnost »Dovoli PHP v člankih?« nastavljena na »Da«</li>
+    <li>lahko upravlja slike in datoteke</li>
+    <li>lahko upravlja razdelke in kategorije</li>
+    <li>lahko upravlja strani, obrazce in sloge</li>
+    <li>lahko si ogleduje diagnostične informacije</li>
+    <li>lahko upravlja nastavitve spletišča</li>
+    <li>lahko si ogleduje uporabnike</li>
+    <li>lahko upravlja dnevnike obiskovalcev</li>
+    <li>lahko upravlja vtičnike</li>
+    <li>lahko uvaža podatke</li>
+</ul>
+<h3>Copy Editor</h3>
+<ul>
+    <li>lahko upravlja članke z eno omejitvijo:
+        <ul>
+            <li>ne more izbrisati člankov, ki pripadajo drugim uporabnikom</li>
+        </ul>
+    </li>
+    <li>lahko upravlja komentarje in povezave</li>
+    <li>lahko upravlja slike in datoteke</li>
+    <li>lahko upravlja kategorije</li>
+    <li>lahko upravlja strani in obrazce</li>
+    <li>lahko si ogleduje uporabnike</li>
+    <li>lahko upravlja dnevnike obiskovalcev</li>
+</ul>
+<h3>Staff Writer</h3>
+<ul>
+    <li>lahko upravlja lastne članke in si ogleduje članke drugih uporabnikov</li>
+    <li>lahko upravlja slike in datoteke</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>lahko upravlja lastne članke v omejenem obsegu:
+        <ul>
+            <li>članek lahko spreminja samo, dokler ni objavljen</li>
+            <li>lahko uporabi samo stanja <em>le</em> Osnutek, Skrito ali V teku</li>
+        </ul>
+    </li>
+    <li>lahko si ogleduje članke drugih uporabnikov</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>lahko upravlja lastne članke v omejenem obsegu:
+        <ul>
+            <li>članek lahko spreminja samo, dokler ni objavljen</li>
+            <li>lahko uporabi samo stanja <em>le</em> Osnutek, Skrito ali V teku</li>
+        </ul>
+    </li>
+    <li>lahko si ogleduje članke drugih uporabnikov</li>
+    <li>lahko upravlja slike</li>
+    <li>lahko upravlja razdelke</li>
+    <li>lahko upravlja strani, obrazce in sloge</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Ustvari avtorja"><![CDATA[
+<h2>Dodaj novega avtorja</h2>
+<p>Novemu avtorju bo po e-pošti poslano pozdravno sporočilo z navodili za prijavo.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Plošča za pisanje">
+        <item id="article_image" title="Slika članka"><![CDATA[
+<h2>Slika članka</h2>
+<p>Če želite s tem člankom povezati slike, tukaj navedite eno od naslednjega:</p>
+<ol>
+    <li>enega ali več ID-jev slik Textpattern, ločenih z vejicami (npr. <code>12, 25, 18</code>)</li>
+    <li>enega ali več relativnih URL-jev slike, ločenih z vejicami (npr. <code>/images/my_pic.jpg</code>)</li>
+    <li>enega ali več polnih URL-jev, ločenih z vejicami (npr. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Prvo sliko lahko prikažete tako, da v obrazec članka vstavite oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>. Privzeto bo izpisala celotno HTML-oznako <code>&lt;img&gt;</code> do izbrane slike.</p>
+<p>Galerije lahko prikažete z oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Telo"><![CDATA[
+<h2>Telo</h2>
+<p>Glavna vsebina članka je v telesu članka.</p>
+<p>Ko v Textpatternu piše ali pripravlja članke za objavo, lahko avtor preklaplja med tremi pogledi članka: navadno besedilo, HTML-označevanje (koda, s katero spletni brskalnik izriše članek) in upodobljen predogled.</p>
+        ]]></item>
+        <item id="description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis članka je neobvezna sestavina, ki lahko pomaga iskalnikom in pajkom bolje prepoznati in razvrstiti vsebino.</p>
+<p>Opis članka je omejen na največ 255 znakov. Upoštevajte, da nekateri iskalniki zaradi praktičnosti prikaza rezultatov iskanja omejijo število znakov v <code>meta description</code> strani in da je ta meja lahko manjša od omejitve 255 znakov v Textpatternu.</p>
+<p>Upoštevajte, da se opis članka razlikuje od izvlečka članka, čeprav oba sprejemata podobno vsebino. Opis članka je namenjen predvsem uporabi pri iskalnikih in pajkih, medtem ko je izvleček članka bolj primeren za človeško berljiv povzetek članka, kadar je to zaželeno.</p>
+        ]]></item>
+        <item id="excerpt" title="Izvleček"><![CDATA[
+<h2>Izvleček</h2>
+<p>Izvlečki člankov so neobvezni. Uporabijo se lahko kot kratki povzetek članka, ki je prikazan kot del kazala vsebine, namesto celotnega telesa članka v RSS-/Atom-virih spletišča ali za druge namene.</p>
+        ]]></item>
+        <item id="expire_date" title="Datum poteka"><![CDATA[
+<h2>Datum poteka</h2>
+<p>Čas, ko je članek označen kot potekel. Čas je neobvezen in ga je mogoče nastaviti na poljuben trenutek v preteklosti ali prihodnosti.</p>
+<p>Polja ustrezajo naslednjim podatkom:</p>
+<ul>
+    <li>leto / mesec / dan</li>
+    <li>ura (24-urni zapis) : minuta : sekunda</li>
+</ul>
+<p>Ko ta čas nastopi ali če je naveden čas v preteklosti, članek poteče.</p>
+<p>Če je možnost prikaza poteklih člankov omogočena, članek ostane viden. Če je možnost prikaza poteklih člankov onemogočena, bodo obiskovalci na strani članka namesto vsebine članka prejeli napako HTTP 410.</p>
+        ]]></item>
+        <item id="keywords" title="Ključne besede"><![CDATA[
+<h2>Ključne besede</h2>
+<p>Ključne besede so uporabne za dodatno natančno določanje razmerij med članki, poleg tistih, ki jih zagotavljajo kategorije.</p>
+<p>Ključne besede morajo biti posamezne besede, ločene z vejicami.</p>
+        ]]></item>
+        <item id="override_form" title="Prepiši obrazec"><![CDATA[
+<h2>Prepiši obrazec</h2>
+<p>Članek lahko po želji uporablja obrazec, ki je drugačen od privzetega – na primer, da se prikaže izvleček članka z oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> namesto telesa članka z oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> – to lahko nastavite tukaj.</p>
+        ]]></item>
+        <item id="publish_date" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Čas, ko je članek ali datoteka objavljena ali nazadnje spremenjena. Čas je mogoče nastaviti na trenutek objave elementa ali na poljuben trenutek v preteklosti ali prihodnosti.</p>
+<p>Polja ustrezajo naslednjim podatkom:</p>
+<ul>
+    <li>leto / mesec / dan</li>
+    <li>ura (24-urni zapis) : minuta : sekunda</li>
+</ul>
+<p>Element z žigom časa, ki je večji od trenutnega časa (tj. v prihodnosti), se na javnih straneh in v RSS-/Atom-virih ne bo pojavil, dokler ta čas ne nastopi.</p>
+        ]]></item>
+        <item id="status" title="Stanje"><![CDATA[
+<h2>Stanje</h2>
+<p>Določa stanje vidnosti objave tega članka Textpattern.</p>
+<p>Stanje objave je eno od naslednjega:</p>
+<ul>
+<li><strong>Osnutek</strong>: šteje se za delo v nastajanju in ni viden zunaj skrbniškega območja Textpattern (tj. ni viden na spletišču in ni vključen v vire).</li>
+<li><strong>Skrito</strong>: članek ni viden zunaj skrbniškega območja Textpattern. Uporabno za odstranitev vsebine s spletišča, ki je ne želite nujno izbrisati.</li>
+<li><strong>V teku</strong>: šteje se za pripravljenega na objavo in čaka na odobritev, vendar ni viden zunaj skrbniškega območja Textpattern.</li>
+<li><strong>V živo</strong>: je običajno viden zunaj skrbniškega območja Textpattern (tj. viden na spletišču in vključen v vire, če to nastavitev dovoljuje). Če je članek v živo in ima datum poteka, bo stanje po preteku tega datuma ostalo »V živo«, članek pa bo zunaj skrbniškega območja prikazan samo, če je objava poteklih člankov dovoljena.</li>
+<li><strong>Pripet</strong>: podoben je članku <strong>V živo</strong>, saj ga lahko vidijo obiskovalci spletišča, vendar se <strong>ne</strong> bo pojavil na seznamih člankov, razen če oznaka <code>article</code> ali <code>article_custom</code> vsebuje atribut <code>status</code> z vrednostjo <code>sticky</code>.</li>
+</ul>
+<p>Opomba: vsebino, ki ni javno vidna na spletišču, si lahko še vedno predogledajo prijavljeni uporabniki.</p>
+        ]]></item>
+        <item id="title" title="Naslov"><![CDATA[
+<h2>Naslov</h2>
+<p>Dodajte ustrezen naslov za ta članek.</p>
+<p>Naslov članka je omejen na največ 255 znakov.</p>
+        ]]></item>
+        <item id="url_title" title="Naslov samo za URL"><![CDATA[
+<h2>Naslov samo za URL</h2>
+<p>Če želite v trajni povezavi članka uporabiti določen naslov, ga vnesite tukaj. Če polje pustite prazno, bo naslov v URL-ju samodejno ustvarjen iz naslova članka.</p>
+<p>To je še posebej uporabno, če naslov članka uporablja ne-ASCII znake.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Plošča kategorij">
+        <item id="article_category" title="Članki"><![CDATA[
+<h2>Članki</h2>
+<p>Za razliko od razdelkov, ki določajo navigacijsko strukturo spletišča, kategorije člankov omogočajo organizacijo člankov glede na njihovo temo. Ko so kategorije dodeljene, je mogoče brskati po seznamih člankov, ki pripadajo posameznim kategorijam.</p>
+<p>Na primer, na spletišču o hrani so lahko verjetne kategorije člankov:</p>
+<ul>
+    <li>surovine</li>
+    <li>nakupovanje</li>
+    <li>recepti</li>
+    <li>postrežba</li>
+    <li>restavracije</li>
+    <li>kuharji</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Opis"><![CDATA[
+<h2>Opis kategorije</h2>
+<p>Opis kategorije je neobvezna sestavina, ki lahko pomaga iskalnikom in pajkom bolje prepoznati in razvrstiti vsebino.</p>
+<p>Opis kategorije je omejen na največ 255 znakov. Upoštevajte, da nekateri iskalniki zaradi praktičnosti prikaza rezultatov iskanja omejijo število znakov v <code>meta description</code> strani in da je ta meja lahko manjša od omejitve 255 znakov v Textpatternu.</p>
+        ]]></item>
+        <item id="file_category" title="Datoteke"><![CDATA[
+<h2>Datoteke</h2>
+<p>Kategorije datotek so neobvezne in so uporabne za združevanje izbranih naloženih datotek.</p>
+        ]]></item>
+        <item id="image_category" title="Slike"><![CDATA[
+<h2>Slike</h2>
+<p>Kategorije slik so neobvezne in so uporabne tako za interno organizacijo kot za določanje naborov slik, ki jih je mogoče prikazati z oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Povezave"><![CDATA[
+<h2>Povezave</h2>
+<p>Kategorije povezav so neobvezne in so uporabne za prikaz različnih skupin povezav, npr. »Prijatelji«, »Rimljani«, »Sodržavljani«.</p>
+<p>Izbirne sezname povezav, kot so ti, izpišete z značko <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, na primer takole:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Plošča diagnostike">
+        <item id="clean_url_data_failed" title="Podatkov o čistih URL-jih ni bilo mogoče pridobiti"><![CDATA[
+<h2>Podatkov o čistih URL-jih ni bilo mogoče pridobiti</h2>
+<p>Videti je, da naslovi URL spletišča (npr. <code>https://example.com/section/article</code>) trenutno ne delujejo ali pa spletni strežnik ne podpira preskusnega postopka, s katerim bi se ugotovilo, ali čisti URL-ji delujejo ali ne; če čisti URL-ji na spletišču delujejo, kot je pričakovano, lahko to sporočilo varno prezrete.</p>
+<p>Če čisti URL-ji <em>ne</em> delujejo, to lahko pomeni:</p>
+<ul>
+    <li>nastavitev »URL spletišča« je napačna ali pa stran na tem naslovu ne upravlja ta primerek Textpatterna</li>
+    <li>strežnik zahteva nekatere spremembe datoteke <code>.htaccess</code> ali podobne strežniške direktive, da bi čisti URL-ji delovali</li>
+    <li>strežnik sploh ne podpira čistih URL-jev</li>
+</ul>
+<p>Preskus čistih URL-jev poskuša pridobiti stran z spletnega naslova, navedenega v možnosti »URL spletišča«, da preveri, ali vsi parametri čistih URL-jev delujejo pravilno. Če ta URL kaže na drugo spletišče ali je bil nadomeščen s statično stranjo ali podobnim, preskus ne bo uspel. Dokler težava ni odpravljena, je treba uporabljati nečiste URL-je (npr. <code>https://example.com?s=section&amp;id=4</code>). Prepričajte se, da je način trajnih povezav v skrbniških nastavitvah nastavljen ustrezno.</p>
+<p>Upoštevajte, da lahko vtičnik, ki postavi spletišče v »način vzdrževanja«, sproži to opozorilo.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Preskus čistih URL-jev ni uspel"><![CDATA[
+<h2>Preskus čistih URL-jev ni uspel</h2>
+<p>Videti je, da naslovi URL spletišča (npr. <code>https://example.com/section/article</code>) trenutno ne delujejo ali pa spletni strežnik ne podpira preskusnega postopka, s katerim bi se ugotovilo, ali čisti URL-ji delujejo ali ne; če čisti URL-ji na spletišču delujejo, kot je pričakovano, lahko to sporočilo varno prezrete.</p>
+<p>Če čisti URL-ji <em>ne</em> delujejo, to lahko pomeni:</p>
+<ul>
+    <li>nastavitev »URL spletišča« je napačna ali pa stran na tem naslovu ne upravlja ta primerek Textpatterna</li>
+    <li>strežnik zahteva nekatere spremembe datoteke <code>.htaccess</code> ali podobne strežniške direktive, da bi čisti URL-ji delovali</li>
+    <li>strežnik sploh ne podpira čistih URL-jev</li>
+</ul>
+<p>Preskus čistih URL-jev poskuša pridobiti stran z spletnega naslova, navedenega v možnosti »URL spletišča«, da preveri, ali vsi parametri čistih URL-jev delujejo pravilno. Če ta URL kaže na drugo spletišče ali je bil nadomeščen s statično stranjo ali podobnim, preskus ne bo uspel. Dokler težava ni odpravljena, je treba uporabljati nečiste URL-je (npr. <code>https://example.com?s=section&amp;id=4</code>). Prepričajte se, da je način trajnih povezav v skrbniških nastavitvah nastavljen ustrezno.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Sočasne prijave na produkcijskem strežniku"><![CDATA[
+<h2>Sočasne prijave na produkcijskem strežniku</h2>
+<p>Dovoljevanje prijave uporabniškega računa iz več sej je varnostno tveganje in ni priporočljivo. Onemogočite to funkcijo v plošči naprednih nastavitev, razen če razumete in sprejemate tveganja.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Skrij zasebne informacije"><![CDATA[
+<h2>Skrij zasebne informacije</h2>
+<p>Skrije zasebne informacije za dodatno varnost. Če je treba diagnostične informacije deliti v javno dostopni obliki, na primer na podporni forum Textpattern, se s tem zmanjša varnostno tveganje, saj se izpustijo občutljivi podatki o strežniku.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Razvojna koda na produkcijskem strežniku"><![CDATA[
+<h2>Razvojna koda na produkcijskem strežniku</h2>
+<p>Razvojne različice Textpatterna niso priporočene za uporabo na produkcijskih spletiščih. To opozorilo lahko varno prezrete, če razumete tveganja in jih sprejemate.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Imenik ni zapisljiv"><![CDATA[
+<h2>Imenik ni zapisljiv</h2>
+<p>Če želite uporabljati funkcije za nalaganje datotek in slik, morajo biti ti imeniki za uporabo prek uporabnika spletnega strežnika zapisljivi za PHP. To lahko nastavite z odjemalcem (S)FTP ali pa v ukazni vrstici z ukazom <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Napaka DNS"><![CDATA[
+<h2>Iskanje DNS ni uspelo</h2>
+<p>Videti je, da je URL, naveden kot naslov spletišča, nedosegljiv.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Nalaganje datotek je onemogočeno"><![CDATA[
+<h2>Nalaganje datotek je onemogočeno</h2>
+<p>Trenutna konfiguracija strežnika kaže, da je nalaganje datotek onemogočeno. Preverite in spremenite nastavitev <code>file_uploads</code> v <code>php.ini</code> ali se za pomoč obrnite na gostitelja spletišča.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess datoteka manjka"><![CDATA[
+<h2>.htaccess datoteka manjka</h2>
+<p>Uporablja se način trajnih povezav, ki zahteva datoteko <code>.htaccess</code>, ta datoteka pa ni bila najdena. Datoteka je priložena Textpatternu in se nahaja v korenu Textpatterna poleg datoteke <code>index.php</code> in imenika <code>textpattern</code>. Priporočene direktive so:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Kazalo spletišča ni dosegljivo"><![CDATA[
+<h2>Kazalo spletišča ni dosegljivo</h2>
+<p>Koreninska datoteka <code>index.php</code>, navedena kot kazalo spletišča, za strežnik ni berljiva. Preverite njeno prisotnost in dovoljenja.</p>
+        ]]></item>
+        <item id="missing_files" title="Manjkajo datoteke"><![CDATA[
+<h2>Manjkajo datoteke</h2>
+<p>Ena ali več ključnih datotek Textpatterna manjka. Preverite, ali so vse navedene datoteke prisotne na strežniku in na pravilnih mestih.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Manjka Apache mod_rewrite"><![CDATA[
+<h2>Manjka Apache mod_rewrite</h2>
+<p>Apachejev modul <code>mod_rewrite</code> ni nameščen ali je onemogočen. Za pravilno delovanje Textpatterna je priporočen. Preverite, ali obstaja in je omogočen, ali pa se za pomoč obrnite na gostitelja spletišča.</p>
+        ]]></item>
+        <item id="modified_files" title="Spremenjene datoteke"><![CDATA[
+<h2>Spremenjene datoteke</h2>
+<p>Ugotovi se, da so datoteke spremenjene, če se njihov kontrolni seštevek razlikuje od seznama znanih pravilnih kontrolnih seštevkov, priloženega Textpatternu. Če se katera koli datoteka v namestitvi Textpattern razlikuje od pričakovane, bo tukaj označena.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Napake v tabelah MySQL"><![CDATA[
+<h2>Napake v tabelah MySQL</h2>
+<p>Videti je, da je v zbirki podatkov MySQL za Textpattern prišlo do napak ali poškodbe. Poskusite popraviti prizadete tabele z orodjem za dostop do MySQL, na primer <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> ali <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Začasni imenik ni določen"><![CDATA[
+<h2>Začasni imenik ni določen</h2>
+<p>Čeprav bo Textpattern deloval brez začasnega imenika, nekatere funkcije morda ne bodo delovale, kot je pričakovano, če ta možnost ni nastavljena. Obiščite skrbniške nastavitve in nastavite »Pot do začasnega imenika«.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Razdelek z enakim imenom kot imenik"><![CDATA[
+<h2>Razdelek z enakim imenom kot imenik</h2>
+<p>Obstoječa imena imenikov so lahko v sporu z imeni razdelkov, ki se uporabljajo v shemi trajnih povezav člankov. Da bi se izognili težavam, preverite in izbrišite prizadeta imena imenikov, če je to varno, ali spremenite imena razdelkov, da se ne prekrivajo.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Imenik spletišča ni berljiv"><![CDATA[
+<h2>Imenik spletišča ni berljiv</h2>
+<p>Imenik, ki vsebuje korensko datoteko <code>index.php</code>, navedeno kot kazalo spletišča, za strežnik ni berljiv. Preverite dovoljenja.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Omogočeno skriptiranje PHP"><![CDATA[
+<h2>Omogočeno skriptiranje PHP</h2>
+<p>Textpattern omogoča avtorjem in skrbnikom vdelavo kode PHP v članke in strani/obrazce, če so te funkcije omogočene. Ker to predstavlja varnostno tveganje – izvajati je mogoče kakršno koli kodo PHP, vključno z morebitno škodljivo/nevarno kodo, ki lahko povzroči uničenje namestitve ali uhajanje informacij tretjim osebam – je zelo priporočljivo, da te možnosti v <a href="?event=prefs#prefs_group_publish">plošči nastavitev</a> izklopite, razen če funkcijo res potrebujete.</p>
+<p>Številne izboljšave spletišč Textpattern, ki so prej zahtevale delčke PHP, je zdaj mogoče izvesti z <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">jedrnimi oznakami</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimalne različice programske opreme"><![CDATA[
+<h2>Minimalne različice programske opreme</h2>
+<p>Textpattern zahteva določene funkcije v programskem jeziku PHP in strežniku zbirke podatkov MySQL. Oglejte si naslednjo tabelo, da ugotovite minimalne sistemske zahteve:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Različica Textpattern</th>
+                <th scope="col">Minimalna različica PHP</th>
+                <th scope="col">Minimalna različica MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Poleg zgornjih sistemskih zahtev so potrebne naslednje razširitve PHP:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a></li>
+</ul>
+<p>Datoteka <code>php.ini</code> spletišča, globalna ali lokalna, mora vsebovati nastavitev <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Imenik za namestitev še vedno obstaja"><![CDATA[
+<h2>Imenik za namestitev še vedno obstaja</h2>
+<p>Ko je Textpattern nameščen, imenik <code>textpattern/setup</code> in njegova vsebina nista več potrebna in ju je treba iz varnostnih razlogov izbrisati.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Neskladje URL-ja spletišča"><![CDATA[
+<h2>Neskladje URL-ja spletišča</h2>
+<p>URL spletišča, nastavljen v plošči »Nastavitve«, se ne ujema z dejanskim URL-jem, uporabljenim za obisk spletišča.</p>
+<p>Če je spletišče dosegljivo prek več različnih URL-jev in če se spletišče obnaša, kot je pričakovano, lahko to sporočilo varno prezrete.</p>
+<p>V nasprotnem primeru preverite in po potrebi spremenite nastavitev »URL spletišča« v skrbniških nastavitvah. Utemeljena domneva pravilnega URL-ja spletišča je prikazana v opozorilu pred preverjanjem na plošči »Diagnostika«.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Funkcije PHP [&#8230;] so onemogočene na vašem strežniku"><![CDATA[
+<h2>Funkcije PHP [&#8230;] so onemogočene na vašem strežniku</h2>
+<p>Gostitelj spletišča ali skrbnik strežnika je onemogočil eno ali več funkcij PHP, od katerih nekatere lahko vplivajo na delovanje Textpatterna.</p>
+<p>Za več informacij si oglejte <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Uporabniško dokumentacijo Textpattern <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Na voljo je posodobitev različice Textpattern"><![CDATA[
+<h2>Na voljo je posodobitev različice Textpattern</h2>
+<p>Na voljo je novejša različica Textpatterna. Če želite izkoristiti najnovejše funkcije in varnost, je priporočljivo, da nadgradite.</p>
+<p>Upoštevajte, da si prizadevamo, da bi bila izkušnja nadgradnje čim bolj brezhibna in neboleča:</p>
+<ul>
+    <li>Če se od vaše trenutne različice razlikuje le zadnja številka, bo nadgradnja verjetno združljiva s prejšnjimi različicami vtičnikov in tem.</li>
+    <li>Če se od vaše trenutne različice razlikujeta zadnji dve številki, bo morda treba nekatere vtičnike in/ali teme posodobiti, čeprav bo verjetno še naprej delovala tudi brez tega, vendar z omejenimi zmožnostmi.</li>
+    <li>Če se od vaše trenutne različice razlikuje prva številka, bo nadgradnja verjetno zahtevala posodobitve večine vtičnikov in tem. Če se močno zanašate na določeno funkcijo vtičnika ali teme, se pred začetkom nadgradnje pozanimajte pri avtorju ali članih skupnosti.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Na voljo je predizdajna različica Textpattern"><![CDATA[
+<h2>Na voljo je predizdajna posodobitev Textpattern</h2>
+<p>Na voljo je novejša predizdajna različica Textpatterna. Iščemo aktivne prostovoljce za preskušanje te različice, da bo končna izdaja čim bolj stabilna. Prizadevamo si, da bi bila izkušnja nadgradnje brezhibna in neboleča tudi za beta kodo.</p>
+<p>Če se odločite sodelovati, upoštevajte:</p>
+<ul>
+    <li>Te beta izdaje ne uporabljajte na produkcijskem spletišču, razen če imate delujočo varnostno kopijo datotek spletišča in zbirke podatkov ter veste, kako jo uporabiti.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Prijavite morebitne težave</a> in navedite beta različico, ki jo uporabljate. Glede na prijavljene težave bodo morda potrebne dodatne beta izdaje pred stabilno izdajo.</li>
+    <li>Prepričajte se, da po namestitvi te beta izdaje posodobite tudi na končno različico, ko bo izšla.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Poti začasnega imenika in predpomnilnika vtičnikov se ne smejo ujemati"><![CDATA[
+<h2>Poti začasnega imenika in predpomnilnika vtičnikov se ne smejo ujemati</h2>
+<p>Vtičniki naj imajo svoj imenik in ne smejo uporabljati istega imenika kot začasni imenik. To je potencialno varnostno tveganje in lahko škodljivo vpliva na vaše spletišče, če se začasni imenik pobriše. Poskrbite, da se pot začasnega imenika razlikuje od poti predpomnilnika vtičnikov.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Posodobitveni strežnik ni dosegljiv"><![CDATA[
+<h2>Posodobitveni strežnik ni dosegljiv</h2>
+<p>Preverjanje posodobitev ni uspelo, običajno zaradi omrežne zasedenosti ali poteka časa povezave. Ta težava se običajno reši v eni ali dveh urah, zato poskusite to ploščo obiskati pozneje.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Namestitvi PHP manjka funkcija mail()"><![CDATA[
+<h2>Namestitvi PHP manjka funkcija mail()</h2>
+<p>Funkcija PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> je onemogočena. Zato Textpattern ne more pošiljati e-pošte in nekatere funkcije ne bodo na voljo. Na primer, obvestila o novih komentarjih ne bodo poslana, novi uporabniki pa ne bodo prejeli pozdravne e-pošte. Uporabnike je sicer še vedno mogoče dodati.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Plošča datotek">
+        <item id="file_reassign" title="Ponovno dodeli datoteko"><![CDATA[
+<h2>Ponovno dodeli datoteko</h2>
+<p>Ko namesto datoteke, ki je označena kot »Manjkajoča«, naložite drugo datoteko, se izbrana datoteka naloži na strežnik in poveže z izvirnimi informacijami o datoteki v zbirki podatkov. To pomeni, da bo ime izvirne datoteke ostalo nespremenjeno, prav tako vsi drugi povezani podatki, kot sta število prenosov in kategorija. Velikost datoteke pa se bo posodobila tako, da bo odražala novo datoteko.</p>
+        ]]></item>
+        <item id="file_replace" title="Zamenjaj datoteko"><![CDATA[
+<h2>Zamenjaj datoteko</h2>
+<p>Če tukaj naložite datoteko, boste z njeno vsebino zamenjali obstoječo datoteko na strežniku, ime datoteke pa bo ostalo enako kot prej. Število prenosov in druge informacije, povezane z datoteko, ostanejo nespremenjene.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Čas, ko je datoteka objavljena ali nazadnje spremenjena. Čas je mogoče nastaviti na trenutek objave elementa ali na poljuben trenutek v preteklosti ali prihodnosti.</p>
+<p>Polja ustrezajo naslednjim podatkom:</p>
+<ul>
+    <li>leto / mesec / dan</li>
+    <li>ura (24-urni zapis) : minuta : sekunda</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Naloži datoteko"><![CDATA[
+<h2>Naloži datoteko</h2>
+<p>Uporabite ta obrazec za nalaganje datotek ali slik na strežnik.</p>
+<p>Za izris grafik v člankih uporabite kodo Textile, za umestitev grafik v predloge strani kodo Textpattern ali pa za umestitev grafik drugam kodo HTML.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Plošča obrazcev">
+        <item id="forms_overview" title="Uvod v obrazce"><![CDATA[
+<h2>Uvod v obrazce</h2>
+<p>V Textpatternu je obrazec odlomek ali del besedila, HTML-ja in oznak Textpattern, ki ga je mogoče znova uporabiti za prikaz vsebine.</p>
+<p>Tukaj je primer obrazca, ki bi se lahko imenoval <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Uporabite ga lahko za prikaz neurejenega seznama (HTML unordered list) povezanih člankov:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Ker je naloga tega obrazca, da izpiše seznam naslovov, je lahko uporaben znotraj drugih oznak, na primer za prikaz 20 člankov iz trenutnega razdelka:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Obrazec lahko uporabite tudi za prikaz ponavljajoče se vsebine, na primer glave in noge v predlogah strani. To pomeni, da vsebina obstaja le na enem mestu in jo morate v primeru spremembe posodobiti samo enkrat. Vsebina iz obrazca se običajno prikaže z:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Obrazec je lahko velik do 64 KB. Primer za nogo lahko vsebuje naslove, odstavke, povezave, pogojne oznake in sklice na druge obrazce, kot je <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Plošča slik">
+        <item id="create_thumbnail" title="Ustvari sličico"><![CDATA[
+<h2>Ustvari sličico</h2>
+<p>Omogoča (ponovno) ustvarjanje sličice navedenih mer iz velike slike.</p>
+<p>Pri velikosti po meri bo sličica pomanjšana tako, da se prilega izbranim meram, razen če potrdite polje »Obreži«. V tem primeru bo sličica narejena iz sredine slike brez spreminjanja merila.</p>
+<p>Pri samodejnem določanju velikosti bo sličica pomanjšana na mere in (neobvezne) nastavitve obrezovanja v trenutni skrbniški temi.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Zamenjaj sliko"><![CDATA[
+<h2>Zamenjaj sliko</h2>
+<p>Slika, naložena tukaj, preprosto zamenja obstoječo sliko, povezano s tem vnosom v zbirki podatkov.</p>
+        ]]></item>
+        <item id="upload_image" title="Naloži sliko"><![CDATA[
+<h2>Naloži sliko</h2>
+<p>Naložite eno ali več slik na svoj strežnik.</p>
+<p>Ko sliko naložite v imenik <code>images</code>, bo ime izvirne slike ohranjeno samo interno v zbirki podatkov Textpattern; sama slikovna datoteka bo preimenovana v zaporedno številko + končnico datoteke.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Naloži sličico"><![CDATA[
+<h2>Naloži sličico</h2>
+<p>Velikim slikam lahko dodelite lastne sličice. Te so uporabne za povezovanje na velike slike in za njihovo indeksiranje.</p>
+<p>Sklic na sličico je povsem enak kot sklic na veliko sliko, pri čemer je imenu datoteke dodana črka <code>t</code>. Na primer, če se želite sklicevati na sličico, povezano z veliko sliko, ki je shranjena v <code>/images/12.jpg</code>, uporabite <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Plošča jezikov">
+        <item id="get_textpack" title="Namesti Textpack"><![CDATA[
+<h2>Namesti Textpack</h2>
+<p>V to polje prilepite dodatne jezikovne nize za svoje spletišče in izberite »Naloži«, da jih namestite.</p>
+<p>Nizi so pogosto na voljo kot prenosljivi paket Textpack, ki je priložen vtičniku, da omogoči uporabo jezikovnih nizov vtičnika v izvirni obliki znotraj Textpatterna.</p>
+<p>Prevajalci lahko nato te pakete po potrebi prevedejo in lokalizirano vsebino ponovno razširijo v skupnosti.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Plošča povezav">
+        <item id="link_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opisi povezav so neobvezni in so uporabni za podnapise povezav, za ustvarjanje atributov <code>title=""</code> (orodni namig) pri povezavah ali preprosto za vašo interno dokumentacijo.</p>
+        ]]></item>
+        <item id="link_sort" title="Vrednost razvrščanja"><![CDATA[
+<h2>Vrednost razvrščanja</h2>
+<p>Uporabna za razvrščanje seznamov povezav v naravnem jeziku, npr. po priimku osebe in ne po imenu ali po besednih zvezah, ki se začnejo z določenim ali nedoločenim členom.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Naslov povezave. Če povezava kaže na drugo spletišče, mora biti pred njo <code>http://</code> ali <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Datum objave"><![CDATA[
+<h2>Datum objave</h2>
+<p>Čas, ko je povezava objavljena ali nazadnje spremenjena. Čas je mogoče nastaviti na trenutek objave elementa ali na poljuben trenutek v preteklosti ali prihodnosti.</p>
+<p>Polja ustrezajo naslednjim podatkom:</p>
+<ul>
+    <li>leto / mesec / dan</li>
+    <li>ura (24-urni zapis) : minuta : sekunda</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Plošča za prijavo">
+        <item id="remember_login" title="Ostani prijavljen s tem brskalnikom"><![CDATA[
+<h2>Ostani prijavljen s tem brskalnikom</h2>
+<p>Če je možnost označena, boste v svoj račun Textpattern s trenutnim spletnim brskalnikom prijavljeni, dokler se ne odjavite. Če možnost ni označena, boste po določenem obdobju nedejavnosti samodejno odjavljeni.</p>
+<p>V brskalniku morajo biti omogočeni piškotki.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Plošča vtičnikov">
+        <item id="install_plugin" title="Namesti vtičnik"><![CDATA[
+<h2>Namesti vtičnik</h2>
+<p>V to polje prilepite vsebino datoteke z združenim besedilom vtičnika, nato za začetek namestitve uporabite »Naloži«. Vsak vtičnik, ki ga naložite z enakim imenom kot že prej nameščen vtičnik, bo prepisal obstoječo različico.</p>
+<p>Besedilo vtičnika, ki ga prilepite sem, <strong>ni</strong> surova koda PHP, temveč besedilo, kodirano v Base64, ki mu običajno sledi glava z informacijami o vtičniku (npr. ime vtičnika, različica in opis, ime avtorja itd.).</p>
+<p>Združene različice vtičnikov lahko pogosto pridobite iz <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repozitorija vtičnikov <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> ali prek določenega kanala avtorja vtičnika, na primer njegovega spletišča ali GitHuba.</p>
+<p>V to polje lahko prilepite tudi URL do besedilne datoteke s kodiranim vtičnikom Textpattern, če zunanje spletišče to dovoljuje.</p>
+<p>Vsi naloženi vtičniki opravijo preverjanje, ki vam omogoča vpogled v kodo in vsebino vtičnika pred namestitvijo.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Naloži vtičnik"><![CDATA[
+<h2>Naloži vtičnik</h2>
+<p>Uporabite ta obrazec za nalaganje datoteke vtičnika. Naloženi vtičniki (in morebitna sredstva) so shranjeni v imeniku »plugins«.</p>
+<p>Vrste vtičnikov, ki jih je tukaj mogoče naložiti, so:</p>
+<ul>
+<li>Predloge datotek PHP Textpattern, ki vsebujejo popolno kodo, metapodatke, nize Textpack in besedilo pomoči.</li>
+<li>Združene besedilne datoteke Textpattern, ki vsebujejo popolno kodo, metapodatke, nize Textpack in besedilo pomoči.</li>
+<li>Paketi zip Textpattern, ki vsebujejo podatke manifest in kodo, metapodatke, nize Textpack, besedilo pomoči in podporne datoteke.</li>
+<li>Surove datoteke PHP (čeprav ne bodo napolnile dodatnih metapodatkov in niso priporočene).</li>
+</ul>
+<p>Vsak vtičnik, ki ga naložite z enakim imenom kot že prej nameščen vtičnik, bo prepisal obstoječo različico.</p>
+<p>Vsi naloženi vtičniki opravijo preverjanje, ki vam omogoča vpogled v kodo in vsebino vtičnika pred namestitvijo.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Plošča nastavitev">
+        <item id="admin_side_plugins" title="Uporabljati skrbniške vtičnike?"><![CDATA[
+<h2>Uporabljati skrbniške vtičnike?</h2>
+<p>Skrbniški vtičniki lahko spremenijo delovanje skrbniškega vmesnika. Lahko se vključijo v že obstoječa dejanja, kot sta urejanje ali objava člankov, ali pa dodajo nove plošče za dodatne/razširjene funkcije.</p>
+<p>Če želite izvedeti več o skrbniških vtičnikih, glejte stran <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Razširjanje Textpatterna <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> v <a rel="external" target="_blank" href="https://docs.textpattern.com/">Uporabniški dokumentaciji Textpattern <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>. Vtičniki vseh vrst so navedeni na spletišču <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Napredne možnosti"><![CDATA[
+<h2>Napredne možnosti</h2>
+<p>Prikaže skupino naprednih nastavitev, kjer je mogoče konfigurirati dodatne nastavitve, kot so:</p>
+<ul>
+    <li>funkcije PHP, omogočene v oznaki <code>txp:evaluate</code>.</li>
+    <li>Vrste predlog obrazcev po meri.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Dovoliti PHP v člankih?"><![CDATA[
+<h2>Dovoliti PHP v člankih?</h2>
+<p>Če je ta nastavitev omogočena, bo dovoljena uporaba PHP v člankih. Avtor mora imeti za to ustrezna pooblastila (privzeto lahko to počnejo le <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">»Publisherji« <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">»Managing Editorji« <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> in <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">»Copy Editorji« <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>).</p>
+<p><strong>Močno priporočamo, da to možnost izklopite</strong>, razen če funkcijo res potrebujete. Vsak avtor lahko doda morebitno škodljivo/nevarno kodo PHP, ki lahko uniči vaše spletišče ali razkrije informacije tretjim osebam, kodo pa lahko izvede vsakdo, ki si ogleduje ta članek.</p>
+<p>Koda PHP mora izpustiti začetne in končne oznake PHP in mora biti zaprta v oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Dovoliti prepis obrazca?"><![CDATA[
+<h2>Dovoliti prepis obrazca?</h2>
+<p>Ta nastavitev omogoča avtorjem člankov, da prepišejo obrazec, ki se uporabi, ko je njihov članek upodobljen. Če je omogočena, bo pri urejanju članka na voljo spustni seznam »Prepiši obrazec«.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Dovoliti PHP na straneh?"><![CDATA[
+<h2>Dovoliti PHP na straneh?</h2>
+<p>Če je ta nastavitev omogočena, dovoljuje uporabo kode PHP v predlogah strani in obrazcev.</p>
+<p><strong>Močno priporočamo, da to možnost izklopite</strong>, razen če funkcijo res potrebujete. Vsak drug uporabnik lahko doda morebitno škodljivo/nevarno kodo PHP, ki lahko uniči vaše spletišče ali razkrije informacije tretjim osebam, kodo pa lahko izvede nič hudega sluteči skrbnik ali obiskovalec spletišča.</p>
+<p>Koda PHP mora izpustiti začetne in končne oznake PHP in mora biti zaprta v oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Oblika datuma arhiva"><![CDATA[
+<h2>Oblika datuma arhiva</h2>
+<p>Kako bodo datumi prikazani pri člankih v razdelkih vašega spletišča.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Prikazati izvleček na strani za urejanje članka?"><![CDATA[
+<h2>Prikazati izvleček na strani za urejanje članka?</h2>
+<p>Če izberete »Ne«, polje za izvleček avtorju na zaslonu za urejanje članka ne bo prikazano.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Naslov priložiti trajnim povezavam?"><![CDATA[
+<h2>Naslov priložiti trajnim povezavam?</h2>
+<p>Ta nastavitev bo URL-ju priložila samodejno ustvarjeno različico naslova članka. Ustvari se samodejno ali pa jo je mogoče ročno prepisati v polju »Naslov samo za URL« pri urejanju članka.</p>
+<p>Nastavitev ima učinek le, če uporabljate čiste URL-je. Pri nekaterih jezikih lahko to povzroči dolge in neprivlačne URL-je, v tem primeru boste to verjetno nastavili na »Izklopljeno«.</p>
+        ]]></item>
+        <item id="auto_dst" title="Samodejno prilagoditi poletni čas?"><![CDATA[
+<h2>Samodejno prilagoditi poletni čas?</h2>
+<p>Ta nastavitev omogoča Textpatternu, da spremeni časovno obdobje poletnega časa (DST – Daylight Saving Time) v vašem kraju. Če je nastavljena na »Ne«, boste lahko možnost »Poletni čas omogočen« spreminjali ročno.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ali nov komentar pomeni posodobitev spletišča?"><![CDATA[
+<h2>Ali nov komentar pomeni posodobitev spletišča?</h2>
+<p>Zbirka podatkov Textpattern beleži, kdaj je bila na vašem spletišču zadnja sprememba. Če je ta nastavitev nastavljena na »Da«, bo nov komentar posodobil tudi to vrednost. Ta vrednost se na primer uporablja za funkcionalnost <code>"Pošlji glavo Last-Modified"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Uporabiti rel=&quot;nofollow&quot; za komentarje?"><![CDATA[
+<h2>Uporabiti rel="nofollow" za komentarje?</h2>
+<p>Če je nastavljeno na »Da«, bo to povezavam v komentarjih dodalo dodaten atribut. Namenjeno je kot ukrep, ki zmanjšuje spodbudo za pošiljanje neželenih komentarjev, in so ga uvedli različni iskalniki in razvijalci programske opreme. Več lahko izveste v <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Googlejevem obvestilu <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+<p><strong>Opomba:</strong> Ta nastavitev ne vpliva na delovanje vašega spletišča. Lahko pa prepreči ali zmanjša vpliv vaših komentarjev, ko nekateri iskalniki razvrščajo spletišča, na katera vodijo te povezave.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Komentarje prikazati kot oštevilčen seznam?"><![CDATA[
+<h2>Komentarje prikazati kot oštevilčen seznam?</h2>
+<p>Določa, ali bodo komentarji članka oviti z HTML-oznako <code>&lt;ol&gt;</code> in bodo posamezni komentarji oviti v oznako <code>&lt;li&gt;</code> (kar povzroči prikaz komentarjev kot oštevilčenega seznama) ali ali bodo posamezni komentarji namesto tega oviti v oznako <code>&lt;div&gt;</code>.</p>
+<p>V obeh primerih lahko oznake, uporabljene za posamezen obrazec, prepišete z urejanjem oznake <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, ki jo najdete v obrazcu <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Samodejno pripeti komentarje člankom?"><![CDATA[
+<h2>Samodejno pripeti komentarje člankom?</h2>
+<p>Ta nastavitev določa, ali so komentarji in obrazec za komentarje samodejno pripeti vsem posameznim člankom (s samodejno vključitvijo vsebine obrazca <code>comments_display</code>).</p>
+<p>V večini primerov boste to želeli nastaviti na »Ne«, saj to omogoča večjo prilagodljivost postavitve komentarjev v oblikovanju spletišča. V vse predloge, ki temeljijo na člankih in kjer želite prikazati komentarje, boste morali ročno dodati oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+<p>Če se v članku soočate z dvojnim prikazom komentarjev, je verjetno, da vaša predloga že vsebuje oznako <code>&lt;txp:comments /&gt;</code>, hkrati pa je nastavitev »Samodejno pripeti komentarje člankom?« prav tako določena na »Da«.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Oblika datuma komentarjev"><![CDATA[
+<h2>Oblika datuma komentarjev</h2>
+<p>Kako bodo datumi komentarjev prikazani obiskovalcem vašega spletišča.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Privzeto vabilo h komentiranju"><![CDATA[
+<h2>Privzeto vabilo h komentiranju</h2>
+<p>Če obiskovalcem dovolite komentiranje na spletišču, je to privzeto besedilo vabila. Na primer:</p>
+<ul>
+    <li>Komentarji</li>
+    <li>Dodaj komentar</li>
+    <li>Povratne informacije</li>
+    <li>Opiši</li>
+</ul>
+<p>Upoštevajte, da je vabilo mogoče vedno spremeniti za vsak članek posebej.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Komentarji onemogočeni po"><![CDATA[
+<h2>Komentarji onemogočeni po</h2>
+<p>S tem nastavite časovno obdobje, po katerem bo komentiranje pri člankih izklopljeno (na »Nikoli« ga lahko nastavite, če želite omogočiti neomejen čas za komentiranje).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Dovoliti slike komentatorjev v komentarjih?"><![CDATA[
+<h2>Dovoliti slike komentatorjev v komentarjih?</h2>
+<p>Če je ta možnost nastavljena na »Ne«, bodo vse slike v komentarjih odstranjene.</p>
+        ]]></item>
+        <item id="comments_mode" title="Način komentarjev"><![CDATA[
+<h2>Način komentarjev</h2>
+<p>Če je izbran »nopopup« (priporočeno), se bo trenutno okno osvežilo in prikazal se bo samo trenutni članek s komentarji spodaj.</p>
+<p>Če je izbran »popup«, se ob kliku na povezavo za komentarje odpre novo okno brskalnika (uporablja obrazec <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderirati komentarje?"><![CDATA[
+<h2>Moderirati komentarje?</h2>
+<p>Če je ta možnost nastavljena na »Da«, bo imel vsak nov komentar izklopljeno vidnost, dokler ni pregledan. Vsak komentar morate ročno moderirati in ga narediti vidnega (ko je k članku prejet nov komentar, je avtorju članka poslano sporočilo po e-pošti).</p>
+        ]]></item>
+        <item id="comments_on_default" title="So komentarji privzeto omogočeni?"><![CDATA[
+<h2>So komentarji privzeto omogočeni?</h2>
+<p>Če je ta možnost nastavljena na »Da«, bodo komentarji samodejno omogočeni za vsak objavljen članek. Če je nastavljena na »Ne«, morate na plošči »Pisanje« pri vsakem članku, za katerega želite sprejemati komentarje, komentarje posebej omogočiti.</p>
+<p>Komentarje lahko kadar koli omogočite ali onemogočite za posamezen članek.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Komentarji zahtevajo e-poštni naslov komentatorja?"><![CDATA[
+<h2>Ali komentarji zahtevajo uporabnikov e-poštni naslov?</h2>
+<p>Če je nastavljeno na »Da«, bodo morali ljudje, ki želijo komentirati vaš članek, v obrazec za komentar vnesti e-poštni naslov. Komentarja ne bodo mogli poslati, če e-poštnega naslova ne navedejo.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Komentarji zahtevajo ime komentatorja?"><![CDATA[
+<h2>Ali komentarji zahtevajo ime komentatorja?</h2>
+<p>Če je nastavljeno na »Da«, bodo morali ljudje, ki želijo komentirati vaš članek, v obrazec za komentar vnesti ime. Komentarja ne bodo mogli poslati, če imena ne navedejo.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Poslati komentarje avtorju po e-pošti?"><![CDATA[
+<h2>Poslati komentarje avtorju po e-pošti?</h2>
+<p>Če je nastavljeno na »Da«, bo vsakič, ko bo k članku prejet nov komentar, njegova kopija poslana po e-pošti avtorju tega članka.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Dovoliti več označevanja Textile v komentarjih?"><![CDATA[
+<h2>Dovoliti več označevanja Textile v komentarjih?</h2>
+<p>Če je nastavljeno na »Da«, lahko komentarji vsebujejo elemente <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, ki bi bili sicer obravnavani kot navadno besedilo, kot so:</p>
+<ul>
+    <li>naslovi</li>
+    <li>urejeni in neurejeni seznami</li>
+    <li>opombe pod črto</li>
+    <li>tabele</li>
+    <li>koda</li>
+    <li>razširjena skladnja blokov (<code>bc..</code>, <code>bq..</code> itd.)</li>
+</ul>
+<p><strong>Opomba:</strong> Zaradi varnosti se surov HTML pretvori v navadno besedilo.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Računi, ki jim je dovoljena sočasna prijava"><![CDATA[
+<h2>Računi, ki jim je dovoljena sočasna prijava</h2>
+<p>Seznam imen prijavnih računov, ločenih z vejicami, ki se lahko prijavijo v več brskalnikih/sejah. To je uporabno med razvojem, da lahko prijavo delite s strankami.</p>
+<p>Uporaba te funkcije je varnostno tveganje in <strong>ni priporočena na produkcijskih spletiščih</strong>. Diagnostika bo izpisala opozorilo, če je vaš uporabniški račun nastavljen za sočasno prijavo na produkcijskem spletišču.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Vrste predlog obrazcev po meri"><![CDATA[
+<h2>Vrste predlog obrazcev po meri</h2>
+<p>Poleg standardnih vrst predlog obrazcev (article, file, misc itd.) lahko Publisherji določijo tudi vrste po meri. Namen vrst predlog obrazcev po meri je dvojen: lažje razvrščanje predlog obrazcev in določanje sredstev po meri.</p>
+<p>Oblika nastavitve je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, pri čemer vsak razdelek ustreza vrsti predloge obrazca.</p>
+<p>Če želite določiti vrsto obrazca po meri (npr. <code>js</code>), morate dodati (vsak v svojo vrstico) razdelek <code>[js]</code>. Privzeti naslov lahko nastavite z vnosom <code>title="Javascript"</code> v ustreznem razdelku. Po potrebi lahko dodate tudi lokalizirane naslove (npr. <code>ru="Скрипт"</code>).</p>
+<p>Dodatno lahko določite tudi <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">vrsto predstavnosti <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> (prej znano kot vrsto MIME) za predlogo obrazca, npr. <code>mediatype="application/javascript"</code>. S tem se predloge obrazcev te vrste spremenijo v sredstva po meri, ki jih je mogoče postreči kot dano vrsto predstavnosti, bodisi iz zbirke podatkov bodisi z diska (ravne datoteke) prek oznake <code>&lt;txp:output_form /&gt;</code>. Na primer, predlogo obrazca z imenom <code>myscript.js</code> vrste <code>[js]</code> in vrsto predstavnosti <code>application/javascript</code> lahko vključite v svojo kodo takole:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>To bo ustvarilo naslednjo HTML-oznako <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Le predloge obrazcev z imenom, ki ima pripono, ustrezno njihovi vrsti (npr. <code>myscript.js</code>), je mogoče postreči kot ravne datoteke. V tem primeru jih Textpattern ne bo obdelal in bodo dostopne prek svojega URL-ja.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Polja po meri"><![CDATA[
+<h2>Polja po meri</h2>
+<p>Polja po meri se uporabljajo za shranjevanje dodatnih podatkov o članku. Določite jih lahko do deset, tako da jim tukaj dodelite ime. Vsako se prikaže kot ločeno polje na plošči Pisanje, da lahko vsakemu članku dodelite podatke po meri.</p>
+<p>Polja lahko poimenujete, kakor želite, vendar upoštevajte naslednje:</p>
+<ul>
+<li>Uporaba presledkov izboljša berljivost na plošči Pisanje, vendar potem polj <em>ni</em> mogoče uporabiti kot parametre za razvrščanje ali filtriranje v oznaki article_custom. Če želite to funkcijo uporabljati, raje uporabite podčrtaje.</li>
+<li>Pri poimenovanju polj pazite, da se ne prekrivajo z rezerviranimi imeni polj v Textpatternu. Ne uporabljajte na primer <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> itd., saj boste dobili nenavadne rezultate ali pokvarjena spletišča.</li>
+<li>Podatki v posameznem polju so omejeni na 255 znakov navadnega besedila.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Oblika datuma"><![CDATA[
+<h2>Oblika datuma</h2>
+<p>Ta možnost vpliva samo na to, kako so datumi člankov prikazani na prvi strani vašega spletišča.</p>
+        ]]></item>
+        <item id="default_event" title="Privzeta plošča"><![CDATA[
+<h2>Privzeta plošča</h2>
+<p>Plošča skrbniškega vmesnika Textpattern, ki se bo pojavila prva, ko se kdo prijavi.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Privzeto stanje objave"><![CDATA[
+<h2>Privzeto stanje objave</h2>
+<p>Določa stanje vidnosti objave na novo ustvarjenih člankov Textpattern.</p>
+<p>Upoštevajte, da ta nastavitev ne vpliva na stanje člankov, ustvarjenih ali urejenih pred spremembo.</p>
+<p>Privzeto stanje objave je eno od naslednjega:</p>
+<ul>
+    <li>Osnutek</li>
+    <li>Skrito</li>
+    <li>V teku</li>
+    <li>V živo</li>
+    <li>Pripet</li>
+</ul>
+<p><strong>Osnutek</strong> je članek, ki se šteje za delo v nastajanju in ni viden zunaj skrbniškega območja Textpattern (tj. ni viden na javnem delu Textpatterna in ni vključen v vire).</p>
+<p><strong>Skriti</strong> članek ni viden zunaj skrbniškega območja Textpattern.</p>
+<p><strong>Članek v teku</strong> je članek, ki se šteje za pripravljenega na objavo in čaka na odobritev, vendar ni viden zunaj skrbniškega območja Textpattern.</p>
+<p><strong>Članek v živo</strong> je običajno viden zunaj skrbniškega območja Textpattern (tj. viden na javnem delu Textpatterna, vključen v vire, če to nastavitev dovoljuje). Če je članek v živo in ima datum poteka, bo stanje po preteku tega datuma ostalo »v živo«, članek pa bo zunaj skrbniškega območja prikazan samo, če je objava poteklih člankov dovoljena.</p>
+<p><strong>Pripet</strong> članek je podoben članku <strong>v živo</strong>, saj ga je mogoče videti zunaj skrbniškega območja Textpattern, vendar se <strong>ne</strong> bo pojavil na seznamih člankov, razen če oznaka <code>article</code> ali <code>article_custom</code> vsebuje atribut <code>status</code> z vrednostjo <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Izberite, kateri HTML doctype želite uporabljati (HTML5 ali XHTML). To vpliva na obrazce za vnos komentarjev, upodabljanje Textile oznak <code>&lt;abbr&gt;</code> ali <code>&lt;acronym&gt;</code> in oznake <code>&lt;link&gt;</code>, ki jih ustvari oznaka <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Omogočiti predogled razvojne teme?"><![CDATA[
+<h2>Omogočiti predogled razvojne teme?</h2>
+<p>Uporabniki z ustreznimi pooblastili (privzeto tisti z vlogami Publisher in Designer) lahko varno razvijajo in preizkušajo novo temo, medtem ko vsi drugi uporabniki še vedno vidijo staro temo (dokler nova ni uveljavljena).</p>
+<p>Vendar lahko uporabniki s pooblastili, ki ne želijo sodelovati pri razvoju tem, predogled razvojne teme onemogočijo. V tem primeru jim bo, tako kot običajnim obiskovalcem spletišča, prikazana trenutna »javna« tema.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Omogočiti podporo za kratke oznake?"><![CDATA[
+<h2>Omogočiti podporo za kratke oznake?</h2>
+<p>Oznake Textpattern so oblike <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Možno je zmanjšati količino tipkanja z omogočanjem okrajšave, pri kateri lahko izpustite <code>txp:</code>, če upoštevate nekaj preprostih smernic. Tu je nekaj primerov za ponazoritev koncepta:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> postane <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> postane <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> postane <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> postane <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> postane <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (upoštevajte, da je mogoče za oznako <code>else</code> uporabiti predpono vtičnika).</li>
+</ul>
+<p>Če oznaka vsebuje podčrtaj in omogočite kratke oznake, je osnovni koncept naslednji:</p>
+<ol>
+    <li>Odstranite predpono <code>txp:</code>.</li>
+    <li>Prvi pojav podčrtaja zamenjajte z <code>::</code>.</li>
+</ol>
+<p>Upoštevajte, da ta nastavitev ne vpliva na možnost uporabe kratkih kod <code>&lt;txp:output_form /&gt;</code> za upodobitev izrezkov obrazcev. Še vedno lahko uporabljate <code>&lt;txp::shortcode /&gt;</code>, kar se razume kot <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Omogočiti strežnik XML-RPC?"><![CDATA[
+<h2>Omogočiti strežnik XML-RPC?</h2>
+<p>Če želite uporabiti <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> za oddaljeno upravljanje Textpatterna (npr. z namiznimi ali mobilnimi aplikacijami), morate strežnik XML-RPC vklopiti tako, da to nastavitev določite na »Da«.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Uporabiti napredne funkcije e-pošte"><![CDATA[
+<h2>Uporabiti napredne funkcije e-pošte</h2>
+<p>Če je ta možnost nastavljena na »Ne«, bodo vsa e-poštna sporočila – na primer zahteve za ponastavitev gesla računa in e-pošta iz vtičnikov, kot je com_connect – poslana prek funkcije PHP <code>mail()</code>. Če izberete »Da«, bo uporabljen priloženi PHPMailer, ki omogoča dodatne nastavitve za pošiljanje e-pošte prek zunanjih strežnikov SMTP.</p>
+<p>Če imate težave z dostavo e-pošte (zlasti pri ponudnikih, kot so Gmail, Outlook, Yahoo! ipd.), je verjeten razlog v tem, da vaše domene ne prepoznajo kot zaupanja vrednega vira. Preklop na »Da« lahko izboljša uspešnost dostave. Poleg tega uporaba SMTP lahko zagotovi boljšo združljivost z nekaterimi ponudniki e-pošte in še dodatno izboljša dostavo.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Po koliko dneh naj potečejo dnevniki?"><![CDATA[
+<h2>Po koliko dneh naj potečejo dnevniki?</h2>
+<p>Če je beleženje Textpattern omogočeno, lahko določite, kako dolgo (v dneh) naj se dnevniki hranijo. Vrednost »7« bo dnevnike ohranila na voljo sedem dni.</p>
+<p><strong>Opomba:</strong> Dnevniki se porežejo le, ko si ogledate ploščo »Dnevniki obiskovalcev«, sicer pa se bodo še naprej povečevali.</p>
+        ]]></item>
+        <item id="file_base_path" title="Pot do imenika datotek"><![CDATA[
+<h2>Pot do imenika datotek</h2>
+<p>S tem nastavite <strong>absolutno pot</strong> do imenika, kamor bodo trajno shranjene naložene datoteke. PHP potrebuje pravice pisanja v ta imenik.</p>
+<p><strong>Opomba:</strong> Zaradi večje varnosti razmislite o premiku tega imenika izven javno dostopnega korena vašega spletišča.</p>
+        ]]></item>
+        <item id="file_download_header" title="Glava za prenos datotek"><![CDATA[
+<h2>Glava za prenos datotek</h2>
+<p>Omogoča prilagoditev obravnave prenosov datotek.</p>
+<p>Običajno se vsi prenosi obravnavajo kot priloge in se prenesejo (odvisno od tega, kako je brskalnik konfiguriran za obravnavo tega tipa datotek). Če želite namigniti, kako naj bodo obravnavane nekatere ali vse vrste datotek, lahko tukaj navedete kodo oznak. Primer: datoteke PDF, ki ste jim v Textpatternu dodelili kategorijo »inline-pdf«, prikažete v brskalniku in jih namesto prenosa ne prenesete:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Največja velikost naloženih datotek (v bajtih)"><![CDATA[
+<h2>Največja velikost naloženih datotek (v bajtih)</h2>
+<p>Omejite lahko največjo velikost (v bajtih) naloženih datotek. Upoštevajte, da to vrednost omejuje tudi konfiguracija PHP. Če Textpattern zazna, da konfiguracija PHP omejuje velikost nalaganja na manjšo vrednost, jo bo samodejno zmanjšal. Če želite omogočiti večje nalaganje datotek prek brskalnika, se obrnite na ponudnika gostovanja (ustrezne vrednosti v <code>php.ini</code> so <code>post_max_size</code>, <code>upload_max_filesize</code> in <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Časovni pas"><![CDATA[
+<h2>Časovni pas</h2>
+<p>Če želite datume prikazovati v vašem lokalnem časovnem pasu, izberite svoj časovni pas.</p>
+        ]]></item>
+        <item id="img_dir" title="Imenik slik"><![CDATA[
+<h2>Imenik slik</h2>
+<p>Če želite prilagoditi ime imenika s slikami, ga lahko nastavite tukaj. Imenik morate najprej ustvariti v korenu namestitve Textpattern, zagotoviti pa morate tudi, da lahko PHP v ta imenik piše.</p>
+<p>Ta pot je vedno <strong>relativna pot</strong> (glede na imenik korena vaše namestitve Textpattern).</p>
+<p>Privzeta vrednost je <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Vključiti e-poštni naslov v vire Atom?"><![CDATA[
+<h2>Vključiti e-poštni naslov v vire Atom?</h2>
+<p>To vam omogoča, da e-poštni naslov avtorja članka (kot je nastavljen v njegovem uporabniškem računu) vključite v razdelek <code>author</code> v virih Atom.</p>
+        ]]></item>
+        <item id="is_dst" title="Ali je poletni čas omogočen?"><![CDATA[
+<h2>Ali je poletni čas omogočen?</h2>
+<p>Ali je DST (Daylight Saving Time, poletni čas) trenutno omogočen za vaš časovni pas.</p>
+        ]]></item>
+        <item id="logging" title="Beleženje"><![CDATA[
+<h2>Beleženje</h2>
+<p>Izberete lahko raven beleženja obiskovalcev, ki jo opravlja Textpattern:</p>
+<ul>
+    <li><strong>Vsi zadetki:</strong> Textpattern bo beležil vse oglede strani na vašem spletišču</li>
+    <li><strong>Samo napotitelji:</strong> Textpattern bo beležil le obiske, ki so prišli s povezav na drugih spletiščih</li>
+    <li><strong>Brez:</strong> Textpattern ne bo beležil nobenih ogledov strani</li>
+</ul>
+<p>V Textpatternu 4.7.0 in novejših se podatki o naslovih IP obiskovalcev ne zbirajo in ne shranjujejo. Če naslove IP zbirate ali shranjujete zunaj Textpatterna, sprejmite ustrezne ukrepe, da boste podatke shranjevali in/ali uporabljali skladno z veljavno zakonodajo, na primer z <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, in zagotovite visoko raven varnosti v vseh vidikih strežnika in namestitve Textpatterna, da preprečite ogrožanje teh podatkov.</p>
+<p>Močno vam svetujemo, da to nastavitev pustite pri privzeti vrednosti »Brez«, razen če te informacije resnično potrebujete in javno navedete svoj namen uporabe.</p>
+        ]]></item>
+        <item id="max_url_len" title="Največja dolžina URL-ja (v znakih)"><![CDATA[
+<h2>Največja dolžina URL-ja (v znakih)</h2>
+<p>Ta nastavitev prepreči delovanje URL-jev, ki so daljši od določene dolžine. Lahko je uporabna za omejevanje škode in varnost spletišča.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Prikazati skrbniške povezave do pomoči znotraj vmesnika"><![CDATA[
+<h2>Prikazati skrbniške povezave do pomoči znotraj vmesnika</h2>
+<p>Če želite v celotnem sistemu skriti povezave do pomoči znotraj skrbniškega dela (pojavno okno s pomočjo Textpattern), nastavite to možnost na »Brez«.</p>
+        ]]></item>
+        <item id="never_display_email" title="Skriti e-poštni naslov komentatorja?"><![CDATA[
+<h2>Skriti e-poštni naslov komentatorja?</h2>
+<p>Ta nastavitev določa, ali naj bo e-poštni naslov komentatorja prikazan javno.</p>
+<p>Priporočljivo je, da se e-poštni naslovi ne prikazujejo, kot izraz spoštovanja do uporabnikov, vendar so lahko v nekaterih primerih zaželeni.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Uporabiti kodiranje ISO-8859-1 v e-pošti (privzeto je UTF-8)?"><![CDATA[
+<h2>Uporabiti kodiranje ISO-8859-1 v e-pošti (privzeto je UTF-8)?</h2>
+<p>Textpattern privzeto povsod, kjer je mogoče, uporablja kodiranje UTF-8, tudi za odhodno e-pošto. Vendar nekateri starejši e-poštni odjemalci (vključno z nekaterimi različicami Microsoft Outlooka) nimajo ustrezne podpore za UTF-8. Če v e-poštnih sporočilih opažate zmedene znake, bo ta nastavitev pred pošiljanjem besedilo pretvorila v kodiranje ISO-8859-1.</p>
+<p><strong>Opomba:</strong> Če uporabljate jezik, katerega znakov ni mogoče predstaviti z ISO-8859-1, vam ta nastavitev žal ne bo pomagala. Poskusite uporabiti e-poštni odjemalec, združljiv z UTF-8 (ali Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Vrste prepisanih obrazcev"><![CDATA[
+<h2>Vrste prepisanih obrazcev</h2>
+<p>Izberite, za katere vrste obrazcev bodo njihove predloge na voljo na plošči Pisanje kot obrazci za prepis.</p>
+        ]]></item>
+        <item id="permlink_format" title="Vzorec naslova v trajni povezavi"><![CDATA[
+<h2>Vzorec naslova v trajni povezavi</h2>
+<p>Ta nastavitev določa način, kako so člankom dodeljeni in sestavljeni URL-ji, če ne uporabljate nečistega načina.</p>
+<p>Ko je članek objavljen, se njegov URL ustvari iz naslova članka, razen če je v polju Naslov samo za URL naveden poseben URL.</p>
+<p>Vzemimo naslednji naslov članka: <em>Ann and Bob eat cake</em></p>
+<p>Če je možnost vzorca naslova v trajni povezavi nastavljena na »Z vezaji (title-like-this)«, bo URL članka:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Če je možnost vzorca naslova v trajni povezavi nastavljena na »Z velikimi začetnicami (TitleLikeThis)«, bo URL članka:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Vzorec URL-ja članka"><![CDATA[
+<h2>Vzorec URL-ja članka</h2>
+<p>Ta nastavitev določa način, kako so posamezni članki dosegljivi prek URL-ja, prikazanega z oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+<p>Način »?=messy« je najbolj združljiv – deloval bo z malo ali brez konfiguracije – vendar najmanj koristen z vidika berljivosti URL-ja in optimizacije za iskalnike (SEO). V tem načinu bodo URL-ji člankov na vašem spletišču videti takole:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Vsi drugi načini zahtevajo funkcijo prepisovanja URL-jev na spletnem strežniku (npr. Apache <code>mod_rewrite</code> ali direktive rewrite v <code>server</code> bloku pri NGINX). Če strežnik ne podpira prepisovanja URL-jev, se obrnite na ponudnika gostovanja ali uporabite zgoraj opisani način »?=messy«.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Pot do imenika predpomnilnika vtičnikov"><![CDATA[
+<h2>Pot do imenika predpomnilnika vtičnikov</h2>
+<p>Ta nastavitev je namenjena predvsem razvijalcem vtičnikov. Ko jo določite, lahko datoteko z izvorno kodo vtičnika (ne združeno) postavite v ta imenik in Textpattern jo bo samodejno naložil, tako da lahko preprosto urejate vtičnik in takoj vidite učinek, ne da bi morali vtičnik namestiti/aktivirati. <strong>Pozor</strong>, pri tej metodi lahko pokvarjen vtičnik (ki se ne prevede) pokvari tudi Textpattern!</p>
+<p>Na produkcijskem spletišču je priporočljivo nalagati vtičnike prek standardne plošče »Vtičniki« in ne z uporabo imenika predpomnilnika vtičnikov.</p>
+<p><strong>Opomba:</strong> istega imenika ne določite hkrati za »začasni imenik« in »predpomnilnik vtičnikov«, saj bo to povzročilo težave (Textpattern bo poskušal zagnati vsebino začasnih dnevniških datotek kot vtičnike).</p>
+        ]]></item>
+        <item id="production_status" title="Status produkcije"><![CDATA[
+<h2>Status produkcije</h2>
+<p>Spletišče Textpattern ima enega od treh načinov:</p>
+<ol>
+    <li>»Razhroščevanje«</li>
+    <li>»Testiranje«</li>
+    <li>»V živo«</li>
+</ol>
+<h3>Način razhroščevanja</h3>
+<p>Vsa poročila o napakah PHP na vašem javnem spletišču bodo vidna, prav tako opozorila o neustrezni kodi in vtičnikih. Poleg tega bodo ob ogledu izvorne kode HTML javnih strani vidne naslednje informacije:</p>
+<ul>
+    <li>čas, ki ga je strežnik porabil za sestavljanje strani (»Runtime«)</li>
+    <li>število izvedenih poizvedb MySQL</li>
+    <li>približna največja poraba pomnilnika</li>
+    <li>vse oznake Textpattern, ki so bile obdelane med sestavljanjem strani (t. i. sledenje oznakam)</li>
+</ul>
+<h3>Način testiranja</h3>
+<p>Vsa poročila o napakah PHP na vašem javnem spletišču bodo vidna, prav tako opozorila o neustrezni kodi in vtičnikih. Ob ogledu izvorne kode HTML javnih strani bodo vidne naslednje informacije:</p>
+<ul>
+    <li>čas, ki ga je strežnik porabil za sestavljanje strani (»Runtime«)</li>
+    <li>število izvedenih poizvedb MySQL</li>
+    <li>približna največja poraba pomnilnika</li>
+</ul>
+<h3>Način v živo</h3>
+<p>Na stran se ne pošilja nobeno poročanje o napakah ali diagnostičnih informacijah. Način v živo je na splošno prednosten, saj nudi najboljšo uporabniško izkušnjo in najmanj obremenjuje strežnik.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema za javni del"><![CDATA[
+<h2>Tema za javni del</h2>
+<p>Privzeta tema za javni del, ki bo uporabljena, ko kdorkoli obišče vaše javno spletišče. Textpattern vsebuje vnaprej nameščeno privzeto temo in možnost začetka brez teme. V imenik <code>textpattern/themes</code> lahko dodate tudi pakete tem, da jih omogočite za uporabo.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Objaviti potekle članke?"><![CDATA[
+<h2>Objaviti potekle članke?</h2>
+<p>Če je nastavitev določena na »Da«, se bodo potekli članki na vašem spletišču prikazovali tudi po preteku datuma poteka. Uporabite lahko oznako <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, da prikažete nadomestno vsebino ali označevanje za potekle članke.</p>
+<p>Če je nastavitev določena na »Ne«, bodo potekli članki odstranjeni z javnega spletišča in se bo namesto njih vrnil status HTTP »410 Gone«. Privzeta nastavitev je »Ne«.</p>
+        ]]></item>
+        <item id="publisher_email" title="Poslati prijavne podatke s tega e-poštnega naslova"><![CDATA[
+<h2>Poslati prijavne podatke s tega e-poštnega naslova</h2>
+<p>Določite e-poštni naslov, ki se uporabi kot naslov pošiljatelja »From:« v sporočilih s prijavnimi podatki za nove uporabnike.</p>
+<p>Če to polje pustite prazno ali vsebuje neveljaven e-poštni naslov, Textpattern namesto tega uporabi ime in naslov trenutno prijavljenega uporabnika.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Koliko člankov naj bo vključenih v vire?"><![CDATA[
+<h2>Koliko člankov naj bo vključenih v vire?</h2>
+<p>To je največje število trenutnih člankov, ki bodo hkrati distribuirani v zapisih RSS in Atom.</p>
+<p>Priporočljiva je nizka vrednost, npr. med <code>5</code> in <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Število dodatnih prehodov razčlenjevalnika"><![CDATA[
+<h2>Število dodatnih prehodov razčlenjevalnika</h2>
+<p>Razčlenjevalnik oznak Textpattern običajno vse vaše oznake zamenja z vsebino iz zbirke podatkov v enem prehodu predloge strani. V nekaterih primerih pa to morda ni dovolj, na primer:</p>
+<ul>
+    <li>pri uporabi vtičnikov z nizko obremenitvijo kot atributov oznak</li>
+    <li>pri zamenjavah kode znotraj oznak <code>&lt;txp:php&gt;</code></li>
+    <li>ko želite preskočiti elemente strani prej na strani, da lahko prejmejo vsebino, pridobljeno iz oznake, ki je obdelana pozneje</li>
+</ul>
+<p>Textpattern je zaradi združljivosti v preteklosti tradicionalno izvajal še en dodaten prehod (imenovan »secondpass«), zato je privzeta vrednost te nastavitve <code>1</code>. Več prehodov pa poveča možnost, da nekatere nezaželene oznake zdrsnejo skozi in se obdelajo. Nedavne izboljšave razčlenjevalnika oznak so zmanjšale potrebo po tem drugem prehodu. Zato zmanjšajte to vrednost na <code>0</code>, razen če drugi prehod uporabljate izrecno, da povečate varnost spletišča.</p>
+<p>Če nato opazite neobdelane oznake, izpisane na vašem spletišču (in v načinu Testiranje/Razhroščevanje ni prikazanih drugih napak zaradi neusklajenih parov oznak), se obrnite na nas z zgledom svoje predloge strani/kode/vtičnika. Poskušamo odpraviti potrebo po dodatnih prehodih razčlenjevalnika, zato nam bodo te informacije pomagale pri tem.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Poslati glavo &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Poslati glavo "Last-Modified"?</h2>
+<p>Če je ta možnost nastavljena, bo Textpattern prebral glavo HTTP <code>If-Modified-Since</code> obiskovalca (če obstaja) in jo primerjal z zadnjo posodobitvijo spletišča. Če se od zadnjega nalaganja strani ni nič spremenilo (tj. če se časovni žig, ki ga pošlje brskalnik, ujema z zadnjo posodobitvijo spletišča), bo obiskovalčevemu brskalniku poslana glava z navodilom, naj uporabi predpomnjeno različico strani.</p>
+<p>To lahko zmanjša porabo pasovne širine, čase nalaganja strani in obremenitev spletnega strežnika.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Prikazati število komentarjev v virih?"><![CDATA[
+<h2>Prikazati število komentarjev v virih?</h2>
+<p>Če je ta možnost nastavljena na »Da«, bo število komentarjev v virih RSS/Atom dodano naslovom člankov.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan spletišča"><![CDATA[
+<h2>Slogan spletišča</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan spletišča <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> je povzetek ali opis vašega spletišča. Uporablja se kot opis spletišča, kjer je to potrebno, na primer v virih RSS/Atom, in ga lahko na lastno presojo uporabite na številnih mestih na spletišču.</p>
+<p><strong>Opomba:</strong> Slogan spletišča je neobvezen, vendar je lahko potreben za veljaven vir RSS ali Atom.</p>
+        ]]></item>
+        <item id="sitename" title="Ime spletišča"><![CDATA[
+<h2>Ime spletišča</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Ime ali naslov vašega spletišča <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>. To se pojavi v naslovni vrstici obiskovalčevega brskalnika ali bralnika virov ter na številnih drugih mestih na spletišču po vaši presoji.</p>
+        ]]></item>
+        <item id="siteurl" title="URL spletišča"><![CDATA[
+<h2>URL spletišča</h2>
+<p>To je naslov vašega spletišča Textpattern, na primer <code>www.example.com</code>.</p>
+<p><strong>Opomba:</strong> Predpona <code>http://</code> ali <code>https://</code> in zaključna poševnica <code>/</code> nista potrebni.</p>
+        ]]></item>
+        <item id="skin_dir" title="Imenik tem"><![CDATA[
+<h2>Imenik tem</h2>
+<p>Če želite prilagoditi ime imenika, v katerega bodo trajno shranjene ravne datoteke tem za javni del, ga lahko tukaj nastavite. Imenik morate najprej ustvariti v korenu namestitve Textpattern, zagotoviti pa morate tudi, da lahko PHP v ta imenik piše.</p>
+<p>Ta pot je vedno <strong>relativna pot</strong> (glede na imenik korena vaše namestitve Textpattern).</p>
+<p>Privzeta vrednost je <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Naslov ovojnice SMTP"><![CDATA[
+<h2>Naslov ovojnice SMTP</h2>
+<p>To nastavitev pustite prazno, razen če imate težave s pošiljanjem e-pošte v Textpatternu (če se e-pošta sploh ne pošilja). Če do težave pride, lahko tukaj navedete kateri koli veljaven e-poštni naslov, najbolje pa takega, ki ima enako ime domene kot spletišče, kjer je Textpattern nameščen (tj. če je vaše spletišče <code>https://example.com</code>, lahko uporabite <code>you@example.com</code>).</p>
+<p>Za tiste, ki jih zanimajo tehnične podrobnosti:</p>
+<ul>
+    <li>v strežnikih UNIX-like/macOS se navedeni e-poštni naslov uporabi kot 4. parameter (s predpono »-f«) funkcije PHP <code>mail()</code></li>
+    <li>v strežnikih Windows se navedeni e-poštni naslov uporabi za nastavitev (ali prepis) nastavitve <code>sendmail_from</code> v php.ini</li>
+</ul>
+<p>S tem poskrbite, da je naslov ovojnice SMTP (ki ni nujno enak naslovu »From:«, ki ga običajno vidite v e-pošti) nastavljen na e-poštni naslov, ki ga tukaj vnesete, kar je pogoj za pošiljanje e-pošte na nekaterih spletnih strežnikih.</p>
+        ]]></item>
+        <item id="smtp_host" title="Gostitelj SMTP"><![CDATA[
+<h2>Gostitelj SMTP</h2>
+<p>Če želite izboljšati dostavo sporočil in izkoristiti pošiljanje e-pošte prek zunanje storitve (na primer SendGrid, AWS SES, Mailchimp, Mailgun itd.), navedite strežnik SMTP tukaj. To vrednost pridobite pri ponudniku storitve SMTP.</p>
+<p>To vrednost je mogoče posredovati z določanjem konstante <code>SMTP_HOST</code> v <code>config.php</code>, v tem primeru je vrednost v plošči Nastavitve zasenčena.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Geslo SMTP"><![CDATA[
+<h2>Geslo SMTP</h2>
+<p>Če povezava SMTP za navedenega uporabniškega imena zahteva geslo, ga navedite tukaj. Podrobnosti preverite v dokumentaciji ponudnika.</p>
+<p>Opomba: čeprav geslo tukaj ne bo prikazano, bo <em>v zbirki podatkov v tabeli prefs shranjeno v navadnem besedilu</em>. Če želite povečati varnost, raje določite konstanto <code>SMTP_PASS</code> v datoteki <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="Vrata SMTP"><![CDATA[
+<h2>Vrata SMTP</h2>
+<p>Če ste določili gostitelja SMTP, morate določiti tudi vrata, da omogočite usmerjanje prek SMTP. Običajna vrata so:</p>
+<ul>
+    <li>25 – za nezavarovano pošto</li>
+    <li>465 – ohranjena (neuradna) za varno pošto</li>
+    <li>587 – privzeta (priporočena) za varno pošto TLS</li>
+</ul>
+<p>Vaš ponudnik storitve SMTP bo morda uporabljal druga vrata, zato preverite njegovo dokumentacijo.</p>
+<p>To vrednost je mogoče posredovati z določanjem konstante <code>SMTP_PORT</code> v <code>config.php</code>, v tem primeru je vrednost v plošči Nastavitve zasenčena.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Metoda varnosti SMTP"><![CDATA[
+<h2>Metoda varnosti SMTP</h2>
+<p>Izberite mehanizem, ki ga vaš ponudnik SMTP uporablja kot varnostni protokol e-pošte. Podrobnosti preverite v njegovi dokumentaciji.</p>
+<p>To vrednost je mogoče posredovati z določanjem konstante <code>SMTP_SECTYPE</code> v <code>config.php</code>, v tem primeru je vrednost v plošči Nastavitve zasenčena.</p>
+        ]]></item>
+        <item id="smtp_user" title="Uporabniško ime SMTP"><![CDATA[
+<h2>Uporabniško ime SMTP</h2>
+<p>Če povezava SMTP zahteva uporabniško/prijavno ime, ga navedite tukaj. Podrobnosti preverite v dokumentaciji ponudnika.</p>
+<p>To vrednost je mogoče posredovati z določanjem konstante <code>SMTP_USER</code> v <code>config.php</code>, v tem primeru je vrednost v plošči Nastavitve zasenčena.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Seznami blokiranja neželene pošte (ločeni z vejicami)"><![CDATA[
+<h2>Seznami blokiranja neželene pošte (ločeni z vejicami)</h2>
+<p>Ponudniki <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">seznamov blokiranja <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>, navedeni tukaj, bodo poizvedeni ob objavi komentarja na vašem blogu in preverili bodo naslov IP komentatorja. Če je naslov IP na seznamu, to pomeni, da so v preteklosti že bili podani en ali več prijav neželene pošte za ta naslov IP in komentar bo zavrnjen. Ne glede na izid preverjanja Textpattern naslova IP komentatorja ne shranjuje.</p>
+<p>Tukaj lahko navedete seznam domen, ločenih z vejicami. Upoštevajte, da je vaša dolžnost zagotoviti, da so seznami blokiranja ustrezni namenu.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindicirati samo izvleček članka?"><![CDATA[
+<h2>Sindicirati <strong>samo</strong> izvleček članka?</h2>
+<p>Če je nastavitev določena na »Ne«, bodo elementi v virih vsebovali celotna telesa člankov.</p>
+<p>Če je nastavitev določena na »Da«, bodo elementi v virih vsebovali izvleček članka namesto telesa članka, kjer je ta na voljo.</p>
+        ]]></item>
+        <item id="tempdir" title="Pot do začasnega imenika"><![CDATA[
+<h2>Pot do začasnega imenika</h2>
+<p>Določi <strong>absolutno pot</strong> do začasnega imenika (včasih imenovanega »tmp« ali »temp«). PHP potrebuje pravice pisanja v ta imenik. Imenik se uporablja za začasne datoteke, na primer pri nalaganju različnih vrst (vtičnikov, datotek ali slik).</p>
+<p><strong>Opombe:</strong>
+<ul>
+    <li>istega imenika ne določite hkrati za »začasni imenik« in »predpomnilnik vtičnikov«, saj bo to povzročilo težave (Textpattern bo poskušal zagnati vsebino začasnih dnevniških datotek kot vtičnike).</li>
+    <li>zaradi večje varnosti razmislite o premiku tega imenika izven javno dostopnega korena vašega spletišča.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema za skrbniški del"><![CDATA[
+<h2>Tema za skrbniški del</h2>
+<p>Privzeta tema za skrbniški del, ki bo uporabljena ob vsaki prijavi v Textpattern. Textpattern vsebuje več vnaprej nameščenih skrbniških tem, dodate pa lahko tudi lastne pakete tem v imenik <code>textpattern/admin-themes</code>, da jih omogočite za uporabo.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Dodati zaključni poševnik URL-jem"><![CDATA[
+<h2>Dodati zaključni poševnik URL-jem</h2>
+<p>Ali naj Textpattern samodejno doda zaključni poševnik URL-jem, ki jih ustvari. Možnosti so:</p>
+<ul>
+    <li><strong>Ne</strong> – Nikoli</li>
+    <li><strong>Seznam</strong> – Samo na pristajalnih straneh, ki temeljijo na seznamih (tj. ne pri ogledu posameznih člankov)</li>
+    <li><strong>Da</strong> – Vedno</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Funkcije PHP, omogočene v txp:evaluate"><![CDATA[
+<h2>Funkcije PHP, omogočene v txp:evaluate</h2>
+<p>To je seznam elementov <code>function</code> ali <code>alias=function</code>, ločenih z vejicami, npr. <code>md5</code>, <code>replace=str_replace</code>. V tej možnosti navedene elemente je mogoče uporabiti v atributu <code>query</code> oznake <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> mora vrniti skalarno vrednost (<strong>ne</strong> tabele/objekta).</p>
+        ]]></item>
+        <item id="use_comments" title="Sprejemati komentarje?"><![CDATA[
+<h2>Sprejemati komentarje?</h2>
+<p>Ta možnost določa, ali naj bo funkcija komentiranja v Textpatternu omogočena ali onemogočena.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Uporabiti e-poštni naslov za sestavljanje ID-jev v virih (privzeto je URL spletišča)?"><![CDATA[
+<h2>Uporabiti e-poštni naslov za sestavljanje ID-jev v virih (privzeto je URL spletišča)?</h2>
+<p>Elementi v viru Atom potrebujejo enoličen ID.</p>
+<p>Za generiranje ID-jev, ki so enolični za vaše spletišče, vam Textpattern omogoča izbiro med e-poštnim naslovom ali imenom domene, ki se uporabi v teh ID-jih. E-poštni naslov bo prvi, ki je bil uporabljen pri ustvarjanju spletišča. Če v prihodnje verjetno ne boste spreminjali imena domene, lahko to nastavitev varno določite na »Ne«.</p>
+        ]]></item>
+        <item id="use_plugins" title="Uporabljati vtičnike?"><![CDATA[
+<h2>Uporabljati vtičnike?</h2>
+<p>Ta možnost omogoča izklop celotne podpore za vtičnike Textpattern. Uporabna je pri razhroščevanju napak na spletišču, ko želite preveriti, ali so vpleteni eden ali več vtičnikov.</p>
+        ]]></item>
+        <item id="use_textile" title="Privzeto oblikovanje besedila"><![CDATA[
+<h2>Privzeto oblikovanje besedila</h2>
+<p>Nastavitev oblike besedila, ki jo izberete tukaj, postane privzeta za označevanje izvlečkov in teles člankov na plošči »Pisanje«. Izberete lahko popolno obdelavo Textile, pretvorbo prelomov vrstic v HTML-oznake odstavkov ali pa, da se besedilo sploh ne pretvarja.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a> je pripomoček, namenjen poenostavitvi pretvorbe navadnega besedila v HTML. Če je omogočen, bo Textile obdelal besedilo telesa člankov in vrnil strukturno pravilen HTML.</p>
+<p>Textile ponuja tudi zmogljiv, a enostaven nabor ukazov za oblikovanje besedila, določanje struktur, kot so seznami, naslovi in navedki, ter vstavljanje povezav in slik.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Plošča razdelkov">
+        <item id="section_category" title="Uvod"><![CDATA[
+<h2>Uvod</h2>
+<p>Razdelke v Textpatternu je najbolje razumeti kot analogijo razdelkom v časopisu; vsi pripadajo isti publikaciji, vendar lahko vsak vsebuje drugačno postavitev ali drugačen slog člankov itd.</p>
+<p>Za večino spletišč zadostuje ustvarjanje le minimalnega števila razdelkov.</p>
+<h3>Verjetna zasnova spletišča s tremi razdelki:</h3>
+<ol>
+    <li><strong>Arhiv:</strong> »Razdelek«, v katerega spadajo vsi članki, ki se pojavljajo na prvi strani. Kadar bralec klikne na trajno povezavo članka, bo ta prikazan v postavitvi strani, dodeljeni temu »razdelku«. Če želite prikazati oštevilčen seznam najnovejših člankov, dodeljenih razdelku »Arhiv«, bo URL <code>https://example.com/archive/</code>.</li>
+    <li><strong>O spletišču:</strong> stran »O tem spletišču«, ki se razlikuje od prve strani in razdelka »Arhiv« po tem, da je bolj statična, ima lahko drugačno postavitev in bo verjetno vsebovala le en članek. Do razdelka »O spletišču« pridete prek <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotografije:</strong> »Razdelek«, katerega drugačna postavitev (in morda drugačen CSS) prikaže fotografije namesto člankov.</li>
+</ol>
+<p>Upoštevajte, da vedno obstaja poseben skriti razdelek z imenom default. Ta privzeti razdelek uporablja stran z imenom default in slog z imenom default ter sestavi prvo stran vašega spletišča.</p>
+        ]]></item>
+        <item id="section_default" title="Privzeti razdelek za objavo"><![CDATA[
+<h2>Privzeti razdelek za objavo</h2>
+<p>Ta možnost določa, kateri razdelek bo v meniju Razdelek predizbran pri ustvarjanju novega članka na plošči »Pisanje«.</p>
+<p>Če večina vaših člankov spada v določen razdelek, ga tukaj izberite s seznama. Spremembe bodo takoj uveljavljene.</p>
+<p>To lahko za posamezen članek prepišete na plošči »Pisanje« z izbiro drugega razdelka v podoknu »Razvrsti in prikaži«.</p>
+        ]]></item>
+        <item id="section_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis razdelka je neobvezna sestavina, ki lahko pomaga iskalnikom in pajkom bolje prepoznati in razvrstiti vsebino.</p>
+<p>Opis članka je omejen na največ 255 znakov. Upoštevajte, da nekateri iskalniki zaradi praktičnosti prikaza rezultatov iskanja omejijo število znakov v <code>meta description</code> strani in da je ta meja lahko manjša od omejitve 255 znakov v Textpatternu.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Naj se članki iz razdelka pojavljajo na prvi strani?"><![CDATA[
+<h2>Naj se članki iz razdelka pojavljajo na prvi strani?</h2>
+<p>Članki v nekaterih razdelkih, na primer tistih, ki so bolj podobni »statičnim« spletnim stranem, so lahko v časovno občutljivem toku prve strani vašega spletišča odveč.</p>
+<p>Če to možnost nastavite na »Ne«, članki, dodeljeni temu razdelku, ne bodo prikazani na prvi strani.</p>
+        ]]></item>
+        <item id="section_searchable" title="Vključiti ta razdelek v iskanje po spletišču?"><![CDATA[
+<h2>Vključiti ta razdelek v iskanje po spletišču?</h2>
+<p>Ta nastavitev določa, ali se članki, ki pripadajo temu razdelku, pojavijo kot del rezultatov iskanja po celotnem spletišču.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindikacija člankov v tem razdelku?"><![CDATA[
+<h2>Sindikacija člankov v tem razdelku?</h2>
+<p>Določa, ali bodo članki v tem razdelku prikazani v RSS- in Atom-virih spletišča.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Uporablja slog"><![CDATA[
+<h2>Uporablja slog</h2>
+<p>Če želite za določen razdelek prepisati privzeti slogovni list, ga lahko nastavite tukaj.</p>
+<p>To je pomembno samo za slogovne liste, shranjene v plošči Textpattern »Slogi« – če CSS gostite zunaj Textpatterna (kar je zelo priporočljivo), ta možnost nima učinka.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Uporablja stran"><![CDATA[
+<h2>Uporablja stran</h2>
+<p>V Textpatternu so razdelki povezani s predlogami strani.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Uporablja temo"><![CDATA[
+<h2>Uporablja temo</h2>
+<p>Če želite za določen razdelek spremeniti uporabljeno temo, jo lahko tukaj izberete s seznama trenutno nameščenih tem.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Plošča za namestitev">
+        <item id="setup_admin_url" title="Skrbniška poddomena"><![CDATA[
+<h2>Skrbniška poddomena</h2>
+<p>Poddomena, ki jo želite uporabljati za dostop do skrbniškega vmesnika Textpattern (npr. <code>admin.example.com</code>).</p>
+<p>Za več podrobnosti glejte <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">namestitev več spletišč Textpattern</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domena piškotka"><![CDATA[
+<h2>Domena piškotka</h2>
+<p>(Pod)domena, ki jo želite uporabiti za piškotke Textpattern.</p>
+<p>Za več podrobnosti glejte <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">namestitev več spletišč Textpattern</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Prijava uporabnika"><![CDATA[
+<h2>Prijava uporabnika</h2>
+<p>Prijavno ime skrbniškega računa (»Publisher«), ki ga boste uporabljali za upravljanje svojega spletišča.</p>
+<p>Čeprav ni omejitev glede imena, je najbolje, da se izognete zapletenim zaporedjem znakov in zlahka uganljivim uporabniškim imenom (npr. <code>admin</code>, <code>administrator</code> itd.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Geslo uporabnika"><![CDATA[
+<h2>Geslo uporabnika</h2>
+<p>Ker ima ta račun najvišjo raven dostopa v Textpatternu, izberite zelo močno geslo ali, še bolje, geselno frazo.</p>
+<h3>Nasveti</h3>
+<ul>
+    <li>Uporabite mešanico velikih in malih črk</li>
+    <li>Uporabite številke</li>
+    <li>Uporabite simbole</li>
+    <li>Geslo naj bo dolgo vsaj osem znakov</li>
+    <li><strong>Izogibajte se</strong> kakršnim koli osebnim podatkom (datumi, imena, kraji, družinski člani, hišni ljubljenčki itd.)</li>
+    <li><strong>Izogibajte se</strong> posameznim ali ponavljajočim se slovarskim besedam, ne glede na črkovanje, jezik ali zapis</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Predpona tabel"><![CDATA[
+<h2>Predpona tabel</h2>
+    <p>Predpono tabel morate uporabiti le, če v isti zbirki podatkov potrebujete več namestitev Textpattern. Vsaka namestitev Textpattern potrebuje svojo enolično predpono.</p>
+    <p>Predpona mora izpolnjevati naslednja pravila:</p>
+<ul>
+    <li><strong>Prvi znak:</strong> mora biti črka a–z, A–Z ali podčrtaj</li>
+    <li><strong>Nadaljnji znaki:</strong> so lahko le črke a–z, A–Z, številke 0–9 ali podčrtaj</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Plošča tem">
+        <item id="skin_author" title="Avtor teme"><![CDATA[
+<h2>Avtor teme</h2>
+<p>Avtor(ji) te teme (neobvezno).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Spletišče teme"><![CDATA[
+<h2>Spletišče teme</h2>
+<p>URL, na katerem so na voljo vse informacije in/ali najnovejše različice te teme (neobvezno).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Izbriši tudi predloge teme z diska"><![CDATA[
+<h2>Izbriši tudi predloge teme z diska</h2>
+<p>Če je možnost označena, bodo vse predloške datotek v izbranih temah trajno izbrisane z diska. Vendar imeniki, povezani s temami, in njihovi podimeniki ne bodo izbrisani, če v njih obstajajo druge datoteke (na primer JavaScript, slike ...).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Pri uvozu izbrisati neuporabljene predloge iz zbirke podatkov"><![CDATA[
+<h2>Pri uvozu izbrisati neuporabljene predloge iz zbirke podatkov</h2>
+<p>Če je možnost označena, bo vsaka predloga v izbranih temah, ki nima ustrezne datoteke na disku, trajno izbrisana iz zbirke podatkov. Rezultat po končani akciji bo, da bodo predloge v zbirki podatkov čim bolj odražale stanje na disku.</p>
+<p>Upoštevajte, da bodo, če ste odstranili datoteke predlog, ki jih Textpattern zahteva, v zbirki podatkov za vas ustvarjene prazne različice.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Pri izvozu izbrisati neuporabljene predloge z diska"><![CDATA[
+<h2>Pri izvozu izbrisati neuporabljene predloge z diska</h2>
+<p>Če je možnost označena, bo vsaka datoteka predloge v izbranih temah, ki nima ustreznega elementa v zbirki podatkov, trajno izbrisana iz teme na disku. Rezultat po končani akciji bo, da bodo predloge v datotečnem sistemu natančno odražale stanje v zbirki podatkov.</p>
+        ]]></item>
+        <item id="skin_description" title="Opis teme"><![CDATA[
+<h2>Opis teme</h2>
+<p>Navedete lahko kratek povzetek oblikovanja/postavitve te teme (neobvezno).</p>
+<p>Opis teme je omejen na največ 255 znakov.</p>
+        ]]></item>
+        <item id="skin_import" title="Uvozi temo"><![CDATA[
+<h2>Uvozi temo z diska</h2>
+<p>Ta obrazec omogoča uvoz teme iz imenika s temami v zbirko podatkov Textpattern.</p>
+<p>Temo je mogoče uvoziti, če jo sestavlja berljiva nadrejena mapa, ki uporablja ime teme kot ime mape, znotraj nje pa berljiva datoteka <code>manifest.json</code> v pričakovani obliki. Mapa teme naj vsebuje tudi strani, obrazce in sloge v istoimenskih podmapah.</p>
+<p>Čeprav bi morale strani in obrazci uporabljati končnico <code>.txp</code>, se za slogovne liste pričakuje, da bodo datoteke <code>.css</code>. Obrazci naj bodo tudi razvrščeni po tipu v namenske imenike. Textpattern bo pri uvozu ustvaril vse manjkajoče ključne predloge.</p>
+<p>Za več informacij o ustvarjanju, namestitvi in uporabi tem znotraj sistema Textpattern CMS si oglejte <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentacijo o temah <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Ime teme"><![CDATA[
+<h2>Ime teme</h2>
+<p>Ime teme se uporablja za ime imenika teme in druge tehnične namene (obvezno).</p>
+<p>Ime ne sme vsebovati posebnih znakov ali presledkov.</p>
+        ]]></item>
+        <item id="skin_overview" title="Uvod v teme"><![CDATA[
+<h2>Uvod v teme</h2>
+<p>Tema Textpattern je zbirka Strani, Obrazcev in Slogovnih listov. Teme vam omogočajo logično razdelitev sredstev spletišča v skupine, da jih lažje prepoznate ali delite z drugimi. Ustvarjanje ali uvoz teme in vseh sredstev v njej <em>nima</em> nobenega vpliva na vaše obstoječe spletišče. Prosto lahko urejate ali spreminjate katero koli sredstvo, ki ni povezano z razdelkom vašega spletišča, ne da bi to vplivalo na samo spletišče.</p>
+<p>Če želite urejati sredstva v temi, obiščite ploščo Strani, Obrazci ali Slogi in na spustnem seznamu izberite temo, na kateri želite delati. Tema, na kateri delate, je zapomnjena v celotnem skrbniškem območju, kar vam omogoča hitro in enostavno preklapljanje med vrstami sredstev. Imenuje se <em>delovna tema</em>.</p>
+<p>Za več informacij glejte <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Uporabniško dokumentacijo Textpattern <span class="ui-icon ui-icon-extlink">(odpre zunanjo povezavo v novem oknu)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Naslov teme"><![CDATA[
+<h2>Naslov teme</h2>
+<p>Opisni naslov teme, ki se uporablja za prepoznavo teme v ploščah Textpattern.</p>
+<p>Naslov lahko vsebuje posebne znake in presledke.</p>
+        ]]></item>
+        <item id="skin_version" title="Različica teme"><![CDATA[
+<h2>Različica teme</h2>
+<p>Številka nameščene različice te teme (neobvezno).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

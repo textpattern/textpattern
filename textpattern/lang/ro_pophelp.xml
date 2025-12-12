@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="ro">
+    <group id="admin" title="Panou utilizatori">
+        <item id="about_privileges" title="Despre roluri"><![CDATA[
+<h2>Despre roluri</h2>
+<h3>Publicist</h3>
+<ul>
+    <li>poate gestiona articole, comentarii și linkuri</li>
+    <li>poate folosi PHP în articole dacă preferința de admin „Permite PHP în articole?” este setată pe „Da”</li>
+    <li>poate gestiona imagini și fișiere</li>
+    <li>poate gestiona secțiuni și categorii</li>
+    <li>poate gestiona pagini, formulare și stiluri</li>
+    <li>poate vedea informațiile de diagnostic</li>
+    <li>poate gestiona preferințele site‑ului</li>
+    <li>poate gestiona utilizatori</li>
+    <li>poate gestiona jurnalele de vizitatori</li>
+    <li>poate gestiona pluginuri</li>
+    <li>poate importa date</li>
+</ul>
+<h3>Editor coordonator</h3>
+<ul>
+    <li>poate gestiona articole, comentarii și linkuri</li>
+    <li>poate folosi PHP în articole dacă preferința de admin „Permite PHP în articole?” este setată pe „Da”</li>
+    <li>poate gestiona imagini și fișiere</li>
+    <li>poate gestiona secțiuni și categorii</li>
+    <li>poate gestiona pagini, formulare și stiluri</li>
+    <li>poate vedea informațiile de diagnostic</li>
+    <li>poate gestiona preferințele site‑ului</li>
+    <li>poate vedea utilizatori</li>
+    <li>poate gestiona jurnalele de vizitatori</li>
+    <li>poate gestiona pluginuri</li>
+    <li>poate importa date</li>
+</ul>
+<h3>Editor de conținut</h3>
+<ul>
+    <li>poate gestiona articole cu o singură limitare:
+        <ul>
+            <li>nu le poate șterge pe cele care aparțin altor utilizatori</li>
+        </ul>
+    </li>
+    <li>poate gestiona comentarii și linkuri</li>
+    <li>poate gestiona imagini și fișiere</li>
+    <li>poate gestiona categorii</li>
+    <li>poate gestiona pagini și formulare</li>
+    <li>poate vedea utilizatori</li>
+    <li>poate gestiona jurnalele de vizitatori</li>
+</ul>
+<h3>Redactor</h3>
+<ul>
+    <li>poate gestiona propriile articole, poate vedea articolele altor utilizatori</li>
+    <li>poate gestiona imagini și fișiere</li>
+</ul>
+<h3>Colaborator extern</h3>
+<ul>
+    <li>poate gestiona propriile articole într‑un sens limitat:
+        <ul>
+            <li>poate modifica articolul doar până când este publicat</li>
+            <li>poate aplica doar stările de <em>numai</em> Ciornă, Ascuns sau În așteptare</li>
+        </ul>
+    </li>
+    <li>poate vedea articolele altor utilizatori</li>
+</ul>
+<h3>Designer</h3>
+<ul>
+    <li>poate gestiona propriile articole într‑un sens limitat:
+        <ul>
+            <li>poate modifica articolul doar până când este publicat</li>
+            <li>poate aplica doar stările de <em>numai</em> Ciornă, Ascuns sau În așteptare</li>
+        </ul>
+    </li>
+    <li>poate vedea articolele altor utilizatori</li>
+    <li>poate gestiona imagini</li>
+    <li>poate gestiona secțiuni</li>
+    <li>poate gestiona pagini, formulare și stiluri</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Creează autor"><![CDATA[
+<h2>Adaugă autor nou</h2>
+<p>Un mesaj de bun venit și instrucțiuni de autentificare vor fi trimise prin email noului autor.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Panou Scriere">
+        <item id="article_image" title="Imagine articol"><![CDATA[
+<h2>Imagine articol</h2>
+<p>Pentru a asocia imagini cu acest articol, introdu aici una dintre următoarele:</p>
+<ol>
+    <li>unul sau mai multe ID‑uri de imagini Textpattern, separate prin virgule (de ex. <code>12, 25, 18</code>)</li>
+    <li>unul sau mai multe URL‑uri relative către imagine, separate prin virgule (de ex. <code>/images/my_pic.jpg</code>)</li>
+    <li>unul sau mai multe URL‑uri complet calificate, separate prin virgule (de ex. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Prima imagine poate fi afișată plasând un tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> în interiorul unui formular de articol. În mod implicit, acesta va afișa un tag HTML complet <code>&lt;img&gt;</code> către imaginea aleasă.</p>
+<p>Poți afișa galerii folosind tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Corp"><![CDATA[
+<h2>Corp</h2>
+<p>Conținutul principal al unui articol este cuprins în corpul articolului.</p>
+<p>Când compune sau pregătește articole pentru publicare în Textpattern, un autor poate comuta între trei vizualizări ale articolului: text simplu, marcaj HTML (codul cu care un browser web redă articolul) și o previzualizare redată.</p>
+        ]]></item>
+        <item id="description" title="Descriere"><![CDATA[
+<h2>Descriere</h2>
+<p>Descrierea articolului este o componentă opțională care poate ajuta motoarele de căutare și crawler‑ele web să identifice și să ordoneze mai bine conținutul.</p>
+<p>Descrierea articolului este limitată la maximum 255 de caractere. Reține că unele motoare de căutare impun limite de caractere pentru lungimea unei <code>meta description</code> a paginii, din motive de afișare în paginile cu rezultate ale motoarelor de căutare (SERP), iar aceasta poate fi mai mică decât limita de 255 de caractere din Textpattern.</p>
+<p>Reține că descrierea articolului diferă de rezumatul articolului, deși ambele acceptă conținut similar. Descrierea articolului ar trebui să fie destinată în primul rând utilizării de către motoarele de căutare și crawler‑e, în timp ce rezumatul articolului este mai potrivit ca un rezumat lizibil de către oameni, acolo unde este dorit.</p>
+        ]]></item>
+        <item id="excerpt" title="Rezumat"><![CDATA[
+<h2>Rezumat</h2>
+<p>Rezumatele de articol sunt opționale. Rezumatul poate fi folosit ca un scurt sumar al articolului afișat ca parte a unui cuprins, folosit în locul corpului complet al articolului în fluxurile RSS/Atom ale site‑ului sau în alte numeroase moduri.</p>
+        ]]></item>
+        <item id="expire_date" title="Data expirării"><![CDATA[
+<h2>Data expirării</h2>
+<p>Momentul în care un articol este etichetat ca expirat. Ora este opțională și poate fi setată la un moment arbitrar în trecut sau viitor.</p>
+<p>Căsuțele corespund următoarelor informații:</p>
+<ul>
+    <li>An / Lună / Zi</li>
+    <li>Oră (format 24 de ore) : Minut : Secundă</li>
+</ul>
+<p>Când sosește momentul, sau în cazul în care este furnizată o dată în trecut, articolul expiră.</p>
+<p>Dacă opțiunea de afișare a articolelor expirate este activată, articolul rămâne vizibil. Dacă opțiunea de afișare a articolelor expirate este dezactivată, vizitatorilor paginii articolului li se va livra o eroare HTTP 410 în locul conținutului articolului.</p>
+        ]]></item>
+        <item id="keywords" title="Cuvinte cheie"><![CDATA[
+<h2>Cuvinte cheie</h2>
+<p>Cuvintele cheie sunt utile pentru rafinarea relațiilor dintre articole, dincolo de ceea ce oferă categoriile.</p>
+<p>Cuvintele cheie trebuie să fie cuvinte individuale separate prin virgule.</p>
+        ]]></item>
+        <item id="override_form" title="Formular de suprascriere"><![CDATA[
+<h2>Formular de suprascriere</h2>
+<p>Un articol poate, opțional, să folosească un formular diferit de cel atribuit implicit – de exemplu pentru a afișa un rezumat de articol cu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> în locul corpului articolului cu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> – acest lucru poate fi setat aici.</p>
+        ]]></item>
+        <item id="publish_date" title="Data publicării"><![CDATA[
+<h2>Data publicării</h2>
+<p>Momentul în care un articol sau fișier este publicat sau revizuit cel mai recent. Ora poate fi setată la momentul publicării elementului sau la un moment arbitrar în trecut sau viitor.</p>
+<p>Căsuțele corespund următoarelor informații:</p>
+<ul>
+    <li>An / Lună / Zi</li>
+    <li>Oră (format 24 de ore) : Minut : Secundă</li>
+</ul>
+<p>Un element cu un marcaj temporal mai mare decât timpul curent (adică în viitor) nu va apărea pe partea publică și în fluxurile RSS/Atom până la sosirea acelui moment.</p>
+        ]]></item>
+        <item id="status" title="Stare"><![CDATA[
+<h2>Stare</h2>
+<p>Definește starea de vizibilitate la publicare a acestui articol Textpattern.</p>
+<p>Starea de publicare este una dintre următoarele:</p>
+<ul>
+<li><strong>Ciornă</strong>: considerat lucru în curs de desfășurare și nu este vizibil în afara zonei de administrare Textpattern (adică nu este vizibil pe site și nu este distribuit în fluxuri).</li>
+<li><strong>Ascuns</strong>: articolul nu este vizibil în afara zonei de administrare Textpattern. Util pentru a elimina conținut de pe site pe care nu dorești neapărat să‑l ștergi.</li>
+<li><strong>În așteptare</strong>: considerat gata pentru publicare și în așteptarea aprobării, dar nu este vizibil în afara zonei de administrare Textpattern.</li>
+<li><strong>Public</strong>: este, de regulă, vizibil în afara zonei de administrare Textpattern (adică vizibil pe site, distribuit în fluxuri dacă preferința permite). Dacă un articol este public și are o dată de expirare, starea va rămâne Public după ce acea dată a fost atinsă, dar articolul apare în afara zonei de administrare doar dacă este permisă publicarea articolelor expirate.</li>
+<li><strong>Fixat</strong>: similar cu un articol <strong>Public</strong>, în sensul că poate fi vizualizat de vizitatorii site‑ului, dar <strong>nu</strong> va apărea în listele de articole decât dacă tagul <code>article</code> sau <code>article_custom</code> respectiv include un atribut <code>status</code> cu valoarea <code>sticky</code>.</li>
+</ul>
+<p>Notă: conținutul care nu este vizibil public pe site poate fi totuși previzualizat de utilizatorii autentificați.</p>
+        ]]></item>
+        <item id="title" title="Titlu"><![CDATA[
+<h2>Titlu</h2>
+<p>Adaugă un titlu potrivit pentru acest articol.</p>
+<p>Titlul unui articol este limitat la maximum 255 de caractere.</p>
+        ]]></item>
+        <item id="url_title" title="Titlu doar pentru URL"><![CDATA[
+<h2>Titlu doar pentru URL</h2>
+<p>Pentru a folosi un titlu specific în URL‑ul de legătură permanentă al unui articol, introdu‑l aici. Dacă este lăsat gol, titlul de URL va fi generat automat din titlul articolului.</p>
+<p>Acest lucru este deosebit de util dacă titlul articolului folosește caractere non‑ASCII.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Panou Categorii">
+        <item id="article_category" title="Articole"><![CDATA[
+<h2>Articole</h2>
+<p>Spre deosebire de secțiuni, care definesc structura de navigare a unui site, categoriile de articole permit organizarea articolelor după subiectul lor. Odată ce categoriile sunt atribuite, pot fi răsfoite liste de articole care aparțin anumitor categorii.</p>
+<p>De exemplu, categoriile probabile de articole pe un site despre mâncare ar putea fi:</p>
+<ul>
+    <li>ingrediente crude</li>
+    <li>cumpărături</li>
+    <li>rețete</li>
+    <li>prezentare</li>
+    <li>restaurante</li>
+    <li>bucătari</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Descriere"><![CDATA[
+<h2>Descriere categorie</h2>
+<p>Descrierea categoriei este o componentă opțională care poate ajuta motoarele de căutare și crawler‑ele web să identifice și să ordoneze mai bine conținutul.</p>
+<p>Descrierea categoriei este limitată la maximum 255 de caractere. Reține că unele motoare de căutare impun limite de caractere pentru lungimea unei <code>meta description</code> a paginii, din motive de afișare în paginile cu rezultate ale motoarelor de căutare (SERP), iar aceasta poate fi mai mică decât limita de 255 de caractere din Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Fișiere"><![CDATA[
+<h2>Fișiere</h2>
+<p>Categoriile de fișiere sunt opționale și sunt utile pentru gruparea împreună a unor fișiere încărcate selectate.</p>
+        ]]></item>
+        <item id="image_category" title="Imagini"><![CDATA[
+<h2>Imagini</h2>
+<p>Categoriile de imagini sunt opționale și sunt utile atât pentru organizarea internă, cât și pentru definirea seturilor de imagini care pot fi afișate folosind tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Linkuri"><![CDATA[
+<h2>Linkuri</h2>
+<p>Categoriile de linkuri sunt opționale și sunt utile pentru afișarea unor grupări diferite de linkuri, de ex. „Prieteni”, „Romani”, „Compatrioți”.</p>
+<p>Listele selective de linkuri ca acestea sunt afișate cu tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>, astfel:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Panou Diagnostic">
+        <item id="clean_url_data_failed" title="Date pentru URL curate eșuate"><![CDATA[
+<h2>Date pentru URL curate eșuate</h2>
+<p>Se pare că fie URL‑urile site‑ului (de ex. <code>https://example.com/section/article</code>) nu funcționează momentan, fie serverul web nu suportă procedura de test pentru a determina dacă URL‑urile curate funcționează sau nu; dacă URL‑urile curate de pe site funcționează conform așteptărilor, acest mesaj poate fi ignorat în siguranță.</p>
+<p>Dacă URL‑urile curate <em>nu</em> funcționează, acest lucru poate însemna fie:</p>
+<ul>
+    <li>setarea „Site URL” este incorectă sau pagina de la acea adresă nu este administrată de această instanță Textpattern</li>
+    <li>serverul necesită unele modificări în <code>.htaccess</code> sau o directivă de server similară pentru ca URL‑urile curate să funcționeze</li>
+    <li>serverul nu suportă deloc URL‑uri curate</li>
+</ul>
+<p>Testul de URL curat încearcă să preia o pagină de la adresa web specificată în preferința „Site URL” pentru a verifica dacă toți parametrii de URL curat funcționează corect. Dacă acel URL indică spre un alt site sau a fost înlocuit cu o pagină statică sau similar, testul va eșua. Până când problema este rezolvată, ar trebui folosite URL‑uri „dezordonate” (de ex. <code>https://example.com?s=section&amp;id=4</code>). Asigură‑te că „Permanent link mode” din Preferințele de admin este setat în mod corespunzător.</p>
+<p>Reține că folosirea unui plugin pentru a pune site‑ul în „mod de întreținere” poate declanșa acest avertisment.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Test pentru URL curate eșuat"><![CDATA[
+<h2>Test pentru URL curate eșuat</h2>
+<p>Se pare că fie URL‑urile site‑ului (de ex. <code>https://example.com/section/article</code>) nu funcționează momentan, fie serverul web nu suportă procedura de test pentru a determina dacă URL‑urile curate funcționează sau nu; dacă URL‑urile curate de pe site funcționează conform așteptărilor, acest mesaj poate fi ignorat în siguranță.</p>
+<p>Dacă URL‑urile curate <em>nu</em> funcționează, acest lucru poate însemna fie:</p>
+<ul>
+    <li>setarea „Site URL” este incorectă sau pagina de la acea adresă nu este administrată de această instanță Textpattern</li>
+    <li>serverul necesită unele modificări în <code>.htaccess</code> sau o directivă de server similară pentru ca URL‑urile curate să funcționeze</li>
+    <li>serverul nu suportă deloc URL‑uri curate</li>
+</ul>
+<p>Testul de URL curat încearcă să preia o pagină de la adresa web specificată în preferința „Site URL” pentru a verifica dacă toți parametrii de URL curat funcționează corect. Dacă acel URL indică spre un alt site sau a fost înlocuit cu o pagină statică sau similar, testul va eșua. Până când problema este rezolvată, ar trebui folosite URL‑uri „dezordonate” (de ex. <code>https://example.com?s=section&amp;id=4</code>). Asigură‑te că „Permanent link mode” din Preferințele de admin este setat în mod corespunzător.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Autentificări simultane pe un server live"><![CDATA[
+<h2>Autentificări simultane pe un server live</h2>
+<p>Permițând contului tău de utilizator să se autentifice din mai multe sesiuni reprezintă un risc de securitate și nu este recomandat. Dezactivează această funcție din panoul de preferințe avansate, cu excepția cazului în care riscurile sunt înțelese și acceptabile.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Ascunde informațiile private"><![CDATA[
+<h2>Ascunde informațiile private</h2>
+<p>Ascunde informațiile private pentru securitate suplimentară. Dacă informațiile de diagnostic trebuie partajate într‑un format vizibil public, de exemplu pe forumul de suport Textpattern, acest lucru reduce riscul de securitate prin omiterea informațiilor sensibile despre server.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Cod de dezvoltare pe un server live"><![CDATA[
+<h2>Cod de dezvoltare pe un server live</h2>
+<p>Versiunile în dezvoltare ale Textpattern nu sunt recomandate pentru utilizare pe site‑uri de producție. Acest avertisment poate fi ignorat în siguranță dacă riscurile sunt înțelese și acceptabile.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Directorul nu este inscriptibil"><![CDATA[
+<h2>Directorul nu este inscriptibil</h2>
+<p>Pentru a utiliza capabilitățile de încărcare a fișierelor și imaginilor, aceste directoare trebuie să fie inscriptibile de către PHP prin utilizatorul serverului web. Acest lucru se poate face cu un client (S)FTP sau, alternativ, din linia de comandă, prin rularea comenzii <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Eșec DNS"><![CDATA[
+<h2>Căutare DNS eșuată</h2>
+<p>Se pare că URL‑ul specificat ca adresă a site‑ului este inaccesibil.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Încărcarea fișierelor este dezactivată"><![CDATA[
+<h2>Încărcarea fișierelor este dezactivată</h2>
+<p>Configurația curentă a serverului indică faptul că încărcarea fișierelor este dezactivată. Verifică și modifică setarea <code>file_uploads</code> din <code>php.ini</code> sau consultă furnizorul de găzduire pentru asistență.</p>
+        ]]></item>
+        <item id="htaccess_missing" title="Fișierul .htaccess lipsește"><![CDATA[
+<h2>Fișierul .htaccess lipsește</h2>
+<p>Este folosit un mod de linkuri permanente care necesită un fișier <code>.htaccess</code>, iar fișierul nu poate fi găsit. Fișierul este inclus cu Textpattern și se află în rădăcina Textpattern, alături de <code>index.php</code> și directorul <code>textpattern</code>. Directivele recomandate sunt:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Indexul site‑ului este inaccesibil"><![CDATA[
+<h2>Indexul site‑ului este inaccesibil</h2>
+<p>Fișierul rădăcină <code>index.php</code> specificat ca index pentru site nu poate fi citit de server. Verifică existența și permisiunile acestuia.</p>
+        ]]></item>
+        <item id="missing_files" title="Fișiere lipsă"><![CDATA[
+<h2>Fișiere lipsă</h2>
+<p>Unul sau mai multe fișiere esențiale lipsesc din Textpattern. Asigură‑te că toate fișierele listate sunt prezente pe server și se află în locațiile corecte.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite lipsește"><![CDATA[
+<h2>Apache mod_rewrite lipsește</h2>
+<p>Modulul <code>mod_rewrite</code> al Apache nu este instalat sau este dezactivat. Acesta este recomandat pentru ca Textpattern să funcționeze corect. Verifică existența și activarea acestuia sau contactează furnizorul de găzduire pentru asistență.</p>
+        ]]></item>
+        <item id="modified_files" title="Fișiere modificate"><![CDATA[
+<h2>Fișiere modificate</h2>
+<p>Fișierele sunt considerate modificate dacă suma lor de control diferă de lista de sume de control cunoscute ca valide furnizată cu Textpattern. Dacă oricare dintre fișierele din instalarea Textpattern diferă de cele așteptate, fișierele vor fi evidențiate aici.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Erori în tabelele MySQL"><![CDATA[
+<h2>Erori în tabelele MySQL</h2>
+<p>Este posibil să existe o anumită corupere sau deteriorare în baza de date MySQL a Textpattern. Încearcă să repari tabelul(tabelele) afectat(e) cu un instrument de acces MySQL, cum ar fi <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> sau <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Director temporar nedefinit"><![CDATA[
+<h2>Director temporar nedefinit</h2>
+<p>Deși Textpattern va rula fără un director temporar, unele funcționalități pot să nu funcționeze conform așteptărilor dacă această preferință nu este setată. Vizitează Preferințe Admin și setează „Calea directorului temporar”.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Secțiune numită la fel ca directorul"><![CDATA[
+<h2>Secțiune numită la fel ca directorul</h2>
+<p>Numele de directoare existente pot intra în conflict cu numele de secțiuni folosite în schema de linkuri permanente pentru articole. Pentru a evita problemele, verifică și șterge numele de directoare afectate, dacă este sigur să faci acest lucru, sau modifică numele secțiunilor astfel încât să nu se ciocnească.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Directorul site‑ului este necitibil"><![CDATA[
+<h2>Directorul site‑ului este necitibil</h2>
+<p>Directorul care conține fișierul rădăcină <code>index.php</code> specificat ca index pentru site nu poate fi citit de server. Verifică permisiunile.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Scripting PHP activat"><![CDATA[
+<h2>Scripting PHP activat</h2>
+<p>Textpattern permite autorilor și administratorilor să încorporeze cod PHP în articole și pagini/formulare dacă aceste funcții sunt activate. Deoarece aceasta este o problemă de securitate – se poate executa orice fel de PHP, inclusiv cod potențial dăunător/periculos care poate duce la distrugerea instalării sau la scurgerea de informații către terți – este recomandat cu tărie să dezactivezi aceste opțiuni în <a href="?event=prefs#prefs_group_publish">panoul Preferințe</a>, cu excepția cazului în care ai absolut nevoie de această funcție.</p>
+<p>Multe îmbunătățiri ale site‑urilor Textpattern care înainte necesitau fragmente de PHP pot fi acum realizate cu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">taguri de bază</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Cerințe minime de versiune"><![CDATA[
+<h2>Cerințe minime de versiune</h2>
+<p>Textpattern necesită anumite funcționalități prezente în limbajul de programare PHP și în serverul de baze de date MySQL. Consultă următorul tabel pentru a determina cerințele minime de sistem:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Versiune Textpattern</th>
+                <th scope="col">Versiune minimă PHP</th>
+                <th scope="col">Versiune minimă MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Pe lângă cerințele de sistem de mai sus, sunt necesare următoarele extensii PHP:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a></li>
+</ul>
+<p>Fișierul <code>php.ini</code> al site‑ului, fie global, fie local, trebuie să conțină o setare <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Directorul Setup încă există"><![CDATA[
+<h2>Directorul Setup încă există</h2>
+<p>După ce Textpattern a fost instalat, directorul <code>textpattern/setup</code> și conținutul său nu mai sunt necesare și ar trebui șterse din motive de securitate.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Nepotrivire URL site"><![CDATA[
+<h2>Nepotrivire URL site</h2>
+<p>URL‑ul site‑ului, așa cum este setat în panoul „Preferințe”, nu se potrivește cu URL‑ul efectiv folosit pentru a vizita site‑ul.</p>
+<p>Dacă site‑ul poate fi accesat prin mai multe URL‑uri diferite și dacă site‑ul se comportă conform așteptărilor, acest mesaj poate fi ignorat în siguranță.</p>
+<p>În caz contrar, verifică și modifică setarea „Site URL” în Preferințe Admin, după cum este necesar. O estimare informată a URL‑ului corect al site‑ului este afișată în mesajul de avertizare preliminară din panoul „Diagnostic”.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Funcțiile PHP [&#8230;] sunt dezactivate pe serverul tău"><![CDATA[
+<h2>Funcțiile PHP [&#8230;] sunt dezactivate pe serverul tău</h2>
+<p>Furnizorul de găzduire sau administratorul serverului a dezactivat una sau mai multe funcții PHP, dintre care unele pot afecta rularea Textpattern.</p>
+<p>Consultă <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Documentația utilizatorului Textpattern <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pentru mai multe informații.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Actualizare versiune Textpattern"><![CDATA[
+<h2>Actualizare versiune Textpattern</h2>
+<p>Este disponibilă o versiune mai nouă de Textpattern. Pentru a beneficia de cele mai recente funcții și de securitate, este recomandat să faci upgrade.</p>
+<p>Reține că, deși ne străduim să facem experiența de upgrade cât mai lină și lipsită de probleme:</p>
+<ul>
+    <li>Dacă diferă doar ultima cifră față de versiunea ta curentă, upgrade‑ul este probabil compatibil înapoi cu pluginurile și temele.</li>
+    <li>Dacă diferă ultimele două cifre față de versiunea ta curentă, upgrade‑ul ar putea necesita actualizări la unele pluginuri și/sau teme, deși probabil va continua să funcționeze oricum într‑o capacitate limitată.</li>
+    <li>Dacă prima cifră este diferită de versiunea ta curentă, este probabil ca upgrade‑ul să necesite actualizări la majoritatea pluginurilor și temelor. Dacă te bazezi puternic pe o anumită funcție de plugin sau temă, verifică în prealabil cu autorul sau cu membrii comunității înainte de a începe upgrade‑ul.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Pre‑versiune Textpattern disponibilă"><![CDATA[
+<h2>Actualizare pre‑versiune Textpattern disponibilă</h2>
+<p>Este disponibilă o versiune pre‑release mai nouă de Textpattern. Căutăm voluntari activi pentru a testa această versiune, astfel încât să putem face lansarea finală cât mai solidă posibil. Ne străduim să facem experiența de upgrade lină și lipsită de probleme, chiar și pentru cod beta.</p>
+<p>Dacă decizi să participi, reține:</p>
+<ul>
+    <li>Nu utiliza această versiune beta pe un site de producție decât dacă ai un backup funcțional atât al fișierelor site‑ului, cât și al bazei de date, și știi cum să îl folosești.</li>
+    <li>Te rugăm să <a href="https://github.com/textpattern/textpattern/issues">raportezi orice probleme</a>, menționând versiunea beta pe care o folosești. Pot fi necesare alte lansări beta înainte de versiunea stabilă, în funcție de problemele raportate.</li>
+    <li>Asigură‑te că, dacă implementezi această versiune beta, actualizezi și la versiunea finală când aceasta este lansată.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Căile directoarelor temporar și cache plugin nu ar trebui să coincidă"><![CDATA[
+<h2>Căile directoarelor Temporar și cache Plugin nu ar trebui să coincidă</h2>
+<p>Pluginurile ar trebui să aibă propriul lor director și să nu partajeze directorul temporar. Acesta este un potențial risc de securitate și poate afecta negativ site‑ul tău dacă directorul temporar este golit. Asigură‑te că calea directorului temporar este diferită de calea cache‑ului pluginurilor.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Serverul de actualizare este inaccesibil"><![CDATA[
+<h2>Serverul de actualizare este inaccesibil</h2>
+<p>Verificarea actualizărilor a eșuat, de obicei din cauza congestiei rețelei sau a depășirii timpului de conexiune. Această situație se rezolvă, de regulă, singură în decurs de o oră sau două, așa că încearcă să revii la acest panou mai târziu.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Instalarea ta PHP nu are funcția mail()"><![CDATA[
+<h2>Instalarea ta PHP nu are funcția mail()</h2>
+<p>Funcția <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> a PHP este dezactivată. Prin urmare, Textpattern nu poate trimite emailuri și unele funcționalități nu vor fi disponibile. De exemplu, notificările prin email pentru comentarii noi nu vor fi trimise, iar utilizatorii noi nu vor primi un email de bun venit. Totuși, utilizatorii pot fi adăugați în continuare.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Panou Fișiere">
+        <item id="file_reassign" title="Reatribuie fișierul"><![CDATA[
+<h2>Reatribuie fișierul</h2>
+<p>Când încarci un fișier în locul unuia care este marcat ca „Lipsă”, fișierul ales de tine este încărcat pe server și legat de informațiile originale ale fișierului din baza de date. Aceasta înseamnă că numele fișierului original va rămâne, la fel și toate celelalte informații asociate, cum ar fi numărul de descărcări și categoria. Dimensiunea fișierului va fi însă actualizată pentru a reflecta noul fișier.</p>
+        ]]></item>
+        <item id="file_replace" title="Înlocuiește fișierul"><![CDATA[
+<h2>Înlocuiește fișierul</h2>
+<p>Încărcarea unui fișier aici va înlocui conținutul fișierului existent de pe server, dar va păstra același nume de fișier ca înainte. Numărul de descărcări și alte informații asociate fișierului rămân neafectate.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Data publicării"><![CDATA[
+<h2>Data publicării</h2>
+<p>Momentul în care un fișier este publicat sau revizuit cel mai recent. Ora poate fi setată la momentul publicării elementului sau la un moment arbitrar în trecut sau viitor.</p>
+<p>Căsuțele corespund următoarelor informații:</p>
+<ul>
+    <li>An / Lună / Zi</li>
+    <li>Oră (format 24 de ore) : Minut : Secundă</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Încarcă fișier"><![CDATA[
+<h2>Încarcă fișier</h2>
+<p>Folosește acest formular pentru a încărca fișiere sau imagini pe server.</p>
+<p>Folosește cod Textile pentru a reda grafica în articole, cod Textpattern pentru a plasa grafica în șabloanele de pagină sau cod HTML pentru a plasa grafica în altă parte.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Panou Formulare">
+        <item id="forms_overview" title="Introducere în Formulare"><![CDATA[
+<h2>Introducere în Formulare</h2>
+<p>În Textpattern, un formular este un fragment sau o bucată de text, HTML și taguri Textpattern care poate fi refolosită pentru a afișa conținut.</p>
+<p>Iată un exemplu de formular care ar putea fi numit <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Îl poți folosi pentru a afișa o listă HTML neordonată de articole înrudite:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Deoarece rolul acestui formular este să afișeze o listă de titluri, poate fi utilizat în interiorul altor taguri, cum ar fi afișarea a 20 de articole din secțiunea curentă:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Poți de asemenea alege să folosești un formular pentru a afișa conținut repetat, cum ar fi antetul și subsolul în șabloanele de pagină. Aceasta înseamnă că acel conținut există doar într‑un singur loc și, dacă decizi să‑l schimbi, trebuie să faci modificarea o singură dată. Afișarea conținutului dintr‑un formular este realizată, de obicei, cu:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Un formular poate avea până la 64 KB. Un exemplu de subsol ar putea include titluri, paragrafe, linkuri, taguri condiționale și referințe la alte formulare, cum ar fi <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Panou Imagini">
+        <item id="create_thumbnail" title="Creează miniatură"><![CDATA[
+<h2>Creează miniatură</h2>
+<p>Îți permite să (re)creezi o miniatură cu dimensiunile specificate, pornind de la imaginea de dimensiune completă.</p>
+<p>Pentru dimensionare personalizată, miniatura va fi scalată pentru a se potrivi dimensiunilor alese, cu excepția cazului în care selectezi caseta de bifare „Decupează”. În acest caz, miniatura va fi creată din centrul imaginii, fără nicio scalare.</p>
+<p>Pentru dimensionare automată, miniatura va fi scalată la dimensiunile și (opțional) setările de decupare din tema de administrare curentă.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Înlocuiește imaginea"><![CDATA[
+<h2>Înlocuiește imaginea</h2>
+<p>O imagine încărcată aici va înlocui pur și simplu imaginea existentă asociată cu această înregistrare din baza de date.</p>
+        ]]></item>
+        <item id="upload_image" title="Încarcă imaginea"><![CDATA[
+<h2>Încarcă imaginea</h2>
+<p>Încarcă una sau mai multe imagini pe server.</p>
+<p>La încărcarea în directorul <code>images</code>, numele fișierului imaginii originale va fi păstrat doar intern în baza de date a Textpattern; fișierul imaginii în sine va fi redenumit într‑un număr secvențial + extensia fișierului.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Încarcă miniatura"><![CDATA[
+<h2>Încarcă miniatura</h2>
+<p>Imaginile la dimensiune completă își pot primi propriile miniaturi. Acestea sunt utile pentru a face legătura către – și pentru indexarea – imaginilor la dimensiune completă.</p>
+<p>O referință la miniatură este exact aceeași ca referința la imaginea de dimensiune completă, cu <code>t</code> adăugat la numele fișierului. De exemplu, pentru a face referire la o miniatură asociată unei imagini de dimensiune completă stocată la <code>/images/12.jpg</code>, ai folosi <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Panou Limbi">
+        <item id="get_textpack" title="Instalează Textpack"><![CDATA[
+<h2>Instalează Textpack</h2>
+<p>Lipește în această casetă șiruri suplimentare de limbă pentru site‑ul tău și selectează „Încărcare” pentru a le instala.</p>
+<p>Șirurile vor veni adesea sub forma unui Textpack descărcabil, distribuit împreună cu un plugin pentru a permite utilizarea nativă în Textpattern a șirurilor de limbă ale pluginului.</p>
+<p>Traducătorii pot apoi să traducă aceste pachete după necesități și să redistribuie conținutul localizat comunității.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Panou Linkuri">
+        <item id="link_description" title="Descriere"><![CDATA[
+<h2>Descriere</h2>
+<p>Descrierile pentru linkuri sunt opționale și sunt utile pentru subtitrarea linkurilor, pentru crearea atributelor <code>title=""</code> (tooltip) pentru linkuri sau, pur și simplu, pentru păstrarea propriei documentații interne.</p>
+        ]]></item>
+        <item id="link_sort" title="Valoare de sortare"><![CDATA[
+<h2>Valoare de sortare</h2>
+<p>Utilă pentru sortarea în limbaj natural a listelor de linkuri, de ex. după numele de familie al unei persoane, mai degrabă decât după prenume, sau după expresii care încep cu un articol hotărât sau nehotărât.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Adresa linkului. Dacă linkul indică spre un alt site, atunci trebuie precedat de <code>http://</code> sau <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Data publicării"><![CDATA[
+<h2>Data publicării</h2>
+<p>Momentul în care un link este publicat sau revizuit cel mai recent. Ora poate fi setată la momentul publicării elementului sau la un moment arbitrar în trecut sau viitor.</p>
+<p>Căsuțele corespund următoarelor informații:</p>
+<ul>
+    <li>An / Lună / Zi</li>
+    <li>Oră (format 24 de ore) : Minut : Secundă</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Panou Autentificare">
+        <item id="remember_login" title="Rămâi autentificat cu acest browser"><![CDATA[
+<h2>Rămâi autentificat cu acest browser</h2>
+<p>Când este bifat, vei rămâne autentificat în contul tău Textpattern cu browserul web curent până când alegi să te deloghezi. Dacă nu este bifat, vei fi delogat automat după o perioadă de inactivitate.</p>
+<p>Necesită ca modulele cookie să fie activate în browser.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Panou Plugin">
+        <item id="install_plugin" title="Instalează plugin"><![CDATA[
+<h2>Instalează plugin</h2>
+<p>Lipește aici conținutul fișierului text compilat al pluginului, apoi folosește „Încărcare” pentru a începe instalarea. Orice plugin pe care îl încarci cu același nume ca unul instalat anterior va suprascrie versiunea instalată cu versiunea încărcată.</p>
+<p>Textul pluginului pe care îl lipești aici <strong>nu</strong> este codul PHP brut, ci textul codificat Base64, de obicei precedat de un antet care conține informații despre plugin (cum ar fi numele pluginului, versiunea și descrierea, numele autorului etc.).</p>
+<p>Poți obține adesea versiuni compilate ale pluginurilor din <a rel="external" target="_blank" href="https://plugins.textpattern.com/">depozitul de pluginuri <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> sau din canalul desemnat al unui autor de plugin, cum ar fi site‑ul său sau GitHub.</p>
+<p>Poți de asemenea lipi aici un URL către un fișier text compilat Textpattern, dacă site‑ul extern permite acest lucru.</p>
+<p>Toate pluginurile încărcate vor trece printr‑un pas de verificare care îți permite să inspectezi codul și conținutul pluginului înainte de instalare.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Încarcă plugin"><![CDATA[
+<h2>Încarcă plugin</h2>
+<p>Folosește acest formular pentru a încărca un fișier plugin. Pluginurile încărcate (și orice resurse) sunt stocate în directorul „plugins”.</p>
+<p>Tipurile de pluginuri care pot fi încărcate aici sunt:</p>
+<ul>
+<li>Fișiere șablon PHP Textpattern care conțin cod complet, metadate, șiruri Textpack și text de ajutor.</li>
+<li>Fișiere text compilate Textpattern care conțin cod complet, metadate, șiruri Textpack și text de ajutor.</li>
+<li>Pachete zip Textpattern care conțin informații de manifest și cod, metadate, șiruri Textpack, text de ajutor și fișiere suport.</li>
+<li>Fișiere PHP brute (deși acestea nu vor popula metadate suplimentare și nu sunt recomandate).</li>
+</ul>
+<p>Orice plugin pe care îl încarci cu același nume ca unul instalat anterior va suprascrie versiunea instalată cu versiunea încărcată.</p>
+<p>Toate pluginurile încărcate vor trece printr‑un pas de verificare care îți permite să inspectezi codul și conținutul pluginului înainte de instalare.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Panou Preferințe">
+        <item id="admin_side_plugins" title="Folosește pluginuri pe partea de administrare?"><![CDATA[
+<h2>Folosește pluginuri pe partea de administrare?</h2>
+<p>Pluginurile de admin pot schimba modul de funcționare al interfeței de administrare. Ele se pot lega de acțiuni deja existente, cum ar fi editarea sau publicarea articolelor, sau pot adăuga panouri noi pentru funcționalități suplimentare/extinse.</p>
+<p>Dacă dorești să afli mai multe despre pluginurile de admin, consultă pagina <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extinderea Textpattern <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> din <a rel="external" target="_blank" href="https://docs.textpattern.com/">Documentația utilizatorului Textpattern <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>. Pluginuri de toate tipurile sunt listate pe site‑ul <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opțiuni avansate"><![CDATA[
+<h2>Opțiuni avansate</h2>
+<p>Afișează grupul de preferințe avansate, unde se pot configura setări suplimentare, cum ar fi:</p>
+<ul>
+    <li>Funcții PHP permise în <code>txp:evaluate</code>.</li>
+    <li>Tipuri personalizate de șabloane de formulare.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Permite PHP în articole?"><![CDATA[
+<h2>Permite PHP în articole?</h2>
+<p>Când este activată, această setare va permite folosirea PHP în articole. Autorul trebuie să aibă privilegii suficiente pentru a face acest lucru (implicit, numai <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Publiciștii” <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Editorii coordonatori” <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> și <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Editorii de conținut” <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pot).</p>
+<p><strong>Este recomandat cu tărie să dezactivezi această opțiune</strong>, cu excepția cazului în care ai absolut nevoie de această funcție. Orice fel de cod PHP potențial dăunător/periculos, care poate distruge site‑ul sau poate scurge informații către terți, poate fi adăugat de orice autor și executat de oricine vizualizează acel articol.</p>
+<p>Codul PHP trebuie să aibă etichetele de deschidere și închidere PHP omise și, de asemenea, să fie încapsulat în taguri <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Permite suprascrierea formularului?"><![CDATA[
+<h2>Permite suprascrierea formularului?</h2>
+<p>Această setare permite autorilor de articole să suprascrie formularul care va fi utilizat la redarea articolului lor. Dacă este activată, un meniu derulant „Formular de suprascriere” va fi disponibil la editarea unui articol.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Permite PHP în pagini?"><![CDATA[
+<h2>Permite PHP în pagini?</h2>
+<p>Când este activată, această setare permite cod PHP în șabloanele de pagini și formulare.</p>
+<p><strong>Este recomandat cu tărie să dezactivezi această opțiune</strong>, cu excepția cazului în care ai absolut nevoie de această funcție. Orice fel de cod PHP potențial dăunător/periculos, care poate distruge site‑ul sau poate scurge informații către terți, poate fi adăugat de orice alt utilizator și executat de un administrator sau vizitator al site‑ului nepregătit.</p>
+<p>Codul PHP trebuie să omită etichetele de deschidere și închidere PHP și, de asemenea, să fie încapsulat în taguri <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Format dată arhivă"><![CDATA[
+<h2>Format dată arhivă</h2>
+<p>Modul în care datele vor apărea la articolele din secțiunile site‑ului tău.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Afișezi rezumatul pe pagina de editare a articolului?"><![CDATA[
+<h2>Afișezi rezumatul pe pagina de editare a articolului?</h2>
+<p>Dacă alegi „Nu”, câmpul de rezumat nu va fi afișat autorului pe ecranul de editare a articolului.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Atașezi titluri la linkurile permanente?"><![CDATA[
+<h2>Atașezi titluri la linkurile permanente?</h2>
+<p>Această setare va atașa la URL o versiune generată automat a titlului articolului. Ea este generată automat sau poate fi suprascrisă manual în „Titlu doar pentru URL” atunci când editezi un articol.</p>
+<p>Setarea va avea efect numai când folosești URL‑uri curate. Pentru anumite limbi, acest lucru poate duce la URL‑uri lungi și inestetice, caz în care probabil vei dori să setezi această opțiune pe „Oprit”.</p>
+        ]]></item>
+        <item id="auto_dst" title="Ajustezi automat ora de vară?"><![CDATA[
+<h2>Ajustezi automat ora de vară?</h2>
+<p>Această setare permite Textpattern să modifice momentul în care are loc DST (Daylight Saving Time) în zona ta. Dacă este setată pe „Nu”, vei putea schimba manual preferința „DST activat”.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Comentariu nou înseamnă site actualizat?"><![CDATA[
+<h2>Comentariu nou înseamnă site actualizat?</h2>
+<p>Baza de date Textpattern păstrează evidența momentului în care a avut loc cea mai recentă modificare a site‑ului tău. Când această setare este „Da”, un comentariu nou va actualiza de asemenea această valoare. Această valoare este folosită, de exemplu, pentru funcționalitatea <code>"Trimite antet Last-Modified"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Aplici rel=&quot;nofollow&quot; la comentarii?"><![CDATA[
+<h2>Aplici rel="nofollow" la comentarii?</h2>
+<p>Dacă este setat pe „Da”, acest lucru va adăuga un atribut suplimentar la linkurile din comentarii. Este conceput ca o măsură care elimină motivația spammerilor de comentarii și a fost inițiată de o serie de motoare de căutare și dezvoltatori de software. Poți afla mai multe citind <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">anunțul Google <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+<p><strong>Notă:</strong> Această setare nu influențează funcționalitatea site‑ului tău. Este posibil să împiedice sau să diminueze influența comentariilor tale atunci când unele motoare de căutare clasează site‑urile la care se face legătură din acele comentarii.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Prezinți comentariile ca o listă numerotată?"><![CDATA[
+<h2>Prezinți comentariile ca o listă numerotată?</h2>
+<p>Determină dacă comentariile la articole vor fi învelite cu tagul HTML <code>&lt;ol&gt;</code>, iar comentariile individuale vor fi învelite în tagul <code>&lt;li&gt;</code> (ceea ce face ca comentariile să fie prezentate ca o listă numerotată), sau dacă, în schimb, comentariile individuale vor fi învelite cu tagul <code>&lt;div&gt;</code>.</p>
+<p>Indiferent de valoare, poți suprascrie tagurile folosite la nivel de formular individual, modificând tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>, aflat în formularul <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Anexezi automat comentariile la articole?"><![CDATA[
+<h2>Anexezi automat comentariile la articole?</h2>
+<p>Această setare determină dacă comentariile și formularul de comentarii sunt anexate automat tuturor articolelor individuale (prin includerea automată a conținutului formularului <code>comments_display</code>).</p>
+<p>În majoritatea cazurilor, vei dori ca această opțiune să fie setată pe „Nu”, deoarece astfel ai mai multă flexibilitate în poziționarea comentariilor în designul site‑ului tău. Va trebui să adaugi manual tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> în orice șabloane bazate pe articole în care dorești să apară comentariile.</p>
+<p>Dacă întâmpini afișarea dublată a comentariilor într‑un articol, atunci este probabil ca șabloanele tale să aibă tagul <code>&lt;txp:comments /&gt;</code> într‑un șablon și, de asemenea, opțiunea „Anexezi automat comentariile la articole?” setată pe „Da”.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Format dată comentarii"><![CDATA[
+<h2>Format dată comentarii</h2>
+<p>Modul în care datele comentariilor vor apărea vizitatorilor site‑ului tău.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Invitație implicită la comentarii"><![CDATA[
+<h2>Invitație implicită la comentarii</h2>
+<p>Dacă permiți vizitatorilor să comenteze pe site‑ul tău, acesta este textul implicit de invitație. De exemplu:</p>
+<ul>
+    <li>Comentarii</li>
+    <li>Adaugă un comentariu</li>
+    <li>Feedback</li>
+    <li>Adnotări</li>
+</ul>
+<p>Reține că textul invitației poate fi întotdeauna schimbat la nivel de articol individual.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Comentariile sunt dezactivate după"><![CDATA[
+<h2>Comentariile sunt dezactivate după</h2>
+<p>Folosește această setare pentru a stabili după cât timp comentariile vor fi dezactivate pentru articole (poate fi setat pe „Niciodată” pentru a permite comentarii la nesfârșit).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Permiți imagini ale comentatorilor în comentarii?"><![CDATA[
+<h2>Permiți imagini ale comentatorilor în comentarii?</h2>
+<p>Cu această opțiune setată pe „Nu”, orice imagini incluse în comentarii vor fi eliminate.</p>
+        ]]></item>
+        <item id="comments_mode" title="Mod comentarii"><![CDATA[
+<h2>Mod comentarii</h2>
+<p>Dacă este selectat „nopopup” (recomandat), fereastra curentă va fi reîncărcată pentru a afișa doar articolul curent, cu comentariile dedesubt.</p>
+<p>Dacă este selectat „popup”, se va deschide o fereastră nouă de browser când se face clic pe linkul de comentarii (aceasta folosește formularul <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderezi comentariile?"><![CDATA[
+<h2>Moderezi comentariile?</h2>
+<p>Când este setat pe „Da”, fiecare comentariu nou va avea vizibilitatea dezactivată până când va fi revizuit. Trebuie să moderezi manual și să faci vizibil fiecare comentariu (un mesaj va fi trimis prin email autorului articolului când este primit un comentariu nou).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Comentariile sunt activate implicit?"><![CDATA[
+<h2>Comentariile sunt activate implicit?</h2>
+<p>Dacă este setat pe „Da”, comentariile vor fi activate automat pentru fiecare articol publicat. Dacă este setat pe „Nu”, va trebui să activezi comentariile în panoul „Scriere” al articolului de fiecare dată când dorești să accepți comentarii.</p>
+<p>Comentariile pot fi activate/dezactivate în orice moment, la nivel de articol individual.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Comentariile necesită adresa de email a comentatorului?"><![CDATA[
+<h2>Comentariile necesită adresa de email a utilizatorului?</h2>
+<p>Dacă este setat pe „Da”, persoanele care doresc să comenteze articolul tău vor trebui să introducă o adresă de email în formularul de comentarii. Nu vor putea publica un comentariu dacă nu furnizează o adresă de email.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Comentariile necesită numele comentatorului?"><![CDATA[
+<h2>Comentariile necesită numele comentatorului?</h2>
+<p>Dacă este setat pe „Da”, persoanele care doresc să comenteze articolul tău vor trebui să introducă un nume în formularul de comentarii. Nu vor putea trimite un comentariu dacă nu furnizează un nume.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Trimiți comentariile autorului prin email?"><![CDATA[
+<h2>Trimiți comentariile autorului prin email?</h2>
+<p>Dacă este setat pe „Da”, ori de câte ori este primit un comentariu nou la un articol, o copie va fi trimisă prin email autorului acelui articol.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Permiți mai mult marcaj Textile în comentarii?"><![CDATA[
+<h2>Permiți mai mult marcaj Textile în comentarii?</h2>
+<p>Când este setat pe „Da”, comentariile pot conține elemente <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> care altfel ar fi tratate ca text simplu, cum ar fi:</p>
+<ul>
+    <li>titluri</li>
+    <li>liste ordonate și neordonate</li>
+    <li>note de subsol</li>
+    <li>tabele</li>
+    <li>cod</li>
+    <li>sintaxă extinsă de bloc (<code>bc..</code>, <code>bq..</code> etc.)</li>
+</ul>
+<p><strong>Notă:</strong> Din motive de securitate, HTML brut este transformat în text obișnuit.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Conturi permise să se autentifice simultan"><![CDATA[
+<h2>Conturi permise să se autentifice simultan</h2>
+<p>O listă separată prin virgule de nume de conturi care se pot conecta în mai multe browsere/sesiuni. Acest lucru este util în timpul dezvoltării, pentru a partaja un login cu clienții.</p>
+<p>Folosirea acestei funcții este un risc de securitate și <strong>nu este recomandată pe site‑uri live</strong>. Panoul Diagnostic va emite un avertisment dacă contul tău de utilizator este configurat pentru utilizare simultană pe un site live.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Tipuri personalizate de șabloane de formulare"><![CDATA[
+<h2>Tipuri personalizate de șabloane de formulare</h2>
+<p>Pe lângă tipurile standard de șabloane de formulare (articol, fișier, diverse etc.), Publiciștii pot defini tipuri personalizate. Scopul tipurilor personalizate de șabloane de formulare este dublu: clasificarea mai ușoară a șabloanelor de formulare și definirea de resurse personalizate.</p>
+<p>Formatul preferinței este <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>, fiecare secțiune corespunzând unui tip de șablon de formular.</p>
+<p>Pentru a defini un tip personalizat de formular (de ex. <code>js</code>) trebuie adăugată (pe o linie separată) o secțiune <code>[js]</code>. Un titlu implicit poate fi setat printr‑o intrare <code>title="Javascript"</code> în secțiunea corespunzătoare. Dacă este nevoie, pot fi adăugate și titluri localizate (de ex. <code>ru="Скрипт"</code>).</p>
+<p>În plus, poate fi specificat un <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">tip media <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> (cunoscut anterior ca tip MIME) pentru un șablon de formular, de ex. <code>mediatype="application/javascript"</code>. Aceasta transformă șabloanele de formulare din acest tip în resurse personalizate care pot fi servite ca tip media setat, fie din baza de date, fie de pe disc (fișiere plate) prin tagul <code>&lt;txp:output_form /&gt;</code>. De exemplu, un șablon de formular numit <code>myscript.js</code> de tip <code>[js]</code> cu un tip media <code>application/javascript</code> poate fi inclus în codul tău astfel:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Aceasta va genera următorul tag HTML <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Numai șabloanele de formulare cu extensia de nume corespunzătoare tipului lor (de ex. <code>myscript.js</code>) pot fi servite ca fișiere plate. În acest caz, ele nu vor fi procesate deloc de Textpattern și vor fi accesibile prin URL‑ul lor.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Câmpuri personalizate"><![CDATA[
+<h2>Câmpuri personalizate</h2>
+<p>Câmpurile personalizate sunt folosite pentru a reține date suplimentare despre articole. Poți defini până la zece, dându‑le un nume aici. Fiecare va apărea ca un câmp separat în panoul Scriere, pentru a permite asocierea de date personalizate cu fiecare articol.</p>
+<p>Poți numi câmpurile în orice mod dorești, dar ține cont de următoarele:</p>
+<ul>
+<li>Folosirea spațiilor îmbunătățește lizibilitatea în panoul Scriere, dar câmpurile <em>nu</em> vor putea fi folosite ca parametri de sortare sau filtrare într‑un tag article_custom. Ia în considerare folosirea de underscore în schimb, dacă dorești să folosești această funcționalitate.</li>
+<li>Ai grijă când denumești câmpurile, astfel încât să nu se ciocnească cu nume de câmp rezervate în Textpattern. De exemplu, nu folosi <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> etc., deoarece vei obține rezultate ciudate sau site‑uri nefuncționale.</li>
+<li>Datele din fiecare câmp sunt limitate la 255 de caractere de text simplu.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Formatul datei"><![CDATA[
+<h2>Formatul datei</h2>
+<p>Această opțiune va afecta doar modul în care datele articolelor apar pe prima pagină a site‑ului tău.</p>
+        ]]></item>
+        <item id="default_event" title="Panou implicit"><![CDATA[
+<h2>Panou implicit</h2>
+<p>Panoul interfeței de administrare Textpattern care va apărea primul atunci când oricine se autentifică.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Stare implicită de publicare"><![CDATA[
+<h2>Stare implicită de publicare</h2>
+<p>Definește starea de vizibilitate la publicare a articolelor Textpattern nou create.</p>
+<p>Reține că această preferință nu afectează starea articolelor create sau editate înainte de orice modificare.</p>
+<p>Starea implicită de publicare este una dintre următoarele:</p>
+<ul>
+    <li>Ciornă</li>
+    <li>Ascuns</li>
+    <li>În așteptare</li>
+    <li>Public</li>
+    <li>Fixat</li>
+</ul>
+<p>Un articol <strong>ciornă</strong> este considerat lucru în curs de desfășurare și nu este vizibil în afara zonei de administrare Textpattern (adică nu este vizibil pe partea publică Textpattern și nu este distribuit în fluxuri).</p>
+<p>Un articol <strong>ascuns</strong> nu este vizibil în afara zonei de administrare Textpattern.</p>
+<p>Un articol <strong>în așteptare</strong> este considerat gata pentru publicare și în așteptarea aprobării, dar nu este vizibil în afara zonei de administrare Textpattern.</p>
+<p>Un articol <strong>public</strong> este, de obicei, vizibil în afara zonei de administrare Textpattern (adică vizibil pe partea publică Textpattern, distribuit în fluxuri dacă preferința permite). Dacă un articol este public și are o dată de expirare, starea va rămâne publică după ce acea dată a fost atinsă, dar articolul apare în afara zonei de administrare doar dacă este permisă publicarea articolelor expirate.</p>
+<p>Un articol <strong>fixat</strong> este similar cu un articol <strong>public</strong>, în sensul că poate fi vizualizat în afara zonei de administrare Textpattern, dar <strong>nu</strong> va apărea în listele de articole decât dacă tagul <code>article</code> sau <code>article_custom</code> respectiv include un atribut <code>status</code> cu valoarea <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Selectează ce doctype HTML dorești să folosești (fie HTML5, fie XHTML). Aceasta afectează formularele de introducere a comentariilor, randarea Textile a <code>&lt;abbr&gt;</code> sau <code>&lt;acronym&gt;</code> și tagurile <code>&lt;link&gt;</code> generate de <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Activezi previzualizarea temei de dezvoltare?"><![CDATA[
+<h2>Activezi previzualizarea temei de dezvoltare?</h2>
+<p>Utilizatorii cu privilegii suficiente (implicit, cei cu roluri de Publicist și Designer) pot dezvolta și previzualiza în siguranță o temă nouă, în timp ce toți ceilalți utilizatori vor vedea în continuare tema veche (până când noua temă este implementată).</p>
+<p>Totuși, utilizatorii privilegiați care nu doresc să participe la dezvoltarea temelor pot dezactiva previzualizarea temei de dezvoltare. Lor li se va servi tema „publică” curentă, la fel ca vizitatorilor standard ai site‑ului.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Activezi suportul pentru taguri scurte?"><![CDATA[
+<h2>Activezi suportul pentru taguri scurte?</h2>
+<p>Tagurile Textpattern au forma <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Este posibil să reduci cantitatea de tastare implicată activând o notație prescurtată prin care <code>txp:</code> poate fi omis, urmând câteva reguli simple. Iată câteva exemple pentru a demonstra conceptul:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> devine <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> devine <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> devine <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> devine <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> devine <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (reține că prefixul pluginului poate fi folosit pentru tagul <code>else</code>).</li>
+</ul>
+<p>Dacă un tag conține o linie jos (underscore) și activezi tagurile scurte, conceptul de bază este:</p>
+<ol>
+    <li>Elimină prefixul <code>txp:</code>.</li>
+    <li>Înlocuiește prima apariție a liniei jos cu <code>::</code>.</li>
+</ol>
+<p>Reține că setarea acestei preferințe nu afectează abilitatea de a folosi coduri scurte <code>&lt;txp:output_form /&gt;</code> pentru a reda fragmente de formulare. Poți folosi în continuare <code>&lt;txp::shortcode /&gt;</code>, care va fi interpretat ca <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Activezi serverul XML‑RPC?"><![CDATA[
+<h2>Activezi serverul XML‑RPC?</h2>
+<p>Dacă dorești să folosești <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML‑RPC <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pentru a controla Textpattern de la distanță (de ex. aplicații desktop sau mobile), trebuie să activezi serverul XML‑RPC setând această opțiune pe „Da”.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Folosești funcții de email îmbunătățite"><![CDATA[
+<h2>Folosești funcții de email îmbunătățite</h2>
+<p>Setarea acestei opțiuni pe „Nu” va direcționa tot emailul – cum ar fi cererile de resetare a parolei de cont și emailurile trimise de pluginuri precum com_connect – prin funcția <code>mail()</code> a PHP. Selectarea „Da” va folosi în schimb PHPMailer inclus, ceea ce deschide setări opționale pentru direcționarea emailului prin servere SMTP externe.</p>
+<p>Dacă ai probleme cu livrarea emailurilor (în special către furnizori online precum Gmail, Outlook, Yahoo! etc.), motivul probabil este că domeniul tău nu este văzut ca sursă de încredere. Comutarea pe „Da” poate îmbunătăți livrabilitatea. În plus, folosirea SMTP poate oferi o compatibilitate mai bună cu anumiți furnizori de email și poate îmbunătăți și mai mult livrabilitatea.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Jurnalele expiră după câte zile?"><![CDATA[
+<h2>Jurnalele expiră după câte zile?</h2>
+<p>Când jurnalizarea Textpattern este activată, poți specifica cât timp (în zile) ar trebui păstrate jurnalele. De exemplu, „7” va păstra jurnalele disponibile timp de șapte zile.</p>
+<p><strong>Notă:</strong> Jurnalele sunt tăiate doar atunci când vizualizezi panoul „Jurnale vizitatori” și, altfel, vor continua să crească în dimensiune.</p>
+        ]]></item>
+        <item id="file_base_path" title="Calea directorului de fișiere"><![CDATA[
+<h2>Calea directorului de fișiere</h2>
+<p>Setează <strong>calea absolută</strong> către directorul în care încărcările de fișiere vor fi salvate permanent. PHP trebuie să aibă acces de scriere la acest director.</p>
+<p><strong>Notă:</strong> Ia în considerare mutarea acestui director în afara directorului public al site‑ului tău, pentru securitate sporită.</p>
+        ]]></item>
+        <item id="file_download_header" title="Antet descărcare fișier"><![CDATA[
+<h2>Antet descărcare fișier</h2>
+<p>Îți permite să personalizezi modul în care sunt gestionate descărcările de fișiere.</p>
+<p>De obicei, toate descărcările sunt tratate ca atașamente și sunt descărcate (în funcție de modul în care este configurat browserul tău pentru a gestiona acel tip de fișier). Dacă dorești să oferi indicii despre cum ai prefera să fie tratate unele sau toate tipurile de fișiere, poți furniza aici cod de taguri pentru a face acest lucru. Un exemplu ar putea fi afișarea inline a fișierelor PDF pe care le‑ai adăugat la categoria Textpattern „inline-pdf”, în locul descărcării lor:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Dimensiunea maximă a fișierelor încărcate (în bytes)"><![CDATA[
+<h2>Dimensiunea maximă a fișierelor încărcate (în bytes)</h2>
+<p>Poți restricționa dimensiunea maximă (în bytes) pentru fișierele încărcate. Reține că această valoare este limitată și de configurația PHP. Dacă Textpattern detectează că configurația PHP limitează dimensiunea încărcărilor la o valoare mai mică, o va corecta automat în jos. Dacă dorești să permiți încărcări de fișiere mai mari prin browser, contactează furnizorul de găzduire (valorile relevante în <code>php.ini</code> sunt <code>post_max_size</code>, <code>upload_max_filesize</code> și <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Fus orar"><![CDATA[
+<h2>Fus orar</h2>
+<p>Pentru a afișa datele în fusul orar local, selectează fusul orar.</p>
+        ]]></item>
+        <item id="img_dir" title="Director imagini"><![CDATA[
+<h2>Director imagini</h2>
+<p>Dacă dorești să personalizezi numele directorului de imagini, o poți face aici. Mai întâi trebuie să creezi directorul în rădăcina instalării Textpattern, iar apoi trebuie să te asiguri că PHP poate scrie în acel director.</p>
+<p>Această cale este întotdeauna o <strong>cale relativă</strong> (față de directorul instalării tale Textpattern).</p>
+<p>Valoarea implicită este <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Include adresa de email în fluxurile Atom?"><![CDATA[
+<h2>Include adresa de email în fluxurile Atom?</h2>
+<p>Aceasta îți permite să incluzi adresa de email a autorului (așa cum este setată în contul său de utilizator) al unui articol în partea <code>author</code> din fluxurile Atom.</p>
+        ]]></item>
+        <item id="is_dst" title="Ora de vară este activată?"><![CDATA[
+<h2>Ora de vară este activată?</h2>
+<p>Dacă DST (Daylight Saving Time) este în prezent activată pentru fusul tău orar.</p>
+        ]]></item>
+        <item id="logging" title="Jurnalizare"><![CDATA[
+<h2>Jurnalizare</h2>
+<p>Poți selecta nivelul de jurnalizare a vizitatorilor efectuat de Textpattern:</p>
+<ul>
+    <li><strong>Toate accesările:</strong> Textpattern va înregistra toate vizualizările de pagini de pe site</li>
+    <li><strong>Numai refereri:</strong> Textpattern va înregistra doar vizitele venite prin trimitere de pe alte site‑uri</li>
+    <li><strong>Niciuna:</strong> Textpattern nu va înregistra nicio vizualizare de pagină</li>
+</ul>
+<p>Începând cu Textpattern 4.7.0, nicio informație privind adresele IP ale vizitatorilor nu este colectată sau stocată de Textpattern. Dacă colectezi sau stochezi adrese IP în afara Textpattern, ia toate măsurile de precauție adecvate pentru a stoca și/sau folosi datele în conformitate cu orice legi aplicabile, cum ar fi <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>, și aplică o securitate puternică în fiecare aspect al serverului și instalării Textpattern pentru a evita compromiterea acestor date.</p>
+<p>Se recomandă cu fermitate să lași această setare la valoarea implicită, „Niciuna”, cu excepția cazului în care ai absolut nevoie de aceste informații și, în plus, declari public modul în care intenționezi să le folosești.</p>
+        ]]></item>
+        <item id="max_url_len" title="Lungimea maximă a URL‑ului (în caractere)"><![CDATA[
+<h2>Lungimea maximă a URL‑ului (în caractere)</h2>
+<p>Aceasta împiedică funcționarea URL‑urilor care sunt mai lungi decât lungimea specificată. Poate fi utilă pentru limitarea daunelor și securitatea site‑ului.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Afișează linkurile de ajutor inline pe partea de admin"><![CDATA[
+<h2>Afișează linkurile de ajutor inline pe partea de admin</h2>
+<p>Dacă dorești să ascunzi linkurile de ajutor inline pe partea de admin (ferestrele pop‑up de ajutor Textpattern) în întregul sistem, setează această opțiune pe „Niciuna”.</p>
+        ]]></item>
+        <item id="never_display_email" title="Ascunzi adresa de email a comentatorului?"><![CDATA[
+<h2>Ascunzi adresa de email a comentatorului?</h2>
+<p>Această setare controlează dacă adresa de email a unui comentator ar trebui să fie afișată public.</p>
+<p>Se recomandă ca adresele de email să nu fie afișate, ca un gest de curtoazie față de utilizatorii tăi, dar pot exista anumite situații în care afișarea adreselor de email ale comentatorilor este de dorit.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Folosești codare ISO‑8859‑1 în emailuri (implicit este UTF‑8)?"><![CDATA[
+<h2>Folosești codare ISO‑8859‑1 în emailuri (implicit este UTF‑8)?</h2>
+<p>Textpattern folosește codare UTF‑8 ori de câte ori este posibil, implicit, inclusiv pentru emailurile trimise. Totuși, unele clienți de email mai vechi (inclusiv unele versiuni de Microsoft Outlook) nu au suport corespunzător pentru UTF‑8. Dacă întâmpini caractere deformate în emailuri, această setare va converti textul în codare ISO‑8859‑1 înainte de trimitere.</p>
+<p><strong>Notă:</strong> Dacă folosești o limbă ale cărei caractere nu pot fi reprezentate în ISO‑8859‑1, din păcate această setare nu te va ajuta. Ar trebui să cauți un client de email compatibil cu UTF‑8 (sau Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Tipuri de formulare de suprascriere"><![CDATA[
+<h2>Tipuri de formulare de suprascriere</h2>
+<p>Alege ce tipuri de formulare vor avea șabloanele lor puse la dispoziție în panoul Scriere ca formulare de suprascriere.</p>
+        ]]></item>
+        <item id="permlink_format" title="Model URL pentru titlul linkului permanent"><![CDATA[
+<h2>Model URL pentru titlul linkului permanent</h2>
+<p>Aceasta definește metoda prin care sunt construite și atribuite URL‑urile articolelor când este folosit un mod non‑dezordonat.</p>
+<p>Când un articol este publicat, URL‑ul său este generat din titlul articolului, cu excepția cazului în care este furnizat un URL specific în câmpul „Titlu doar pentru URL”.</p>
+<p>Consideră următorul exemplu de titlu de articol: <em>Ann and Bob eat cake</em></p>
+<p>Când opțiunea „Model URL pentru titlul linkului permanent” este setată la „Cu liniuțe (title-like-this)”, URL‑ul pentru articol ar fi:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Când opțiunea este setată la „Intercapped (TitleLikeThis)”, URL‑ul pentru articol ar fi:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Model URL articol"><![CDATA[
+<h2>Model URL articol</h2>
+<p>Aceasta definește metoda prin care articolele individuale sunt accesate prin URL‑ul afișat folosind tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
+<p>Modul „?=messy” este cel mai compatibil – va funcționa cu puțină sau fără configurație necesară – dar este cel mai puțin benefic în termeni de lizibilitate a URL‑urilor și optimizare pentru motoarele de căutare (SEO). În acest mod, URL‑urile articolelor de pe site ar arăta astfel:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Toate celelalte moduri necesită funcționalitate de rescriere a URL‑urilor pe serverul web (de ex. modulul <code>mod_rewrite</code> al Apache sau directive de rescriere NGINX în blocul <code>server</code>). Dacă serverul tău nu suportă funcționalitatea de rescriere a URL‑urilor, fie contactează furnizorul de găzduire, fie folosește modul „?=messy” descris mai sus.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Calea directorului de cache pentru pluginuri"><![CDATA[
+<h2>Calea directorului de cache pentru pluginuri</h2>
+<p>Această setare este folosită în principal de dezvoltatorii de pluginuri. Când este specificată, poți plasa fișierul sursă al pluginului (necompilat) în acest director, iar Textpattern îl va încărca automat, astfel încât să poți edita ușor pluginul și să vezi imediat efectele, fără a fi nevoie să instalezi/activezi pluginul. <strong>Atenție</strong> însă, folosind această metodă, un plugin defect (care nu se poate compila) poate strica și Textpattern!</p>
+<p>Se recomandă să încarci pluginuri prin panoul standard „Pluginuri” pe un site de producție, mai degrabă decât să folosești directorul de cache pentru pluginuri.</p>
+<p><strong>Notă:</strong> Nu specifica același director atât pentru „temporar”, cât și pentru „plugin cache”, deoarece acest lucru va cauza probleme (Textpattern ar încerca să ruleze conținutul fișierelor temporare de jurnal ca pluginuri).</p>
+        ]]></item>
+        <item id="production_status" title="Stare producție"><![CDATA[
+<h2>Stare producție</h2>
+<p>Un site Textpattern are unul dintre următoarele trei moduri:</p>
+<ol>
+    <li>„Debugging”</li>
+    <li>„Testing”</li>
+    <li>„Live”</li>
+</ol>
+<h3>Mod Debugging</h3>
+<p>Toate rapoartele de eroare PHP de pe site‑ul tău live vor fi vizibile, la fel și avertismentele privind codul și pluginurile nefuncționale. În plus, următoarele informații vor fi vizibile când vizualizezi codul sursă HTML al paginilor live:</p>
+<ul>
+    <li>timpul necesar serverului pentru a construi pagina („Runtime”)</li>
+    <li>numărul de interogări MySQL executate</li>
+    <li>consumul maxim aproximativ de memorie</li>
+    <li>toate tagurile Textpattern întâlnite în timpul construirii paginii (cunoscut și ca „trasare taguri”)</li>
+</ul>
+<h3>Mod Testing</h3>
+<p>Toate rapoartele de eroare PHP de pe site‑ul tău live vor fi vizibile, la fel și avertismentele privind codul și pluginurile nefuncționale. Următoarele informații vor fi vizibile când vizualizezi codul sursă HTML al paginilor live:</p>
+<ul>
+    <li>timpul necesar serverului pentru a construi pagina („Runtime”)</li>
+    <li>numărul de interogări MySQL executate</li>
+    <li>consumul maxim aproximativ de memorie</li>
+</ul>
+<h3>Mod Live</h3>
+<p>Niciun raport de eroare sau informații de diagnostic nu vor fi trimise către pagină. În general, modul Live este preferat, deoarece oferă cea mai bună experiență de utilizare și impune cea mai mică încărcare asupra serverului.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema pentru partea publică"><![CDATA[
+<h2>Tema pentru partea publică</h2>
+<p>Tema implicită pentru partea publică care va fi folosită atunci când oricine vizitează site‑ul tău public. O temă implicită este preinstalată cu Textpattern, plus opțiunea de a începe fără nicio temă. Poți de asemenea adăuga pachete de teme în directorul <code>textpattern/themes</code> pentru a le face disponibile pentru utilizare.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publici articolele expirate?"><![CDATA[
+<h2>Publici articolele expirate?</h2>
+<p>Când este setat pe „Da”, articolele expirate vor continua să fie afișate pe site după ce data lor de expirare a trecut. Poți folosi tagul <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pentru a afișa conținut sau marcaj alternativ pentru articolele expirate.</p>
+<p>Când este setat pe „Nu”, articolele expirate vor fi eliminate de pe site‑ul public și vor returna un status HTTP „410 Gone”. Setarea implicită este „Nu”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Trimite detaliile de login de la această adresă de email"><![CDATA[
+<h2>Trimite detaliile de login de la această adresă de email</h2>
+<p>Specifică o adresă de email care va fi folosită ca adresă „From:” a expeditorului în mesajele cu informații de autentificare pentru utilizatorii noi.</p>
+<p>Dacă această preferință este lăsată goală sau conține o adresă de email invalidă, Textpattern va folosi în schimb numele și adresa utilizatorului autentificat în prezent.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Câte articole ar trebui incluse în fluxuri?"><![CDATA[
+<h2>Câte articole ar trebui incluse în fluxuri?</h2>
+<p>Aceasta este numărul maxim de articole curente care vor fi distribuite simultan, în formate RSS și Atom.</p>
+<p>Se recomandă o valoare mică, precum <code>5</code> până la <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Număr suplimentar de treceri ale parserului"><![CDATA[
+<h2>Număr suplimentar de treceri ale parserului</h2>
+<p>Parserul de taguri Textpattern, de obicei, înlocuiește toate tagurile tale cu conținut din baza de date într‑o singură trecere a șablonului de pagină. În unele cazuri, acest lucru poate fi insuficient, de exemplu:</p>
+<ul>
+    <li>Când se folosesc pluginuri cu ordin de încărcare mic drept atribute de tag</li>
+    <li>Înlocuiri de cod în interiorul tagurilor <code>&lt;txp:php&gt;</code></li>
+    <li>Sărirea elementelor de pagină mai devreme în pagină, astfel încât acestea să poată primi conținut derivat dintr‑un tag procesat mai târziu</li>
+</ul>
+<p>În mod tradițional, Textpattern a rulat o trecere suplimentară (numită „secondpass”) din motive de compatibilitate veche, de unde și valoarea implicită <code>1</code> a acestei preferințe. Mai multe treceri, totuși, cresc șansele ca taguri neintenționate să scape și să fie procesate. Îmbunătățirile recente ale parserului de taguri au redus nevoia acestei a doua treceri. Așadar, cu excepția cazului în care folosești a doua trecere dintr‑un motiv dedicat, redu această valoare la <code>0</code> pentru a face site‑ul mai sigur.</p>
+<p>Dacă ulterior găsești taguri neprocesate care sunt redate pe site‑ul tău (și nu există alte erori de taguri afișate în modurile Testing/Debugging din cauza perechilor de taguri nepotrivite), contactează‑ne, te rugăm, cu un exemplu de șablon de pagină/cod/plugin. Încercăm să eliminăm nevoia de treceri suplimentare ale parserului, iar aceste informații ne vor ajuta să realizăm acest lucru.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Trimiți antetul &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Trimiți antetul "Last-Modified"?</h2>
+<p>Când este setat, Textpattern va citi antetul HTTP <code>If-Modified-Since</code> al vizitatorului (dacă există) și îl va compara cu ultima actualizare a site‑ului. Dacă nimic nu s‑a schimbat de la ultima încărcare a paginii de către vizitator (adică dacă marca temporală trimisă de browser este aceeași cu ultima actualizare a site‑ului), se va trimite înapoi un antet care instructează browserul vizitatorului să folosească versiunea cache‑uită a paginii.</p>
+<p>Acest lucru poate reduce consumul de bandă, timpii de încărcare a paginilor și încărcarea serverului web.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Afișezi numărul de comentarii în fluxuri?"><![CDATA[
+<h2>Afișezi numărul de comentarii în fluxuri?</h2>
+<p>Când este setată pe „Da”, această opțiune va adăuga numărul de comentarii la titlurile articolelor din fluxurile RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Sloganul site‑ului"><![CDATA[
+<h2>Sloganul site‑ului</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Sloganul site‑ului <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> este un rezumat sau o descriere a site‑ului tău. Va fi folosit drept descriere a site‑ului oriunde este necesar, cum ar fi în fluxurile RSS/Atom, și poate fi folosit în orice număr de locuri de pe site, la discreția ta.</p>
+<p><strong>Notă:</strong> Sloganul site‑ului este opțional, dar poate fi necesar pentru un flux RSS sau Atom valid.</p>
+        ]]></item>
+        <item id="sitename" title="Numele site‑ului"><![CDATA[
+<h2>Numele site‑ului</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Numele sau titlul site‑ului tău <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>. Acesta va apărea în bara de titlu a browserului sau a cititorului de fluxuri al vizitatorului și în orice alt număr de locuri de pe site, la discreția ta.</p>
+        ]]></item>
+        <item id="siteurl" title="URL‑ul site‑ului"><![CDATA[
+<h2>URL‑ul site‑ului</h2>
+<p>Aceasta este adresa site‑ului tău Textpattern, de exemplu <code>www.example.com</code>.</p>
+<p><strong>Notă:</strong> Nu este nevoie de <code>http://</code>, <code>https://</code> sau de o bară oblică finală <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Director teme"><![CDATA[
+<h2>Director teme</h2>
+<p>Dacă dorești să personalizezi numele directorului în care fișierele plate ale temelor pentru partea publică vor fi salvate permanent, o poți face aici. Mai întâi trebuie să creezi directorul în rădăcina instalării Textpattern, iar apoi trebuie să te asiguri că PHP poate scrie în acel director.</p>
+<p>Această cale este întotdeauna o <strong>cale relativă</strong> (față de directorul instalării tale Textpattern).</p>
+<p>Valoarea implicită este <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Adresă expeditor SMTP (envelope)"><![CDATA[
+<h2>Adresă expeditor SMTP (envelope)</h2>
+<p>Această preferință ar trebui lăsată goală, cu excepția cazului în care întâmpini probleme la trimiterea de emailuri în Textpattern (dacă nu se trimite niciun email). Dacă apare această problemă, poți introduce aici orice adresă de email validă, de preferință una care are același nume de domeniu ca site‑ul unde ai instalat Textpattern (adică, dacă site‑ul tău este <code>https://example.com</code>, ai putea folosi <code>you@example.com</code>).</p>
+<p>Pentru cei interesați de detaliile tehnice:</p>
+<ul>
+    <li>Pe serverele UNIX‑like/macOS, adresa de email introdusă este folosită ca al 4‑lea parametru (prefixat cu „-f”) pentru funcția PHP <code>mail()</code></li>
+    <li>Pe serverele Windows, adresa de email introdusă este folosită pentru a seta (sau suprascrie) setarea <code>sendmail_from</code> din php.ini</li>
+</ul>
+<p>Acest lucru asigură faptul că adresa expeditorului pentru „plicul” SMTP (care nu este neapărat aceeași cu antetul „From:” pe care îl vezi în mod normal în emailuri) este setată la adresa de email introdusă aici, ceea ce este o cerință pentru trimiterea de emailuri pe unele servere web.</p>
+        ]]></item>
+        <item id="smtp_host" title="Gazdă SMTP"><![CDATA[
+<h2>Gazdă SMTP</h2>
+<p>Pentru a îmbunătăți livrarea mesajelor și a beneficia de direcționarea emailului printr‑un serviciu extern (cum ar fi SendGrid, AWS SES, Mailchimp, Mailgun etc.), specifică aici serverul SMTP. Consultă furnizorul SMTP pentru a obține această valoare.</p>
+<p>Această valoare poate fi furnizată prin definirea unei constante <code>SMTP_HOST</code> în <code>config.php</code>, caz în care valoarea este estompată (gri) în panoul Preferințe.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Parolă SMTP"><![CDATA[
+<h2>Parolă SMTP</h2>
+<p>Dacă conexiunea SMTP necesită o parolă pentru numele de utilizator specificat, furnizeaz‑o aici. Consultă documentația furnizorului pentru detalii.</p>
+<p>Notă: Deși parola nu va fi afișată aici, ea <em>va</em> fi stocată în clar în tabelul prefs al bazei de date. Dacă dorești să crești securitatea, poți defini în schimb o constantă <code>SMTP_PASS</code> în <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>Port SMTP</h2>
+<p>Dacă ai specificat o gazdă SMTP, trebuie să specifici un port pentru a activa rutarea SMTP. Porturile comune sunt:</p>
+<ul>
+    <li>25 – pentru email nesecurizat</li>
+    <li>465 – vechi (neoficial) pentru email securizat</li>
+    <li>587 – implicit (recomandat) pentru email TLS securizat</li>
+</ul>
+<p>Este posibil ca furnizorul tău SMTP să folosească un port diferit, așa că consultă documentația acestuia.</p>
+<p>Această valoare poate fi furnizată prin definirea unei constante <code>SMTP_PORT</code> în <code>config.php</code>, caz în care valoarea este estompată (gri) în panoul Preferințe.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Metodă de securitate SMTP"><![CDATA[
+<h2>Metodă de securitate SMTP</h2>
+<p>Alege mecanismul pe care furnizorul tău SMTP îl folosește ca protocol de securitate pentru email. Consultă documentația acestuia pentru detalii.</p>
+<p>Această valoare poate fi furnizată prin definirea unei constante <code>SMTP_SECTYPE</code> în <code>config.php</code>, caz în care valoarea este estompată (gri) în panoul Preferințe.</p>
+        ]]></item>
+        <item id="smtp_user" title="Nume utilizator SMTP"><![CDATA[
+<h2>Nume utilizator SMTP</h2>
+<p>Dacă conexiunea SMTP necesită un nume de utilizator/login, furnizeaz‑l aici. Consultă documentația furnizorului pentru detalii.</p>
+<p>Această valoare poate fi furnizată prin definirea unei constante <code>SMTP_USER</code> în <code>config.php</code>, caz în care valoarea este estompată (gri) în panoul Preferințe.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Liste negre de spam (separate prin virgulă)"><![CDATA[
+<h2>Liste negre de spam (separate prin virgulă)</h2>
+<p>Furnizorii de <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">liste negre <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> introduși aici vor fi interogați când este postat un comentariu pe blogul tău, iar adresa IP a celui care postează comentariul va fi verificată. Dacă adresa IP este listată, înseamnă că a existat una sau mai multe raportări de spam pentru această adresă IP în trecut, iar comentariul va fi respins. Indiferent de rezultatul verificării, adresa IP a celui care postează comentariul nu este stocată de Textpattern.</p>
+<p>Poți introduce aici o listă de nume de domenii, separate prin virgule. Reține că este responsabilitatea ta să te asiguri că listele negre sunt adecvate scopului.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Distribui doar rezumatul articolului?"><![CDATA[
+<h2>Distribui <strong>doar</strong> rezumatul articolului?</h2>
+<p>Dacă este setat pe „Nu”, elementele din flux vor conține corpurile complete ale articolelor.</p>
+<p>Dacă este setat pe „Da”, elementele din flux vor conține rezumatul articolului în locul corpului articolului, acolo unde acesta este disponibil.</p>
+        ]]></item>
+        <item id="tempdir" title="Calea directorului temporar"><![CDATA[
+<h2>Calea directorului temporar</h2>
+<p>Setează o <strong>cale absolută</strong> către un director temporar (cunoscut uneori ca „tmp” sau „temp”). PHP trebuie să aibă acces de scriere la acest director. Acest director este folosit pentru fișiere temporare, de exemplu pentru încărcări de orice fel (pluginuri, fișiere sau imagini).</p>
+<p><strong>Note:</strong>
+<ul>
+    <li>Nu specifica același director atât pentru „temporar”, cât și pentru „plugin cache”, deoarece acest lucru va cauza probleme (Textpattern ar încerca să ruleze conținutul fișierelor temporare de jurnal ca pluginuri).</li>
+    <li>Ia în considerare mutarea acestui director în afara directorului public al site‑ului tău, pentru securitate sporită.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema pentru partea de admin"><![CDATA[
+<h2>Tema pentru partea de admin</h2>
+<p>Tema implicită pentru partea de administrare care va fi folosită atunci când oricine se autentifică în Textpattern. Un număr de teme de admin preinstalate sunt incluse cu Textpattern și poți de asemenea adăuga pachete de teme personalizate în directorul <code>textpattern/admin-themes</code> pentru a le face disponibile pentru utilizare.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Adaugi o bară oblică finală la URL‑uri"><![CDATA[
+<h2>Adaugi o bară oblică finală la URL‑uri</h2>
+<p>Dacă Textpattern va adăuga automat o bară oblică finală la URL‑urile pe care le generează. Opțiunile sunt:</p>
+<ul>
+    <li><strong>Nu</strong> – Niciodată</li>
+    <li><strong>Listă</strong> – Doar pe paginile de destinație bazate pe liste (adică nu atunci când se vizualizează articole individuale)</li>
+    <li><strong>Da</strong> – Întotdeauna</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Funcții PHP activate în txp:evaluate"><![CDATA[
+<h2>Funcții PHP activate în txp:evaluate</h2>
+<p>Aceasta este o listă separată prin virgule de elemente <code>function</code> sau <code>alias=function</code>, de ex. <code>md5</code>, <code>replace=str_replace</code>. Elementele specificate în această listă pot fi utilizate în atributul <code>query</code> al tagului <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> ar trebui să returneze o valoare scalară (<strong>nu</strong> un array/obiect).</p>
+        ]]></item>
+        <item id="use_comments" title="Accepți comentarii?"><![CDATA[
+<h2>Accepți comentarii?</h2>
+<p>Aceasta setează dacă funcționalitatea de comentarii a Textpattern ar trebui să fie activată sau dezactivată.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Folosești adresa de email pentru a construi ID‑uri de feed (implicit este URL‑ul site‑ului)?"><![CDATA[
+<h2>Folosești adresa de email pentru a construi ID‑uri de feed (implicit este URL‑ul site‑ului)?</h2>
+<p>Elementele într‑un feed Atom necesită un ID unic.</p>
+<p>Pentru a genera ID‑uri unice pentru site‑ul tău, Textpattern îți permite să alegi între o adresă de email sau numele domeniului pentru a fi incluse în aceste ID‑uri. Adresa de email va fi prima utilizată la crearea site‑ului. Cu excepția cazului în care este probabil să îți schimbi numele de domeniu în viitor, este probabil sigur să setezi această opțiune pe „Nu”.</p>
+        ]]></item>
+        <item id="use_plugins" title="Folosești pluginuri?"><![CDATA[
+<h2>Folosești pluginuri?</h2>
+<p>Aceasta îți permite să dezactivezi complet suportul pentru pluginuri Textpattern. Este util dacă depanezi erori pe site și dorești să verifici dacă unul sau mai multe pluginuri sunt implicate.</p>
+        ]]></item>
+        <item id="use_textile" title="Formatare implicită a textului"><![CDATA[
+<h2>Formatare implicită a textului</h2>
+<p>Setarea de format text pe care o alegi aici devine cea implicită pentru marcajul de rezumat și corp în panoul „Scriere”. Poți alege să permiți procesarea completă Textile, să convertești întreruperile de linie în marcatori de paragraf HTML sau să nu convertești deloc textul.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> este un utilitar conceput pentru a simplifica conversia textului simplu în HTML. Când este activat, Textile va procesa textul corpului articolelor și va returna HTML structural corect.</p>
+<p>Textile oferă, de asemenea, un set puternic, dar ușor de învățat, de comenzi cu care poți formata textul, defini structuri precum liste, titluri și citate bloc și insera linkuri și imagini.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Panou Secțiuni">
+        <item id="section_category" title="Introducere"><![CDATA[
+<h2>Introducere</h2>
+<p>Secțiunile în Textpattern trebuie privite cel mai bine ca fiind analoge cu secțiunile dintr‑un ziar; toate aparțin aceleiași publicații, dar fiecare poate avea un aranjament diferit sau un stil diferit de articol etc.</p>
+<p>Pentru majoritatea site‑urilor web este nevoie să fie create doar un număr minim de secțiuni.</p>
+<h3>Un scenariu probabil pentru un site web cu trei secțiuni:</h3>
+<ol>
+    <li><strong>Arhivă:</strong> „Secțiunea” căreia îi aparțin toate articolele care apar pe prima pagină. Ori de câte ori un cititor face clic pe linkul permanent al unui articol, acesta va fi afișat în șablonul de pagină atribuit acestei „Secțiuni”. Pentru a merge la o listă paginată a celor mai recente articole atribuite secțiunii „Archive”, URL‑ul ar fi <code>https://example.com/archive/</code>.</li>
+    <li><strong>Despre:</strong> O pagină „despre acest site”, care diferă de prima pagină și de secțiunea „Archive” prin faptul că este mai statică, poate avea un aspect diferit și va conține, probabil, un singur articol. Secțiunea „About” ar fi accesată la <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotografii:</strong> O „Secțiune” al cărei aranjament diferit (și, posibil, CSS diferit) ar afișa fotografii în loc de articole.</li>
+</ol>
+<p>Reține că există întotdeauna o secțiune specială ascunsă, numită default. Această secțiune implicită folosește pagina numită default și stilul numit default și construiește prima pagină a site‑ului tău.</p>
+        ]]></item>
+        <item id="section_default" title="Secțiune implicită de publicare"><![CDATA[
+<h2>Secțiune implicită de publicare</h2>
+<p>Această opțiune controlează ce secțiune va fi preselectată în meniul Secțiune atunci când creezi un articol nou în panoul „Scriere”.</p>
+<p>Dacă majoritatea articolelor tale ajung să aparțină unei anumite secțiuni, selecteaz‑o din listă aici. Modificările se vor reflecta imediat.</p>
+<p>Poți suprascrie acest lucru la nivel de articol individual în panoul „Scriere”, selectând o secțiune diferită în panoul „Sortare și afișare”.</p>
+        ]]></item>
+        <item id="section_description" title="Descriere"><![CDATA[
+<h2>Descriere</h2>
+<p>Descrierea secțiunii este o componentă opțională care poate ajuta motoarele de căutare și crawler‑ele web să identifice și să ordoneze mai bine conținutul.</p>
+<p>Descrierea articolului este limitată la maximum 255 de caractere. Reține că unele motoare de căutare impun limite de caractere pentru lungimea unei <code>meta description</code> a paginii, din motive de afișare în paginile cu rezultate ale motoarelor de căutare (SERP), iar aceasta poate fi mai mică decât limita de 255 de caractere din Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Apar articolele din secțiune pe prima pagină?"><![CDATA[
+<h2>Apar articolele din secțiune pe prima pagină?</h2>
+<p>Articolele din unele secțiuni, cum ar fi cele care seamănă mai mult cu pagini web „statice”, pot părea deplasate în fluxul sensibil la timp al primei pagini a site‑ului.</p>
+<p>Setarea acestei opțiuni pe „Nu” va împiedica articolele atribuite acestei secțiuni să apară pe prima pagină.</p>
+        ]]></item>
+        <item id="section_searchable" title="Include această secțiune în căutarea site‑ului?"><![CDATA[
+<h2>Include această secțiune în căutarea site‑ului?</h2>
+<p>Aceasta controlează dacă articolele care aparțin acestei secțiuni ar trebui să apară ca parte a rezultatelor la căutarea pe întregul site.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindicarea articolelor din această secțiune?"><![CDATA[
+<h2>Sindicarea articolelor din această secțiune?</h2>
+<p>Controlează dacă articolele din această secțiune vor apărea sau nu în fluxurile RSS și Atom ale site‑ului.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Folosește stilul"><![CDATA[
+<h2>Folosește stilul</h2>
+<p>Dacă dorești să suprascrii foaia de stil implicită pentru o anumită secțiune, acest lucru poate fi setat aici.</p>
+<p>Acest lucru este relevant doar pentru foile de stil păstrate în panoul „Stiluri” al Textpattern – dacă găzduiești CSS în afara Textpattern (ceea ce este foarte recomandat), această opțiune nu are niciun efect.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Folosește pagina"><![CDATA[
+<h2>Folosește pagina</h2>
+<p>În Textpattern, secțiunile sunt asociate cu șabloane de pagină.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Folosește tema"><![CDATA[
+<h2>Folosește tema</h2>
+<p>Dacă dorești să modifici tema folosită pentru o anumită secțiune, aceasta poate fi setată aici din lista de teme instalate în prezent.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Panou Instalare">
+        <item id="setup_admin_url" title="Subdomeniu admin"><![CDATA[
+<h2>Subdomeniu admin</h2>
+<p>Subdomeniul pe care dorești să îl folosești pentru a accesa interfața de administrare Textpattern (de ex. <code>admin.example.com</code>).</p>
+<p>Consultă <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalarea multi‑site Textpattern</a> pentru mai multe detalii.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domeniu cookie"><![CDATA[
+<h2>Domeniu cookie</h2>
+<p>(Sub)domeniul pe care dorești să îl folosești pentru cookie‑urile Textpattern.</p>
+<p>Consultă <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalarea multi‑site Textpattern</a> pentru mai multe detalii.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Login utilizator"><![CDATA[
+<h2>Login utilizator</h2>
+<p>Numele de login al contului de administrator („Publicist”) pe care îl vei folosi pentru administrarea site‑ului.</p>
+<p>Deși nu există restricții privind numele, este mai bine să eviți secvențele complicate de caractere și numele de utilizator ușor de ghicit (de ex. <code>admin</code>, <code>administrator</code> etc.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Parolă utilizator"><![CDATA[
+<h2>Parolă utilizator</h2>
+<p>Deoarece acest cont are cel mai înalt nivel de acces în Textpattern, alege o parolă foarte puternică sau, de preferință, o frază de parolă.</p>
+<h3>Sfaturi</h3>
+<ul>
+    <li>Folosește un amestec de caractere majuscule și minuscule</li>
+    <li>Folosește cifre</li>
+    <li>Folosește simboluri</li>
+    <li>Fă parola să aibă cel puțin opt caractere</li>
+    <li><strong>Evită</strong> orice informații personale (date, nume, locuri, membri ai familiei, animale de companie etc.)</li>
+    <li><strong>Evită</strong> orice cuvinte izolate sau repetate din dicționar, indiferent de ortografie, limbă sau scriere</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Prefix tabel"><![CDATA[
+<h2>Prefix tabel</h2>
+    <p>Trebuie să folosești un prefix de tabel doar dacă ai nevoie de mai multe instalări Textpattern într‑o singură bază de date. Fiecare instalare Textpattern are nevoie de un prefix unic.</p>
+    <p>Reține că prefixul trebuie să respecte următoarele reguli:</p>
+<ul>
+    <li><strong>Primul caracter:</strong> trebuie să fie a‑z, A‑Z sau underscore</li>
+    <li><strong>Caracterele următoare:</strong> pot fi doar a‑z, A‑Z, 0‑9 sau underscore</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Panou Teme">
+        <item id="skin_author" title="Autorul temei"><![CDATA[
+<h2>Autorul temei</h2>
+<p>Autorul (autorii) acestei teme (opțional).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Site‑ul temei"><![CDATA[
+<h2>Site‑ul temei</h2>
+<p>URL‑ul unde pot fi găsite informații complete și/sau cele mai recente versiuni ale acestei teme (opțional).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Șterge și șabloanele temei de pe disc"><![CDATA[
+<h2>Șterge și șabloanele temei de pe disc</h2>
+<p>Dacă este bifat, toate fișierele de șabloane din tema(temele) selectată(e) vor fi șterse definitiv de pe disc. Totuși, directoarele legate de teme și subdirectoarele lor nu vor fi șterse dacă există în ele alte fișiere (cum ar fi JavaScript, imagini etc.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Șterge șabloanele neutilizate din baza de date la import"><![CDATA[
+<h2>Șterge șabloanele neutilizate din baza de date la import</h2>
+<p>Dacă este bifat, fiecare șablon din tema(temele) selectată(e) care nu are un fișier corespunzător pe disc va fi șters definitiv din baza de date. Rezultatul, după finalizarea acțiunii, va fi că șabloanele din baza de date vor reflecta pe cât posibil ceea ce se află pe disc.</p>
+<p>Reține că, dacă ai eliminat fișiere de șabloane de care Textpattern are nevoie, vor fi create pentru tine versiuni goale în baza de date.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Șterge șabloanele neutilizate de pe disc la export"><![CDATA[
+<h2>Șterge șabloanele neutilizate de pe disc la export</h2>
+<p>Dacă este bifat, fiecare fișier de șablon din tema(temele) selectată(e) care nu are un element corespunzător în baza de date va fi șters definitiv din tema stocată pe disc. Rezultatul, după finalizarea acțiunii, va fi că șabloanele din sistemul de fișiere vor reflecta exact ceea ce se află în baza de date.</p>
+        ]]></item>
+        <item id="skin_description" title="Descrierea temei"><![CDATA[
+<h2>Descrierea temei</h2>
+<p>Poate fi furnizat un scurt rezumat al designului/aranjamentului acestei teme (opțional).</p>
+<p>Descrierea temei este limitată la maximum 255 de caractere.</p>
+        ]]></item>
+        <item id="skin_import" title="Importă tema"><![CDATA[
+<h2>Importă tema de pe disc</h2>
+<p>Acest formular îți permite să imporți o temă în baza de date Textpattern din directorul tău de teme.</p>
+<p>O temă importabilă trebuie să fie compusă dintr‑un folder părinte lizibil care folosește numele temei ca nume de folder și, în interiorul folderului, un fișier <code>manifest.json</code> lizibil în formatul așteptat. Folderul temei ar trebui, de asemenea, să conțină pagini, formulare și stiluri în subfoldere eponime.</p>
+<p>În timp ce paginile și formularele ar trebui să folosească extensia <code>.txp</code>, foile de stil sunt așteptate să fie fișiere <code>.css</code>. Formularele ar trebui, de asemenea, grupate pe tip în directoare dedicate. Textpattern va crea orice șabloane esențiale care lipsesc la import.</p>
+<p>Consultă <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">documentația despre teme <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pentru mai multe informații despre crearea, instalarea și folosirea temelor în Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Numele temei"><![CDATA[
+<h2>Numele temei</h2>
+<p>Numele unei teme este folosit pentru numele directorului temei și pentru alte scopuri tehnice (obligatoriu).</p>
+<p>Numele nu ar trebui să conțină caractere speciale sau spații.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introducere în Teme"><![CDATA[
+<h2>Introducere în Teme</h2>
+<p>O temă Textpattern este o colecție de pagini, formulare și foi de stil. Teme îți permit să separi logic resursele site‑ului în grupuri pentru a le identifica mai ușor sau pentru a le partaja cu alții. Actul de creare sau import al unei teme și al oricăror resurse pe care aceasta le conține <em>nu</em> are niciun impact asupra site‑ului tău existent. Ești liber să editezi sau să modifici orice resursă care nu este asociată unei Secțiuni a site‑ului tău, fără a afecta site‑ul în sine.</p>
+<p>Pentru a edita resursele dintr‑o temă, vizitează panoul Pagini, Formulare sau Stiluri și folosește selectorul derulant pentru a alege tema la care dorești să lucrezi. Tema la care lucrezi este reținută în toată zona de administrare, permițându‑ți să sari rapid și ușor între tipurile de resurse. Este denumită <em>tema de lucru</em>.</p>
+<p>Te rugăm să consulți <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Documentația utilizatorului Textpattern <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a> pentru mai multe informații.</p>
+        ]]></item>
+        <item id="skin_title" title="Titlul temei"><![CDATA[
+<h2>Titlul temei</h2>
+<p>Titlul descriptiv al unei teme, folosit pentru a identifica tema în panourile Textpattern.</p>
+<p>Titlul poate conține caractere speciale și spații.</p>
+        ]]></item>
+        <item id="skin_version" title="Versiunea temei"><![CDATA[
+<h2>Versiunea temei</h2>
+<p>Numărul versiunii versiunii instalate a acestei teme (opțional).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
