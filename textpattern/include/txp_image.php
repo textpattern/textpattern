@@ -1270,7 +1270,7 @@ function image_delete($ids = array())
                 $rsd = safe_delete('txp_image', "id = '$id'");
                 $ul = false;
 
-                $slir = new SLIR('/'.$img_dir.'/'.$id.$ext);
+                $slir = new SLIR(rhu.$img_dir.'/'.$id.$ext);
                 $slir->uncache();
 
                 if (is_file(IMPATH . $id . $ext)) {
@@ -1390,7 +1390,7 @@ function thumbnail_delete()
     }
 
     $rs = safe_row("id, ext", 'txp_image', "id = $id");
-    $slir = new SLIR('/'.$img_dir.'/'.$rs['id'].$rs['ext']);
+    $slir = new SLIR(rhu.$img_dir.'/'.$rs['id'].$rs['ext']);
     $slir->uncache();
 
     $t = new txp_thumb($id);
