@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="vi">
+    <group id="admin" title="Bảng điều khiển người dùng">
+        <item id="about_privileges" title="Giới thiệu về vai trò"><![CDATA[
+<h2>Giới thiệu về vai trò</h2>
+<h3>Nhà xuất bản (Publisher)</h3>
+<ul>
+    <li>có thể quản lý bài viết, bình luận và liên kết</li>
+    <li>có thể dùng PHP trong bài viết nếu tùy chọn quản trị ‘Cho phép PHP trong bài viết?’ được đặt thành ‘Có’</li>
+    <li>có thể quản lý ảnh và tập tin</li>
+    <li>có thể quản lý mục (section) và chuyên mục (category)</li>
+    <li>có thể quản lý trang, biểu mẫu và kiểu dáng (style)</li>
+    <li>có thể xem thông tin chẩn đoán</li>
+    <li>có thể quản lý tùy chọn trang web</li>
+    <li>có thể quản lý người dùng</li>
+    <li>có thể quản lý nhật ký truy cập</li>
+    <li>có thể quản lý plugin</li>
+    <li>có thể nhập dữ liệu</li>
+</ul>
+<h3>Biên tập quản lý (Managing Editor)</h3>
+<ul>
+    <li>có thể quản lý bài viết, bình luận và liên kết</li>
+    <li>có thể dùng PHP trong bài viết nếu tùy chọn quản trị ‘Cho phép PHP trong bài viết?’ được đặt thành ‘Có’</li>
+    <li>có thể quản lý ảnh và tập tin</li>
+    <li>có thể quản lý mục (section) và chuyên mục (category)</li>
+    <li>có thể quản lý trang, biểu mẫu và kiểu dáng (style)</li>
+    <li>có thể xem thông tin chẩn đoán</li>
+    <li>có thể quản lý tùy chọn trang web</li>
+    <li>có thể xem người dùng</li>
+    <li>có thể quản lý nhật ký truy cập</li>
+    <li>có thể quản lý plugin</li>
+    <li>có thể nhập dữ liệu</li>
+</ul>
+<h3>Biên tập viên nội dung (Copy Editor)</h3>
+<ul>
+    <li>có thể quản lý bài viết nhưng có một giới hạn:
+        <ul>
+            <li>không thể xóa bài viết thuộc về người dùng khác</li>
+        </ul>
+    </li>
+    <li>có thể quản lý bình luận và liên kết</li>
+    <li>có thể quản lý ảnh và tập tin</li>
+    <li>có thể quản lý chuyên mục (category)</li>
+    <li>có thể quản lý trang và biểu mẫu</li>
+    <li>có thể xem người dùng</li>
+    <li>có thể quản lý nhật ký truy cập</li>
+</ul>
+<h3>Phóng viên (Staff Writer)</h3>
+<ul>
+    <li>có thể quản lý bài viết của riêng mình, xem bài viết của người dùng khác</li>
+    <li>có thể quản lý ảnh và tập tin</li>
+</ul>
+<h3>Cộng tác viên (Freelancer)</h3>
+<ul>
+    <li>có thể quản lý bài viết của riêng mình ở mức giới hạn:
+        <ul>
+            <li>chỉ có thể sửa bài viết cho đến khi bài viết được xuất bản</li>
+            <li>chỉ có thể áp dụng trạng thái <em>chỉ</em> Nháp (Draft), Ẩn (Hidden) hoặc Chờ duyệt (Pending)</li>
+        </ul>
+    </li>
+    <li>có thể xem bài viết của người dùng khác</li>
+</ul>
+<h3>Nhà thiết kế (Designer)</h3>
+<ul>
+    <li>có thể quản lý bài viết của riêng mình ở mức giới hạn:
+        <ul>
+            <li>chỉ có thể sửa bài viết cho đến khi bài viết được xuất bản</li>
+            <li>chỉ có thể áp dụng trạng thái <em>chỉ</em> Nháp (Draft), Ẩn (Hidden) hoặc Chờ duyệt (Pending)</li>
+        </ul>
+    </li>
+    <li>có thể xem bài viết của người dùng khác</li>
+    <li>có thể quản lý ảnh</li>
+    <li>có thể quản lý mục (section)</li>
+    <li>có thể quản lý trang, biểu mẫu và kiểu dáng (style)</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Tạo tác giả"><![CDATA[
+<h2>Thêm tác giả mới</h2>
+<p>Một thư chào mừng và hướng dẫn đăng nhập sẽ được gửi qua email cho tác giả mới.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Bảng viết bài">
+        <item id="article_image" title="Ảnh bài viết"><![CDATA[
+<h2>Ảnh bài viết</h2>
+<p>Để gắn ảnh với bài viết này, hãy đặt một trong các nội dung sau vào đây:</p>
+<ol>
+    <li>một hoặc nhiều ID ảnh của Textpattern, phân tách bằng dấu phẩy (ví dụ <code>12, 25, 18</code>)</li>
+    <li>một hoặc nhiều URL tương đối tới ảnh, phân tách bằng dấu phẩy (ví dụ <code>/images/my_pic.jpg</code>)</li>
+    <li>một hoặc nhiều URL đầy đủ, phân tách bằng dấu phẩy (ví dụ <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Ảnh đầu tiên có thể được hiển thị bằng cách đặt thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> bên trong form bài viết. Theo mặc định, thẻ này sẽ xuất toàn bộ thẻ HTML <code>&lt;img&gt;</code> trỏ tới ảnh đã chọn.</p>
+<p>Bạn có thể hiển thị bộ sưu tập ảnh bằng thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Nội dung chính"><![CDATA[
+<h2>Nội dung chính</h2>
+<p>Nội dung chính của một bài viết được chứa trong phần thân bài viết.</p>
+<p>Khi soạn hoặc chuẩn bị bài viết để xuất bản trong Textpattern, tác giả có thể chuyển đổi giữa ba chế độ xem bài viết: văn bản thuần, mã HTML (mã mà trình duyệt dùng để hiển thị bài viết) và bản xem thử đã dựng.</p>
+        ]]></item>
+        <item id="description" title="Mô tả"><![CDATA[
+<h2>Mô tả</h2>
+<p>Mô tả bài viết là thành phần tùy chọn có thể giúp máy tìm kiếm và trình thu thập dữ liệu nhận diện và sắp xếp nội dung tốt hơn.</p>
+<p>Mô tả bài viết bị giới hạn tối đa 255 ký tự. Lưu ý một số máy tìm kiếm áp đặt giới hạn số ký tự cho độ dài <code>meta description</code> của trang để tiện hiển thị trên trang kết quả tìm kiếm (SERP) và con số này có thể thấp hơn giới hạn 255 ký tự trong Textpattern.</p>
+<p>Lưu ý rằng mô tả bài viết khác với trích đoạn bài viết, dù cả hai đều chấp nhận nội dung tương tự. Mô tả bài viết chủ yếu nhằm phục vụ máy tìm kiếm và crawler, trong khi trích đoạn bài viết phù hợp hơn làm phần tóm tắt bài viết dễ đọc cho người dùng khi cần.</p>
+        ]]></item>
+        <item id="excerpt" title="Trích đoạn"><![CDATA[
+<h2>Trích đoạn</h2>
+<p>Trích đoạn bài viết là tùy chọn. Trích đoạn có thể được dùng như một bản tóm tắt ngắn của bài viết, được hiển thị như một phần của mục lục, dùng thay cho toàn bộ nội dung bài viết trong các feed RSS/Atom của trang, hoặc cho nhiều mục đích khác.</p>
+        ]]></item>
+        <item id="expire_date" title="Ngày hết hạn"><![CDATA[
+<h2>Ngày hết hạn</h2>
+<p>Thời điểm một bài viết được gắn nhãn là đã hết hạn. Thời gian là tùy chọn và có thể đặt ở một thời điểm bất kỳ trong quá khứ hoặc tương lai.</p>
+<p>Các ô tương ứng với các thông tin sau:</p>
+<ul>
+    <li>Năm / Tháng / Ngày</li>
+    <li>Giờ (định dạng 24 giờ) : Phút : Giây</li>
+</ul>
+<p>Khi thời điểm đó đến, hoặc trong trường hợp đặt thời gian trong quá khứ, bài viết sẽ hết hạn.</p>
+<p>Nếu tùy chọn hiển thị bài viết đã hết hạn được bật, bài viết vẫn còn hiển thị. Nếu tùy chọn này tắt, khách truy cập trang bài viết sẽ nhận về lỗi HTTP 410 thay cho nội dung bài viết.</p>
+        ]]></item>
+        <item id="keywords" title="Từ khóa"><![CDATA[
+<h2>Từ khóa</h2>
+<p>Từ khóa hữu ích để tinh chỉnh mối quan hệ giữa các bài viết vượt ra ngoài những gì các chuyên mục (category) cung cấp.</p>
+<p>Các từ khóa phải là những từ riêng lẻ, phân tách bằng dấu phẩy.</p>
+        ]]></item>
+        <item id="override_form" title="Mẫu ghi đè (Override form)"><![CDATA[
+<h2>Mẫu ghi đè (Override form)</h2>
+<p>Một bài viết có thể tùy chọn dùng một form khác với form được gán mặc định – ví dụ để hiển thị trích đoạn bài viết bằng <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> thay vì thân bài bằng <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> – có thể thiết lập tại đây.</p>
+        ]]></item>
+        <item id="publish_date" title="Ngày xuất bản"><![CDATA[
+<h2>Ngày xuất bản</h2>
+<p>Thời điểm một bài viết hoặc tập tin được xuất bản hoặc được sửa đổi gần đây nhất. Thời gian có thể được đặt là thời điểm xuất bản mục đó, hoặc là bất kỳ thời điểm nào trong quá khứ hay tương lai.</p>
+<p>Các ô tương ứng với các thông tin sau:</p>
+<ul>
+    <li>Năm / Tháng / Ngày</li>
+    <li>Giờ (định dạng 24 giờ) : Phút : Giây</li>
+</ul>
+<p>Một mục có dấu thời gian lớn hơn thời gian hiện tại (tức là trong tương lai) sẽ không xuất hiện ở mặt ngoài trang và trong các feed RSS/Atom cho đến khi thời điểm đó đến.</p>
+        ]]></item>
+        <item id="status" title="Trạng thái"><![CDATA[
+<h2>Trạng thái</h2>
+<p>Xác định trạng thái hiển thị xuất bản của bài viết Textpattern này.</p>
+<p>Trạng thái xuất bản là một trong các trạng thái sau:</p>
+<ul>
+<li><strong>Nháp (Draft)</strong>: được xem là đang soạn dở và không thể xem bên ngoài khu vực quản trị Textpattern (tức là không hiển thị trên trang web và không được phát hành qua feed).</li>
+<li><strong>Ẩn (Hidden)</strong>: bài viết không thể xem bên ngoài khu vực quản trị Textpattern. Hữu ích để gỡ nội dung khỏi trang web mà bạn không muốn xóa hẳn.</li>
+<li><strong>Chờ duyệt (Pending)</strong>: được xem là đã sẵn sàng xuất bản và đang chờ phê duyệt, nhưng chưa thể xem bên ngoài khu vực quản trị Textpattern.</li>
+<li><strong>Hiện (Live)</strong>: thường có thể xem bên ngoài khu vực quản trị Textpattern (tức là hiển thị trên trang web, được phát hành trong feed nếu tùy chọn cho phép). Nếu một bài viết ở trạng thái Hiện và có ngày hết hạn, trạng thái vẫn giữ là Hiện sau khi qua ngày đó, nhưng bài chỉ xuất hiện bên ngoài khu vực quản trị nếu cho phép xuất bản bài đã hết hạn.</li>
+<li><strong>Sticky</strong>: giống với bài viết <strong>Hiện</strong> ở chỗ khách truy cập có thể xem, nhưng <strong>không</strong> xuất hiện trong danh sách bài viết trừ khi thẻ <code>article</code> hoặc <code>article_custom</code> có thuộc tính <code>status</code> với giá trị <code>sticky</code>.</li>
+</ul>
+<p>Lưu ý: nội dung không hiển thị công khai trên trang web vẫn có thể được xem thử (preview) bởi người dùng đã đăng nhập.</p>
+        ]]></item>
+        <item id="title" title="Tiêu đề"><![CDATA[
+<h2>Tiêu đề</h2>
+<p>Thêm một tiêu đề phù hợp cho bài viết này.</p>
+<p>Tiêu đề bài viết bị giới hạn tối đa 255 ký tự.</p>
+        ]]></item>
+        <item id="url_title" title="Tiêu đề chỉ dùng cho URL"><![CDATA[
+<h2>Tiêu đề chỉ dùng cho URL</h2>
+<p>Để dùng một tiêu đề cụ thể trong URL permalink của bài viết, hãy nhập vào đây. Nếu để trống, tiêu đề URL sẽ được tạo tự động từ tiêu đề bài viết.</p>
+<p>Điều này đặc biệt hữu ích nếu tiêu đề bài viết dùng các ký tự không thuộc ASCII.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Bảng chuyên mục">
+        <item id="article_category" title="Bài viết"><![CDATA[
+<h2>Bài viết</h2>
+<p>Khác với mục (section), thứ xác định cấu trúc điều hướng của một trang web, chuyên mục bài viết (article category) cho phép tổ chức bài viết theo chủ đề. Sau khi gán chuyên mục, có thể duyệt danh sách bài viết thuộc từng chuyên mục cụ thể.</p>
+<p>Ví dụ, các chuyên mục bài viết có thể có trên một trang về ẩm thực là:</p>
+<ul>
+    <li>nguyên liệu thô</li>
+    <li>mua sắm</li>
+    <li>công thức</li>
+    <li>trình bày</li>
+    <li>nhà hàng</li>
+    <li>đầu bếp</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Mô tả"><![CDATA[
+<h2>Mô tả chuyên mục</h2>
+<p>Mô tả chuyên mục là thành phần tùy chọn có thể giúp máy tìm kiếm và trình thu thập dữ liệu (crawler) nhận diện và sắp xếp nội dung tốt hơn.</p>
+<p>Mô tả chuyên mục bị giới hạn tối đa 255 ký tự. Lưu ý một số máy tìm kiếm áp đặt giới hạn số ký tự cho độ dài <code>meta description</code> của trang để tiện hiển thị trên trang kết quả tìm kiếm (SERP) và con số này có thể thấp hơn giới hạn 255 ký tự trong Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Tập tin"><![CDATA[
+<h2>Tập tin</h2>
+<p>Chuyên mục tập tin là tùy chọn và hữu ích cho việc nhóm các tập tin đã tải lên lại với nhau.</p>
+        ]]></item>
+        <item id="image_category" title="Ảnh"><![CDATA[
+<h2>Ảnh</h2>
+<p>Chuyên mục ảnh là tùy chọn và hữu ích cả cho việc tổ chức nội bộ lẫn định nghĩa các tập hợp ảnh có thể hiển thị bằng thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Liên kết"><![CDATA[
+<h2>Liên kết</h2>
+<p>Chuyên mục liên kết là tùy chọn và hữu ích để hiển thị các nhóm liên kết khác nhau, ví dụ: ‘Bạn bè’, ‘Người La Mã’, ‘Đồng bào’.</p>
+<p>Các danh sách liên kết chọn lọc như vậy được xuất bằng thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> như sau:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Bảng chẩn đoán">
+        <item id="clean_url_data_failed" title="Lỗi dữ liệu URL sạch (Clean URL)"><![CDATA[
+<h2>Lỗi dữ liệu URL sạch (Clean URL)</h2>
+<p>Có vẻ như các URL của trang (ví dụ <code>https://example.com/section/article</code>) hiện không hoạt động, hoặc máy chủ web không hỗ trợ quy trình kiểm tra để xác định URL sạch có hoạt động hay không; nếu URL sạch trên trang vẫn hoạt động như mong đợi, bạn có thể bỏ qua thông báo này.</p>
+<p>Nếu URL sạch <em>không</em> hoạt động, có thể là vì:</p>
+<ul>
+    <li>thiết lập ‘Site URL’ không đúng, hoặc trang ở địa chỉ đó không được quản lý bởi bản cài đặt Textpattern này</li>
+    <li>máy chủ cần một số thay đổi đối với <code>.htaccess</code> hoặc chỉ thị (directive) tương tự để URL sạch hoạt động</li>
+    <li>máy chủ hoàn toàn không hỗ trợ URL sạch</li>
+</ul>
+<p>Bài kiểm tra URL sạch cố gắng tải một trang từ địa chỉ web được ghi trong tùy chọn ‘Site URL’ để kiểm tra tất cả tham số URL sạch có hoạt động đúng không. Nếu URL đó là một trang web khác, hoặc đã được thay thế bằng một trang tĩnh hay tương tự, việc kiểm tra sẽ thất bại. Cho đến khi sự cố được khắc phục, nên dùng URL "lộn xộn" (ví dụ <code>https://example.com?s=section&amp;id=4</code>). Hãy đảm bảo ‘Chế độ liên kết cố định’ (Permanent link mode) trong trang Tùy chọn quản trị được đặt phù hợp.</p>
+<p>Lưu ý rằng việc dùng plugin để đưa trang vào ‘chế độ bảo trì’ có thể kích hoạt cảnh báo này.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Kiểm tra Clean URL thất bại"><![CDATA[
+<h2>Kiểm tra Clean URL thất bại</h2>
+<p>Có vẻ như các URL của trang (ví dụ <code>https://example.com/section/article</code>) hiện không hoạt động, hoặc máy chủ web không hỗ trợ quy trình kiểm tra để xác định URL sạch có hoạt động hay không; nếu URL sạch trên trang vẫn hoạt động như mong đợi, bạn có thể bỏ qua thông báo này.</p>
+<p>Nếu URL sạch <em>không</em> hoạt động, có thể là vì:</p>
+<ul>
+    <li>thiết lập ‘Site URL’ không đúng, hoặc trang ở địa chỉ đó không được quản lý bởi bản cài đặt Textpattern này</li>
+    <li>máy chủ cần một số thay đổi đối với <code>.htaccess</code> hoặc chỉ thị (directive) tương tự để URL sạch hoạt động</li>
+    <li>máy chủ hoàn toàn không hỗ trợ URL sạch</li>
+</ul>
+<p>Bài kiểm tra URL sạch cố gắng tải một trang từ địa chỉ web được ghi trong tùy chọn ‘Site URL’ để kiểm tra tất cả tham số URL sạch có hoạt động đúng không. Nếu URL đó là một trang web khác, hoặc đã được thay thế bằng một trang tĩnh hay tương tự, việc kiểm tra sẽ thất bại. Cho đến khi sự cố được khắc phục, nên dùng URL "lộn xộn" (ví dụ <code>https://example.com?s=section&amp;id=4</code>). Hãy đảm bảo ‘Chế độ liên kết cố định’ (Permanent link mode) trong trang Tùy chọn quản trị được đặt phù hợp.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Đăng nhập đồng thời trên máy chủ live"><![CDATA[
+<h2>Đăng nhập đồng thời trên máy chủ live</h2>
+<p>Cho phép tài khoản người dùng của bạn đăng nhập từ nhiều phiên (session) là một rủi ro bảo mật và không được khuyến nghị. Vui lòng tắt tính năng này trong bảng tùy chọn nâng cao, trừ khi bạn hiểu và chấp nhận rủi ro.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Ẩn thông tin riêng tư"><![CDATA[
+<h2>Ẩn thông tin riêng tư</h2>
+<p>Ẩn thông tin riêng tư để tăng cường bảo mật. Nếu muốn chia sẻ thông tin chẩn đoán dưới dạng công khai, ví dụ trên diễn đàn hỗ trợ Textpattern, việc này giúp giảm rủi ro bảo mật bằng cách bỏ qua các thông tin nhạy cảm về máy chủ.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Mã phát triển trên máy chủ live"><![CDATA[
+<h2>Mã phát triển trên máy chủ live</h2>
+<p>Các phiên bản Textpattern đang trong quá trình phát triển không được khuyến nghị sử dụng cho trang sản xuất (production). Bạn có thể bỏ qua cảnh báo này nếu hiểu và chấp nhận rủi ro.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Thư mục không ghi được"><![CDATA[
+<h2>Thư mục không ghi được</h2>
+<p>Để sử dụng khả năng tải tập tin và ảnh lên, các thư mục này phải được PHP ghi được thông qua người dùng của máy chủ web. Có thể thực hiện điều này bằng trình khách (S)FTP, hoặc trên dòng lệnh bằng lệnh <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Lỗi tra cứu DNS"><![CDATA[
+<h2>Tra cứu DNS thất bại</h2>
+<p>Có vẻ như URL được chỉ định làm địa chỉ trang hiện không truy cập được.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Chức năng tải tập tin lên bị tắt"><![CDATA[
+<h2>Chức năng tải tập tin lên bị tắt</h2>
+<p>Cấu hình máy chủ hiện tại cho thấy chức năng tải tập tin lên đang bị vô hiệu hóa. Vui lòng kiểm tra và thay đổi thiết lập <code>file_uploads</code> trong <code>php.ini</code> hoặc liên hệ nhà cung cấp host để được trợ giúp.</p>
+        ]]></item>
+        <item id="htaccess_missing" title="Thiếu tập tin .htaccess"><![CDATA[
+<h2>Thiếu tập tin .htaccess</h2>
+<p>Một chế độ liên kết cố định (permalink) yêu cầu tập tin <code>.htaccess</code> đang được sử dụng, nhưng tập tin lại không được tìm thấy. Tập tin này được cung cấp kèm với Textpattern và nằm trong thư mục gốc của Textpattern, cạnh <code>index.php</code> và thư mục <code>textpattern</code>. Các chỉ thị khuyến nghị như sau:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Không truy cập được index của trang"><![CDATA[
+<h2>Không truy cập được index của trang</h2>
+<p>Tập tin gốc <code>index.php</code> được chỉ định làm index của trang đang không đọc được bởi máy chủ. Vui lòng kiểm tra sự tồn tại và quyền truy cập của nó.</p>
+        ]]></item>
+        <item id="missing_files" title="Thiếu tập tin"><![CDATA[
+<h2>Thiếu tập tin</h2>
+<p>Một hoặc nhiều tập tin thiết yếu đang thiếu khỏi Textpattern. Hãy đảm bảo tất cả tập tin được liệt kê có mặt trên máy chủ và ở đúng vị trí.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Thiếu Apache mod_rewrite"><![CDATA[
+<h2>Thiếu Apache mod_rewrite</h2>
+<p>Module <code>mod_rewrite</code> của Apache chưa được cài hoặc đang tắt. Module này được khuyến nghị để Textpattern hoạt động đúng. Hãy đảm bảo nó tồn tại và được kích hoạt, hoặc liên hệ nhà cung cấp host để được trợ giúp.</p>
+        ]]></item>
+        <item id="modified_files" title="Tập tin bị sửa đổi"><![CDATA[
+<h2>Tập tin bị sửa đổi</h2>
+<p>Một tập tin được xem là đã bị sửa nếu checksum của nó khác với danh sách checksum chuẩn đi kèm với Textpattern. Nếu bất kỳ tập tin nào trong bản cài Textpattern khác với mong đợi, chúng sẽ được đánh dấu tại đây.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Lỗi bảng MySQL"><![CDATA[
+<h2>Lỗi bảng MySQL</h2>
+<p>Có thể có một số hỏng hóc hoặc lỗi trong cơ sở dữ liệu MySQL của Textpattern. Hãy thử sửa (repair) các bảng bị ảnh hưởng bằng một công cụ truy cập MySQL, như <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> hoặc <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Chưa định nghĩa thư mục tạm"><![CDATA[
+<h2>Chưa định nghĩa thư mục tạm</h2>
+<p>Mặc dù Textpattern vẫn chạy được mà không có thư mục tạm, một số chức năng có thể không hoạt động như mong đợi nếu tùy chọn này chưa được đặt. Vui lòng vào Tùy chọn quản trị (Admin Preferences) và thiết lập ‘Đường dẫn thư mục tạm’.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Mục có tên trùng với thư mục"><![CDATA[
+<h2>Mục có tên trùng với thư mục</h2>
+<p>Các tên thư mục đã tồn tại có thể xung đột với tên mục (section) được dùng trong lược đồ permalink bài viết. Để tránh vấn đề, hãy kiểm tra và xóa các thư mục bị ảnh hưởng nếu an toàn, hoặc đổi tên (các) mục để không trùng nhau.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Không đọc được thư mục trang"><![CDATA[
+<h2>Không đọc được thư mục trang</h2>
+<p>Thư mục chứa tập tin gốc <code>index.php</code> được chỉ định làm index của trang đang không đọc được bởi máy chủ. Vui lòng kiểm tra quyền truy cập.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Đang bật chạy PHP"><![CDATA[
+<h2>Đang bật chạy PHP</h2>
+<p>Textpattern cho phép tác giả và quản trị viên nhúng mã PHP vào bài viết và page/form nếu các tính năng này được bật. Vì đây là vấn đề bảo mật – bất kỳ dạng mã PHP nào cũng có thể được thực thi, kể cả mã gây hại/nguy hiểm có thể phá hủy bản cài đặt hoặc rò rỉ thông tin cho bên thứ ba – nên <strong>rất khuyến nghị</strong> bạn tắt các tùy chọn này trong <a href="?event=prefs#prefs_group_publish">bảng Tùy chọn</a> trừ khi bạn thực sự cần.</p>
+<p>Nhiều cải tiến cho trang Textpattern mà trước đây cần đoạn PHP nhỏ giờ có thể thực hiện bằng <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">thẻ lõi</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Yêu cầu phiên bản tối thiểu"><![CDATA[
+<h2>Yêu cầu phiên bản tối thiểu</h2>
+<p>Textpattern cần một số chức năng nhất định có trong ngôn ngữ lập trình PHP và máy chủ cơ sở dữ liệu MySQL. Vui lòng xem bảng sau để xác định yêu cầu hệ thống tối thiểu:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Phiên bản Textpattern</th>
+                <th scope="col">Phiên bản PHP tối thiểu</th>
+                <th scope="col">Phiên bản MySQL tối thiểu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Ngoài các yêu cầu hệ thống trên, còn cần các phần mở rộng PHP sau:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a></li>
+</ul>
+<p>Tập tin <code>php.ini</code> của trang, toàn cục hoặc cục bộ, cần có thiết lập <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Thư mục setup vẫn tồn tại"><![CDATA[
+<h2>Thư mục setup vẫn tồn tại</h2>
+<p>Sau khi Textpattern đã được cài đặt, thư mục <code>textpattern/setup</code> và nội dung của nó không còn cần thiết và nên bị xóa vì lý do bảo mật.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Không khớp Site URL"><![CDATA[
+<h2>Không khớp Site URL</h2>
+<p>Site URL được đặt trong bảng ‘Tùy chọn’ không trùng với URL thực tế được dùng để truy cập trang.</p>
+<p>Nếu trang có thể truy cập qua nhiều URL khác nhau, và trang vẫn hoạt động như mong đợi, bạn có thể bỏ qua thông báo này.</p>
+<p>Nếu không, vui lòng kiểm tra và chỉnh sửa thiết lập ‘Site URL’ trong Tùy chọn quản trị cho phù hợp. Một giá trị URL trang hợp lý được ước đoán sẽ được hiển thị trong thông báo kiểm tra sơ bộ trên bảng ‘Chẩn đoán’.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Các hàm PHP [...] bị tắt trên máy chủ của bạn"><![CDATA[
+<h2>Các hàm PHP [...] bị tắt trên máy chủ của bạn</h2>
+<p>Nhà cung cấp host hoặc quản trị viên máy chủ đã vô hiệu hóa một hoặc nhiều hàm PHP, trong đó có thể có hàm ảnh hưởng đến hoạt động của Textpattern.</p>
+<p>Vui lòng xem thêm <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Tài liệu người dùng Textpattern <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> để biết thêm chi tiết.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Bản cập nhật phiên bản Textpattern"><![CDATA[
+<h2>Bản cập nhật phiên bản Textpattern</h2>
+<p>Có phiên bản Textpattern mới hơn. Để tận dụng các tính năng và bảo mật mới nhất, khuyến nghị bạn nâng cấp.</p>
+<p>Lưu ý rằng dù chúng tôi cố gắng làm cho trải nghiệm nâng cấp mượt mà và ít đau đầu nhất có thể:</p>
+<ul>
+    <li>Nếu chỉ khác chữ số cuối cùng so với phiên bản hiện tại, nâng cấp có khả năng tương thích ngược với plugin và theme.</li>
+    <li>Nếu khác hai chữ số cuối so với phiên bản hiện tại, nâng cấp có thể yêu cầu cập nhật một số plugin và/hoặc theme, mặc dù trang có thể vẫn hoạt động ở mức hạn chế.</li>
+    <li>Nếu chữ số đầu tiên khác phiên bản hiện tại, nâng cấp có khả năng sẽ cần cập nhật hầu hết plugin và theme. Nếu bạn phụ thuộc nhiều vào một plugin hoặc tính năng theme cụ thể, hãy kiểm tra với tác giả hoặc cộng đồng trước khi bắt đầu nâng cấp.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Có bản Textpattern phát hành trước (pre-release)"><![CDATA[
+<h2>Có bản cập nhật Textpattern pre-release</h2>
+<p>Có phiên bản pre-release mới hơn của Textpattern. Chúng tôi đang tìm kiếm các tình nguyện viên tích cực để thử nghiệm phiên bản này nhằm giúp bản phát hành cuối cùng ổn định nhất có thể. Chúng tôi cố gắng làm cho trải nghiệm nâng cấp mượt mà và ít đau đầu, ngay cả với mã beta.</p>
+<p>Nếu bạn quyết định tham gia, lưu ý rằng:</p>
+<ul>
+    <li>Không dùng bản beta này trên trang sản xuất trừ khi bạn có bản sao lưu hoạt động của cả tập tin trang và cơ sở dữ liệu, và biết cách khôi phục.</li>
+    <li>Vui lòng <a href="https://github.com/textpattern/textpattern/issues">báo cáo mọi vấn đề</a>, ghi rõ phiên bản beta bạn đang dùng. Có thể cần thêm các bản beta khác trước khi phát hành bản ổn định, tùy thuộc vào các vấn đề được báo cáo.</li>
+    <li>Đảm bảo rằng nếu bạn triển khai bản beta này, bạn cũng cập nhật lên bản chính thức khi nó được phát hành.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Đường dẫn thư mục tạm và thư mục nhớ đệm plugin không được trùng nhau"><![CDATA[
+<h2>Đường dẫn thư mục tạm và thư mục nhớ đệm plugin không được trùng nhau</h2>
+<p>Plugin nên có thư mục riêng và không dùng chung thư mục tạm. Đây là rủi ro bảo mật tiềm tàng và có thể ảnh hưởng xấu tới trang nếu thư mục tạm bị xóa nội dung. Hãy đảm bảo đường dẫn thư mục tạm khác với đường dẫn thư mục nhớ đệm plugin.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Không truy cập được máy chủ cập nhật"><![CDATA[
+<h2>Không truy cập được máy chủ cập nhật</h2>
+<p>Việc kiểm tra cập nhật đã thất bại, thường do nghẽn mạng hoặc hết thời gian chờ kết nối. Tình huống này thường tự hết trong vòng một hai giờ nên hãy thử truy cập lại bảng này sau.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Bản cài PHP của bạn thiếu hàm mail()"><![CDATA[
+<h2>Bản cài PHP của bạn thiếu hàm mail()</h2>
+<p>Hàm <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> của PHP đang bị vô hiệu hóa. Do vậy, Textpattern không thể gửi email và một số chức năng sẽ không khả dụng. Ví dụ, email thông báo bình luận mới sẽ không được gửi và người dùng mới sẽ không nhận email chào mừng. Tuy vậy, vẫn có thể thêm người dùng.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Bảng tập tin">
+        <item id="file_reassign" title="Gán lại tập tin"><![CDATA[
+<h2>Gán lại tập tin</h2>
+<p>Khi bạn tải một tập tin mới thay cho tập tin đang được gắn nhãn ‘Missing’ (thiếu), tập tin bạn chọn sẽ được tải lên máy chủ và liên kết với thông tin tập tin gốc trong cơ sở dữ liệu. Điều này nghĩa là tên tập tin gốc vẫn giữ nguyên, cũng như các thông tin liên quan khác như số lượt tải và chuyên mục. Tuy nhiên, kích thước tập tin sẽ được cập nhật để phản ánh tập tin mới.</p>
+        ]]></item>
+        <item id="file_replace" title="Thay thế tập tin"><![CDATA[
+<h2>Thay thế tập tin</h2>
+<p>Tải một tập tin tại đây sẽ thay thế nội dung của tập tin hiện có trên máy chủ nhưng vẫn giữ nguyên tên tập tin cũ. Số lượt tải và các thông tin khác liên quan đến tập tin không bị ảnh hưởng.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Ngày xuất bản"><![CDATA[
+<h2>Ngày xuất bản</h2>
+<p>Thời điểm một tập tin được xuất bản hoặc được sửa đổi gần đây nhất. Thời gian có thể được đặt là thời điểm xuất bản mục đó, hoặc là bất kỳ thời điểm nào trong quá khứ hay tương lai.</p>
+<p>Các ô tương ứng với các thông tin sau:</p>
+<ul>
+    <li>Năm / Tháng / Ngày</li>
+    <li>Giờ (định dạng 24 giờ) : Phút : Giây</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Tải tập tin lên"><![CDATA[
+<h2>Tải tập tin lên</h2>
+<p>Dùng biểu mẫu này để tải tập tin hoặc ảnh lên máy chủ.</p>
+<p>Dùng mã Textile để hiển thị đồ họa trong bài viết, mã Textpattern để đặt đồ họa vào mẫu trang của bạn, hoặc mã HTML để đặt đồ họa ở nơi khác.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Bảng form">
+        <item id="forms_overview" title="Giới thiệu về Form"><![CDATA[
+<h2>Giới thiệu về Form</h2>
+<p>Trong Textpattern, form là một đoạn (snippet) hoặc khối văn bản, HTML và thẻ Textpattern có thể tái sử dụng để hiển thị nội dung.</p>
+<p>Ví dụ về một form có thể được đặt tên là <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Bạn có thể sử dụng nó để hiển thị một danh sách không thứ tự (unordered list) các bài viết liên quan ở dạng HTML:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Vì vai trò của form này là xuất một danh sách tiêu đề, nó cũng có thể được áp dụng bên trong các thẻ khác, chẳng hạn như hiển thị 20 bài viết từ mục (section) hiện tại:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Bạn cũng có thể dùng form để hiển thị nội dung lặp lại, chẳng hạn như phần đầu và chân trang trong mẫu trang của bạn. Điều này có nghĩa là nội dung chỉ tồn tại ở một nơi và nếu bạn quyết định thay đổi nó, bạn chỉ cần làm một lần. Việc hiển thị nội dung từ form thường được thực hiện bằng:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Một form có thể có kích thước lên đến 64KB. Ví dụ cho một chân trang có thể bao gồm tiêu đề, đoạn văn, liên kết, thẻ điều kiện và tham chiếu đến các form khác như <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Bảng ảnh">
+        <item id="create_thumbnail" title="Tạo ảnh thu nhỏ"><![CDATA[
+<h2>Tạo ảnh thu nhỏ</h2>
+<p>Cho phép bạn (tạo lại) một ảnh thu nhỏ với kích thước chỉ định từ ảnh kích thước đầy đủ.</p>
+<p>Với kích thước tùy chỉnh, ảnh thu nhỏ sẽ được co theo kích thước bạn chọn, trừ khi bạn chọn ô ‘Cắt (Crop)’. Khi đó, ảnh thu nhỏ sẽ được cắt từ phần giữa ảnh mà không co giãn.</p>
+<p>Với kích thước tự động, ảnh thu nhỏ sẽ được co theo kích thước và thiết lập cắt (nếu có) trong theme quản trị hiện tại.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Thay thế ảnh"><![CDATA[
+<h2>Thay thế ảnh</h2>
+<p>Một ảnh được tải lên tại đây sẽ đơn giản thay thế ảnh hiện có gắn với mục này trong cơ sở dữ liệu.</p>
+        ]]></item>
+        <item id="upload_image" title="Tải ảnh lên"><![CDATA[
+<h2>Tải ảnh lên</h2>
+<p>Tải một hoặc nhiều ảnh lên máy chủ của bạn.</p>
+<p>Sau khi tải vào thư mục <code>images</code>, tên tập tin ảnh gốc của bạn chỉ được lưu bên trong cơ sở dữ liệu của Textpattern; bản thân tập tin ảnh sẽ được đổi tên thành một số tuần tự + phần mở rộng tập tin.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Tải ảnh thu nhỏ lên"><![CDATA[
+<h2>Tải ảnh thu nhỏ lên</h2>
+<p>Ảnh kích thước đầy đủ có thể được gán các ảnh thu nhỏ riêng. Điều này hữu ích cho việc liên kết tới – và lập chỉ mục – ảnh kích thước đầy đủ.</p>
+<p>Đường dẫn tới ảnh thu nhỏ giống hệt đường dẫn tới ảnh kích thước đầy đủ, chỉ thêm <code>t</code> vào cuối tên tập tin. Ví dụ, để tham chiếu tới ảnh thu nhỏ gắn với ảnh kích thước đầy đủ lưu tại <code>/images/12.jpg</code> bạn sẽ dùng <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Bảng ngôn ngữ">
+        <item id="get_textpack" title="Cài Textpack"><![CDATA[
+<h2>Cài Textpack</h2>
+<p>Dán thêm các chuỗi ngôn ngữ cho trang web của bạn vào ô này và chọn ‘Tải lên’ để cài đặt.</p>
+<p>Các chuỗi này thường ở dạng một Textpack có thể tải về, được phân phối kèm với plugin để cho phép chuỗi ngôn ngữ của plugin được sử dụng nguyên bản trong Textpattern.</p>
+<p>Các dịch giả sau đó có thể dịch các gói này khi cần và phân phối lại nội dung bản địa hóa cho cộng đồng.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Bảng liên kết">
+        <item id="link_description" title="Mô tả"><![CDATA[
+<h2>Mô tả</h2>
+<p>Mô tả cho liên kết là tùy chọn, và hữu ích cho việc chú thích liên kết, tạo thuộc tính <code>title=""</code> (tooltip) cho liên kết, hoặc đơn giản là lưu tài liệu nội bộ cho riêng bạn.</p>
+        ]]></item>
+        <item id="link_sort" title="Giá trị sắp xếp"><![CDATA[
+<h2>Giá trị sắp xếp</h2>
+<p>Hữu ích cho việc sắp xếp danh sách liên kết theo ngôn ngữ tự nhiên, ví dụ theo họ thay vì tên, hoặc theo các cụm từ bắt đầu bằng mạo từ xác định hay bất định.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Địa chỉ của liên kết. Nếu liên kết trỏ tới một trang khác, thì phải có tiền tố <code>http://</code> hoặc <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Ngày xuất bản"><![CDATA[
+<h2>Ngày xuất bản</h2>
+<p>Thời điểm một liên kết được xuất bản hoặc được sửa đổi gần đây nhất. Thời gian có thể được đặt là thời điểm xuất bản mục đó, hoặc là bất kỳ thời điểm nào trong quá khứ hay tương lai.</p>
+<p>Các ô tương ứng với các thông tin sau:</p>
+<ul>
+    <li>Năm / Tháng / Ngày</li>
+    <li>Giờ (định dạng 24 giờ) : Phút : Giây</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Bảng đăng nhập">
+        <item id="remember_login" title="Giữ trạng thái đăng nhập với trình duyệt này"><![CDATA[
+<h2>Giữ trạng thái đăng nhập với trình duyệt này</h2>
+<p>Khi được chọn, bạn sẽ vẫn đăng nhập vào tài khoản Textpattern của mình với trình duyệt web hiện tại cho đến khi bạn chọn đăng xuất. Nếu bỏ chọn, bạn sẽ tự động bị đăng xuất sau một khoảng thời gian không hoạt động.</p>
+<p>Yêu cầu bật cookie trong trình duyệt.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Bảng plugin">
+        <item id="install_plugin" title="Cài đặt plugin"><![CDATA[
+<h2>Cài đặt plugin</h2>
+<p>Dán nội dung của tập tin văn bản plugin đã biên dịch vào đây, rồi dùng ‘Tải lên’ để bắt đầu cài đặt. Bất kỳ plugin nào bạn tải lên có cùng tên với plugin đã cài trước đó sẽ bị ghi đè bằng phiên bản mới.</p>
+<p>Văn bản plugin bạn dán vào đây <strong>không phải</strong> là mã PHP thô mà là văn bản được mã hóa Base64, thường có phần đầu chứa thông tin plugin (như tên plugin, phiên bản và mô tả, tên tác giả, v.v.).</p>
+<p>Bạn thường có thể lấy bản đã biên dịch của plugin từ <a rel="external" target="_blank" href="https://plugins.textpattern.com/">kho plugin <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> hoặc kênh phân phối của tác giả plugin, như trang web hoặc GitHub của họ.</p>
+<p>Bạn cũng có thể dán một URL tới tập tin văn bản plugin dạng Textpattern đã biên dịch vào đây, nếu trang ngoài cho phép.</p>
+<p>Mọi plugin tải lên sẽ trải qua bước xác minh, cho phép bạn xem mã và nội dung plugin trước khi cài.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Tải plugin lên"><![CDATA[
+<h2>Tải plugin lên</h2>
+<p>Dùng biểu mẫu này để tải tập tin plugin lên. Các plugin được tải lên (và mọi tài sản kèm theo) sẽ được lưu trong thư mục ‘plugins’.</p>
+<p>Các loại plugin có thể tải lên tại đây gồm:</p>
+<ul>
+<li>Tập tin Mẫu PHP Textpattern (PHP Template) chứa đầy đủ mã, metadata, chuỗi Textpack và văn bản trợ giúp.</li>
+<li>Tập tin văn bản Textpattern đã biên dịch chứa đầy đủ mã, metadata, chuỗi Textpack và văn bản trợ giúp.</li>
+<li>Gói zip Textpattern chứa thông tin manifest và mã, metadata, chuỗi Textpack, văn bản trợ giúp và tập tin hỗ trợ.</li>
+<li>Tập tin PHP thô (nhưng sẽ không điền metadata bổ sung và không được khuyến nghị).</li>
+</ul>
+<p>Bất kỳ plugin nào bạn tải lên có cùng tên với plugin đã cài trước đó sẽ bị ghi đè bằng phiên bản mới.</p>
+<p>Mọi plugin tải lên sẽ trải qua bước xác minh, cho phép bạn xem mã và nội dung plugin trước khi cài.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Bảng tùy chọn">
+        <item id="admin_side_plugins" title="Dùng plugin phía quản trị?"><![CDATA[
+<h2>Dùng plugin phía quản trị?</h2>
+<p>Các plugin phía quản trị có thể thay đổi cách hoạt động của giao diện quản trị. Chúng có thể móc (hook) vào các thao tác đã có sẵn, như sửa hay xuất bản bài viết, hoặc thêm các bảng mới để cung cấp/chức năng mở rộng.</p>
+<p>Nếu bạn muốn tìm hiểu thêm về plugin phía quản trị, vui lòng xem trang <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Mở rộng Textpattern <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> trong <a rel="external" target="_blank" href="https://docs.textpattern.com/">Tài liệu người dùng Textpattern <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>. Mọi loại plugin đều được liệt kê trên trang <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugin Textpattern <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Tùy chọn nâng cao"><![CDATA[
+<h2>Tùy chọn nâng cao</h2>
+<p>Hiển thị nhóm tùy chọn nâng cao, nơi có thể cấu hình thêm các thiết lập như:</p>
+<ul>
+    <li>Các hàm PHP được bật trong <code>txp:evaluate</code>.</li>
+    <li>Các loại mẫu form tùy biến.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Cho phép PHP trong bài viết?"><![CDATA[
+<h2>Cho phép PHP trong bài viết?</h2>
+<p>Khi bật, thiết lập này cho phép dùng PHP trong bài viết. Tác giả phải có đủ quyền để làm điều đó (theo mặc định, chỉ <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Nhà xuất bản (Publishers)’ <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Biên tập quản lý (Managing Editors)’ <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> và <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">‘Biên tập viên nội dung (Copy Editors)’ <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> có thể).</p>
+<p><strong>Rất khuyến nghị bạn tắt tùy chọn này</strong> trừ khi thực sự cần. Bất kỳ dạng mã PHP có thể gây hại/nguy hiểm nào có thể bị thêm vào bởi bất kỳ tác giả nào và được thực thi bởi bất cứ ai xem bài viết đó, có thể phá hủy trang web hoặc làm rò rỉ thông tin cho bên thứ ba.</p>
+<p>Mã PHP phải bỏ thẻ mở và đóng PHP, và phải được bao trong thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Cho phép ghi đè form?"><![CDATA[
+<h2>Cho phép ghi đè form?</h2>
+<p>Thiết lập này cho phép tác giả bài viết ghi đè form được dùng khi bài viết của họ được dựng. Nếu bật, một danh sách xổ xuống ‘Mẫu ghi đè (Override form)’ sẽ xuất hiện khi chỉnh sửa bài viết.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Cho phép PHP trong trang?"><![CDATA[
+<h2>Cho phép PHP trong trang?</h2>
+<p>Khi bật, thiết lập này cho phép dùng mã PHP trong template trang (page template) và form.</p>
+<p><strong>Rất khuyến nghị bạn tắt tùy chọn này</strong> trừ khi thực sự cần. Bất kỳ dạng mã PHP có thể gây hại/nguy hiểm nào có thể bị thêm vào bởi người dùng khác và được thực thi bởi quản trị viên hoặc khách truy cập không biết.</p>
+<p>Mã PHP phải bỏ thẻ mở và đóng PHP, và phải được bao trong thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Định dạng ngày tháng lưu trữ"><![CDATA[
+<h2>Định dạng ngày tháng lưu trữ</h2>
+<p>Cách ngày tháng xuất hiện trên bài viết trong các mục (section) trên trang của bạn.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Hiển thị trích đoạn trên trang sửa bài viết?"><![CDATA[
+<h2>Hiển thị trích đoạn trên trang sửa bài viết?</h2>
+<p>Nếu chọn ‘Không’ thì ô trích đoạn sẽ không hiển thị với tác giả trên màn hình chỉnh sửa bài viết.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Gắn tiêu đề vào permalink?"><![CDATA[
+<h2>Gắn tiêu đề vào permalink?</h2>
+<p>Thiết lập này sẽ gắn một phiên bản tiêu đề bài viết được tạo tự động vào URL. Nó được tạo tự động hoặc có thể được ghi đè thủ công trong ‘Tiêu đề chỉ dùng cho URL’ khi chỉnh sửa bài viết.</p>
+<p>Thiết lập này chỉ có tác dụng khi bạn sử dụng URL sạch. Với một số ngôn ngữ, điều này có thể tạo ra URL dài và xấu, khi đó bạn có thể muốn đặt tùy chọn này thành ‘Tắt’.</p>
+        ]]></item>
+        <item id="auto_dst" title="Tự động điều chỉnh cài đặt Giờ mùa hè (DST)?"><![CDATA[
+<h2>Tự động điều chỉnh cài đặt Giờ mùa hè (DST)?</h2>
+<p>Thiết lập này cho phép Textpattern thay đổi thời điểm DST (Daylight Saving Time – Giờ mùa hè) trong vùng của bạn. Nếu đặt là ‘Không’, bạn sẽ có thể thay đổi tùy chọn ‘Bật DST’ theo cách thủ công.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Bình luận mới đồng nghĩa với trang được cập nhật?"><![CDATA[
+<h2>Bình luận mới đồng nghĩa với trang được cập nhật?</h2>
+<p>Cơ sở dữ liệu Textpattern lưu thời điểm thay đổi gần nhất trên trang của bạn. Khi thiết lập này là ‘Có’, một bình luận mới cũng sẽ cập nhật giá trị này. Giá trị này được dùng, ví dụ, cho chức năng <code>"Gửi phần đầu Last-Modified"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Thêm rel=&quot;nofollow&quot; vào bình luận?"><![CDATA[
+<h2>Thêm rel=&quot;nofollow&quot; vào bình luận?</h2>
+<p>Nếu đặt là ‘Có’, tùy chọn này sẽ thêm một thuộc tính nữa vào các liên kết trong bình luận. Nó nhằm mục đích giảm động cơ cho spammer bình luận và được khởi xướng bởi nhiều máy tìm kiếm và nhà phát triển phần mềm. Bạn có thể tìm hiểu thêm bằng cách đọc <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">thông báo của Google <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+<p><strong>Lưu ý:</strong> Thiết lập này không ảnh hưởng đến chức năng của trang. Nó có thể ngăn hoặc giảm ảnh hưởng của bình luận khi một số máy tìm kiếm xếp hạng các trang được liên kết từ các bình luận đó.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Hiển thị bình luận dưới dạng danh sách đánh số?"><![CDATA[
+<h2>Hiển thị bình luận dưới dạng danh sách đánh số?</h2>
+<p>Xác định xem bình luận bài viết sẽ được bao bọc bằng thẻ HTML <code>&lt;ol&gt;</code> và từng bình luận được bao bọc trong thẻ <code>&lt;li&gt;</code> (khiến bình luận hiển thị dạng danh sách đánh số), hay từng bình luận sẽ được bao bọc bằng thẻ <code>&lt;div&gt;</code> thay thế.</p>
+<p>Dù ở giá trị nào, bạn có thể ghi đè các thẻ được dùng trên cơ sở từng form riêng biệt bằng cách chỉnh sửa thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>, có trong form <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Tự động chèn bình luận vào bài viết?"><![CDATA[
+<h2>Tự động chèn bình luận vào bài viết?</h2>
+<p>Thiết lập này xác định liệu bình luận và form bình luận có được tự động nối thêm vào tất cả các bài viết riêng lẻ hay không (bằng cách tự động bao gồm nội dung của form <code>comments_display</code>).</p>
+<p>Phần lớn thời gian, bạn sẽ muốn đặt là ‘Không’, vì điều này cho phép bạn linh hoạt hơn trong việc bố trí vị trí bình luận trong thiết kế trang. Bạn sẽ cần thêm thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> thủ công trong bất kỳ mẫu trang dựa trên bài viết nào mà bạn muốn hiển thị bình luận.</p>
+<p>Nếu bạn gặp tình trạng bình luận hiển thị trùng lặp trong một bài viết, rất có thể là do mẫu trang của bạn đã có thẻ <code>&lt;txp:comments /&gt;</code> nhưng đồng thời tùy chọn ‘Tự động chèn bình luận vào bài viết?’ cũng đang đặt là ‘Có’.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Định dạng ngày tháng của bình luận"><![CDATA[
+<h2>Định dạng ngày tháng của bình luận</h2>
+<p>Cách ngày tháng bình luận xuất hiện với khách truy cập trang.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Lời mời bình luận mặc định"><![CDATA[
+<h2>Lời mời bình luận mặc định</h2>
+<p>Nếu bạn cho phép khách truy cập bình luận trên trang, đây là dòng mời mặc định. Ví dụ:</p>
+<ul>
+    <li>Bình luận</li>
+    <li>Thêm bình luận</li>
+    <li>Phản hồi</li>
+    <li>Chú thích</li>
+</ul>
+<p>Lưu ý rằng lời mời bình luận luôn có thể thay đổi riêng cho từng bài viết.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Tắt bình luận sau"><![CDATA[
+<h2>Tắt bình luận sau</h2>
+<p>Dùng mục này để thiết lập khoảng thời gian sau đó việc bình luận sẽ bị tắt cho các bài viết (có thể đặt là ‘Không bao giờ’ để cho phép bình luận vô thời hạn).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Cho phép ảnh trong bình luận?"><![CDATA[
+<h2>Cho phép ảnh trong bình luận?</h2>
+<p>Nếu đặt tùy chọn này là ‘Không’, mọi ảnh được chèn trong bình luận sẽ bị loại bỏ.</p>
+        ]]></item>
+        <item id="comments_mode" title="Chế độ bình luận"><![CDATA[
+<h2>Chế độ bình luận</h2>
+<p>Nếu chọn ‘nopopup’ (khuyến nghị), cửa sổ hiện tại sẽ được tải lại để chỉ hiển thị bài viết hiện tại, với các bình luận bên dưới.</p>
+<p>Nếu chọn ‘popup’, một cửa sổ trình duyệt mới sẽ mở khi nhấp vào liên kết bình luận (dùng form <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Duyệt bình luận?"><![CDATA[
+<h2>Duyệt bình luận?</h2>
+<p>Nếu đặt là ‘Có’, mọi bình luận mới sẽ bị tắt hiển thị cho đến khi được xem xét. Bạn phải duyệt thủ công và cho hiển thị từng bình luận (một thư sẽ được gửi cho tác giả bài viết khi nhận được bình luận mới).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Mặc định bật bình luận?"><![CDATA[
+<h2>Mặc định bật bình luận?</h2>
+<p>Nếu đặt là ‘Có’, bình luận sẽ tự động được bật cho mọi bài viết được xuất bản. Nếu đặt là ‘Không’, bạn phải bật bình luận trong bảng ‘Viết’ của bài viết mỗi khi muốn nhận bình luận.</p>
+<p>Có thể bật/tắt bình luận bất cứ lúc nào, riêng cho từng bài viết.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Bình luận yêu cầu địa chỉ email của người bình luận?"><![CDATA[
+<h2>Bình luận yêu cầu địa chỉ email của người dùng?</h2>
+<p>Nếu đặt là ‘Có’, những người muốn bình luận trên bài viết của bạn sẽ phải nhập một địa chỉ email trong form bình luận. Họ sẽ không thể gửi bình luận nếu không cung cấp địa chỉ email.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Bình luận yêu cầu tên người bình luận?"><![CDATA[
+<h2>Bình luận yêu cầu tên người bình luận?</h2>
+<p>Nếu đặt là ‘Có’, những người muốn bình luận trên bài viết của bạn sẽ phải nhập tên trong form bình luận. Họ sẽ không thể gửi bình luận nếu không cung cấp tên.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Gửi bình luận qua email cho tác giả?"><![CDATA[
+<h2>Gửi bình luận qua email cho tác giả?</h2>
+<p>Nếu đặt là ‘Có’, bất cứ khi nào nhận được bình luận mới cho một bài viết, một bản sao bình luận sẽ được gửi qua email cho tác giả của bài viết đó.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Cho phép thêm nhiều đánh dấu Textile trong bình luận?"><![CDATA[
+<h2>Cho phép thêm nhiều đánh dấu Textile trong bình luận?</h2>
+<p>Khi đặt là ‘Có’, bình luận có thể chứa các phần tử <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> vốn sẽ bị xử lý như văn bản thuần nếu không bật, chẳng hạn như:</p>
+<ul>
+    <li>tiêu đề</li>
+    <li>danh sách có thứ tự và không thứ tự</li>
+    <li>chú thích (footnote)</li>
+    <li>bảng</li>
+    <li>mã lệnh (code)</li>
+    <li>cú pháp khối mở rộng (<code>bc..</code>, <code>bq..</code>, v.v.)</li>
+</ul>
+<p><strong>Lưu ý:</strong> Vì lý do bảo mật, HTML thô sẽ được chuyển thành văn bản thường.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Tài khoản được phép đăng nhập đồng thời"><![CDATA[
+<h2>Tài khoản được phép đăng nhập đồng thời</h2>
+<p>Một danh sách tên đăng nhập, phân tách bằng dấu phẩy, được phép đăng nhập trên nhiều trình duyệt/phiên. Điều này hữu ích trong giai đoạn phát triển để chia sẻ một tài khoản với khách hàng.</p>
+<p>Sử dụng tính năng này là rủi ro bảo mật và <strong>không được khuyến nghị trên trang live</strong>. Bảng Chẩn đoán sẽ đưa cảnh báo nếu tài khoản người dùng của bạn được cấu hình dùng đăng nhập đồng thời trên trang live.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Các loại template form tùy biến"><![CDATA[
+<h2>Các loại template form tùy biến</h2>
+<p>Bên cạnh các loại template form chuẩn (article, file, misc, v.v.), Publisher có thể định nghĩa loại tùy biến. Mục đích của các loại template form tùy biến là hai mặt: phân loại form dễ hơn và định nghĩa tài sản tùy biến.</p>
+<p>Định dạng của tùy chọn này là <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>, với mỗi phần (section) tương ứng với một loại template form.</p>
+<p>Để định nghĩa một loại form tùy biến (ví dụ <code>js</code>) cần thêm (ở dòng riêng) phần <code>[js]</code>. Tiêu đề mặc định có thể đặt qua mục <code>title="Javascript"</code> trong phần tương ứng. Nếu cần, cũng có thể thêm tiêu đề bản địa hóa (ví dụ <code>ru="Скрипт"</code>).</p>
+<p>Ngoài ra, có thể chỉ định <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">kiểu phương tiện (media type) <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> (trước đây gọi là MIME type) cho template form, ví dụ <code>mediatype="application/javascript"</code>. Điều này biến các template form loại này thành tài sản tùy biến có thể được phục vụ với kiểu phương tiện đã đặt, từ cơ sở dữ liệu hoặc từ đĩa (tập tin phẳng) qua thẻ <code>&lt;txp:output_form /&gt;</code>. Ví dụ, một template form tên <code>myscript.js</code> thuộc loại <code>[js]</code> với media type là <code>application/javascript</code> có thể được đưa vào mã của bạn như sau:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Thao tác này sẽ tạo thẻ HTML <code>&lt;script&gt;</code> sau:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Chỉ các template form có phần mở rộng tên tương ứng với loại của chúng (ví dụ <code>myscript.js</code>) mới có thể được phục vụ dưới dạng tập tin phẳng. Khi đó, chúng sẽ không được Textpattern xử lý và có thể truy cập qua URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Trường tùy biến"><![CDATA[
+<h2>Trường tùy biến</h2>
+<p>Các trường tùy biến được dùng để chứa dữ liệu bổ sung của bài viết. Bạn có thể định nghĩa tối đa mười trường bằng cách đặt tên tại đây. Mỗi trường sẽ xuất hiện như một ô riêng trên bảng Viết, cho phép gắn dữ liệu tùy biến với từng bài viết.</p>
+<p>Bạn có thể đặt tên trường theo bất kỳ cách nào, nhưng lưu ý những điểm sau:</p>
+<ul>
+<li>Dùng khoảng trắng giúp dễ đọc hơn trên bảng Viết, nhưng khi đó các trường <em>không</em> thể dùng làm tham số sắp xếp hoặc lọc trong thẻ article_custom. Hãy cân nhắc dùng dấu gạch dưới nếu muốn dùng chức năng này.</li>
+<li>Hãy cẩn thận khi đặt tên để không trùng với các tên trường đã dành riêng trong Textpattern. Ví dụ, đừng dùng <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code>, v.v. nếu không bạn sẽ gặp kết quả kỳ lạ hoặc hỏng trang.</li>
+<li>Dữ liệu trong mỗi trường bị giới hạn 255 ký tự và chỉ là văn bản.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Định dạng ngày"><![CDATA[
+<h2>Định dạng ngày</h2>
+<p>Tùy chọn này chỉ ảnh hưởng tới cách ngày tháng bài viết xuất hiện trên trang chủ của bạn.</p>
+        ]]></item>
+        <item id="default_event" title="Bảng mặc định"><![CDATA[
+<h2>Bảng mặc định</h2>
+<p>Bảng trong giao diện quản trị Textpattern sẽ hiển thị đầu tiên khi bất cứ ai đăng nhập.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Trạng thái xuất bản mặc định"><![CDATA[
+<h2>Trạng thái xuất bản mặc định</h2>
+<p>Xác định trạng thái hiển thị xuất bản của các bài Textpattern mới tạo.</p>
+<p>Lưu ý thiết lập tùy chọn này không ảnh hưởng đến trạng thái các bài được tạo hoặc sửa trước thời điểm thay đổi.</p>
+<p>Trạng thái xuất bản mặc định là một trong các trạng thái sau:</p>
+<ul>
+    <li>Draft (Nháp)</li>
+    <li>Hidden (Ẩn)</li>
+    <li>Pending (Chờ duyệt)</li>
+    <li>Live (Hiện)</li>
+    <li>Sticky</li>
+</ul>
+<p>Một bài <strong>nháp</strong> được xem là đang soạn dở và không thể xem bên ngoài khu vực quản trị Textpattern (tức là không hiển thị trên mặt ngoài Textpattern và không được phát hành qua feed).</p>
+<p>Một bài <strong>ẩn</strong> không thể xem bên ngoài khu vực quản trị Textpattern.</p>
+<p>Một bài <strong>chờ duyệt</strong> được xem là sẵn sàng xuất bản và chờ phê duyệt, nhưng không thể xem bên ngoài khu vực quản trị Textpattern.</p>
+<p>Một bài <strong>hiện</strong> thường có thể xem bên ngoài khu vực quản trị Textpattern (tức là hiển thị trên mặt ngoài Textpattern, được phát hành trong feed nếu tùy chọn cho phép). Nếu một bài hiện và có ngày hết hạn, trạng thái vẫn giữ là hiện sau khi qua ngày đó, nhưng bài chỉ xuất hiện bên ngoài khu vực quản trị nếu cho phép xuất bản bài đã hết hạn.</p>
+<p>Một bài <strong>sticky</strong> giống với bài <strong>hiện</strong> ở chỗ có thể xem bên ngoài khu vực quản trị Textpattern nhưng <strong>không</strong> xuất hiện trong danh sách bài viết trừ khi thẻ <code>article</code> hoặc <code>article_custom</code> có thuộc tính <code>status</code> với giá trị <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Chọn doctype HTML bạn muốn dùng (HTML5 hoặc XHTML). Tùy chọn này ảnh hưởng tới form nhập bình luận, cách Textile dựng thẻ <code>&lt;abbr&gt;</code> hoặc <code>&lt;acronym&gt;</code>, và các thẻ <code>&lt;link&gt;</code> được tạo bởi thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Bật xem trước theme đang phát triển?"><![CDATA[
+<h2>Bật xem trước theme đang phát triển?</h2>
+<p>Người dùng có đủ quyền (theo mặc định là vai trò Publisher và Designer) có thể phát triển và xem trước một theme mới một cách an toàn trong khi mọi người dùng khác vẫn xem theme cũ (cho đến khi theme mới được triển khai).</p>
+<p>Tuy nhiên, người dùng có quyền nhưng không muốn tham gia phát triển theme có thể tắt xem trước theme đang phát triển. Khi đó họ sẽ được phục vụ theme ‘công khai’ hiện tại, giống khách truy cập thông thường.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Bật hỗ trợ short tag?"><![CDATA[
+<h2>Bật hỗ trợ short tag?</h2>
+<p>Các thẻ Textpattern có dạng <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Có thể giảm thao tác gõ bằng cách bật cú pháp viết tắt, trong đó có thể bỏ tiền tố <code>txp:</code> nếu tuân theo một vài quy tắc đơn giản. Dưới đây là một số ví dụ minh họa:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> trở thành <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> trở thành <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> trở thành <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> trở thành <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> trở thành <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (lưu ý có thể dùng tiền tố plugin cho thẻ <code>else</code>).</li>
+</ul>
+<p>Nếu một thẻ có dấu gạch dưới và bạn bật short tag, ý tưởng cơ bản là:</p>
+<ol>
+    <li>Bỏ tiền tố <code>txp:</code>.</li>
+    <li>Thay lần xuất hiện đầu tiên của dấu gạch dưới bằng <code>::</code>.</li>
+</ol>
+<p>Lưu ý thiết lập này không ảnh hưởng đến khả năng dùng mã rút gọn <code>&lt;txp:output_form /&gt;</code> để dựng đoạn form. Bạn vẫn có thể dùng <code>&lt;txp::shortcode /&gt;</code>, sẽ được diễn giải thành <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Bật máy chủ XML-RPC?"><![CDATA[
+<h2>Bật máy chủ XML-RPC?</h2>
+<p>Nếu bạn muốn dùng <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> để điều khiển Textpattern từ xa (ví dụ bằng ứng dụng desktop hoặc di động) bạn phải bật máy chủ XML-RPC bằng cách đặt tùy chọn này là ‘Có’.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Dùng tính năng email nâng cao"><![CDATA[
+<h2>Dùng tính năng email nâng cao</h2>
+<p>Đặt tùy chọn này là ‘Không’ sẽ chuyển tất cả email – như yêu cầu đặt lại mật khẩu tài khoản, và email từ plugin như com_connect – đi qua hàm <code>mail()</code> của PHP. Chọn ‘Có’ sẽ dùng PHPMailer tích hợp thay thế, mở ra các cài đặt tùy chọn để gửi mail qua máy chủ SMTP ngoài.</p>
+<p>Nếu bạn gặp khó khăn với việc email được gửi đến (đặc biệt với nhà cung cấp trực tuyến như Gmail, Outlook, Yahoo!, v.v.), nguyên nhân thường là tên miền của bạn không được xem là nguồn tin cậy. Chuyển sang ‘Có’ có thể cải thiện khả năng gửi thành công. Ngoài ra, dùng SMTP có thể tương thích tốt hơn với một số nhà cung cấp email và tăng thêm khả năng gửi thành công.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Nhật ký hết hạn sau bao nhiêu ngày?"><![CDATA[
+<h2>Nhật ký hết hạn sau bao nhiêu ngày?</h2>
+<p>Khi bật ghi nhật ký trong Textpattern, bạn có thể chỉ định thời gian (theo ngày) giữ nhật ký. Ví dụ ‘7’ sẽ giữ nhật ký trong bảy ngày.</p>
+<p><strong>Lưu ý:</strong> Nhật ký chỉ được cắt bớt khi bạn xem bảng ‘Nhật ký truy cập’, còn nếu không sẽ tiếp tục tăng kích thước.</p>
+        ]]></item>
+        <item id="file_base_path" title="Đường dẫn thư mục tập tin"><![CDATA[
+<h2>Đường dẫn thư mục tập tin</h2>
+<p>Thiết lập <strong>đường dẫn tuyệt đối</strong> tới thư mục nơi các tập tin tải lên sẽ được lưu vĩnh viễn. PHP cần có quyền ghi vào thư mục này.</p>
+<p><strong>Lưu ý:</strong> Hãy cân nhắc chuyển thư mục này ra ngoài thư mục gốc công khai của trang web để tăng bảo mật.</p>
+        ]]></item>
+        <item id="file_download_header" title="Phần đầu tải tập tin xuống (File download header)"><![CDATA[
+<h2>Phần đầu tải tập tin xuống (File download header)</h2>
+<p>Cho phép bạn tùy chỉnh cách xử lý tải tập tin xuống.</p>
+<p>Thông thường mọi lượt tải được xử lý như tệp đính kèm và được tải về (tùy cách trình duyệt của bạn xử lý kiểu tập tin đó). Nếu bạn muốn gợi ý cách xử lý một số hoặc tất cả loại tập tin, bạn có thể cung cấp mã thẻ tại đây. Ví dụ, để hiển thị tập tin PDF được bạn gán vào chuyên mục Textpattern 'inline-pdf' trực tiếp (inline) thay vì tải xuống:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Dung lượng tập tin tối đa cho phép tải lên (tính theo byte)"><![CDATA[
+<h2>Dung lượng tập tin tối đa cho phép tải lên (tính theo byte)</h2>
+<p>Bạn có thể giới hạn kích thước tối đa (tính bằng byte) đối với tập tin tải lên. Lưu ý giá trị này cũng bị giới hạn bởi cấu hình PHP. Nếu Textpattern phát hiện cấu hình PHP giới hạn kích thước tải lên thấp hơn, nó sẽ tự động điều chỉnh xuống. Nếu muốn cho phép tải tập tin lớn hơn qua trình duyệt, hãy liên hệ nhà cung cấp host (các giá trị liên quan trong <code>php.ini</code> là <code>post_max_size</code>, <code>upload_max_filesize</code> và <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Múi giờ"><![CDATA[
+<h2>Múi giờ</h2>
+<p>Để hiển thị ngày giờ theo múi giờ địa phương, vui lòng chọn múi giờ của bạn.</p>
+        ]]></item>
+        <item id="img_dir" title="Thư mục ảnh"><![CDATA[
+<h2>Thư mục ảnh</h2>
+<p>Nếu bạn muốn tùy chỉnh tên thư mục ảnh, có thể thực hiện tại đây. Bạn phải tạo thư mục trước trong thư mục gốc cài đặt Textpattern, và cần đảm bảo PHP có thể ghi vào thư mục đó.</p>
+<p>Đường dẫn này luôn là <strong>đường dẫn tương đối</strong> (so với thư mục gốc cài đặt Textpattern).</p>
+<p>Mặc định là <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Thêm địa chỉ email vào feed Atom?"><![CDATA[
+<h2>Thêm địa chỉ email vào feed Atom?</h2>
+<p>Tùy chọn này cho phép bạn thêm địa chỉ email của tác giả (được đặt trong tài khoản người dùng) của một bài viết vào phần <code>author</code> trong feed Atom.</p>
+        ]]></item>
+        <item id="is_dst" title="Bật Giờ mùa hè (DST)?"><![CDATA[
+<h2>Bật Giờ mùa hè (DST)?</h2>
+<p>Liệu DST (Daylight Saving Time – Giờ mùa hè) hiện đang bật cho múi giờ của bạn hay không.</p>
+        ]]></item>
+        <item id="logging" title="Ghi nhật ký"><![CDATA[
+<h2>Ghi nhật ký</h2>
+<p>Bạn có thể chọn mức độ ghi nhật ký khách truy cập mà Textpattern thực hiện:</p>
+<ul>
+    <li><strong>Tất cả lượt truy cập (All hits):</strong> Textpattern sẽ ghi nhật ký mọi lượt xem trang trên site của bạn</li>
+    <li><strong>Chỉ lượt giới thiệu (Referrers only):</strong> Textpattern chỉ ghi các lượt truy cập đến từ trang khác</li>
+    <li><strong>Không (None):</strong> Textpattern không ghi nhật ký lượt xem nào</li>
+</ul>
+<p>Từ Textpattern 4.7.0, Textpattern không thu thập hay lưu trữ thông tin địa chỉ IP của khách truy cập. Nếu bạn thu thập hay lưu địa chỉ IP bên ngoài Textpattern, hãy có biện pháp phù hợp để lưu trữ và/hoặc sử dụng dữ liệu theo đúng luật áp dụng, như <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>, và thực thi bảo mật mạnh ở mọi khía cạnh của máy chủ và bản cài Textpattern để tránh dữ liệu bị lộ.</p>
+<p>Rất khuyến nghị bạn giữ tùy chọn này ở giá trị mặc định, ‘Không’, trừ khi bạn thực sự cần thông tin này và hơn nữa, công khai tuyên bố cách sử dụng dự kiến của nó.</p>
+        ]]></item>
+        <item id="max_url_len" title="Chiều dài URL tối đa (tính theo số ký tự)"><![CDATA[
+<h2>Chiều dài URL tối đa (tính theo số ký tự)</h2>
+<p>Tùy chọn này ngăn không cho các URL dài hơn độ dài chỉ định hoạt động. Nó có thể hữu ích cho việc giảm thiểu thiệt hại và tăng bảo mật trang.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Hiển thị liên kết trợ giúp nội tuyến phía quản trị"><![CDATA[
+<h2>Hiển thị liên kết trợ giúp nội tuyến phía quản trị</h2>
+<p>Nếu bạn muốn ẩn các liên kết trợ giúp nội tuyến phía quản trị (cửa sổ trợ giúp Textpattern dạng pop-up) trên toàn hệ thống, hãy chuyển thiết lập này sang ‘Không’.</p>
+        ]]></item>
+        <item id="never_display_email" title="Ẩn địa chỉ email của người bình luận?"><![CDATA[
+<h2>Ẩn địa chỉ email của người bình luận?</h2>
+<p>Thiết lập này điều khiển việc địa chỉ email của người bình luận có được hiển thị công khai hay không.</p>
+<p>Khuyến nghị không hiển thị địa chỉ email, như một phép lịch sự với người dùng của bạn, nhưng vẫn có những tình huống việc hiển thị email người bình luận là mong muốn.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Dùng bảng mã ISO-8859-1 trong email gửi đi (mặc định là UTF-8)?"><![CDATA[
+<h2>Dùng bảng mã ISO-8859-1 trong email gửi đi (mặc định là UTF-8)?</h2>
+<p>Textpattern sử dụng mã hóa UTF-8 ở mọi nơi khi có thể theo mặc định, bao gồm cả email gửi đi. Tuy nhiên, một số trình khách email cũ (bao gồm một số phiên bản Microsoft Outlook) không hỗ trợ tốt UTF-8. Nếu bạn gặp ký tự lỗi trong email, tùy chọn này sẽ chuyển văn bản sang mã hóa ISO-8859-1 trước khi gửi.</p>
+<p><strong>Lưu ý:</strong> Nếu bạn dùng một ngôn ngữ có ký tự không thể biểu diễn trong ISO-8859-1, thiết lập này sẽ không giúp ích. Bạn nên tìm một trình khách email hỗ trợ UTF-8 (hoặc Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Loại form ghi đè"><![CDATA[
+<h2>Loại form ghi đè</h2>
+<p>Chọn loại form nào sẽ có template được cung cấp trong bảng Viết để dùng làm form ghi đè (override forms).</p>
+        ]]></item>
+        <item id="permlink_format" title="Mẫu URL tiêu đề permalink"><![CDATA[
+<h2>Mẫu URL tiêu đề permalink</h2>
+<p>Tùy chọn này định nghĩa cách URL bài viết được tạo và gán khi dùng chế độ không "lộn xộn".</p>
+<p>Khi bài viết được xuất bản, URL của nó được tạo từ tiêu đề bài viết trừ khi một URL cụ thể được cung cấp trong trường Tiêu đề chỉ dùng cho URL.</p>
+<p>Xét tiêu đề bài viết ví dụ sau: <em>Ann and Bob eat cake</em></p>
+<p>Khi tùy chọn mẫu URL tiêu đề permalink được đặt là ‘Gạch nối (title-like-this)’, URL của bài sẽ là:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Khi tùy chọn mẫu URL tiêu đề permalink được đặt là ‘Viết hoa xen kẽ (TitleLikeThis)’, URL của bài sẽ là:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Mẫu URL bài viết"><![CDATA[
+<h2>Mẫu URL bài viết</h2>
+<p>Tùy chọn này định nghĩa cách truy cập từng bài viết qua URL được hiển thị bằng thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>.</p>
+<p>Chế độ ‘?=messy’ là tương thích nhất – nó hoạt động với rất ít hoặc không cần cấu hình – nhưng lại kém lợi về khả năng đọc URL và tối ưu hóa máy tìm kiếm (SEO). Ở chế độ này, URL của bài trên trang của bạn sẽ trông như sau:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Các chế độ khác cần chức năng rewrite URL của máy chủ web (ví dụ module <code>mod_rewrite</code> của Apache hoặc chỉ thị rewrite của NGINX trong khối <code>server</code>). Nếu máy chủ của bạn không hỗ trợ rewrite URL, hãy liên hệ nhà cung cấp host hoặc dùng chế độ ‘?=messy’ như trên.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Đường dẫn thư mục nhớ đệm plugin"><![CDATA[
+<h2>Đường dẫn thư mục nhớ đệm plugin</h2>
+<p>Thiết lập này chủ yếu dành cho nhà phát triển plugin. Khi chỉ định, bạn có thể đặt tập tin mã nguồn plugin (không phải bản biên dịch) trong thư mục này và Textpattern sẽ tự động tải plugin, cho phép bạn dễ dàng sửa plugin và xem ngay tác động mà không cần cài/kích hoạt plugin. <strong>Cẩn thận</strong> vì theo cách này, một plugin lỗi (không biên dịch được) cũng có thể làm Textpattern bị lỗi theo!</p>
+<p>Khuyến nghị bạn tải plugin thông qua bảng ‘Plugins’ chuẩn trên trang sản xuất, thay vì dùng thư mục nhớ đệm plugin.</p>
+<p><strong>Lưu ý:</strong> Đừng chỉ định cùng một thư mục cho cả ‘thư mục tạm’ và ‘nhớ đệm plugin’, nếu không sẽ gây lỗi (Textpattern sẽ cố chạy nội dung của tập tin nhật ký tạm như plugin).</p>
+        ]]></item>
+        <item id="production_status" title="Trạng thái sản xuất (Production status)"><![CDATA[
+<h2>Trạng thái sản xuất (Production status)</h2>
+<p>Một trang Textpattern có ba chế độ:</p>
+<ol>
+    <li>‘Debugging’ (Gỡ lỗi)</li>
+    <li>‘Testing’ (Kiểm thử)</li>
+    <li>‘Live’ (Live)</li>
+</ol>
+<h3>Chế độ Debugging</h3>
+<p>Tất cả thông tin lỗi PHP trên trang live sẽ hiển thị, cũng như cảnh báo về mã và plugin bị lỗi. Ngoài ra, các thông tin sau sẽ hiển thị khi bạn xem mã nguồn HTML của trang live:</p>
+<ul>
+    <li>thời gian máy chủ mất để dựng trang (‘Runtime’)</li>
+    <li>số truy vấn MySQL được thực thi</li>
+    <li>bộ nhớ dùng cực đại xấp xỉ</li>
+    <li>mọi thẻ Textpattern được gặp trong quá trình dựng trang (còn gọi là dấu vết thẻ – tag trace)</li>
+</ul>
+<h3>Chế độ Testing</h3>
+<p>Tất cả thông tin lỗi PHP trên trang live sẽ hiển thị, cũng như cảnh báo về mã và plugin bị lỗi. Các thông tin sau sẽ hiển thị khi bạn xem mã nguồn HTML của trang live:</p>
+<ul>
+    <li>thời gian máy chủ mất để dựng trang (‘Runtime’)</li>
+    <li>số truy vấn MySQL được thực thi</li>
+    <li>bộ nhớ dùng cực đại xấp xỉ</li>
+</ul>
+<h3>Chế độ Live</h3>
+<p>Không có thông tin lỗi hay chẩn đoán nào được gửi ra trang. Thông thường, chế độ Live được ưu tiên, vì mang lại trải nghiệm người dùng tốt nhất và giảm tải cho máy chủ.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Theme mặt ngoài (Front-side theme)"><![CDATA[
+<h2>Theme mặt ngoài (Front-side theme)</h2>
+<p>Theme mặt ngoài mặc định sẽ được dùng khi bất cứ ai truy cập trang web công khai của bạn. Một theme mặc định cài sẵn được bao gồm với Textpattern, cùng tùy chọn bắt đầu mà không có theme. Bạn cũng có thể thêm gói theme vào thư mục <code>textpattern/themes</code> để chúng sẵn sàng sử dụng.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Xuất bản bài đã hết hạn?"><![CDATA[
+<h2>Xuất bản bài đã hết hạn?</h2>
+<p>Khi đặt là ‘Có’, các bài đã hết hạn vẫn tiếp tục hiển thị trên trang sau khi qua ngày hết hạn. Bạn có thể dùng thẻ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> để hiển thị nội dung hoặc đánh dấu thay thế cho bài đã hết hạn.</p>
+<p>Khi đặt là ‘Không’, các bài đã hết hạn sẽ bị gỡ khỏi trang công khai và trả về mã HTTP "410 Gone". Thiết lập mặc định là ‘Không’.</p>
+        ]]></item>
+        <item id="publisher_email" title="Gửi thông tin đăng nhập từ địa chỉ email này"><![CDATA[
+<h2>Gửi thông tin đăng nhập từ địa chỉ email này</h2>
+<p>Chỉ định một địa chỉ email được dùng làm địa chỉ ‘From:’ của người gửi trong các thư chứa thông tin đăng nhập cho người dùng mới.</p>
+<p>Nếu tùy chọn này để trống hoặc chứa địa chỉ email không hợp lệ, Textpattern sẽ dùng tên và địa chỉ của người dùng hiện đang đăng nhập thay thế.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Bao nhiêu bài sẽ được đưa vào feed?"><![CDATA[
+<h2>Bao nhiêu bài sẽ được đưa vào feed?</h2>
+<p>Đây là số lượng tối đa các bài hiện tại được phát hành cùng lúc, ở định dạng RSS và Atom.</p>
+<p>Khuyến nghị một giá trị thấp, chẳng hạn <code>5</code> đến <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Số lượt quét parser bổ sung"><![CDATA[
+<h2>Số lượt quét parser bổ sung</h2>
+<p>Trình phân tích thẻ (tag parser) của Textpattern thường thay thế tất cả thẻ bằng nội dung lấy từ cơ sở dữ liệu trong một lượt quét template trang. Trong một số trường hợp, một lượt có thể không đủ, ví dụ:</p>
+<ul>
+    <li>Khi dùng plugin có thứ tự tải thấp trong thuộc tính thẻ</li>
+    <li>Các thay thế mã bên trong thẻ <code>&lt;txp:php&gt;</code></li>
+    <li>Bỏ qua các phần trang ở đoạn đầu để chúng có thể nhận nội dung được sinh ra từ một thẻ được xử lý ở đoạn sau</li>
+</ul>
+<p>Vì lý do tương thích cũ, Textpattern truyền thống chạy thêm một lượt quét nữa (gọi là ‘secondpass’), do đó giá trị mặc định của tùy chọn này là <code>1</code>. Tuy nhiên, quét thêm nhiều lượt làm tăng khả năng các thẻ ngoài ý muốn bị xử lý. Những cải tiến gần đây trong parser đã giảm nhu cầu về lượt quét thứ hai. Vì vậy, trừ khi bạn dùng lượt quét thứ hai cho lý do cụ thể, hãy giảm giá trị này xuống <code>0</code> để làm trang an toàn hơn.</p>
+<p>Nếu sau đó bạn thấy thẻ chưa được xử lý hiển thị trên trang (và không có lỗi thẻ khác hiển thị ở chế độ Testing/Debugging do cặp thẻ không khớp) thì vui lòng liên hệ chúng tôi với ví dụ template/trang hoặc plugin của bạn. Chúng tôi đang cố loại bỏ nhu cầu quét parser bổ sung và thông tin này sẽ giúp đạt mục tiêu đó.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Gửi phần đầu &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Gửi phần đầu &quot;Last-Modified&quot;?</h2>
+<p>Khi bật, Textpattern sẽ đọc phần đầu HTTP <code>If-Modified-Since</code> của khách truy cập (nếu có) và so sánh với lần cập nhật gần nhất của trang. Nếu không có gì thay đổi kể từ lần khách truy cập tải trang (tức là dấu thời gian trình duyệt gửi trùng với lần cập nhật gần nhất), thì một phần đầu sẽ được gửi lại yêu cầu trình duyệt dùng bản cache của trang.</p>
+<p>Điều này có thể giảm băng thông, thời gian tải trang và tải cho máy chủ web.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Hiển thị số bình luận trong feed?"><![CDATA[
+<h2>Hiển thị số bình luận trong feed?</h2>
+<p>Khi đặt là ‘Có’, tùy chọn này sẽ thêm số lượng bình luận vào tiêu đề bài viết trong feed RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Khẩu hiệu trang"><![CDATA[
+<h2>Khẩu hiệu trang</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Khẩu hiệu trang <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> là phần tóm tắt hoặc mô tả về trang của bạn. Nó sẽ được dùng làm mô tả trang ở những nơi cần thiết, như trong feed RSS/Atom, và có thể được dùng ở nhiều nơi trên trang, tùy bạn.</p>
+<p><strong>Lưu ý:</strong> Khẩu hiệu trang là tùy chọn, nhưng có thể được yêu cầu để feed RSS hoặc Atom hợp lệ.</p>
+        ]]></item>
+        <item id="sitename" title="Tên trang"><![CDATA[
+<h2>Tên trang</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Tên hoặc tiêu đề trang của bạn <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a>. Tên này sẽ xuất hiện trên thanh tiêu đề trình duyệt của khách truy cập hoặc trong trình đọc feed, và ở nhiều nơi khác trên trang, tùy bạn.</p>
+        ]]></item>
+        <item id="siteurl" title="Site URL"><![CDATA[
+<h2>Site URL</h2>
+<p>Đây là địa chỉ trang Textpattern của bạn, ví dụ <code>www.example.com</code>.</p>
+<p><strong>Lưu ý:</strong> Không cần <code>http://</code>, <code>https://</code> hoặc dấu gạch chéo cuối <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Thư mục theme"><![CDATA[
+<h2>Thư mục theme</h2>
+<p>Nếu bạn muốn tùy chỉnh tên thư mục nơi các tập tin phẳng của theme mặt ngoài sẽ được lưu vĩnh viễn, có thể làm tại đây. Bạn phải tạo thư mục trước trong thư mục gốc cài đặt Textpattern, và cần đảm bảo PHP có thể ghi vào thư mục đó.</p>
+<p>Đường dẫn này luôn là <strong>đường dẫn tương đối</strong> (so với thư mục gốc cài đặt Textpattern).</p>
+<p>Mặc định là <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Địa chỉ phong bì người gửi SMTP"><![CDATA[
+<h2>Địa chỉ phong bì người gửi SMTP</h2>
+<p>Tùy chọn này nên để trống trừ khi bạn gặp vấn đề khi gửi email trong Textpattern (không gửi được email). Nếu gặp vấn đề đó, bạn có thể nhập bất kỳ địa chỉ email hợp lệ nào tại đây, tốt nhất là có cùng tên miền với trang nơi bạn cài Textpattern (ví dụ nếu trang là <code>https://example.com</code>, bạn có thể dùng <code>you@example.com</code>).</p>
+<p>Với những người quan tâm chi tiết kỹ thuật:</p>
+<ul>
+    <li>Trên máy chủ UNIX-like/macOS, địa chỉ email được nhập sẽ dùng làm tham số thứ 4 (tiền tố "-f") cho hàm <code>mail()</code> của PHP</li>
+    <li>Trên máy chủ Windows, địa chỉ email được nhập sẽ dùng để đặt (hoặc ghi đè) thiết lập <code>sendmail_from</code> trong php.ini</li>
+</ul>
+<p>Điều này đảm bảo địa chỉ phong bì người gửi SMTP (không nhất thiết trùng với tiêu đề "From:" mà bạn thấy trong email) được đặt thành địa chỉ email bạn nhập, vốn là yêu cầu trên một số máy chủ web để gửi email.</p>
+        ]]></item>
+        <item id="smtp_host" title="Máy chủ SMTP"><![CDATA[
+<h2>Máy chủ SMTP</h2>
+<p>Để cải thiện khả năng gửi email thành công và tận dụng việc gửi email qua dịch vụ ngoài (như SendGrid, AWS SES, Mailchimp, Mailgun, v.v.), hãy chỉ định máy chủ SMTP tại đây. Tham khảo nhà cung cấp SMTP để lấy giá trị này.</p>
+<p>Giá trị này có thể được cung cấp bằng cách định nghĩa hằng <code>SMTP_HOST</code> trong <code>config.php</code>; khi đó trường này sẽ hiển thị bị khóa (xám) trong bảng Tùy chọn.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Mật khẩu SMTP"><![CDATA[
+<h2>Mật khẩu SMTP</h2>
+<p>Nếu kết nối SMTP yêu cầu mật khẩu cho tên người dùng đã chỉ định, hãy nhập tại đây. Tham khảo tài liệu của nhà cung cấp để biết chi tiết.</p>
+<p>Lưu ý: Mặc dù mật khẩu sẽ không hiển thị ở đây, nó <em>vẫn</em> được lưu dạng văn bản thuần trong bảng prefs của cơ sở dữ liệu. Nếu muốn tăng bảo mật, bạn có thể định nghĩa hằng <code>SMTP_PASS</code> trong <code>config.php</code> thay thế.</p>
+        ]]></item>
+        <item id="smtp_port" title="Cổng SMTP"><![CDATA[
+<h2>Cổng SMTP</h2>
+<p>Nếu bạn đã chỉ định máy chủ SMTP, bạn phải chỉ định cổng để bật gửi mail qua SMTP. Các cổng phổ biến gồm:</p>
+<ul>
+    <li>25 - cho mail không bảo mật</li>
+    <li>465 - cổng cũ (không chính thức) cho mail bảo mật</li>
+    <li>587 - cổng mặc định (khuyến nghị) cho mail bảo mật TLS</li>
+</ul>
+<p>Nhà cung cấp SMTP của bạn có thể dùng cổng khác, hãy xem tài liệu của họ.</p>
+<p>Giá trị này có thể được cung cấp bằng cách định nghĩa hằng <code>SMTP_PORT</code> trong <code>config.php</code>; khi đó trường này sẽ hiển thị bị khóa (xám) trong bảng Tùy chọn.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Phương thức bảo mật SMTP"><![CDATA[
+<h2>Phương thức bảo mật SMTP</h2>
+<p>Chọn cơ chế bảo mật email mà nhà cung cấp SMTP của bạn sử dụng. Tham khảo tài liệu của họ để biết chi tiết.</p>
+<p>Giá trị này có thể được cung cấp bằng cách định nghĩa hằng <code>SMTP_SECTYPE</code> trong <code>config.php</code>; khi đó trường này sẽ hiển thị bị khóa (xám) trong bảng Tùy chọn.</p>
+        ]]></item>
+        <item id="smtp_user" title="Tên đăng nhập SMTP"><![CDATA[
+<h2>Tên đăng nhập SMTP</h2>
+<p>Nếu kết nối SMTP yêu cầu tên người dùng/đăng nhập, hãy nhập tại đây. Tham khảo tài liệu nhà cung cấp để biết chi tiết.</p>
+<p>Giá trị này có thể được cung cấp bằng cách định nghĩa hằng <code>SMTP_USER</code> trong <code>config.php</code>; khi đó trường này sẽ hiển thị bị khóa (xám) trong bảng Tùy chọn.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Danh sách đen chống spam (phân cách bằng dấu phẩy)"><![CDATA[
+<h2>Danh sách đen chống spam (phân cách bằng dấu phẩy)</h2>
+<p>Các nhà cung cấp <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> được nhập ở đây sẽ được truy vấn khi có bình luận mới gửi tới blog của bạn, và địa chỉ IP của người gửi bình luận sẽ được kiểm tra. Nếu địa chỉ IP nằm trong danh sách nghĩa là đã có một hoặc nhiều báo cáo spam liên quan tới IP này trong quá khứ, và bình luận sẽ bị từ chối. Bất kể kết quả kiểm tra, địa chỉ IP của người gửi bình luận không được Textpattern lưu trữ.</p>
+<p>Bạn có thể nhập danh sách tên miền ở đây, phân tách bằng dấu phẩy. Lưu ý bạn tự chịu trách nhiệm đảm bảo blocklist phù hợp với mục đích sử dụng.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Chỉ phát hành trích đoạn bài viết?"><![CDATA[
+<h2>Chỉ phát hành <strong>trích đoạn</strong> bài viết?</h2>
+<p>Nếu đặt là ‘Không’, các mục trong feed sẽ chứa toàn bộ nội dung bài viết.</p>
+<p>Nếu đặt là ‘Có’, các mục trong feed sẽ chứa trích đoạn bài viết thay cho thân bài khi trích đoạn tồn tại.</p>
+        ]]></item>
+        <item id="tempdir" title="Đường dẫn thư mục tạm"><![CDATA[
+<h2>Đường dẫn thư mục tạm</h2>
+<p>Đặt <strong>đường dẫn tuyệt đối</strong> tới thư mục tạm (thường gọi là ‘tmp’ hoặc ‘temp’). PHP cần có quyền ghi vào thư mục này. Thư mục được dùng cho các tập tin tạm, ví dụ quá trình tải lên (plugin, tập tin hoặc ảnh).</p>
+<p><strong>Lưu ý:</strong>
+<ul>
+    <li>Đừng chỉ định cùng một thư mục cho cả ‘tạm’ và ‘nhớ đệm plugin’, nếu không sẽ gây lỗi (Textpattern sẽ cố chạy nội dung của tập tin nhật ký tạm như plugin).</li>
+    <li>Hãy cân nhắc chuyển thư mục này ra ngoài thư mục gốc công khai của trang web để tăng bảo mật.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Theme phía quản trị"><![CDATA[
+<h2>Theme phía quản trị</h2>
+<p>Theme phía quản trị mặc định sẽ được dùng khi bất cứ ai đăng nhập vào Textpattern. Một số theme quản trị cài sẵn được cung cấp với Textpattern và bạn cũng có thể thêm gói theme tùy biến vào thư mục <code>textpattern/admin-themes</code> để chúng sẵn sàng sử dụng.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Thêm dấu gạch chéo ở cuối URL"><![CDATA[
+<h2>Thêm dấu gạch chéo ở cuối URL</h2>
+<p>Liệu Textpattern có tự động thêm dấu gạch chéo ở cuối các URL mà nó tạo hay không. Các tùy chọn gồm:</p>
+<ul>
+    <li><strong>Không</strong> - Không bao giờ</li>
+    <li><strong>Danh sách (List)</strong> - Chỉ trên các trang danh sách (landing page dạng danh sách, tức không áp dụng khi xem từng bài riêng lẻ)</li>
+    <li><strong>Có</strong> - Luôn luôn</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Các hàm PHP được bật trong txp:evaluate"><![CDATA[
+<h2>Các hàm PHP được bật trong txp:evaluate</h2>
+<p>Đây là danh sách phân tách bằng dấu phẩy các mục <code>function</code> hoặc <code>alias=function</code>, ví dụ <code>md5</code>, <code>replace=str_replace</code>. Các mục chỉ định trong danh sách này có thể được dùng trong thuộc tính <code>query</code> của thẻ <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> nên trả về một giá trị kiểu đơn (scalar) (<strong>không</strong> phải mảng/đối tượng).</p>
+        ]]></item>
+        <item id="use_comments" title="Chấp nhận bình luận?"><![CDATA[
+<h2>Chấp nhận bình luận?</h2>
+<p>Tùy chọn này đặt việc chức năng bình luận của Textpattern được bật hay tắt.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Dùng địa chỉ email để tạo mã số feed (mặc định dùng Site URL)?"><![CDATA[
+<h2>Dùng địa chỉ email để tạo mã số feed (mặc định dùng Site URL)?</h2>
+<p>Các mục trong feed Atom cần một ID duy nhất.</p>
+<p>Để tạo ID duy nhất cho trang của bạn, Textpattern cho phép chọn giữa dùng địa chỉ email hoặc tên miền để đưa vào các ID này. Địa chỉ email sẽ là địa chỉ được dùng đầu tiên khi tạo trang. Trừ khi bạn có khả năng sẽ đổi tên miền trong tương lai, thường an toàn khi đặt tùy chọn này là ‘Không’.</p>
+        ]]></item>
+        <item id="use_plugins" title="Dùng plugin?"><![CDATA[
+<h2>Dùng plugin?</h2>
+<p>Tùy chọn này cho phép bạn tắt toàn bộ hỗ trợ plugin của Textpattern. Điều này hữu ích khi bạn gỡ lỗi lỗi trên trang và muốn kiểm tra xem có plugin nào liên quan hay không.</p>
+        ]]></item>
+        <item id="use_textile" title="Định dạng văn bản mặc định"><![CDATA[
+<h2>Định dạng văn bản mặc định</h2>
+<p>Thiết lập định dạng văn bản bạn chọn tại đây sẽ trở thành mặc định cho đánh dấu trích đoạn và thân bài trên bảng ‘Viết’. Bạn có thể chọn cho phép xử lý Textile đầy đủ, chuyển ngắt dòng thành thẻ đoạn văn HTML, hoặc không chuyển đổi văn bản.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> là tiện ích nhằm đơn giản hóa việc chuyển văn bản thuần sang HTML. Khi bật, Textile sẽ xử lý phần thân bài viết và trả về HTML có cấu trúc.</p>
+<p>Textile cũng cung cấp tập lệnh mạnh mẽ nhưng dễ học để định dạng văn bản, định nghĩa cấu trúc như danh sách, tiêu đề và trích dẫn khối, cũng như chèn liên kết và ảnh.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Bảng mục (Section)">
+        <item id="section_category" title="Giới thiệu"><![CDATA[
+<h2>Giới thiệu</h2>
+<p>Các mục (section) trong Textpattern nên được hiểu tương tự như các chuyên mục trong một tờ báo; tất cả đều thuộc cùng một ấn phẩm, nhưng mỗi mục có thể có bố cục khác nhau, hoặc kiểu bài viết khác nhau, v.v.</p>
+<p>Đối với hầu hết trang web, chỉ cần tạo số lượng mục tối thiểu.</p>
+<h3>Một kịch bản điển hình cho trang web có ba mục:</h3>
+<ol>
+    <li><strong>Lưu trữ (Archive):</strong> Mục ‘Section’ mà mọi bài viết xuất hiện trên trang chủ thuộc về. Bất cứ khi nào độc giả nhấp vào liên kết cố định (permalink) của một bài, bài đó sẽ được hiển thị trong bố cục trang được gán cho ‘Section’ này. Để đi tới danh sách phân trang các bài mới nhất thuộc mục "Archive", URL sẽ là <code>https://example.com/archive/</code>.</li>
+    <li><strong>Giới thiệu (About):</strong> Một trang ‘giới thiệu về trang web này’, khác với trang chủ và mục "Archive" ở chỗ nó tĩnh hơn, có thể có bố cục khác và thường chỉ chứa một bài viết. Mục ‘About’ sẽ được truy cập tại <code>https://example.com/about/</code>.</li>
+    <li><strong>Ảnh (Photos):</strong> Một ‘Section’ có bố cục khác (và có thể là CSS khác) để hiển thị ảnh thay vì bài viết.</li>
+</ol>
+<p>Lưu ý rằng luôn tồn tại một mục ẩn đặc biệt tên là default (mặc định). Mục default dùng trang (page) tên default và style tên default, và dựng nên trang chủ của trang web bạn.</p>
+        ]]></item>
+        <item id="section_default" title="Mục xuất bản mặc định"><![CDATA[
+<h2>Mục xuất bản mặc định</h2>
+<p>Tùy chọn này điều khiển mục nào sẽ được chọn sẵn trong menu Section khi tạo bài viết mới trong bảng ‘Viết’.</p>
+<p>Nếu phần lớn bài viết của bạn thuộc về một mục cụ thể, hãy chọn nó trong danh sách ở đây. Thay đổi sẽ có hiệu lực ngay lập tức.</p>
+<p>Bạn có thể ghi đè thiết lập này cho từng bài trong bảng ‘Viết’ bằng cách chọn một mục khác trong khung ‘Sắp xếp và hiển thị’.</p>
+        ]]></item>
+        <item id="section_description" title="Mô tả"><![CDATA[
+<h2>Mô tả</h2>
+<p>Mô tả mục là thành phần tùy chọn có thể giúp máy tìm kiếm và trình thu thập dữ liệu nhận diện và sắp xếp nội dung tốt hơn.</p>
+<p>Mô tả bài viết bị giới hạn tối đa 255 ký tự. Lưu ý một số máy tìm kiếm áp đặt giới hạn số ký tự cho độ dài <code>meta description</code> của trang để tiện hiển thị trên trang kết quả tìm kiếm (SERP) và con số này có thể thấp hơn giới hạn 255 ký tự trong Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Bài trong mục này xuất hiện trên trang chủ?"><![CDATA[
+<h2>Bài trong mục này xuất hiện trên trang chủ?</h2>
+<p>Các bài trong một số mục, chẳng hạn những mục giống với các trang web tĩnh hơn, có thể không phù hợp với dòng nội dung mang tính thời gian trên trang chủ.</p>
+<p>Đặt tùy chọn này thành ‘Không’ sẽ ngăn các bài thuộc mục này xuất hiện trên trang chủ.</p>
+        ]]></item>
+        <item id="section_searchable" title="Bao gồm mục này trong tìm kiếm trên trang?"><![CDATA[
+<h2>Bao gồm mục này trong tìm kiếm trên trang?</h2>
+<p>Tùy chọn này điều khiển việc các bài thuộc mục này có xuất hiện trong kết quả tìm kiếm toàn trang hay không.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Phát hành (syndicate) bài trong mục này?"><![CDATA[
+<h2>Phát hành (syndicate) bài trong mục này?</h2>
+<p>Điều khiển việc các bài trong mục này có xuất hiện trong các feed RSS và Atom của trang hay không.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Dùng style"><![CDATA[
+<h2>Dùng style</h2>
+<p>Nếu bạn muốn ghi đè stylesheet mặc định cho một mục cụ thể, có thể đặt tại đây.</p>
+<p>Điều này chỉ áp dụng với các stylesheet được lưu trong bảng ‘Styles’ của Textpattern – nếu bạn lưu CSS bên ngoài Textpattern (rất được khuyến khích), tùy chọn này không có tác dụng.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Dùng trang (page)"><![CDATA[
+<h2>Dùng trang (page)</h2>
+<p>Trong Textpattern, mục (section) được gắn chặt với template trang (page template).</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Dùng theme"><![CDATA[
+<h2>Dùng theme</h2>
+<p>Nếu bạn muốn thay đổi theme được dùng cho một mục cụ thể, có thể chọn tại đây từ danh sách các theme đã cài đặt.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Bảng cài đặt (Setup)">
+        <item id="setup_admin_url" title="Tên miền con cho quản trị (Admin subdomain)"><![CDATA[
+<h2>Tên miền con cho quản trị (Admin subdomain)</h2>
+<p>Tên miền con bạn muốn dùng để truy cập giao diện quản trị Textpattern (ví dụ <code>admin.example.com</code>).</p>
+<p>Vui lòng tham khảo thêm <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">cài đặt nhiều site Textpattern</a> để biết chi tiết.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Miền cookie"><![CDATA[
+<h2>Miền cookie</h2>
+<p>(Sub)domain bạn muốn dùng cho cookie của Textpattern.</p>
+<p>Vui lòng tham khảo thêm <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">cài đặt nhiều site Textpattern</a> để biết chi tiết.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Tên đăng nhập người dùng"><![CDATA[
+<h2>Tên đăng nhập người dùng</h2>
+<p>Tên đăng nhập của tài khoản quản trị (‘Publisher’) mà bạn sẽ dùng để quản lý trang.</p>
+<p>Dù không có giới hạn cụ thể về tên, tốt nhất nên tránh chuỗi ký tự phức tạp và tên dễ đoán (ví dụ <code>admin</code>, <code>administrator</code>, v.v.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Mật khẩu người dùng"><![CDATA[
+<h2>Mật khẩu người dùng</h2>
+<p>Vì tài khoản này có mức truy cập cao nhất trong Textpattern, hãy chọn một mật khẩu rất mạnh hoặc tốt hơn là một cụm mật khẩu (passphrase).</p>
+<h3>Gợi ý</h3>
+<ul>
+    <li>Dùng kết hợp chữ hoa và chữ thường</li>
+    <li>Dùng số</li>
+    <li>Dùng ký hiệu</li>
+    <li>Dài ít nhất tám ký tự</li>
+    <li><strong>Tránh</strong> mọi thông tin cá nhân (ngày tháng, tên, địa điểm, thành viên gia đình, thú nuôi, v.v.)</li>
+    <li><strong>Tránh</strong> mọi từ đơn hoặc lặp lại trong từ điển, bất kể chính tả, ngôn ngữ hay kiểu chữ</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tiền tố bảng"><![CDATA[
+<h2>Tiền tố bảng</h2>
+    <p>Bạn chỉ cần dùng tiền tố bảng nếu muốn có nhiều bản cài Textpattern dùng chung một cơ sở dữ liệu. Mỗi bản cài Textpattern cần một tiền tố riêng.</p>
+    <p>Lưu ý tiền tố phải tuân theo các quy tắc sau:</p>
+<ul>
+    <li><strong>Ký tự thứ nhất:</strong> phải là a-z, A-Z, hoặc gạch dưới</li>
+    <li><strong>Các ký tự tiếp theo:</strong> chỉ có thể là a-z, A-Z, 0-9 hoặc gạch dưới</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Bảng theme">
+        <item id="skin_author" title="Tác giả theme"><![CDATA[
+<h2>Tác giả theme</h2>
+<p>Các tác giả của theme này (tùy chọn).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Trang web theme"><![CDATA[
+<h2>Trang web theme</h2>
+<p>URL nơi có thể tìm thấy đầy đủ thông tin và/hoặc phiên bản mới nhất của theme này (tùy chọn).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Xóa cả template theme trên đĩa"><![CDATA[
+<h2>Xóa cả template theme trên đĩa</h2>
+<p>Nếu được chọn, tất cả tập tin template trong (các) theme đã chọn sẽ bị xóa vĩnh viễn khỏi đĩa. Tuy nhiên, các thư mục liên quan tới theme và thư mục con của chúng sẽ không bị xóa nếu còn tồn tại tập tin khác (như JavaScript, ảnh, ...).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Xóa template không dùng khỏi cơ sở dữ liệu khi nhập"><![CDATA[
+<h2>Xóa template không dùng khỏi cơ sở dữ liệu khi nhập</h2>
+<p>Nếu được chọn, mỗi template trong (các) theme đã chọn mà không có tập tin tương ứng trên đĩa sẽ bị xóa vĩnh viễn khỏi cơ sở dữ liệu. Kết quả sau khi hoàn tất thao tác là các template trong cơ sở dữ liệu sẽ phản ánh càng sát càng tốt những gì có trên đĩa.</p>
+<p>Lưu ý nếu bạn đã xóa các tập tin template mà Textpattern yêu cầu, các bản rỗng sẽ được tạo thay thế trong cơ sở dữ liệu.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Xóa template không dùng khỏi đĩa khi xuất"><![CDATA[
+<h2>Xóa template không dùng khỏi đĩa khi xuất</h2>
+<p>Nếu được chọn, mỗi tập tin template trong (các) theme đã chọn mà không có mục tương ứng trong cơ sở dữ liệu sẽ bị xóa vĩnh viễn khỏi theme trên đĩa. Kết quả sau khi hoàn tất thao tác là các template trên hệ thống tập tin sẽ phản ánh chính xác những gì có trong cơ sở dữ liệu.</p>
+        ]]></item>
+        <item id="skin_description" title="Mô tả theme"><![CDATA[
+<h2>Mô tả theme</h2>
+<p>Có thể cung cấp tóm tắt ngắn gọn về thiết kế/bố cục của theme này (tùy chọn).</p>
+<p>Mô tả theme bị giới hạn tối đa 255 ký tự.</p>
+        ]]></item>
+        <item id="skin_import" title="Nhập theme"><![CDATA[
+<h2>Nhập theme từ đĩa</h2>
+<p>Biểu mẫu này cho phép bạn nhập theme vào cơ sở dữ liệu Textpattern từ thư mục themes.</p>
+<p>Một theme có thể nhập được phải bao gồm một thư mục cha có thể đọc được, dùng tên theme làm tên thư mục, và bên trong thư mục đó có tập tin <code>manifest.json</code> có thể đọc được với định dạng mong đợi. Thư mục theme cũng nên chứa các page, form và style trong các thư mục con cùng tên.</p>
+<p>Các page và form nên dùng phần mở rộng <code>.txp</code>, còn stylesheet phải là tập tin <code>.css</code>. Form cũng nên được nhóm theo loại trong các thư mục chuyên dụng. Textpattern sẽ tạo bất kỳ template thiết yếu nào còn thiếu khi nhập.</p>
+<p>Xem thêm <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">tài liệu về theme <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> để biết thêm thông tin về cách tạo, cài đặt và sử dụng theme trong Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Tên theme"><![CDATA[
+<h2>Tên theme</h2>
+<p>Tên theme được dùng làm tên thư mục theme và cho các mục đích kỹ thuật khác (bắt buộc).</p>
+<p>Tên không nên chứa ký tự đặc biệt hoặc khoảng trắng.</p>
+        ]]></item>
+        <item id="skin_overview" title="Giới thiệu về Theme"><![CDATA[
+<h2>Giới thiệu về Theme</h2>
+<p>Một theme Textpattern là tập hợp các Page, Form và Stylesheet. Theme cho phép bạn tách logic tài sản trang web của mình thành các nhóm để dễ nhận diện hoặc chia sẻ với người khác. Việc tạo hoặc nhập một Theme, cùng với bất kỳ tài sản nào nó chứa, <em>không</em> có tác động nào đến trang hiện có của bạn. Bạn được tự do sửa hoặc thay đổi bất kỳ tài sản nào không gắn với một Section của trang mà không ảnh hưởng đến chính trang đó.</p>
+<p>Để chỉnh sửa tài sản trong theme, hãy truy cập bảng Pages, Forms hoặc Styles và dùng danh sách chọn thả xuống để chọn theme bạn muốn làm việc. Theme bạn đang chỉnh sửa sẽ được ghi nhớ trong toàn bộ khu vực quản trị, cho phép bạn chuyển nhanh giữa các loại tài sản. Nó được gọi là <em>theme đang làm việc</em> (working theme).</p>
+<p>Vui lòng xem thêm <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Tài liệu người dùng Textpattern <span class="ui-icon ui-icon-extlink">(mở liên kết ngoài trong cửa sổ mới)</span></a> để biết thêm thông tin.</p>
+        ]]></item>
+        <item id="skin_title" title="Tiêu đề theme"><![CDATA[
+<h2>Tiêu đề theme</h2>
+<p>Tiêu đề mô tả của theme, được dùng để nhận diện theme trong các bảng của Textpattern.</p>
+<p>Tiêu đề có thể chứa ký tự đặc biệt và khoảng trắng.</p>
+        ]]></item>
+        <item id="skin_version" title="Phiên bản theme"><![CDATA[
+<h2>Phiên bản theme</h2>
+<p>Số phiên bản của bản theme đã cài đặt (tùy chọn).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

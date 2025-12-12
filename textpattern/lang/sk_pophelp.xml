@@ -79,196 +79,1118 @@
     </group>
 
     <group id="article" title="Panel obsah">
-        <item id="article_image" title="Obrázok článku"><![CDATA[]]></item>
-        <item id="body" title="Telo článku"><![CDATA[]]></item>
-        <item id="description" title="Popis"><![CDATA[]]></item>
-        <item id="excerpt" title="Anotácia"><![CDATA[]]></item>
-        <item id="expire_date" title="Dátum expirácie"><![CDATA[]]></item>
-        <item id="keywords" title="Kľúčové slová"><![CDATA[]]></item>
-        <item id="override_form" title="Prepísať šablónu"><![CDATA[]]></item>
-        <item id="publish_date" title="Dátum vydania"><![CDATA[]]></item>
-        <item id="status" title="Stav"><![CDATA[]]></item>
-        <item id="title" title="Názov"><![CDATA[]]></item>
-        <item id="url_title" title=""><![CDATA[]]></item>
+        <item id="article_image" title="Obrázok článku"><![CDATA[
+<h2>Obrázok článku</h2>
+<p>Ak chcete k tomuto článku priradiť obrázky, zadajte sem jednu z nasledujúcich možností:</p>
+<ol>
+    <li>jedno alebo viac ID obrázkov Textpatternu, oddelených čiarkami (napr. <code>12, 25, 18</code>)</li>
+    <li>jednu alebo viac relatívnych adries URL obrázka, oddelených čiarkami (napr. <code>/images/my_pic.jpg</code>)</li>
+    <li>jednu alebo viac úplných adries URL, oddelených čiarkami (napr. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Prvý obrázok môžete zobraziť vložením tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> do formy článku. Štandardne vypíše kompletný HTML tag <code>&lt;img&gt;</code> k zvolenému obrázku.</p>
+<p>Galérie môžete zobrazovať pomocou tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Telo článku"><![CDATA[
+<h2>Telo článku</h2>
+<p>Telo článku obsahuje hlavný obsah článku</p>
+<p>Pri písaní článku a jeho príprave k publikovaniu môže autor prepínať medzi troma spôsobmi zobrazenia: čistý text, HTML (kód, z ktorého prehliadač článok zobrazí) a náhľad článku.</p>        ]]></item>
+        <item id="description" title="Popis"><![CDATA[
+<h2>Popis</h2>
+<p>Popis článku je voliteľná súčasť, ktorá môže pomôcť vyhľadávačom a robotom lepšie identifikovať a triediť obsah.</p>
+<p>Popis článku je obmedzený na maximálne 255 znakov. Uvedomte si, že niektoré vyhľadávače obmedzujú dĺžku <code>meta description</code> stránky kvôli praktickému zobrazeniu vo výsledkoch vyhľadávania (SERP) a tento limit môže byť nižší ako 255 znakov, ktoré povoľuje Textpattern.</p>
+<p>Uvedomte si, že popis článku sa líši od anotácie článku, hoci obidve polia umožňujú podobný obsah. Popis článku je určený primárne pre vyhľadávače a roboty, zatiaľ čo anotácia článku je vhodnejšia ako zhrnutie článku čitateľné ľuďmi, ak je to potrebné.</p>
+        ]]></item>
+        <item id="excerpt" title="Anotácia"><![CDATA[
+<h2>Anotácia</h2>
+<p>Výťah z článku je voliteľný. Môže slúžiť ako krátke zhrnutie článku, ktoré sa zobrazuje napríklad v obsahu, namiesto celého textu článku v RSS/Atom kanáloch webu alebo aj na iné účely.</p>
+        ]]></item>
+        <item id="expire_date" title="Dátum expirácie"><![CDATA[
+<h2>Dátum vypršania</h2>
+<p>Čas, kedy je článok označený ako expirovaný. Vyplnenie času je voliteľné a je ho možné nastaviť na ľubovoľný okamih v minulosti alebo budúcnosti.</p>
+<p>Polia zodpovedajú týmto údajom:</p>
+<ul>
+    <li>Rok / Mesiac / Deň</li>
+    <li>Hodina (24-hodinový formát) : Minúta : Sekunda</li>
+</ul>
+<p>Keď daný čas nastane – alebo ak je zadaný čas v minulosti – článok exspiruje.</p>
+<p>Ak je zapnutá voľba zobrazovať expirované články, článok zostane viditeľný. Ak je vypnutá, návštevníkom sa namiesto obsahu článku zobrazí chyba HTTP 410.</p>
+        ]]></item>
+        <item id="keywords" title="Kľúčové slová"><![CDATA[
+<h2>Kľúčové slová</h2>
+<p>Kľúčové slová sú užitočné pre spresnenie vzťahov medzi článkami nad rámec toho, čo umožňujú rubriky.</p>
+<p>Kľúčové slová musia byť jednotlivé slová oddelené čiarkami.</p>
+        ]]></item>
+        <item id="override_form" title="Prepísať šablónu"><![CDATA[
+<h2>Prepísať formu</h2>
+<p>Článok môže prípadne používať inú formu, než je predvolená – napríklad na zobrazenie anotácie článku pomocou <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> namiesto tela článku s tagom <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>. Túto možnosť je možné nastaviť tu.</p>
+        ]]></item>
+        <item id="publish_date" title="Dátum vydania"><![CDATA[
+<h2>Dátum publikovania</h2>
+<p>Čas, kedy bol článok alebo súbor publikovaný alebo naposledy upravený. Čas je možné nastaviť na okamih publikovania alebo na ľubovoľný čas v minulosti či budúcnosti.</p>
+<p>Polia zodpovedajú týmto údajom:</p>
+<ul>
+    <li>Rok / Mesiac / Deň</li>
+    <li>Hodina (24-hodinový formát) : Minúta : Sekunda</li>
+</ul>
+<p>Položka s časovou značkou väčšou ako aktuálny čas (t. j. v budúcnosti) sa neobjaví na verejnej časti webu ani v RSS/Atom kanáloch, kým tento čas nenastane.</p>
+        ]]></item>
+        <item id="status" title="Stav"><![CDATA[
+<h2>Stav</h2>
+<p>Určuje publikačný stav viditeľnosti tohto článku v Textpatterne.</p>
+<p>Publikačný stav môže byť jeden z nasledujúcich:</p>
+<ul>
+<li><strong>Koncept</strong>: považuje sa za rozpracovaný a nie je viditeľný mimo administračného rozhrania Textpatternu (t. j. nie je viditeľný na webe ani v kanáloch).</li>
+<li><strong>Skrytý</strong>: článok nie je viditeľný mimo administračného rozhrania Textpatternu. Užitočné, ak chcete odstrániť obsah z webu bez jeho úplného zmazania.</li>
+<li><strong>Čaká na schválenie</strong>: článok je pripravený na publikovanie a čaká na schválenie, ale nie je viditeľný mimo administračného rozhrania Textpatternu.</li>
+<li><strong>Publikovaný</strong>: je zvyčajne viditeľný mimo administračného rozhrania Textpatternu (t. j. viditeľný na webe, syndikovaný v kanáloch, ak to nastavenia povoľujú). Ak je článok publikovaný a má dátum vypršania, jeho stav zostane aj po tomto dátume „Publikovaný“, ale článok sa bude mimo administrácie zobrazovať len vtedy, ak je povolené publikovanie expirovaných článkov.</li>
+<li><strong>Pripnutý</strong>: podobný ako článok so stavom <strong>Publikovaný</strong> v tom, že môže byť viditeľný návštevníkom webu, ale <strong>nebude</strong> sa zobrazovať v zoznamoch článkov, pokiaľ tag <code>article</code> alebo <code>article_custom</code> neobsahuje atribút <code>status</code> s hodnotou <code>sticky</code>.</li>
+</ul>
+<p>Poznámka: obsah, ktorý nie je verejne viditeľný na webe, si môžu stále zobraziť prihlásení používatelia pomocou náhľadu.</p>
+        ]]></item>
+        <item id="title" title="Názov"><![CDATA[
+<h2>Nadpis</h2>
+<p>Pridajte k článku vhodný nadpis.</p>
+<p>Nadpis článku je obmedzený na maximálne 255 znakov.</p>
+        ]]></item>
+        <item id="url_title" title="Nadpis len pre URL"><![CDATA[
+<h2>Nadpis len pre URL</h2>
+<p>Ak chcete v trvalom odkaze článku použiť konkrétny nadpis v URL, zadajte ho sem. Ak pole necháte prázdne, nadpis v URL sa automaticky vygeneruje z nadpisu článku.</p>
+<p>Je to obzvlášť užitočné, keď nadpis článku obsahuje ne-ASCII znaky.</p>
+        ]]></item>
     </group>
 
     <group id="category" title="Panel kategórií">
-        <item id="article_category" title="Články"><![CDATA[]]></item>
-        <item id="category_description" title="Popis"><![CDATA[]]></item>
-        <item id="file_category" title="Súbory"><![CDATA[]]></item>
-        <item id="image_category" title="Obrázky"><![CDATA[]]></item>
-        <item id="link_category" title="Odkazy"><![CDATA[]]></item>
+        <item id="article_category" title="Články"><![CDATA[
+<h2>Články</h2>
+<p>Na rozdiel od sekcií, ktoré definujú navigačnú štruktúru webu, kategórie článkov umožňujú organizovať články podľa ich témy. Po priradení kategórií je možné prehliadať zoznamy článkov patriacich do konkrétnych kategórií.</p>
+<p>Napríklad na webe o jedle môžu byť pravdepodobné kategórie článkov takéto:</p>
+<ul>
+    <li>suroviny</li>
+    <li>nakupovanie</li>
+    <li>recepty</li>
+    <li>servírovanie</li>
+    <li>reštaurácie</li>
+    <li>šéfkuchári</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Popis"><![CDATA[
+<h2>Popis kategórie</h2>
+<p>Popis kategórie je voliteľná súčasť, ktorá môže pomôcť vyhľadávačom a robotom lepšie identifikovať a triediť obsah.</p>
+<p>Popis kategórie je obmedzený na maximálne 255 znakov. Uvedomte si, že niektoré vyhľadávače obmedzujú dĺžku <code>meta description</code> stránky kvôli praktickému zobrazeniu vo výsledkoch vyhľadávania (SERP) a tento limit môže byť nižší ako 255 znakov, ktoré povoľuje Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Súbory"><![CDATA[
+<h2>Súbory</h2>
+<p>Kategórie súborov sú voliteľné a sú užitočné na zoskupovanie vybraných nahraných súborov.</p>
+        ]]></item>
+        <item id="image_category" title="Obrázky"><![CDATA[
+<h2>Obrázky</h2>
+<p>Kategórie obrázkov sú voliteľné a užitočné jednak na internú organizáciu, jednak na definovanie sád obrázkov, ktoré možno zobraziť pomocou tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Odkazy"><![CDATA[
+<h2>Odkazy</h2>
+<p>Kategórie odkazov sú voliteľné a sú užitočné na zobrazovanie rôznych skupín odkazov, napr. „Priatelia“, „Rimania“, „Krajané“.</p>
+<p>Takéto výberové zoznamy odkazov sa vypisujú pomocou tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> napríklad takto:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Diagnostický panel">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Test pekných URL adries zlyhal"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Skryť súkromné informácie"><![CDATA[]]></item>
-        <item id="dev_version_live" title="Vývojová verzia na živom serveri"><![CDATA[]]></item>
-        <item id="dir_not_writable" title="Adresár nie je zapisovateľný"><![CDATA[]]></item>
-        <item id="dns_lookup_fails" title=""><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Nahrávanie súborov je zakázané"><![CDATA[]]></item>
-        <item id="htaccess_missing" title="Chýba súbor .htaccess"><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title="Chýbajú súbory"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title=""><![CDATA[]]></item>
-        <item id="modified_files" title="Upravené súbory"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="Chyby v tabulke MySQL"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Nebol definovaný dočasný (temp) adresár"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title="Rubrika s takým istým názvom ako adresár"><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title=""><![CDATA[]]></item>
-        <item id="php_version_required" title=""><![CDATA[]]></item>
-        <item id="setup_still_exists" title=""><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Aktualizácia verzie Textpattern"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title="Cesty k dočasnému adresáru a adresáru vyrovnávacej pamäte doplnku by sa nemali zhodovať"><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title="Aktualizačný server neprístupný"><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="clean_url_data_failed" title="Test dát pekných URL adries zlyhal"><![CDATA[
+<h2>Test dát pekných URL adries zlyhal</h2>
+<p>Zdá sa, že buď adresy webu (napr. <code>https://example.com/section/article</code>) momentálne nefungujú, alebo webový server nepodporuje testovací postup na zistenie, či pekné URL fungujú; ak pekné URL na webe fungujú podľa očakávania, túto správu môžete ignorovať.</p>
+<p>Ak pekné URL <em>nefungujú</em>, môže to znamenať, že:</p>
+<ul>
+    <li>nastavenie „URL webu“ je chybné alebo stránku na tejto adrese nespravuje táto inštalácia Textpatternu</li>
+    <li>server vyžaduje úpravy súboru <code>.htaccess</code> alebo podobnej serverovej direktívy, aby pekné URL fungovali</li>
+    <li>server vôbec nepodporuje pekné URL</li>
+</ul>
+<p>Test pekných URL sa pokúsi načítať stránku z webovej adresy uvedenej v nastavení „URL webu“, aby overil, že všetky parametre pekných URL fungujú správne. Ak táto adresa patrí inému webu alebo bola nahradená statickou stránkou a podobne, test zlyhá. Kým sa problém nevyrieši, mali by sa používať „špinavé“ URL (napr. <code>https://example.com?s=section&amp;id=4</code>). Uistite sa, že „Režim trvalého odkazu“ v nastaveniach administrácie je nastavený zodpovedajúcim spôsobom.</p>
+<p>Upozornenie: použitím pluginu na prepnutie webu do „režimu údržby“ sa toto varovanie môže spúšťať.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Test pekných URL adries zlyhal"><![CDATA[
+<h2>Test pekných URL zlyhal</h2>
+<p>Zdá sa, že buď adresy webu (napr. <code>https://example.com/section/article</code>) momentálne nefungujú, alebo webový server nepodporuje testovací postup na zistenie, či pekné URL fungujú; ak pekné URL na webe fungujú podľa očakávania, túto správu môžete ignorovať.</p>
+<p>Ak pekné URL <em>nefungujú</em>, môže to znamenať, že:</p>
+<ul>
+    <li>nastavenie „URL webu“ je chybné alebo stránku na tejto adrese nespravuje táto inštalácia Textpatternu</li>
+    <li>server vyžaduje úpravy súboru <code>.htaccess</code> alebo podobnej serverovej direktívy, aby pekné URL fungovali</li>
+    <li>server vôbec nepodporuje pekné URL</li>
+</ul>
+<p>Test pekných URL sa pokúsi načítať stránku z webovej adresy uvedenej v nastavení „URL webu“, aby overil, že všetky parametre pekných URL fungujú správne. Ak táto adresa patrí inému webu alebo bola nahradená statickou stránkou a podobne, test zlyhá. Kým sa problém nevyrieši, mali by sa používať „špinavé“ URL (napr. <code>https://example.com?s=section&amp;id=4</code>). Uistite sa, že „Režim trvalého odkazu“ v nastaveniach administrácie je nastavený zodpovedajúcim spôsobom.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Súbežné prihlásenia na živom serveri"><![CDATA[
+<h2>Súbežné prihlásenia na živom serveri</h2>
+<p>Povoliť prihlásenie vášho používateľského účtu z viacerých relácií predstavuje bezpečnostné riziko a neodporúča sa. Vypnite túto funkciu v paneli rozšírených preferencií, pokiaľ si riziká nie ste vedomí a akceptujete ich.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Skryť súkromné informácie"><![CDATA[
+<h2>Skryť súkromné informácie</h2>
+<p>Skryje súkromné informácie pre zvýšenie bezpečnosti. Ak sa majú diagnostické informácie zdieľať vo verejne prístupnej podobe – napríklad na fóre podpory Textpatternu – týmto znížite bezpečnostné riziko vynechaním citlivých informácií o serveri.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Vývojová verzia na živom serveri"><![CDATA[
+<h2>Vývojová verzia na živom serveri</h2>
+<p>Vývojové verzie Textpatternu nie sú odporúčané na použitie na produkčných weboch. Toto varovanie môžete bezpečne ignorovať, ak si riziká uvedomujete a akceptujete ich.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Adresár nie je zapisovateľný"><![CDATA[
+<h2>Adresár nie je zapisovateľný</h2>
+<p>Ak chcete používať funkcie nahrávania súborov a obrázkov, tieto adresáre musia byť zapisovateľné pre PHP pod používateľom webového servera. Môžete to nastaviť pomocou (S)FTP klienta alebo alternatívne z príkazového riadka príkazom <code>chmod 755 /cesta/k/adresaru</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="Zlyhanie DNS"><![CDATA[
+<h2>Vyhľadanie DNS zlyhalo</h2>
+<p>Zdá sa, že URL adresa uvedená ako adresa webu je nedostupná.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Nahrávanie súboro je zakázané"><![CDATA[
+<h2>Nahrávanie súborov je zakázané</h2>
+<p>Aktuálna konfigurácia servera uvádza, že nahrávanie súborov je zakázané. Skontrolujte a upravte nastavenie <code>file_uploads</code> v <code>php.ini</code> alebo sa obráťte na správcu hostingu.</p>
+        ]]></item>
+        <item id="htaccess_missing" title="Chýba súbor .htaccess"><![CDATA[
+<h2>Chýba súbor .htaccess</h2>
+<p>Je použitý režim trvalých odkazov, ktorý vyžaduje súbor <code>.htaccess</code>, a tento súbor nebol nájdený. Súbor je súčasťou Textpatternu a nachádza sa v koreňovom adresári inštalácie Textpatternu vedľa <code>index.php</code> a adresára <code>textpattern</code>. Odporúčané direktívy sú:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Index webu je nedostupný"><![CDATA[
+<h2>Index webu je nedostupný</h2>
+<p>Koreňový súbor <code>index.php</code> uvedený ako index webu nie je pre server čitateľný. Skontrolujte jeho existenciu a prístupové práva.</p>
+        ]]></item>
+        <item id="missing_files" title="Chýbajú súbory"><![CDATA[
+<h2>Chýbajúce súbory</h2>
+<p>V Textpatterne chýbajú jeden alebo viaceré dôležité súbory. Uistite sa, že všetky uvedené súbory sú na serveri prítomné a na správnych miestach.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Chýba modul Apache mod_rewrite"><![CDATA[
+<h2>Chýba modul Apache mod_rewrite</h2>
+<p>Modul <code>mod_rewrite</code> servera Apache nie je nainštalovaný alebo je vypnutý. Je odporúčaný pre správne fungovanie Textpatternu. Overte jeho existenciu a aktiváciu alebo kontaktujte správcu hostingu.</p>
+        ]]></item>
+        <item id="modified_files" title="Upravené súbory"><![CDATA[
+<h2>Upravené súbory</h2>
+<p>Súbory sa považujú za upravené, ak sa ich kontrolný súčet líši od zoznamu referenčných súčtov dodaného s Textpatternom. Ak sa niektoré súbory v inštalácii Textpatternu odlišujú od očakávaných, budú tu zvýraznené.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Chyby v tabulke MySQL"><![CDATA[
+<h2>Chyby v MySQL tabuľkách</h2>
+<p>V MySQL databáze Textpatternu môže byť poškodenie alebo iné chyby. Skúste poškodené tabuľky opraviť pomocou nástroja na správu MySQL, napríklad <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> alebo <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nebol definovaný dočasný (temp) adresár"><![CDATA[
+<h2>Nebol definovaný dočasný adresár</h2>
+<p>Aj keď Textpattern dokáže bežať bez dočasného adresára, niektoré funkcie nemusia bez tohto nastavenia fungovať podľa očakávania. Prejdite na panel Administrácia – Nastavenia a nastavte „Cestu k dočasnému adresáru“.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Rubrika s takým istým názvom ako adresár"><![CDATA[
+<h2>Rubrika s takým istým názvom ako adresár</h2>
+<p>Existujúce názvy adresárov môžu kolidovať s názvami sekcií použitými v schéme trvalých odkazov na články. Aby ste predišli problémom, skontrolujte a odstráňte príslušné adresáre, ak je to bezpečné, alebo premenujte sekcie tak, aby si navzájom nekolidovali.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Adresár webu je nečitateľný"><![CDATA[
+<h2>Adresár webu je nečitateľný</h2>
+<p>Adresár obsahujúci koreňový súbor <code>index.php</code>, ktorý je nastavený ako index webu, nie je pre server čitateľný. Skontrolujte prístupové práva.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP skriptovanie je povolené"><![CDATA[
+<h2>PHP skriptovanie je povolené</h2>
+<p>Textpattern umožňuje autorom a správcom vkladať PHP kód do článkov a do stránok/foriem, ak sú tieto funkcie povolené. Keďže ide o bezpečnostné riziko – môže sa spúšťať akýkoľvek PHP kód, vrátane potenciálne škodlivého, ktorý môže viesť k zničeniu inštalácie alebo úniku informácií tretím stranám – dôrazne sa odporúča tieto voľby v <a href="?event=prefs#prefs_group_publish">paneli Nastavenia</a> vypnúť, pokiaľ ich naozaj nepotrebujete.</p>
+<p>Mnohé rozšírenia webov v Textpatterne, ktoré predtým vyžadovali útržky PHP, je dnes možné riešiť pomocou <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">jadrových tagov</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimálne verzie"><![CDATA[
+<h2>Minimálne požiadavky na verzie</h2>
+<p>Textpattern vyžaduje určitú funkcionalitu v programovacom jazyku PHP a databázovom serveri MySQL. Nasledujúca tabuľka uvádza minimálne systémové požiadavky:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Verzia Textpatternu</th>
+                <th scope="col">Minimálna verzia PHP</th>
+                <th scope="col">Minimálna verzia MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Okrem uvedených systémových požiadaviek sú potrebné aj nasledujúce rozšírenia PHP:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a></li>
+</ul>
+<p>Súbor <code>php.ini</code> na serveri – globálny alebo lokálny – musí obsahovať nastavenie <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Adresár setup stále existuje"><![CDATA[
+<h2>Adresár setup stále existuje</h2>
+<p>Po nainštalovaní Textpatternu už adresár <code>textpattern/setup</code> a jeho obsah nie sú potrebné a z bezpečnostných dôvodov by mali byť odstránené.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Nesúlad URL webu"><![CDATA[
+<h2>Nesúlad URL webu</h2>
+<p>URL webu nastavená v paneli „Nastavenia“ sa nezhoduje so skutočnou URL, cez ktorú bol web navštívený.</p>
+<p>Ak je web dostupný cez viac rôznych URL a správa sa podľa očakávania, môžete túto správu ignorovať.</p>
+<p>Inak skontrolujte a podľa potreby upravte nastavenie „URL webu“ v administrátorských nastaveniach. Odhad správnej URL webu nájdete v predbežnej kontrolnej správe na paneli „Diagnostika“.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Funkcie PHP […] sú na vašom serveri zakázané"><![CDATA[
+<h2>Funkcie PHP […] sú na vašom serveri zakázané</h2>
+<p>Poskytovateľ hostingu alebo správca servera zakázal jednu alebo viac funkcií PHP, z ktorých niektoré môžu ovplyvniť chod Textpatternu.</p>
+<p>Ďalšie informácie nájdete v <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Používateľskej dokumentácii Textpatternu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Aktualizácia verzie Textpattern"><![CDATA[
+<h2>Aktualizácia verzie Textpattern</h2>
+<p>Je dostupná novšia verzia Textpatternu. Odporúčame aktualizovať na ňu, aby ste využili nové funkcie a bezpečnostné opravy.</p>
+<p>Aj keď sa snažíme, aby bol proces aktualizácie čo najplynulejší a bezbolestný, berte do úvahy:</p>
+<ul>
+    <li>Ak sa od vašej verzie líši iba posledná číslica, aktualizácia bude pravdepodobne spätne kompatibilná s pluginmi a motívmi.</li>
+    <li>Ak sa od vašej verzie líšia posledné dve číslice, aktualizácia môže vyžadovať úpravy niektorých pluginov a/alebo motívov, hoci s najväčšou pravdepodobnosťou budú naďalej fungovať aspoň v obmedzenom rozsahu.</li>
+    <li>Ak je iné prvé číslo verzie, aktualizácia bude pravdepodobne vyžadovať úpravy väčšiny pluginov a motívov. Ak sa výrazne spoliehate na konkrétny plugin alebo funkciu motívu, pred aktualizáciou sa poraďte s jeho autorom alebo komunitou.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Dostupná predbežná verzia Textpattern"><![CDATA[
+<h2>Dostupná predbežná aktualizácia Textpattern</h2>
+<p>Je dostupná novšia predbežná verzia Textpatternu. Hľadáme aktívnych dobrovoľníkov, ktorí ju otestujú, aby sme konečné vydanie mohli pripraviť čo najstabilnejšie. Snažíme sa, aby bol proces aktualizácie plynulý a bezbolestný aj pri beta verziách.</p>
+<p>Ak sa rozhodnete zapojiť, majte na pamäti:</p>
+<ul>
+    <li>Nenasadzujte beta verziu na produkčný web, pokiaľ nemáte funkčnú zálohu súborov aj databázy a neviete ju obnoviť.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Hlásenie problémov</a> posielajte s uvedením beta verzie, ktorú používate. V závislosti od hlásených problémov môže byť potrebných viac beta vydaní pred stabilnou verziou.</li>
+    <li>Ak nasadíte beta verziu, uistite sa, že po vydaní stabilnej verzie aktualizujete aj na ňu.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Cesty k dočasnému adresáru a adresáru vyrovnávacej pamäte doplnku by sa nemali zhodovať"><![CDATA[
+<h2>Cesty k dočasnému adresáru a adresáru vyrovnávacej pamäte doplnku by sa nemali zhodovať</h2>
+<p>Pluginy by mali mať vlastný adresár a nemali by zdieľať dočasný adresár. Ide o potenciálne bezpečnostné riziko a môže to mať nepriaznivý vplyv na váš web, ak sa dočasný adresár vymaže. Uistite sa, že cesta k dočasnému adresáru je iná ako cesta k adresáru cache pluginov.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Aktualizačný server neprístupný"><![CDATA[
+<h2>Aktualizačný server neprístupný</h2>
+<p>Kontrola aktualizácií zlyhala, často v dôsledku preťaženia siete alebo časového limitu spojenia. Táto situácia sa zvyčajne vyrieši v priebehu hodiny či dvoch, skúste tento panel navštíviť neskôr.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Vo vašej inštalácii PHP chýba funkcia mail()"><![CDATA[
+<h2>Vo vašej inštalácii PHP chýba funkcia mail()</h2>
+<p>Funkcia <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> v PHP je zakázaná. Textpattern preto nemôže odosielať e‑maily a niektoré funkcie nebudú dostupné. Napríklad sa nebudú posielať e‑mailové upozornenia na nové komentáre a noví používatelia nedostanú uvítací e‑mail. Používateľov však môžete aj tak pridávať.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Panel Odkazy">
-        <item id="file_reassign" title="Zmeniť priradenie súboru"><![CDATA[]]></item>
-        <item id="file_replace" title="Nahradiť súbor"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Dátum vydania"><![CDATA[]]></item>
-        <item id="upload" title="Nahrať súbor"><![CDATA[]]></item>
+        <item id="file_reassign" title="Zmeniť priradenie súboru"><![CDATA[
+<h2>Priradiť súbor</h2>
+<p>Keď nahráte súbor na miesto takého, ktorý je označený ako „Chýba“, váš zvolený súbor sa odošle na server a prepojí s pôvodnými informáciami o súbore v databáze. To znamená, že názov pôvodného súboru zostane zachovaný rovnako ako ďalšie súvisiace údaje, napríklad počet stiahnutí a kategória. Aktualizuje sa však veľkosť súboru, aby odpovedala novému súboru.</p>
+        ]]></item>
+        <item id="file_replace" title="Nahradiť súbor"><![CDATA[
+<h2>Nahradiť súbor</h2>
+<p>Nahranie súboru tu nahradí obsah existujúceho súboru na serveri, ale ponechá pôvodný názov súboru. Počet stiahnutí a ďalšie informácie spojené so súborom zostanú nezmenené.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Dátum vydania"><![CDATA[
+<h2>Dátum publikovania</h2>
+<p>Čas, kedy bol súbor publikovaný alebo naposledy upravený. Čas je možné nastaviť na okamih publikovania alebo na ľubovoľný čas v minulosti či budúcnosti.</p>
+<p>Polia zodpovedajú týmto údajom:</p>
+<ul>
+    <li>Rok / Mesiac / Deň</li>
+    <li>Hodina (24-hodinový formát) : Minúta : Sekunda</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Nahrať súbor"><![CDATA[
+<h2>Nahrať súbor</h2>
+<p>Tento formulár použite na nahratie súborov alebo obrázkov na server.</p>
+<p>Použite kód Textile na vloženie grafiky do článkov, kód Textpattern na umiestnenie grafiky do šablón stránok alebo HTML kód na umiestnenie grafiky inde.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="Panel Foriem">
-        <item id="forms_overview" title="Úvod do foriem"><![CDATA[]]></item>
+        <item id="forms_overview" title="Úvod do foriem"><![CDATA[
+<h2>Úvod do foriem</h2>
+<p>Vo výsledku Textpattern je forma útržok alebo blok textu, HTML a tagov Textpattern, ktorý je možné znovu použiť na zobrazenie obsahu.</p>
+<p>Tu je ukážka formy, ktorá sa môže volať <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Môžete ju použiť na zobrazenie nečíslovaného HTML zoznamu súvisiacich článkov:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Keďže úlohou tejto formy je vypisovať zoznam nadpisov, môže sa hodiť aj v iných tagoch, napríklad na zobrazenie 20 článkov z aktuálnej sekcie:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Formu môžete použiť aj na zobrazovanie opakujúceho sa obsahu, ako je hlavička a päta v šablónach stránok. Obsah tak existuje len na jednom mieste a ak sa rozhodnete ho zmeniť, stačí to urobiť raz. Obsah z formy sa zvyčajne zobrazuje pomocou tagu:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Forma môže mať veľkosť až 64 kB. Príklad päty môže obsahovať nadpisy, odseky, odkazy, podmienené tagy a odkazy na iné formy, napríklad <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
     <group id="image" title="Panel Obrázky">
-        <item id="create_thumbnail" title="Vytvoriť náhľad"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Nahradiť obrázok"><![CDATA[]]></item>
-        <item id="upload_image" title="Nahrať obrázok"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Nahrať náhľad"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Vytvoriť náhľad"><![CDATA[
+<h2>Vytvoriť miniatúru</h2>
+<p>Umožní (znovu)vytvoriť miniatúru so zadanými rozmermi z plného obrázka.</p>
+<p>Pri vlastnej veľkosti sa miniatúra pomerne zmení na zadané rozmery, pokiaľ nezačiarknete voľbu „Orez“. V tom prípade sa miniatúra vytvorí zo stredu obrázka bez zmeny mierky.</p>
+<p>Pri automatickej veľkosti sa miniatúra zmení na rozmery (a prípadné nastavenia orezu) definované v aktuálnom administračnom motíve.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Nahradiť obrázok"><![CDATA[
+<h2>Nahradiť obrázok</h2>
+<p>Obrázok nahraný tu jednoducho nahradí existujúci obrázok priradený k tomuto záznamu v databáze.</p>
+        ]]></item>
+        <item id="upload_image" title="Nahrať obrázok"><![CDATA[
+<h2>Nahrať obrázok</h2>
+<p>Nahrajte na server jeden alebo viac obrázkov.</p>
+<p>Po nahraní do priečinka <code>images</code> sa pôvodný názov vášho obrázka uchová len interne v databáze Textpatternu; samotný súbor obrázka sa premenuje na postupné číslo + prípona súboru.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Nahrať náhľad"><![CDATA[
+<h2>Nahrať miniatúru</h2>
+<p>Celostránkové obrázky môžu mať vlastné miniatúry. Tie sú užitočné na odkazovanie na celé obrázky aj na ich indexovanie.</p>
+<p>Odkaz na miniatúru je úplne rovnaký ako odkaz na plný obrázok, len sa k názvu súboru pripojí písmeno <code>t</code>. Napríklad na odkaz na miniatúru patriacu k obrázku uloženému v <code>/images/12.jpg</code> použijete <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="Panel Jazyky">
-        <item id="get_textpack" title="Inštalovať jazyk z Textpack-u"><![CDATA[]]></item>
+        <item id="get_textpack" title="Inštalovať jazyk z Textpack-u"><![CDATA[
+<h2>Inštalovať Textpack</h2>
+<p>Vložte do tohto poľa ďalšie jazykové reťazce pre svoj web a kliknite na „Nahrať“ na ich inštaláciu.</p>
+<p>Reťazce často prichádzajú ako sťahovateľný Textpack, ktorý je distribuovaný s pluginom, aby sa jeho jazykové reťazce mohli v Textpatterne používať natívne.</p>
+<p>Prekladatelia potom môžu tieto balíčky podľa potreby prekladať a ďalej šíriť lokalizovaný obsah komunite.</p>
+        ]]></item>
     </group>
 
     <group id="link" title="Panel Odkazy">
-        <item id="link_description" title="Popis"><![CDATA[]]></item>
-        <item id="link_sort" title="Hodnota pre zoradenie"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
-        <item id="timestamp_link" title="Dátum vydania"><![CDATA[]]></item>
+        <item id="link_description" title="Popis"><![CDATA[
+<h2>Popis</h2>
+<p>Popisy odkazov sú voliteľné a sú užitočné na titulkovanie odkazov, vytváranie atribútov <code>title=""</code> (tooltip) pre odkazy alebo jednoducho na vlastnú internú dokumentáciu.</p>
+        ]]></item>
+        <item id="link_sort" title="Hodnota pre zoradenie"><![CDATA[
+<h2>Hodnota triedenia</h2>
+<p>Užitočné pre prirodzené jazykové triedenie zoznamov odkazov, napríklad podľa priezviska namiesto krstného mena alebo pri frázach začínajúcich určitým či neurčitým členom.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Adresa odkazu. Ak odkaz smeruje na iný web, musí začínať na <code>http://</code> alebo <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Dátum vydania"><![CDATA[
+<h2>Dátum publikovania</h2>
+<p>Čas, kedy bol odkaz publikovaný alebo naposledy upravený. Čas je možné nastaviť na okamih publikovania alebo na ľubovoľný čas v minulosti či budúcnosti.</p>
+<p>Polia zodpovedajú týmto údajom:</p>
+<ul>
+    <li>Rok / Mesiac / Deň</li>
+    <li>Hodina (24-hodinový formát) : Minúta : Sekunda</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="login" title="Prihlasovací panel">
-        <item id="remember_login" title=""><![CDATA[]]></item>
+        <item id="remember_login" title="Zapamätať si prihlásenie pre tento prehliadač"><![CDATA[
+<h2>Zostať prihlásený v tomto prehliadači</h2>
+<p>Ak je táto voľba začiarknutá, zostanete do svojho účtu Textpattern prihlásený v aktuálnom webovom prehliadači, kým sa neodhlásite. Ak ju necháte nezačiarknutú, po určitej dobe nečinnosti budete automaticky odhlásený.</p>
+<p>Vyžaduje, aby mal váš prehliadač povolené cookies.</p>
+        ]]></item>
     </group>
 
     <group id="plugin" title="Panel doplnkov">
-        <item id="install_plugin" title="Nainštalovať plugin"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Nahrať plugin"><![CDATA[]]></item>
+        <item id="install_plugin" title="Nainštalovať plugin"><![CDATA[
+<h2>Inštalovať plugin</h2>
+<p>Vložte sem obsah skompilovaného textového súboru pluginu a potom kliknite na „Nahrať“ na spustenie inštalácie. Každý plugin, ktorý nahráte s rovnakým názvom ako už nainštalovaný, sa prepíše nahranou verziou.</p>
+<p>Text pluginu, ktorý sem vkladáte, <strong>nie je</strong> samotný PHP kód, ale text zakódovaný v Base64, zvyčajne s hlavičkou obsahujúcou informácie o plugine (názov pluginu, verziu a popis, meno autora atď.).</p>
+<p>Skompilované verzie pluginov často nájdete v <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repozitári pluginov <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> alebo na určenom kanáli autora pluginu, napríklad na jeho webe či GitHube.</p>
+<p>Môžete sem tiež vložiť URL adresu Textpattern skompilovaného textového súboru, ak to externý web povoľuje.</p>
+<p>Všetky nahrané pluginy prejdú overovacím krokom, v ktorom môžete pred inštaláciou skontrolovať ich kód a obsah.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Nahrať plugin"><![CDATA[
+<h2>Nahrať plugin</h2>
+<p>Týmto formulárom môžete nahrať súbor pluginu. Nahrané pluginy (a prípadné sprievodné súbory) sa ukladajú do adresára „plugins“.</p>
+<p>Možno nahrať tieto typy pluginov:</p>
+<ul>
+<li>šablóny Textpattern PHP, ktoré obsahujú kompletný kód, metadáta, reťazce Textpack a text nápovedy,</li>
+<li>skompilované textové súbory Textpatternu, ktoré obsahujú kompletný kód, metadáta, reťazce Textpack a text nápovedy,</li>
+<li>zip balíčky Textpatternu, ktoré obsahujú manifest, kód, metadáta, reťazce Textpack, text nápovedy a sprievodné súbory,</li>
+<li>surové PHP súbory (tie však nevyplnia ďalšie metadáta a neodporúčajú sa).</li>
+</ul>
+<p>Každý plugin, ktorý nahráte s rovnakým názvom ako už nainštalovaný, sa prepíše nahranou verziou.</p>
+<p>Všetky nahrané pluginy prejdú overovacím krokom, v ktorom môžete pred inštaláciou skontrolovať ich kód a obsah.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Panel nastavení">
-        <item id="admin_side_plugins" title="Používať administračné &quot;bočné&quot; pluginy?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Rozšírené nastavenia"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Povoliť PHP kód v článkoch?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Povoliť prepísanie šablóny?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Povoliť PHP kód na stránkach?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Formát dátumu pre archív"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Používajú články anotácie?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Pripojiť titulky k trvalým odkazom?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Automaticky nastavovať letný čas?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Nový komentár znamená aktualizáciu stránky?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title=""><![CDATA[]]></item>
-        <item id="comments_are_ol" title="Vypísať komentáre ako číslovaný zoznam?"><![CDATA[]]></item>
-        <item id="comments_auto_append" title="Automaticky povoliť komentáre k článkom?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title=""><![CDATA[]]></item>
-        <item id="comments_default_invite" title=""><![CDATA[]]></item>
-        <item id="comments_disabled_after" title=""><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title=""><![CDATA[]]></item>
-        <item id="comments_moderate" title=""><![CDATA[]]></item>
-        <item id="comments_on_default" title=""><![CDATA[]]></item>
-        <item id="comments_require_email" title=""><![CDATA[]]></item>
-        <item id="comments_require_name" title=""><![CDATA[]]></item>
-        <item id="comments_sendmail" title=""><![CDATA[]]></item>
-        <item id="comments_use_fat_textile" title=""><![CDATA[]]></item>
-        <item id="custom_form_types" title=""><![CDATA[]]></item>
-        <item id="custom_overview" title=""><![CDATA[]]></item>
-        <item id="dateformat" title=""><![CDATA[]]></item>
-        <item id="default_event" title=""><![CDATA[]]></item>
-        <item id="default_publish_status" title=""><![CDATA[]]></item>
-        <item id="doctype" title=""><![CDATA[]]></item>
-        <item id="enable_dev_preview" title=""><![CDATA[]]></item>
-        <item id="enable_short_tags" title=""><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title=""><![CDATA[]]></item>
-        <item id="expire_logs_after" title=""><![CDATA[]]></item>
-        <item id="file_base_path" title=""><![CDATA[]]></item>
-        <item id="file_max_upload_size" title=""><![CDATA[]]></item>
-        <item id="gmtoffset" title="Časové pásmo"><![CDATA[]]></item>
-        <item id="img_dir" title="Priečinok s obrázkami"><![CDATA[]]></item>
-        <item id="include_email_atom" title=""><![CDATA[]]></item>
-        <item id="is_dst" title=""><![CDATA[]]></item>
-        <item id="logging" title="Záznamy"><![CDATA[]]></item>
-        <item id="max_url_len" title="Maximálna dĺžka URL"><![CDATA[]]></item>
-        <item id="module_pophelp" title="Zobraziť odkazy nápovedy"><![CDATA[]]></item>
-        <item id="never_display_email" title="Skrývat emailové adresy komentujúcich?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title=""><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title=""><![CDATA[]]></item>
-        <item id="permlink_mode" title=""><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title=""><![CDATA[]]></item>
-        <item id="production_status" title=""><![CDATA[]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title=""><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title=""><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title=""><![CDATA[]]></item>
-        <item id="site_slogan" title=""><![CDATA[]]></item>
-        <item id="sitename" title=""><![CDATA[]]></item>
-        <item id="siteurl" title=""><![CDATA[]]></item>
-        <item id="skin_dir" title=""><![CDATA[]]></item>
-        <item id="smtp_from" title=""><![CDATA[]]></item>
-        <item id="spam_blocklists" title=""><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title=""><![CDATA[]]></item>
-        <item id="tempdir" title=""><![CDATA[]]></item>
-        <item id="theme_name" title=""><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title=""><![CDATA[]]></item>
-        <item id="use_comments" title=""><![CDATA[]]></item>
-        <item id="use_mail_on_feeds_id" title=""><![CDATA[]]></item>
-        <item id="use_plugins" title=""><![CDATA[]]></item>
-        <item id="use_textile" title=""><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Používať administračné &quot;bočné&quot; pluginy?"><![CDATA[
+<h2>Používať pluginy v administrácii?</h2>
+<p>Pluginy pre administráciu môžu zmeniť fungovanie administračného rozhrania. Môžu sa napojiť na už existujúce akcie, ako je úprava alebo publikovanie článkov, alebo môžu pridať nové panely s ďalšími/rozšírenými funkciami.</p>
+<p>Ak sa chcete o administrátorských pluginoch dozvedieť viac, pozrite si stránku <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Rozšírenie Textpatternu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> v <a rel="external" target="_blank" href="https://docs.textpattern.com/">Používateľskej dokumentácii Textpatternu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>. Rôzne typy pluginov sú uvedené na webe <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Rozšírené nastavenia"><![CDATA[
+<h2>Pokročilé možnosti</h2>
+<p>Zobrazí skupinu rozšírených preferencií, kde môžete nastaviť ďalšie parametre, napríklad:</p>
+<ul>
+    <li>funkcie PHP povolené v <code>txp:evaluate</code>.</li>
+    <li>vlastné typy šablón foriem.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Povoliť PHP kód v článkoch?"><![CDATA[
+<h2>Povoliť PHP v článkoch?</h2>
+<p>Ak je toto nastavenie povolené, je možné používať PHP v článkoch. Autor na to musí mať dostatočné oprávnenia (štandardne to sú iba <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Publishers“ <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Managing Editors“ <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> a <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Copy Editors“ <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>).</p>
+<p><strong>Dôrazne odporúčame túto voľbu vypnúť</strong>, pokiaľ ju naozaj nepotrebujete. Akýkoľvek potenciálne škodlivý či nebezpečný PHP kód, ktorý môže zničiť váš web alebo spôsobiť únik informácií tretím stranám, môže byť pridaný ktorýmkoľvek autorom a spustený každým návštevníkom článku.</p>
+<p>PHP kód musí byť bez úvodných a koncových PHP tagov a musí byť uzavretý v tagoch <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Povoliť prepísanie šablóny?"><![CDATA[
+<h2>Povoliť prepísanie formy?</h2>
+<p>Toto nastavenie umožní autorom článkov prepísať formu, ktorá sa použije pri zobrazení ich článku. Ak je zapnuté, pri úprave článku bude k dispozícii rozbaľovacia ponuka „Prepísať formu“.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Povoliť PHP kód na stránkach?"><![CDATA[
+<h2>Povoliť PHP na stránkach?</h2>
+<p>Ak je toto nastavenie povolené, je možné používať PHP kód v šablónach stránok a foriem.</p>
+<p><strong>Dôrazne odporúčame túto voľbu vypnúť</strong>, pokiaľ ju naozaj nepotrebujete. Akýkoľvek potenciálne škodlivý či nebezpečný PHP kód, ktorý môže zničiť váš web alebo spôsobiť únik informácií tretím stranám, môže byť pridaný iným používateľom a spustený nič netušiacim správcom alebo návštevníkom webu.</p>
+<p>PHP kód musí byť bez úvodných a koncových PHP tagov a musí byť uzavretý v tagoch <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Formát dátumu pre archív"><![CDATA[
+<h2>Formát dátumu archívu</h2>
+<p>Určuje, v akom tvare sa budú dátumy zobrazovať v článkoch v sekciách vášho webu.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Zobraziť anotáciu na stránke úpravy článku?"><![CDATA[
+<h2>Zobraziť anotáciu na stránke úpravy článku?</h2>
+<p>Ak zvolíte „Nie“, pole pre anotáciu sa autorovi na obrazovke úpravy článku nebude zobrazovať.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Pripojiť titulky k trvalým odkazom?"><![CDATA[
+<h2>Pripojiť titulky k trvalým odkazom?</h2>
+<p>Toto nastavenie pripojí k URL automaticky generovanú verziu nadpisu článku. Vygeneruje sa buď automaticky, alebo ju možno ručne prepísať v poli „Nadpis len pre URL“ pri úprave článku.</p>
+<p>Nastavenie má zmysel len pri použití pekných URL. V niektorých jazykoch to môže viesť k dlhým a nepekným URL, v takom prípade je lepšie nastaviť túto voľbu na „Vypnuté“.</p>
+        ]]></item>
+        <item id="auto_dst" title="Automaticky nastavovať letný čas?"><![CDATA[
+<h2>Automaticky upravovať letný čas?</h2>
+<p>Toto nastavenie umožní Textpatternu meniť, kedy prebieha prechod na letný čas (DST) vo vašom časovom pásme. Ak je nastavené na „Nie“, budete môcť predvoľbu „Letný čas zapnutý“ meniť ručne.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Nový komentár znamená aktualizáciu stránky?"><![CDATA[
+<h2>Nový komentár znamená aktualizáciu webu?</h2>
+<p>Databáza Textpatternu sleduje, kedy prebehla posledná zmena na vašom webe. Ak je toto nastavenie „Áno“, nový komentár túto hodnotu tiež aktualizuje. Túto hodnotu využíva napríklad funkcia <code>"Posielať hlavičku Last-Modified"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Používať atribút rel=\&quot;nofollow\&quot; v komentároch?"><![CDATA[
+<h2>Používať rel="nofollow" v komentároch?</h2>
+<p>Ak je nastavené na „Áno“, pridá sa do odkazov v komentároch ďalší atribút. Je určený ako opatrenie, ktoré má obmedziť motiváciu pre spamovanie komentárov, a bol zavedený viacerými vyhľadávačmi a vývojármi softvéru. Viac sa dozviete v <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">oznámení Google <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+<p><strong>Poznámka:</strong> Toto nastavenie neovplyvňuje funkčnosť vášho webu. Môže však znížiť alebo obmedziť vplyv vašich komentárov pri hodnotení webov, na ktoré vedú odkazy v komentároch, v niektorých vyhľadávačoch.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Vypísať komentáre ako číslovaný zoznam?"><![CDATA[
+<h2>Zobrazovať komentáre ako číslovaný zoznam?</h2>
+<p>Určuje, či budú komentáre k článkom obalené HTML tagom <code>&lt;ol&gt;</code> a jednotlivé komentáre tagom <code>&lt;li&gt;</code> (čo spôsobí, že sa komentáre zobrazia ako číslovaný zoznam), alebo či budú jednotlivé komentáre obalené namiesto toho tagom <code>&lt;div&gt;</code>.</p>
+<p>Pri oboch spôsoboch môžete použité tagy prepísať na úrovni jednotlivých foriem úpravou tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> vo forme <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automaticky povoliť komentáre k článkom?"><![CDATA[
+<h2>Automaticky pridávať komentáre k článkom?</h2>
+<p>Toto nastavenie určuje, či sa budú komentáre a formulár pre komentáre automaticky pridávať ku všetkým samostatným článkom (automatickým vložením obsahu formy <code>comments_display</code>).</p>
+<p>Väčšinou je vhodné nechať toto nastavenie na „Nie“, pretože to umožňuje väčšiu flexibilitu v umiestnení komentárov v návrhu vášho webu. Do šablón založených na článkoch, kde chcete komentáre zobrazovať, budete musieť ručne vložiť tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+<p>Ak sa vám v článku zobrazujú komentáre duplicitne, je pravdepodobné, že máte tag <code>&lt;txp:comments /&gt;</code> v šablóne a zároveň máte nastavenie „Automaticky pridávať komentáre k článkom?“ prepnuté na „Áno“.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Tvar dátumu v komentároch"><![CDATA[
+<h2>Tvar dátumu v komentároch</h2>
+<p>Určuje, v akom tvare sa budú dátumy komentárov zobrazovať návštevníkom vášho webu.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Prednastavená výzva na komentovanie"><![CDATA[
+<h2>Prednastavená výzva na komentovanie</h2>
+<p>Ak umožňujete návštevníkom na vašom webe komentovať, toto je predvolený text výzvy. Napríklad:</p>
+<ul>
+    <li>Komentáre</li>
+    <li>Pridať komentár</li>
+    <li>Spätná väzba</li>
+    <li>Pripomienky</li>
+</ul>
+<p>Upozorňujeme, že text výzvy možno vždy zmeniť pri jednotlivých článkoch.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Komentovanie uzatvoriť po"><![CDATA[
+<h2>Komentovanie uzatvoriť po</h2>
+<p>Týmto nastavíte časové obdobie, po ktorom sa komentovanie článkov vypne (môže byť nastavené na „Nikdy“ a komentovanie tak ponechať bez časového obmedzenia).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Povoliť použitie obrázkov?"><![CDATA[
+<h2>Povoliť použitie obrázkov v komentároch?</h2>
+<p>Pri nastavení na „Nie“ budú všetky obrázky v komentároch odstránené.</p>
+        ]]></item>
+        <item id="comments_mode" title="Režim komentárov"><![CDATA[
+<h2>Režim komentárov</h2>
+<p>Ak je vybraté „nopopup“ (odporúčané), aktuálne okno sa obnoví tak, aby zobrazovalo iba aktuálny článok a pod ním komentáre.</p>
+<p>Ak je vybraté „popup“, po kliknutí na odkaz na komentáre sa otvorí nové okno prehliadača (použije sa forma <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderovanie komentárov"><![CDATA[
+<h2>Moderovať komentáre?</h2>
+<p>Ak je nastavené na „Áno“, viditeľnosť každého nového komentára bude vypnutá, kým nebude skontrolovaný. Komentáre musíte ručne moderovať a nastavovať im viditeľnosť (po prijatí nového komentára sa autorovi článku odošle oznamovací e‑mail).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Komentáre implicitne povolené?"><![CDATA[
+<h2>Komentáre implicitne povolené?</h2>
+<p>Ak je toto nastavenie „Áno“, komentáre sa automaticky povolia pri každom publikovanom článku. Ak je nastavené na „Nie“, pri každom článku, kde chcete komentáre povoliť, ich musíte zapnúť na paneli „Napísať“.</p>
+<p>Komentáre možno kedykoľvek povoliť alebo zakázať pri jednotlivých článkoch.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Vyžadujú komentáre zadanie emailu?"><![CDATA[
+<h2>Vyžadujú komentáre e‑mailovú adresu používateľa?</h2>
+<p>Ak je nastavené na „Áno“, ľudia, ktorí chcú komentovať váš článok, budú musieť do formulára komentára zadať e‑mailovú adresu. Bez zadania e‑mailovej adresy nebudú môcť komentár odoslať.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Vyžadujú komentáre zadanie mena?"><![CDATA[
+<h2>Vyžadujú komentáre meno komentujúceho?</h2>
+<p>Ak je nastavené na „Áno“, ľudia, ktorí chcú komentovať váš článok, budú musieť do formulára komentára zadať meno. Bez zadania mena nebudú môcť komentár odoslať.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Upozorniť na nové komentáre emailom"><![CDATA[
+<h2>Posielať komentáre autorovi e‑mailom?</h2>
+<p>Ak je nastavené na „Áno“, pri prijatí každého nového komentára k článku sa jeho kópia odošle e‑mailom autorovi daného článku.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Povoliť viac značiek Textile v komentároch?"><![CDATA[
+<h2>Povoliť viac značiek Textile v komentároch?</h2>
+<p>Ak je nastavené na „Áno“, komentáre môžu obsahovať prvky <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>, ktoré by inak boli považované za obyčajný text, napríklad:</p>
+<ul>
+    <li>nadpisy</li>
+    <li>číslované a nečíslované zoznamy</li>
+    <li>poznámky pod čiarou</li>
+    <li>tabuľky</li>
+    <li>kód</li>
+    <li>rozšírená bloková syntax (<code>bc..</code>, <code>bq..</code> atď.)</li>
+</ul>
+<p><strong>Poznámka:</strong> Z bezpečnostných dôvodov sa surové HTML premení na obyčajný text.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Účty s povoleným súbežným prihlásením"><![CDATA[
+<h2>Účty s povoleným súbežným prihlásením</h2>
+<p>Čiarkou oddelený zoznam prihlasovacích mien účtov, ktoré sa môžu prihlasovať z viacerých prehliadačov/relácií. Je to užitočné pri vývoji, keď zdieľate prístup s klientmi.</p>
+<p>Používanie tejto funkcie je bezpečnostné riziko a <strong>neodporúča sa na živých weboch</strong>. Diagnostika zobrazí varovanie, ak je váš účet na živom webe nastavený na súbežné prihlásenia.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Vlastné typy šablón foriem"><![CDATA[
+<h2>Vlastné typy šablón foriem</h2>
+<p>Okrem štandardných typov šablón foriem (article, file, misc atď.) môžu vydavatelia definovať aj vlastné typy. Účel vlastných typov šablón foriem je dvojitý: jednoduchšie triedenie šablón foriem a definovanie vlastných assetov.</p>
+<p>Formát tejto predvoľby je <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>, pričom každá sekcia zodpovedá jednému typu šablóny formy.</p>
+<p>Na definovanie vlastného typu formy (napr. <code>js</code>) musíte pridať (na samostatný riadok) sekciu <code>[js]</code>. Predvolený titulok môžete nastaviť pomocou položky <code>title="Javascript"</code> v príslušnej sekcii. Ak je potrebné, môžete pridať aj lokalizované titulky (napr. <code>ru="Скрипт"</code>).</p>
+<p>Okrem toho možno špecifikovať <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">typ média <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> (predtým známy ako MIME typ) pre šablóny foriem, napríklad <code>mediatype="application/javascript"</code>. Tým sa z takýchto šablón stanú vlastné assety, ktoré možno poskytovať ako daný typ média – buď z databázy, alebo z disku (ploché súbory) cez tag <code>&lt;txp:output_form /&gt;</code>. Napríklad formu s názvom <code>myscript.js</code> typu <code>[js]</code> a typom média <code>application/javascript</code> môžete do kódu vložiť takto:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Vygeneruje sa nasledujúci HTML tag <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Plochými súbormi môžu byť len tie šablóny foriem, ktorých názov má príponu zodpovedajúcu ich typu (napr. <code>myscript.js</code>). V takom prípade ich Textpattern vôbec nespracováva a sú prístupné cez vlastnú URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Vlastné polia"><![CDATA[
+<h2>Vlastné polia</h2>
+<p>Vlastné polia slúžia na ukladanie dodatočných údajov o článkoch. Môžete si ich definovať až desať tak, že im tu priradíte názvy. Každé sa potom zobrazí ako samostatné pole na paneli Napísať, aby ste mohli k článku pripojiť vlastné údaje.</p>
+<p>Polia môžete pomenovať ľubovoľne, ale majte na pamäti nasledujúce:</p>
+<ul>
+<li>Použitie medzier zvyšuje čitateľnosť na paneli Napísať, ale takéto polia potom <em>nie je možné</em> použiť ako parametre na triedenie alebo filtrovanie v tagu <code>article_custom</code>. Ak chcete túto funkcionalitu využiť, zvažujte namiesto medzier podčiarkovníky.</li>
+<li>Dávajte pozor, aby sa názvy polí neprekrývali s rezervovanými názvami polí v Textpatterne. Napríklad nepoužívajte <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> atď., inak sa môžete stretnúť s podivným chovaním alebo nefunkčným webom.</li>
+<li>Údaje v každom poli sú obmedzené na 255 znakov obyčajného textu.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Tvar dátumu"><![CDATA[
+<h2>Tvar dátumu</h2>
+<p>Toto nastavenie ovplyvní iba to, ako sa budú dátumy článkov zobrazovať na hlavnej stránke vášho webu.</p>
+        ]]></item>
+        <item id="default_event" title="Východzia záložka administrácie"><![CDATA[
+<h2>Predvolený panel</h2>
+<p>Panel administračného rozhrania Textpattern, ktorý sa zobrazí ako prvý, keď sa niekto prihlási.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Východzí stav článku"><![CDATA[
+<h2>Východzí publikačný stav</h2>
+<p>Určuje publikačný stav viditeľnosti novovytvorených článkov Textpatternu.</p>
+<p>Upozornenie: toto nastavenie nemá žiadny vplyv na stav článkov vytvorených alebo upravených pred zmenou.</p>
+<p>Predvolený publikačný stav môže byť jeden z nasledujúcich:</p>
+<ul>
+    <li>Koncept</li>
+    <li>Skrytý</li>
+    <li>Čaká na schválenie</li>
+    <li>Publikovaný</li>
+    <li>Pripnutý</li>
+</ul>
+<p><strong>Koncept</strong> je považovaný za rozpracovaný článok a nie je viditeľný mimo administračného rozhrania Textpatternu (t. j. nie je viditeľný na verejnej časti webu ani v kanáloch).</p>
+<p><strong>Skrytý</strong> článok nie je viditeľný mimo administračného rozhrania Textpatternu.</p>
+<p><strong>Čakajúci</strong> článok je považovaný za pripravený na publikovanie a čaká na schválenie, ale nie je viditeľný mimo administračného rozhrania Textpatternu.</p>
+<p><strong>Publikovaný</strong> článok je zvyčajne viditeľný mimo administračného rozhrania Textpatternu (t. j. viditeľný na verejnej časti webu, syndikovaný v kanáloch, ak to nastavenia povoľujú). Ak je článok publikovaný a má dátum vypršania, jeho stav zostane po tomto dátume „Publikovaný“, ale článok sa zobrazí mimo administrácie iba vtedy, ak je povolené publikovanie expirovaných článkov.</p>
+<p><strong>Pripnutý</strong> článok je podobný „Publikovanému“ v tom, že je viditeľný mimo administračného rozhrania Textpatternu, ale <strong>nebude</strong> sa zobrazovať v zoznamoch článkov, pokiaľ tag <code>article</code> alebo <code>article_custom</code> neobsahuje atribút <code>status</code> s hodnotou <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Vyberte, ktorý HTML doctype chcete používať (HTML5 alebo XHTML). Ovplyvní to formuláre pre zadávanie komentárov, renderovanie Textile pre <code>&lt;abbr&gt;</code> alebo <code>&lt;acronym&gt;</code> a tagy <code>&lt;link&gt;</code> generované tagom <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Umožniť náhľad vývojovej verzie vzhľadu?"><![CDATA[
+<h2>Umožniť náhľad vývojovej verzie vzhľadu?</h2>
+<p>Používatelia s dostatočnými oprávneniami (štandardne roly Publisher a Designer) môžu bezpečne vyvíjať a prehliadať nový motív, zatiaľ čo všetci ostatní používatelia budú stále vidieť starý motív (až kým nebude nový nasadený).</p>
+<p>Privilegovaní používatelia, ktorí sa nechcú podieľať na vývoji motívov, si môžu náhľad vývojového motívu vypnúť. Potom sa im bude zobrazovať aktuálny „verejný“ motív tak ako bežným návštevníkom.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Povoliť podporu krátkych tagov?"><![CDATA[
+<h2>Povoliť podporu krátkych tagov?</h2>
+<p>Tagy Textpatternu majú tvar <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Je možné znížiť množstvo písania povolením skráteného zápisu, pri ktorom sa môže vynechať <code>txp:</code>, ak sa dodrží niekoľko jednoduchých pravidiel. Nasledujúce príklady ukazujú princíp:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> sa zmení na <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> sa zmení na <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> sa zmení na <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> sa zmení na <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> sa zmení na <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> ( všimnite si, že prefix pluginu možno použiť aj pri tagu <code>else</code>).</li>
+</ul>
+<p>Ak tag obsahuje podčiarkovník a máte povolené krátke tagy, základný princíp je:</p>
+<ol>
+    <li>Odstrániť prefix <code>txp:</code>.</li>
+    <li>Nahradiť prvý výskyt podčiarkovníka reťazcom <code>::</code>.</li>
+</ol>
+<p>Upozornenie: toto nastavenie neovplyvňuje možnosť používať skrátené kódy <code>&lt;txp:output_form /&gt;</code> na vykresľovanie útržkov foriem. Stále môžete používať zápis <code>&lt;txp::shortcode /&gt;</code>, ktorý sa interpretuje ako <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Povoliť XML-RPC server?"><![CDATA[
+<h2>Povoliť XML-RPC server?</h2>
+<p>Ak chcete používať <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> na vzdialené ovládanie Textpatternu (napr. z desktopových alebo mobilných aplikácií), musíte server XML-RPC zapnúť nastavením tejto voľby na „Áno“.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Používať rozšírené funkcie pošty"><![CDATA[
+<h2>Používať rozšírené funkcie pošty</h2>
+<p>Nastavenie na „Nie“ spôsobí, že všetky e‑maily – napríklad žiadosti o obnovenie hesla a e‑maily z pluginov ako com_connect – sa budú posielať pomocou PHP funkcie <code>mail()</code>. Pri nastavení na „Áno“ sa použije pribalený PHPMailer, ktorý umožňuje voliteľné smerovanie pošty cez externé SMTP servery.</p>
+<p>Ak máte problémy s doručovaním e‑mailov (najmä k online poskytovateľom, ako sú Gmail, Outlook, Yahoo! a iní), môže to byť spôsobené tým, že vaša doména nie je považovaná za dôveryhodný zdroj. Prepnúť na „Áno“ môže doručiteľnosť zlepšiť. Použitie SMTP môže tiež zlepšiť kompatibilitu s niektorými poskytovateľmi pošty a ďalej zvýšiť úspešnosť doručenia.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Záznamy vypršia po"><![CDATA[
+<h2>Záznamy vypršia po koľkých dňoch?</h2>
+<p>Ak je v Textpatterne zapnuté logovanie, môžete určiť, ako dlho (v dňoch) sa majú záznamy uchovávať. Hodnota „7“ napríklad ponechá záznamy dostupné sedem dní.</p>
+<p><strong>Poznámka:</strong> Záznamy sa skrátia len vtedy, keď zobrazíte panel „Záznamy návštev“, inak budú stále narastať.</p>
+        ]]></item>
+        <item id="file_base_path" title="Cesta k súborom"><![CDATA[
+<h2>Cesta k priečinku so súbormi</h2>
+<p>Týmto nastavíte <strong>absolútnu cestu</strong> k adresáru, kde sa budú trvalo ukladať nahrané súbory. PHP musí mať do tohto adresára právo zápisu.</p>
+<p><strong>Poznámka:</strong> Z bezpečnostných dôvodov zvážte premiestnenie tohto adresára mimo verejného koreňového adresára webu.</p>
+        ]]></item>
+        <item id="file_download_header" title="Hlavička sťahovania súborov"><![CDATA[
+<h2>Hlavička sťahovania súborov</h2>
+<p>Umožňuje vám prispôsobiť spôsob, akým sa spracúva sťahovanie súborov.</p>
+<p>Bežne sa všetky stiahnutia považujú za prílohy a sú stiahnuté (podľa toho, ako si prehliadač nastavíte na daný typ súboru). Ak chcete pre niektoré alebo všetky typy súborov naznačiť preferovaný spôsob spracovania, môžete sem vložiť tagy, ktoré to určia. Napríklad ak chcete súbory PDF zaradené do kategórie Textpatternu „inline-pdf“ zobrazovať priamo v prehliadači namiesto ich sťahovania:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maximálna veľkosť súborov (v Bajtoch)"><![CDATA[
+<h2>Maximálna veľkosť nahrávaných súborov (v bajtoch)</h2>
+<p>Môžete obmedziť maximálnu veľkosť (v bajtoch) nahrávaných súborov. Uvedomte si, že táto hodnota je zároveň limitovaná konfiguráciou PHP. Ak Textpattern zistí, že konfigurácia PHP povoľuje menšiu veľkosť nahrávok, automaticky nastaví nižší limit. Ak chcete povoliť väčšie súbory pri nahrávaní cez prehliadač, kontaktujte svoj hosting (relevantné hodnoty v <code>php.ini</code> sú <code>post_max_size</code>, <code>upload_max_filesize</code> a <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Časové pásmo"><![CDATA[
+<h2>Časové pásmo</h2>
+<p>Aby sa dátumy zobrazovali vo vašom miestnom čase, vyberte svoje časové pásmo.</p>
+        ]]></item>
+        <item id="img_dir" title="Priečinok s obrázkami"><![CDATA[
+<h2>Adresár obrázkov</h2>
+<p>Ak chcete prispôsobiť názov adresára s obrázkami, môžete tak urobiť tu. Najprv musíte adresár vytvoriť v koreňovom adresári inštalácie Textpatternu a následne sa uistiť, že PHP doň môže zapisovať.</p>
+<p>Táto cesta je vždy <strong>relatívna cesta</strong> (vzhľadom na koreňový adresár inštalácie Textpatternu).</p>
+<p>Predvolená hodnota je <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Zobraziť email v Atom zdrojoch?"><![CDATA[
+<h2>Zobraziť e‑mailovú adresu v Atom kanáloch?</h2>
+<p>Týmto povolíte zahrnúť e‑mailovú adresu autora článku (podľa nastavenia v jeho používateľskom účte) do časti <code>author</code> v Atom kanáloch.</p>
+        ]]></item>
+        <item id="is_dst" title="Je letný čas"><![CDATA[
+<h2>Je zapnutý letný čas?</h2>
+<p>Určuje, či je v súčasnosti pre vaše časové pásmo zapnutý letný čas (DST).</p>
+        ]]></item>
+        <item id="logging" title="Záznamy"><![CDATA[
+<h2>Záznamy</h2>
+<p>Môžete vybrať úroveň logovania návštev, ktoré bude Textpattern vykonávať:</p>
+<ul>
+    <li><strong>Všetky prístupy:</strong> Textpattern bude zaznamenávať všetky zobrazenia stránok na vašom webe</li>
+    <li><strong>Len refereri:</strong> Textpattern bude zaznamenávať len návštevy privedené z iných webov</li>
+    <li><strong>Žiadne:</strong> Textpattern nebude zaznamenávať žiadne zobrazenia stránok</li>
+</ul>
+<p>Od verzie Textpattern 4.7.0 sa nezhromažďujú ani neukladajú žiadne IP adresy návštevníkov. Ak ukladáte IP adresy mimo Textpatternu, prijmite vhodné opatrenia na ich uchovanie a/alebo použitie v súlade s príslušnými právnymi predpismi, ako napríklad <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>, a zabezpečte dôkladné zabezpečenie všetkých častí servera a inštalácie Textpatternu, aby tieto dáta neboli ohrozené.</p>
+<p>Dôrazne odporúčame ponechať toto nastavenie na predvolenej hodnote „Žiadne“, pokiaľ tieto informácie naozaj nepotrebujete a zároveň verejne neinformujete o tom, ako ich plánujete používať.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maximálna dĺžka URL"><![CDATA[
+<h2>Maximálna dĺžka URL (v znakoch)</h2>
+<p>Týmto zabránite fungovaniu URL adries, ktoré sú dlhšie než zadaná dĺžka. Môže to byť užitočné pri obmedzovaní škôd a zvyšovaní bezpečnosti webu.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Zobraziť odkazy nápovedy"><![CDATA[
+<h2>Zobraziť interné odkazy nápovedy v administrácii</h2>
+<p>Ak chcete skryť odkazy na internú nápovedu administrácie (vyskakovacie okná s nápovedou Textpatternu) v celom systéme, nastavte túto voľbu na „Žiadne“.</p>
+        ]]></item>
+        <item id="never_display_email" title="Skrývat emailové adresy komentujúcich?"><![CDATA[
+<h2>Skrývať e‑mailové adresy komentujúcich?</h2>
+<p>Toto nastavenie určuje, či sa má e‑mailová adresa komentujúceho zobrazovať verejne.</p>
+<p>Odporúčame e‑mailové adresy nezobrazovať – z ohľadu k používateľom –, môžu však existovať situácie, keď je zobrazenie e‑mailových adries komentujúcich žiaduce.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Používať kódovanie ISO-8859-1 v emailoch? (prednastavené je utf-8)"><![CDATA[
+<h2>Používať kódovanie ISO-8859-1 v e‑mailoch (predvolené je UTF‑8)?</h2>
+<p>Textpattern štandardne používa, kde je to možné, kódovanie UTF‑8, vrátane odchádzajúcich e‑mailov. Niektoré staršie e‑mailové klienty (vrátane niektorých verzií Microsoft Outlooku) však nepodporujú UTF‑8 správne. Ak sa v e‑mailoch objavujú „rozbité“ znaky, toto nastavenie pred odoslaním skonvertuje text do kódovania ISO‑8859‑1.</p>
+<p><strong>Poznámka:</strong> Ak používate jazyk, ktorého znaky nemožno v ISO‑8859‑1 reprezentovať, toto nastavenie vám nepomôže. Mali by ste si nájsť e‑mailového klienta kompatibilného s UTF‑8 (alebo Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Druhy foriem pre ručnú voľbu"><![CDATA[
+<h2>Typy foriem pre prepísanie</h2>
+<p>Vyberte, ktoré typy foriem budú mať svoje šablóny k dispozícii na paneli Napísať ako „prepísateľné“ formy.</p>
+        ]]></item>
+        <item id="permlink_format" title="Formát adresy URL"><![CDATA[
+<h2>Formát nadpisu v URL trvalého odkazu</h2>
+<p>Určuje spôsob, akým sa konštruujú a priraďujú URL článkov, keď je použitý niektorý z ne-„špinavých“ režimov.</p>
+<p>Keď je článok publikovaný, jeho URL sa vygeneruje z nadpisu článku, pokiaľ nie je v poli „Nadpis len pre URL“ zadaná konkrétna URL časť.</p>
+<p>Uvažujme nasledujúci nadpis článku: <em>Ann and Bob eat cake</em></p>
+<p>Keď je voľba „Formát nadpisu v URL trvalého odkazu“ nastavená na „S pomlčkami (title-like-this)“, URL článku bude:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Keď je táto voľba nastavená na „InterCaps (TitleLikeThis)“, URL článku bude:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Vzor URL adresy článku"><![CDATA[
+<h2>Vzor URL adresy článku</h2>
+<p>Definuje spôsob, akým sa pristupuje k jednotlivým článkom cez URL zobrazenú pomocou tagu <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+<p>Režim „?=messy“ je najkompatibilnejší – funguje s minimálnou alebo žiadnou konfiguráciou – ale najmenej vhodný z hľadiska čitateľnosti URL a optimalizácie pre vyhľadávače (SEO). V tomto režime budú URL článkov na webe vyzerať napríklad takto:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Všetky ostatné režimy vyžadujú podporu modulu pre prepisovanie URL na serveri (napr. <code>mod_rewrite</code> v Apache alebo direktívy rewrite v bloku <code>server</code> v NGINX). Ak váš server prepisovanie URL nepodporuje, kontaktujte svoj hosting alebo použite vyššie popísaný režim „?=messy“.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Zložka pre cache (vyrovnávaciu pamäť) rozšírení"><![CDATA[
+<h2>Cesta k adresáru cache pluginov</h2>
+<p>Toto nastavenie je určené najmä pre vývojárov pluginov. Ak je vyplnené, môžete do tohto adresára uložiť zdrojový súbor pluginu (neskompilovaný) a Textpattern ho načíta automaticky, takže plugin môžete jednoducho upravovať a okamžite vidieť výsledok bez nutnosti inštalácie/aktivácie pluginu. <strong>Pozor</strong>, pri tomto spôsobe môže chybný plugin (ktorý sa nedokáže skompilovať) spôsobiť nefunkčnosť samotného Textpatternu!</p>
+<p>Na produkčnom webe je odporúčané načítavať pluginy cez štandardný panel „Pluginy“ a nepoužívať adresár cache pluginov.</p>
+<p><strong>Poznámka:</strong> Nezadávajte rovnaký adresár pre „dočasné súbory“ aj pre „plugin cache“, pretože to spôsobí problémy (Textpattern by sa pokúšal spúšťať obsah dočasných log súborov ako pluginy).</p>
+        ]]></item>
+        <item id="production_status" title="Produkčný status"><![CDATA[
+<h2>Produkčný status</h2>
+<p>Web v Textpatterne môže byť v jednom z troch režimov:</p>
+<ol>
+    <li>„Debugging“</li>
+    <li>„Testing“</li>
+    <li>„Live“</li>
+</ol>
+<h3>Režim Debugging</h3>
+<p>Na verejnom webe budú viditeľné všetky hlásenia o chybách PHP, rovnako ako varovania o nefunkčnom kóde a pluginoch. Pri zobrazení HTML zdroja živých stránok sú navyše viditeľné tieto informácie:</p>
+<ul>
+    <li>čas potrebný serveru na vytvorenie stránky („Runtime“)</li>
+    <li>počet vykonaných MySQL dotazov</li>
+    <li>približná špičková spotreba pamäte</li>
+    <li>všetky tagy Textpatternu spracované pri zostavovaní stránky (tzv. tag trace)</li>
+</ul>
+<h3>Režim Testing</h3>
+<p>Na verejnom webe budú viditeľné všetky hlásenia o chybách PHP, rovnako ako varovania o nefunkčnom kóde a pluginoch. Pri zobrazení HTML zdroja živých stránok budú viditeľné tieto informácie:</p>
+<ul>
+    <li>čas potrebný serveru na vytvorenie stránky („Runtime“)</li>
+    <li>počet vykonaných MySQL dotazov</li>
+    <li>približná špičková spotreba pamäte</li>
+</ul>
+<h3>Režim Live</h3>
+<p>Na stránku sa neposielajú žiadne chybové hlásenia ani diagnostické informácie. Režim Live je zvyčajne najvhodnejší, pretože poskytuje najlepší používateľský zážitok a najmenej zaťažuje server.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Vzhľad web stránky"><![CDATA[
+<h2>Vzhľad verejnej časti webu</h2>
+<p>Predvolený motív verejnej časti webu, ktorý sa použije, keď niekto navštívi vašu stránku. Textpattern obsahuje predinštalovaný predvolený motív a možnosť začať bez motívu. Do adresára <code>textpattern/themes</code> môžete pridať aj balíčky motívov, aby boli dostupné na použitie.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Vydať expirované články?"><![CDATA[
+<h2>Publikovať expirované články?</h2>
+<p>Ak je nastavené na „Áno“, expirované články sa budú zobrazovať na webe aj po uplynutí dátumu ich exspirácie. Na zobrazenie alternatívneho obsahu alebo značkovania pre expirované články môžete použiť tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+<p>Ak je nastavené na „Nie“, expirované články sa z verejného webu odstránia a budú vracať stav HTTP „410 Gone“. Predvolené nastavenie je „Nie“.</p>
+        ]]></item>
+        <item id="publisher_email" title="Odoslať prihlasovacie údaje z tejto emailové adresy"><![CDATA[
+<h2>Odoslať prihlasovacie údaje z tejto e‑mailovej adresy</h2>
+<p>Zadajte e‑mailovú adresu, ktorá sa použije ako odosielateľ („From:“) v správach s prihlasovacími údajmi pre nových používateľov.</p>
+<p>Ak túto predvoľbu necháte prázdnu alebo bude obsahovať neplatnú adresu, Textpattern použije meno a adresu aktuálne prihláseného používateľa.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Koľko článkov zobraziť v RSS?"><![CDATA[
+<h2>Koľko článkov má byť zahrnutých v kanáloch?</h2>
+<p>Maximálny počet aktuálnych článkov, ktoré sa budú naraz syndikovať v RSS a Atom formátoch.</p>
+<p>Odporúča sa nižšia hodnota, napríklad <code>5</code> až <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Počet dodatočných cyklov analyzátora"><![CDATA[
+<h2>Počet dodatočných cyklov analyzátora</h2>
+<p>Tagový analyzátor Textpatternu zvyčajne nahradí všetky tagy obsahom z databázy v jednom priechode nad šablónou stránky. V niektorých prípadoch to nemusí stačiť, napríklad:</p>
+<ul>
+    <li>pri použití pluginov s nízkym číslom poradia načítania v atribútoch tagov,</li>
+    <li>pri nahrádzaniach kódu vnútri tagov <code>&lt;txp:php&gt;</code>,</li>
+    <li>ak preskakujete prvky stránky spracované skôr, aby mohli dostať obsah odvodený z tagu spracovaného neskôr.</li>
+</ul>
+<p>Textpattern z historických dôvodov tradične spúšťal jeden dodatočný priechod („secondpass“), preto je predvolená hodnota tejto predvoľby <code>1</code>. Viac priechodov však zvyšuje riziko, že sa nechcene spracujú aj tagy, ktoré by sa spracovať nemali. Nedávne vylepšenia analyzátora znížili potrebu druhého priechodu. Ak druhý priechod nevyužívate zámerne, nastavte radšej hodnotu na <code>0</code>, čím zvýšite bezpečnosť webu.</p>
+<p>Ak neskôr zistíte, že sa na webe zobrazujú nespracované tagy (a v režimoch Testing/Debugging sa nezobrazujú iné chyby tagov, napr. kvôli nevyhovujúcim párom tagov), kontaktujte nás s príkladom vašej šablóny/kódu/pluginu. Snažíme sa odstrániť potrebu dodatočných priechodov analyzátora a tieto informácie nám v tom pomôžu.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Odosielať hlavičku poslednej úpravy"><![CDATA[
+<h2>Odosielať hlavičku „Last-Modified“?</h2>
+<p>Ak je táto voľba zapnutá, Textpattern prečíta hlavičku HTTP <code>If-Modified-Since</code> z prehliadača návštevníka (ak existuje) a porovná ju s časom poslednej zmeny na webe. Ak sa od posledného načítania stránky nič nezmenilo (t. j. časová značka, ktorú prehliadač odošle, je rovnaká ako čas poslednej aktualizácie webu), server vráti hlavičku, ktorá prehliadaču prikáže použiť svoju cacheovanú verziu stránky.</p>
+<p>Tým sa môže znížiť prenos dát, čas načítania stránok a zaťaženie webového servera.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Zobraziť počet komentárov v RSS a Atom zdrojoch?"><![CDATA[
+<h2>Zobraziť počet komentárov v kanáloch?</h2>
+<p>Ak je nastavené na „Áno“, k nadpisu článkov v RSS/Atom kanáloch sa pripojí počet komentárov.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slogan stránok"><![CDATA[
+<h2>Slogan webu</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slogan webu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> je zhrnutie alebo popis vášho webu. Používa sa ako popis webu tam, kde je to potrebné, napríklad v RSS/Atom kanáloch a podľa potreby aj na iných miestach webu.</p>
+<p><strong>Poznámka:</strong> Slogan webu je voliteľný, ale môže byť vyžadovaný pre platný RSS alebo Atom kanál.</p>
+        ]]></item>
+        <item id="sitename" title="Názov stránky"><![CDATA[
+<h2>Názov webu</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Názov alebo titulok vášho webu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>. Zobrazí sa v titulku prehliadača návštevníka alebo v čítačke kanálov a podľa potreby aj na ďalších miestach na webe.</p>
+        ]]></item>
+        <item id="siteurl" title="URL stránok"><![CDATA[
+<h2>URL webu</h2>
+<p>Adresa vášho webu v Textpatterne, napríklad <code>www.example.com</code>.</p>
+<p><strong>Poznámka:</strong> Nezadávajte <code>http://</code>, <code>https://</code> ani koncové lomítko <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Zložka témy/vzhľadu"><![CDATA[
+<h2>Adresár motívov</h2>
+<p>Ak chcete prispôsobiť názov adresára, v ktorom budú uložené ploché súbory motívov verejnej časti webu, môžete to urobiť tu. Najprv musíte tento adresár vytvoriť v koreňovom adresári inštalácie Textpatternu a potom sa uistiť, že PHP doň má právo zápisu.</p>
+<p>Táto cesta je vždy <strong>relatívna cesta</strong> (vzhľadom na koreňový adresár inštalácie Textpatternu).</p>
+<p>Predvolená hodnota je <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP adresa odesielateľa"><![CDATA[
+<h2>Adresa odosielateľa SMTP (envelope sender)</h2>
+<p>Táto predvoľba by mala zostať prázdna, pokiaľ v Textpatterne nemáte problém s odosielaním e‑mailov (napríklad sa neodosiela žiadny e‑mail). Ak takýto problém nastane, môžete sem zadať ľubovoľnú platnú e‑mailovú adresu – ideálne s rovnakou doménou, akú má web, na ktorom je Textpattern nainštalovaný (t. j. ak je váš web <code>https://example.com</code>, môže to byť <code>you@example.com</code>).</p>
+<p>Pre tých, ktorých zaujímajú technické detaily:</p>
+<ul>
+    <li>Na serveroch UNIX-like/macOS sa zadaná adresa použije ako 4. parameter (s prefixom „-f“) pre PHP funkciu <code>mail()</code></li>
+    <li>Na serveroch Windows sa zadaná adresa použije na nastavenie (alebo prepísanie) hodnoty <code>sendmail_from</code> v súbore php.ini</li>
+</ul>
+<p>Tým sa zabezpečí, že SMTP envelope sender (ktorý nemusí byť rovnaký ako hlavička „From:“, ktorú bežne vidíte v e‑mailoch) je nastavený na adresu, ktorú tu zadáte, čo je na niektorých serveroch požiadavkou na odosielanie pošty.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP host"><![CDATA[
+<h2>SMTP host</h2>
+<p>Na zlepšenie doručovania správ a využitie smerovania e‑mailov cez externú službu (napr. SendGrid, AWS SES, Mailchimp, Mailgun atď.) tu zadajte SMTP server. Hodnotu overte u svojho poskytovateľa SMTP.</p>
+<p>Táto hodnota môže byť zadaná definovaním konštanty <code>SMTP_HOST</code> v súbore <code>config.php</code>, v takom prípade je hodnota na paneli Nastavenia neaktívna (zobrazená sivou).</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP heslo"><![CDATA[
+<h2>SMTP heslo</h2>
+<p>Ak vaše SMTP pripojenie vyžaduje heslo pre zadané používateľské meno, uveďte ho sem. Podrobnosti nájdete v dokumentácii poskytovateľa.</p>
+<p>Poznámka: Aj keď sa heslo na tomto mieste nezobrazuje, <em>uloží sa</em> v databáze v tabuľke predvolieb v obyčajnom texte. Ak chcete zvýšiť bezpečnosť, môžete namiesto toho definovať konštantu <code>SMTP_PASS</code> v súbore <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>SMTP port</h2>
+<p>Ak ste zadali SMTP host, musíte zadať aj port, aby sa povolilo smerovanie cez SMTP. Bežné porty sú:</p>
+<ul>
+    <li>25 – pre nezabezpečenú poštu</li>
+    <li>465 – starší (neoficiálny) pre zabezpečenú poštu</li>
+    <li>587 – predvolený (odporúčaný) pre zabezpečenú poštu cez TLS</li>
+</ul>
+<p>Váš poskytovateľ SMTP môže používať iný port, preto si prečítajte jeho dokumentáciu.</p>
+<p>Táto hodnota môže byť zadaná definovaním konštanty <code>SMTP_PORT</code> v súbore <code>config.php</code>, v takom prípade je hodnota na paneli Nastavenia neaktívna (zobrazená sivou).</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Typ zabezpečenia SMTP"><![CDATA[
+<h2>Spôsob zabezpečenia SMTP</h2>
+<p>Vyberte mechanizmus, ktorý váš poskytovateľ SMTP používa ako bezpečnostný protokol e‑mailov. Podrobnosti nájdete v jeho dokumentácii.</p>
+<p>Táto hodnota môže byť zadaná definovaním konštanty <code>SMTP_SECTYPE</code> v súbore <code>config.php</code>, v takom prípade je hodnota na paneli Nastavenia neaktívna (zobrazená sivou).</p>
+        ]]></item>
+        <item id="smtp_user" title="Meno užívateľa SMTP"><![CDATA[
+<h2>Používateľské meno SMTP</h2>
+<p>Ak vaše SMTP pripojenie vyžaduje používateľské meno/prihlasovacie meno, zadajte ho sem. Podrobnosti nájdete v dokumentácii poskytovateľa.</p>
+<p>Táto hodnota môže byť zadaná definovaním konštanty <code>SMTP_USER</code> v súbore <code>config.php</code>, v takom prípade je hodnota na paneli Nastavenia neaktívna (zobrazená sivou).</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spam blacklists (oddelené čiarkou)"><![CDATA[
+<h2>Spam blocklisty (oddelené čiarkou)</h2>
+<p>Poskytovatelia <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklistov <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>, uvedení tu, budú dotazovaní pri odoslaní komentára na blog a skontroluje sa IP adresa odosielateľa komentára. Ak je IP adresa uvedená v blockliste, znamená to, že z tejto adresy už bolo v minulosti nahlásené spamovanie, a komentár bude odmietnutý. Bez ohľadu na výsledok kontroly Textpattern IP adresu odosielateľa neukladá.</p>
+<p>Môžete zadať zoznam domén oddelených čiarkami. Upozorňujeme, že je vašou zodpovednosťou zabezpečiť, aby zvolené blocklisty boli vhodné pre váš účel.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Syndikovať anotáciu článku? (default is body)"><![CDATA[
+<h2>Syndikovať <strong>iba</strong> anotáciu článku?</h2>
+<p>Ak je nastavené na „Nie“, položky v kanáloch budú obsahovať celé telo článku.</p>
+<p>Ak je nastavené na „Áno“, položky v kanáloch budú obsahovať namiesto tela článku jeho anotáciu, ak je k dispozícii.</p>
+        ]]></item>
+        <item id="tempdir" title="Adresár pre dočasné súbory"><![CDATA[
+<h2>Cesta k dočasnému adresáru</h2>
+<p>Nastaví <strong>absolútnu cestu</strong> k dočasnému adresáru (niekedy označovanému ako „tmp“ alebo „temp“). PHP musí mať do tohto adresára povolený zápis. Tento adresár sa používa pre dočasné súbory, napríklad pri nahrávaní (pluginov, súborov alebo obrázkov).</p>
+<p><strong>Poznámky:</strong>
+<ul>
+    <li>Nezadávajte rovnaký adresár pre „dočasné súbory“ a „plugin cache“, pretože to spôsobí problémy (Textpattern by sa pokúšal spúšťať obsah dočasných log súborov ako pluginy).</li>
+    <li>Z bezpečnostných dôvodov zvážte premiestnenie tohto adresára mimo verejného koreňového adresára webu.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Vzhľad administrácie"><![CDATA[
+<h2>Vzhľad administrácie</h2>
+<p>Predvolený motív administrácie, ktorý sa použije, keď sa niekto prihlási do Textpatternu. Textpattern obsahuje niekoľko predinštalovaných administračných motívov a môžete pridať aj vlastné balíčky motívov do adresára <code>textpattern/admin-themes</code>, aby boli dostupné na použitie.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Pridať k adresám URL koncové lomítko"><![CDATA[
+<h2>Pridať na koniec URL lomítko</h2>
+<p>Určuje, či Textpattern automaticky pridá koncové lomítko k URL, ktoré generuje. Možnosti sú:</p>
+<ul>
+    <li><strong>Nie</strong> – nikdy</li>
+    <li><strong>Zoznam</strong> – iba na vstupných stránkach so zoznamami (t. j. nie pri zobrazení jednotlivých článkov)</li>
+    <li><strong>Áno</strong> – vždy</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Funkcie PHP povolené v txp:evaluate"><![CDATA[
+<h2>Funkcie PHP povolené v txp:evaluate</h2>
+<p>Ide o zoznam položiek <code>function</code> alebo <code>alias=function</code> oddelených čiarkou, napr. <code>md5</code>, <code>replace=str_replace</code>. Položky uvedené v tomto zozname možno používať v atribúte <code>query</code> tagu <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> musí vracať skalárnu hodnotu (<strong>nie</strong> pole/objekt).</p>
+        ]]></item>
+        <item id="use_comments" title="Povoliť komentovanie"><![CDATA[
+<h2>Povoliť komentovanie?</h2>
+<p>Určuje, či má byť funkcia komentárov v Textpatterne zapnutá alebo vypnutá.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Použiť emailovú adresu na vytvorenie RSS ID?"><![CDATA[
+<h2>Použiť e‑mailovú adresu na vytvorenie ID kanálov (predvolene URL webu)?</h2>
+<p>Položky v Atom kanále vyžadujú jedinečné ID.</p>
+<p>Aby Textpattern vytváral ID jedinečné pre váš web, môžete si vybrať, či sa v nich použije e‑mailová adresa alebo názov domény. E‑mailová adresa bude prvou, ktorá sa použila pri vytváraní webu. Pokiaľ v budúcnosti pravdepodobne nebudete meniť doménu, je zvyčajne bezpečné nastaviť túto voľbu na „Nie“.</p>
+        ]]></item>
+        <item id="use_plugins" title="Používať pluginy?"><![CDATA[
+<h2>Používať pluginy?</h2>
+<p>Týmto nastavením môžete vypnúť všetku podporu pluginov Textpatternu. Je to užitočné pri ladení chýb na webe, keď chcete zistiť, či sa na probléme podieľa niektorý plugin.</p>
+        ]]></item>
+        <item id="use_textile" title="Východzie formátovanie textu"><![CDATA[
+<h2>Predvolené formátovanie textu</h2>
+<p>Formátovanie textu, ktoré si tu vyberiete, sa stane predvoleným formátovaním anotácií a tela článku na paneli „Napísať“. Môžete povoliť úplné spracovanie Textile, prevod zalomení riadkov na HTML odseky alebo ponechať text bez akýchkoľvek konverzií.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a> je nástroj určený na jednoduchší prevod obyčajného textu na HTML. Ak je povolený, Textile spracuje text tela článkov a vráti štrukturálne korektné HTML.</p>
+<p>Textile navyše ponúka výkonnú, ale ľahko osvojiteľnú sadu príkazov na formátovanie textu, definovanie štruktúr ako zoznamy, nadpisy a citácie a vkladanie odkazov a obrázkov.</p>
+        ]]></item>
     </group>
 
-    <group id="section" title="">
-        <item id="section_category" title=""><![CDATA[]]></item>
-        <item id="section_default" title=""><![CDATA[]]></item>
-        <item id="section_description" title=""><![CDATA[]]></item>
-        <item id="section_on_frontpage" title=""><![CDATA[]]></item>
-        <item id="section_searchable" title=""><![CDATA[]]></item>
-        <item id="section_syndicate" title=""><![CDATA[]]></item>
-        <item id="section_uses_css" title=""><![CDATA[]]></item>
-        <item id="section_uses_page" title=""><![CDATA[]]></item>
-        <item id="section_uses_skin" title=""><![CDATA[]]></item>
+    <group id="section" title="Panel Sekcie">
+        <item id="section_category" title="Úvod"><![CDATA[
+<h2>Úvod</h2>
+<p>Sekcie v Textpatterne je najlepšie chápať ako obdobu rubrík v novinách; patria do jedného vydania, ale každá môže mať inú šablónu, iný štýl článkov a podobne.</p>
+<p>Vo väčšine webov stačí vytvoriť len minimum sekcií.</p>
+<h3>Príklad webu s tromi sekciami:</h3>
+<ol>
+    <li><strong>Archív:</strong> Sekcia, do ktorej patria všetky články z hlavnej stránky. Kedykoľvek čitateľ klikne na trvalý odkaz článku, článok sa zobrazí v rozložení stránky priradenom tejto sekcii „Archív“. Na stránku s členeným zoznamom najnovších článkov v sekcii „Archív“ by viedla URL <code>https://example.com/archive/</code>.</li>
+    <li><strong>O nás:</strong> Stránka „o tomto webe“, ktorá sa líši od hlavnej stránky a sekcie „Archív“ tým, že je skôr statická, môže mať inú šablónu a pravdepodobne bude obsahovať len jeden článok. Sekcia „About“ by bola dostupná na <code>https://example.com/about/</code>.</li>
+    <li><strong>Fotky:</strong> Sekcia, ktorej odlišné rozloženie (a prípadne iné CSS) zobrazuje namiesto článkov fotografie.</li>
+</ol>
+<p>Uvedomte si, že vždy existuje špeciálna skrytá sekcia s názvom <code>default</code>. Táto predvolená sekcia používa stránku s názvom <code>default</code> a štýl s názvom <code>default</code> a skladá z nich hlavnú stránku vášho webu.</p>
+        ]]></item>
+        <item id="section_default" title="Východzia rubrika pre Napísať"><![CDATA[
+<h2>Východzia rubrika pre publikovanie</h2>
+<p>Toto nastavenie určuje, ktorá sekcia bude predvybratá v ponuke Sekcia pri vytváraní nového článku na paneli „Napísať“.</p>
+<p>Ak väčšina vašich článkov patrí do konkrétnej sekcie, vyberte ju zo zoznamu tu. Zmena sa prejaví okamžite.</p>
+<p>Pri jednotlivých článkoch to môžete zmeniť na paneli „Napísať“ výberom inej sekcie v časti „Zoradiť a zobraziť“.</p>
+        ]]></item>
+        <item id="section_description" title="Popis"><![CDATA[
+<h2>Popis</h2>
+<p>Popis sekcie je voliteľná súčasť, ktorá môže pomôcť vyhľadávačom a robotom lepšie identifikovať a triediť obsah.</p>
+<p>Popis článku je obmedzený na maximálne 255 znakov. Uvedomte si, že niektoré vyhľadávače obmedzujú dĺžku <code>meta description</code> stránky kvôli praktickému zobrazeniu vo výsledkoch vyhľadávania (SERP) a tento limit môže byť nižší ako 255 znakov, ktoré povoľuje Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Články sekcie na hlavnej stránke?"><![CDATA[
+<h2>Zobrazovať články sekcie na hlavnej stránke?</h2>
+<p>Články v niektorých sekciách, napríklad pripomínajúcich „statické“ webové stránky, môžu na časovo orientovanej hlavnej stránke vášho webu pôsobiť nepatrične.</p>
+<p>Nastavením na „Nie“ zabránite tomu, aby sa články z tejto sekcie zobrazovali na hlavnej stránke.</p>
+        ]]></item>
+        <item id="section_searchable" title="Zahrnúť do vyhľadávania na webe?"><![CDATA[
+<h2>Zahrnúť túto sekciu do vyhľadávania na webe?</h2>
+<p>Určuje, či sa články patriace do tejto sekcie majú zobrazovať vo výsledkoch celowebového vyhľadávania.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Syndikovať články v tejto sekcii?"><![CDATA[
+<h2>Syndikovať články v tejto sekcii?</h2>
+<p>Určuje, či sa články v tejto sekcii budú zobrazovať v RSS a Atom kanáloch webu.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Používa štýl"><![CDATA[
+<h2>Používa štýl</h2>
+<p>Ak chcete pre konkrétnu sekciu použiť inú štýlovú šablónu ako predvolenú, môžete ju nastaviť tu.</p>
+<p>Týka sa to iba štýlov (CSS) uložených v paneli „Štýly“ Textpatternu – ak máte CSS uložené mimo Textpatternu (čo sa dôrazne odporúča), toto nastavenie nemá žiadny účinok.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Používa stránku"><![CDATA[
+<h2>Používa stránku</h2>
+<p>V Textpatterne sú sekcie pevne prepojené so šablónami stránok.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Použiť motív"><![CDATA[
+<h2>Použiť motív</h2>
+<p>Ak chcete pre konkrétnu sekciu zmeniť použitý motív, môžete ho tu vybrať zo zoznamu aktuálne nainštalovaných motívov.</p>
+        ]]></item>
     </group>
 
-    <group id="setup" title="">
-        <item id="setup_user_login" title=""><![CDATA[]]></item>
-        <item id="setup_user_pass" title=""><![CDATA[]]></item>
-        <item id="table_prefix" title=""><![CDATA[]]></item>
+    <group id="setup" title="Panel Inštalácia">
+        <item id="setup_admin_url" title="Subdoména pre oblasť administrácie"><![CDATA[
+<h2>Administračná subdoména</h2>
+<p>Subdoména, ktorú chcete používať na prístup k administračnému rozhraniu Textpatternu (napr. <code>admin.example.com</code>).</p>
+<p>Podrobnosti nájdete v dokumente <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Inštalácia viacerých webov v Textpatterne</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookies domény"><![CDATA[
+<h2>Doména cookies</h2>
+<p>(Sub)doména, ktorú chcete používať pre cookies Textpatternu.</p>
+<p>Podrobnosti nájdete v dokumente <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Inštalácia viacerých webov v Textpatterne</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Prihlasovacie meno používateľa"><![CDATA[
+<h2>Prihlasovacie meno používateľa</h2>
+<p>Prihlasovacie meno účtu správcu („Publisher“), ktoré budete používať na správu webu.</p>
+<p>Aj keď na názov neexistujú žiadne obmedzenia, je lepšie vyhnúť sa komplikovaným kombináciám znakov a ľahko uhádnuteľným používateľským menám (napr. <code>admin</code>, <code>administrator</code> a pod.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Heslo používateľa"><![CDATA[
+<h2>Heslo používateľa</h2>
+<p>Keďže tento účet má v Textpatterne najvyššiu úroveň prístupu, vyberte si veľmi silné heslo alebo, ešte lepšie, prístupovú frázu.</p>
+<h3>Tipy</h3>
+<ul>
+    <li>Používajte kombináciu veľkých a malých písmen</li>
+    <li>Používajte čísla</li>
+    <li>Používajte symboly</li>
+    <li>Dĺžka aspoň osem znakov</li>
+    <li><strong>Vyhnite sa</strong> osobným údajom (dátumy, mená, miesta, členovia rodiny, domáce zvieratá atď.)</li>
+    <li><strong>Vyhnite sa</strong> samostatným alebo opakovaným slovám zo slovníka, bez ohľadu na pravopis, jazyk či použitie veľkých/malých písmen</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Prefix tabuliek"><![CDATA[
+<h2>Prefix tabuliek</h2>
+    <p>Prefix tabuliek potrebujete iba vtedy, ak potrebujete viac inštalácií Textpatternu v jednej databáze. Každá inštalácia Textpatternu potrebuje jedinečný prefix.</p>
+    <p>Prefix musí spĺňať nasledujúce pravidlá:</p>
+<ul>
+    <li><strong>1. znak:</strong> musí byť písmeno a-z, A-Z alebo podčiarkovník</li>
+    <li><strong>Ďalšie znaky:</strong> môžu byť iba písmená a-z, A-Z, čísla 0-9 alebo podčiarkovník</li>
+</ul>
+        ]]></item>
     </group>
 
-    <group id="skin" title="">
-        <item id="skin_author" title=""><![CDATA[]]></item>
-        <item id="skin_author_uri" title=""><![CDATA[]]></item>
-        <item id="skin_delete_entirely" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title=""><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title=""><![CDATA[]]></item>
-        <item id="skin_description" title=""><![CDATA[]]></item>
-        <item id="skin_import" title=""><![CDATA[]]></item>
-        <item id="skin_name" title="Meno motívu"><![CDATA[]]></item>
-        <item id="skin_overview" title=""><![CDATA[]]></item>
-        <item id="skin_title" title="Názov motívu"><![CDATA[]]></item>
+    <group id="skin" title="Panel Motívy">
+        <item id="skin_author" title="Autor motívu"><![CDATA[
+<h2>Autor motívu</h2>
+<p>Autor alebo autori tohto motívu (voliteľné).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Webová stránka motívu"><![CDATA[
+<h2>Webová stránka motívu</h2>
+<p>URL adresa, na ktorej nájdete úplné informácie a/alebo najnovšiu verziu tohto motívu (voliteľné).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Odstrániť tému šablony aj z disku"><![CDATA[
+<h2>Odstrániť šablóny motívu aj z disku</h2>
+<p>Ak je začiarknuté, všetky súbory šablón vo vybraných motívoch budú natrvalo odstránené z disku. Adresáre motívov a ich podadresáre však nebudú odstránené, ak v nich existujú aj iné súbory (napríklad JavaScript, obrázky atď.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Odstrániť pri importe nepoužívané šablóny z databázy"><![CDATA[
+<h2>Odstrániť pri importe nepoužívané šablóny z databázy</h2>
+<p>Ak je začiarknuté, každá šablóna vo vybraných motívoch, ktorá nemá zodpovedajúci súbor na disku, bude natrvalo odstránená z databázy. Výsledkom po dokončení akcie bude, že šablóny v databáze budú v čo najväčšej možnej miere zodpovedať stavu na disku.</p>
+<p>Upozornenie: ak ste odstránili súbory šablón, ktoré Textpattern vyžaduje, pri importe sa vám v databáze vytvoria prázdne verzie týchto šablón.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Odstrániť pri exporte nepoužívané šablóny z disku"><![CDATA[
+<h2>Odstrániť pri exporte nepoužívané šablóny z disku</h2>
+<p>Ak je začiarknuté, každý súbor šablóny vo vybraných motívoch, ktorý nemá zodpovedajúcu položku v databáze, bude natrvalo odstránený z motívu na disku. Výsledkom po dokončení akcie bude, že šablóny v súborovom systéme budú presne zodpovedať tomu, čo je v databáze.</p>
+        ]]></item>
+        <item id="skin_description" title="Popis motívu"><![CDATA[
+<h2>Popis motívu</h2>
+<p>Môžete zadať krátke zhrnutie vzhľadu/rozloženia tohto motívu (voliteľné).</p>
+<p>Popis motívu je obmedzený na maximálne 255 znakov.</p>
+        ]]></item>
+        <item id="skin_import" title="Importovať motív"><![CDATA[
+<h2>Importovať motív z disku</h2>
+<p>Tento formulár umožňuje importovať motív do databázy Textpatternu z adresára s motívmi.</p>
+<p>Importovateľný motív sa musí skladať zo čitateľného nadradeného priečinka, ktorý používa názov motívu ako názov adresára, a v ňom čitateľného súboru <code>manifest.json</code> v očakávanom formáte. Priečinok motívu by mal tiež obsahovať stránky, formy a štýly v rovnako pomenovaných podpriečinkoch.</p>
+<p>Stránky a formy by mali používať príponu <code>.txp</code>, štýlové šablóny sa očakávajú ako súbory <code>.css</code>. Formy by mali byť navyše zoskupené podľa typu v samostatných adresároch. Textpattern pri importe vytvorí všetky chýbajúce základné šablóny.</p>
+<p>Ďalšie informácie o vytváraní, inštalovaní a používaní motívov v CMS Textpattern nájdete v <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentácii k motívom <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Meno motívu"><![CDATA[
+<h2>Názov motívu</h2>
+<p>Názov motívu sa používa pre názov jeho adresára a na ďalšie technické účely (povinné).</p>
+<p>Názov by nemal obsahovať špeciálne znaky ani medzery.</p>
+        ]]></item>
+        <item id="skin_overview" title="Úvod do motívov"><![CDATA[
+<h2>Úvod do motívov</h2>
+<p>Motív Textpatternu je kolekcia stránok, foriem a štýlových šablón. Motívy vám umožňujú logicky rozdeliť prvky webu do skupín kvôli jednoduchšej identifikácii alebo zdieľaniu s ostatnými. Samotný akt vytvorenia alebo importu motívu a akýchkoľvek jeho prvkov <em>nemá</em> žiadny vplyv na váš existujúci web. Môžete voľne upravovať akýkoľvek prvok, ktorý nie je priradený k žiadnej sekcii vášho webu, bez toho, aby tým bol web ovplyvnený.</p>
+<p>Na úpravu prvkov v motíve navštívte panely Stránky, Formy alebo Štýly a pomocou rozbaľovacej ponuky vyberte motív, s ktorým chcete pracovať. Motív, na ktorom pracujete, si administrácia pamätá naprieč celým rozhraním, takže môžete rýchlo a jednoducho prechádzať medzi typmi prvkov. Označuje sa ako váš <em>pracovný motív</em>.</p>
+<p>Ďalšie informácie nájdete v <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Používateľskej dokumentácii Textpatternu <span class="ui-icon ui-icon-extlink">(otvorí externý odkaz v novom okne)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Názov motívu"><![CDATA[
+<h2>Titulok motívu</h2>
+<p>Popisný titulok motívu, ktorý slúži na jeho identifikáciu v paneloch Textpatternu.</p>
+<p>Titulok môže obsahovať špeciálne znaky aj medzery.</p>
+        ]]></item>
         <item id="skin_version" title="Verzia motívu"><![CDATA[
 <h2>Verzia motívu</h2>
 <p>Číslo nainštalovanej verze skinu (voliteľné).</p>        ]]></item>
