@@ -5361,7 +5361,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
         }
 
-        if ($permlink_mode === 'messy') {
+        if (false/*$permlink_mode === 'messy'*/) {
             $params['i'] = $img['id'].$img['ext'];
 
             if (!empty($token)) {
