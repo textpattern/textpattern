@@ -6,75 +6,11 @@ Changes in 4.9.0 (upcoming)
   recommended, preferably with ongoing vendor support).
 * Changed: Minimum system requirements increased to MySQL 5.5 (MySQL 8.0+
   recommended, preferably with ongoing vendor support).
-* Changed: Pending articles may be displayed on the site.
 * Fixed: Remove 'br' tags from article image markup where >1 image is
   supplied (thanks, jools-r).
-* Added: <txp:if_article_status /> tag.
-* Added: Filter articles by image.
-* Added: 'exclude', 'month' and 'time' attributes to <txp:images />.
-* Added: 'exclude' attribute to <txp:file_download_list />
-  and <txp:linklist />.
-* Added: Punjabi, Slovenian and Urdu (Pakistani dialect) language support.
-* Added: Latest text translations. Thank you to all our translators.
-* Changed: Theme page maximum size increased from 64KB to 16MB.
-* Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
-* Changed: Enhancements to SVG handling relating to non-px dimensions
-  (thanks, jools-r).
-* Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
-* Changed: Admin-theme checksums computed independently. Unused admin themes
-  can be deleted and will no longer trigger Diagnostics alert.
-* Changed: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
-  Epochalypse/Year 2038 problem for info.
-* Changed: Checksums use Tiger-192,3 instead of MD5. Fewer potential clashes.
-* Developer: Permitted concurrent logins. See Advanced Prefs.
-* Developer: Removed duplicate pluggable_ui callback for
-  article_ui›categories (thanks, jools-r).
-* Developer: Added pophelp support in plugin 'lang' directory.
-* Developer: Articles (list) panel callbacks:
-    articles>fields and articles>from to manipulate the query
-    articles>controls to affect the button area
-    articles_ui>list.row (pluggable_ui) for adding table data
-    articles>steps for plugins to register custom panel-level functionality.
-* Vendors: DOMPurify 3.3.1.
-* Vendors: PHPMailer 6.12.0.
-
-Changes in 4.9.0-beta.2 (14 Mar 2025)
-
-* Added: Full article previews directly from the Write panel.
-* Added: Site status values to 'process' attribute of <txp:hide />.
-* Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
-* Added: 'target' attribute to <txp:popup />.
-* Added: 'match', 'separator' attribute capability to <txp:if_yield />.
-* Added: Ability to serve files via 'type' attribute to <txp:file_download />.
-* Added: Plugin compilation directly from the Plugins panel.
-* Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
-* Changed: Wildcards in file/image/link category queries.
-* Changed: Enhancements to RPC functionality (thanks, Melonking906).
-* Changed: Multi-site scaffold optimisations.
-* Changed: Pre-flight check visibility toggle.
-* Changed: Articles may use external URLs directly.
-* Changed: A few language keys renamed to avoid invalid name clashes.
-* Developer: Add pre+post article_submit callbacks on article post/save.
-* Developer: Add getAtts($tag) method for fetching tag attributes.
-* Developer: Reintroduce extend_col_1 markup area on Write panel.
-* Developer: Add lifecycle>loaded callback for plugins run from cache.
 * Fixed: Pre+post textfilter callbacks were switched.
-* Fixed: Plugins import Textpack strings properly.
-* Fixed: Prefs (multi-)select options (UI Library).
-* Vendors: DOMPurify 3.2.4.
-* Vendors: jQuery UI 1.14.1.
-* Vendors: PHPMailer 6.9.3.
-* Vendors: PrismJS 1.30.0.
-* Vendors: Textile 4.1.3. (thanks, gocom).
-* Vendors: UglifyJS 3.19.3.
-
-Changes in 4.9.0-beta.1 (12 Aug 2024)
-
-* Changed: Removed 'noopener' from target="_blank" links (now default behaviour
-  in all supported browsers) (thanks, phiw13).
-* Changed: Removed 'aria-label' attributes where 'title' already exists.
-* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
-  instead.
+* Fixed: Plugins import Textpack strings correctly.
+* Fixed: Prefs (multi-)select options.
 * Fixed: Improved support for images with EXIF orientation metadata
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
@@ -87,53 +23,106 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
 * Fixed: Ignore search in individual article mode.
 * Fixed: Take RFC 2616 mail headers setting into account for separator.
 * Fixed: Sandboxed article/body/excerpt preview (thanks, grozdniyandy).
-* Added: Support for PHP 8.2, PHP 8.3.1+ and PHP 8.4.
+* Added: Support for PHP 8.2, PHP 8.3.1+, PHP 8.4, and PHP 8.5.
+* Added: Full article previews directly from the Write panel.
+* Added: Filter articles by image.
 * Added: SVG image support (thanks, osadl and jools-r).
-* Added: Option to define a Content Security Policy header for the Textpattern
-  admin-side via config.php.
-* Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: Activity indicator for extended duration file/image upload processes.
 * Added: Multi-edit for changing author language.
+* Added: In-use asset counters to the Users panel.
+* Added: Reload language packs from disk.
+* Added: Shift+Space shortcut for 'Tab' indent in textareas.
+* Added: Input length tooltip when appropriate.
+* Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: <txp:if_article_status /> tag.
+* Added: <txp:if_items_count /> tag.
+* Added: <txp:date /> tag.
+* Added: Global 'variable' attribute.
+* Added: Global 'offset' can be set by URL parameters.
+* Added: 'parent' attribute to <txp:category />.
+* Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
+* Added: 'alias' attribute to <txp:evaluate />.
+* Added: Ability to serve files via 'type' attribute to <txp:file_download />.
+* Added: 'exclude' attribute to <txp:file_download_list />
+  and <txp:linklist />.
+* Added: Site status values to 'process' attribute of <txp:hide />.
+* Added: 'level' attribute to <txp:if_category />.
+* Added: 'match', 'separator' attribute capability to <txp:if_yield />.
+* Added: 'exclude', 'month' and 'time' attributes to <txp:images />.
+* Added: 'lang' attribute to <txp:page_url />.
+* Added: 'target' attribute to <txp:popup />.
+* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
 * Added: Plugins can be uploaded from a URL by dragging to upload textarea.
+* Added: Plugin compilation directly from the Plugins panel.
+* Added: Plugin export to .zip.
 * Added: Compiled plugins can be uploaded via Browse... feature.
 * Added: Compatible plugin upgrades directly from the Plugins panel.
 * Added: Create and install new plugins directly from the Plugins panel.
 * Added: Plugin multi-edit option: revert to last installed code content.
 * Added: All plugin metadata exposed in the Plugin Edit panel.
-* Added: Plugin export to .zip.
-* Added: Support for aggregate window functions in compatible MySQL versions.
+* Added: Latest text translations. Thank you to all our translators.
+* Added: Punjabi, Slovenian and Urdu (Pakistani dialect) language support.
 * Added: Trailing slash URL preference.
 * Added: File download header preference.
-* Added: In-use asset counters to the Users panel.
-* Added: 'filter' attribute to <txp:section_list /> and <txp:if_section />.
-* Added: 'level' attribute to <txp:if_category />.
-* Added: Activity indicator for extended duration file/image upload processes.
+* Added: Option to define a Content Security Policy header for the Textpattern
+  admin-side via config.php.
+* Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
-* Added: Global 'offset' can be set by URL parameters.
-* Added: 'lang' attribute to <txp:page_url />.
-* Added: <txp:if_items_count /> tag.
-* Added: Reload language packs from disk.
-* Added: Shift+Space shortcut for 'Tab' indent in textareas.
-* Added: Input length tooltip when appropriate.
-* Added: <txp:date /> tag.
-* Added: Global 'variable' attribute.
-* Added: 'alias' attribute to <txp:evaluate />.
-* Added: 'parent' attribute to <txp:category />.
-* Changed: Plugins of all types trigger verify step (with improved security).
+
+* Changed: Pending articles may be displayed on the site.
+* Changed: Theme page maximum size increased from 64KB to 16MB.
+* Changed: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
+  Epochalypse/Year 2038 problem for info.
+
+* Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
 * Changed: Image Edit panel has the ability to delete images.
+* Changed: Pre-flight check visibility toggle.
 * Changed: In-use languages can not be deleted.
+* Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
+  instead.
+* Changed: Section-aware default search.
 * Changed: Image tags can take HTML attributes.
-* Changed: Less collision-prone custom fields name processing.
+* Changed: Enhancements to 'br' tag HTML5 compliance (thanks, jools-r).
+* Changed: Enhancements to SVG handling relating to non-px dimensions
+  (thanks, jools-r).
+* Changed: Enhancements to 'extension' and 'size' attributes of <txp:images />.
+* Changed: Enhancements to RPC functionality (thanks, Melonking906).
+* Changed: Admin-theme checksums computed independently. Unused admin themes
+  can be deleted and will no longer trigger Diagnostics alert.
+* Changed: Multi-site scaffold optimisations.
+* Changed: Wildcards in file/image/link category queries.
+* Changed: <txp:header /> tag requires 'form' privilege.
+* Changed: Articles may use external URLs directly.
+* Changed: Some language keys renamed to avoid invalid name clashes.
 * Changed: Do not generate empty syndication feeds for feedless sections.
+* Changed: Removed 'noopener' from target="_blank" links (now default behaviour
+  in all supported browsers) (thanks, phiw13).
+* Changed: Removed 'aria-label' attributes where 'title' already exists.
+* Changed: Checksums use Tiger-192,3 instead of MD5. Fewer potential clashes.
 * Changed: Allow PHP scripting options off by default, and Diagnostics warning.
+* Changed: Plugins of all types trigger verify step (with improved security).
+* Changed: Extend character set that can be used in tag/attribute names.
+* Changed: Less collision-prone custom fields name processing.
+* Changed: Category & section description field sizes increased to 1023
+  characters.
 * Changed: Introduce primary keys for all database tables, replacing some old
   indexes.
-* Changed: Category & section description field sizes increased to 1023.
-* Changed: <txp:header /> tag requires 'form' privilege.
-* Changed: Section-aware default search.
-* Changed: Extend character set that can be used in tag/attribute names.
+* Developer: Permitted concurrent logins. See Advanced Prefs.
+* Developer: Removed duplicate pluggable_ui callback for
+  article_ui›categories (thanks, jools-r).
+* Developer: Added pophelp support in plugin 'lang' directory.
+* Developer: Articles (list) panel callbacks:
+	articles>fields and articles>from to manipulate the query
+	articles>controls to affect the button area
+	articles_ui>list.row (pluggable_ui) for adding table data
+	articles>steps for plugins to register custom panel-level functionality.
+* Developer: Add pre+post article_submit callbacks on article post/save.
+* Developer: Add getAtts($tag) method for fetching tag attributes.
+* Developer: Reintroduce extend_col_1 markup area on Write panel.
+* Developer: Add lifecycle>loaded callback for plugins run from cache.
 * Developer: Introduce UI class library for building interface components.
 * Developer: Tag registration is now mandatory.
 * Developer: Some of the lesser-used tags are loaded on demand from their class
@@ -144,13 +133,13 @@ Changes in 4.9.0-beta.1 (12 Aug 2024)
   (was: 'log') to prevent conflicts with privacy filters.
 * Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
 * Developer: Activation emails can be skipped via hidden notify="skip" field.
-* Vendors: DOMPurify 3.0.6.
+* Vendors: Textile 4.1.3. (thanks, gocom).
+* Vendors: DOMPurify 3.3.1.
 * Vendors: jQuery 3.7.1.
-* Vendors: jQuery UI 1.13.3.
-* Vendors: PHPMailer 6.9.1.
-* Vendors: PrismJS 1.29.0.
-* Vendors: Textile 4.1.1. (thanks, gocom).
-* Vendors: UglifyJS 3.19.2.
+* Vendors: jQuery UI 1.14.1.
+* Vendors: PHPMailer 6.12.0.
+* Vendors: PrismJS 1.30.0.
+* Vendors: UglifyJS 3.19.3.
 
 Changes in 4.8.8 (24 Jan 2022)
 
