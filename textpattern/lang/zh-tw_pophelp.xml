@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="zh-TW">
+    <group id="admin" title="使用者面板">
+        <item id="about_privileges" title="關於角色"><![CDATA[
+<h2>關於角色</h2>
+<h3>發佈者（Publisher）</h3>
+<ul>
+    <li>可以管理文章、迴響與連結</li>
+    <li>當管理偏好設定中的「Allow PHP in articles?」設為「Yes」時，可以在文章中使用 PHP</li>
+    <li>可以管理圖片與檔案</li>
+    <li>可以管理版區與分類</li>
+    <li>可以管理頁面、表單與樣式</li>
+    <li>可以檢視診斷資訊</li>
+    <li>可以管理網站偏好設定</li>
+    <li>可以管理使用者</li>
+    <li>可以管理訪客記錄</li>
+    <li>可以管理外掛</li>
+    <li>可以匯入資料</li>
+</ul>
+<h3>主編（Managing Editor）</h3>
+<ul>
+    <li>可以管理文章、迴響與連結</li>
+    <li>當管理偏好設定中的「Allow PHP in articles?」設為「Yes」時，可以在文章中使用 PHP</li>
+    <li>可以管理圖片與檔案</li>
+    <li>可以管理版區與分類</li>
+    <li>可以管理頁面、表單與樣式</li>
+    <li>可以檢視診斷資訊</li>
+    <li>可以管理網站偏好設定</li>
+    <li>可以檢視使用者</li>
+    <li>可以管理訪客記錄</li>
+    <li>可以管理外掛</li>
+    <li>可以匯入資料</li>
+</ul>
+<h3>文字編輯（Copy Editor）</h3>
+<ul>
+    <li>可以在一項限制下管理文章：
+        <ul>
+            <li>不能刪除其他使用者的文章</li>
+        </ul>
+    </li>
+    <li>可以管理迴響與連結</li>
+    <li>可以管理圖片與檔案</li>
+    <li>可以管理分類</li>
+    <li>可以管理頁面與表單</li>
+    <li>可以檢視使用者</li>
+    <li>可以管理訪客記錄</li>
+</ul>
+<h3>撰稿人（Staff Writer）</h3>
+<ul>
+    <li>可以管理自己的文章，並檢視其他使用者的文章</li>
+    <li>可以管理圖片與檔案</li>
+</ul>
+<h3>自由寫手（Freelancer）</h3>
+<ul>
+    <li>可以在有限範圍內管理自己的文章：
+        <ul>
+            <li>只可在文章發佈前修改文章</li>
+            <li>只能套用 <em>only</em> Draft、Hidden 或 Pending 狀態</li>
+        </ul>
+    </li>
+    <li>可以檢視其他使用者的文章</li>
+</ul>
+<h3>設計師（Designer）</h3>
+<ul>
+    <li>可以在有限範圍內管理自己的文章：
+        <ul>
+            <li>只可在文章發佈前修改文章</li>
+            <li>只能套用 <em>only</em> Draft、Hidden 或 Pending 狀態</li>
+        </ul>
+    </li>
+    <li>可以檢視其他使用者的文章</li>
+    <li>可以管理圖片</li>
+    <li>可以管理版區</li>
+    <li>可以管理頁面、表單與樣式</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="建立作者"><![CDATA[
+<h2>新增作者</h2>
+<p>一封歡迎訊息與登入說明會透過電子郵件寄送給新作者。</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="寫作面板">
+        <item id="article_image" title="文章圖片"><![CDATA[
+<h2>文章圖片</h2>
+<p>若要將圖片與此文章關聯，請在此輸入下列其中一種：</p>
+<ol>
+    <li>一或多個以逗號分隔的 Textpattern 圖片 ID（例如 <code>12, 25, 18</code>）</li>
+    <li>一或多個圖片的相對網址，以逗號分隔（例如 <code>/images/my_pic.jpg</code>）</li>
+    <li>一或多個完整網址，以逗號分隔（例如 <code>https://example.com/path/to/images/my_pic.jpg</code>）</li>
+</ol>
+<p>第一張圖片可以透過在文章表單中放入 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來顯示。預設情況下，它會輸出一個完整的 HTML <code>&lt;img&gt;</code> 標籤指向該圖片。</p>
+<p>你也可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來顯示圖庫。</p>
+        ]]></item>
+        <item id="body" title="內文"><![CDATA[
+<h2>內文</h2>
+<p>文章的主要內容會放在文章內文裡。</p>
+<p>在 Textpattern 撰寫或準備發佈文章時，作者可以在三種檢視模式之間切換：純文字、HTML 標記（瀏覽器用來呈現文章的程式碼），以及已渲染的預覽。</p>
+        ]]></item>
+        <item id="description" title="說明"><![CDATA[
+<h2>說明</h2>
+<p>文章說明是選用的元件，可協助搜尋引擎與網站爬蟲更好地辨識與整理內容。</p>
+<p>文章說明的長度上限為 255 個字元。請注意，有些搜尋引擎出於在搜尋結果頁面（SERP）顯示的實用性考量，會對頁面 <code>meta description</code> 的長度設下限制，而這個長度可能小於 Textpattern 所允許的 255 個字元。</p>
+<p>請注意，文章說明與文章摘要不同，儘管它們可接受類似的內容。文章說明主要是供搜尋引擎與爬蟲使用，而文章摘要則較適合作為提供給讀者閱讀的文章概要（若有需要）。</p>
+        ]]></item>
+        <item id="excerpt" title="摘要"><![CDATA[
+<h2>摘要</h2>
+<p>文章摘要是選用的。摘要可用來作為顯示在目錄中的短篇文章概要、取代網站 RSS/Atom feed 中完整內文的內容，或用於其他各種用途。</p>
+        ]]></item>
+        <item id="expire_date" title="到期日"><![CDATA[
+<h2>到期日</h2>
+<p>文章被標記為過期的時間。時間欄位是選填，可以設定為過去或未來的任意時間。</p>
+<p>欄位對應如下：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時（24 小時制）: 分 : 秒</li>
+</ul>
+<p>當時間到達時，或是設定在過去的時間，文章即會過期。</p>
+<p>如果啟用顯示已過期文章的選項，文章仍然會可見。若停用顯示已過期文章，訪客前往該文章頁面時會收到 HTTP 410 錯誤，而不會看到文章內容。</p>
+        ]]></item>
+        <item id="keywords" title="關鍵字"><![CDATA[
+<h2>關鍵字</h2>
+<p>關鍵字可用來在分類之外，更細緻地定義文章之間的關聯性。</p>
+<p>關鍵字必須是以逗號分隔的單字。</p>
+        ]]></item>
+        <item id="override_form" title="覆蓋預設模型"><![CDATA[
+<h2>覆蓋預設模型</h2>
+<p>文章可以選擇使用不同於預設指定的表單，例如在此設定顯示文章摘要而非內文：改用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來取代使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 顯示文章內文。</p>
+        ]]></item>
+        <item id="publish_date" title="發佈日期"><![CDATA[
+<h2>發佈日期</h2>
+<p>文章或檔案發佈，或最近一次修改的時間。此時間可以設定為實際發佈當下，或是過去／未來的任意時間。</p>
+<p>欄位對應如下：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時（24 小時制）: 分 : 秒</li>
+</ul>
+<p>若項目的時間戳記晚於目前時間（亦即在未來），在時間到達前，它不會出現在前端網站與 RSS/Atom feed 中。</p>
+        ]]></item>
+        <item id="status" title="狀態"><![CDATA[
+<h2>狀態</h2>
+<p>定義此 Textpattern 文章的發佈可見狀態。</p>
+<p>發佈狀態可為下列其中之一：</p>
+<ul>
+<li><strong>Draft</strong>：視為撰寫中的草稿，不會在 Textpattern 管理介面之外顯示（亦即在網站上不可見，也不會出現在 feed 中）。</li>
+<li><strong>Hidden</strong>：文章不會在 Textpattern 管理介面之外顯示。當你想從網站移除內容、但又不想刪除時很實用。</li>
+<li><strong>Pending</strong>：視為已準備好要發佈並等待核准，但在 Textpattern 管理介面之外仍不可見。</li>
+<li><strong>Live</strong>：通常會在 Textpattern 管理介面之外顯示（亦即在網站上可見，且若偏好設定允許也會出現在 feed 中）。若文章為 Live 且設定了到期日，超過到期日後狀態仍維持 Live，但只有在允許發佈已過期文章時，文章才會在管理介面之外顯示。</li>
+<li><strong>Sticky</strong>：與 <strong>Live</strong> 文章相似，訪客可以看到，但除非 <code>article</code> 或 <code>article_custom</code> 標籤的 <code>status</code> 屬性包含 <code>sticky</code> 值，否則不會出現在文章清單中。</li>
+</ul>
+<p>注意：即使內容不在網站上公開顯示，已登入的使用者仍然可以預覽。</p>
+        ]]></item>
+        <item id="title" title="標題"><![CDATA[
+<h2>標題</h2>
+<p>為這篇文章新增一個合適的標題。</p>
+<p>文章標題的長度上限為 255 個字元。</p>
+        ]]></item>
+        <item id="url_title" title="網址名稱"><![CDATA[
+<h2>網址名稱</h2>
+<p>若想在文章的永久連結網址中使用特定標題，可在此輸入。若留白，網址名稱會自動由文章標題產生。</p>
+<p>當文章標題使用非 ASCII 字元時，這個功能特別有用。</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="分類面板">
+        <item id="article_category" title="文章"><![CDATA[
+<h2>文章</h2>
+<p>與定義網站導覽結構的版區不同，文章分類可以依主題內容來組織文章。一旦指派了分類，就可以瀏覽屬於特定分類的文章清單。</p>
+<p>例如，一個以食物為主題的網站，可能會有以下文章分類：</p>
+<ul>
+    <li>生鮮食材</li>
+    <li>採買</li>
+    <li>食譜</li>
+    <li>擺盤</li>
+    <li>餐廳</li>
+    <li>主廚</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="說明"><![CDATA[
+<h2>分類說明</h2>
+<p>分類說明是選用的元件，可協助搜尋引擎與網站爬蟲更好地辨識與整理內容。</p>
+<p>分類說明的長度上限為 255 個字元。請注意，有些搜尋引擎出於在搜尋結果頁面（SERP）顯示的實用性考量，會對頁面 <code>meta description</code> 的長度設下限制，而這個長度可能小於 Textpattern 所允許的 255 個字元。</p>
+        ]]></item>
+        <item id="file_category" title="檔案"><![CDATA[
+<h2>檔案</h2>
+<p>檔案分類是選用的，適合用來將特定上傳檔案分組管理。</p>
+        ]]></item>
+        <item id="image_category" title="圖片"><![CDATA[
+<h2>圖片</h2>
+<p>圖片分類是選用的，既可用於內部組織管理，也可用於定義可由 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 標籤顯示的圖片集。</p>
+        ]]></item>
+        <item id="link_category" title="連結"><![CDATA[
+<h2>連結</h2>
+<p>連結分類是選用的，可用來顯示不同的連結群組，例如「朋友」、「同好」、「同業」等。</p>
+<p>像這樣的特定連結清單可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來輸出，如下所示：</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="診斷面板">
+        <item id="clean_url_data_failed" title="簡潔網址資料測試失敗"><![CDATA[
+<h2>簡潔網址資料測試失敗</h2>
+<p>看起來網站網址（例如 <code>https://example.com/section/article</code>）目前無法正常運作，或是網頁伺服器不支援用來檢測簡潔網址是否可用的測試程序；如果網站上的簡潔網址實際運作一切正常，可以放心忽略這則訊息。</p>
+<p>若簡潔網址<em>無法</em>運作，可能原因包括：</p>
+<ul>
+    <li>「Site URL」設定不正確，或該位址的頁面並非由這個 Textpattern 站台管理</li>
+    <li>伺服器需要修改 <code>.htaccess</code> 或類似的伺服器設定指令，才能讓簡潔網址正常運作</li>
+    <li>伺服器完全不支援簡潔網址</li>
+</ul>
+<p>簡潔網址測試會嘗試從「Site URL」偏好設定中指定的網址擷取頁面，以檢查所有簡潔網址參數是否正常運作。如果該網址指向不同的網站，或是被靜態頁面等取代，測試就會失敗。在問題解決前，應改用較雜亂的網址（例如 <code>https://example.com?s=section&amp;id=4</code>）。請確定管理偏好設定中的「Permanent link mode」已做相應設定。</p>
+<p>請注意，若使用外掛將網站切換為「維護模式」，也可能觸發這則警告。</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="簡潔網址測試失敗"><![CDATA[
+<h2>簡潔網址測試失敗</h2>
+<p>看起來網站網址（例如 <code>https://example.com/section/article</code>）目前無法正常運作，或是網頁伺服器不支援用來檢測簡潔網址是否可用的測試程序；如果網站上的簡潔網址實際運作一切正常，可以放心忽略這則訊息。</p>
+<p>若簡潔網址<em>無法</em>運作，可能原因包括：</p>
+<ul>
+    <li>「Site URL」設定不正確，或該位址的頁面並非由這個 Textpattern 站台管理</li>
+    <li>伺服器需要修改 <code>.htaccess</code> 或類似的伺服器設定指令，才能讓簡潔網址正常運作</li>
+    <li>伺服器完全不支援簡潔網址</li>
+</ul>
+<p>簡潔網址測試會嘗試從「Site URL」偏好設定中指定的網址擷取頁面，以檢查所有簡潔網址參數是否正常運作。如果該網址指向不同的網站，或是被靜態頁面等取代，測試就會失敗。在問題解決前，應改用較雜亂的網址（例如 <code>https://example.com?s=section&amp;id=4</code>）。請確定管理偏好設定中的「Permanent link mode」已做相應設定。</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="正式伺服器上的多重登入"><![CDATA[
+<h2>正式伺服器上的多重登入</h2>
+<p>允許你的使用者帳號從多個工作階段同時登入會造成安全風險，不建議這樣設定。除非你了解並可接受相關風險，否則請在進階偏好設定面板中停用此功能。</p>
+        ]]></item>
+        <item id="diag_clear_private" title="隱藏私密資訊"><![CDATA[
+<h2>隱藏私密資訊</h2>
+<p>隱藏私密資訊以增加安全性。若要將診斷資訊分享到公開可見的地方（例如 Textpattern 技術支援論壇），透過省略敏感的伺服器資訊，可以降低安全風險。</p>
+        ]]></item>
+        <item id="dev_version_live" title="正式伺服器上的開發版程式碼"><![CDATA[
+<h2>正式伺服器上的開發版程式碼</h2>
+<p>不建議在正式網站上使用開發中的 Textpattern 版本。如果你已充分了解並可接受風險，則可以放心忽略這則警告。</p>
+        ]]></item>
+        <item id="dir_not_writable" title="目錄無法寫入"><![CDATA[
+<h2>目錄無法寫入</h2>
+<p>若要使用檔案與圖片上傳功能，這些目錄必須可由 PHP 透過網頁伺服器使用者寫入。你可以使用 (S)FTP 用戶端來設定權限，或在命令列執行 <code>chmod 755 /path/to/dir</code> 指令。</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS 解析失敗"><![CDATA[
+<h2>DNS 查詢失敗</h2>
+<p>看起來設定為本站位址的 URL 無法連線。</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="檔案上傳功能目前無法使用"><![CDATA[
+<h2>檔案上傳功能目前無法使用</h2>
+<p>目前的伺服器設定顯示已停用檔案上傳功能。請檢查並修改 <code>php.ini</code> 檔中的 <code>file_uploads</code> 設定，或洽詢主機服務商協助。</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess 檔案遺失"><![CDATA[
+<h2>.htaccess 檔案遺失</h2>
+<p>目前使用的永久連結模式需要 <code>.htaccess</code> 檔案，但無法找到該檔。此檔案隨 Textpattern 一同提供，位在 Textpattern 根目錄中，與 <code>index.php</code> 與 <code>textpattern</code> 目錄並列。建議的設定內容如下：</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="網站索引頁無法存取"><![CDATA[
+<h2>網站索引頁無法存取</h2>
+<p>作為網站索引頁的根 <code>index.php</code> 檔案，伺服器無法讀取。請檢查該檔案是否存在以及權限設定。</p>
+        ]]></item>
+        <item id="missing_files" title="檔案遺失"><![CDATA[
+<h2>檔案遺失</h2>
+<p>有一或多個 Textpattern 必要檔案遺失。請確認所有列出的檔案均存在於伺服器上，且位於正確位置。</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="缺少 Apache mod_rewrite 模組"><![CDATA[
+<h2>缺少 Apache mod_rewrite 模組</h2>
+<p>Apache 的 <code>mod_rewrite</code> 模組尚未安裝或已停用。此模組為 Textpattern 正常運作所建議安裝的套件。請確認其已存在並啟用，或洽詢主機服務商協助。</p>
+        ]]></item>
+        <item id="modified_files" title="檔案已被修改"><![CDATA[
+<h2>檔案已被修改</h2>
+<p>若檔案的檢查碼與 Textpattern 提供的已知正確檢查碼清單不同，則會被視為已修改。如果 Textpattern 安裝中的任何檔案與預期不符，這些檔案會在此處被標示出來。</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL 資料表錯誤"><![CDATA[
+<h2>MySQL 資料表錯誤</h2>
+<p>Textpattern 使用的 MySQL 資料庫可能出現損毀或損傷。請嘗試使用 MySQL 管理工具（例如 <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 或 <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>）來修復受影響的資料表。</p>
+        ]]></item>
+        <item id="no_temp_dir" title="未定義暫存目錄"><![CDATA[
+<h2>未定義暫存目錄</h2>
+<p>雖然在沒有暫存目錄的情況下 Textpattern 仍可運作，但若未設定此偏好，有些功能可能無法如預期般工作。請前往管理偏好設定，設定「Temporary directory path」。</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="版區名稱與目錄相同"><![CDATA[
+<h2>版區名稱與目錄相同</h2>
+<p>既有的目錄名稱可能會與在文章永久連結結構中使用的版區名稱衝突。為避免問題，請檢查並在安全無虞的情況下刪除相關目錄名稱，或調整版區名稱以避免衝突。</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="網站目錄無法讀取"><![CDATA[
+<h2>網站目錄無法讀取</h2>
+<p>包含網站根 <code>index.php</code> 檔案的目錄，伺服器無法讀取。請檢查權限設定。</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="已啟用 PHP 指令碼"><![CDATA[
+<h2>已啟用 PHP 指令碼</h2>
+<p>若啟用相關功能，Textpattern 允許作者與管理者在文章與頁面／表單中嵌入 PHP 程式碼。由於任何類型的 PHP 都可能被執行，包括可能毀損你的安裝或洩漏資料給第三方的危險程式碼，這是一項安全風險，<strong>強烈建議你在不絕對需要時關閉這些選項</strong>，可於<a href="?event=prefs#prefs_group_publish">偏好設定面板</a>中調整。</p>
+<p>許多過去需要以 PHP 程式碼實作的 Textpattern 擴充功能，如今已可透過 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">核心標籤</a> 完成。</p>
+        ]]></item>
+        <item id="php_version_required" title="最低版本需求"><![CDATA[
+<h2>最低版本需求</h2>
+<p>Textpattern 需要 PHP 程式語言與 MySQL 資料庫伺服器中具備特定功能。請參考下列表格以瞭解最低系統需求：</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern 版本</th>
+                <th scope="col">最低 PHP 版本</th>
+                <th scope="col">最低 MySQL 版本</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>除了上述系統需求外，還需要下列 PHP 擴充功能：</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a></li>
+</ul>
+<p>網站的 <code>php.ini</code> 檔案（全域或區域設定）必須包含 <code>date.timezone</code> 設定。</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Setup 目錄仍然存在"><![CDATA[
+<h2>Setup 目錄仍然存在</h2>
+<p>Textpattern 安裝完成後，<code>textpattern/setup</code> 目錄及其中內容便不再需要，基於安全理由應予以刪除。</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Site URL 不相符"><![CDATA[
+<h2>Site URL 不相符</h2>
+<p>「Preferences」面板中設定的 Site URL，與實際用來造訪網站的 URL 不一致。</p>
+<p>若網站可以透過多種不同網址存取，而且一切運作正常，可以放心忽略這則訊息。</p>
+<p>否則，請檢查並依需要調整管理偏好設定中的「Site URL」。在「Diagnostics」面板的預先檢查警告訊息中，會顯示推測較為合理的 Site URL。</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="伺服器上已停用部分 PHP 函式"><![CDATA[
+<h2>伺服器上已停用部分 PHP 函式</h2>
+<p>主機或伺服器管理者停用了部分 PHP 函式，其中有些可能會影響 Textpattern 的執行。</p>
+<p>請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern 使用者文件 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 以取得更多資訊。</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern 版本可更新"><![CDATA[
+<h2>Textpattern 版本可更新</h2>
+<p>目前有新版 Textpattern 可用。為享有最新功能與安全修補，建議你升級。</p>
+<p>請注意，儘管我們致力讓升級過程順利、減少困擾：</p>
+<ul>
+    <li>若只有版本號最後一位數不同，升級通常可與既有外掛與佈景主題相容。</li>
+    <li>若後兩位數皆不同，升級後可能需要更新部分外掛與／或佈景主題，不過在多數情況下，即使不更新，也仍能在某種程度上運作。</li>
+    <li>若第一位數不同，升級後很可能需要更新多數外掛與佈景主題。若你高度仰賴某款外掛或佈景主題的特定功能，請在升級前向作者或社群成員確認。</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern 測試版可用"><![CDATA[
+<h2>有可用的 Textpattern 測試版更新</h2>
+<p>目前有較新的 Textpattern 測試版可用。我們希望有更多活躍的志工協助測試，以便讓正式版盡可能穩定。我們會盡力讓升級經驗順暢、無痛，即使是測試版程式碼也一樣。</p>
+<p>若你決定參與，請注意：</p>
+<ul>
+    <li>除非你擁有網站檔案與資料庫的可用備份，且知道如何還原，否則請勿在正式網站上使用此測試版。</li>
+    <li>請 <a href="https://github.com/textpattern/textpattern/issues">回報任何問題</a>，並註明你使用的測試版本。根據回報情況，在正式版釋出前可能會再發佈其他測試版。</li>
+    <li>若你部署了此測試版，務必在正式版釋出後一併更新。</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="暫存資料夾及外掛快取資料夾不能相同"><![CDATA[
+<h2>暫存目錄與外掛快取目錄路徑不可相同</h2>
+<p>外掛應該有自己的獨立目錄，不應與暫存目錄共用。這是潛在的安全風險，且若清空暫存目錄可能會對網站造成不良影響。請確保暫存目錄路徑與外掛快取路徑不同。</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="更新伺服器無法存取"><![CDATA[
+<h2>更新伺服器無法存取</h2>
+<p>檢查更新的動作失敗，通常是因為網路壅塞或連線逾時。此情況通常會在一兩小時內自行恢復，請稍後再回到此面板查看。</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="你的 PHP 安裝缺少 mail() 函式"><![CDATA[
+<h2>你的 PHP 安裝缺少 mail() 函式</h2>
+<p>PHP 的 <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 函式已被停用。因此，Textpattern 無法寄送電子郵件，某些功能也將無法使用。例如，不會寄送新迴響的電子郵件通知，新使用者也不會收到歡迎信。但你仍然可以新增使用者。</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="檔案面板">
+        <item id="file_reassign" title="重新指定檔案"><![CDATA[
+<h2>重新指定檔案</h2>
+<p>當你上傳一個檔案來取代標記為「Missing」的檔案時，你選擇的檔案會上傳到伺服器，並連結到資料庫中原有的檔案資訊。這表示原本的檔名會保留，其他相關資訊（例如下載次數與分類）也會維持不變。但檔案大小會更新為新檔案的大小。</p>
+        ]]></item>
+        <item id="file_replace" title="取代檔案"><![CDATA[
+<h2>取代檔案</h2>
+<p>在此上傳檔案會取代伺服器上既有檔案的內容，但檔名會與原來相同。下載次數與其他與檔案相關的資訊則不受影響。</p>
+        ]]></item>
+        <item id="timestamp_file" title="發佈日期"><![CDATA[
+<h2>發佈日期</h2>
+<p>檔案發佈或最近一次修改的時間。此時間可以設定為實際發佈當下，或是過去／未來的任意時間。</p>
+<p>欄位對應如下：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時（24 小時制）: 分 : 秒</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="上傳檔案"><![CDATA[
+<h2>上傳檔案</h2>
+<p>使用此表單將檔案或圖片上傳到你的伺服器。</p>
+<p>可使用 Textile 程式碼在文章中顯示圖像、使用 Textpattern 程式碼將圖像放入頁面樣板，或使用 HTML 程式碼將圖像放在其他位置。</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="模型面板">
+        <item id="forms_overview" title="表單簡介"><![CDATA[
+<h2>表單簡介</h2>
+<p>在 Textpattern 中，表單是可重複使用的內容片段，由文字、HTML 與 Textpattern 標籤組成，用於顯示內容。</p>
+<p>以下是一個範例表單，可命名為 <code>ordinary_list</code>：</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>你可以用它來顯示相關文章的 HTML 無序清單：</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>由於此表單的作用是輸出標題清單，它也可以用在其他標籤內，例如顯示目前版區中 20 篇文章：</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>你也可以使用表單來顯示重複出現的內容，例如頁面樣板中的頁首與頁尾。這表示內容只需存在於一處，當你決定修改時，只要改一次即可。通常可使用下列方式來顯示表單中的內容：</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>單一表單大小上限為 64KB。例如頁尾表單可以包含標題、段落、連結、條件標籤，以及指向其他表單（如 <code>ordinary_list</code>）的參照。</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="圖片面板">
+        <item id="create_thumbnail" title="建立縮圖"><![CDATA[
+<h2>建立縮圖</h2>
+<p>允許你從完整尺寸圖片依指定尺寸（重新）建立縮圖。</p>
+<p>使用自訂尺寸時，縮圖會依你選擇的尺寸等比例縮放，除非你勾選「Crop」核取方塊，此時縮圖會以圖片中心裁切產生，而不進行縮放。</p>
+<p>使用自動尺寸時，縮圖會依目前管理佈景主題中設定的尺寸與（選用）裁切設定來縮放。</p>
+        ]]></item>
+        <item id="replace_image_form" title="更換圖片"><![CDATA[
+<h2>更換圖片</h2>
+<p>在此上傳的圖片會直接取代資料庫中與此項目關聯的現有圖片。</p>
+        ]]></item>
+        <item id="upload_image" title="上傳圖片"><![CDATA[
+<h2>上傳圖片</h2>
+<p>將一張或多張圖片上傳到你的伺服器。</p>
+<p>圖片上傳到 <code>images</code> 目錄後，原始圖片的檔名只會在 Textpattern 資料庫中內部保留；圖片檔本身會重新命名為連號數字加上副檔名。</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="上傳縮圖"><![CDATA[
+<h2>上傳縮圖</h2>
+<p>完整尺寸的圖片可以指派各自的縮圖。縮圖有助於連結到完整尺寸圖片，以及幫助索引。</p>
+<p>縮圖的參照方式與完整尺寸圖片相同，只是在檔名後加上 <code>t</code>。例如，要參照儲存在 <code>/images/12.jpg</code> 的完整圖片所對應的縮圖，可使用 <code>/images/12t.jpg</code>。</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="語言面板">
+        <item id="get_textpack" title="安裝 Textpack"><![CDATA[
+<h2>安裝 Textpack</h2>
+<p>將網站額外的語言字串貼到這個欄位中，然後選擇「Upload」以安裝它們。</p>
+<p>這些字串通常會以可下載的 Textpack 形式提供，並隨外掛一同發佈，好讓外掛的語言字串能在 Textpattern 中原生使用。</p>
+<p>之後譯者可以視需要翻譯這些套件，並將在地化內容重新散佈給社群。</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="連結面板">
+        <item id="link_description" title="說明"><![CDATA[
+<h2>說明</h2>
+<p>連結說明是選用的，可用於為連結加上註解說明、建立連結的 <code>title=""</code>（工具提示）屬性，或單純作為你的內部註記。</p>
+        ]]></item>
+        <item id="link_sort" title="排序值"><![CDATA[
+<h2>排序值</h2>
+<p>用於以自然語言方式排序連結清單，例如依姓氏而非名字排序，或在排序時忽略前置冠詞。</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>連結的位址。如果連結指向其他網站，必須加上 <code>http://</code> 或 <code>https://</code> 前綴。</p>
+        ]]></item>
+        <item id="timestamp_link" title="發佈日期"><![CDATA[
+<h2>發佈日期</h2>
+<p>連結發佈或最近一次修改的時間。此時間可以設定為實際發佈當下，或是過去／未來的任意時間。</p>
+<p>欄位對應如下：</p>
+<ul>
+    <li>年 / 月 / 日</li>
+    <li>時（24 小時制）: 分 : 秒</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="登入面板">
+        <item id="remember_login" title="在此瀏覽器保持登入狀態"><![CDATA[
+<h2>在此瀏覽器保持登入狀態</h2>
+<p>勾選後，你會在目前的網頁瀏覽器中維持登入 Textpattern 帳號，直到你主動登出為止。若未勾選，在一段時間未操作後，你會自動被登出。</p>
+<p>瀏覽器必須啟用 Cookie 功能。</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="外掛面板">
+        <item id="install_plugin" title="安裝外掛"><![CDATA[
+<h2>安裝外掛</h2>
+<p>請將已編譯外掛文字檔的內容貼在這裡，然後按下「Upload」開始安裝。若你上傳的外掛名稱與已安裝外掛相同，將會以新上傳的版本覆蓋既有外掛。</p>
+<p>你在此貼上的外掛文字<strong>不是</strong>原始 PHP 程式碼，而是 Base64 編碼後的文字，通常前面還會有一段標頭，包含外掛名稱、版本與說明、作者名稱等資訊。</p>
+<p>你通常可以在 <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Plugins repository <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 或外掛作者指定的管道（例如作者網站或 GitHub）取得已編譯的外掛版本。</p>
+<p>若外部網站允許，你也可以在此貼上指向 Textpattern 已編譯文字檔的網址。</p>
+<p>所有上傳的外掛在安裝前都會進入驗證步驟，讓你檢視外掛程式碼與內容。</p>
+        ]]></item>
+        <item id="upload_plugin" title="上傳外掛"><![CDATA[
+<h2>上傳外掛</h2>
+<p>使用此表單上傳外掛檔案。上傳的外掛（與相關資產）會儲存在「plugins」目錄中。</p>
+<p>可在此上傳的外掛類型包括：</p>
+<ul>
+<li>包含完整程式碼、中繼資料、Textpack 字串與說明文字的 Textpattern PHP Template 檔案。</li>
+<li>包含完整程式碼、中繼資料、Textpack 字串與說明文字的 Textpattern 已編譯文字檔。</li>
+<li>包含 manifest 資訊以及程式碼、中繼資料、Textpack 字串、說明文字與支援檔案的 Textpattern zip 套件。</li>
+<li>原始 PHP 檔案（但不會自動填入額外中繼資料，且不建議採用）。</li>
+</ul>
+<p>若你上傳的外掛名稱與已安裝外掛相同，將會以新上傳的版本覆蓋既有外掛。</p>
+<p>所有上傳的外掛在安裝前都會進入驗證步驟，讓你檢視外掛程式碼與內容。</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="偏好設定面板">
+        <item id="admin_side_plugins" title="啟用管理介面外掛？"><![CDATA[
+<h2>啟用管理介面外掛？</h2>
+<p>管理介面外掛可以變更管理介面的運作方式。它們可能掛勾到既有動作，例如編輯或發佈文章，或是新增其他面板來提供額外／延伸的功能。</p>
+<p>若想進一步瞭解管理介面外掛，請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 頁面，以及 <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern 使用者文件 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>。各式外掛會列在 <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 網站上。</p>
+        ]]></item>
+        <item id="advanced_options" title="進階選項"><![CDATA[
+<h2>進階選項</h2>
+<p>顯示進階偏好設定群組，可在其中設定額外選項，例如：</p>
+<ul>
+    <li>在 <code>txp:evaluate</code> 中啟用的 PHP 函式。</li>
+    <li>自訂表單模型類型。</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="允許在文章中使用 PHP？"><![CDATA[
+<h2>允許在文章中使用 PHP？</h2>
+<p>啟用後，此設定允許在文章中使用 PHP。作者必須擁有足夠權限才能這麼做（預設僅 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">「Publishers」<span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>、<a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">「Managing Editors」<span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 與 <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">「Copy Editors」<span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 可使用）。</p>
+<p><strong>強烈建議在非必要情況下關閉此選項</strong>。否則任何作者都可能加入具毀損網站或洩漏資料風險的 PHP 程式碼，而任何檢視該文章的人都可能觸發執行。</p>
+<p>PHP 程式碼必須省略 PHP 開頭與結尾標籤，並且包在 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 中。</p>
+        ]]></item>
+        <item id="allow_form_override" title="允許覆蓋模型？"><![CDATA[
+<h2>允許覆蓋模型？</h2>
+<p>此設定允許文章作者在文章被渲染時覆蓋所使用的表單。若啟用，在編輯文章時會顯示「Override form」下拉選單。</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="允許在頁面中使用 PHP？"><![CDATA[
+<h2>允許在頁面中使用 PHP？</h2>
+<p>啟用後，此設定允許在頁面樣板與表單樣板中使用 PHP 程式碼。</p>
+<p><strong>強烈建議在非必要情況下關閉此選項</strong>。否則任何其他使用者都可能加入具毀損網站或洩漏資料風險的 PHP 程式碼，並由毫無防備的管理者或訪客執行。</p>
+<p>PHP 程式碼必須省略 PHP 開頭與結尾標籤，並且包在 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 中。</p>
+        ]]></item>
+        <item id="archive_dateformat" title="彙整日期格式"><![CDATA[
+<h2>彙整日期格式</h2>
+<p>決定你的網站各版區中文章所顯示的日期格式。</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="文章使用摘要？"><![CDATA[
+<h2>文章使用摘要？</h2>
+<p>若選擇「No」，作者在文章編輯畫面中就不會看到摘要欄位。</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="附加標題於永久網址？"><![CDATA[
+<h2>附加標題於永久網址？</h2>
+<p>此設定會將由文章標題自動產生的版本附加到網址中。它可以自動產生，或是在編輯文章時於「URL-only title」手動覆寫。</p>
+<p>此設定只在使用簡潔網址時才會生效。對某些語言來說，這可能導致網址冗長又難看，此時你可能會希望將此設定為「Off」。</p>
+        ]]></item>
+        <item id="auto_dst" title="自動調較夏令時間？"><![CDATA[
+<h2>自動調較夏令時間？</h2>
+<p>此設定允許 Textpattern 依你的所在地，自動調整夏令時間（DST，Daylight Savings Time）。若將此設為「No」，你可以手動變更「DST enabled」偏好設定。</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="有新迴響即代表網站已更新？"><![CDATA[
+<h2>有新迴響即代表網站已更新？</h2>
+<p>Textpattern 資料庫會記錄網站最近一次變更的時間。若將此設定為「Yes」，新增迴響時也會更新這個時間值。此值會用於例如 <code>"Send Last-Modified header"</code> 等功能。</p>
+        ]]></item>
+        <item id="comment_nofollow" title="使用 rel=&quot;nofollow&quot; 於迴響？"><![CDATA[
+<h2>Apply rel="nofollow" to comments?</h2>
+<p>若設為「Yes」，將在迴響中的連結加上額外屬性。這項措施的目的在於減少垃圾迴響的誘因，是由多家搜尋引擎與軟體開發者共同倡議的。你可以參閱 <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google 的公告 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 以取得更多資訊。</p>
+<p><strong>注意：</strong>此設定不會影響網站功能。但在某些搜尋引擎計算從迴響連出的站台排名時，可能會減少這些迴響的影響力，甚至完全排除。</p>
+        ]]></item>
+        <item id="comments_are_ol" title="迴響列表編號顯示？"><![CDATA[
+<h2>迴響列表編號顯示？</h2>
+<p>決定文章迴響是否包在 HTML <code>&lt;ol&gt;</code> 標籤內，而各別迴響則包在 <code>&lt;li&gt;</code> 標籤內（因此顯示為編號清單），或是改為將各別迴響包在 <code>&lt;div&gt;</code> 內。</p>
+<p>不論此處設定為何，你都可以在個別表單中自行修改，藉由調整 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來覆蓋預設標籤；該標籤位於 <code>comments_display</code> 表單中。</p>
+        ]]></item>
+        <item id="comments_auto_append" title="在文章頁面顯示迴響？"><![CDATA[
+<h2>在文章頁面顯示迴響？</h2>
+<p>此設定決定是否自動將迴響與迴響表單附加到所有單篇文章頁面（亦即自動包含 <code>comments_display</code> 表單的內容）。</p>
+<p>多數情況下，你會希望將此設為「No」，以便在版面設計上擁有較大的彈性，可以自行決定迴響出現的位置。你必須在任何要顯示迴響的文章樣板中，手動加入 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>。</p>
+<p>如果你發現文章中的迴響顯示重複，很可能是因為樣板中已含有 <code>&lt;txp:comments /&gt;</code> 標籤，同時「Automatically append comments to articles?」也被設為「Yes」。</p>
+        ]]></item>
+        <item id="comments_dateformat" title="迴響日期格式"><![CDATA[
+<h2>迴響日期格式</h2>
+<p>決定訪客在網站上看到的迴響日期格式。</p>
+        ]]></item>
+        <item id="comments_default_invite" title="預設迴響標示"><![CDATA[
+<h2>預設迴響標示</h2>
+<p>若你允許訪客在網站上留下迴響，這裡是預設的邀請文字。例如：</p>
+<ul>
+    <li>Comments</li>
+    <li>Add a comment</li>
+    <li>Feedback</li>
+    <li>Annotate</li>
+</ul>
+<p>請注意，邀請文字可以在每篇文章中個別修改。</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="關閉迴響於"><![CDATA[
+<h2>關閉迴響於</h2>
+<p>在此設定多久之後文章的迴響功能會被關閉（若設定為「Never」，則不會自動關閉，訪客可以在任何時間留言）。</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="允許在迴響中使用圖片？"><![CDATA[
+<h2>Allow commenter images in comments?</h2>
+<p>若將此選項設為「No」，任何包含在迴響中的圖片都會被移除。</p>
+        ]]></item>
+        <item id="comments_mode" title="顯示方式"><![CDATA[
+<h2>迴響顯示方式</h2>
+<p>若選擇「nopopup」（建議值），目前視窗會重新整理，只顯示該篇文章與其下方的迴響。</p>
+<p>若選擇「popup」，點選迴響連結時會開啟新的瀏覽器視窗（會使用 <code>popup_comments</code> 表單）。</p>
+        ]]></item>
+        <item id="comments_moderate" title="新迴響不公開？"><![CDATA[
+<h2>新迴響不公開？</h2>
+<p>若將此設為「Yes」，每則新迴響的可見性都會先被關閉，直到審核完畢為止。你必須手動審核並將每一則迴響設為可見（當文章收到新迴響時，系統會寄送通知信給該文章作者）。</p>
+        ]]></item>
+        <item id="comments_on_default" title="預設開啟迴響功能？"><![CDATA[
+<h2>預設開啟迴響功能？</h2>
+<p>若設為「Yes」，每篇新發佈文章都會自動啟用迴響功能。若設為「No」，每次想開放迴響時，就必須在文章「Write」面板中為該篇文章啟用迴響。</p>
+<p>迴響可以在任何時候、針對個別文章啟用或停用。</p>
+        ]]></item>
+        <item id="comments_require_email" title="迴響 Email 必填？"><![CDATA[
+<h2>迴響必須填寫電子郵件位址？</h2>
+<p>若設為「Yes」，想在你的文章留下迴響的人必須在迴響輸入表單中填入電子郵件位址，否則無法送出迴響。</p>
+        ]]></item>
+        <item id="comments_require_name" title="迴響名字必填？"><![CDATA[
+<h2>迴響名字必填？</h2>
+<p>若設為「Yes」，想在你的文章留下迴響的人必須在迴響輸入表單中填入名稱，否則無法送出迴響。</p>
+        ]]></item>
+        <item id="comments_sendmail" title="把迴響寄給作者？"><![CDATA[
+<h2>把迴響寄給作者？</h2>
+<p>若設為「Yes」，每當文章收到新迴響時，系統會將該迴響的副本透過電子郵件寄給文章作者。</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="允許在迴響中使用更多 Textile 標記？"><![CDATA[
+<h2>允許在迴響中使用更多 Textile 標記？</h2>
+<p>若設為「Yes」，迴響中可以包含本來會被視為純文字的 <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 元素，例如：</p>
+<ul>
+    <li>標題</li>
+    <li>有序與無序清單</li>
+    <li>註腳</li>
+    <li>表格</li>
+    <li>程式碼</li>
+    <li>延伸區塊語法（<code>bc..</code>、<code>bq..</code> 等）</li>
+</ul>
+<p><strong>注意：</strong>基於安全考量，原始 HTML 會被轉換為一般文字。</p>
+        ]]></item>
+        <item id="concurrent_logins" title="允許多重登入的帳號"><![CDATA[
+<h2>允許多重登入的帳號</h2>
+<p>以逗號分隔的登入帳號清單，這些帳號可以在多個瀏覽器／工作階段中同時登入。這在開發期間與客戶共用登入帳號時很有幫助。</p>
+<p>使用這項功能有安全風險，<strong>不建議在正式網站上使用</strong>。若你的使用者帳號在正式網站上被設定為可多重登入，診斷面板會發出警告。</p>
+        ]]></item>
+        <item id="custom_form_types" title="自訂表單模型類型"><![CDATA[
+<h2>自訂表單模型類型</h2>
+<p>除了標準表單模型類型（article、file、misc 等），發佈者可以自訂類型。自訂表單模型類型的目的有二：讓表單模型更易分類，並定義自訂資產。</p>
+<p>此偏好的格式為 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>，每個區段對應一個表單模型類型。</p>
+<p>若要定義自訂表單類型（例如 <code>js</code>），必須在單獨一行新增 <code>[js]</code> 區段。可以透過 <code>title="Javascript"</code> 預設標題項目設定預設標題；若有需要，也可加入在地化標題（例如 <code>ru="Скрипт"</code>）。</p>
+<p>此外，也可以指定表單模型的 <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">媒體型別（media type）<span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>（先前稱為 MIME type），例如 <code>mediatype="application/javascript"</code>。如此一來，此類型的表單模型會變成可由資料庫或磁碟（平面檔案）提供的自訂資產，並以設定的媒體型別輸出，可透過 <code>&lt;txp:output_form /&gt;</code> 標籤輸出。例如，名為 <code>myscript.js</code>、類型為 <code>[js]</code>、媒體型別為 <code>application/javascript</code> 的表單模型，可以如下方式置入程式碼中：</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>這會產生下列 HTML <code>&lt;script&gt;</code> 標籤：<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>只有名稱延伸副檔名與其類型相符的表單模型（例如 <code>myscript.js</code>）才能以平面檔案形式提供。這種情況下，Textpattern 不會處理它們，並可透過 URL 直接存取。</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="自訂欄位"><![CDATA[
+<h2>自訂欄位</h2>
+<p>自訂欄位可用來儲存文章的額外資料。你最多可以定義十個欄位，只要在此為它們命名即可。每個欄位都會在 Write 面板中以獨立欄位出現，以便替每篇文章加入自訂資料。</p>
+<p>你可以自由命名這些欄位，但需注意以下事項：</p>
+<ul>
+<li>使用空白有助於在 Write 面板上閱讀，但之後這些欄位就<em>無法</em>在 article_custom 標籤中作為排序或篩選參數。若想使用此功能，請考慮改用底線。</li>
+<li>命名欄位時請避免與 Textpattern 保留欄位名稱衝突。例如，不要使用 <code>title</code>、<code>category</code>、<code>limit</code>、<code>status</code> 等，否則可能導致奇怪的結果或站台故障。</li>
+<li>每個欄位的資料限於 255 個字元，只能為純文字。</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="日期格式"><![CDATA[
+<h2>日期格式</h2>
+<p>此選項只會影響網站首頁上文章日期的顯示方式。</p>
+        ]]></item>
+        <item id="default_event" title="預設面板"><![CDATA[
+<h2>預設面板</h2>
+<p>任何人登入 Textpattern 時，首先顯示的管理介面面板。</p>
+        ]]></item>
+        <item id="default_publish_status" title="預設文章狀態"><![CDATA[
+<h2>預設發佈狀態</h2>
+<p>定義新建立 Textpattern 文章的預設發佈可見狀態。</p>
+<p>請注意，變更此偏好設定不會影響在變更之前建立或編輯的文章狀態。</p>
+<p>預設發佈狀態可為下列其中之一：</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p><strong>Draft</strong> 文章視為撰寫中的草稿，不會在 Textpattern 管理介面之外顯示（亦即在 Textpattern 前端不可見，也不會出現在 feed 中）。</p>
+<p><strong>Hidden</strong> 文章不會在 Textpattern 管理介面之外顯示。</p>
+<p><strong>Pending</strong> 文章視為已準備好要發佈並等待核准，但在 Textpattern 管理介面之外仍不可見。</p>
+<p><strong>Live</strong> 文章通常會在 Textpattern 管理介面之外顯示（亦即在 Textpattern 前端可見，且若偏好設定允許也會出現在 feed 中）。若文章為 live 且設定了到期日，超過到期日後狀態仍維持為 live，但只有在允許發佈已過期文章時，文章才會在管理介面之外顯示。</p>
+<p><strong>Sticky</strong> 文章與 <strong>live</strong> 文章類似，會在 Textpattern 管理介面之外顯示，但除非 <code>article</code> 或 <code>article_custom</code> 標籤的 <code>status</code> 屬性包含 <code>sticky</code> 值，否則不會出現在文章清單中。</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>選擇你要使用的 HTML doctype（HTML5 或 XHTML）。這會影響迴響輸入表單、Textile 對 <code>&lt;abbr&gt;</code> 或 <code>&lt;acronym&gt;</code> 的渲染，以及 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 所產生的 <code>&lt;link&gt;</code> 標籤。</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="啟用開發佈景主題預覽？"><![CDATA[
+<h2>啟用開發佈景主題預覽？</h2>
+<p>擁有足夠權限的使用者（預設為具有 Publisher 與 Designer 角色者）可以在不影響其他使用者仍看到舊佈景主題的情況下，安全地開發與預覽新佈景主題（直到新佈景主題部署為止）。</p>
+<p>不希望參與佈景主題開發的有權限使用者，可以停用開發佈景主題預覽。這樣他們就會與一般訪客一樣，看到目前的「public」佈景主題。</p>
+        ]]></item>
+        <item id="enable_short_tags" title="啟用短標籤支援？"><![CDATA[
+<h2>啟用短標籤支援？</h2>
+<p>Textpattern 標籤的形式為 <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>。透過啟用短標籤表示法並遵循幾項簡單規則，可以減少輸入量而省略 <code>txp:</code> 前綴。以下範例說明這個概念：</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> 可寫成 <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> 可寫成 <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> 可寫成 <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> 可寫成 <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> 可寫成 <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code>（請注意，<code>else</code> 標籤也可以使用外掛前綴）。</li>
+</ul>
+<p>若標籤名稱包含底線且你啟用了短標籤，基本概念為：</p>
+<ol>
+    <li>移除 <code>txp:</code> 前綴。</li>
+    <li>將第一個底線改成 <code>::</code>。</li>
+</ol>
+<p>請注意，設定此偏好不會影響使用 <code>&lt;txp:output_form /&gt;</code> 短代碼來渲染表單片段的能力。你仍然可以使用 <code>&lt;txp::shortcode /&gt;</code>，它會被解譯為 <code>&lt;txp:output_form form="shortcode" /&gt;</code>。</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="啟用 XML-RPC 伺服器？"><![CDATA[
+<h2>啟用 XML-RPC 伺服器？</h2>
+<p>若你想使用 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 遠端控制 Textpattern（例如透過桌面或行動應用程式），必須將此設定為「Yes」以啟用 XML-RPC 伺服器。</p>
+        ]]></item>
+        <item id="enhanced_email" title="使用強化的郵件功能"><![CDATA[
+<h2>使用強化的郵件功能</h2>
+<p>將此設定為「No」時，所有電子郵件（例如帳號密碼重設郵件，以及像 com_connect 之類外掛所寄送的郵件），都會透過 PHP 的 <code>mail()</code> 函式送出。若選擇「Yes」，則會改用隨附的 PHPMailer，並可開啟透過外部 SMTP 伺服器傳送郵件的選項。</p>
+<p>若你在郵件送達方面遇到問題（特別是寄送至 Gmail、Outlook、Yahoo! 等線上服務），可能是因為你的網域未被視為可信來源。切換為「Yes」可以改善送達率。此外，使用 SMTP 也可提升與部分電子郵件服務供應商的相容性，進一步改善送達情形。</p>
+        ]]></item>
+        <item id="expire_logs_after" title="停止紀錄於（天）"><![CDATA[
+<h2>停止紀錄於幾天後？</h2>
+<p>啟用 Textpattern 訪客記錄（logging）時，你可以指定保留紀錄的天數。若設定為「7」，則代表保留最近七天的紀錄。</p>
+<p><strong>注意：</strong>只有在檢視「Visitor logs」面板時，系統才會清理舊紀錄，否則紀錄會持續成長。</p>
+        ]]></item>
+        <item id="file_base_path" title="檔案上傳路徑"><![CDATA[
+<h2>檔案上傳路徑</h2>
+<p>此處設定檔案上傳永久儲存目錄的<strong>絕對路徑</strong>。PHP 必須擁有寫入該目錄的權限。</p>
+<p><strong>注意：</strong>為了更高的安全性，建議將此目錄移到網站對外可讀根目錄（docroot）以外的位置。</p>
+        ]]></item>
+        <item id="file_download_header" title="檔案下載標頭"><![CDATA[
+<h2>檔案下載標頭</h2>
+<p>此設定可讓你自訂檔案下載的處理方式。</p>
+<p>一般情況下，所有下載都會視為附件處理，並觸發下載動作（視瀏覽器對該檔案類型的設定而定）。若你希望對某些或全部檔案類型提供處理方式的提示，可以在此加入標籤程式碼。例如，將加入 Textpattern 分類「inline-pdf」的 PDF 檔案改為在瀏覽器中直接顯示，而非下載：</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="最大上傳檔案大小（bytes）"><![CDATA[
+<h2>最大上傳檔案大小（位元組）</h2>
+<p>你可以限制上傳檔案的最大大小（單位為位元組）。請注意，此值也受到 PHP 設定限制。若 Textpattern 偵測到 PHP 設定的上傳大小上限較小，會自動調整為較小的值。若想允許透過瀏覽器上傳較大的檔案，請聯絡主機服務商（<code>php.ini</code> 中相關設定為 <code>post_max_size</code>、<code>upload_max_filesize</code> 與 <code>memory_limit</code>）。</p>
+        ]]></item>
+        <item id="gmtoffset" title="時區"><![CDATA[
+<h2>時區</h2>
+<p>若要在本地時區顯示日期，請在此選擇你的時區。</p>
+        ]]></item>
+        <item id="img_dir" title="圖片資料夾"><![CDATA[
+<h2>圖片資料夾</h2>
+<p>若你想自訂圖片目錄名稱，可以在此設定。你必須先在 Textpattern 安裝根目錄下建立該目錄，並確保 PHP 可寫入該目錄。</p>
+<p>此路徑一律為<strong>相對路徑</strong>（相對於 Textpattern 安裝根目錄）。</p>
+<p>預設值為 <code>images</code>。</p>
+        ]]></item>
+        <item id="include_email_atom" title="於 Atom feed 內包含 Email？"><![CDATA[
+<h2>於 Atom feed 內包含電子郵件位址？</h2>
+<p>此設定允許你在 Atom feed 的 <code>author</code> 區段中，包含文章作者在其使用者帳號中設定的電子郵件位址。</p>
+        ]]></item>
+        <item id="is_dst" title="日光節約時間"><![CDATA[
+<h2>啟用日光節約時間？</h2>
+<p>此設定用於指出你的時區目前是否啟用夏令時間（DST, Daylight Saving Time）。</p>
+        ]]></item>
+        <item id="logging" title="訪問記錄"><![CDATA[
+<h2>訪問記錄</h2>
+<p>你可以選擇 Textpattern 記錄訪客的層級：</p>
+<ul>
+    <li><strong>All hits：</strong>Textpattern 會記錄網站上的所有頁面瀏覽</li>
+    <li><strong>Referrers only：</strong>Textpattern 只會記錄從其他網站引導而來的造訪</li>
+    <li><strong>None：</strong>Textpattern 不會記錄任何頁面瀏覽</li>
+</ul>
+<p>自 Textpattern 4.7.0 起，Textpattern 不會收集或儲存任何訪客 IP 位址資訊。若你在 Textpattern 之外收集或儲存 IP 位址，請採取適當防護措施，以符合適用法律（例如 <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>），並在伺服器與 Textpattern 安裝的各個層面採用強化安全措施，以免資料外洩。</p>
+<p>強烈建議除非你絕對需要這些資訊，且已公開說明預期用途，否則請將此設定維持在預設值「None」。</p>
+        ]]></item>
+        <item id="max_url_len" title="最大的 URL 長度（字元數）"><![CDATA[
+<h2>最大的 URL 長度（字元數）</h2>
+<p>此設定會阻止長度超過指定值的網址運作。對於減少惡意攻擊帶來的損害與提昇網站安全性可能有所幫助。</p>
+        ]]></item>
+        <item id="module_pophelp" title="顯示管理介面內嵌說明連結"><![CDATA[
+<h2>顯示管理介面內嵌說明連結</h2>
+<p>若你希望隱藏系統中各處的管理介面內嵌說明連結（Textpattern 說明彈出視窗），請將此設定為「None」。</p>
+        ]]></item>
+        <item id="never_display_email" title="永不顯示留言者的 Email 信箱？"><![CDATA[
+<h2>永不顯示留言者的 Email 信箱？</h2>
+<p>此設定控制是否在公開頁面上顯示留言者的電子郵件位址。</p>
+<p>基於對使用者的尊重，一般建議不要顯示電子郵件位址，不過在某些情境下，你可能會希望顯示留言者的電子郵件。</p>
+        ]]></item>
+        <item id="override_emailcharset" title="電子郵件使用 ISO-8859-1 編碼？（預設為 UTF-8 編碼）"><![CDATA[
+<h2>電子郵件使用 ISO-8859-1 編碼？（預設為 UTF-8）</h2>
+<p>Textpattern 預設盡可能使用 UTF-8 編碼，包括外寄電子郵件。不過，有些舊版郵件用戶端（包含部分 Microsoft Outlook 版本）對 UTF-8 的支援不完整。若你在郵件中看到亂碼，可啟用此設定，在寄送前將文字轉為 ISO-8859-1 編碼。</p>
+<p><strong>注意：</strong>若你使用的語言包含 ISO-8859-1 無法表示的字元，此設定將無法幫上忙。你應該改用支援 UTF-8（或 Unicode）的郵件用戶端。</p>
+        ]]></item>
+        <item id="override_form_types" title="覆蓋預設模型類型"><![CDATA[
+<h2>覆蓋預設模型類型</h2>
+<p>選擇哪些表單類型的樣板會在 Write 面板中，作為可用的 override forms 供選擇。</p>
+        ]]></item>
+        <item id="permlink_format" title="永久連結標題網址模式"><![CDATA[
+<h2>永久連結標題網址模式</h2>
+<p>此設定定義在使用非 messy 模式時，文章網址的組成與指派方式。</p>
+<p>當文章發佈時，若未在 URL-only title 欄位提供特定網址，網址會由文章標題產生。</p>
+<p>以以下文章標題為例：<em>Ann and Bob eat cake</em></p>
+<p>當「permalink title URL pattern」設定為「Hyphenated (title-like-this)」時，文章網址會是：</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>當「permalink title URL pattern」設定為「Intercapped (TitleLikeThis)」時，文章網址會是：</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="固定網址結構"><![CDATA[
+<h2>文章網址模式</h2>
+<p>此設定定義在使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 時，單篇文章透過網址被存取的方式。</p>
+<p>「?=messy」模式相容性最高——幾乎不需任何設定即可運作——但在網址可讀性與搜尋引擎最佳化（SEO）方面最不理想。在此模式下，站上文章網址看起來會像：</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>其他所有模式都需要伺服器支援網址重寫功能（例如 Apache 的 <code>mod_rewrite</code> 或 NGINX <code>server</code> 區塊中的 rewrite 指令）。若你的伺服器不支援網址重寫功能，請聯絡主機服務商，或改用上述「?=messy」模式。</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="外掛快取資料夾"><![CDATA[
+<h2>外掛快取資料夾</h2>
+<p>此設定主要供外掛開發者使用。當設定後，你可以將外掛原始程式碼檔案（非編譯版本）放在此目錄中，Textpattern 會自動載入它，如此你就能輕鬆編輯外掛並立即看到效果，而不必安裝／啟用外掛。<strong>但請注意</strong>，若採用此方式，若外掛壞掉（無法編譯），也可能導致 Textpattern 一併故障！</p>
+<p>在正式網站上，建議你透過標準的「Plugins」面板載入外掛，而不要使用外掛快取資料夾。</p>
+<p><strong>注意：</strong>「temporary」與「plugin cache」兩項設定請勿指定相同目錄，否則會造成問題（Textpattern 會嘗試將暫存記錄檔內容當成外掛執行）。</p>
+        ]]></item>
+        <item id="production_status" title="網站狀態"><![CDATA[
+<h2>網站狀態</h2>
+<p>Textpattern 站台有三種模式：</p>
+<ol>
+    <li>「Debugging」</li>
+    <li>「Testing」</li>
+    <li>「Live」</li>
+</ol>
+<h3>Debugging（除錯）模式</h3>
+<p>所有 PHP 錯誤報告與程式或外掛運作異常的警告，會在正式網站上顯示。此外，在檢視前端頁面 HTML 原始碼時，還會顯示下列資訊：</p>
+<ul>
+    <li>伺服器建立頁面所花費的時間（Runtime）</li>
+    <li>執行的 MySQL 查詢數量</li>
+    <li>約略的記憶體使用高峰</li>
+    <li>建立頁面過程中遇到的所有 Textpattern 標籤（亦即標籤追蹤）</li>
+</ul>
+<h3>Testing（測試）模式</h3>
+<p>所有 PHP 錯誤報告與程式或外掛運作異常的警告，會在正式網站上顯示。在檢視前端頁面 HTML 原始碼時，會顯示下列資訊：</p>
+<ul>
+    <li>伺服器建立頁面所花費的時間（Runtime）</li>
+    <li>執行的 MySQL 查詢數量</li>
+    <li>約略的記憶體使用高峰</li>
+</ul>
+<h3>Live（正式）模式</h3>
+<p>不會將任何錯誤報告或診斷資訊輸出到頁面。一般會建議使用 Live 模式，因為這能提供最佳使用體驗，並減少伺服器負擔。</p>
+        ]]></item>
+        <item id="public_theme_name" title="前端佈景主題"><![CDATA[
+<h2>前端佈景主題</h2>
+<p>當任何人造訪你公開的網站時所使用的預設前端佈景主題。Textpattern 內建一個預設佈景主題，也可選擇不使用任何佈景主題。你也可以將佈景主題套件加入 <code>textpattern/themes</code> 目錄，使其可供使用。</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="發佈已過期文章？"><![CDATA[
+<h2>發佈已過期文章？</h2>
+<p>若設為「Yes」，文章在到期日過後仍會顯示在網站上。你可以使用 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 來為已過期文章顯示替代內容或標記。</p>
+<p>若設為「No」，已過期文章將自公開網站移除，並回傳「410 Gone」HTTP 狀態。預設值為「No」。</p>
+        ]]></item>
+        <item id="publisher_email" title="以此電子郵件位址寄送登入資訊"><![CDATA[
+<h2>以此電子郵件位址寄送登入資訊</h2>
+<p>指定在寄送新使用者登入資訊時，做為寄件者「From:」欄位所使用的電子郵件位址。</p>
+<p>若此偏好留白或包含無效的電子郵件位址，Textpattern 會改用目前登入使用者的名稱與電子郵件位址。</p>
+        ]]></item>
+        <item id="rss_how_many" title="RSS 的文章數"><![CDATA[
+<h2>Feed 中應包含多少篇文章？</h2>
+<p>此設定為 RSS 與 Atom 格式中，同時間最多會同步的最新文章篇數。</p>
+<p>建議使用較小的數值，例如 <code>5</code> 至 <code>15</code>。</p>
+        ]]></item>
+        <item id="secondpass" title="額外解析器掃描次數"><![CDATA[
+<h2>額外解析器掃描次數</h2>
+<p>Textpattern 標籤解析器通常只會在掃描頁面樣板一次時，就將所有標籤替換為資料庫中的內容。在某些情況下，這可能不夠，例如：</p>
+<ul>
+    <li>將載入順序較低的外掛標籤用作屬性值時</li>
+    <li>在 <code>&lt;txp:php&gt;</code> 標籤內進行程式碼替換時</li>
+    <li>略過頁面前段的元素，讓它們可以接收由稍後處理的標籤所產生的內容時</li>
+</ul>
+<p>出於相容舊版的理由，Textpattern 傳統上會進行額外一次掃描（稱為「secondpass」），因此此偏好的預設值為 <code>1</code>。然而，掃描次數愈多，就愈可能讓原本不該執行的標籤漏網並被解析。近期標籤解析器的改良已降低對第二次掃描的需求。因此，除非你有特別需求必須仰賴第二次掃描，否則請將此值調整為 <code>0</code>，以提高網站安全性。</p>
+<p>若之後發現網站上出現未處理的標籤（而 Testing／Debugging 模式下沒有顯示任何因標籤配對不正確所導致的錯誤），請提供頁面樣板／程式碼／外掛範例與我們聯繫。我們正努力消除對額外解析掃描的需求，而這些資訊將有助於達成目標。</p>
+        ]]></item>
+        <item id="send_lastmod" title="傳送 &quot;Last-Modified&quot; header？"><![CDATA[
+<h2>傳送 "Last-Modified" header？</h2>
+<p>啟用後，Textpattern 會讀取訪客的 HTTP <code>If-Modified-Since</code> 標頭（若存在），並與網站最近一次更新時間比較。若自訪客上次載入頁面後網站內容並未變更（也就是瀏覽器送出的時間戳與網站最後更新時間相同），系統會回傳標頭，指示瀏覽器使用快取版本的頁面。</p>
+<p>這有助於減少頻寬使用、縮短載入時間並降低伺服器負載。</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="在 Feed 內顯示迴響篇數？"><![CDATA[
+<h2>在 Feed 內顯示迴響篇數？</h2>
+<p>若設為「Yes」，此設定會在 RSS/Atom feed 中的文章標題後附加迴響數量。</p>
+        ]]></item>
+        <item id="site_slogan" title="網站敘述"><![CDATA[
+<h2>網站敘述</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">site slogan（網站口號／敘述）<span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 是你網站的摘要或說明。當需要網站說明時會使用這段文字，例如在 RSS/Atom feed 中，或是由你自行選擇的站點位置。</p>
+<p><strong>注意：</strong>site slogan 雖為選填，但在部份情況下可能是產生有效 RSS 或 Atom feed 所必需的。</p>
+        ]]></item>
+        <item id="sitename" title="網站名稱"><![CDATA[
+<h2>網站名稱</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">你網站的名稱或標題 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>。此名稱將出現在訪客瀏覽器標題列或 feed 閱讀器，以及你選擇的網站各處。</p>
+        ]]></item>
+        <item id="siteurl" title="網站網址"><![CDATA[
+<h2>網站網址</h2>
+<p>這是你的 Textpattern 網站位址，例如 <code>www.example.com</code>。</p>
+<p><strong>注意：</strong>不需要加上 <code>http://</code>、<code>https://</code> 或結尾斜線 <code>/</code>。</p>
+        ]]></item>
+        <item id="skin_dir" title="佈景主題目錄"><![CDATA[
+<h2>佈景主題目錄</h2>
+<p>若你想自訂前端佈景主題平面檔案的永久儲存目錄名稱，可以在此設定。你必須先在 Textpattern 安裝根目錄下建立該目錄，並確保 PHP 可寫入該目錄。</p>
+<p>此路徑一律為<strong>相對路徑</strong>（相對於 Textpattern 安裝根目錄）。</p>
+<p>預設值為 <code>themes</code>。</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP Envelope 寄件者位址"><![CDATA[
+<h2>SMTP envelope 寄件者位址</h2>
+<p>除非你在 Textpattern 寄送電子郵件時完全無法成功（完全沒寄出任何郵件），否則此偏好應保持空白。若遇到這類問題，你可以在此輸入任何有效的電子郵件位址，但最好使用與安裝 Textpattern 之網站同一網域的位址（例如若網站為 <code>https://example.com</code>，可使用 <code>you@example.com</code>）。</p>
+<p>技術說明：</p>
+<ul>
+    <li>在類 UNIX／macOS 伺服器上，此電子郵件位址會做為 PHP <code>mail()</code> 函式第 4 個參數（前綴為「-f」）</li>
+    <li>在 Windows 伺服器上，此電子郵件位址會用來設定（或覆寫）<code>php.ini</code> 中的 <code>sendmail_from</code> 設定</li>
+</ul>
+<p>如此可確保 SMTP envelope 寄件者位址（不一定與你在郵件中看到的「From:」標頭相同）會被設定為你在此輸入的電子郵件位址，而部分網頁伺服器要求必須如此設定才能寄送郵件。</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP 主機"><![CDATA[
+<h2>SMTP 主機</h2>
+<p>若想改善信件送達率，並利用外部服務（如 SendGrid、AWS SES、Mailchimp、Mailgun 等）來轉送郵件，請在此指定 SMTP 伺服器。請向 SMTP 服務供應商查詢此值。</p>
+<p>也可以在 <code>config.php</code> 中定義 <code>SMTP_HOST</code> 常數來提供此值，此時偏好設定面板中的欄位會以灰色顯示、無法編輯。</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP 密碼"><![CDATA[
+<h2>SMTP 密碼</h2>
+<p>若 SMTP 連線需要針對指定使用者名稱提供密碼，請在此輸入。詳情請參閱服務供應商文件。</p>
+<p>注意：儘管此處不會顯示密碼，它仍會以明文儲存在資料庫的 prefs 資料表中。若你希望提高安全性，可改在 <code>config.php</code> 中定義 <code>SMTP_PASS</code> 常數。</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP 連接埠"><![CDATA[
+<h2>SMTP 連接埠</h2>
+<p>若你已指定 SMTP 主機，必須同時指定連接埠才能啟用 SMTP 轉送。常見連接埠為：</p>
+<ul>
+    <li>25 - 未加密郵件</li>
+    <li>465 - 傳統（非正式）安全郵件</li>
+    <li>587 - 預設（建議）安全 TLS 郵件</li>
+</ul>
+<p>你選用的 SMTP 供應商可能使用不同連接埠，請參閱其文件。</p>
+<p>也可以在 <code>config.php</code> 中定義 <code>SMTP_PORT</code> 常數來提供此值，此時偏好設定面板中的欄位會以灰色顯示、無法編輯。</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP 安全機制"><![CDATA[
+<h2>SMTP 安全機制</h2>
+<p>選擇 SMTP 供應商所使用的郵件安全通訊協定。詳情請參閱其文件。</p>
+<p>也可以在 <code>config.php</code> 中定義 <code>SMTP_SECTYPE</code> 常數來提供此值，此時偏好設定面板中的欄位會以灰色顯示、無法編輯。</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP 使用者名稱"><![CDATA[
+<h2>SMTP 使用者名稱</h2>
+<p>若 SMTP 連線需要使用者／登入名稱，請在此輸入。詳情請參閱服務供應商文件。</p>
+<p>也可以在 <code>config.php</code> 中定義 <code>SMTP_USER</code> 常數來提供此值，此時偏好設定面板中的欄位會以灰色顯示、無法編輯。</p>
+        ]]></item>
+        <item id="spam_blocklists" title="垃圾郵件黑名單（逗號分隔）"><![CDATA[
+<h2>垃圾郵件黑名單（逗號分隔）</h2>
+<p>在此輸入的<a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">黑名單服務提供者 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a>，會在有留言張貼到你的部落格時被查詢，並用以檢查留言者的 IP 位址。若該 IP 位址在黑名單中，表示過去曾收到一或多次垃圾訊息回報，系統便會拒絕該留言。不論檢查結果為何，Textpattern 都不會儲存留言者的 IP 位址。</p>
+<p>你可以在此輸入以逗號分隔的網域清單。請注意，你必須自行負責確認所用黑名單是否符合你的需求。</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="訂閱以摘要顯示？（預設為顯示全部內容）"><![CDATA[
+<h2>僅訂閱文章摘要？</h2>
+<p>若設為「No」，feed 項目會包含完整文章內文。</p>
+<p>若設為「Yes」，feed 項目會在有摘要時，改以文章摘要取代內文。</p>
+        ]]></item>
+        <item id="tempdir" title="暫存路徑"><![CDATA[
+<h2>暫存路徑</h2>
+<p>設定指向暫存（通常稱為「tmp」或「temp」）目錄的<strong>絕對路徑</strong>。PHP 必須擁有寫入該目錄的權限。此目錄會用於臨時檔案，例如各種上傳（外掛、檔案或圖片）。</p>
+<p><strong>注意事項：</strong>
+<ul>
+    <li>「temporary」與「plugin cache」兩項設定請勿指定相同目錄，否則會造成問題（Textpattern 會嘗試將暫存記錄檔內容當成外掛執行）。</li>
+    <li>為了更高的安全性，建議將此目錄移到網站對外可讀根目錄（docroot）以外的位置。</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="管理後台佈景主題"><![CDATA[
+<h2>管理後台佈景主題</h2>
+<p>任何人登入 Textpattern 時所使用的預設管理介面佈景主題。Textpattern 內建多款管理佈景主題，你也可以將自訂主題套件加入 <code>textpattern/admin-themes</code> 目錄，使其可供使用。</p>
+        ]]></item>
+        <item id="trailing_slash" title="在網址後加上結尾斜線"><![CDATA[
+<h2>在網址後加上結尾斜線</h2>
+<p>決定 Textpattern 是否會自動在產生的網址結尾加上斜線。選項包括：</p>
+<ul>
+    <li><strong>No</strong> - 永不加上</li>
+    <li><strong>List</strong> - 只有在列表型著陸頁（例如文章清單頁，而非單篇文章頁）加上</li>
+    <li><strong>Yes</strong> - 總是加上</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="在 txp:evaluate 中啟用的 PHP 函式"><![CDATA[
+<h2>在 txp:evaluate 中啟用的 PHP 函式</h2>
+<p>此處為以逗號分隔的 <code>function</code> 或 <code>alias=function</code> 清單，例如 <code>md5</code>、<code>replace=str_replace</code>。清單中指定的項目可在 <code>&lt;txp:evaluate /&gt;</code> 標籤的 <code>query</code> 屬性中使用：</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>function</code> 應回傳標量值（<strong>不可</strong>為陣列或物件）。</p>
+        ]]></item>
+        <item id="use_comments" title="使用迴響功能？"><![CDATA[
+<h2>使用迴響功能？</h2>
+<p>此設定決定是否啟用 Textpattern 的留言／迴響功能。</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="以 Email 產生 Feed ID？（預設為網址產生）"><![CDATA[
+<h2>以 Email 產生 Feed ID？（預設為網址）</h2>
+<p>Atom feed 中的項目需要唯一 ID。</p>
+<p>為了產生對你的站台而言唯一的 ID，Textpattern 允許你在這些 ID 中選擇使用電子郵件位址或網域名稱。電子郵件位址會使用建立網站時的第一個郵件位址。除非你將來很可能會變更網域名稱，否則通常可放心將此設定為「No」。</p>
+        ]]></item>
+        <item id="use_plugins" title="使用外掛？"><![CDATA[
+<h2>使用外掛？</h2>
+<p>此設定讓你可以完全停用 Textpattern 外掛支援。當你想偵錯網站錯誤並確認是否與一或多個外掛有關時，這會很有用。</p>
+        ]]></item>
+        <item id="use_textile" title="預設文字格式"><![CDATA[
+<h2>預設文字格式</h2>
+<p>你在此選擇的文字格式，會成為「Write」面板中摘要與內文標記的預設值。你可以選擇啟用完整 Textile 處理、只將換行轉換為 HTML 段落標記，或完全不轉換文字。</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 是一個用於簡化純文字轉換為 HTML 的工具。啟用後，Textile 會處理文章內文並回傳結構良好的 HTML。</p>
+<p>Textile 也提供一組強大且易學的指令，用於排版文字、定義列表、標題與引述區塊等結構，並插入連結與圖片。</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="版區面板">
+        <item id="section_category" title="簡介"><![CDATA[
+<h2>簡介</h2>
+<p>在 Textpattern 中，版區可視為報紙中的各個版面；同屬一份刊物，但每個版面可能有不同版型或文章風格，依此類推。</p>
+<p>對多數網站來說，只需要建立少量必要的版區即可。</p>
+<h3>擁有三個版區的網站可能情境：</h3>
+<ol>
+    <li><strong>Archive：</strong>所有出現在首頁的文章都屬於的「Section」。讀者點擊文章永久連結時，會以這個「Section」所指派的頁面版型來顯示該文章。若要前往指派給「Archive」版區的最新文章分頁清單，網址會是 <code>https://example.com/archive/</code>。</li>
+    <li><strong>About：</strong>「關於本網站」頁面，與首頁與「Archive」版區不同，通常較為靜態，可能使用不同版型，而且通常只會有一篇文章。「About」版區的網址會是 <code>https://example.com/about/</code>。</li>
+    <li><strong>Photos：</strong>一個「Section」，具有不同的版面配置（也可能使用不同 CSS），用來顯示照片而非一般文章。</li>
+</ol>
+<p>請注意，系統中永遠存在一個名為 default 的特殊隱藏版區。此 default 版區會使用名為 default 的頁面與名為 default 的樣式，並據此組成網站首頁。</p>
+        ]]></item>
+        <item id="section_default" title="預設發佈版區"><![CDATA[
+<h2>預設發佈版區</h2>
+<p>此選項決定在「Write」面板建立新文章時，「Section」選單中預先選取的版區。</p>
+<p>若多數文章都會屬於某個特定版區，請在此自清單中選取它。變更會立即生效。</p>
+<p>你可以在「Write」面板中針對個別文章覆寫此設定，只要在「Sort and display」區段選擇不同的版區即可。</p>
+        ]]></item>
+        <item id="section_description" title="說明"><![CDATA[
+<h2>說明</h2>
+<p>版區說明是選用的元件，可協助搜尋引擎與網站爬蟲更好地辨識與整理內容。</p>
+<p>文章說明的長度上限為 255 個字元。請注意，有些搜尋引擎出於在搜尋結果頁面（SERP）顯示的實用性考量，會對頁面 <code>meta description</code> 的長度設下限制，而這個長度可能小於 Textpattern 所允許的 255 個字元。</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="在首頁顯示本版區文章？"><![CDATA[
+<h2>Section articles appear on front page?</h2>
+<p>有些版區中的文章較接近「靜態」網頁，在網站首頁以時間順序流動的文章列表中可能顯得不太合適。</p>
+<p>將此設為「No」會阻止指派到此版區的文章出現在首頁。</p>
+        ]]></item>
+        <item id="section_searchable" title="允許站內搜尋此版區？"><![CDATA[
+<h2>Include this section in site search?</h2>
+<p>此選項決定屬於此版區的文章是否會出現在全站搜尋結果中。</p>
+        ]]></item>
+        <item id="section_syndicate" title="整合此版區文章至訂閱項目？"><![CDATA[
+<h2>整合此版區文章至訂閱項目？</h2>
+<p>決定此版區的文章是否會出現在網站的 RSS 與 Atom feed 中。</p>
+        ]]></item>
+        <item id="section_uses_css" title="樣式表"><![CDATA[
+<h2>樣式表</h2>
+<p>若你想為特定版區覆蓋預設樣式表，可在此設定。</p>
+<p>這只與 Textpattern「Styles」面板中管理的樣式表有關；如果你將 CSS 放在 Textpattern 之外（強烈建議如此），這個選項就不會有任何效果。</p>
+        ]]></item>
+        <item id="section_uses_page" title="頁面樣板"><![CDATA[
+<h2>頁面樣板</h2>
+<p>在 Textpattern 中，版區會與頁面樣板配對。</p>
+        ]]></item>
+        <item id="section_uses_skin" title="佈景主題"><![CDATA[
+<h2>使用佈景主題</h2>
+<p>若你想變更特定版區所使用的佈景主題，可從目前已安裝的佈景主題清單中於此設定。</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="安裝面板">
+        <item id="setup_admin_url" title="管理子網域"><![CDATA[
+<h2>管理子網域</h2>
+<p>你希望用來存取 Textpattern 管理介面的子網域（例如 <code>admin.example.com</code>）。</p>
+<p>詳細資訊請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern 多站台安裝</a>。</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie 網域"><![CDATA[
+<h2>Cookie 網域</h2>
+<p>你希望用於 Textpattern Cookie 的（子）網域。</p>
+<p>詳細資訊請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern 多站台安裝</a>。</p>
+        ]]></item>
+        <item id="setup_user_login" title="使用者登入名稱"><![CDATA[
+<h2>使用者登入名稱</h2>
+<p>你將用來管理網站的管理者（Publisher）帳號登入名稱。</p>
+<p>雖然名稱沒有嚴格限制，但最好避免過於複雜的字元組合與容易被猜到的帳號名稱（例如 <code>admin</code>、<code>administrator</code> 等）。</p>
+        ]]></item>
+        <item id="setup_user_pass" title="使用者密碼"><![CDATA[
+<h2>使用者密碼</h2>
+<p>由於此帳號在 Textpattern 中擁有最高存取權限，請選擇強度極高的密碼或（更佳選擇）通關片語。</p>
+<h3>建議</h3>
+<ul>
+    <li>混用大寫與小寫字母</li>
+    <li>加入數字</li>
+    <li>加入符號</li>
+    <li>長度至少八個字元</li>
+    <li><strong>避免</strong>任何個人資訊（日期、姓名、地點、家人、寵物等）</li>
+    <li><strong>避免</strong>任何單一或重複的字典單字，不論拼字、語言或大小寫為何</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="資料表前綴字串"><![CDATA[
+<h2>資料表前綴字串</h2>
+    <p>只有在你需要在同一個資料庫中安裝多個 Textpattern 時，才需要使用資料表前綴字串。每一套 Textpattern 安裝都需要使用不同的前綴。</p>
+    <p>請注意，前綴必須符合下列規則：</p>
+<ul>
+    <li><strong>第一個字元：</strong>必須是 a-z、A-Z 或底線</li>
+    <li><strong>後續字元：</strong>只能是 a-z、A-Z、0-9 或底線</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="佈景主題面板">
+        <item id="skin_author" title="佈景主題作者"><![CDATA[
+<h2>佈景主題作者</h2>
+<p>此佈景主題的作者（可選填，可為多位）。</p>
+        ]]></item>
+        <item id="skin_author_uri" title="佈景主題網站"><![CDATA[
+<h2>佈景主題網站</h2>
+<p>可取得此佈景主題完整資訊與／或最新版本的網址（選填）。</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="同時從磁碟刪除佈景主題樣板"><![CDATA[
+<h2>同時從磁碟刪除佈景主題樣板</h2>
+<p>若勾選，選取的佈景主題中所有樣板檔案都會從磁碟永久刪除。不過，只要這些佈景主題相關目錄及其子目錄中仍有其他檔案（例如 JavaScript、圖片⋯⋯），這些目錄就不會被刪除。</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="匯入時從資料庫刪除未使用的樣板"><![CDATA[
+<h2>匯入時從資料庫刪除未使用的樣板</h2>
+<p>若勾選，每個選取佈景主題中，在磁碟上沒有對應檔案的樣板，會從資料庫中永久刪除。完成後，資料庫中的樣板內容將儘可能與磁碟上的檔案保持一致。</p>
+<p>請注意，若你移除了 Textpattern 需要的樣板檔案，系統會在資料庫中為你建立空白版本。</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="匯出時從磁碟刪除未使用的樣板"><![CDATA[
+<h2>匯出時從磁碟刪除未使用的樣板</h2>
+<p>若勾選，每個選取佈景主題中，在資料庫裡沒有對應項目的樣板檔案，會從磁碟上的佈景主題中永久刪除。完成後，檔案系統中的樣板將與資料庫中的內容完全一致。</p>
+        ]]></item>
+        <item id="skin_description" title="佈景主題說明"><![CDATA[
+<h2>佈景主題說明</h2>
+<p>可在此提供此佈景主題設計／版面的簡短摘要（選填）。</p>
+<p>佈景主題說明的長度上限為 255 個字元。</p>
+        ]]></item>
+        <item id="skin_import" title="匯入佈景主題"><![CDATA[
+<h2>從磁碟匯入佈景主題</h2>
+<p>此表單可讓你從 themes 目錄將佈景主題匯入 Textpattern 資料庫。</p>
+<p>可匯入的佈景主題必須由可讀取的父資料夾組成，資料夾名稱需與佈景主題名稱相同，且資料夾內須包含格式正確、可讀取的 <code>manifest.json</code> 檔案。此佈景主題資料夾也應包含 pages、forms 與 styles 等同名子資料夾。</p>
+<p>頁面與表單應使用 <code>.txp</code> 副檔名，樣式表則須為 <code>.css</code> 檔案。表單也應依類型分組放入專用子目錄。Textpattern 會在匯入時自動建立任何缺少的必要樣板。</p>
+<p>請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">佈景主題文件 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 以瞭解在 Textpattern CMS 中建立、安裝與使用佈景主題的更多資訊。</p>
+        ]]></item>
+        <item id="skin_name" title="佈景主題名稱"><![CDATA[
+<h2>佈景主題名稱</h2>
+<p>佈景主題的名稱會用於佈景主題的資料夾名稱與其他技術用途（必填）。</p>
+<p>名稱不應包含特殊字元或空白。</p>
+        ]]></item>
+        <item id="skin_overview" title="佈景主題簡介"><![CDATA[
+<h2>佈景主題簡介</h2>
+<p>Textpattern 佈景主題是一組頁面、表單與樣式表的集合。佈景主題讓你可以邏輯性地將站台資產分組，方便識別或分享給他人。建立或匯入佈景主題，以及其中包含的任何資產，<em>不會</em>影響你現有的網站。你可以自由編輯或修改任何尚未指派給網站某個 Section 的資產，而不會影響網站本身。</p>
+<p>若要編輯佈景主題中的資產，請造訪 Pages、Forms 或 Styles 面板，並使用下拉選單選擇你要作業的佈景主題。你正在編輯的佈景主題會在整個管理介面中被記住，方便快速在不同資產類型間切換。這稱為你的<em>工作佈景主題</em>（working theme）。</p>
+<p>請參閱 <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern 使用者文件 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 以取得更多資訊。</p>
+        ]]></item>
+        <item id="skin_title" title="佈景主題標題"><![CDATA[
+<h2>佈景主題標題</h2>
+<p>佈景主題的描述性標題，用於在 Textpattern 各面板中識別佈景主題。</p>
+<p>標題可以包含特殊字元與空白。</p>
+        ]]></item>
+        <item id="skin_version" title="佈景主題版本"><![CDATA[
+<h2>佈景主題版本</h2>
+<p>此佈景主題目前安裝版本的版本號（選填）。</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

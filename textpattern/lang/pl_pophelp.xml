@@ -2,115 +2,510 @@
 <resources>
 <help lang="pl">
     <group id="admin" title="Panel użytkownika">
-        <item id="about_privileges" title="O rolach"><![CDATA[]]></item>
-        <item id="create_author" title="Utwórz autora"><![CDATA[]]></item>
+        <item id="about_privileges" title="O rolach"><![CDATA[
+<h2>O rolach</h2>
+<h3>Wydawca</h3>
+<ul>
+    <li>może zarządzać artykułami, komentarzami i linkami</li>
+    <li>może używać PHP w artykułach, jeśli preferencja administratora „Zezwolić na PHP w artykułach?” jest ustawiona na „Tak”</li>
+    <li>może zarządzać obrazami i plikami</li>
+    <li>może zarządzać sekcjami i kategoriami</li>
+    <li>może zarządzać stronami, formularzami i stylami</li>
+    <li>może przeglądać informacje diagnostyczne</li>
+    <li>może zarządzać ustawieniami witryny</li>
+    <li>może zarządzać użytkownikami</li>
+    <li>może zarządzać logami odwiedzin</li>
+    <li>może zarządzać wtyczkami</li>
+    <li>może importować dane</li>
+</ul>
+<h3>Redaktor naczelny</h3>
+<ul>
+    <li>może zarządzać artykułami, komentarzami i linkami</li>
+    <li>może używać PHP w artykułach, jeśli preferencja administratora „Zezwolić na PHP w artykułach?” jest ustawiona na „Tak”</li>
+    <li>może zarządzać obrazami i plikami</li>
+    <li>może zarządzać sekcjami i kategoriami</li>
+    <li>może zarządzać stronami, formularzami i stylami</li>
+    <li>może przeglądać informacje diagnostyczne</li>
+    <li>może zarządzać ustawieniami witryny</li>
+    <li>może przeglądać użytkowników</li>
+    <li>może zarządzać logami odwiedzin</li>
+    <li>może zarządzać wtyczkami</li>
+    <li>może importować dane</li>
+</ul>
+<h3>Redaktor merytoryczny</h3>
+<ul>
+    <li>może zarządzać artykułami z jednym ograniczeniem:
+        <ul>
+            <li>nie może usuwać artykułów należących do innych użytkowników</li>
+        </ul>
+    </li>
+    <li>może zarządzać komentarzami i linkami</li>
+    <li>może zarządzać obrazami i plikami</li>
+    <li>może zarządzać kategoriami</li>
+    <li>może zarządzać stronami i formularzami</li>
+    <li>może przeglądać użytkowników</li>
+    <li>może zarządzać logami odwiedzin</li>
+</ul>
+<h3>Redaktor</h3>
+<ul>
+    <li>może zarządzać własnymi artykułami, przeglądać artykuły innych użytkowników</li>
+    <li>może zarządzać obrazami i plikami</li>
+</ul>
+<h3>Freelancer</h3>
+<ul>
+    <li>może zarządzać własnymi artykułami w ograniczonym zakresie:
+        <ul>
+            <li>może modyfikować artykuł tylko do momentu jego publikacji</li>
+            <li>może nadawać status <em>jedynie</em> Szkic, Ukryty lub Oczekujący</li>
+        </ul>
+    </li>
+    <li>może przeglądać artykuły innych użytkowników</li>
+</ul>
+<h3>Projektant</h3>
+<ul>
+    <li>może zarządzać własnymi artykułami w ograniczonym zakresie:
+        <ul>
+            <li>może modyfikować artykuł tylko do momentu jego publikacji</li>
+            <li>może nadawać status <em>jedynie</em> Szkic, Ukryty lub Oczekujący</li>
+        </ul>
+    </li>
+    <li>może przeglądać artykuły innych użytkowników</li>
+    <li>może zarządzać obrazami</li>
+    <li>może zarządzać sekcjami</li>
+    <li>może zarządzać stronami, formularzami i stylami</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Utwórz autora"><![CDATA[
+<h2>Dodaj nowego autora</h2>
+<p>Wiadomość powitalna i instrukcje logowania zostaną wysłane mailem do nowego autora.</p>
+        ]]></item>
     </group>
 
-    <group id="article" title="">
-        <item id="article_image" title="Obrazek do artykułu"><![CDATA[]]></item>
+    <group id="article" title="Panel pisania">
+        <item id="article_image" title="Obrazek do artykułu"><![CDATA[
+<h2>Obraz artykułu</h2>
+<p>Aby powiązać obrazy z tym artykułem, umieść tutaj jedną z poniższych opcji:</p>
+<ol>
+    <li>jeden lub więcej identyfikatorów obrazów Textpattern, oddzielonych przecinkami (np. <code>12, 25, 18</code>)</li>
+    <li>jeden lub więcej względnych adresów URL do obrazu, rozdzielonych przecinkami (np. <code>/images/my_pic.jpg</code>)</li>
+    <li>jeden lub więcej pełnych adresów URL, rozdzielonych przecinkami (np. <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Pierwszy obraz można wyświetlić, umieszczając znacznik <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> wewnątrz formularza artykułu. Domyślnie wygeneruje on kompletne znacznik HTML <code>&lt;img&gt;</code> wskazujący na wybrany obraz.</p>
+<p>Możesz wyświetlać galerie za pomocą znacznika <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
         <item id="body" title="Treść"><![CDATA[
 <h2>Treść</h2>
 <p>Główny tekst artykułu jest zawarty w polu treści.</p>
 <p>Podczas tworzenia lub przygotowywania artykułów do publikacji w Textpattern, autor może przełączać się między trzema widokami artykułu: zwykły tekst, znaczniki HTML (kod, na podstawie którego przeglądarki sieci web wyświetlają artykuł) i wygenerowany podgląd treści.</p>        ]]></item>
-        <item id="description" title="Opis"><![CDATA[]]></item>
+        <item id="description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis artykułu jest opcjonalnym elementem, który może pomóc wyszukiwarkom i robotom sieciowym lepiej identyfikować i porządkować treści.</p>
+<p>Opis artykułu jest ograniczony do maksymalnie 255 znaków. Należy pamiętać, że niektóre wyszukiwarki nakładają ograniczenia na długość <code>meta description</code> strony ze względów praktycznych przy wyświetlaniu w wynikach wyszukiwania (SERP), i limit ten może być niższy niż 255 znaków dostępnych w Textpattern.</p>
+<p>Pamiętaj, że opis artykułu różni się od zajawki artykułu, choć oba pola akceptują podobne treści. Opis artykułu jest przeznaczony głównie dla wyszukiwarek i robotów, podczas gdy zajawka lepiej nadaje się na zwięzłe podsumowanie artykułu dla czytelnika.</p>
+        ]]></item>
         <item id="excerpt" title="Zajawka"><![CDATA[
 <h2>Fragment</h2>
 <p>Fragmenty artykułu są opcjonalne. Fragmenty mogą być używane jako krótkie podsumowanie artykułu, które jest wyświetlane jako część spisu treści, wykorzystane zamiast całego artykułu w kanale RSS/Atom lub w wielu innych zastosowaniach.</p>
         ]]></item>
-        <item id="expire_date" title="Data wygaśnięcia"><![CDATA[]]></item>
+        <item id="expire_date" title="Data wygaśnięcia"><![CDATA[
+<h2>Data wygaśnięcia</h2>
+<p>Moment, w którym artykuł zostanie oznaczony jako wygasły. Czas jest opcjonalny i może zostać ustawiony na dowolny moment w przeszłości lub przyszłości.</p>
+<p>Pola odpowiadają następującym informacjom:</p>
+<ul>
+    <li>Rok / Miesiąc / Dzień</li>
+    <li>Godzina (format 24‑godzinny) : Minuta : Sekunda</li>
+</ul>
+<p>Gdy nadejdzie ten moment — lub gdy podano czas z przeszłości — artykuł wygasa.</p>
+<p>Jeśli opcja wyświetlania wygasłych artykułów jest włączona, artykuł pozostaje widoczny. Jeśli opcja wyświetlania wygasłych artykułów jest wyłączona, odwiedzający stronę artykułu otrzymają błąd HTTP 410 zamiast treści artykułu.</p>
+        ]]></item>
         <item id="keywords" title="Słowa kluczowe"><![CDATA[
 <h2>Słowa kluczowe</h2>
 <p>Słowa kluczowe są przydatne do uszczegółowienia relacji między artykułami nawet z różnych kategorii.</p>
 <p>Słowa kluczowe muszą być oddzielone przecinkami.</p>
         ]]></item>
-        <item id="override_form" title="Nadpisz formę"><![CDATA[]]></item>
-        <item id="publish_date" title="Data publikacji"><![CDATA[]]></item>
-        <item id="status" title="Status"><![CDATA[]]></item>
+        <item id="override_form" title="Nadpisz formę"><![CDATA[
+<h2>Nadpisanie formularza</h2>
+<p>Artykuł może opcjonalnie używać innego formularza niż domyślnie przypisany – na przykład, aby wyświetlać zajawkę artykułu za pomocą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> zamiast treści artykułu za pomocą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> – ustawiasz to tutaj.</p>
+        ]]></item>
+        <item id="publish_date" title="Data publikacji"><![CDATA[
+<h2>Data publikacji</h2>
+<p>Czas, kiedy artykuł lub plik został opublikowany albo ostatnio zmodyfikowany. Czas może zostać ustawiony na moment publikacji elementu lub na dowolny moment w przeszłości bądź przyszłości.</p>
+<p>Pola odpowiadają następującym informacjom:</p>
+<ul>
+    <li>Rok / Miesiąc / Dzień</li>
+    <li>Godzina (format 24‑godzinny) : Minuta : Sekunda</li>
+</ul>
+<p>Element z czasem publikacji późniejszym niż bieżący (tzn. w przyszłości) nie pojawi się na stronie publicznej ani w kanałach RSS/Atom, dopóki ten moment nie nadejdzie.</p>
+        ]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Określa widoczność publikacji tego artykułu Textpattern.</p>
+<p>Status publikacji może przyjmować jedną z poniższych wartości:</p>
+<ul>
+<li><strong>Szkic</strong>: traktowany jako praca w toku i niewidoczny poza obszarem administracyjnym Textpattern (tzn. niewidoczny w witrynie i nie uwzględniany w kanałach).</li>
+<li><strong>Ukryty</strong>: artykuł nie jest widoczny poza obszarem administracyjnym Textpattern. Przydatne do usuwania treści z witryny bez konieczności ich trwałego kasowania.</li>
+<li><strong>Oczekujący</strong>: uznawany za gotowy do publikacji i oczekujący na zatwierdzenie, ale niewidoczny poza obszarem administracyjnym Textpattern.</li>
+<li><strong>Opublikowany</strong> (Live): zazwyczaj widoczny poza obszarem administracyjnym Textpattern (tzn. widoczny w witrynie, uwzględniany w kanałach, jeśli zezwalają na to preferencje). Jeśli artykuł ma status „Opublikowany” i ustawioną datę wygaśnięcia, status pozostanie „Opublikowany” po upływie tej daty, ale artykuł będzie widoczny poza panelem administracyjnym tylko wtedy, gdy zezwolono na publikowanie wygasłych artykułów.</li>
+<li><strong>Przyklejony</strong> (Sticky): podobny do artykułu <strong>Opublikowanego</strong> w tym sensie, że może być wyświetlany odwiedzającym witrynę, ale <strong>nie</strong> pojawi się na listach artykułów, chyba że odpowiedni znacznik <code>article</code> lub <code>article_custom</code> zawiera atrybut <code>status</code> z wartością <code>sticky</code>.</li>
+</ul>
+<p>Uwaga: treść, która nie jest publicznie widoczna w witrynie, nadal może być podglądana przez zalogowanych użytkowników.</p>
+        ]]></item>
         <item id="title" title="Tytuł"><![CDATA[
 <h2>Tytuł</h2>
 <p>Dodaj tytuł odpowiedni dla tego artykułu.</p>
 <p>Tytuł artykułu jest ograniczony do maksymalnie 255 znaków.</p>
         ]]></item>
-        <item id="url_title" title="Adres URL"><![CDATA[]]></item>
+        <item id="url_title" title="Adres URL"><![CDATA[
+<h2>Tytuł tylko dla URL</h2>
+<p>Aby użyć określonego tytułu w bezpośrednim adresie URL artykułu, wprowadź go tutaj. Jeśli pozostawisz to pole puste, tytuł URL zostanie automatycznie wygenerowany na podstawie tytułu artykułu.</p>
+<p>Jest to szczególnie przydatne, gdy tytuł artykułu zawiera znaki spoza ASCII.</p>
+        ]]></item>
     </group>
 
     <group id="category" title="Panel kategorii">
-        <item id="article_category" title="Artykuły"><![CDATA[]]></item>
-        <item id="category_description" title="Opis"><![CDATA[]]></item>
+        <item id="article_category" title="Artykuły"><![CDATA[
+<h2>Artykuły</h2>
+<p>W przeciwieństwie do sekcji, które definiują strukturę nawigacyjną witryny, kategorie artykułów pozwalają organizować artykuły według tematyki. Po przypisaniu kategorii można przeglądać listy artykułów należących do określonych kategorii.</p>
+<p>Na przykład prawdopodobne kategorie artykułów w serwisie o jedzeniu mogą być następujące:</p>
+<ul>
+    <li>surowe składniki</li>
+    <li>zakupy</li>
+    <li>przepisy</li>
+    <li>podanie potraw</li>
+    <li>restauracje</li>
+    <li>szefowie kuchni</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Opis"><![CDATA[
+<h2>Opis kategorii</h2>
+<p>Opis kategorii jest opcjonalnym elementem, który może pomóc wyszukiwarkom i robotom sieciowym lepiej identyfikować i porządkować treści.</p>
+<p>Opis kategorii jest ograniczony do maksymalnie 255 znaków. Należy pamiętać, że niektóre wyszukiwarki nakładają ograniczenia na długość <code>meta description</code> strony ze względów praktycznych przy wyświetlaniu w wynikach wyszukiwania (SERP), i limit ten może być niższy niż 255 znaków dostępnych w Textpattern.</p>
+        ]]></item>
         <item id="file_category" title="Pliki"><![CDATA[
 <h2>Pliki</h2>
 <p>Kategorie plików są opcjonalne i przydatne do grupowania wybranych plików razem.</p>
         ]]></item>
         <item id="image_category" title="Obrazy"><![CDATA[
 <h2>Obrazy</h2>
-<p>Kategorie obrazów są opcjonalne, ale przydatne zarówno dla organizacji, jak i do definiowania zestawów obrazów, które mogą być wyświetlane za pomocą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_index"><code>&lt;txp:image_index /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera link zewnętrzny w nowym oknie)</span></a> i <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/image_display"><code>&lt;txp:image_display /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera link zewnętrzny w nowym oknie)</span></a> tagów.</p>
+<p>Kategorie obrazów są opcjonalne i przydatne zarówno do wewnętrznej organizacji, jak i do definiowania zestawów obrazów, które można wyświetlać za pomocą znacznika <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
         ]]></item>
-        <item id="link_category" title="Linki"><![CDATA[]]></item>
+        <item id="link_category" title="Linki"><![CDATA[
+<h2>Linki</h2>
+<p>Kategorie linków są opcjonalne i przydają się do wyświetlania różnych grup linków, np. „Przyjaciele”, „Rzymianie”, „Rodacy”.</p>
+<p>Takie selektywne listy linków są wyświetlane za pomocą znacznika <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, na przykład:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category=&quot;Friends&quot; /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
     </group>
 
     <group id="diag" title="Panel diagnostyczny">
-        <item id="clean_url_data_failed" title=""><![CDATA[]]></item>
-        <item id="clean_url_test_failed" title="Test przyjaznych adresów URL nie powiódł się"><![CDATA[]]></item>
-        <item id="diag_clear_private" title="Ukryj osobiste informacje"><![CDATA[
-<h2>Ukryj prywatne informacje</h2>
-<p>Ukryj prywatne informacje dla dodatkowego bezpieczeństwa. Jeśli informacje diagnostyczne mają być udostępniane w formacie widocznym publicznie, na przykład forum wsparcia Textpattern, zmniejsza to ryzyko bezpieczeństwa poprzez pominięcie wrażliwych informacji o serwerze. </p>
+        <item id="clean_url_data_failed" title="Test przyjaznych adresów URL (dane) nie powiódł się"><![CDATA[
+<h2>Błąd danych dla przyjaznych adresów URL</h2>
+<p>Wygląda na to, że adresy URL witryny (np. <code>https://example.com/section/article</code>) obecnie nie działają albo serwer WWW nie obsługuje procedury testowej sprawdzającej, czy przyjazne adresy URL działają; jeśli w Twojej witrynie przyjazne adresy URL działają prawidłowo, ten komunikat można bezpiecznie zignorować.</p>
+<p>Jeśli przyjazne adresy URL <em>nie</em> działają, może to oznaczać, że:</p>
+<ul>
+    <li>ustawienie „Adres URL witryny” jest nieprawidłowe lub strona pod tym adresem nie jest obsługiwana przez tę instancję Textpattern</li>
+    <li>serwer wymaga zmian w pliku <code>.htaccess</code> lub podobnej dyrektywie serwera, aby przyjazne adresy URL działały</li>
+    <li>serwer w ogóle nie obsługuje przyjaznych adresów URL</li>
+</ul>
+<p>Test przyjaznych adresów URL próbuje pobrać stronę spod adresu podanego w preferencji „Adres URL witryny”, aby sprawdzić, czy wszystkie parametry przyjaznych adresów działają poprawnie. Jeśli pod ten adres wskazuje inna witryna lub został on zastąpiony stroną statyczną bądź podobną, test zakończy się niepowodzeniem. Do czasu rozwiązania problemu należy używać „zaśmieconych” adresów URL (np. <code>https://example.com?s=section&amp;id=4</code>). Upewnij się, że „Tryb trwałych odsyłaczy” w preferencjach administratora jest ustawiony odpowiednio.</p>
+<p>Zwróć uwagę, że użycie wtyczki przełączającej witrynę w „tryb konserwacji” może wywołać to ostrzeżenie.</p>
         ]]></item>
-        <item id="dev_version_live" title=""><![CDATA[]]></item>
+        <item id="clean_url_test_failed" title="Test przyjaznych adresów URL nie powiódł się"><![CDATA[
+<h2>Test przyjaznych adresów URL nie powiódł się</h2>
+<p>Wygląda na to, że adresy URL witryny (np. <code>https://example.com/section/article</code>) obecnie nie działają albo serwer WWW nie obsługuje procedury testowej sprawdzającej, czy przyjazne adresy URL działają; jeśli w Twojej witrynie przyjazne adresy URL działają prawidłowo, ten komunikat można bezpiecznie zignorować.</p>
+<p>Jeśli przyjazne adresy URL <em>nie</em> działają, może to oznaczać, że:</p>
+<ul>
+    <li>ustawienie „Adres URL witryny” jest nieprawidłowe lub strona pod tym adresem nie jest obsługiwana przez tę instancję Textpattern</li>
+    <li>serwer wymaga zmian w pliku <code>.htaccess</code> lub podobnej dyrektywie serwera, aby przyjazne adresy URL działały</li>
+    <li>serwer w ogóle nie obsługuje przyjaznych adresów URL</li>
+</ul>
+<p>Test przyjaznych adresów URL próbuje pobrać stronę spod adresu podanego w preferencji „Adres URL witryny”, aby sprawdzić, czy wszystkie parametry przyjaznych adresów działają poprawnie. Jeśli pod ten adres wskazuje inna witryna lub został on zastąpiony stroną statyczną bądź podobną, test zakończy się niepowodzeniem. Do czasu rozwiązania problemu należy używać „zaśmieconych” adresów URL (np. <code>https://example.com?s=section&amp;id=4</code>). Upewnij się, że „Tryb trwałych odsyłaczy” w preferencjach administratora jest ustawiony odpowiednio.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Równoczesne logowania na serwerze produkcyjnym"><![CDATA[
+<h2>Równoczesne logowania na serwerze produkcyjnym</h2>
+<p>Zezwalanie na logowanie do tego samego konta użytkownika z wielu sesji stanowi ryzyko bezpieczeństwa i nie jest zalecane. Wyłącz tę funkcję w panelu preferencji zaawansowanych, chyba że rozumiesz i akceptujesz związane z tym ryzyko.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Ukryj informacje prywatne"><![CDATA[
+<h2>Ukryj prywatne informacje</h2>
+<p>Ukryj prywatne informacje dla dodatkowego bezpieczeństwa. Jeśli informacje diagnostyczne mają być udostępniane w publicznie widocznej formie, na przykład na forum wsparcia Textpattern, zmniejsza to ryzyko bezpieczeństwa poprzez pominięcie wrażliwych informacji o serwerze.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Kod rozwojowy na serwerze produkcyjnym"><![CDATA[
+<h2>Kod rozwojowy na serwerze produkcyjnym</h2>
+<p>Wersje rozwojowe Textpattern nie są zalecane do użycia na serwisach produkcyjnych. To ostrzeżenie można zignorować, jeśli ryzyko jest Ci znane i akceptowalne.</p>
+        ]]></item>
         <item id="dir_not_writable" title="Katalog nie jest zapisywalny"><![CDATA[
 <h2>Katalog nie jest zapisywalny</h2>
-<p>Aby użyć możliwości przesyłania plików i obrazów, te katalogi muszą być zapisywalne przez PHP za pośrednictwem użytkownika serwera WWW. Można to zrobić z klientem (S)FTP lub ewentualnie w wierszu poleceń, wydając polecenie <code>chmod 755 /ścieżka/do/katalogu</code></p>
+<p>Aby korzystać z możliwości wgrywania plików i obrazów, te katalogi muszą być zapisywalne przez PHP za pośrednictwem użytkownika serwera WWW. Można to zrobić za pomocą klienta (S)FTP lub w wierszu poleceń, wydając komendę <code>chmod 755 /ścieżka/do/katalogu</code>.</p>
         ]]></item>
-        <item id="dns_lookup_fails" title="Błąd DNS"><![CDATA[]]></item>
-        <item id="file_uploads_disabled" title="Wgrywanie plików jest wyłączone"><![CDATA[
+        <item id="dns_lookup_fails" title="Błąd DNS"><![CDATA[
+<h2>Wyszukiwanie DNS nie powiodło się</h2>
+<p>Wygląda na to, że adres URL podany jako adres witryny jest nieosiągalny.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Dodawanie plików na serwer jest wyłączone"><![CDATA[
 <h2>Wgrywanie plików jest wyłączone</h2>
-<p>Aktualna konfiguracja serwera wskazuje, że przesyłanie plików jest wyłączone. Sprawdź i zmień ustawienia <code>file_uploads</code> w <code>php.ini</code> lub skontaktuj się z hostem witryny w celu uzyskania pomocy.</p>
+<p>Aktualna konfiguracja serwera wskazuje, że wgrywanie plików jest wyłączone. Sprawdź i zmień ustawienie <code>file_uploads</code> w <code>php.ini</code> lub skontaktuj się z dostawcą hostingu, aby uzyskać pomoc.</p>
         ]]></item>
-        <item id="htaccess_missing" title="Brak pliku .htaccess"><![CDATA[]]></item>
-        <item id="index_inaccessible" title=""><![CDATA[]]></item>
-        <item id="missing_files" title="Brakujące pliki"><![CDATA[]]></item>
-        <item id="mod_rewrite_missing" title="Brak mod_rewrite Apache"><![CDATA[]]></item>
-        <item id="modified_files" title="Zmodyfikowane pliki"><![CDATA[]]></item>
-        <item id="mysql_table_errors" title="Błędy w tabeli MySQL"><![CDATA[]]></item>
-        <item id="no_temp_dir" title="Nie zdefiniowano katalogu tymczasowego"><![CDATA[]]></item>
-        <item id="old_placeholder_exists" title=""><![CDATA[]]></item>
-        <item id="path_to_site_inaccessible" title="Katalog witryny nieczytelny"><![CDATA[]]></item>
-        <item id="php_version_required" title="Minimalne wymogi dotyczące wersji"><![CDATA[]]></item>
-        <item id="setup_still_exists" title="Katalog instalacji nadal istnieje"><![CDATA[]]></item>
-        <item id="site_url_mismatch" title=""><![CDATA[]]></item>
-        <item id="some_php_functions_disabled" title=""><![CDATA[]]></item>
-        <item id="textpattern_version_update" title="Aktualizacja wersji Textpattern CMS"><![CDATA[]]></item>
-        <item id="textpattern_version_update_beta" title=""><![CDATA[]]></item>
-        <item id="tmp_plugin_paths_match" title=""><![CDATA[]]></item>
-        <item id="update_server_inaccessible" title=""><![CDATA[]]></item>
-        <item id="warn_mail_unavailable" title=""><![CDATA[]]></item>
+        <item id="htaccess_missing" title="Brak pliku .htaccess"><![CDATA[
+<h2>Brak pliku .htaccess</h2>
+<p>Używany jest tryb trwałych odsyłaczy wymagający pliku <code>.htaccess</code>, a plik ten nie został znaleziony. Jest on dołączony do Textpattern i znajduje się w katalogu głównym Textpattern, obok <code>index.php</code> i katalogu <code>textpattern</code>. Zalecane dyrektywy to:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Indeks witryny jest niedostępny"><![CDATA[
+<h2>Indeks witryny jest niedostępny</h2>
+<p>Główny plik <code>index.php</code> wskazany jako indeks witryny jest nieczytelny dla serwera. Sprawdź, czy plik istnieje i ma odpowiednie uprawnienia.</p>
+        ]]></item>
+        <item id="missing_files" title="Brakujące pliki"><![CDATA[
+<h2>Brakujące pliki</h2>
+<p>Brakuje jednego lub więcej niezbędnych plików Textpattern. Upewnij się, że wszystkie wymienione pliki znajdują się na serwerze i w prawidłowych lokalizacjach.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Brak mod_rewrite Apache"><![CDATA[
+<h2>Brak Apache mod_rewrite</h2>
+<p>Moduł <code>mod_rewrite</code> serwera Apache nie jest zainstalowany lub jest wyłączony. Jest on zalecany, aby Textpattern działał poprawnie. Upewnij się, że moduł istnieje i jest aktywny, lub skontaktuj się z dostawcą hostingu, aby uzyskać pomoc.</p>
+        ]]></item>
+        <item id="modified_files" title="Zmodyfikowane pliki"><![CDATA[
+<h2>Zmodyfikowane pliki</h2>
+<p>Pliki są uznawane za zmodyfikowane, jeśli ich suma kontrolna różni się od znanej, poprawnej sumy kontrolnej dostarczonej z Textpattern. Jeśli jakiekolwiek pliki w instalacji Textpattern różnią się od oczekiwanych, zostaną tutaj wyróżnione.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="Błędy w tabeli MySQL"><![CDATA[
+<h2>Błędy w tabeli MySQL</h2>
+<p>W bazie danych MySQL używanej przez Textpattern mogą występować uszkodzenia lub inne problemy. Spróbuj naprawić odpowiednie tabele przy użyciu narzędzia do obsługi MySQL, takiego jak <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> lub <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nie zdefiniowano katalogu tmp"><![CDATA[
+<h2>Nie zdefiniowano katalogu tymczasowego</h2>
+<p>Textpattern może działać bez katalogu tymczasowego, jednak niektóre funkcje mogą nie działać zgodnie z oczekiwaniami, jeśli ta preferencja nie jest ustawiona. Odwiedź panel preferencji administratora i ustaw „Ścieżkę do katalogu tymczasowego”.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sekcja o takiej samej nazwie jak katalog"><![CDATA[
+<h2>Sekcja o takiej samej nazwie jak katalog</h2>
+<p>Istniejące nazwy katalogów mogą kolidować z nazwami sekcji używanymi w schemacie trwałych odsyłaczy artykułów. Aby uniknąć problemów, usuń odpowiedni katalog, jeśli jest to bezpieczne, lub zmień nazwy sekcji tak, aby się nie pokrywały.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Katalog witryny nieczytelny"><![CDATA[
+<h2>Katalog witryny nieczytelny</h2>
+<p>Katalog zawierający główny plik <code>index.php</code> wskazany jako indeks witryny jest nieczytelny dla serwera. Sprawdź uprawnienia.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="Włączone skrypty PHP"><![CDATA[
+<h2>Włączone skrypty PHP</h2>
+<p>Textpattern pozwala autorom i administratorom osadzać kod PHP w artykułach oraz stronach/formularzach, jeśli funkcje te są włączone. Ponieważ stanowi to zagrożenie dla bezpieczeństwa — może zostać wykonany dowolny kod PHP, w tym potencjalnie szkodliwy/niebezpieczny, który może doprowadzić do zniszczenia instalacji lub wycieku informacji do osób trzecich — zdecydowanie zaleca się wyłączenie tych opcji w <a href="?event=prefs#prefs_group_publish">panelu preferencji</a>, chyba że naprawdę są one niezbędne.</p>
+<p>Wiele usprawnień w witrynach Textpattern, które wcześniej wymagały fragmentów PHP, można obecnie uzyskać za pomocą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">podstawowych znaczników</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimalne wymogi dotyczące wersji"><![CDATA[
+<h2>Minimalne wymogi dotyczące wersji</h2>
+<p>Textpattern wymaga określonej funkcjonalności dostępnej w języku PHP oraz serwerze bazy danych MySQL. Zapoznaj się z poniższą tabelą, aby poznać minimalne wymagania systemowe:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Wersja Textpattern</th>
+                <th scope="col">Minimalna wersja PHP</th>
+                <th scope="col">Minimalna wersja MySQL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Oprócz powyższych wymagań systemowych wymagane są następujące rozszerzenia PHP:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a></li>
+</ul>
+<p>W pliku <code>php.ini</code> używanym przez tę witrynę — globalnym lub lokalnym — musi być ustawiona dyrektywa <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Katalog instalacji nadal istnieje"><![CDATA[
+<h2>Katalog instalacji nadal istnieje</h2>
+<p>Po zainstalowaniu Textpattern katalog <code>textpattern/setup</code> i jego zawartość nie są już potrzebne i ze względów bezpieczeństwa powinny zostać usunięte.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Niezgodność adresu URL witryny"><![CDATA[
+<h2>Niezgodność adresu URL witryny</h2>
+<p>Adres URL witryny ustawiony w panelu „Preferencje” nie odpowiada faktycznemu adresowi URL używanemu do odwiedzenia witryny.</p>
+<p>Jeśli do witryny można dotrzeć przez wiele różnych adresów URL i jeśli zachowuje się ona zgodnie z oczekiwaniami, ten komunikat można bezpiecznie zignorować.</p>
+<p>W przeciwnym razie sprawdź i popraw ustawienie „Adres URL witryny” w preferencjach administratora. Propozycja prawdopodobnie poprawnego adresu URL witryny jest wyświetlana w komunikacie ostrzegawczym wstępnej kontroli w panelu „Diagnostyka”.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="Funkcje PHP […] są wyłączone na Twoim serwerze"><![CDATA[
+<h2>Funkcje PHP […] są wyłączone na Twoim serwerze</h2>
+<p>Dostawca hostingu lub administrator serwera wyłączył jedną lub więcej funkcji PHP, z których część może mieć wpływ na działanie Textpattern.</p>
+<p>Więcej informacji znajdziesz w <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Dokumentacji użytkownika Textpattern <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Aktualizacja wersji Textpattern CMS"><![CDATA[
+<h2>Aktualizacja wersji Textpattern</h2>
+<p>Dostępna jest nowsza wersja Textpattern. Aby skorzystać z najnowszych funkcji i poprawek bezpieczeństwa, zaleca się aktualizację.</p>
+<p>Pamiętaj, że choć dokładamy starań, by proces aktualizacji był możliwie bezproblemowy:</p>
+<ul>
+    <li>Jeśli różni się tylko ostatnia cyfra wersji, aktualizacja prawdopodobnie będzie wstecznie kompatybilna z wtyczkami i motywami.</li>
+    <li>Jeśli dwie ostatnie cyfry różnią się od Twojej aktualnej wersji, aktualizacja może wymagać zmian w niektórych wtyczkach i/lub motywach, choć prawdopodobnie i tak będą działać, choćby w ograniczonym zakresie.</li>
+    <li>Jeśli inna jest pierwsza cyfra wersji, aktualizacja prawdopodobnie będzie wymagała aktualizacji większości wtyczek i motywów. Jeśli w dużym stopniu polegasz na określonej funkcji wtyczki lub motywu, przed rozpoczęciem aktualizacji skontaktuj się z autorem lub członkami społeczności.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Dostępna wersja przedpremierowa Textpattern"><![CDATA[
+<h2>Dostępna aktualizacja wersji przedpremierowej Textpattern</h2>
+<p>Dostępna jest nowsza wersja przedpremierowa Textpattern. Poszukujemy aktywnych wolontariuszy, którzy przetestują tę wersję, aby finalne wydanie było możliwie jak najbardziej dopracowane. Staramy się, by proces aktualizacji był możliwie bezproblemowy, nawet w przypadku wersji beta.</p>
+<p>Jeśli zdecydujesz się wziąć udział, pamiętaj:</p>
+<ul>
+    <li>Nie używaj tej wersji beta w serwisie produkcyjnym, chyba że masz działającą kopię zapasową zarówno plików witryny, jak i bazy danych, i wiesz, jak z niej skorzystać.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Zgłaszaj wszelkie problemy</a>, podając używaną wersję beta. W zależności od zgłoszonych problemów przed wydaniem stabilnym mogą być konieczne kolejne wersje beta.</li>
+    <li>Jeśli wdrożysz tę wersję beta, upewnij się, że zaktualizujesz ją do wersji finalnej, gdy tylko się pojawi.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Ścieżki katalogu tymczasowego i katalogu pamięci podręcznej wtyczek nie mogą być takie same"><![CDATA[
+<h2>Ścieżki katalogu tymczasowego i pamięci podręcznej wtyczek nie powinny być takie same</h2>
+<p>Wtyczki powinny mieć własny katalog i nie współdzielić katalogu tymczasowego. Jest to potencjalne zagrożenie bezpieczeństwa i może negatywnie wpłynąć na działanie witryny, jeśli katalog tymczasowy zostanie wyczyszczony. Upewnij się, że ścieżka katalogu tymczasowego jest inna niż ścieżka pamięci podręcznej wtyczek.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Serwer aktualizacji jest niedostępny"><![CDATA[
+<h2>Serwer aktualizacji jest niedostępny</h2>
+<p>Sprawdzenie dostępności aktualizacji nie powiodło się, często z powodu przeciążenia sieci lub przekroczenia limitu czasu połączenia. Zwykle problem rozwiązuje się samoistnie w ciągu godziny lub dwóch, więc spróbuj ponownie odwiedzić ten panel później.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Twojej instalacji PHP brakuje funkcji mail()"><![CDATA[
+<h2>Twojej instalacji PHP brakuje funkcji mail()</h2>
+<p>Funkcja PHP <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> jest wyłączona. W związku z tym Textpattern nie może wysyłać wiadomości e‑mail i część funkcji nie będzie dostępna. Na przykład powiadomienia e‑mail o nowych komentarzach nie zostaną wysłane, a nowi użytkownicy nie otrzymają wiadomości powitalnej. Nadal można jednak dodawać użytkowników.</p>
+        ]]></item>
     </group>
 
     <group id="file" title="Panel pliki">
-        <item id="file_reassign" title="Przypisz plik ponownie"><![CDATA[]]></item>
-        <item id="file_replace" title="Zastąp plik"><![CDATA[]]></item>
-        <item id="timestamp_file" title="Data publikacji"><![CDATA[]]></item>
-        <item id="upload" title="Wgraj plik"><![CDATA[]]></item>
+        <item id="file_reassign" title="Przypisz plik ponownie"><![CDATA[
+<h2>Przypisz plik ponownie</h2>
+<p>Gdy wgrywasz plik w miejsce tego oznaczonego jako „Brakujący”, wybrany plik jest wysyłany na serwer i łączony z oryginalnymi informacjami o pliku w bazie danych. Oznacza to, że nazwa oryginalnego pliku oraz wszystkie inne powiązane informacje, takie jak liczba pobrań czy kategoria, pozostaną bez zmian. Zaktualizowany zostanie natomiast rozmiar pliku, aby odzwierciedlał nowy plik.</p>
+        ]]></item>
+        <item id="file_replace" title="Zastąp plik"><![CDATA[
+<h2>Zastąp plik</h2>
+<p>Wgranie tutaj nowego pliku zastąpi zawartość istniejącego pliku na serwerze, ale jego nazwa pozostanie taka sama jak wcześniej. Liczba pobrań i inne informacje powiązane z plikiem pozostaną bez zmian.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Data publikacji"><![CDATA[
+<h2>Data publikacji</h2>
+<p>Czas, kiedy plik został opublikowany albo ostatnio zmodyfikowany. Czas może zostać ustawiony na moment publikacji elementu lub na dowolny moment w przeszłości bądź przyszłości.</p>
+<p>Pola odpowiadają następującym informacjom:</p>
+<ul>
+    <li>Rok / Miesiąc / Dzień</li>
+    <li>Godzina (format 24‑godzinny) : Minuta : Sekunda</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Wgraj plik"><![CDATA[
+<h2>Wgraj plik</h2>
+<p>Użyj tego formularza, aby wgrać pliki lub obrazy na serwer.</p>
+<p>Użyj składni Textile, aby wyświetlać grafiki w artykułach, kodu Textpattern, aby umieszczać grafiki w szablonach stron, lub kodu HTML, aby umieszczać grafiki w innych miejscach.</p>
+        ]]></item>
     </group>
 
     <group id="form" title="Panel formularzy">
-        <item id="forms_overview" title=""><![CDATA[]]></item>
+        <item id="forms_overview" title="Wprowadzenie do formularzy"><![CDATA[
+<h2>Wprowadzenie do formularzy</h2>
+<p>W Textpattern formularz to fragment tekstu, HTML i znaczników Textpattern, który można wielokrotnie wykorzystywać do wyświetlania treści.</p>
+<p>Oto przykładowy formularz, który może mieć nazwę <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Możesz użyć go do wyświetlenia nieuporządkowanej listy HTML powiązanych artykułów:</p>
+<pre><code>&lt;txp:related_articles form=&quot;ordinary_list&quot; wraptag=&quot;ul&quot; /&gt;</code></pre>
+<p>Ponieważ rolą tego formularza jest wypisanie tytułów, może on być używany także wewnątrz innych znaczników, na przykład do wyświetlenia 20 artykułów z bieżącej sekcji:</p>
+<pre><code>&lt;txp:article form=&quot;ordinary_list&quot; limit=&quot;20&quot; wraptag=&quot;ol&quot; /&gt;</code></pre>
+<p>Możesz również używać formularza do wyświetlania powtarzalnej treści, takiej jak nagłówek i stopka w szablonach stron. Oznacza to, że treść istnieje tylko w jednym miejscu i jeśli zdecydujesz się ją zmienić, musisz to zrobić tylko raz. Najczęściej treść z formularza wyświetla się za pomocą:</p>
+<pre><code>&lt;txp:output_form form=&quot;your_form_name&quot; /&gt;</code></pre>
+<p>Formularz może mieć rozmiar do 64 kB. Przykładowa stopka może zawierać nagłówki, akapity, linki, znaczniki warunkowe oraz odwołania do innych formularzy, takich jak <code>ordinary_list</code>.</p>
+        ]]></item>
     </group>
 
     <group id="image" title="Panel obrazów">
-        <item id="create_thumbnail" title="Utwórz miniaturkę"><![CDATA[]]></item>
-        <item id="replace_image_form" title="Zastąp obraz"><![CDATA[]]></item>
-        <item id="upload_image" title="Wgraj obraz"><![CDATA[]]></item>
-        <item id="upload_thumbnail" title="Wgraj miniaturkę"><![CDATA[]]></item>
+        <item id="create_thumbnail" title="Utwórz miniaturkę"><![CDATA[
+<h2>Utwórz miniaturę</h2>
+<p>Umożliwia (ponowne) utworzenie miniatury o określonych wymiarach na podstawie obrazu pełnowymiarowego.</p>
+<p>W przypadku rozmiaru niestandardowego miniatura zostanie przeskalowana, aby zmieścić się w wybranych wymiarach, chyba że zaznaczysz pole wyboru „Przytnij”. W takim przypadku miniatura zostanie utworzona ze środka obrazu, bez skalowania.</p>
+<p>W przypadku rozmiaru automatycznego miniatura zostanie przeskalowana do wymiarów (oraz opcjonalnych ustawień przycięcia) z bieżącego motywu administracyjnego.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Zastąp obraz"><![CDATA[
+<h2>Zastąp obraz</h2>
+<p>Obraz wgrany w tym miejscu po prostu zastąpi istniejący obraz powiązany z tym wpisem w bazie danych.</p>
+        ]]></item>
+        <item id="upload_image" title="Wgraj obraz"><![CDATA[
+<h2>Wgraj obraz</h2>
+<p>Wgraj jeden lub więcej obrazów na swój serwer.</p>
+<p>Podczas przesyłania do katalogu <code>images</code> nazwa oryginalnego pliku obrazu będzie przechowywana jedynie wewnętrznie w bazie danych Textpattern; sam plik obrazu zostanie przemianowany na kolejny numer + rozszerzenie pliku.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Wgraj miniaturkę"><![CDATA[
+<h2>Wgraj miniaturę</h2>
+<p>Pełnowymiarowym obrazom można przypisać ich własne miniatury. Są one przydatne do linkowania do obrazów w pełnym rozmiarze oraz ich indeksowania.</p>
+<p>Odwołanie do miniatury jest dokładnie takie samo jak odwołanie do pełnowymiarowego obrazu, z dodaną literą <code>t</code> do nazwy pliku. Na przykład, aby odwołać się do miniatury powiązanej z obrazem w pełnym rozmiarze zapisanym jako <code>/images/12.jpg</code>, należy użyć ścieżki <code>/images/12t.jpg</code>.</p>
+        ]]></item>
     </group>
 
     <group id="lang" title="Panel językowy">
-        <item id="get_textpack" title="Zainstaluj «Textpack»"><![CDATA[]]></item>
+        <item id="get_textpack" title="Zainstaluj «Textpack»"><![CDATA[
+<h2>Instaluj Textpack</h2>
+<p>Wklej do tego pola dodatkowe ciągi językowe dla swojej witryny i wybierz „Prześlij”, aby je zainstalować.</p>
+<p>Takie ciągi są często dostarczane w formie pliku Textpack do pobrania, dystrybuowanego wraz z wtyczką, aby jej ciągi językowe mogły być używane natywnie w Textpattern.</p>
+<p>Tłumacze mogą następnie tłumaczyć te pakiety według potrzeb i rozpowszechniać zlokalizowaną zawartość w społeczności.</p>
+        ]]></item>
     </group>
 
     <group id="link" title="Panel linków">
-        <item id="link_description" title="Opis"><![CDATA[]]></item>
-        <item id="link_sort" title="Sortuj według"><![CDATA[]]></item>
-        <item id="link_url" title="URL"><![CDATA[]]></item>
+        <item id="link_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opisy linków są opcjonalne i przydają się do podpisywania linków, tworzenia atrybutów <code>title=&quot;&quot;</code> (dymek) dla linków lub po prostu jako wewnętrzna dokumentacja.</p>
+        ]]></item>
+        <item id="link_sort" title="Sortuj według"><![CDATA[
+<h2>Wartość sortowania</h2>
+<p>Przydatna przy sortowaniu list linków w sposób naturalny dla języka, np. według nazwiska zamiast imienia, albo w przypadku fraz zaczynających się od rodzajnika określonego czy nieokreślonego.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Adres linku. Jeśli link wskazuje inną witrynę, musi być poprzedzony <code>http://</code> lub <code>https://</code>.</p>
+        ]]></item>
         <item id="timestamp_link" title="Data publikacji"><![CDATA[
 <h2>Data publikacji</h2>
 <p>Czas kiedy link został opublikowany lub ostatnim razem zmodyfikowany. Czas może zostać ustawiony na moment, w którym link zostanie opublikowany lub dowolny moment w przeszłości lub przyszłości.</p>
@@ -123,155 +518,629 @@
     </group>
 
     <group id="login" title="Panel logowania">
-        <item id="remember_login" title="Zapamiętaj mnie na tym komputerze"><![CDATA[]]></item>
+        <item id="remember_login" title="Zapamiętaj mnie na tym komputerze"><![CDATA[
+<h2>Pozostań zalogowany w tej przeglądarce</h2>
+<p>Po zaznaczeniu pozostaniesz zalogowany do swojego konta Textpattern w bieżącej przeglądarce internetowej, dopóki nie zdecydujesz się wylogować. Jeśli nie zaznaczysz tej opcji, zostaniesz automatycznie wylogowany po okresie bezczynności.</p>
+<p>Wymaga włączonej obsługi plików cookie w przeglądarce.</p>
+        ]]></item>
     </group>
 
     <group id="plugin" title="Panel wtyczek">
-        <item id="install_plugin" title="Zainstaluj wtyczkę"><![CDATA[]]></item>
-        <item id="upload_plugin" title="Załaduj wtyczkę"><![CDATA[]]></item>
+        <item id="install_plugin" title="Zainstaluj wtyczkę"><![CDATA[
+<h2>Zainstaluj wtyczkę</h2>
+<p>Wklej tutaj zawartość skompilowanego pliku tekstowego wtyczki, a następnie użyj przycisku „Prześlij”, aby rozpocząć instalację. Każda wtyczka o takiej samej nazwie jak już zainstalowana zostanie nadpisana nową wersją.</p>
+<p>Wklejany tutaj tekst wtyczki to <strong>nie</strong> surowy kod PHP, lecz tekst zakodowany w Base64, zazwyczaj poprzedzony nagłówkiem zawierającym informacje o wtyczce (takie jak nazwa wtyczki, wersja, opis, autor itp.).</p>
+<p>Skompilowane wersje wtyczek można zwykle pobrać z <a rel="external" target="_blank" href="https://plugins.textpattern.com/">repozytorium wtyczek <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> lub z kanału wskazanego przez autora, np. jego strony WWW lub GitHuba.</p>
+<p>Możesz również wkleić tutaj adres URL do skompilowanego pliku tekstowego Textpattern, jeśli zewnętrzna witryna na to pozwala.</p>
+<p>Wszystkie wgrane wtyczki przechodzą etap weryfikacji, który pozwala przejrzeć kod i zawartość wtyczki przed instalacją.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Załaduj wtyczkę"><![CDATA[
+<h2>Wgraj wtyczkę</h2>
+<p>Użyj tego formularza, aby wgrać plik wtyczki. Wgrane wtyczki (i wszystkie ich zasoby) są przechowywane w katalogu „plugins”.</p>
+<p>Dozwolone typy wtyczek, które można tutaj wgrywać, to:</p>
+<ul>
+<li>Pliki szablonów PHP Textpattern zawierające kompletny kod, metadane, ciągi Textpack i tekst pomocy.</li>
+<li>Skompilowane pliki tekstowe Textpattern zawierające kompletny kod, metadane, ciągi Textpack i tekst pomocy.</li>
+<li>Pakiety zip Textpattern zawierające informacje z manifestu oraz kod, metadane, ciągi Textpack, tekst pomocy i pliki pomocnicze.</li>
+<li>Surowe pliki PHP (nie uzupełniają one jednak dodatkowych metadanych i nie są zalecane).</li>
+</ul>
+<p>Każda wtyczka o takiej samej nazwie jak już zainstalowana zostanie nadpisana nową wersją.</p>
+<p>Wszystkie wgrane wtyczki przechodzą etap weryfikacji, który pozwala przejrzeć kod i zawartość wtyczki przed instalacją.</p>
+        ]]></item>
     </group>
 
     <group id="prefs" title="Panel ustawień">
-        <item id="admin_side_plugins" title="Używać pluginów dla administracji?"><![CDATA[]]></item>
-        <item id="advanced_options" title="Opcje zaawansowane"><![CDATA[]]></item>
-        <item id="allow_article_php_scripting" title="Czy kod PHP jest dozwolony w artykułach?"><![CDATA[]]></item>
-        <item id="allow_form_override" title="Nadpisywanie form dozwolone?"><![CDATA[]]></item>
-        <item id="allow_page_php_scripting" title="Czy kod PHP jest dozwolony na stronach?"><![CDATA[]]></item>
-        <item id="archive_dateformat" title="Format daty w archiwum"><![CDATA[]]></item>
-        <item id="articles_use_excerpts" title="Artykuły mają zajawki?"><![CDATA[]]></item>
-        <item id="attach_titles_to_permalinks" title="Dołączać tytuły do trwałych odsyłaczy (permalinków)?"><![CDATA[]]></item>
-        <item id="auto_dst" title="Dostosowywać strefę czas. wg ust. lokalnych?"><![CDATA[]]></item>
-        <item id="comment_means_site_updated" title="Nowy komentarz oznacza aktualizację witryny?"><![CDATA[]]></item>
-        <item id="comment_nofollow" title="Zastosuj rel=&quot;brak&quot; do komentarzy?"><![CDATA[]]></item>
+        <item id="admin_side_plugins" title="Używać pluginów dla administracji?"><![CDATA[
+<h2>Używać wtyczek po stronie administratora?</h2>
+<p>Wtyczki po stronie administratora mogą zmieniać działanie interfejsu administracyjnego. Mogą podłączać się do już istniejących akcji, takich jak edycja czy publikacja artykułów, albo dodawać nowe panele z dodatkowymi/rozszerzonymi funkcjami.</p>
+<p>Jeśli chcesz dowiedzieć się więcej o wtyczkach po stronie administratora, zobacz stronę <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Rozszerzanie Textpattern <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> w <a rel="external" target="_blank" href="https://docs.textpattern.com/">Dokumentacji użytkownika Textpattern <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>. Różne wtyczki są wymienione w serwisie <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Opcje zaawansowane"><![CDATA[
+<h2>Opcje zaawansowane</h2>
+<p>Pokazuje grupę preferencji zaawansowanych, gdzie można skonfigurować dodatkowe ustawienia, takie jak:</p>
+<ul>
+    <li>włączone funkcje PHP w <code>txp:evaluate</code>,</li>
+    <li>niestandardowe typy szablonów formularzy.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Czy kod PHP jest dozwolony w artykułach?"><![CDATA[
+<h2>Zezwolić na PHP w artykułach?</h2>
+<p>Po włączeniu to ustawienie pozwala używać PHP wewnątrz artykułów. Autor musi mieć do tego odpowiednie uprawnienia (domyślnie mogą to robić tylko role <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Wydawca” <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Redaktor naczelny” <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> oraz <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Redaktor merytoryczny” <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>).</p>
+<p><strong>Zdecydowanie zaleca się wyłączenie tej opcji</strong>, chyba że funkcja ta jest absolutnie niezbędna. Każdy autor może dodać dowolny, potencjalnie szkodliwy/niebezpieczny kod PHP, który może zniszczyć witrynę lub spowodować wyciek informacji do osób trzecich i zostanie wykonany przy wyświetlaniu takiego artykułu.</p>
+<p>Kod PHP musi mieć pominięte znaczniki otwierające i zamykające PHP oraz być dodatkowo zawarty w znacznikach <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Nadpisywanie form dozwolone?"><![CDATA[
+<h2>Zezwolić na nadpisanie formularza?</h2>
+<p>To ustawienie pozwala autorom artykułów nadpisać formularz używany przy renderowaniu ich artykułu. Po włączeniu podczas edycji artykułu będzie dostępna lista rozwijana „Nadpisanie formularza”.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Czy kod PHP jest dozwolony na stronach?"><![CDATA[
+<h2>Zezwolić na PHP na stronach?</h2>
+<p>Po włączeniu to ustawienie pozwala używać kodu PHP w szablonach stron i formularzy.</p>
+<p><strong>Zdecydowanie zaleca się wyłączenie tej opcji</strong>, chyba że funkcja ta jest absolutnie niezbędna. Każdy inny użytkownik może dodać dowolny, potencjalnie szkodliwy/niebezpieczny kod PHP, który może zniszczyć witrynę lub spowodować wyciek informacji do osób trzecich i zostanie wykonany przez niczego nieświadomego administratora lub odwiedzającego witrynę.</p>
+<p>Kod PHP musi mieć pominięte znaczniki otwierające i zamykające PHP oraz być dodatkowo zawarty w znacznikach <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Format daty w archiwum"><![CDATA[
+<h2>Format daty archiwum</h2>
+<p>Sposób wyświetlania dat przy artykułach w sekcjach Twojej witryny.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Pokazywać zajawkę na stronie edycji artykułu?"><![CDATA[
+<h2>Pokazywać zajawkę na stronie edycji artykułu?</h2>
+<p>Jeśli wybierzesz „Nie”, pole zajawki nie będzie pokazywane autorowi na ekranie edycji artykułu.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Dołączać tytuły do trwałych odsyłaczy (permalinków)?"><![CDATA[
+<h2>Dołączać tytuły do trwałych odsyłaczy?</h2>
+<p>To ustawienie dołącza automatycznie generowaną wersję tytułu artykułu do adresu URL. Jest ona generowana automatycznie lub może zostać ręcznie nadpisana w polu „Tytuł tylko dla URL” podczas edycji artykułu.</p>
+<p>To ustawienie ma wpływ tylko wtedy, gdy używasz przyjaznych adresów URL. Dla niektórych języków może to skutkować długimi i „brzydkimi” adresami URL – w takim przypadku prawdopodobnie warto ustawić tę opcję na „Wyłączone”.</p>
+        ]]></item>
+        <item id="auto_dst" title="Dostosowywać strefę czas. wg ust. lokalnych?"><![CDATA[
+<h2>Automatycznie korygować czas letni?</h2>
+<p>To ustawienie pozwala Textpattern zmieniać moment obowiązywania czasu letniego (DST) w Twojej strefie. Jeśli jest ustawione na „Nie”, preferencję „Włączony czas letni” będzie można zmieniać ręcznie.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Nowy komentarz oznacza aktualizację witryny?"><![CDATA[
+<h2>Nowy komentarz oznacza aktualizację witryny?</h2>
+<p>Baza danych Textpattern śledzi moment ostatniej zmiany w Twojej witrynie. Gdy to ustawienie ma wartość „Tak”, nowy komentarz również aktualizuje tę wartość. Jest ona używana na przykład przez funkcję <code>&quot;Wysyłać nagłówek Last-Modified&quot;</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Zastosuj rel=&quot;brak&quot; do komentarzy?"><![CDATA[
+<h2>Stosować rel=&quot;nofollow&quot; w komentarzach?</h2>
+<p>Jeśli ustawione na „Tak”, do linków dodawanych w komentarzach zostanie dodany dodatkowy atrybut. Ma to na celu ograniczenie zachęty dla spamerów komentujących i zostało wprowadzone przez szereg wyszukiwarek i twórców oprogramowania. Więcej informacji znajdziesz w <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">komunikacie Google <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+<p><strong>Uwaga:</strong> To ustawienie nie wpływa na funkcjonowanie Twojej witryny. Może natomiast ograniczyć lub zmniejszyć znaczenie Twoich komentarzy przy ustalaniu pozycji witryn linkowanych z tych komentarzy przez niektóre wyszukiwarki.</p>
+        ]]></item>
         <item id="comments_are_ol" title="Prezentować komentarze jako listę numerowaną?"><![CDATA[
 <h2>Prezentować komentarze jako listę numerowaną? </h2>
 <p>Określa, czy komentarze do artykułu zostaną opakowane tagiem HTML <code>&lt;ol&gt;</code>, a poszczególne komentarze zostaną opakowane w tag <code>&lt;li&gt;</code> (powodując, że komentarze będą prezentowane jako lista numerowana), lub czy poszczególne komentarze zostaną zamiast tego opakowane tagiem <code>&lt;div&gt;</code>. </p>
 <p>Przy każdej z tych wartości, możesz nadpisać tagi używane w poszczególnych formularzach modyfikując tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, znaleziono w formularzu <code>pokazującym komentarze</code>. </p>
         ]]></item>
-        <item id="comments_auto_append" title="Automatycznie dodawać komentarze do artykułów?"><![CDATA[]]></item>
-        <item id="comments_dateformat" title="Format daty komentarzy"><![CDATA[]]></item>
-        <item id="comments_default_invite" title="Domyślne zaproszenie do komentarzy"><![CDATA[]]></item>
-        <item id="comments_disabled_after" title="Komentarze zostaną wyłączone po upływie"><![CDATA[]]></item>
-        <item id="comments_disallow_images" title=""><![CDATA[]]></item>
-        <item id="comments_mode" title="Komentarze umieszczone"><![CDATA[]]></item>
-        <item id="comments_moderate" title="Moderować komentarze?"><![CDATA[]]></item>
-        <item id="comments_on_default" title="Komentarze włączone domyślnie?"><![CDATA[]]></item>
-        <item id="comments_require_email" title="Komentarze wymagają adresu e-mail komentującego?"><![CDATA[]]></item>
-        <item id="comments_require_name" title="Komentarze wymagają imienia komentującego?"><![CDATA[]]></item>
+        <item id="comments_auto_append" title="Automatycznie dodawać komentarze do artykułów?"><![CDATA[
+<h2>Automatycznie dołączać komentarze do artykułów?</h2>
+<p>To ustawienie określa, czy komentarze i formularz komentowania mają być automatycznie dołączane do wszystkich pojedynczych artykułów (przez automatyczne włączenie zawartości formularza <code>comments_display</code>).</p>
+<p>W większości przypadków warto zostawić tutaj „Nie”, ponieważ pozwala to na większą elastyczność w umieszczaniu komentarzy w projekcie witryny. Musisz wtedy ręcznie dodać znacznik <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> do wszystkich szablonów opartych na artykułach, w których chcesz wyświetlać komentarze.</p>
+<p>Jeśli w artykule widzisz podwójne wyświetlanie komentarzy, najprawdopodobniej szablon zawiera znacznik <code>&lt;txp:comments /&gt;</code>, a jednocześnie ustawienie „Automatycznie dołączać komentarze do artykułów?” ma wartość „Tak”.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Format daty komentarzy"><![CDATA[
+<h2>Format daty komentarzy</h2>
+<p>Sposób wyświetlania dat komentarzy odwiedzającym Twoją witrynę.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Domyślne zaproszenie do komentarzy"><![CDATA[
+<h2>Domyślny tekst zaproszenia do komentowania</h2>
+<p>Jeśli zezwalasz odwiedzającym na komentowanie w Twojej witrynie, jest to domyślny tekst zaproszenia. Na przykład:</p>
+<ul>
+    <li>Komentarze</li>
+    <li>Dodaj komentarz</li>
+    <li>Opinie</li>
+    <li>Skomentuj</li>
+</ul>
+<p>Pamiętaj, że tekst zaproszenia zawsze można zmienić indywidualnie dla każdego artykułu.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Komentarze zostaną wyłączone po upływie"><![CDATA[
+<h2>Komentarze wyłączone po</h2>
+<p>Użyj tego ustawienia, aby określić czas po opublikowaniu artykułu, po którym komentowanie zostanie wyłączone (można ustawić „Nigdy”, aby pozwolić na komentowanie bez ograniczeń czasowych).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Pozwalać na obrazki komentujących w komentarzach?"><![CDATA[
+<h2>Pozwalać na obrazki komentujących w komentarzach?</h2>
+<p>Jeśli ta opcja jest ustawiona na „Nie”, wszystkie obrazy dołączone w komentarzach zostaną usunięte.</p>
+        ]]></item>
+        <item id="comments_mode" title="Komentarze umieszczone"><![CDATA[
+<h2>Tryb komentarzy</h2>
+<p>Jeśli wybrano „nopopup” (zalecane), bieżące okno zostanie odświeżone, aby wyświetlić jedynie bieżący artykuł z komentarzami poniżej.</p>
+<p>Jeśli wybrano „popup”, po kliknięciu linku do komentarzy zostanie otwarte nowe okno przeglądarki (używa formularza <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderować komentarze?"><![CDATA[
+<h2>Moderować komentarze?</h2>
+<p>Jeśli ustawione na „Tak”, każdy nowy komentarz będzie domyślnie miał wyłączoną widoczność, dopóki nie zostanie przejrzany. Musisz ręcznie moderować i uaktywnić każdy komentarz (po otrzymaniu nowego komentarza do autora artykułu zostanie wysłana wiadomość e‑mail).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Komentarze włączone domyślnie?"><![CDATA[
+<h2>Komentarze domyślnie włączone?</h2>
+<p>Jeśli ustawione na „Tak”, komentarze będą automatycznie włączane dla każdego opublikowanego artykułu. Jeśli ustawione na „Nie”, za każdym razem, gdy chcesz przyjmować komentarze, musisz włączyć je w panelu „Pisanie” danego artykułu.</p>
+<p>Komentarze można włączać i wyłączać w dowolnym momencie, indywidualnie dla każdego artykułu.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Komentarze wymagają adresu e-mail komentującego?"><![CDATA[
+<h2>Czy komentarze wymagają adresu e‑mail użytkownika?</h2>
+<p>Jeśli ustawione na „Tak”, osoby chcące skomentować Twój artykuł będą musiały wpisać adres e‑mail w formularzu komentarza. Nie będą mogły opublikować komentarza bez podania adresu e‑mail.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Komentarze wymagają imienia komentującego?"><![CDATA[
+<h2>Czy komentarze wymagają imienia i nazwiska komentującego?</h2>
+<p>Jeśli ustawione na „Tak”, osoby chcące skomentować Twój artykuł będą musiały wpisać imię (lub nazwę) w formularzu komentarza. Nie będą mogły wysłać komentarza bez podania nazwy.</p>
+        ]]></item>
         <item id="comments_sendmail" title="Wysyłać komentarze emailem do autora?"><![CDATA[
 <h2>Wyślij komentarze do autora?</h2>
 <p>Jeśli ustawiono na „Tak”, za każdym razem, gdy pojawi się nowy komentarz do artykułu, jego kopia zostanie wysłana pocztą elektroniczną do autora tego artykułu.</p>
         ]]></item>
-        <item id="comments_use_fat_textile" title="Zezwalać na zaawansowany Textile w komentarzach?"><![CDATA[]]></item>
-        <item id="custom_form_types" title="Rodzaje szablonów formularzy niestandardowych"><![CDATA[]]></item>
-        <item id="custom_overview" title="Pola dodatkowe"><![CDATA[]]></item>
+        <item id="comments_use_fat_textile" title="Zezwalać na zaawansowany Textile w komentarzach?"><![CDATA[
+<h2>Zezwolić na więcej znaczników Textile w komentarzach?</h2>
+<p>Gdy ustawione na „Tak”, komentarze mogą zawierać elementy <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, które w przeciwnym razie byłyby traktowane jako zwykły tekst, takie jak:</p>
+<ul>
+    <li>nagłówki</li>
+    <li>listy uporządkowane i nieuporządkowane</li>
+    <li>przypisy</li>
+    <li>tabele</li>
+    <li>kod</li>
+    <li>rozszerzona składnia blokowa (<code>bc..</code>, <code>bq..</code> itd.)</li>
+</ul>
+<p><strong>Uwaga:</strong> Ze względów bezpieczeństwa surowy HTML jest przekształcany w zwykły tekst.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Konta z możliwością jednoczesnego logowania"><![CDATA[
+<h2>Konta z możliwością jednoczesnego logowania</h2>
+<p>Lista nazw kont logowania, rozdzielonych przecinkami, które mogą logować się równocześnie w wielu przeglądarkach/sesjach. Jest to przydatne podczas prac deweloperskich, aby współdzielić jedno logowanie z klientami.</p>
+<p>Korzystanie z tej funkcji wiąże się z ryzykiem bezpieczeństwa i <strong>nie jest zalecane w serwisach produkcyjnych</strong>. Panel „Diagnostyka” wyświetli ostrzeżenie, jeśli Twoje konto zostanie skonfigurowane do równoczesnych logowań w działającej publicznie witrynie.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Rodzaje szablonów formularzy niestandardowych"><![CDATA[
+<h2>Rodzaje szablonów formularzy niestandardowych</h2>
+<p>Oprócz standardowych typów szablonów formularzy (article, file, misc itd.) Wydawcy mogą definiować typy własne. Ich celem jest po pierwsze łatwiejsza klasyfikacja szablonów formularzy, a po drugie definiowanie niestandardowych zasobów.</p>
+<p>Format tej preferencji to <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, gdzie każda sekcja odpowiada typowi szablonu formularza.</p>
+<p>Aby zdefiniować niestandardowy typ formularza (np. <code>js</code>), należy dodać (w osobnej linii) sekcję <code>[js]</code>. Domyślny tytuł można ustawić za pomocą wpisu <code>title=&quot;Javascript&quot;</code> w odpowiedniej sekcji. W razie potrzeby można również dodać tytuły zlokalizowane (np. <code>ru=&quot;Скрипт&quot;</code>).</p>
+<p>Dodatkowo można określić <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">typ mediów szablonu formularza <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> (wcześniej znany jako typ MIME), np. <code>mediatype=&quot;application/javascript&quot;</code>. Dzięki temu szablony formularzy tego typu stają się niestandardowymi zasobami, które mogą być serwowane z zadanym typem mediów — z bazy danych lub z dysku (pliki płaskie) za pośrednictwem znacznika <code>&lt;txp:output_form /&gt;</code>. Przykładowo szablon formularza o nazwie <code>myscript.js</code> typu <code>[js]</code> z typem mediów <code>application/javascript</code> można włączyć do kodu w następujący sposób:</p>
+<pre><code>&lt;txp:output_form form=&quot;myscript.js&quot;
+    format=&quot;flat.script&quot; /&gt;</code></pre>
+<p>To wygeneruje następujący znacznik HTML <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src=&quot;path/to/flat/myscript.js&quot;&gt;&lt;/script&gt;</code></pre>
+<p>Tylko szablony formularzy z rozszerzeniem nazwy odpowiadającym ich typowi (np. <code>myscript.js</code>) mogą być serwowane jako pliki płaskie. W takim przypadku nie są w ogóle przetwarzane przez Textpattern i są dostępne bezpośrednio pod swoim adresem URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format=&quot;script&quot; /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Własne pola"><![CDATA[
+<h2>Własne pola</h2>
+<p>Własne pola służą do przechowywania dodatkowych danych artykułu. Możesz zdefiniować do dziesięciu takich pól, nadając im nazwy tutaj. Każde pojawi się jako osobne pole w panelu „Pisanie”, aby można było powiązać z każdym artykułem niestandardowe dane.</p>
+<p>Możesz dowolnie nazwać te pola, pamiętaj jednak o następujących kwestiach:</p>
+<ul>
+<li>Używanie spacji poprawia czytelność w panelu „Pisanie”, ale takich pól <em>nie</em> można później używać jako parametrów sortowania lub filtrowania w znaczniku <code>article_custom</code>. Jeśli chcesz mieć taką możliwość, rozważ użycie podkreśleń zamiast spacji.</li>
+<li>Uważaj, aby nazwy pól nie kolidowały z nazwami zarezerwowanymi w Textpattern. Na przykład nie używaj <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> itp., ponieważ może to prowadzić do nieoczekiwanych rezultatów lub błędów w witrynie.</li>
+<li>Dane w każdym polu są ograniczone do 255 znaków tekstu.</li>
+</ul>
+        ]]></item>
         <item id="dateformat" title="Format daty"><![CDATA[
 <h2>Format daty</h2>
-<p>Ta opcja wpłynie jedynie na to, jak daty artykułu pojawiają się na stronie głównej twojej witryny.</p>
+<p>Ta opcja wpływa wyłącznie na sposób, w jaki daty artykułów są wyświetlane na stronie głównej Twojej witryny.</p>
         ]]></item>
-        <item id="default_event" title="Panel domyślny"><![CDATA[]]></item>
-        <item id="default_publish_status" title="Domyślny status publikacji"><![CDATA[]]></item>
-        <item id="doctype" title="Doctype"><![CDATA[]]></item>
-        <item id="enable_dev_preview" title="Włączyć podgląd motywu rozwoju?"><![CDATA[]]></item>
-        <item id="enable_short_tags" title="Włącz obsługę short-tagów?"><![CDATA[]]></item>
-        <item id="enable_xmlrpc_server" title="Włączyć serwer XML-RPC?"><![CDATA[
-<h2>Włączyć serwer XML-RPC?</h2>
-<p>Jeśli chcesz użyć <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> do zdalnego sterowania Textpattern (np. aplikacje na komputer lub mobilne) musisz włączyć serwer XML-RPC ustawiając tę opcję na „Tak”.</p>
+        <item id="default_event" title="Domyślny panel"><![CDATA[
+<h2>Domyślny panel</h2>
+<p>Panel interfejsu administracyjnego Textpattern, który pojawia się jako pierwszy po zalogowaniu się dowolnego użytkownika.</p>
         ]]></item>
-        <item id="expire_logs_after" title="Po ilu dniach wygasają logi?"><![CDATA[]]></item>
-        <item id="file_base_path" title="Ścieżka katalogu plików"><![CDATA[]]></item>
-        <item id="file_max_upload_size" title="Maksymalny rozmiar dodawanego pliku (w bajtach)"><![CDATA[]]></item>
+        <item id="default_publish_status" title="Domyślny status publikacji"><![CDATA[
+<h2>Domyślny status publikacji</h2>
+<p>Określa widoczność publikacji nowo utworzonych artykułów Textpattern.</p>
+<p>Pamiętaj, że ta preferencja nie ma wpływu na status artykułów utworzonych lub edytowanych przed jej zmianą.</p>
+<p>Domyślny status publikacji może być jednym z poniższych:</p>
+<ul>
+    <li>Szkic</li>
+    <li>Ukryty</li>
+    <li>Oczekujący</li>
+    <li>Opublikowany</li>
+    <li>Przyklejony</li>
+</ul>
+<p><strong>Szkic</strong> jest traktowany jako praca w toku i nie jest widoczny poza obszarem administracyjnym Textpattern (tzn. nie jest widoczny po stronie publicznej Textpattern i nie jest uwzględniany w kanałach).</p>
+<p><strong>Ukryty</strong> artykuł nie jest widoczny poza obszarem administracyjnym Textpattern.</p>
+<p><strong>Oczekujący</strong> artykuł jest traktowany jako gotowy do publikacji i oczekujący na zatwierdzenie, ale nie jest widoczny poza obszarem administracyjnym Textpattern.</p>
+<p><strong>Opublikowany</strong> artykuł jest zazwyczaj widoczny poza obszarem administracyjnym Textpattern (tzn. widoczny po stronie publicznej Textpattern, uwzględniany w kanałach, jeśli zezwalają na to preferencje). Jeśli artykuł ma status „Opublikowany” i ustawioną datę wygaśnięcia, status pozostanie „Opublikowany” po upływie tej daty, ale artykuł pojawi się poza obszarem administracyjnym tylko wtedy, gdy zezwolono na publikowanie wygasłych artykułów.</p>
+<p><strong>Przyklejony</strong> artykuł jest podobny do artykułu <strong>Opublikowanego</strong> o tyle, że może być wyświetlany poza obszarem administracyjnym Textpattern, ale <strong>nie</strong> pojawi się na listach artykułów, chyba że odpowiedni znacznik <code>article</code> lub <code>article_custom</code> zawiera atrybut <code>status</code> z wartością <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Wybierz, którego typu dokumentu HTML chcesz używać (HTML5 lub XHTML). Ma to wpływ na formularze wprowadzania komentarzy, renderowanie Textile dla <code>&lt;abbr&gt;</code> lub <code>&lt;acronym&gt;</code> oraz znaczniki <code>&lt;link&gt;</code> generowane przez znacznik <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Włączyć podgląd motywu deweloperskiego?"><![CDATA[
+<h2>Włączyć podgląd motywu deweloperskiego?</h2>
+<p>Użytkownicy z wystarczającymi uprawnieniami (domyślnie role Wydawca i Projektant) mogą bezpiecznie tworzyć i podglądać nowy motyw, podczas gdy wszyscy inni użytkownicy nadal widzą stary motyw (do czasu wdrożenia nowego).</p>
+<p>Uprzywilejowani użytkownicy, którzy nie chcą brać udziału w pracach nad motywem, mogą wyłączyć podgląd motywu deweloperskiego. Będą wtedy otrzymywać aktualny „publiczny” motyw, tak jak standardowi odwiedzający witrynę.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Włączyć obsługę short‑tagów?"><![CDATA[
+<h2>Włączyć obsługę short‑tagów?</h2>
+<p>Znaczniki Textpattern mają postać <code>&lt;txp:tag_name attribute1=&quot;value&quot; ... /&gt;</code>. Można zmniejszyć ilość pisania, włączając skróconą składnię, w której można pominąć prefiks <code>txp:</code>, stosując kilka prostych zasad. Oto kilka przykładów ilustrujących tę koncepcję:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> staje się <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> staje się <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> staje się <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> staje się <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> staje się <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (zauważ, że prefiks wtyczki można użyć również przy znaczniku <code>else</code>).</li>
+</ul>
+<p>Jeśli znacznik zawiera podkreślenie, a obsługa short‑tagów jest włączona, ogólna zasada jest następująca:</p>
+<ol>
+    <li>Usuń prefiks <code>txp:</code>.</li>
+    <li>Zastąp pierwsze wystąpienie podkreślenia ciągiem <code>::</code>.</li>
+</ol>
+<p>Zwróć uwagę, że to ustawienie nie wpływa na możliwość używania skrótów <code>&lt;txp:output_form /&gt;</code> do renderowania fragmentów formularzy. Nadal możesz używać <code>&lt;txp::shortcode /&gt;</code>, co zostanie zinterpretowane jako <code>&lt;txp:output_form form=&quot;shortcode&quot; /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Uaktywnić serwer XML‑RPC?"><![CDATA[
+<h2>Włączyć serwer XML‑RPC?</h2>
+<p>Jeśli chcesz używać <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML‑RPC <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> do zdalnego sterowania Textpattern (np. z aplikacji na komputerze lub urządzeniu mobilnym), musisz włączyć serwer XML‑RPC, ustawiając tę opcję na „Tak”.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Używać rozszerzonych funkcji poczty"><![CDATA[
+<h2>Używać rozszerzonych funkcji poczty</h2>
+<p>Ustawienie „Nie” spowoduje, że cała poczta — np. prośby o zresetowanie hasła do konta oraz wiadomości z wtyczek, takich jak com_connect — będzie wysyłana za pomocą funkcji PHP <code>mail()</code>. Wybranie „Tak” spowoduje użycie dołączonej biblioteki PHPMailer, co umożliwia opcjonalne kierowanie poczty przez zewnętrzne serwery SMTP.</p>
+<p>Jeśli masz problemy z dostarczalnością wiadomości (szczególnie do usług takich jak Gmail, Outlook, Yahoo! itd.), prawdopodobną przyczyną jest to, że Twoja domena nie jest uznawana za zaufane źródło. Przełączenie na „Tak” może poprawić dostarczalność. Dodatkowo użycie SMTP może zapewnić lepszą kompatybilność z niektórymi dostawcami poczty i jeszcze bardziej zwiększyć szanse na dotarcie wiadomości.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Po ilu dniach wygasają logi?"><![CDATA[
+<h2>Po ilu dniach wygasają logi?</h2>
+<p>Gdy logowanie odwiedzin w Textpattern jest włączone, możesz określić, jak długo (w dniach) logi mają być przechowywane. Wartość „7” oznacza, że logi będą dostępne przez siedem dni.</p>
+<p><strong>Uwaga:</strong> Logi są czyszczone tylko podczas wyświetlania panelu „Logi odwiedzin”; w przeciwnym razie ich rozmiar będzie stale rósł.</p>
+        ]]></item>
+        <item id="file_base_path" title="Ścieżka do wgrywania plików na serwer"><![CDATA[
+<h2>Ścieżka katalogu plików</h2>
+<p>Ustawia <strong>bezwzględną ścieżkę</strong> do katalogu, w którym będą trwale zapisywane wgrywane pliki. PHP musi mieć prawo zapisu do tego katalogu.</p>
+<p><strong>Uwaga:</strong> Ze względów bezpieczeństwa rozważ przeniesienie tego katalogu poza publicznie dostępny katalog główny witryny.</p>
+        ]]></item>
+        <item id="file_download_header" title="Nagłówek pobierania pliku"><![CDATA[
+<h2>Nagłówek pobierania pliku</h2>
+<p>Pozwala dostosować sposób obsługi pobierania plików.</p>
+<p>Domyślnie wszystkie pobrania są traktowane jako załączniki i są pobierane (w zależności od konfiguracji przeglądarki dla danego typu pliku). Jeśli chcesz zasugerować, jak mają być traktowane niektóre lub wszystkie typy plików, możesz podać tutaj odpowiedni kod znaczników. Przykład: aby pliki PDF dodane do kategorii Textpattern „inline-pdf” były wyświetlane w przeglądarce zamiast pobierane:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape=&quot;quote&quot; /&gt;=&quot;inline-pdf&quot;'&gt;
+    &lt;txp:header name=&quot;Content-Disposition&quot; value=&quot;inline&quot; /&gt;
+    &lt;txp:header name=&quot;Content-Type&quot; value=&quot;application/pdf&quot; /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maksymalny rozmiar dodawanego pliku (w bajtach)"><![CDATA[
+<h2>Maksymalny rozmiar dodawanego pliku (w bajtach)</h2>
+<p>Możesz ograniczyć maksymalny rozmiar (w bajtach) dla wgrywanych plików. Pamiętaj, że wartość ta jest również ograniczona konfiguracją PHP. Jeśli Textpattern wykryje, że konfiguracja PHP ogranicza rozmiar wgrywanych plików do mniejszej wartości, automatycznie obniży limit. Jeśli chcesz pozwolić na większe pliki wgrywane przez przeglądarkę, skontaktuj się z dostawcą hostingu (odpowiednie wartości w <code>php.ini</code> to <code>post_max_size</code>, <code>upload_max_filesize</code> oraz <code>memory_limit</code>).</p>
+        ]]></item>
         <item id="gmtoffset" title="Strefa czasowa"><![CDATA[
 <h2>Strefa czasowa</h2>
-<p>Aby wyświetlić daty w lokalnej strefie czasowej, wybierz strefę czasową.</p>
+<p>Aby wyświetlać daty w lokalnej strefie czasowej, wybierz swoją strefę czasową.</p>
         ]]></item>
-        <item id="img_dir" title="Katalog obrazów"><![CDATA[]]></item>
-        <item id="include_email_atom" title="Uwzględniać adres email w kanałach Atom?"><![CDATA[]]></item>
+        <item id="img_dir" title="Katalog z obrazkami"><![CDATA[
+<h2>Katalog obrazów</h2>
+<p>Jeśli chcesz zmienić nazwę katalogu obrazów, możesz zrobić to tutaj. Najpierw musisz utworzyć katalog w katalogu głównym instalacji Textpattern, a także upewnić się, że PHP ma prawo zapisu do tego katalogu.</p>
+<p>Ta ścieżka jest zawsze <strong>ścieżką względną</strong> (względem katalogu głównego instalacji Textpattern).</p>
+<p>Domyślną wartością jest <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Uwzględniać adres email w kanałach Atom?"><![CDATA[
+<h2>Uwzględniać adres email w kanałach Atom?</h2>
+<p>To ustawienie pozwala dołączyć adres e‑mail autora artykułu (ustawiony na jego koncie użytkownika) w części <code>author</code> Twoich kanałów Atom.</p>
+        ]]></item>
         <item id="is_dst" title="Automatycznie zmieniać czas z letniego na zimowy?"><![CDATA[
 <h2>Włączony czas letni?</h2>
-<p>Czy DST (czas letni) jest obecnie włączone dla Twojej strefy czasowej.</p>
+<p>Określa, czy DST (czas letni) jest obecnie włączony dla Twojej strefy czasowej.</p>
         ]]></item>
-        <item id="logging" title="Logi odwiedzin"><![CDATA[]]></item>
-        <item id="max_url_len" title="Maksymalna długość URL (w znakach)"><![CDATA[]]></item>
-        <item id="module_pophelp" title="Wyświetl wbudowane linki pomocy po stronie administratora"><![CDATA[]]></item>
-        <item id="never_display_email" title="Nigdy nie pokazywać adresów email?"><![CDATA[]]></item>
-        <item id="override_emailcharset" title="Używać ISO-8859-1 w emailach (domyślnie jest UTF-8)?"><![CDATA[]]></item>
-        <item id="override_form_types" title=""><![CDATA[]]></item>
-        <item id="permlink_format" title="Format trwałych odsyłaczy"><![CDATA[]]></item>
-        <item id="permlink_mode" title="Wzór adresu URL artykułu"><![CDATA[]]></item>
-        <item id="plugin_cache_dir" title="Ścieżka do katalogu pamięci podręcznej pluginów"><![CDATA[]]></item>
+        <item id="logging" title="Logi odwiedzin"><![CDATA[
+<h2>Logowanie</h2>
+<p>Możesz wybrać poziom logowania odwiedzin realizowany przez Textpattern:</p>
+<ul>
+    <li><strong>Wszystkie odsłony:</strong> Textpattern będzie logować wszystkie wyświetlenia stron w Twojej witrynie</li>
+    <li><strong>Tylko odsyłacze:</strong> Textpattern będzie logować jedynie wizyty z innych witryn</li>
+    <li><strong>Brak:</strong> Textpattern nie będzie logował żadnych odsłon</li>
+</ul>
+<p>Od wersji Textpattern 4.7.0 Textpattern nie zbiera ani nie przechowuje adresów IP odwiedzających. Jeśli zbierasz lub przechowujesz adresy IP poza Textpattern, podejmij odpowiednie środki ostrożności, aby przechowywać i/lub używać tych danych zgodnie z obowiązującymi przepisami — takimi jak <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">RODO (GDPR) <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> — oraz zastosuj silne zabezpieczenia na wszystkich poziomach serwera i instalacji Textpattern, aby uniknąć naruszenia tych danych.</p>
+<p>Zdecydowanie zaleca się pozostawienie tego ustawienia w domyślnej pozycji „Brak”, chyba że naprawdę potrzebujesz tych informacji i dodatkowo publicznie informujesz o sposobie ich wykorzystania.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maksymalna długość URL"><![CDATA[
+<h2>Maksymalna długość URL (w znakach)</h2>
+<p>To ustawienie uniemożliwia działanie adresów URL dłuższych niż określony limit. Może być przydatne do ograniczania szkód i zwiększania bezpieczeństwa witryny.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Wyświetl wbudowane linki pomocy po stronie administratora"><![CDATA[
+<h2>Wyświetlać wbudowane linki pomocy po stronie administratora</h2>
+<p>Jeśli chcesz ukryć w całym systemie wbudowane linki pomocy po stronie administratora (okna pomocy Textpattern w postaci wyskakujących okienek), ustaw tę opcję na „Brak”.</p>
+        ]]></item>
+        <item id="never_display_email" title="Nigdy nie pokazywać adresów email?"><![CDATA[
+<h2>Ukrywać adres e‑mail komentującego?</h2>
+<p>To ustawienie kontroluje, czy adres e‑mail komentującego ma być publicznie widoczny.</p>
+<p>Zaleca się, aby nie pokazywać adresów e‑mail — z szacunku dla użytkowników — choć w pewnych sytuacjach wyświetlanie adresów może być pożądane.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Używać ISO‑8859‑1 w emailach (domyślnie jest UTF‑8)?"><![CDATA[
+<h2>Używać kodowania ISO‑8859‑1 w emailach (domyślnie UTF‑8)?</h2>
+<p>Textpattern domyślnie wszędzie, gdzie to możliwe, używa kodowania UTF‑8, w tym dla wysyłanej poczty. Jednak niektóre starsze klienty poczty (w tym niektóre wersje Microsoft Outlook) nie obsługują poprawnie UTF‑8. Jeśli w wiadomościach widzisz zniekształcone znaki, to ustawienie spowoduje konwersję tekstu do kodowania ISO‑8859‑1 przed wysłaniem.</p>
+<p><strong>Uwaga:</strong> Jeśli używasz języka, którego znaków nie można przedstawić w ISO‑8859‑1, to ustawienie nie pomoże. Powinieneś poszukać klienta poczty zgodnego z UTF‑8 (lub Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Zastąp typy formularzy"><![CDATA[
+<h2>Zastąp typy formularzy</h2>
+<p>Wybierz, które typy formularzy będą miały swoje szablony dostępne w panelu „Pisanie” jako formularze nadpisujące.</p>
+        ]]></item>
+        <item id="permlink_format" title="Format trwałych odsyłaczy"><![CDATA[
+<h2>Wzorzec URL tytułu trwałego odsyłacza</h2>
+<p>Określa sposób konstruowania i przypisywania adresów URL artykułów, gdy używany jest tryb przyjaznych (niezaśmieconych) adresów.</p>
+<p>Gdy artykuł jest publikowany, jego adres URL jest generowany na podstawie tytułu artykułu, chyba że w polu „Tytuł tylko dla URL” podano konkretny adres.</p>
+<p>Rozważmy przykładowy tytuł artykułu: <em>Ann and Bob eat cake</em></p>
+<p>Jeśli wzorzec URL tytułu trwałego odsyłacza ustawiony jest na „Z dywizami (title-like-this)”, adres URL artykułu będzie wyglądał tak:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Jeśli wzorzec URL tytułu trwałego odsyłacza ustawiony jest na „Wielbłądzi zapis (TitleLikeThis)”, adres URL artykułu będzie wyglądał tak:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Wzór adresu URL artykułu"><![CDATA[
+<h2>Wzorzec adresu URL artykułu</h2>
+<p>Określa sposób, w jaki pojedyncze artykuły są osiągane poprzez adres URL wyświetlany przy użyciu znacznika <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+<p>Tryb „?=messy” jest najbardziej kompatybilny — działa przy minimalnej lub zerowej konfiguracji — lecz najmniej korzystny pod względem czytelności URL i optymalizacji dla wyszukiwarek (SEO). W tym trybie adresy URL artykułów w Twojej witrynie wyglądałyby następująco:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Wszystkie inne tryby wymagają funkcji przepisywania adresów URL serwera WWW (np. modułu Apache <code>mod_rewrite</code> lub dyrektyw przepisywania w bloku <code>server</code> w NGINX). Jeśli Twój serwer nie obsługuje przepisywania adresów URL, skontaktuj się z dostawcą hostingu lub użyj trybu „?=messy” opisanego powyżej.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Ścieżka do katalogu pamięci podręcznej wtyczek"><![CDATA[
+<h2>Ścieżka do katalogu pamięci podręcznej wtyczek</h2>
+<p>To ustawienie jest przeznaczone głównie dla twórców wtyczek. Po jej podaniu możesz umieścić w tym katalogu plik źródłowy wtyczki (nieskompilowany), a Textpattern załaduje go automatycznie, dzięki czemu możesz łatwo edytować wtyczkę i natychmiast zobaczyć efekty bez konieczności instalowania/aktywowania wtyczki. <strong>Pamiętaj jednak</strong>, że przy takim podejściu wadliwa wtyczka (która nie kompiluje się poprawnie) może również spowodować awarię Textpattern!</p>
+<p>Na serwisach produkcyjnych zaleca się wgrywanie wtyczek przez standardowy panel „Wtyczki”, a nie przy użyciu katalogu pamięci podręcznej wtyczek.</p>
+<p><strong>Uwaga:</strong> Nie wskazuj tego samego katalogu zarówno dla „tymczasowego”, jak i „pamięci podręcznej wtyczek”, ponieważ spowoduje to problemy (Textpattern próbowałby uruchamiać zawartość tymczasowych plików dziennika jako wtyczki).</p>
+        ]]></item>
         <item id="production_status" title="Stan witryny"><![CDATA[
 <h2>Status produkcji</h2>
-<p>Strona Textpattern ma jeden z trzech trybów:</p>
+<p>Witryna Textpattern może pracować w jednym z trzech trybów:</p>
 <ol>
-    <li>‘Debugging’</li>
-    <li>‘Testing’</li>
-    <li>‘Live’</li>
+    <li>„Debugging”</li>
+    <li>„Testing”</li>
+    <li>„Live”</li>
 </ol>
 <h3>Tryb debugowania</h3>
-<p>Wszystkie raporty błędów PHP na twojej stronie na żywo będą widoczne, ostrzega przed nieprawidłowym działaniem kodu i wtyczek. Dodatkowo, następujące informacje będą widoczne, gdy zobaczysz źródło HTML stron na żywo:</p>
+<p>Wszystkie raporty błędów PHP na działającej witrynie będą widoczne, podobnie jak ostrzeżenia o nieprawidłowym działaniu kodu i wtyczek. Dodatkowo, po wyświetleniu źródła HTML stron publicznych zobaczysz:</p>
 <ul>
-    <li>czas, w którym serwer potrzebował na zbudowanie strony („Runtime”)</li>
-    <li>liczba wykonanych zapytań MySQL</li>
-    <li>przybliżone zużycie pamięci szczytowej</li>
-    <li>wszystkie znaczniki tekstowe napotkane podczas budowy strony (znane również jako „track”)</li>
+    <li>czas potrzebny serwerowi na zbudowanie strony („Runtime”)</li>
+    <li>liczbę wykonanych zapytań MySQL</li>
+    <li>przybliżone maksymalne użycie pamięci</li>
+    <li>wszystkie znaczniki Textpattern napotkane podczas budowy strony (tzw. ślad znaczników)</li>
 </ul>
 <h3>Tryb testowania</h3>
-<p>Wszystkie raporty o błędzie PHP na twojej stronie na żywo będą widocznie. ostrzega przed nieprawidłowym działaniem kodu i wtyczek. Następujące informacje będą widoczne, gdy zobaczysz źródło HTML stron na żywo:</p>
+<p>Wszystkie raporty błędów PHP na działającej witrynie będą widoczne, podobnie jak ostrzeżenia o nieprawidłowym działaniu kodu i wtyczek. Po wyświetleniu źródła HTML stron publicznych zobaczysz:</p>
 <ul>
-    <li>czas, w którym serwer potrzebował na zbudowanie strony („Runtime”)</li>
-    <li>liczba wykonanych zapytań MySQL</li>
-    <li>przybliżone zużycie pamięci szczytowej</li>
+    <li>czas potrzebny serwerowi na zbudowanie strony („Runtime”)</li>
+    <li>liczbę wykonanych zapytań MySQL</li>
+    <li>przybliżone maksymalne użycie pamięci</li>
 </ul>
-<h3>Tryb na żywo</h3>
-<p>Na stronie nie zostaną wysłane żadne informacje o błędach ani diagnostyczne. Ogólnie rzecz biorąc, preferowany jest tryb rzeczywisty, ponieważ zapewnia najlepszy komfort użytkownika i najmniej obciąża na serwer.</p>
+<h3>Tryb produkcyjny (Live)</h3>
+<p>Na stronę nie będą wysyłane żadne raporty błędów ani informacje diagnostyczne. Zazwyczaj preferuje się tryb produkcyjny, ponieważ zapewnia najlepsze wrażenia użytkownika i najmniej obciąża serwer.</p>
         ]]></item>
-        <item id="public_theme_name" title=""><![CDATA[]]></item>
-        <item id="publish_expired_articles" title="Publikować wygasłe artykuły?"><![CDATA[]]></item>
-        <item id="publisher_email" title=""><![CDATA[]]></item>
-        <item id="rss_how_many" title="Ile artykułów powinno być zawartych w kanałach?"><![CDATA[]]></item>
-        <item id="secondpass" title=""><![CDATA[]]></item>
-        <item id="send_lastmod" title=""><![CDATA[]]></item>
-        <item id="show_comment_count_in_feed" title="Pokazać liczbę komentarzy w kanałach?"><![CDATA[]]></item>
-        <item id="site_slogan" title="Motto witryny"><![CDATA[]]></item>
-        <item id="sitename" title="Nazwa witryny"><![CDATA[]]></item>
-        <item id="siteurl" title="Adres witryny"><![CDATA[
+        <item id="public_theme_name" title="Motyw po stronie publicznej"><![CDATA[
+<h2>Motyw po stronie publicznej</h2>
+<p>Domyślny motyw frontendu, używany, gdy ktokolwiek odwiedza publiczną część Twojej witryny. Textpattern zawiera wbudowany motyw domyślny oraz opcję rozpoczęcia pracy bez motywu. Możesz również dodać paczki motywów do katalogu <code>textpattern/themes</code>, aby były dostępne do użycia.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publikować wygasłe artykuły?"><![CDATA[
+<h2>Publikować wygasłe artykuły?</h2>
+<p>Gdy ustawione na „Tak”, wygasłe artykuły będą nadal wyświetlane w witrynie po upływie daty wygaśnięcia. Możesz użyć znacznika <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>, aby pokazywać alternatywną treść lub znacznik dla wygasłych artykułów.</p>
+<p>Gdy ustawione na „Nie”, wygasłe artykuły będą usuwane z witryny publicznej, a ich adresy zwrócą status HTTP „410 Gone”. Domyślne ustawienie to „Nie”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Email wydawcy"><![CDATA[
+<h2>Wysyłać dane logowania z tego adresu email</h2>
+<p>Podaj adres e‑mail, który będzie używany jako adres w polu „Od:” w wiadomościach z danymi logowania dla nowych użytkowników.</p>
+<p>Jeśli to ustawienie pozostanie puste lub będzie zawierać nieprawidłowy adres e‑mail, Textpattern użyje imienia i adresu aktualnie zalogowanego użytkownika.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Ile artykułów w kanałach RSS?"><![CDATA[
+<h2>Ile artykułów powinno być uwzględnianych w kanałach?</h2>
+<p>To maksymalna liczba aktualnych artykułów jednocześnie syndykowanych w formatach RSS i Atom.</p>
+<p>Zaleca się niską wartość, na przykład od <code>5</code> do <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Liczba dodatkowych przebiegów parsera"><![CDATA[
+<h2>Liczba dodatkowych przebiegów parsera</h2>
+<p>Parser znaczników Textpattern zazwyczaj zastępuje wszystkie znaczniki treścią z bazy danych w jednym przebiegu szablonu strony. W niektórych przypadkach może to być jednak niewystarczające, na przykład:</p>
+<ul>
+    <li>gdy używasz wtyczek o niskim numerze ładowania jako atrybutów znaczników</li>
+    <li>przy zastępowaniu kodu wewnątrz znaczników <code>&lt;txp:php&gt;</code></li>
+    <li>przy pomijaniu elementów strony we wcześniejszej części szablonu, aby mogły otrzymać treść pochodzącą ze znacznika przetwarzanego później</li>
+</ul>
+<p>Ze względów kompatybilności Textpattern tradycyjnie wykonywał jeden dodatkowy przebieg (tzw. „secondpass”), stąd domyślna wartość tej preferencji to <code>1</code>. Większa liczba przebiegów zwiększa jednak ryzyko przypadkowego przetwarzania niezamierzonych znaczników. Ostatnie ulepszenia parsera zmniejszyły potrzebę wykonywania drugiego przebiegu. Dlatego, o ile nie używasz drugiego przebiegu z konkretnych powodów, ustaw tę wartość na <code>0</code>, aby zwiększyć bezpieczeństwo witryny.</p>
+<p>Jeśli później zobaczysz w witrynie nieprzetworzone znaczniki (i nie pojawiają się inne błędy znaczników w trybach Testowania/Debugowania, np. z powodu niedopasowanych par znaczników), skontaktuj się z nami, podając przykład użytego szablonu strony/kodu/wtyczki. Staramy się całkowicie wyeliminować potrzebę dodatkowych przebiegów parsera i takie informacje bardzo nam w tym pomogą.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Wysyłać nagłówek &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Wysyłać nagłówek "Last-Modified"?</h2>
+<p>Po włączeniu Textpattern odczyta nagłówek HTTP odwiedzającego <code>If-Modified-Since</code> (jeśli istnieje) i porówna go z czasem ostatniej aktualizacji witryny. Jeśli od ostatniego wyświetlenia strony przez użytkownika nic się nie zmieniło (tzn. znacznik czasu wysłany przez przeglądarkę jest taki sam jak czas ostatniej aktualizacji), zostanie odesłany nagłówek informujący przeglądarkę, że może użyć wersji strony z pamięci podręcznej.</p>
+<p>Może to ograniczyć zużycie transferu, skrócić czas ładowania strony i zmniejszyć obciążenie serwera WWW.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Pokazywać ilość komentarzy w kanałach XML?"><![CDATA[
+<h2>Pokazywać liczbę komentarzy w kanałach?</h2>
+<p>Po ustawieniu na „Tak” liczba komentarzy zostanie dołączona do tytułów artykułów w kanałach RSS/Atom.</p>
+        ]]></item>
+        <item id="site_slogan" title="Motto witryny"><![CDATA[
+<h2>Motto witryny</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Motto witryny <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> to krótkie podsumowanie lub opis Twojej strony. Będzie używane wszędzie tam, gdzie potrzebny jest opis witryny, np. w kanałach RSS/Atom, a także może być wyświetlane w dowolnych miejscach w witrynie według własnego uznania.</p>
+<p><strong>Uwaga:</strong> Motto witryny jest opcjonalne, ale może być wymagane do poprawności kanału RSS lub Atom.</p>
+        ]]></item>
+        <item id="sitename" title="Nazwa witryny"><![CDATA[
+<h2>Nazwa witryny</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Nazwa lub tytuł Twojej witryny <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>. Będzie ona wyświetlana w pasku tytułu przeglądarki odwiedzającego lub czytniku kanałów oraz w dowolnej liczbie innych miejsc w witrynie, według własnego uznania.</p>
+        ]]></item>
+        <item id="siteurl" title="Adres URL witryny"><![CDATA[
 <h2>Adres URL witryny</h2>
-<p>Jest to adres strony Textpattern na przykład <code>www.example.com</code>.</p>
-<p><strong>Uwaga:</strong> Protokoły <code>http://</code> i <code>https://</code> oraz kończący slash <code>/</code> nie są wymagane wymagane.</p>
+<p>Jest to adres Twojej witryny Textpattern, na przykład <code>www.example.com</code>.</p>
+<p><strong>Uwaga:</strong> Nie trzeba podawać <code>http://</code>, <code>https://</code> ani kończącego ukośnika <code>/</code>.</p>
         ]]></item>
-        <item id="skin_dir" title="Katalog motywu"><![CDATA[]]></item>
-        <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[]]></item>
-        <item id="spam_blocklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[]]></item>
-        <item id="syndicate_body_or_excerpt" title="Zsynchronizuj tylko zajawki artykułów?"><![CDATA[]]></item>
-        <item id="tempdir" title="Ścieżka katalogu tymczasowego"><![CDATA[]]></item>
-        <item id="theme_name" title="Motyw panelu administracyjnego"><![CDATA[]]></item>
-        <item id="txp_evaluate_functions" title="Funkcje PHP włączone w txp:evaluate"><![CDATA[]]></item>
+        <item id="skin_dir" title="Katalogu tematu"><![CDATA[
+<h2>Katalog motywów</h2>
+<p>Jeśli chcesz zmienić nazwę katalogu, w którym będą trwale przechowywane pliki płaskie motywów frontendu, możesz zrobić to tutaj. Najpierw musisz utworzyć katalog w katalogu głównym instalacji Textpattern, a także upewnić się, że PHP ma prawo zapisu do tego katalogu.</p>
+<p>Ta ścieżka jest zawsze <strong>ścieżką względną</strong> (względem katalogu głównego instalacji Textpattern).</p>
+<p>Domyślną wartością jest <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="Adres nadawcy (SMTP envelope sender address)"><![CDATA[
+<h2>Adres nadawcy koperty SMTP</h2>
+<p>To ustawienie powinno pozostać puste, chyba że napotkasz problemy z wysyłaniem wiadomości e‑mail w Textpattern (gdy żadna poczta nie jest w ogóle wysyłana). Jeśli taki problem się pojawi, możesz wpisać tutaj dowolny prawidłowy adres e‑mail, najlepiej w tej samej domenie co witryna, na której zainstalowano Textpattern (tzn. jeśli Twoja witryna to <code>https://example.com</code>, możesz użyć np. <code>you@example.com</code>).</p>
+<p>Dla zainteresowanych szczegółami technicznymi:</p>
+<ul>
+    <li>na serwerach UNIX‑owych/macOS podany adres e‑mail jest używany jako czwarty parametr (z prefiksem „-f”) funkcji PHP <code>mail()</code></li>
+    <li>na serwerach Windows podany adres e‑mail służy do ustawienia (lub nadpisania) dyrektywy <code>sendmail_from</code> w pliku php.ini</li>
+</ul>
+<p>Zwiększa to szansę, że adres nadawcy koperty SMTP (który nie musi być tym samym adresem, który widzisz w nagłówku „From:” wiadomości) zostanie ustawiony na podany tutaj adres, co jest wymagane do wysyłania poczty na niektórych serwerach WWW.</p>
+        ]]></item>
+        <item id="smtp_host" title="Serwer SMTP"><![CDATA[
+<h2>Serwer SMTP</h2>
+<p>Aby poprawić dostarczalność wiadomości i móc kierować pocztę przez zewnętrzną usługę (taką jak SendGrid, AWS SES, Mailchimp, Mailgun itp.), podaj tutaj serwer SMTP. O tę wartość zapytaj dostawcę SMTP.</p>
+<p>Tę wartość można także ustawić, definiując stałą <code>SMTP_HOST</code> w pliku <code>config.php</code>; w takim przypadku w panelu preferencji pole będzie wyszarzone.</p>
+        ]]></item>
+        <item id="smtp_pass" title="Hasło SMTP"><![CDATA[
+<h2>Hasło SMTP</h2>
+<p>Jeśli połączenie SMTP wymaga hasła dla podanej nazwy użytkownika, wprowadź je tutaj. Szczegóły znajdziesz w dokumentacji dostawcy.</p>
+<p>Uwaga: Choć hasło nie będzie tutaj wyświetlane, <em>będzie</em> przechowywane w postaci zwykłego tekstu w tabeli preferencji bazy danych. Aby zwiększyć bezpieczeństwo, możesz zamiast tego zdefiniować stałą <code>SMTP_PASS</code> w pliku <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="Port SMTP"><![CDATA[
+<h2>Port SMTP</h2>
+<p>Jeśli podałeś serwer SMTP, musisz określić port, aby włączyć routowanie SMTP. Typowe porty to:</p>
+<ul>
+    <li>25 – dla poczty nieszyfrowanej</li>
+    <li>465 – przestarzały (nieoficjalny) dla poczty szyfrowanej</li>
+    <li>587 – domyślny (zalecany) dla bezpiecznej poczty TLS</li>
+</ul>
+<p>Twój dostawca SMTP może używać innego portu, sprawdź jego dokumentację.</p>
+<p>Tę wartość można także ustawić, definiując stałą <code>SMTP_PORT</code> w pliku <code>config.php</code>; w takim przypadku w panelu preferencji pole będzie wyszarzone.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="Metoda bezpieczeństwa SMTP"><![CDATA[
+<h2>Metoda bezpieczeństwa SMTP</h2>
+<p>Wybierz mechanizm, którego Twój dostawca SMTP używa jako protokołu zabezpieczenia poczty. Szczegóły znajdziesz w jego dokumentacji.</p>
+<p>Tę wartość można także ustawić, definiując stałą <code>SMTP_SECTYPE</code> w pliku <code>config.php</code>; w takim przypadku w panelu preferencji pole będzie wyszarzone.</p>
+        ]]></item>
+        <item id="smtp_user" title="Nazwa użytkownika SMTP"><![CDATA[
+<h2>Nazwa użytkownika SMTP</h2>
+<p>Jeśli połączenie SMTP wymaga nazwy użytkownika/loginu, wprowadź ją tutaj. Szczegóły znajdziesz w dokumentacji dostawcy.</p>
+<p>Tę wartość można także ustawić, definiując stałą <code>SMTP_USER</code> w pliku <code>config.php</code>; w takim przypadku w panelu preferencji pole będzie wyszarzone.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Czarna lista SPAMu (adresy oddzielone przecinkami)"><![CDATA[
+<h2>Czarne listy spamu (oddzielone przecinkami)</h2>
+<p>Wskazani tutaj dostawcy <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">czarnych list <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> będą pytywani przy dodawaniu komentarza do bloga, a adres IP komentującego będzie sprawdzany. Jeśli adres IP znajduje się na liście, oznacza to, że w przeszłości zgłoszono z niego jeden lub więcej przypadków spamu i komentarz zostanie odrzucony. Niezależnie od wyniku sprawdzenia adres IP komentującego nie jest przechowywany przez Textpattern.</p>
+<p>Możesz podać listę nazw domen, oddzielając je przecinkami. Pamiętaj, że to na Tobie spoczywa odpowiedzialność za dobór list odpowiednich do celu.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Zsynchronizuj tylko zajawki artykułów?"><![CDATA[
+<h2>Syndykować <strong>tylko</strong> zajawkę artykułu?</h2>
+<p>Jeśli ustawione na „Nie”, elementy kanału będą zawierały pełne treści artykułów.</p>
+<p>Jeśli ustawione na „Tak”, elementy kanału będą zawierały zajawkę zamiast treści artykułu, o ile zajawka jest dostępna.</p>
+        ]]></item>
+        <item id="tempdir" title="Ścieżka do katalogu tymczasowego"><![CDATA[
+<h2>Ścieżka do katalogu tymczasowego</h2>
+<p>Ustawia <strong>bezwzględną ścieżkę</strong> do katalogu tymczasowego (często nazywanego „tmp” lub „temp”). PHP musi mieć prawo zapisu do tego katalogu. Katalog jest używany do plików tymczasowych, na przykład wgrywania wszelkiego rodzaju plików (wtyczek, plików czy obrazów).</p>
+<p><strong>Uwaga:</strong></p>
+<ul>
+    <li>Nie wskazuj tego samego katalogu zarówno jako „tymczasowego”, jak i „pamięci podręcznej wtyczek”, ponieważ spowoduje to problemy (Textpattern próbowałby uruchamiać zawartość tymczasowych plików dziennika jako wtyczki).</li>
+    <li>Ze względów bezpieczeństwa rozważ przeniesienie tego katalogu poza publicznie dostępny katalog główny witryny.</li>
+</ul>
+        ]]></item>
+        <item id="theme_name" title="Szablon panelu administracyjnego"><![CDATA[
+<h2>Motyw po stronie administracyjnej</h2>
+<p>Domyślny motyw panelu administracyjnego używany po zalogowaniu się do Textpattern. Textpattern zawiera kilka wstępnie zainstalowanych motywów administracyjnych; możesz także dodać własne paczki motywów do katalogu <code>textpattern/admin-themes</code>, aby były dostępne do użycia.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Dodawać kończący ukośnik do adresów URL"><![CDATA[
+<h2>Dodawać kończący ukośnik do adresów URL</h2>
+<p>Określa, czy Textpattern będzie automatycznie dodawał kończący ukośnik do generowanych adresów URL. Dostępne opcje:</p>
+<ul>
+    <li><strong>Nie</strong> – nigdy</li>
+    <li><strong>Listy</strong> – tylko na stronach list (tzn. nie przy wyświetlaniu pojedynczych artykułów)</li>
+    <li><strong>Tak</strong> – zawsze</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="Funkcje PHP włączone w txp:evaluate"><![CDATA[
+<h2>Funkcje PHP włączone w txp:evaluate</h2>
+<p>Jest to lista elementów <code>function</code> lub <code>alias=function</code> rozdzielonych przecinkami, np. <code>md5</code>, <code>replace=str_replace</code>. Funkcje umieszczone na tej liście można używać w atrybucie <code>query</code> znacznika <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query=&quot;replace('cats', 'dogs', 'I like cats.')&quot; /&gt;</code></pre>
+<p>Funkcja <code>function</code> powinna zwracać wartość skalarną (<strong>nie</strong> tablicę/obiekt).</p>
+        ]]></item>
         <item id="use_comments" title="Akceptować komentarze?"><![CDATA[
 <h2>Akceptować komentarze?</h2>
-<p>Określa czy funkcja komentowania Textpattern powinna być włączona, czy wyłączona.</p>
+<p>Określa, czy funkcja komentowania Textpattern ma być włączona, czy wyłączona.</p>
         ]]></item>
-        <item id="use_mail_on_feeds_id" title="Akceptować komentarze?"><![CDATA[]]></item>
-        <item id="use_plugins" title="Używać wtyczek?"><![CDATA[]]></item>
-        <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[]]></item>
+        <item id="use_mail_on_feeds_id" title="Używać adresów email w kanałach XML?"><![CDATA[
+<h2>Używać adresu email do tworzenia identyfikatorów kanałów (domyślnie adres URL witryny)?</h2>
+<p>Elementy w kanale Atom wymagają unikalnego identyfikatora.</p>
+<p>Aby generować identyfikatory unikalne dla Twojej witryny, Textpattern pozwala wybrać między adresem e‑mail a nazwą domeny, które będą w nich zawarte. Adresem e‑mail będzie pierwszy adres użyty podczas tworzenia witryny. Jeśli nie planujesz zmiany nazwy domeny w przyszłości, prawdopodobnie bezpiecznie jest ustawić tutaj „Nie”.</p>
+        ]]></item>
+        <item id="use_plugins" title="Używać pluginów?"><![CDATA[
+<h2>Używać wtyczek?</h2>
+<p>To ustawienie pozwala wyłączyć całą obsługę wtyczek Textpattern. Jest to przydatne podczas debugowania błędów w witrynie, gdy chcesz sprawdzić, czy któryś z problemów jest powodowany przez wtyczki.</p>
+        ]]></item>
+        <item id="use_textile" title="Domyślne formatowanie tekstu"><![CDATA[
+<h2>Domyślne formatowanie tekstu</h2>
+<p>Wybrany tutaj format tekstu stanie się domyślny dla formatowania zajawki i treści w panelu „Pisanie”. Możesz zezwolić na pełne przetwarzanie Textile, konwersję podziałów wierszy na znaczniki akapitu HTML lub całkowity brak konwersji tekstu.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a> to narzędzie, którego celem jest uproszczenie konwersji zwykłego tekstu na HTML. Po włączeniu Textile przetwarza treść artykułów i zwraca poprawny strukturalnie HTML.</p>
+<p>Textile oferuje również potężny, lecz łatwy do nauczenia zestaw poleceń do formatowania tekstu, definiowania struktur takich jak listy, nagłówki i cytaty blokowe oraz wstawiania linków i obrazów.</p>
+        ]]></item>
     </group>
 
     <group id="section" title="Panel sekcji">
-        <item id="section_category" title="Wprowadzenie"><![CDATA[]]></item>
-        <item id="section_default" title="Domyślna sekcja publikacji"><![CDATA[]]></item>
-        <item id="section_description" title="Opis"><![CDATA[]]></item>
-        <item id="section_on_frontpage" title="Artykuły sekcji pojawiają się na stronie głównej?"><![CDATA[]]></item>
-        <item id="section_searchable" title="Uwzględnij tę sekcję przy wyszukiwaniu?"><![CDATA[]]></item>
-        <item id="section_syndicate" title="Zsynchronizuj artykuły w tej sekcji?"><![CDATA[]]></item>
-        <item id="section_uses_css" title="Używa stylu"><![CDATA[]]></item>
-        <item id="section_uses_page" title="Używa strony"><![CDATA[]]></item>
-        <item id="section_uses_skin" title="Używa motywu"><![CDATA[]]></item>
+        <item id="section_category" title="Wprowadzenie"><![CDATA[
+<h2>Wprowadzenie</h2>
+<p>Sekcje w Textpattern najlepiej postrzegać jako odpowiedniki działów w gazecie: wszystkie należą do tej samej publikacji, ale każda może mieć inny układ, inny styl artykułu itd.</p>
+<p>Dla większości witryn wystarczy utworzyć minimalną liczbę sekcji.</p>
+<h3>Przykładowy scenariusz dla witryny z trzema sekcjami:</h3>
+<ol>
+    <li><strong>Archiwum:</strong> Sekcja, do której należą wszystkie artykuły pojawiające się na stronie głównej. Gdy czytelnik kliknie trwały odsyłacz artykułu, zostanie on wyświetlony w układzie strony przypisanym do tej sekcji. Aby przejść do stronicowanej listy najnowszych artykułów przypisanych do sekcji „archive”, użyj adresu <code>https://example.com/archive/</code>.</li>
+    <li><strong>O&nbsp;serwisie:</strong> Strona „o tej witrynie”, która różni się od strony głównej i sekcji „archive” tym, że jest bardziej statyczna, może mieć inny układ i prawdopodobnie zawiera jedynie jeden artykuł. Sekcja „about” jest dostępna pod adresem <code>https://example.com/about/</code>.</li>
+    <li><strong>Zdjęcia:</strong> Sekcja, której inny układ (i możliwe, że inny CSS) służy do wyświetlania zdjęć zamiast artykułów.</li>
+</ol>
+<p>Zwróć uwagę, że zawsze istnieje specjalna ukryta sekcja o nazwie <code>default</code>. Sekcja domyślna używa strony o nazwie <code>default</code> i stylu o nazwie <code>default</code> i na ich podstawie buduje stronę główną Twojej witryny.</p>
+        ]]></item>
+        <item id="section_default" title="Domyślna sekcja publikacji"><![CDATA[
+<h2>Domyślna sekcja publikacji</h2>
+<p>Ta opcja określa, która sekcja będzie wstępnie wybrana w menu „Sekcja” podczas tworzenia nowego artykułu w panelu „Pisanie”.</p>
+<p>Jeśli większość Twoich artykułów ostatecznie przypisywana jest do konkretnej sekcji, wybierz ją z listy. Zmiany są widoczne natychmiast.</p>
+<p>Możesz nadpisać to ustawienie indywidualnie dla artykułu w panelu „Pisanie”, wybierając inną sekcję w panelu „Sortowanie i wyświetlanie”.</p>
+        ]]></item>
+        <item id="section_description" title="Opis"><![CDATA[
+<h2>Opis</h2>
+<p>Opis sekcji jest opcjonalnym elementem, który może pomóc wyszukiwarkom i robotom sieciowym lepiej identyfikować i porządkować treści.</p>
+<p>Opis sekcji jest ograniczony do maksymalnie 255 znaków. Należy pamiętać, że niektóre wyszukiwarki nakładają ograniczenia na długość <code>meta description</code> strony ze względów praktycznych przy wyświetlaniu w wynikach wyszukiwania (SERP), i limit ten może być niższy niż 255 znaków dostępnych w Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Artykuły sekcji pojawiają się na stronie głównej?"><![CDATA[
+<h2>Czy artykuły z tej sekcji pojawiają się na stronie głównej?</h2>
+<p>Artykuły w niektórych sekcjach, takich jak te przypominające bardziej statyczne strony WWW, mogą nie pasować do dynamicznego, czasowo uporządkowanego strumienia treści na stronie głównej.</p>
+<p>Ustawienie tej opcji na „Nie” sprawi, że artykuły przypisane do tej sekcji nie będą pojawiały się na stronie głównej.</p>
+        ]]></item>
+        <item id="section_searchable" title="Uwzględnij tę sekcję przy wyszukiwaniu?"><![CDATA[
+<h2>Uwzględniać tę sekcję w wyszukiwaniu w witrynie?</h2>
+<p>To ustawienie określa, czy artykuły należące do tej sekcji mają pojawiać się w wynikach wyszukiwania obejmujących całą witrynę.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Zsynchronizuj artykuły w tej sekcji?"><![CDATA[
+<h2>Syndykować artykuły w tej sekcji?</h2>
+<p>Określa, czy artykuły z tej sekcji będą uwzględniane w kanałach RSS i Atom witryny.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Używa stylu"><![CDATA[
+<h2>Używa stylu</h2>
+<p>Jeśli chcesz nadpisać domyślny arkusz stylów dla danej sekcji, możesz ustawić to tutaj.</p>
+<p>Ma to zastosowanie tylko do arkuszy stylów przechowywanych w panelu „Style” w Textpattern – jeśli hostujesz CSS poza Textpattern (co jest wysoce zalecane), ta opcja nie ma żadnego efektu.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Używa strony"><![CDATA[
+<h2>Używa strony</h2>
+<p>W Textpattern sekcje są powiązane z szablonami stron.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Używa motywu"><![CDATA[
+<h2>Używa motywu</h2>
+<p>Jeśli chcesz zmienić motyw używany w konkretnej sekcji, możesz wybrać go tutaj z listy aktualnie zainstalowanych motywów.</p>
+        ]]></item>
     </group>
 
     <group id="setup" title="Panel ustawień">
-        <item id="setup_user_login" title="Login użytkownika"><![CDATA[]]></item>
-        <item id="setup_user_pass" title="Hasło użytkownika"><![CDATA[]]></item>
-        <item id="table_prefix" title="Prefiks tabel"><![CDATA[]]></item>
+        <item id="setup_admin_url" title="Poddomeny administracyjna"><![CDATA[
+<h2>Poddomena administracyjna</h2>
+<p>Poddomena używana do dostępu do interfejsu administracyjnego Textpattern (np. <code>admin.example.com</code>).</p>
+<p>Więcej szczegółów znajdziesz w dokumencie <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalacja wieloserwisowa Textpattern</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Domena cookie"><![CDATA[
+<h2>Domena cookie</h2>
+<p>(Pod)domena, której chcesz używać dla cookie Textpattern.</p>
+<p>Więcej szczegółów znajdziesz w dokumencie <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">instalacja wieloserwisowa Textpattern</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Login użytkownika"><![CDATA[
+<h2>Login użytkownika</h2>
+<p>Nazwa logowania konta administratora („Wydawca”), którego będziesz używać do zarządzania witryną.</p>
+<p>Choć nazwa nie jest specjalnie ograniczona, najlepiej unikać skomplikowanych ciągów znaków oraz łatwych do odgadnięcia nazw użytkowników (np. <code>admin</code>, <code>administrator</code> itd.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Hasło użytkownika"><![CDATA[
+<h2>Hasło użytkownika</h2>
+<p>Ponieważ to konto ma najwyższy poziom dostępu w Textpattern, wybierz bardzo silne hasło lub — najlepiej — długą frazę.</p>
+<h3>Wskazówki</h3>
+<ul>
+    <li>Używaj wielkich i małych liter</li>
+    <li>Używaj cyfr</li>
+    <li>Używaj symboli</li>
+    <li>Uczyń hasło co najmniej ośmioznakowym</li>
+    <li><strong>Unikaj</strong> jakichkolwiek informacji osobistych (dat, imion, miejsc, członków rodziny, zwierząt itd.)</li>
+    <li><strong>Unikaj</strong> pojedynczych lub powtarzających się słów słownikowych, niezależnie od pisowni, języka czy wielkości liter</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Prefiks tabel"><![CDATA[
+<h2>Prefiks tabel</h2>
+    <p>Musisz użyć prefiksu tabel tylko wtedy, gdy potrzebujesz wielu instalacji Textpattern w jednej bazie danych. Każda instalacja Textpattern wymaga unikalnego prefiksu.</p>
+    <p>Pamiętaj, że prefiks musi spełniać następujące zasady:</p>
+<ul>
+    <li><strong>1. znak:</strong> musi być literą a–z, A–Z lub znakiem podkreślenia</li>
+    <li><strong>Kolejne znaki:</strong> mogą być tylko literami a–z, A–Z, cyframi 0–9 lub podkreśleniem</li>
+</ul>
+        ]]></item>
     </group>
 
     <group id="skin" title="Panel motywów">
@@ -282,15 +1151,31 @@
 <h2>Strona motywu</h2>
 <p>Adres URL, gdzie można znaleźć pełne informacje i/lub najnowsze wersje tego motywu (opcjonalne).</p>
         ]]></item>
-        <item id="skin_delete_entirely" title="Usuń szablony motywów również z dysku"><![CDATA[]]></item>
-        <item id="skin_delete_from_database" title="Usuń niewykorzystane szablony z bazy danych przy imporcie"><![CDATA[]]></item>
-        <item id="skin_delete_from_disk" title="Usuń niewykorzystane szablony z dysku przy eksporcie"><![CDATA[]]></item>
+        <item id="skin_delete_entirely" title="Usuń szablony motywów również z dysku"><![CDATA[
+<h2>Usuń z dysku także szablony motywu</h2>
+<p>Po zaznaczeniu wszystkie pliki szablonów w wybranych motywach zostaną trwale usunięte z dysku. Katalogi motywów i ich podkatalogi nie zostaną jednak usunięte, jeśli znajdują się w nich inne pliki (np. JavaScript, obrazy itp.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Usuń niewykorzystane szablony z bazy danych przy imporcie"><![CDATA[
+<h2>Usunąć nieużywane szablony z bazy danych podczas importu</h2>
+<p>Po zaznaczeniu każdy szablon w wybranych motywach, który nie ma odpowiadającego mu pliku na dysku, zostanie trwale usunięty z bazy danych. Po zakończeniu operacji szablony w bazie danych będą możliwie jak najwierniej odpowiadać temu, co znajduje się na dysku.</p>
+<p>Pamiętaj, że jeśli usunąłeś pliki szablonów wymagane przez Textpattern, ich puste wersje zostaną utworzone w bazie danych automatycznie.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Usuń niewykorzystane szablony z dysku przy eksporcie"><![CDATA[
+<h2>Usunąć nieużywane szablony z dysku podczas eksportu</h2>
+<p>Po zaznaczeniu każdy plik szablonu w wybranych motywach, który nie ma odpowiadającego mu elementu w bazie danych, zostanie trwale usunięty z motywu na dysku. Po zakończeniu operacji szablony na systemie plików będą dokładnie odzwierciedlały to, co jest zapisane w bazie danych.</p>
+        ]]></item>
         <item id="skin_description" title="Opis motywu"><![CDATA[
 <h2>Opis motywu</h2>
 <p>Można podać krótkie podsumowanie projektu/układu motywu (opcjonalne).</p>
 <p>Opis tematu jest ograniczony do maksymalnie 255 znaków.</p>
         ]]></item>
-        <item id="skin_import" title="Importuj motyw"><![CDATA[]]></item>
+        <item id="skin_import" title="Importuj motyw"><![CDATA[
+<h2>Importuj motyw z dysku</h2>
+<p>Ten formularz pozwala zaimportować motyw do bazy danych Textpattern z katalogu motywów.</p>
+<p>Importowalny motyw musi się składać z czytelnego katalogu nadrzędnego o nazwie motywu oraz z czytelnego pliku <code>manifest.json</code> wewnątrz katalogu, w oczekiwanym formacie. Katalog motywu powinien również zawierać strony, formularze i style w odpowiednich podkatalogach o takich samych nazwach.</p>
+<p>Podczas gdy strony i formularze powinny mieć rozszerzenie <code>.txp</code>, arkusze stylów muszą być plikami <code>.css</code>. Formularze powinny być także pogrupowane według typu w dedykowanych katalogach. Textpattern podczas importu utworzy wszystkie brakujące, niezbędne szablony.</p>
+<p>Więcej informacji na temat tworzenia, instalowania i używania motywów w Textpattern CMS znajdziesz w <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentacji motywów <span class="ui-icon ui-icon-extlink">(otwiera zewnętrzny link w nowym oknie)</span></a>.</p>
+        ]]></item>
         <item id="skin_name" title="Nazwa motywu"><![CDATA[
 <h2>Nazwa motywu</h2>
 <p>Nazwa motywu jest używana w nazwach katalogu motywu i innych celach technicznych (wymagana).</p>

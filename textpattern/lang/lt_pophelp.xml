@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="lt">
+    <group id="admin" title="Naudotojų skydelis">
+        <item id="about_privileges" title="Apie vaidmenis"><![CDATA[
+<h2>Apie vaidmenis</h2>
+<h3>Leidėjas</h3>
+<ul>
+    <li>gali tvarkyti straipsnius, komentarus ir nuorodas</li>
+    <li>gali naudoti PHP straipsniuose, jei administratoriaus nuostata „Allow PHP in articles?“ nustatyta į „Yes“</li>
+    <li>gali tvarkyti atvaizdus ir rinkmenas</li>
+    <li>gali tvarkyti skiltis ir kategorijas</li>
+    <li>gali tvarkyti puslapius, formas ir stilius</li>
+    <li>gali peržiūrėti diagnostinę informaciją</li>
+    <li>gali tvarkyti svetainės nuostatas</li>
+    <li>gali tvarkyti naudotojus</li>
+    <li>gali tvarkyti lankytojų žurnalus</li>
+    <li>gali tvarkyti papildinius</li>
+    <li>gali importuoti duomenis</li>
+</ul>
+<h3>Vyriausiasis redaktorius</h3>
+<ul>
+    <li>gali tvarkyti straipsnius, komentarus ir nuorodas</li>
+    <li>gali naudoti PHP straipsniuose, jei administratoriaus nuostata „Allow PHP in articles?“ nustatyta į „Yes“</li>
+    <li>gali tvarkyti atvaizdus ir rinkmenas</li>
+    <li>gali tvarkyti skiltis ir kategorijas</li>
+    <li>gali tvarkyti puslapius, formas ir stilius</li>
+    <li>gali peržiūrėti diagnostinę informaciją</li>
+    <li>gali tvarkyti svetainės nuostatas</li>
+    <li>gali peržiūrėti naudotojus</li>
+    <li>gali tvarkyti lankytojų žurnalus</li>
+    <li>gali tvarkyti papildinius</li>
+    <li>gali importuoti duomenis</li>
+</ul>
+<h3>Redaktorius</h3>
+<ul>
+    <li>gali tvarkyti straipsnius su viena išimtimi:
+        <ul>
+            <li>negali ištrinti kitų naudotojų straipsnių</li>
+        </ul>
+    </li>
+    <li>gali tvarkyti komentarus ir nuorodas</li>
+    <li>gali tvarkyti atvaizdus ir rinkmenas</li>
+    <li>gali tvarkyti kategorijas</li>
+    <li>gali tvarkyti puslapius ir formas</li>
+    <li>gali peržiūrėti naudotojus</li>
+    <li>gali tvarkyti lankytojų žurnalus</li>
+</ul>
+<h3>Autorius</h3>
+<ul>
+    <li>gali tvarkyti savo straipsnius, matyti kitų naudotojų straipsnius</li>
+    <li>gali tvarkyti atvaizdus ir rinkmenas</li>
+</ul>
+<h3>Laisvai samdomas autorius</h3>
+<ul>
+    <li>gali ribotai tvarkyti savo straipsnius:
+        <ul>
+            <li>gali keisti straipsnį tik tol, kol jis nėra publikuotas</li>
+            <li>gali pritaikyti tik <em>tik</em> juodraščio (Draft), paslėpto (Hidden) arba laukiančio (Pending) būseną</li>
+        </ul>
+    </li>
+    <li>gali peržiūrėti kitų naudotojų straipsnius</li>
+</ul>
+<h3>Dizaineris</h3>
+<ul>
+    <li>gali ribotai tvarkyti savo straipsnius:
+        <ul>
+            <li>gali keisti straipsnį tik tol, kol jis nėra publikuotas</li>
+            <li>gali pritaikyti tik <em>tik</em> juodraščio (Draft), paslėpto (Hidden) arba laukiančio (Pending) būseną</li>
+        </ul>
+    </li>
+    <li>gali peržiūrėti kitų naudotojų straipsnius</li>
+    <li>gali tvarkyti atvaizdus</li>
+    <li>gali tvarkyti skiltis</li>
+    <li>gali tvarkyti puslapius, formas ir stilius</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Sukurti autorių"><![CDATA[
+<h2>Pridėti naują autorių</h2>
+<p>Naujajam autoriui el. paštu bus išsiųstas pasveikinimo pranešimas ir prisijungimo instrukcijos.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Rašymo skydelis">
+        <item id="article_image" title="Straipsnio atvaizdas"><![CDATA[
+<h2>Straipsnio atvaizdas</h2>
+<p>Norėdami susieti atvaizdus su šiuo straipsniu, čia įrašykite vieną iš šių reikšmių:</p>
+<ol>
+    <li>vieną ar daugiau Textpattern atvaizdų ID, atskirtų kableliais (pvz., <code>12, 25, 18</code>)</li>
+    <li>vieną ar daugiau santykinių atvaizdo URL, atskirtų kableliais (pvz., <code>/images/my_pic.jpg</code>)</li>
+    <li>vieną ar daugiau pilnų URL, atskirtų kableliais (pvz., <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Pirmąjį atvaizdą galima parodyti įdedant žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> į straipsnio formą. Pagal numatymą ji išveda visą HTML <code>&lt;img&gt;</code> žymą su pasirinktu atvaizdu.</p>
+<p>Galerijas galite rodyti naudodami žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> tag <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Tekstas"><![CDATA[
+<h2>Tekstas</h2>
+<p>Pagrindinis straipsnio turinys yra straipsnio tekste.</p>
+<p>Rengdami arba ruošdami straipsnius publikavimui Textpattern sistemoje, autoriai gali perjungti tris straipsnio rodinius: gryną tekstą, HTML žymėjimą (kodą, kuriuo naršyklė atvaizduoja straipsnį) ir sugeneruotą peržiūrą.</p>
+        ]]></item>
+        <item id="description" title="Aprašas"><![CDATA[
+<h2>Aprašas</h2>
+<p>Straipsnio aprašas yra pasirenkamas komponentas, kuris gali padėti paieškos sistemoms ir svetainių skenuokliams geriau atpažinti ir rūšiuoti turinį.</p>
+<p>Straipsnio aprašas ribojamas iki 255 simbolių. Atminkite, kad kai kurios paieškos sistemos riboja puslapio <code>meta description</code> ilgiui skirtų simbolių skaičių, kad jis būtų patogiai rodomas rezultatų puslapiuose (SERP), ir ši riba gali būti mažesnė nei 255 simboliai, leidžiami Textpattern.</p>
+<p>Atminkite, kad straipsnio aprašas skiriasi nuo straipsnio ištraukos, nors turinys abiejuose gali būti panašus. Straipsnio aprašas pirmiausia skirtas naudoti su paieškos sistemomis ir skenuokliais, o straipsnio ištrauka labiau tinka žmonėms skaitomai straipsnio santraukai ten, kur to pageidaujama.</p>
+        ]]></item>
+        <item id="excerpt" title="Ištrauka"><![CDATA[
+<h2>Ištrauka</h2>
+<p>Straipsnio ištraukos yra nebūtinos. Ištraukos gali būti naudojamos kaip trumpa straipsnio santrauka, rodoma turinio lentelėje, naudojama vietoje viso straipsnio teksto svetainės RSS/Atom kanaluose ar panašiais tikslais.</p>
+        ]]></item>
+        <item id="expire_date" title="Galiojimo pabaigos data"><![CDATA[
+<h2>Galiojimo pabaigos data</h2>
+<p>Laikas, kada straipsnis pažymimas kaip negaliojantis. Laikas nebūtinas ir gali būti nustatytas į bet kokį momentą praeityje ar ateityje.</p>
+<p>Laukų reikšmės atitinka šią informaciją:</p>
+<ul>
+    <li>Metai / Mėnuo / Diena</li>
+    <li>Valanda (24 val. formatu) : Minutė : Sekundė</li>
+</ul>
+<p>Atėjus šiam laikui (arba jei nurodytas laikas praeityje), straipsnio galiojimas baigiasi.</p>
+<p>Jei įjungta parinktis rodyti nebegaliojančius straipsnius, straipsnis išlieka matomas. Jei parinktis išjungta, lankytojams vietoj straipsnio turinio bus pateikta HTTP 410 klaida.</p>
+        ]]></item>
+        <item id="keywords" title="Raktažodžiai"><![CDATA[
+<h2>Raktažodžiai</h2>
+<p>Raktažodžiai naudingi smulkiau nustatant straipsnių tarpusavio ryšius nei tai leidžia kategorijos.</p>
+<p>Raktažodžiai turi būti pavieniai žodžiai, atskirti kableliais.</p>
+        ]]></item>
+        <item id="override_form" title="Keitimo forma"><![CDATA[
+<h2>Keitimo forma</h2>
+<p>Straipsnyje galima pasirinktinai naudoti kitą formą nei numatytoji – pavyzdžiui, rodyti straipsnio ištrauką su <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> vietoje straipsnio teksto su <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. Tai galima nustatyti čia.</p>
+        ]]></item>
+        <item id="publish_date" title="Publikavimo data"><![CDATA[
+<h2>Publikavimo data</h2>
+<p>Laikas, kai straipsnis arba rinkmena yra publikuojama ar neseniai pataisyta. Laiką galima nustatyti į momentą, kai elementas publikuojamas, arba į bet kokį momentą praeityje ar ateityje.</p>
+<p>Laukų reikšmės atitinka šią informaciją:</p>
+<ul>
+    <li>Metai / Mėnuo / Diena</li>
+    <li>Valanda (24 val. formatu) : Minutė : Sekundė</li>
+</ul>
+<p>Elementas, kurio data yra vėlesnė už dabartinį laiką (t. y. ateityje), nebus rodomas viešojoje svetainės dalyje ir RSS/Atom kanaluose tol, kol šis laikas ateis.</p>
+        ]]></item>
+        <item id="status" title="Būsena"><![CDATA[
+<h2>Būsena</h2>
+<p>Nustato šio Textpattern straipsnio publikavimo matomumo būseną.</p>
+<p>Publikavimo būsena gali būti viena iš šių:</p>
+<ul>
+<li><strong>Draft</strong>: laikoma rengiamu turiniu ir nematoma už Textpattern administravimo srities ribų (t. y. nematoma svetainėje ir nesindikuojama kanaluose).</li>
+<li><strong>Hidden</strong>: straipsnis nematomas už Textpattern administravimo srities ribų. Naudinga laikinai pašalinti turinį iš svetainės jo neištrinant.</li>
+<li><strong>Pending</strong>: laikomas parengtu publikavimui ir laukiančiu patvirtinimo, bet nematomas už Textpattern administravimo srities ribų.</li>
+<li><strong>Live</strong>: paprastai matomas už Textpattern administravimo srities ribų (t. y. matomas svetainėje, sindikuojamas kanaluose, jei tai leidžia nuostatos). Jei straipsnio būsena „Live“ ir jam nustatyta galiojimo pabaigos data, būsena ir toliau bus „Live“, kai ši data bus pasiekta, tačiau straipsnis išorėje bus rodomas tik tuo atveju, jei leidžiama publikuoti nebegaliojančius straipsnius.</li>
+<li><strong>Sticky</strong>: panašus į <strong>Live</strong> straipsnį tuo, kad matomas svetainės lankytojams, tačiau <strong>nebus</strong> rodomas straipsnių sąrašuose, nebent atitinkamos žymos <code>article</code> arba <code>article_custom</code> atributas <code>status</code> turės reikšmę <code>sticky</code>.</li>
+</ul>
+<p>Pastaba: turinys, kuris viešai svetainėje nematomas, vis tiek gali būti peržiūrėtas prisijungusių naudotojų.</p>
+        ]]></item>
+        <item id="title" title="Antraštė"><![CDATA[
+<h2>Antraštė</h2>
+<p>Pridėkite tinkamą šio straipsnio antraštę.</p>
+<p>Straipsnio antraštė negali viršyti 255 simbolių.</p>
+        ]]></item>
+        <item id="url_title" title="Tik URL antraštė"><![CDATA[
+<h2>Tik URL antraštė</h2>
+<p>Jei norite naudoti konkretų pavadinimą straipsnio nuolatinės nuorodos (permalink) URL adrese, įveskite jį čia. Jei paliksite tuščią, URL antraštė bus automatiškai sugeneruota iš straipsnio antraštės.</p>
+<p>Ypač naudinga, jei straipsnio antraštėje naudojami ne ASCII simboliai.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategorijų skydelis">
+        <item id="article_category" title="Straipsniai"><![CDATA[
+<h2>Straipsniai</h2>
+<p>Skirtingai nei skiltys, kurios apibrėžia svetainės naršymo struktūrą, straipsnių kategorijos leidžia straipsnius tvarkyti pagal jų tematiką. Priskyrus kategorijas, galima naršyti straipsnių sąrašus pagal konkrečias kategorijas.</p>
+<p>Pavyzdžiui, svetainėje apie maistą galimos tokios straipsnių kategorijos:</p>
+<ul>
+    <li>žali produktai</li>
+    <li>apsipirkimas</li>
+    <li>receptai</li>
+    <li>patiekimo idėjos</li>
+    <li>restoranai</li>
+    <li>virtuvės šefai</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Aprašas"><![CDATA[
+<h2>Kategorijos aprašas</h2>
+<p>Kategorijos aprašas yra pasirenkamas komponentas, kuris gali padėti paieškos sistemoms ir svetainių skenuokliams geriau atpažinti ir rūšiuoti turinį.</p>
+<p>Kategorijos aprašas negali viršyti 255 simbolių. Atminkite, kad kai kurios paieškos sistemos riboja puslapio <code>meta description</code> ilgiui skirtų simbolių skaičių, kad jis būtų patogiai rodomas rezultatų puslapiuose (SERP), ir ši riba gali būti mažesnė nei 255 simboliai, leidžiami Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Rinkmenos"><![CDATA[
+<h2>Rinkmenos</h2>
+<p>Rinkmenų kategorijos nėra privalomos, bet jos naudingos grupuojant pasirinktas įkeltas rinkmenas.</p>
+        ]]></item>
+        <item id="image_category" title="Atvaizdai"><![CDATA[
+<h2>Atvaizdai</h2>
+<p>Atvaizdų kategorijos nėra privalomos, bet jos naudingos tiek vidinei tvarkai, tiek atvaizdų rinkiniams apibrėžti, kuriuos galima rodyti naudojant žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Nuorodos"><![CDATA[
+<h2>Nuorodos</h2>
+<p>Nuorodų kategorijos nėra privalomos, tačiau naudingos rodant skirtingas nuorodų grupes, pvz., „Draugai“, „Romėnai“, „Tėvynainiai“.</p>
+<p>Tokie atrankiniai nuorodų sąrašai išvedami naudojant <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> žymą <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, pavyzdžiui:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostikos skydelis">
+        <item id="clean_url_data_failed" title="Švaraus URL duomenų testas nepavyko"><![CDATA[
+<h2>Švaraus URL duomenų testas nepavyko</h2>
+<p>Atrodo, kad svetainės URL adresai (pvz., <code>https://example.com/section/article</code>) šiuo metu neveikia arba žiniatinklio serveris nepalaiko testo procedūros, leidžiančios nustatyti, ar švarūs URL veikia; jei svetainėje švarūs URL veikia kaip tikėtasi, šį pranešimą galima drąsiai ignoruoti.</p>
+<p>Jei švarūs URL <em>neveikia</em>, tai gali reikšti, kad:</p>
+<ul>
+    <li>„Site URL“ nuostata neteisinga arba puslapis tuo adresu nėra valdomas šios Textpattern instancijos</li>
+    <li>serveriui reikia pataisyti <code>.htaccess</code> ar panašias serverio direktyvas, kad švarūs URL veiktų</li>
+    <li>serveris apskritai nepalaiko švarių URL</li>
+</ul>
+<p>Švaraus URL testas bando atsiųsti puslapį iš žiniatinklio adreso, nurodyto „Site URL“ nuostatoje, kad patikrintų, ar visi švaraus URL parametrai veikia teisingai. Jei tas URL priklauso kitai svetainei arba buvo pakeistas statiniu puslapiu ar pan., testas nepavyks. Kol problema neišspręsta, reikėtų naudoti „netvarkingus“ URL (pvz., <code>https://example.com?s=section&amp;id=4</code>). Įsitikinkite, kad nuostatoje „Permanent link mode“ administratoriaus nuostatose parinktis nustatyta atitinkamai.</p>
+<p>Atkreipkite dėmesį, kad papildinys, įjungiantis svetainės „priežiūros režimą“, gali sukelti šį įspėjimą.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Švaraus URL testas nepavyko"><![CDATA[
+<h2>Švaraus URL testas nepavyko</h2>
+<p>Atrodo, kad svetainės URL adresai (pvz., <code>https://example.com/section/article</code>) šiuo metu neveikia arba žiniatinklio serveris nepalaiko testo procedūros, leidžiančios nustatyti, ar švarūs URL veikia; jei svetainėje švarūs URL veikia kaip tikėtasi, šį pranešimą galima drąsiai ignoruoti.</p>
+<p>Jei švarūs URL <em>neveikia</em>, tai gali reikšti, kad:</p>
+<ul>
+    <li>„Site URL“ nuostata neteisinga arba puslapis tuo adresu nėra valdomas šios Textpattern instancijos</li>
+    <li>serveriui reikia pataisyti <code>.htaccess</code> ar panašias serverio direktyvas, kad švarūs URL veiktų</li>
+    <li>serveris apskritai nepalaiko švarių URL</li>
+</ul>
+<p>Švaraus URL testas bando atsiųsti puslapį iš žiniatinklio adreso, nurodyto „Site URL“ nuostatoje, kad patikrintų, ar visi švaraus URL parametrai veikia teisingai. Jei tas URL priklauso kitai svetainei arba buvo pakeistas statiniu puslapiu ar pan., testas nepavyks. Kol problema neišspręsta, reikėtų naudoti „netvarkingus“ URL (pvz., <code>https://example.com?s=section&amp;id=4</code>). Įsitikinkite, kad nuostatoje „Permanent link mode“ administratoriaus nuostatose parinktis nustatyta atitinkamai.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Keli prisijungimai gyvojoje serverio aplinkoje"><![CDATA[
+<h2>Keli prisijungimai gyvojoje serverio aplinkoje</h2>
+<p>Leisti jūsų naudotojo paskyrai prisijungti iš kelių sesijų yra saugumo rizika ir nerekomenduojama. Išjunkite šią funkciją išplėstinių nuostatų skydelyje, nebent suprantate ir priimate riziką.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Slėpti privačią informaciją"><![CDATA[
+<h2>Slėpti privačią informaciją</h2>
+<p>Paslepia privačią informaciją dėl papildomo saugumo. Jei diagnostinę informaciją ketinate skelbti viešai matomu formatu, pavyzdžiui, Textpattern pagalbos forume, tai sumažina saugumo riziką, nes nebus rodoma jautri serverio informacija.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Kuriamas kodas gyvojoje serverio aplinkoje"><![CDATA[
+<h2>Kuriamas kodas gyvojoje serverio aplinkoje</h2>
+<p>Vystomos (in-development) Textpattern versijos nerekomenduojamos naudoti produkcinėse svetainėse. Jei suprantate ir priimate riziką, šį įspėjimą galite ignoruoti.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Katalogas nėra įrašomas"><![CDATA[
+<h2>Katalogas nėra įrašomas</h2>
+<p>Norint naudoti rinkmenų ir atvaizdų įkėlimo galimybes, šiuos katalogus PHP turi galėti rašyti per žiniatinklio serverio naudotoją. Tai galima atlikti naudojant (S)FTP klientą arba komandinėje eilutėje paleidžiant komandą <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS paieška nepavyko"><![CDATA[
+<h2>DNS paieška nepavyko</h2>
+<p>Atrodo, kad URL, nurodytas kaip svetainės adresas, yra nepasiekiamas.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Rikmenų įkėlimas yra uždraustas"><![CDATA[
+<h2>Rinkmenų įkėlimas išjungtas</h2>
+<p>Dabartinė serverio konfigūracija rodo, kad rinkmenų įkėlimas išjungtas. Patikrinkite ir pakeiskite nuostatą <code>file_uploads</code> faile <code>php.ini</code> arba kreipkitės pagalbos į svetainės talpytoją.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess rinkmena trūksta"><![CDATA[
+<h2>.htaccess rinkmena trūksta</h2>
+<p>Naudojamas nuolatinių nuorodų režimas, kuriam reikalinga rinkmena <code>.htaccess</code>, tačiau jos nerasta. Ši rinkmena pridedama prie Textpattern ir saugoma Textpattern šakninėje direktorijoje, kartu su <code>index.php</code> ir katalogu <code>textpattern</code>. Rekomenduojamos direktyvos:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Svetainės indeksas nepasiekiamas"><![CDATA[
+<h2>Svetainės indeksas nepasiekiamas</h2>
+<p>Šakninis failas <code>index.php</code>, nurodytas kaip svetainės indeksas, serveriui yra neskaitomas. Patikrinkite, ar jis egzistuoja ir ar turi tinkamus leidimus.</p>
+        ]]></item>
+        <item id="missing_files" title="Trūkstamos rinkmenos"><![CDATA[
+<h2>Trūkstamos rinkmenos</h2>
+<p>Trūksta vienos ar kelių pagrindinių Textpattern rinkmenų. Įsitikinkite, kad visos išvardytos rinkmenos yra serveryje ir tinkamose vietose.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Trūksta Apache mod_rewrite"><![CDATA[
+<h2>Trūksta Apache mod_rewrite</h2>
+<p>Apache modulis <code>mod_rewrite</code> nėra įdiegtas arba yra išjungtas. Jis rekomenduojamas, kad Textpattern veiktų tinkamai. Įsitikinkite, kad jis egzistuoja ir yra įjungtas, arba kreipkitės pagalbos į svetainės talpytoją.</p>
+        ]]></item>
+        <item id="modified_files" title="Modifikuotos rinkmenos"><![CDATA[
+<h2>Modifikuotos rinkmenos</h2>
+<p>Rinkmenos laikomos modifikuotomis, jei jų kontrolinė suma skiriasi nuo žinomo gerojo kontrolinių sumų sąrašo, pateikiamo kartu su Textpattern. Jei kuri nors Textpattern diegimo rinkmena yra kitokia nei tikėtasi, ji bus čia paryškinta.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL lentelių klaidos"><![CDATA[
+<h2>MySQL lentelių klaidos</h2>
+<p>Gali būti, kad Textpattern MySQL duomenų bazėje įvyko tam tikras sugadinimas ar pažeidimas. Pabandykite pataisyti paveiktas lenteles naudodami MySQL prieigos įrankį, pvz., <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> arba <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nenurodytas katalogas laikiniems duomenims"><![CDATA[
+<h2>Nenurodytas katalogas laikiniems duomenims</h2>
+<p>Nors Textpattern veiks ir be laikinojo katalogo, dalis funkcijų gali neveikti taip, kaip tikimasi, jei ši nuostata nenustatyta. Apsilankykite administratoriaus nuostatose (Admin Preferences) ir nustatykite „Temporary directory path“.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sekcija pavadinta taip pat, kaip ir katalogas"><![CDATA[
+<h2>Sekcija pavadinta taip pat, kaip ir katalogas</h2>
+<p>Esami katalogų pavadinimai gali konfliktuoti su sekcijų pavadinimais, kurie naudojami straipsnių nuolatinių nuorodų schemoje. Kad išvengtumėte problemų, patikrinkite ir, jei tai saugu, ištrinkite konflikto sukeltų katalogų pavadinimus arba pakeiskite sekcijų pavadinimus taip, kad jie nesutaptų.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Svetainės katalogas neskaitomas"><![CDATA[
+<h2>Svetainės katalogas neskaitomas</h2>
+<p>Katalogas, kuriame yra šakninis failas <code>index.php</code>, nurodytas kaip svetainės indeksas, serveriui yra neskaitomas. Patikrinkite leidimus.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP scenarijų vykdymas įjungtas"><![CDATA[
+<h2>PHP scenarijų vykdymas įjungtas</h2>
+<p>Textpattern leidžia autoriams ir administratoriams įterpti PHP kodą į straipsnius ir puslapių / formų šablonus, jei šios funkcijos įjungtos. Kadangi tai kelia saugumo riziką – gali būti vykdomas bet koks PHP kodas, įskaitant potencialiai žalingą ar pavojingą kodą, kuris gali sunaikinti jūsų diegimą ar nutekinti informaciją tretiesiems asmenims – primygtinai rekomenduojama šias parinktis išjungti <a href="?event=prefs#prefs_group_publish">nuostatų skydelyje</a>, jei tik jų nereikia būtinai.</p>
+<p>Daugelį patobulinimų Textpattern svetainėse, kuriems anksčiau reikėjo PHP fragmentų, dabar galima įgyvendinti naudojant <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">branduolio žymas</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimalūs versijų reikalavimai"><![CDATA[
+<h2>Minimalūs versijų reikalavimai</h2>
+<p>Textpattern reikalauja tam tikro funkcionalumo, esančio PHP programavimo kalboje ir MySQL duomenų bazių serveryje. Žemiau pateiktoje lentelėje rasite minimalius sistemos reikalavimus:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern versija</th>
+                <th scope="col">Minimali PHP versija</th>
+                <th scope="col">Minimali MySQL versija</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Be minėtų sistemos reikalavimų, būtini šie PHP plėtiniai:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a></li>
+</ul>
+<p>Jūsų svetainės <code>php.ini</code> faile (globaliame arba vietiniame) turi būti nustatyta nuostata <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Diegimo katalogas vis dar egzistuoja"><![CDATA[
+<h2>Diegimo katalogas vis dar egzistuoja</h2>
+<p>Įdiegus Textpattern, katalogo <code>textpattern/setup</code> ir jo turinio daugiau nebereikia, todėl dėl saugumo priežasčių jis turi būti ištrintas.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Svetainės URL nesutampa"><![CDATA[
+<h2>Svetainės URL nesutampa</h2>
+<p>Svetainės URL, nurodytas skydelyje „Preferences“, nesutampa su faktiniu URL, naudojamu svetainei pasiekti.</p>
+<p>Jei svetainė gali būti pasiekiama keliais skirtingais URL adresais ir ji veikia taip, kaip tikitės, šį pranešimą galite drąsiai ignoruoti.</p>
+<p>Kitu atveju patikrinkite ir pakoreguokite nuostatą „Site URL“ administratoriaus nuostatose, kaip reikia. Apytikslė teisingo svetainės URL reikšmė rodoma įspėjamajame pranešime skydelyje „Diagnostics“.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP funkcijos [&#8230;] išjungtos jūsų serveryje"><![CDATA[
+<h2>PHP funkcijos [&#8230;] išjungtos jūsų serveryje</h2>
+<p>Svetainės talpytojas ar serverio administratorius išjungė vieną ar daugiau PHP funkcijų, iš kurių kai kurios gali turėti įtakos Textpattern veikimui.</p>
+<p>Daugiau informacijos rasite <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern versijos atnaujinimas"><![CDATA[
+<h2>Textpattern versijos atnaujinimas</h2>
+<p>Yra prieinama naujesnė Textpattern versija. Norėdami pasinaudoti naujausiomis funkcijomis ir saugumo pataisymais, rekomenduojame atnaujinti.</p>
+<p>Atkreipkite dėmesį, kad nors stengiamės, jog atnaujinimo procesas būtų kuo sklandesnis ir be rūpesčių:</p>
+<ul>
+    <li>Jei nuo jūsų dabartinės versijos skiriasi tik paskutinis skaičius, atnaujinimas greičiausiai bus suderinamas atgal su papildiniais ir temomis.</li>
+    <li>Jei du paskutiniai skaičiai skiriasi nuo dabartinės versijos, atnaujinimas gali pareikalauti kai kurių papildinių ir / arba temų atnaujinimų, tačiau dažniausiai jos ir toliau veiks, kad ir ribotai.</li>
+    <li>Jei skiriasi pirmasis skaitmuo nuo dabartinės versijos, atnaujinimas greičiausiai pareikalaus daugumos papildinių ir temų atnaujinimo. Jei stipriai pasikliaujate kokia nors konkrečia papildinio ar temos funkcija, prieš pradėdami atnaujinimą pasitarkite su autoriumi ar bendruomene.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Prieinama Textpattern bandomoji versija"><![CDATA[
+<h2>Prieinama Textpattern bandomoji (pre-release) versija</h2>
+<p>Yra prieinama naujesnė Textpattern bandomoji versija. Ieškome aktyvių savanorių, norinčių išbandyti šią versiją, kad galutinį leidimą galėtume padaryti kuo stabilesnį. Stengiamės, kad atnaujinimo procesas būtų sklandus ir be rūpesčių net ir naudojant beta versijas.</p>
+<p>Jei nuspręsite dalyvauti, atkreipkite dėmesį:</p>
+<ul>
+    <li>Nenaudokite šio beta leidimo produkcinėje svetainėje, nebent turite veikiančią atsarginę visų svetainės rinkmenų ir duomenų bazės kopiją ir žinote, kaip ją atkurti.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Praneškite apie visus nesklandumus</a>, nurodydami naudojamos beta versijos numerį. Prieš stabilų leidimą gali būti reikalingos papildomos beta versijos, priklausomai nuo gautų atsiliepimų.</li>
+    <li>Jei diegiate beta versiją, įsitikinkite, kad atnaujinsite ir iki galutinės versijos, kai ji bus išleista.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Laikinojo ir papildinių podėlio katalogų keliai neturi sutapti"><![CDATA[
+<h2>Laikinojo ir papildinių podėlio katalogų keliai neturi sutapti</h2>
+<p>Papildiniai turėtų turėti atskirą katalogą ir neturėtų dalytis laikinuoju katalogu. Tai gali kelti saugumo riziką ir neigiamai paveikti svetainę, jei laikinasis katalogas bus išvalytas. Įsitikinkite, kad laikinojo katalogo kelias skiriasi nuo papildinių podėlio kelio.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Atnaujinimų serveris nepasiekiamas"><![CDATA[
+<h2>Atnaujinimų serveris nepasiekiamas</h2>
+<p>Atnaujinimų tikrinimas nepavyko, dažniausiai dėl tinklo perkrovos ar ryšio laiko limito. Paprastai ši situacija išsisprendžia per valandą ar dvi, todėl pabandykite apsilankyti šiame skydelyje vėliau dar kartą.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Jūsų PHP diegime trūksta funkcijos mail()"><![CDATA[
+<h2>Jūsų PHP diegime trūksta funkcijos mail()</h2>
+<p>PHP funkcija <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> yra išjungta. Todėl Textpattern negali siųsti el. laiškų ir dalis funkcijų neveiks. Pavyzdžiui, nebus siunčiami pranešimai apie naujus komentarus ir nauji naudotojai negaus pasveikinimo laiško. Vis dėlto naudotojus vis tiek galima pridėti.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Rinkmenų skydelis">
+        <item id="file_reassign" title="Priskirti rinkmeną"><![CDATA[
+<h2>Priskirti rinkmeną iš naujo</h2>
+<p>Kai įkeliate rinkmeną vietoje tos, kuri pažymėta kaip „Missing“, jūsų pasirinkta rinkmena įkeliama į serverį ir susiejama su pirminės rinkmenos informacija duomenų bazėje. Tai reiškia, kad liks nepakitęs pirminės rinkmenos pavadinimas ir visa kita susijusi informacija, pavyzdžiui, atsisiuntimų skaičius ir kategorija. Tačiau rinkmenos dydis bus atnaujintas, kad atspindėtų naująją rinkmeną.</p>
+        ]]></item>
+        <item id="file_replace" title="Pakeisti rinkmeną"><![CDATA[
+<h2>Pakeisti rinkmeną</h2>
+<p>Čia įkelta rinkmena pakeis esamos serverio rinkmenos turinį, tačiau paliks tą patį rinkmenos pavadinimą. Atsisiuntimų skaičius ir kita su rinkmena susijusi informacija nesikeis.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Publikavimo data"><![CDATA[
+<h2>Publikavimo data</h2>
+<p>Laikas, kai rinkmena yra publikuota arba neseniai pataisyta. Laiką galima nustatyti į momentą, kai elementas publikuojamas, arba į bet kokį momentą praeityje ar ateityje.</p>
+<p>Laukų reikšmės atitinka šią informaciją:</p>
+<ul>
+    <li>Metai / Mėnuo / Diena</li>
+    <li>Valanda (24 val. formatu) : Minutė : Sekundė</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Įkelti rinkmeną"><![CDATA[
+<h2>Įkelti failą</h2>
+<p>Naudokite šią formą, kad įkeltumėte failus arba vaizdus į savo serverį.</p>
+<p>Naudokite „Textile“ kodą, kad straipsniuose sugeneruotumėte grafinius vaizdus, „Textpattern“ kodą – kad grafinius vaizdus įterptumėte į savo puslapių šablonus, arba HTML kodą – kad įterptumėte grafinius vaizdus kitur.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Formų skydelis">
+        <item id="forms_overview" title="Įvadas į formas"><![CDATA[
+<h2>Įvadas į formas</h2>
+<p>Textpattern sistemoje forma yra teksto, HTML ir Textpattern žymų fragmentas ar blokas, kurį galima pakartotinai naudoti turiniui rodyti.</p>
+<p>Štai pavyzdinė forma, kuri galėtų vadintis <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Ją galite naudoti susijusių straipsnių HTML tvarkomojo sąrašo rodymui:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Kadangi šios formos vaidmuo yra išvesti antraščių sąrašą, ji gali būti taikoma ir kitose žymose, pavyzdžiui, rodant 20 straipsnių iš einamosios skilties:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Formą taip pat galite naudoti pasikartojančiam turiniui – pavyzdžiui, antraštėms ir poraštėms jūsų puslapių šablonuose – rodyti. Tai reiškia, kad turinys saugomas tik vienoje vietoje ir, nusprendę jį pakeisti, turėsite tai padaryti tik kartą. Turinys iš formos dažniausiai išvedamas taip:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Formos dydis gali būti iki 64 KB. Pavyzdinėje poraštės formoje gali būti antraštės, pastraipos, nuorodos, sąlyginės žymos ir nuorodos į kitas formas, tokias kaip <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Atvaizdų skydelis">
+        <item id="create_thumbnail" title="Sukurti miniatiūrą"><![CDATA[
+<h2>Sukurti miniatiūrą</h2>
+<p>Leidžia (iš naujo) sukurti nurodytų matmenų miniatiūrą iš viso dydžio atvaizdo.</p>
+<p>Naudojant pasirinktinius matmenis, miniatiūra bus sumažinta iki jūsų nurodytų matmenų, nebent pažymėsite parinktį „Crop“. Tokiu atveju miniatiūra bus iškirpta iš centrinės atvaizdo dalies, be mastelio keitimo.</p>
+<p>Naudojant automatinius matmenis, miniatiūra bus sumažinta iki dabartinės administratoriaus temos nustatytų matmenų ir (pasirinktinai) apkirpimo.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Pakeisti atvaizdą"><![CDATA[
+<h2>Pakeisti atvaizdą</h2>
+<p>Čia įkeltas atvaizdas tiesiog pakeis esamą atvaizdą, susietą su šiuo įrašu duomenų bazėje.</p>
+        ]]></item>
+        <item id="upload_image" title="Įkelti atvaizdą"><![CDATA[
+<h2>Įkelti atvaizdą</h2>
+<p>Įkelkite vieną ar daugiau atvaizdų į savo serverį.</p>
+<p>Įkėlus į <code>images</code> katalogą, pirminio atvaizdo rinkmenos pavadinimas bus saugomas tik Textpattern duomenų bazėje; pati atvaizdo rinkmena bus pervadinta į eilinį numerį ir praplėtimą.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Įkelti miniatiūrą"><![CDATA[
+<h2>Įkelti miniatiūrą</h2>
+<p>Viso dydžio atvaizdams gali būti priskirtos atskiros miniatiūros. Jos naudingos nuorodoms į viso dydžio atvaizdus ir jų indeksavimui.</p>
+<p>Nuoroda į miniatiūrą yra tokia pati kaip į viso dydžio atvaizdą, tik rinkmenos pavadinimui pridedama raidė <code>t</code>. Pavyzdžiui, norėdami nurodyti miniatiūrą, susietą su viso dydžio atvaizdu, esančiu <code>/images/12.jpg</code>, naudokite <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Kalbų skydelis">
+        <item id="get_textpack" title="Įdiegti Textpack"><![CDATA[
+<h2>Įdiegti Textpack</h2>
+<p>Įklijuokite papildomas savo svetainės kalbos eilutes į šį lauką ir pasirinkite „Upload“, kad jas įdiegtumėte.</p>
+<p>Eilutės dažnai pateikiamos kaip atsisiunčiamas Textpack paketas, platinamas kartu su papildiniu, kad papildinio kalbos eilutės būtų naudojamos gimtąja forma Textpattern sistemoje.</p>
+<p>Vertėjai gali išversti šiuos paketus pagal poreikį ir iš naujo išplatinti lokalizuotą turinį bendruomenei.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Nuorodų skydelis">
+        <item id="link_description" title="Aprašas"><![CDATA[
+<h2>Aprašas</h2>
+<p>Nuorodų aprašai nėra privalomi, tačiau naudingi prierašams prie nuorodų, <code>title=""</code> (paaiškinimo) atributams nuorodose kurti ar tiesiog jūsų vidinei dokumentacijai.</p>
+        ]]></item>
+        <item id="link_sort" title="Rūšiavimo reikšmė"><![CDATA[
+<h2>Rūšiavimo reikšmė</h2>
+<p>Naudinga natūraliai kalbinei nuorodų sąrašų rūšiavimo tvarkai, pvz., pagal žmogaus pavardę, o ne vardą, arba pagal frazes, prasidedančias neapibrėžtu ar apibrėžtuoju artikeliu.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Nuorodos adresas. Jei nuoroda veda į kitą svetainę, ji turi prasidėti <code>http://</code> arba <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Publikavimo data"><![CDATA[
+<h2>Publikavimo data</h2>
+<p>Laikas, kai nuoroda yra publikuota arba neseniai pataisyta. Laiką galima nustatyti į momentą, kai elementas publikuojamas, arba į bet kokį momentą praeityje ar ateityje.</p>
+<p>Laukų reikšmės atitinka šią informaciją:</p>
+<ul>
+    <li>Metai / Mėnuo / Diena</li>
+    <li>Valanda (24 val. formatu) : Minutė : Sekundė</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Prisijungimo skydelis">
+        <item id="remember_login" title="Išsaugoti prisijungimą šioje naršyklėje"><![CDATA[
+<h2>Išsaugoti prisijungimą šioje naršyklėje</h2>
+<p>Pažymėjus šią parinktį, liksite prisijungę prie savo Textpattern paskyros dabartinėje naršyklėje tol, kol patys neatsijungsite. Jei nepažymėsite, po tam tikro neveiklumo laiko būsite automatiškai atjungti.</p>
+<p>Reikalingi naršyklėje įjungti slapukai.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Papildinių skydelis">
+        <item id="install_plugin" title="Įdiegti papildinį"><![CDATA[
+<h2>Įdiegti papildinį</h2>
+<p>Įklijuokite čia sukompiliuoto papildinio tekstinio failo turinį ir spustelėkite „Upload“, kad pradėtumėte diegimą. Bet kuris papildinys, kurį įkelsite tuo pačiu pavadinimu kaip ir anksčiau įdiegtas, bus perrašytas nauja versija.</p>
+<p>Čia įklijuojamas papildinio tekstas <strong>nėra</strong> grynasis PHP kodas, o Base64 užkoduotas tekstas, paprastai su antrašte, kurioje yra informacija apie papildinį (pavyzdžiui, papildinio pavadinimas, versija ir aprašas, autoriaus vardas ir kt.).</p>
+<p>Dažnai sukompiliuotas papildinių versijas galite gauti iš <a rel="external" target="_blank" href="https://plugins.textpattern.com/">papildinių saugyklos <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> arba autoriaus nurodyto kanalo, pavyzdžiui, jo svetainės ar GitHub.</p>
+<p>Taip pat galite įklijuoti nuorodą į Textpattern sukompiliuotą tekstinį failą, jei išorinė svetainė tai leidžia.</p>
+<p>Visi įkelti papildiniai pirmiausia pereis patikros etapą, kurio metu galėsite peržiūrėti papildinio kodą ir turinį prieš jį įdiegdami.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Įkelti papildinį"><![CDATA[
+<h2>Įkelti papildinį</h2>
+<p>Naudokite šią formą, kad įkeltumėte papildinio rinkmeną. Įkelti papildiniai (ir susiję ištekliai) saugomi kataloge „plugins“.</p>
+<p>Čia galima įkelti šių tipų papildinius:</p>
+<ul>
+<li>Textpattern PHP šablonų rinkmenas, kuriose yra visas kodas, metaduomenys, Textpack eilutės ir pagalbos tekstas.</li>
+<li>Textpattern sukompiliuotus tekstinius failus, kuriuose yra visas kodas, metaduomenys, Textpack eilutės ir pagalbos tekstas.</li>
+<li>Textpattern ZIP paketus, kuriuose yra manifest informacija ir kodas, metaduomenys, Textpack eilutės, pagalbos tekstas ir papildomos rinkmenos.</li>
+<li>Grynuosius PHP failus (nors jie neužpildys papildomų metaduomenų ir nerekomenduojami).</li>
+</ul>
+<p>Bet kuris papildinys, kurį įkelsite tuo pačiu pavadinimu kaip ir anksčiau įdiegtas, bus perrašytas nauja versija.</p>
+<p>Visi įkelti papildiniai pirmiausia pereis patikros etapą, kurio metu galėsite peržiūrėti papildinio kodą ir turinį prieš jį įdiegdami.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Nuostatų skydelis">
+        <item id="admin_side_plugins" title="Ar naudoti administravimo pusės papildinius?"><![CDATA[
+<h2>Ar naudoti administravimo pusės papildinius?</h2>
+<p>Administravimo pusės papildiniai gali keisti administravimo sąsajos veikimą. Jie gali įsiterpti į esamus veiksmus, pvz., straipsnių redagavimą ar publikavimą, arba pridėti naujų skydelių papildomoms / išplėstoms funkcijoms.</p>
+<p>Jei norite daugiau sužinoti apie administravimo pusės papildinius, žiūrėkite puslapį <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> svetainėje <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. Visų tipų papildiniai išvardyti svetainėje <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Išplėstinės parinktys"><![CDATA[
+<h2>Išplėstinės parinktys</h2>
+<p>Rodo išplėstinių nuostatų grupę, kurioje galima konfigūruoti papildomus nustatymus, pavyzdžiui:</p>
+<ul>
+    <li>PHP funkcijas, įjungtas žymoje <code>txp:evaluate</code>.</li>
+    <li>Pasirinktinius formų šablonų tipus.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Leisti naudoti PHP straipsniuose?"><![CDATA[
+<h2>Leisti naudoti PHP straipsniuose?</h2>
+<p>Jei ši nuostata įjungta, straipsniuose bus galima naudoti PHP. Autorius tam turi turėti pakankamai teisių (pagal numatymą tai gali tik <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Publishers“ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Managing Editors“ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> ir <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">„Copy Editors“ <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>).</p>
+<p><strong>Primygtinai rekomenduojame šią parinktį išjungti</strong>, nebent jos tikrai reikia. Bet kokį potencialiai žalingą / pavojingą PHP kodą, galintį sunaikinti jūsų svetainę ar nutekinti informaciją tretiesiems asmenims, gali įtraukti bet kuris autorius ir jį įvykdyti bet kas, atveriantis tokį straipsnį.</p>
+<p>PHP kode turi būti praleidžiamos atidarymo ir uždarymo PHP žymos, be to, jis turi būti apgaubtas žymomis <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Leisti formos keitimą?"><![CDATA[
+<h2>Leisti formos keitimą?</h2>
+<p>Ši nuostata leidžia straipsnių autoriams pakeisti formą, kuri bus naudojama atvaizduojant jų straipsnį. Jei įjungta, straipsnio redagavimo lange bus rodomas išskleidžiamasis meniu „Override form“.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Leisti naudoti PHP puslapiuose?"><![CDATA[
+<h2>Leisti naudoti PHP puslapiuose?</h2>
+<p>Jei ši nuostata įjungta, PHP kodą galima naudoti puslapių ir formų šablonuose.</p>
+<p><strong>Primygtinai rekomenduojame šią parinktį išjungti</strong>, nebent jos tikrai reikia. Bet kokį potencialiai žalingą / pavojingą PHP kodą, galintį sunaikinti jūsų svetainę ar nutekinti informaciją tretiesiems asmenims, gali įtraukti kiti naudotojai, o vykdyti – neįtariantys administratoriai ar svetainės lankytojai.</p>
+<p>PHP kode turi būti praleidžiamos atidarymo ir uždarymo PHP žymos, be to, jis turi būti apgaubtas žymomis <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Archyvo datos formatas"><![CDATA[
+<h2>Archyvo datos formatas</h2>
+<p>Kaip datos bus rodomos straipsniuose jūsų svetainės skiltyse.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Rodyti ištrauką straipsnio redagavimo puslapyje?"><![CDATA[
+<h2>Rodyti ištrauką straipsnio redagavimo puslapyje?</h2>
+<p>Pasirinkus „No“, straipsnio ištraukos laukas nebebus rodomas autoriui straipsnio redagavimo lange.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Pridėti pavadinimus prie pastoviųjų nuorodų?"><![CDATA[
+<h2>Pridėti pavadinimus prie pastoviųjų nuorodų?</h2>
+<p>Ši nuostata prie URL pridės automatiškai sugeneruotą straipsnio antraštės versiją. Ji sugeneruojama automatiškai arba gali būti rankiniu būdu pakeista lauke „URL-only title“, redaguojant straipsnį.</p>
+<p>Nustatymas turės įtakos tik tada, kai naudojate švarius URL. Kai kuriose kalbose tai gali lemti labai ilgas ir nepatrauklias URL, todėl tokiais atvejais tikriausiai norėsite nustatyti „Off“.</p>
+        ]]></item>
+        <item id="auto_dst" title="Automatiškai koreguoti vasaros laiko (DST) nustatymus?"><![CDATA[
+<h2>Automatiškai koreguoti vasaros laiko (DST) nustatymus?</h2>
+<p>Ši nuostata leidžia Textpattern sistemai koreguoti jūsų vietovėje taikomo vasaros laiko (DST) laikotarpį. Jei ši parinktis nustatyta į „No“, galėsite patys rankiniu būdu keisti nuostatą „DST enabled“.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ar nauji komentarai reiškia, kad svetainė atnaujinta?"><![CDATA[
+<h2>Ar nauji komentarai reiškia, kad svetainė atnaujinta?</h2>
+<p>Textpattern duomenų bazė seka, kada paskutinį kartą jūsų svetainėje buvo atlikti pakeitimai. Kai ši parinktis nustatyta į „Yes“, naujas komentaras taip pat atnaujins šią reikšmę. Pvz., ji naudojama <code>"Send Last-Modified header"</code> funkcionalumui.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Ar pritaikyti rel=&quot;nofollow&quot; komentarams?"><![CDATA[
+<h2>Ar pritaikyti rel="nofollow" komentarams?</h2>
+<p>Jei nustatyta į „Yes“, prie komentaruose pateiktų nuorodų bus pridėtas papildomas atributas. Tai priemonė, kuri sumažina paskatas brukalų siuntėjams ir buvo pasiūlyta įvairių paieškos sistemų bei programinės įrangos kūrėjų. Daugiau informacijos rasite perskaitę <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google pranešimą <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p><strong>Pastaba:</strong> ši nuostata nedaro įtakos jūsų svetainės funkcionalumui. Ji gali sumažinti ar panaikinti jūsų komentarų įtaką, kai kai kurios paieškos sistemos reitinguoja svetaines, į kurias veda šios nuorodos.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Rodyti komentarus kaip numeruojamą sąrašą?"><![CDATA[
+<h2>Rodyti komentarus kaip numeruojamą sąrašą?</h2>
+<p>Nustato, ar straipsnių komentarai bus apgaubiami HTML žyma <code>&lt;ol&gt;</code>, o atskiri komentarai – žyma <code>&lt;li&gt;</code> (tuomet komentarai rodomi kaip numeruojamas sąrašas), ar atskiri komentarai vietoj to bus apgaubiami žyma <code>&lt;div&gt;</code>.</p>
+<p>Nepriklausomai nuo pasirinktos reikšmės, galite pakeisti naudojamas žymas konkrečiose formose, keisdami žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, esančią formoje <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automatiškai pridėti komentarus prie straipsnių?"><![CDATA[
+<h2>Automatiškai pridėti komentarus prie straipsnių?</h2>
+<p>Ši nuostata nustato, ar komentarai ir komentavimo forma bus automatiškai pridedami prie visų atskirų straipsnių (automatiškai įtraukiant formos <code>comments_display</code> turinį).</p>
+<p>Dažniausiai rekomenduojama nustatyti „No“, nes tai suteikia daugiau lankstumo, kur tiksliai dizaino požiūriu rodyti komentarus. Tokiu atveju turėsite rankiniu būdu pridėti žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> visuose straipsnių šablonuose, kuriuose norite rodyti komentarus.</p>
+<p>Jei pastebite, kad straipsnyje komentarai dubliuojasi, greičiausiai šablonuose jau yra žyma <code>&lt;txp:comments /&gt;</code>, o nuostata „Automatically append comments to articles?“ taip pat nustatyta į „Yes“.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Komentarų datos formatas"><![CDATA[
+<h2>Komentarų datos formatas</h2>
+<p>Kaip komentarų datos bus rodomos jūsų svetainės lankytojams.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Numatytasis pakvietimas"><![CDATA[
+<h2>Numatytasis pakvietimas komentuoti</h2>
+<p>Jei leidžiate lankytojams komentuoti jūsų svetainėje, tai yra numatytasis kviečiamasis tekstas. Pavyzdžiui:</p>
+<ul>
+    <li>Komentarai</li>
+    <li>Pridėti komentarą</li>
+    <li>Atsiliepimai</li>
+    <li>Pastabos</li>
+</ul>
+<p>Atminkite, kad kvietimo tekstą visuomet galima pakeisti kiekvienam straipsniui atskirai.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Komentarai išjungiami po"><![CDATA[
+<h2>Komentarai išjungiami po</h2>
+<p>Naudokite šią nuostatą, norėdami nustatyti laiką, po kurio straipsniams bus išjungta komentavimo galimybė (galima nustatyti „Never“, jei norite leisti komentuoti neribotą laiką).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Leisti naudotojų atvaizdus komentaruose?"><![CDATA[
+<h2>Leisti naudotojų atvaizdus komentaruose?</h2>
+<p>Jei ši parinktis nustatyta į „No“, visi komentaruose įterpti atvaizdai bus pašalinami.</p>
+        ]]></item>
+        <item id="comments_mode" title="Komentarų būsena"><![CDATA[
+<h2>Komentarų būsena</h2>
+<p>Jei pasirenkama reikšmė „nopopup“ (rekomenduojama), dabartinis langas bus atnaujinamas taip, kad rodytų tik esamą straipsnį su komentarais apačioje.</p>
+<p>Jei pasirenkama reikšmė „popup“, paspaudus nuorodą į komentarus, atsidarys naujas naršyklės langas (naudojama forma <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Prižiūrėti komentarus?"><![CDATA[
+<h2>Prižiūrėti komentarus?</h2>
+<p>Jei nustatyta į „Yes“, kiekvieno naujo komentaro matomumas bus išjungtas, kol jis bus peržiūrėtas. Turėsite rankiniu būdu moderuoti ir padaryti kiekvieną komentarą matomą (gavus naują komentarą, straipsnio autoriui el. paštu bus išsiųstas pranešimas).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Komentarai įjungti pagal numatymą?"><![CDATA[
+<h2>Komentarai įjungti pagal numatymą?</h2>
+<p>Jei nustatyta į „Yes“, komentarai bus automatiškai įjungiami kiekvienam publikuojamam straipsniui. Jei nustatyta į „No“, kiekvieną kartą, kai norėsite priimti komentarus, turėsite juos įjungti straipsnio skydelyje „Write“.</p>
+<p>Komentarus galima bet kada įjungti ar išjungti kiekvienam straipsniui atskirai.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Ar reikalingas naudotojo el. pašto adresas?"><![CDATA[
+<h2>Ar komentarams būtinas naudotojo el. pašto adresas?</h2>
+<p>Jei nustatyta į „Yes“, norintys komentuoti jūsų straipsnį žmonės privalės komentaro formoje įvesti el. pašto adresą. Nepateikę el. pašto adreso jie negalės paskelbti komentaro.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Ar reikalingas naudotojo vardas?"><![CDATA[
+<h2>Ar komentarams būtinas naudotojo vardas?</h2>
+<p>Jei nustatyta į „Yes“, norintys komentuoti jūsų straipsnį žmonės privalės komentaro formoje įvesti vardą. Nepateikę vardo jie negalės pateikti komentaro.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Siųsti komentarus autoriui?"><![CDATA[
+<h2>Siųsti komentarus autoriui?</h2>
+<p>Jei nustatyta į „Yes“, gavus naują komentarą straipsnyje, jo kopija bus el. paštu išsiųsta to straipsnio autoriui.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Leisti daugiau Textile žymėjimo?"><![CDATA[
+<h2>Leisti daugiau Textile žymėjimo komentaruose?</h2>
+<p>Kai nustatyta į „Yes“, komentaruose galima naudoti <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> elementus, kurie kitu atveju būtų laikomi paprastu tekstu, pavyzdžiui:</p>
+<ul>
+    <li>antraštes</li>
+    <li>numeruotus ir nenumeruotus sąrašus</li>
+    <li>išnašas</li>
+    <li>lenteles</li>
+    <li>kodo fragmentus</li>
+    <li>išplėstinę blokų sintaksę (<code>bc..</code>, <code>bq..</code> ir pan.)</li>
+</ul>
+<p><strong>Pastaba:</strong> dėl saugumo sumetimų grynasis HTML paverčiamas paprastu tekstu.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Paskyros, kurioms leidžiama prisijungti vienu metu"><![CDATA[
+<h2>Paskyros, kurioms leidžiama prisijungti vienu metu</h2>
+<p>Kableliais atskirtas prisijungimo vardų sąrašas, kuriems leidžiama prisijungti iš kelių naršyklių / sesijų. Tai naudinga kūrimo metu, kai norima pasidalyti prisijungimu su klientais.</p>
+<p>Šios funkcijos naudojimas yra saugumo rizika ir <strong>nerekomenduojamas gyvose svetainėse</strong>. Diagnostikos skydelis pateiks įspėjimą, jei jūsų naudotojo paskyra bus sukonfigūruota keliems prisijungimams gyvojoje svetainėje.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Pasirinktinių formų šablonų tipai"><![CDATA[
+<h2>Pasirinktinių formų šablonų tipai</h2>
+<p>Be standartinių formų šablonų tipų (article, file, misc ir pan.), leidėjai (Publishers) gali apibrėžti ir pasirinktinius tipus. Pasirinktinių formų šablonų tipų paskirtis yra dvejopa: lengvesnis formų šablonų klasifikavimas ir pasirinktinių išteklių apibrėžimas.</p>
+<p>Šios nuostatos formatas yra <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, kur kiekvienas skyrius atitinka formos šablono tipą.</p>
+<p>Norint apibrėžti pasirinktą formos tipą (pvz., <code>js</code>), reikia atskira eilute pridėti skyrių <code>[js]</code>. Numatytoji antraštė gali būti nustatyta įrašant <code>title="Javascript"</code> atitinkamame skyriuje. Jei reikia, galima pridėti ir lokalizuotas antraštes (pvz., <code>ru="Скрипт"</code>).</p>
+<p>Be to, galima nurodyti formų šablonams taikomą <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">medijos tipą <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> (anksčiau vadintą MIME tipu), pvz., <code>mediatype="application/javascript"</code>. Tokiu būdu šio tipo formų šablonai tampa pasirinktinais ištekliais, kuriuos galima pateikti kaip nurodytą medijos tipą, tiek iš duomenų bazės, tiek iš disko (plokščiais failais) naudojant žymą <code>&lt;txp:output_form /&gt;</code>. Pavyzdžiui, formos šablonas <code>myscript.js</code>, kurio tipas <code>[js]</code> ir medijos tipas <code>application/javascript</code>, gali būti įtrauktas taip:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Bus sugeneruota tokia HTML žyma <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Tik tie formų šablonai, kurių pavadinimas turi tipui atitinkantį praplėtimą (pvz., <code>myscript.js</code>), gali būti pateikiami kaip plokščios rinkmenos. Tokiu atveju jie nebus visai apdorojami Textpattern ir bus pasiekiami per savo URL.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Pritaikyti laukai"><![CDATA[
+<h2>Pritaikyti laukai</h2>
+<p>Pritaikyti laukai naudojami papildomiems straipsnio duomenims saugoti. Galite apibrėžti iki dešimties laukų, suteikdami jiems pavadinimus čia. Kiekvienas iš jų bus rodomas kaip atskiras laukas skydelyje „Write“, kad prireikus su kiekvienu straipsniu būtų galima susieti papildomus duomenis.</p>
+<p>Laukus galite pavadinti bet kaip, tačiau atkreipkite dėmesį į šiuos dalykus:</p>
+<ul>
+<li>Naudojant tarpus pavadinimuose, skydelyje „Write“ jie bus skaitomesni, bet tokių laukų nebegalima naudoti kaip rūšiavimo ar filtravimo parametrų žymoje article_custom. Jei norite naudoti šią funkciją, verčiau naudokite pabraukimo brūkšnius.</li>
+<li>Atsargiai rinkitės pavadinimus, kad jie nesikirstų su Textpattern rezervuotaisiais laukų pavadinimais. Pavyzdžiui, nenaudokite <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> ir pan., nes tai gali lemti keistus rezultatus ar net sugedusias svetaines.</li>
+<li>Kiekviename lauke galima saugoti tik tekstą ir tik iki 255 simbolių.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Datos formatas"><![CDATA[
+<h2>Datos formatas</h2>
+<p>Ši parinktis paveiks tik tai, kaip straipsnių datos bus rodomos jūsų svetainės pradžios puslapyje.</p>
+        ]]></item>
+        <item id="default_event" title="Numatytasis skydelis"><![CDATA[
+<h2>Numatytasis skydelis</h2>
+<p>Textpattern administravimo sąsajos skydelis, kuris pirmiausia bus rodomas prisijungus bet kuriam naudotojui.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Numatytoji publikavimo būsena"><![CDATA[
+<h2>Numatytoji publikavimo būsena</h2>
+<p>Nustato naujai sukurtų Textpattern straipsnių publikavimo matomumo būseną.</p>
+<p>Atkreipkite dėmesį, kad ši nuostata neturi įtakos straipsniams, kurie buvo sukurti ar redaguoti iki jos pakeitimo.</p>
+<p>Numatytoji publikavimo būsena gali būti viena iš šių:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p><strong>Draft</strong> straipsnis laikomas rengiamu turiniu ir nematomas už Textpattern administravimo srities ribų (t. y. nematomas Textpattern viešojoje pusėje ir nesindikuojamas kanaluose).</p>
+<p><strong>Hidden</strong> straipsnis nematomas už Textpattern administravimo srities ribų.</p>
+<p><strong>Pending</strong> straipsnis laikomas parengtu publikavimui ir laukiančiu patvirtinimo, bet nematomas už Textpattern administravimo srities ribų.</p>
+<p><strong>Live</strong> straipsnis paprastai matomas už Textpattern administravimo srities ribų (t. y. matomas Textpattern viešojoje pusėje, sindikuojamas kanaluose, jei tai leidžia nuostatos). Jei straipsnio būsena „Live“ ir jam nustatyta galiojimo pabaigos data, būsena ir toliau išliks „Live“, kai ši data bus pasiekta, tačiau straipsnis išorėje bus rodomas tik tuo atveju, jei leidžiama publikuoti nebegaliojančius straipsnius.</p>
+<p><strong>Sticky</strong> straipsnis panašus į <strong>Live</strong> straipsnį tuo, kad gali būti matomas už Textpattern administravimo srities ribų, bet <strong>nebus</strong> rodomas straipsnių sąrašuose, nebent atitinkamos žymos <code>article</code> ar <code>article_custom</code> atributas <code>status</code> turės reikšmę <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Pasirinkite, kurį HTML dokumento tipą (doctype) norite naudoti (HTML5 arba XHTML). Tai daro įtaką komentarų įvesties formoms, Textile žymėjamo <code>&lt;abbr&gt;</code> ar <code>&lt;acronym&gt;</code> apdorojimui ir žymoms <code>&lt;link&gt;</code>, generuojamoms žyma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Įjungti kuriamos temos peržiūrą?"><![CDATA[
+<h2>Įjungti kuriamos temos peržiūrą?</h2>
+<p>Naudotojai, turintys pakankamai teisių (pagal numatymą leidėjai – Publishers – ir dizaineriai – Designers), gali saugiai kurti ir peržiūrėti naują temą, kol kiti naudotojai vis dar matys senąją (iki tol, kol naujoji bus įdiegta viešai).</p>
+<p>Tačiau privilegijuoti naudotojai, kurie nenori dalyvauti kuriant temas, gali išjungti kuriamos temos peržiūrą. Tuomet jiems, kaip ir standartiniams lankytojams, bus rodoma dabartinė „viešoji“ tema.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Įjungti trumpųjų žymų palaikymą?"><![CDATA[
+<h2>Įjungti trumpųjų žymų palaikymą?</h2>
+<p>Textpattern žymos atrodo taip: <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Kad būtų mažiau rašymo, galima įjungti sutrumpintą sintaksę, kai galima praleisti priešdėlį <code>txp:</code>, laikantis kelių paprastų taisyklių. Štai keli pavyzdžiai:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> tampa <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> tampa <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> tampa <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> tampa <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> tampa <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (atkreipkite dėmesį, kad papildinio priešdėlis gali būti naudojamas ir žymai <code>else</code>).</li>
+</ul>
+<p>Jei žymoje yra pabraukimo brūkšnys ir įjungiate trumpąsias žymas, pagrindinė taisyklė tokia:</p>
+<ol>
+    <li>Pašalinkite priešdėlį <code>txp:</code>.</li>
+    <li>Pirmąjį pabraukimo brūkšnio simbolį pakeiskite <code>::</code>.</li>
+</ol>
+<p>Atminkite, kad ši nuostata neturi įtakos galimybei naudoti trumpąsias formas su <code>&lt;txp:output_form /&gt;</code>. Vis tiek galite naudoti <code>&lt;txp::shortcode /&gt;</code>, kuri bus interpretuojama kaip <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Įjungti XML-RPC serverį?"><![CDATA[
+<h2>Įjungti XML-RPC serverį?</h2>
+<p>Jei norite naudoti <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> Textpattern valdymui nuotoliniu būdu (pvz., darbalaukio ar mobiliąja programėle), turite įjungti XML-RPC serverį nustatydami šią parinktį į „Yes“.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Naudoti išplėstines pašto funkcijas"><![CDATA[
+<h2>Naudoti išplėstines pašto funkcijas</h2>
+<p>Nustačius „No“, visi el. laiškai – pavyzdžiui, prašymai atstatyti slaptažodį ar papildinių, tokių kaip com_connect, siunčiami el. laiškai – bus siunčiami per PHP funkciją <code>mail()</code>. Pasirinkus „Yes“, bus naudojama kartu pateikiama biblioteka PHPMailer, kuri atveria papildomas nuostatas pašto siuntimui per išorinius SMTP serverius.</p>
+<p>Jei turite problemų su laiškų pristatymu (ypač naudojantis internetinėmis paslaugomis, tokiomis kaip Gmail, Outlook, Yahoo! ir pan.), greičiausiai problema ta, kad jūsų domenas nelaikomas patikimu šaltiniu. Perjungimas į „Yes“ gali pagerinti laiškų pristatymą. Be to, SMTP naudojimas gali užtikrinti geresnį suderinamumą su kai kuriomis el. pašto paslaugomis ir dar labiau pagerinti pristatymo kokybę.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Po kiek dienų nebegalios žurnalai?"><![CDATA[
+<h2>Po kiek dienų nebegalios žurnalai?</h2>
+<p>Kai Textpattern registruoja lankytojų veiklą, galite nurodyti, kiek dienų žurnalai turi būti saugomi. Pavyzdžiui, reikšmė „7“ išsaugos žurnalus septynioms dienoms.</p>
+<p><strong>Pastaba:</strong> žurnalai apkarpomi tik atidarius skydelį „Visitor logs“, kitu atveju jie toliau augs.</p>
+        ]]></item>
+        <item id="file_base_path" title="Rinkmenos katalogo kelias"><![CDATA[
+<h2>Rinkmenos katalogo kelias</h2>
+<p>Nustato <strong>absoliučią nuorodą</strong> į katalogą, kuriame bus nuolat saugomos įkeltos rinkmenos. PHP turi turėti rašymo teises šiame kataloge.</p>
+<p><strong>Pastaba:</strong> dėl papildomo saugumo apsvarstykite galimybę perkelti šį katalogą už viešai prieinamos svetainės šaknies ribų.</p>
+        ]]></item>
+        <item id="file_download_header" title="Rinkmenos atsisiuntimo antraštė"><![CDATA[
+<h2>Rinkmenos atsisiuntimo antraštė</h2>
+<p>Leidžia tinkinti, kaip elgiamasi su rinkmenų atsisiuntimais.</p>
+<p>Paprastai visi atsisiuntimai laikomi priedais ir yra atsiunčiami (priklausomai nuo to, kaip naršyklė tvarko tokio tipo rinkmenas). Jei norite nurodyti, kaip pageidaujate, kad tam tikrų ar visų tipų rinkmenos būtų traktuojamos, galite čia nurodyti atitinkamą žymų kodą. Pavyzdžiui, kad PDF rinkmenos, priskirtos Textpattern kategorijai „inline-pdf“, būtų rodomos naršyklėje, o ne atsisiunčiamos, galite naudoti tokį kodą:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maksimalus siunčiamos rinkmenos dydis (baitais)"><![CDATA[
+<h2>Maksimalus siunčiamos rinkmenos dydis (baitais)</h2>
+<p>Galite apriboti didžiausią rinkmenų įkėlimo dydį (baitais). Atminkite, kad ši reikšmė taip pat ribojama PHP konfigūracijos. Jei Textpattern aptinka, kad jūsų PHP konfigūracija riboja įkeliamų rinkmenų dydį iki mažesnės reikšmės, ši nuostata automatiškai bus sumažinta. Jei norite leisti didesnes rinkmenas įkelti per naršyklę, susisiekite su talpytoju (aktualios <code>php.ini</code> reikšmės: <code>post_max_size</code>, <code>upload_max_filesize</code> ir <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Laiko juosta"><![CDATA[
+<h2>Laiko juosta</h2>
+<p>Kad datos būtų rodomos pagal jūsų vietos laiką, pasirinkite savo laiko juostą.</p>
+        ]]></item>
+        <item id="img_dir" title="Atvaizdo katalogas"><![CDATA[
+<h2>Atvaizdo katalogas</h2>
+<p>Jei norite pakeisti atvaizdų katalogo pavadinimą, galite tai padaryti čia. Pirmiausia turite sukurti katalogą Textpattern diegimo šaknyje ir įsitikinti, kad PHP turi teisę rašyti šiame kataloge.</p>
+<p>Šis kelias visada yra <strong>santykinis kelias</strong> Textpattern diegimo šakniniam katalogui.</p>
+<p>Numatytasis katalogas – <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Naudoti el. paštą Atom srautuose?"><![CDATA[
+<h2>Naudoti el. pašto adresą Atom srautuose?</h2>
+<p>Ši parinktis leidžia įtraukti straipsnio autoriaus el. pašto adresą (nurodytą naudotojo paskyroje) į Atom srauto bloką <code>author</code>.</p>
+        ]]></item>
+        <item id="is_dst" title="DST įjungtas?"><![CDATA[
+<h2>Vasaros laikas (DST) įjungtas?</h2>
+<p>Nurodo, ar jūsų laiko juostoje šiuo metu taikomas vasaros laikas.</p>
+        ]]></item>
+        <item id="logging" title="Žurnalų kūrimas"><![CDATA[
+<h2>Žurnalų kūrimas</h2>
+<p>Galite pasirinkti, kokio lygio lankytojų žurnalus Textpattern turėtų kaupti:</p>
+<ul>
+    <li><strong>All hits:</strong> Textpattern registruos visus puslapių peržiūrėjimus jūsų svetainėje</li>
+    <li><strong>Referrers only:</strong> Textpattern registruos tik apsilankymus, į kuriuos atėjo iš kitų svetainių</li>
+    <li><strong>None:</strong> Textpattern neregistruos jokio puslapių peržiūrų</li>
+</ul>
+<p>Nuo Textpattern 4.7.0 versijos lankytojų IP adresai Textpattern sistemoje nerenkami ir nesaugomi. Jei IP adresus renkate ar saugote už Textpattern ribų, privalote imtis atitinkamų priemonių, kad jie būtų saugomi ir naudojami laikantis galiojančių teisės aktų, tokių kaip <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, ir užtikrinti aukštą saugumą visais serverio ir Textpattern diegimo aspektais, kad ši informacija nebūtų pažeista.</p>
+<p>Primygtinai patariame palikti numatytąją reikšmę „None“, nebent jūs tikrai privalote kaupti šią informaciją ir viešai deklaruojate, kaip ją naudosite.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maksimalus URL ilgis (simboliais)"><![CDATA[
+<h2>Maksimalus URL ilgis (simboliais)</h2>
+<p>Neleidžia veikti URL, kurie ilgesni nei nurodytas ilgis. Tai gali padėti riboti žalą ir pagerinti svetainės saugumą.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Rodyti administravimo pusės integruotas žinyno nuorodas"><![CDATA[
+<h2>Rodyti administravimo pusės integruotas žinyno nuorodas</h2>
+<p>Jei norite paslėpti administravimo pusės integruotas žinyno nuorodas (Textpattern žinyno iškylančius langus) visoje sistemoje, nustatykite šią parinktį į „None“.</p>
+        ]]></item>
+        <item id="never_display_email" title="Slėpti komentatoriaus el. pašto adresą?"><![CDATA[
+<h2>Slėpti komentatoriaus el. pašto adresą?</h2>
+<p>Ši parinktis nustato, ar komentatoriaus el. pašto adresas turi būti rodomas viešai.</p>
+<p>Rekomenduojama el. pašto adresų nerodyti, atsižvelgiant į naudotojų privatumą, tačiau kai kuriose situacijose gali būti pageidautina juos rodyti.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Ar naudoti ISO-8859-1 kodavimą išsiunčiamuose el. laiškuose (numatytas yra UTF-8)?"><![CDATA[
+<h2>Ar naudoti ISO-8859-1 kodavimą išsiunčiamuose el. laiškuose (numatytas yra UTF-8)?</h2>
+<p>Textpattern pagal numatymą visur, kur įmanoma, naudoja UTF-8 kodavimą, įskaitant ir siunčiamus el. laiškus. Tačiau kai kurios senesnės el. pašto programos (įskaitant kai kurias Microsoft Outlook versijas) netinkamai palaiko UTF-8. Jei el. laiškuose matote iškraipytus simbolius, ši parinktis prieš siuntimą pavers tekstą į ISO-8859-1.</p>
+<p><strong>Pastaba:</strong> jei naudojate kalbą, kurios simbolių negalima pavaizduoti ISO-8859-1 rinkinyje, ši parinktis, deja, nepadės. Turėtumėte naudoti su UTF-8 (arba Unicode) suderinamą el. pašto programą.</p>
+        ]]></item>
+        <item id="override_form_types" title="Keitimo formų tipai"><![CDATA[
+<h2>Keitimo formų tipai</h2>
+<p>Pasirinkite, kurių formų tipų šablonai bus prieinami skydelyje „Write“ kaip keitimo formos.</p>
+        ]]></item>
+        <item id="permlink_format" title="Nuolatinės nuorodos pavadinimo URL šablonas"><![CDATA[
+<h2>Nuolatinės nuorodos pavadinimo URL šablonas</h2>
+<p>Nustato, kaip konstruojami ir priskiriami straipsnių URL, kai naudojamas švarus (ne „netvarkingas“) režimas.</p>
+<p>Publikavus straipsnį, jo URL sugeneruojamas iš straipsnio antraštės, nebent lauke „URL-only title“ nurodytas konkretus URL pavadinimas.</p>
+<p>Imkime pavyzdinę straipsnio antraštę: <em>Ann and Bob eat cake</em></p>
+<p>Jei nuostata „Permalink title URL pattern“ nustatyta į „Hyphenated (title-like-this)“, straipsnio URL bus:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Jei „Permalink title URL pattern“ nustatyta į „Intercapped (TitleLikeThis)“, straipsnio URL bus:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Straipsnio URL šablonas"><![CDATA[
+<h2>Straipsnio URL šablonas</h2>
+<p>Nustato, kaip atskiri straipsniai pasiekiami per URL, generuojamą žyma <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+<p>Režimas „?=messy“ yra suderinamiausias – jam dažniausiai nereikia jokios papildomos konfigūracijos – bet mažiausiai naudingas URL skaitomumo ir paieškos sistemų optimizavimo (SEO) požiūriu. Šiame režime jūsų svetainės straipsnių URL atrodys taip:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Visiems kitiems režimams reikalingas žiniatinklio serverio URL perrašymo funkcionalumas (pvz., Apache <code>mod_rewrite</code> arba NGINX perrašymo direktyvos bloke <code>server</code>). Jei serveris nepalaiko URL perrašymo, kreipkitės į talpytoją arba naudokite režimą „?=messy“, aprašytą aukščiau.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Papildinio podėlio katalogo kelias"><![CDATA[
+<h2>Papildinio podėlio katalogo kelias</h2>
+<p>Ši nuostata daugiausia skirta papildinių kūrėjams. Kai nurodote šį kelią, galite šiame kataloge laikyti papildinio pirminį (nesukompiliuotą) failą ir Textpattern jį įkels automatiškai, todėl galėsite lengvai redaguoti papildinį ir iškart matyti poveikį, neįdiegiant / neaktyvuojant papildinio iš naujo. <strong>Tačiau būkite atsargūs</strong>: jei naudodami šį metodą įdėsite sugadintą papildinį (kurio nepavyksta sukompiliuoti), jis gali sutrikdyti ir patį Textpattern!</p>
+<p>Rekomenduojama produkcinėje svetainėje papildinius įkelti per standartinį „Plugins“ skydelį, o ne naudojant papildinių podėlio katalogą.</p>
+<p><strong>Pastaba:</strong> Nenurodykite to paties katalogo „temporary“ ir „plugin cache“ nuostatose, nes tai sukels problemų (Textpattern bandytų vykdyti laikinuosiuose žurnaluose esančius failus kaip papildinius).</p>
+        ]]></item>
+        <item id="production_status" title="Pateikimo būsena"><![CDATA[
+<h2>Pateikimo būsena</h2>
+<p>Textpattern svetainė gali veikti vienu iš trijų režimų:</p>
+<ol>
+    <li>„Debugging“</li>
+    <li>„Testing“</li>
+    <li>„Live“</li>
+</ol>
+<h3>Derinimo (Debugging) režimas</h3>
+<p>Visos PHP klaidos ir įspėjimai apie neveikiantį kodą ir papildinius bus matomi viešojoje svetainės dalyje. Be to, peržiūrėdami HTML šaltinį matysite šią informaciją:</p>
+<ul>
+    <li>per kiek laiko serveris sugeneravo puslapį („Runtime“)</li>
+    <li>kiek MySQL užklausų buvo įvykdyta</li>
+    <li>apytikslį didžiausią atminties sunaudojimą</li>
+    <li>visas Textpattern žymas, aptiktas generuojant puslapį (vadinamąsias žymų pėdsaką – tag trace)</li>
+</ul>
+<h3>Testavimo (Testing) režimas</h3>
+<p>Visos PHP klaidos ir įspėjimai apie neveikiantį kodą ir papildinius taip pat bus matomi viešojoje svetainės dalyje. Peržiūrėdami HTML šaltinį matysite:</p>
+<ul>
+    <li>per kiek laiko serveris sugeneravo puslapį („Runtime“)</li>
+    <li>kiek MySQL užklausų buvo įvykdyta</li>
+    <li>apytikslį didžiausią atminties sunaudojimą</li>
+</ul>
+<h3>Gyvos (Live) aplinkos režimas</h3>
+<p>Į puslapius nesiunčiama jokia klaidų ar diagnostinė informacija. Paprastai šis režimas yra tinkamiausias, nes suteikia geriausią naudotojo patirtį ir mažiausiai apkrauna serverį.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Viešosios pusės tema"><![CDATA[
+<h2>Viešosios pusės tema</h2>
+<p>Numatytoji viešosios pusės tema, kuri bus naudojama visiems lankytojams, atėjusiems į jūsų viešąją svetainę. Textpattern pateikiama iš anksto įdiegta numatytoji tema ir galimybė pradėti be jokios temos. Taip pat galite pridėti temų paketus į katalogą <code>textpattern/themes</code>, kad jie būtų prieinami naudojimui.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Skelbti nebegaliojančius straipsnius?"><![CDATA[
+<h2>Skelbti nebegaliojančius straipsnius?</h2>
+<p>Jei nustatyta „Yes“, nebegaliojantys straipsniai ir toliau bus rodomi jūsų svetainėje ir pasibaigus jų galiojimo datai. Galite naudoti žymą <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>, kad tokiems straipsniams rodytumėte kitokį turinį ar žymėjimą.</p>
+<p>Jei nustatyta „No“, nebegaliojantys straipsniai bus pašalinti iš viešosios svetainės dalies ir vietoj jų bus grąžinamas HTTP statusas „410 Gone“. Pagal numatymą ši parinktis yra „No“.</p>
+        ]]></item>
+        <item id="publisher_email" title="Siųsti prisijungimo informaciją iš šio elektroninio pašto adreso"><![CDATA[
+<h2>Siųsti prisijungimo informaciją iš šio elektroninio pašto adreso</h2>
+<p>Nurodykite el. pašto adresą, kuris bus naudojamas kaip siuntėjo „From:“ adresas laiškuose, kuriuose pateikiama prisijungimo informacija naujiems naudotojams.</p>
+<p>Jei ši nuostata palikta tuščia arba joje yra netinkamas el. pašto adresas, Textpattern naudos šiuo metu prisijungusio naudotojo vardą ir adresą.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Kiek straipsnių turi būti skalidos sraute?"><![CDATA[
+<h2>Kiek straipsnių turi būti srautuose?</h2>
+<p>Didžiausias tuo pat metu sindikuojamų straipsnių skaičius RSS ir Atom formatais.</p>
+<p>Rekomenduojama nustatyti nedidelę reikšmę, pvz., nuo <code>5</code> iki <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Papildomų analizatoriaus (parser) perėjimų skaičius"><![CDATA[
+<h2>Papildomų analizatoriaus (parser) perėjimų skaičius</h2>
+<p>Paprastai Textpattern žymų analizatorius (parser) visą puslapio šabloną peržvelgia vieną kartą ir pakeičia žymas duomenų bazės turiniu. Kai kuriais atvejais to gali nepakakti, pavyzdžiui:</p>
+<ul>
+    <li>naudojant žemo įkėlimo eilės papildinius žymų atributuose</li>
+    <li>atliekant pakeitimus žymose <code>&lt;txp:php&gt;</code></li>
+    <li>praleidžiant puslapio elementus anksčiau, kad jie vėliau galėtų priimti iš vėliau apdorojamų žymų gautą turinį</li>
+</ul>
+<p>Istoriškai Textpattern atlikdavo dar vieną papildomą perėjimą (vadinamą „secondpass“) dėl suderinamumo, todėl šios nuostatos numatytoji reikšmė yra <code>1</code>. Kiekvienas papildomas perėjimas didina riziką, kad bus netyčia apdorotos žymos, kurių apdoroti nenorėta. Naujesni analizatoriaus patobulinimai sumažino antrojo perėjimo poreikį, todėl, jei papildomų perėjimų nenaudojate konkrečiam tikslui, rekomenduojame sumažinti šią reikšmę iki <code>0</code>, kad svetainė būtų saugesnė.</p>
+<p>Jei vėliau pastebėsite, kad svetainėje rodomos neapdorotos žymos (ir nėra kitų žymų klaidų Testing/Debugging režimuose dėl netinkamai suporuotų žymų), susisiekite su mumis, pateikdami puslapio šablono / kodo / papildinio pavyzdį. Siekiame visiškai atsisakyti papildomų analizatoriaus perėjimų, tad ši informacija mums labai padės.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Siųsti &quot;Last-Modified&quot; antraštę?"><![CDATA[
+<h2>Siųsti "Last-Modified" antraštę?</h2>
+<p>Jei ši parinktis įjungta, Textpattern perskaitys lankytojo HTTP antraštę <code>If-Modified-Since</code> (jei ji pateikiama) ir palygins ją su paskutiniu svetainės atnaujinimo laiku. Jei nuo paskutinio puslapio įkėlimo niekas nepasikeitė (t. y. naršyklės siunčiamas laiko žymuo sutampa su paskutiniu svetainės atnaujinimu), atgal bus nusiųsta antraštė, nurodanti naršyklei naudoti talpykloje esantį puslapį.</p>
+<p>Taip galima sumažinti pralaidumo ir serverio apkrovą bei pagreitinti puslapių įkėlimą.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Rodyti komentarų skaičių srautuose?"><![CDATA[
+<h2>Rodyti komentarų skaičių srautuose?</h2>
+<p>Jei nustatyta į „Yes“, ši parinktis prie straipsnių antraščių RSS / Atom srautuose pridės komentarų skaičių.</p>
+        ]]></item>
+        <item id="site_slogan" title="Svetainės šūkis"><![CDATA[
+<h2>Svetainės šūkis</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Svetainės šūkis <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> – tai jūsų svetainės santrauka ar aprašas. Jis bus naudojamas svetainės aprašymui visur, kur to reikės, pavyzdžiui, RSS/Atom srautuose, ir, jūsų nuožiūra, gali būti rodomas bet kurioje svetainės vietoje.</p>
+<p><strong>Pastaba:</strong> svetainės šūkis nėra privalomas, tačiau kai kuriems galiojančių RSS ar Atom srautų formatams jis gali būti būtinas.</p>
+        ]]></item>
+        <item id="sitename" title="Svetainės vardas"><![CDATA[
+<h2>Svetainės vardas</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Svetainės pavadinimas ar antraštė <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>. Jis bus rodomas lankytojo naršyklės antraštės juostoje ar naujienų skaitytuvėje ir, jūsų nuožiūra, gali būti naudojamas įvairiose svetainės vietose.</p>
+        ]]></item>
+        <item id="siteurl" title="Svetainės universalusis adresas"><![CDATA[
+<h2>Svetainės URL</h2>
+<p>Tai jūsų Textpattern svetainės adresas, pavyzdžiui, <code>www.example.com</code>.</p>
+<p><strong>Pastaba:</strong> nereikia įtraukti <code>http://</code>, <code>https://</code> ar pasvirųjų brūkšnių pabaigoje <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Temos katalogas"><![CDATA[
+<h2>Temos katalogas</h2>
+<p>Jei norite pakeisti katalogo, kuriame bus nuolat saugomos viešosios pusės temų plokščiosios rinkmenos, pavadinimą, galite tai padaryti čia. Pirmiausia sukurkite šį katalogą Textpattern diegimo šaknyje ir įsitikinkite, kad PHP turi teisę jame rašyti.</p>
+<p>Šis kelias visada yra <strong>santykinis kelias</strong> Textpattern diegimo šakniniam katalogui.</p>
+<p>Numatytasis katalogas – <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP laiško siuntėjo adresas"><![CDATA[
+<h2>SMTP laiško siuntėjo adresas</h2>
+<p>Šią nuostatą reikėtų palikti tuščią, nebent Textpattern visai nepavyksta siųsti el. laiškų. Jei taip nutiktų, galite čia įvesti bet kokį galiojantį el. pašto adresą, geriausia tokį, kurio domenas sutampa su svetainės domenu (pvz., jei svetainė yra <code>https://example.com</code>, galite naudoti <code>you@example.com</code>).</p>
+<p>Techninių detalių mėgėjams:</p>
+<ul>
+    <li>UNIX tipo / macOS serveriuose čia įvestas el. pašto adresas naudojamas kaip ketvirtasis parametras (su priešdėliu „-f“) PHP funkcijai <code>mail()</code></li>
+    <li>Windows serveriuose čia įvestas el. pašto adresas naudojamas nustatyti (arba perrašyti) <code>sendmail_from</code> nuostatą faile php.ini</li>
+</ul>
+<p>Taip užtikrinama, kad SMTP vokelio siuntėjo adresas (kuris nebūtinai sutampa su matomu „From:“ antraštėje) bus nustatytas į čia įvestą el. pašto adresą. Kai kuriuose serveriuose tai yra būtina sąlyga el. laiškams išsiųsti.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP serveris"><![CDATA[
+<h2>SMTP serveris</h2>
+<p>Norėdami pagerinti laiškų pristatymą ir naudotis el. laiškų siuntimu per išorinę paslaugą (pvz., SendGrid, AWS SES, Mailchimp, Mailgun ir pan.), čia nurodykite SMTP serverį. Šio parametro reikšmės teiraukitės SMTP paslaugos teikėjo.</p>
+<p>Šią reikšmę galima pateikti ir apibrėžus konstantą <code>SMTP_HOST</code> faile <code>config.php</code>. Tokiu atveju ši reikšmė nuostatų skydelyje bus paryškinta pilkai ir neredaguojama.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP slaptažodis"><![CDATA[
+<h2>SMTP slaptažodis</h2>
+<p>Jei SMTP ryšiui su nurodytu naudotojo vardu reikalingas slaptažodis, įveskite jį čia. Daugiau informacijos ieškokite paslaugos teikėjo dokumentacijoje.</p>
+<p>Pastaba: nors slaptažodis čia nebus rodomas, jis <em>bus</em> įrašytas į duomenų bazės nuostatų lentelę paprastu tekstu. Jei norite didesnio saugumo, galite apibrėžti konstantą <code>SMTP_PASS</code> faile <code>config.php</code>, vietoje saugojimo duomenų bazėje.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP prievadas"><![CDATA[
+<h2>SMTP prievadas</h2>
+<p>Jei nurodėte SMTP serverį, turite nurodyti ir prievadą, kad SMTP maršrutizavimas veiktų. Dažniausiai naudojami prievadai:</p>
+<ul>
+    <li>25 – nesaugus paštas</li>
+    <li>465 – senesnis (neoficialus) saugaus pašto prievadas</li>
+    <li>587 – numatytasis (rekomenduojamas) TLS saugiam paštui</li>
+</ul>
+<p>Jūsų SMTP paslaugos teikėjas gali naudoti ir kitą prievadą, todėl tikslintis reikėtų jų dokumentacijoje.</p>
+<p>Šią reikšmę galima pateikti ir apibrėžus konstantą <code>SMTP_PORT</code> faile <code>config.php</code>. Tokiu atveju ši reikšmė nuostatų skydelyje bus paryškinta pilkai ir neredaguojama.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP saugumo metodas"><![CDATA[
+<h2>SMTP saugumo metodas</h2>
+<p>Pasirinkite el. pašto saugumo protokolą, kurį naudoja jūsų SMTP paslaugos teikėjas. Daugiau informacijos rasite jų dokumentacijoje.</p>
+<p>Šią reikšmę galima pateikti ir apibrėžus konstantą <code>SMTP_SECTYPE</code> faile <code>config.php</code>. Tokiu atveju ši reikšmė nuostatų skydelyje bus paryškinta pilkai ir neredaguojama.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP naudotojo vardas"><![CDATA[
+<h2>SMTP naudotojo vardas</h2>
+<p>Jei SMTP ryšiui reikalingas naudotojo / prisijungimo vardas, įveskite jį čia. Daugiau informacijos ieškokite paslaugos teikėjo dokumentacijoje.</p>
+<p>Šią reikšmę galima pateikti ir apibrėžus konstantą <code>SMTP_USER</code> faile <code>config.php</code>. Tokiu atveju ši reikšmė nuostatų skydelyje bus paryškinta pilkai ir neredaguojama.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Brukalų juodieji sąrašai (atskirti kableliais)"><![CDATA[
+<h2>Brukalų juodieji sąrašai (atskirti kableliais)</h2>
+<p>Čia nurodyti <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">blocklist <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> paslaugų teikėjai bus užklausinėjami, kai jūsų tinklaraštyje bus skelbiamas komentaras, ir bus tikrinamas komentarą rašančio naudotojo IP adresas. Jei IP adresas įtrauktas į sąrašą, tai reiškia, kad iš jo anksčiau gauta viena ar daugiau brukalų ataskaitų ir komentaras bus atmestas. Nepriklausomai nuo tikrinimo rezultatų, komentarą rašančio naudotojo IP adresas Textpattern sistemoje nesaugomas.</p>
+<p>Čia galite įvesti domenų pavadinimų sąrašą, atskirdami juos kableliais. Atminkite, kad būtent jūs atsakote už tai, kad pasirinktų blocklist paslaugų veikimas atitiktų jūsų poreikius.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Platinti tik straipsnių santraukas?"><![CDATA[
+<h2>Platinti <strong>tik</strong> straipsnio santrauką?</h2>
+<p>Jei ši parinktis nustatyta į „No“, kanalo elementuose bus pateikiami visi straipsnių tekstai.</p>
+<p>Jei nustatyta į „Yes“, kanalo elementuose bus pateikiamos straipsnių ištraukos (excerpt) vietoje viso straipsnio teksto, jei jos nurodytos.</p>
+        ]]></item>
+        <item id="tempdir" title="Laikinojo katalogo kelias"><![CDATA[
+<h2>Laikinojo katalogo kelias</h2>
+<p>Nustato <strong>absoliučią nuorodą</strong> į laikinąjį (dažnai vadinamą „tmp“ ar „temp“) katalogą. PHP turi turėti teisę rašyti šiame kataloge. Jis naudojamas laikiniems failams, pavyzdžiui, įvairių tipų įkėlimams (papildinių, rinkmenų ar atvaizdų).</p>
+<p><strong>Pastabos:</strong>
+<ul>
+    <li>Nenurodykite to paties katalogo „temporary“ ir „plugin cache“ nuostatose, nes tai sukels problemų (Textpattern bandytų vykdyti laikinuosiuose žurnaluose esančius failus kaip papildinius).</li>
+    <li>Dėl papildomo saugumo apsvarstykite galimybę perkelti šį katalogą už viešai prieinamos svetainės šaknies ribų.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Administratoriaus svetainės tema"><![CDATA[
+<h2>Administratoriaus svetainės tema</h2>
+<p>Numatytoji administravimo pusės tema, kuri bus naudojama prisijungus bet kuriam naudotojui. Textpattern pateikia kelias iš anksto įdiegtas administratoriaus temas; be to, galite pridėti pasirinktines temų rinkmenas į katalogą <code>textpattern/admin-themes</code>, kad jos būtų prieinamos naudojimui.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Pridėti pasvirąjį brūkšnį URL pabaigoje"><![CDATA[
+<h2>Pridėti pasvirąjį brūkšnį URL pabaigoje</h2>
+<p>Nustato, ar Textpattern automatiškai pridės pasvirąjį brūkšnį URL pabaigoje. Galimos parinktys:</p>
+<ul>
+    <li><strong>No</strong> – niekada</li>
+    <li><strong>List</strong> – tik sąrašų puslapiuose (t. y. nežiūrint atskirų straipsnių)</li>
+    <li><strong>Yes</strong> – visada</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP funkcijos, leidžiamos txp:evaluate"><![CDATA[
+<h2>PHP funkcijos, leidžiamos txp:evaluate</h2>
+<p>Tai kableliais atskirtas <code>function</code> arba <code>alias=function</code> elementų sąrašas, pvz., <code>md5</code>, <code>replace=str_replace</code>. Čia nurodytas funkcijas galima naudoti žymos <code>&lt;txp:evaluate /&gt;</code> atributo <code>query</code> viduje:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Funkcija <code>function</code> turėtų grąžinti skalinę reikšmę (<strong>ne</strong> masyvą ar objektą).</p>
+        ]]></item>
+        <item id="use_comments" title="Leisti komentuoti?"><![CDATA[
+<h2>Leisti komentuoti?</h2>
+<p>Nustato, ar Textpattern komentavimo funkcija turi būti įjungta, ar išjungta.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Naudoti el. pašto adresą konstruojant srauto identifikatorius (pagal nutylėjimą naudojamas universalusis adresas)?"><![CDATA[
+<h2>Naudoti el. pašto adresą konstruojant srauto identifikatorius (pagal nutylėjimą naudojamas universalusis adresas)?</h2>
+<p>Atom srauto elementams būtinas unikalus identifikatorius.</p>
+<p>Kad šie identifikatoriai būtų unikalūs jūsų svetainei, Textpattern leidžia rinktis tarp el. pašto adreso arba domeno vardo. El. pašto adresas bus pirmasis, naudotas kuriant svetainę. Jei artimiausiu metu neplanuojate keisti domeno vardo, tikriausiai saugu nustatyti „No“.</p>
+        ]]></item>
+        <item id="use_plugins" title="Naudoti papildinius?"><![CDATA[
+<h2>Naudoti papildinius?</h2>
+<p>Ši nuostata leidžia visiškai išjungti Textpattern papildinių palaikymą. Tai naudinga derinant svetainėje atsiradusias klaidas, kai norite patikrinti, ar jos nesusijusios su vienu ar keliais papildiniais.</p>
+        ]]></item>
+        <item id="use_textile" title="Numatytasis teksto formatavimas"><![CDATA[
+<h2>Numatytasis teksto formatavimas</h2>
+<p>Čia pasirinktas teksto formatavimas taps numatytuoju ištraukos ir teksto (body) žymėjimui skydelyje „Write“. Galite leisti pilną Textile apdorojimą, konvertuoti eilutės lūžius į HTML pastraipos žymes arba visai neapdoroti teksto.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a> – tai priemonė, skirta palengvinti paprasto teksto konvertavimą į HTML. Įjungus Textile, straipsnių tekstas bus apdorojamas ir grąžinamas kaip struktūriškai tvarkingas HTML.</p>
+<p>Textile taip pat siūlo galingą, bet lengvai išmokstamą komandų rinkinį, kuriuo galima formatuoti tekstą, kurti struktūras (sąrašus, antraštes, citatas) ir įterpti nuorodas bei atvaizdus.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Skilčių skydelis">
+        <item id="section_category" title="Įvadas"><![CDATA[
+<h2>Įvadas</h2>
+<p>Textpattern skiltis geriausia suvokti kaip laikraščio skiltis: jos visos priklauso tam pačiam leidiniui, tačiau kiekvienoje gali būti kitoks išdėstymas, kitokio tipo straipsniai ir pan.</p>
+<p>Daugumai svetainių pakanka tik kelių būtiniausių skilčių.</p>
+<h3>Galimas scenarijus svetainei su trimis skiltimis:</h3>
+<ol>
+    <li><strong>Archyvas:</strong> skiltis („Section“), kuriai priklauso visi pradžios puslapyje rodomi straipsniai. Kai skaitytojas paspaudžia straipsnio nuolatinę nuorodą, jis rodomas pagal šiai skilčiai priskirtą puslapio šabloną. Norint pereiti į naujausių šiai skilčiai „Archive“ priskirtų straipsnių puslapiuotą sąrašą, URL būtų <code>https://example.com/archive/</code>.</li>
+    <li><strong>Apie:</strong> puslapis „apie šią svetainę“, besiskiriantis nuo pradžios puslapio ir „Archive“ skilties tuo, kad yra labiau statinis, gali turėti kitokį išdėstymą ir dažniausiai turės tik vieną straipsnį. Skiltis „About“ būtų pasiekiama adresu <code>https://example.com/about/</code>.</li>
+    <li><strong>Nuotraukos:</strong> skiltis („Section“), kurios kitoks išdėstymas (ir galbūt CSS) leis rodyti nuotraukas vietoje straipsnių.</li>
+</ol>
+<p>Atminkite, kad sistemoje visuomet egzistuoja speciali paslėpta skiltis „default“. Ši numatytoji skiltis naudoja puslapį „default“ ir stilių „default“, ir iš jų sukonstruojamas jūsų svetainės pradžios puslapis.</p>
+        ]]></item>
+        <item id="section_default" title="Numatytasis leidybos skyrius"><![CDATA[
+<h2>Numatytasis leidybos skyrius</h2>
+<p>Ši parinktis nustato, kuri skiltis bus iš anksto parinkta skilties meniu kuriant naują straipsnį skydelyje „Write“.</p>
+<p>Jei dauguma jūsų straipsnių atsiduria konkrečioje skiltyje, pasirinkite ją čia. Pakeitimai įsigalios iš karto.</p>
+<p>Šį nustatymą galite pakeisti kiekvienam straipsniui atskirai „Write“ skydelyje, parinkdami kitą skiltį srityje „Sort and display“.</p>
+        ]]></item>
+        <item id="section_description" title="Aprašas"><![CDATA[
+<h2>Aprašas</h2>
+<p>Skilties aprašas yra pasirenkamas komponentas, kuris gali padėti paieškos sistemoms ir svetainių skenuokliams geriau atpažinti ir rūšiuoti turinį.</p>
+<p>Straipsnio aprašas ribojamas iki 255 simbolių. Atminkite, kad kai kurios paieškos sistemos riboja puslapio <code>meta description</code> ilgiui skirtų simbolių skaičių, kad jis būtų patogiai rodomas rezultatų puslapiuose (SERP), ir ši riba gali būti mažesnė nei 255 simboliai, leidžiami Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Ar šios skilties straipsniai rodomi pradžios puslapyje?"><![CDATA[
+<h2>Ar šios skilties straipsniai rodomi pradžios puslapyje?</h2>
+<p>Kai kurių skilčių straipsniai, pavyzdžiui primenantys labiau „statinius“ puslapius, gali nederėti su laiko atžvilgiu jautriu jūsų svetainės pradžios puslapio turiniu.</p>
+<p>Nustačius „No“, šiai skilčiai priskirti straipsniai nebus rodomi pradžios puslapyje.</p>
+        ]]></item>
+        <item id="section_searchable" title="Naudoti svetainės paieškoje?"><![CDATA[
+<h2>Naudoti šią skiltį svetainės paieškoje?</h2>
+<p>Ši parinktis nustato, ar šiai skilčiai priklausantys straipsniai turi būti rodomi visos svetainės paieškos rezultatuose.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Platinti?"><![CDATA[
+<h2>Platinti straipsnius šioje skiltyje?</h2>
+<p>Nustato, ar straipsniai iš šios skilties bus rodomi svetainės RSS ir Atom kanaluose.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Naudoja stilių"><![CDATA[
+<h2>Naudoja stilių</h2>
+<p>Jei konkrečiai skiltiai norite naudoti kitą nei numatytąją stilių lentelę, tai galite nustatyti čia.</p>
+<p>Tai aktualu tik toms stiliaus lentelėms, kurios saugomos Textpattern skydelyje „Styles“. Jei CSS laikote išorėje, už Textpattern ribų (kas labai rekomenduojama), ši parinktis neturi jokio poveikio.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Naudoja puslapį"><![CDATA[
+<h2>Naudoja puslapį</h2>
+<p>Textpattern sistemoje skiltys yra susietos su puslapių šablonais.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Naudoja temą"><![CDATA[
+<h2>Naudoja temą</h2>
+<p>Jei konkrečiai skiltiai norite naudoti kitą temą, tai galite nustatyti čia, pasirinkdami iš šiuo metu įdiegtų temų sąrašo.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Diegimo skydelis">
+        <item id="setup_admin_url" title="Administratoriaus subdomenas"><![CDATA[
+<h2>Administratoriaus subdomenas</h2>
+<p>Subdomenas, kuriuo norite pasiekti Textpattern administravimo sąsają (pvz., <code>admin.example.com</code>).</p>
+<p>Daugiau informacijos rasite dokumentacijoje <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Slapuko domenas"><![CDATA[
+<h2>Slapuko domenas</h2>
+<p>(Sub)domenas, kurį norite naudoti Textpattern slapukams.</p>
+<p>Daugiau informacijos rasite dokumentacijoje <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Naudotojo prisijungimas"><![CDATA[
+<h2>Naudotojo prisijungimas</h2>
+<p>Administratoriaus („Publisher“) paskyros prisijungimo vardas, kuriuo naudositės administruodami savo svetainę.</p>
+<p>Nors vardo netvaržo joks formatas, geriausia vengti sudėtingų simbolių sekų ir lengvai atspėjamų naudotojų vardų (pvz., <code>admin</code>, <code>administrator</code> ir pan.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Naudotojo slaptažodis"><![CDATA[
+<h2>Naudotojo slaptažodis</h2>
+<p>Kadangi ši paskyra turi aukščiausio lygio prieigą Textpattern sistemoje, pasirinkite labai stiprų slaptažodį arba, dar geriau, slaptafrazę.</p>
+<h3>Patarimai</h3>
+<ul>
+    <li>Naudokite ir didžiąsias, ir mažąsias raides</li>
+    <li>Naudokite skaičius</li>
+    <li>Naudokite simbolius</li>
+    <li>Ilgis – bent aštuoni simboliai</li>
+    <li><strong>Venkite</strong> asmeninės informacijos (datų, vardų, vietų, šeimos narių, augintinių ir pan.)</li>
+    <li><strong>Venkite</strong> atskirų ar pasikartojančių žodyno žodžių, nepriklausomai nuo kalbos ar rašybos</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Lentelių priešdėlis"><![CDATA[
+<h2>Lentelių priešdėlis</h2>
+    <p>Naudoti lentelių priešdėlį reikia tik tuomet, jei vienoje duomenų bazėje norite turėti kelis Textpattern diegimus. Kiekvienam Textpattern diegimui reikia unikalaus priešdėlio.</p>
+    <p>Atkreipkite dėmesį, kad priešdėlis turi atitikti šias taisykles:</p>
+<ul>
+    <li><strong>1-as simbolis:</strong> turi būti raidė a–z, A–Z arba pabraukimo brūkšnys</li>
+    <li><strong>Vėlesni simboliai:</strong> gali būti tik a–z, A–Z, 0–9 arba pabraukimo brūkšnys</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Temų skydelis">
+        <item id="skin_author" title="Temos autorius"><![CDATA[
+<h2>Temos autorius</h2>
+<p>Šios temos autorius (-iai) (nebūtina).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Temos svetainė"><![CDATA[
+<h2>Temos svetainė</h2>
+<p>URL adresas, kuriame galima rasti visą informaciją ir / arba naujausias šios temos versijas (nebūtina).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Taip pat ištrinti temos šablonus iš disko"><![CDATA[
+<h2>Taip pat ištrinti temos šablonus iš disko</h2>
+<p>Jei pažymėta, visi pasirinktų temų šablonų failai bus negrįžtamai ištrinti iš disko. Tačiau temų katalogai ir jų pakatalogiai nebus ištrinti, jei juose yra kitų failų (tokių kaip JavaScript, atvaizdai ir pan.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Importuojant ištrinti nenaudojamus šablonus iš duomenų bazės"><![CDATA[
+<h2>Importuojant ištrinti nenaudojamus šablonus iš duomenų bazės</h2>
+<p>Jei pažymėta, kiekvienas pasirinktos temos (-ų) šablonas, kuriam diske nėra atitinkamo failo, bus negrįžtamai ištrintas iš duomenų bazės. Užbaigus veiksmą, kiek įmanoma, duomenų bazėje esantys šablonai atitiks tai, kas yra diske.</p>
+<p>Atkreipkite dėmesį, kad jei pašalinote šablonų failus, kurių Textpattern reikalauja, jų tuščios versijos bus automatiškai sukurtos duomenų bazėje.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Eksportuojant ištrinti nenaudojamus šablonus iš disko"><![CDATA[
+<h2>Eksportuojant ištrinti nenaudojamus šablonus iš disko</h2>
+<p>Jei pažymėta, kiekvienas pasirinktos temos (-ų) šablono failas, kuriam duomenų bazėje nėra atitinkamo įrašo, bus negrįžtamai ištrintas iš disko. Užbaigus veiksmą, failų sistemoje esantys šablonai tiksliai atitiks tai, kas yra duomenų bazėje.</p>
+        ]]></item>
+        <item id="skin_description" title="Temos aprašas"><![CDATA[
+<h2>Temos aprašas</h2>
+<p>Trumpas šios temos dizaino / išdėstymo aprašymas (nebūtina).</p>
+<p>Temos aprašas negali viršyti 255 simbolių.</p>
+        ]]></item>
+        <item id="skin_import" title="Importuoti temą"><![CDATA[
+<h2>Importuoti temą iš disko</h2>
+<p>Ši forma leidžia importuoti temą į Textpattern duomenų bazę iš jūsų temų katalogo.</p>
+<p>Importuojama tema turi būti sudaryta iš skaitomo pagrindinio aplanko, kurio pavadinimas sutampa su temos pavadinimu, ir šiame aplanke esančio skaitomo failo <code>manifest.json</code> numatytame formate. Temos aplanke taip pat turi būti puslapių, formų ir stilių atitinkamuose to paties pavadinimo pakatalogiuose.</p>
+<p>Puslapių ir formų failų praplėtimas turėtų būti <code>.txp</code>, o stilių lentelių – <code>.css</code>. Formos taip pat turėtų būti grupuojamos pagal tipą į atskirus katalogus. Importuojant Textpattern sukurs visus trūkstamus būtinus šablonus.</p>
+<p>Daugiau informacijos apie temų kūrimą, diegimą ir naudojimą Textpattern CMS aplinkoje rasite <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">temų dokumentacijoje <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Temos pavadinimas"><![CDATA[
+<h2>Temos pavadinimas</h2>
+<p>Temos pavadinimas naudojamas temos katalogo pavadinimui ir kitiems techniniams tikslams (privalomas).</p>
+<p>Pavadinime neturėtų būti specialiųjų simbolių ar tarpų.</p>
+        ]]></item>
+        <item id="skin_overview" title="Įvadas į temas"><![CDATA[
+<h2>Įvadas į temas</h2>
+<p>Textpattern tema – tai puslapių, formų ir stilių rinkinių visuma. Temos leidžia logiškai suskirstyti svetainės išteklius į grupes, kad būtų lengviau juos identifikuoti ar dalytis su kitais. Temos kūrimas ar importas ir visi į ją įtraukti ištekliai <em>nėra</em> daromi įtakos jūsų esamai svetainei. Galite laisvai redaguoti ar keisti visus išteklius, kurie nėra susieti su kokia nors svetainės skiltimi, ir tai neturės jokios įtakos pačiai svetainei.</p>
+<p>Norėdami redaguoti temos išteklius, apsilankykite skydeliuose Pages, Forms arba Styles ir naudokite išskleidžiamąjį meniu, kad pasirinktumėte temą, su kuria norite dirbti. Tema, su kuria dirbate, prisimenama visoje administravimo srityje, todėl galite greitai ir lengvai perjungti išteklių tipus. Ji vadinama jūsų <em>darbine tema</em>.</p>
+<p>Daugiau informacijos rasite <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern User Documentation <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Temos antraštė"><![CDATA[
+<h2>Temos antraštė</h2>
+<p>Aprašomoji temos antraštė, naudojama temai identifikuoti Textpattern skydeliuose.</p>
+<p>Antraštėje gali būti specialiųjų simbolių ir tarpų.</p>
+        ]]></item>
+        <item id="skin_version" title="Temos versija"><![CDATA[
+<h2>Temos versija</h2>
+<p>Įdiegtos šios temos versijos numeris (nebūtina).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

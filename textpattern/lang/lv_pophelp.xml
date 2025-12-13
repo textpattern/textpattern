@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="lv">
+    <group id="admin" title="Lietotāju panelis">
+        <item id="about_privileges" title="Par lomām"><![CDATA[
+<h2>Par lomām</h2>
+<h3>Publicētājs</h3>
+<ul>
+    <li>var pārvaldīt rakstus, komentārus un saites</li>
+    <li>var lietot PHP rakstos, ja administratora iestatījumos “Allow PHP in articles?” ir iestatīts “Yes”</li>
+    <li>var pārvaldīt attēlus un failus</li>
+    <li>var pārvaldīt sadaļas un kategorijas</li>
+    <li>var pārvaldīt lapas, formas un stilus</li>
+    <li>var skatīt diagnostikas informāciju</li>
+    <li>var pārvaldīt vietnes iestatījumus</li>
+    <li>var pārvaldīt lietotājus</li>
+    <li>var pārvaldīt apmeklētāju žurnālus</li>
+    <li>var pārvaldīt spraudņus</li>
+    <li>var importēt datus</li>
+</ul>
+<h3>Redaktors</h3>
+<ul>
+    <li>var pārvaldīt rakstus, komentārus un saites</li>
+    <li>var lietot PHP rakstos, ja administratora iestatījumos “Allow PHP in articles?” ir iestatīts “Yes”</li>
+    <li>var pārvaldīt attēlus un failus</li>
+    <li>var pārvaldīt sadaļas un kategorijas</li>
+    <li>var pārvaldīt lapas, formas un stilus</li>
+    <li>var skatīt diagnostikas informāciju</li>
+    <li>var pārvaldīt vietnes iestatījumus</li>
+    <li>var skatīt lietotājus</li>
+    <li>var pārvaldīt apmeklētāju žurnālus</li>
+    <li>var pārvaldīt spraudņus</li>
+    <li>var importēt datus</li>
+</ul>
+<h3>Korektors</h3>
+<ul>
+    <li>var pārvaldīt rakstus ar vienu ierobežojumu:
+        <ul>
+            <li>nevar dzēst citu lietotāju rakstus</li>
+        </ul>
+    </li>
+    <li>var pārvaldīt komentārus un saites</li>
+    <li>var pārvaldīt attēlus un failus</li>
+    <li>var pārvaldīt kategorijas</li>
+    <li>var pārvaldīt lapas un formas</li>
+    <li>var skatīt lietotājus</li>
+    <li>var pārvaldīt apmeklētāju žurnālus</li>
+</ul>
+<h3>Darbinieks-autors</h3>
+<ul>
+    <li>var pārvaldīt savus rakstus un skatīt citu lietotāju rakstus</li>
+    <li>var pārvaldīt attēlus un failus</li>
+</ul>
+<h3>Brīvmākslinieks</h3>
+<ul>
+    <li>var pārvaldīt savus rakstus ierobežotā veidā:
+        <ul>
+            <li>var mainīt rakstu tikai līdz tā publicēšanai</li>
+            <li>var piešķirt statusu <em>tikai</em> “Draft”, “Hidden” vai “Pending”</li>
+        </ul>
+    </li>
+    <li>var skatīt citu lietotāju rakstus</li>
+</ul>
+<h3>Dizainers</h3>
+<ul>
+    <li>var pārvaldīt savus rakstus ierobežotā veidā:
+        <ul>
+            <li>var mainīt rakstu tikai līdz tā publicēšanai</li>
+            <li>var piešķirt statusu <em>tikai</em> “Draft”, “Hidden” vai “Pending”</li>
+        </ul>
+    </li>
+    <li>var skatīt citu lietotāju rakstus</li>
+    <li>var pārvaldīt attēlus</li>
+    <li>var pārvaldīt sadaļas</li>
+    <li>var pārvaldīt lapas, formas un stilus</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Izveidot autoru"><![CDATA[
+<h2>Pievienot jaunu autoru</h2>
+<p>Jaunajam autoram tiks nosūtīts sveiciena ziņojums un pieteikšanās instrukcijas pa e‑pastu.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Rakstīšanas panelis">
+        <item id="article_image" title="Raksta attēls"><![CDATA[
+<h2>Raksta attēls</h2>
+<p>Lai sasaistītu attēlus ar šo rakstu, šeit ievadiet vienu no šiem variantiem:</p>
+<ol>
+    <li>vienu vai vairākus Textpattern attēlu ID, atdalītus ar komatiem (piem., <code>12, 25, 18</code>)</li>
+    <li>vienu vai vairākus relatīvos ceļus uz attēlu, atdalītus ar komatiem (piem., <code>/images/my_pic.jpg</code>)</li>
+    <li>vienu vai vairākus pilnus URL, atdalītus ar komatiem (piem., <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Pirmo attēlu var parādīt, ievietojot raksta formā iezīmi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>. Pēc noklusējuma tā izvada pilnu HTML <code>&lt;img&gt;</code> iezīmi uz izvēlēto attēlu.</p>
+<p>Galerijas var parādīt, izmantojot iezīmi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Pamatteksts"><![CDATA[
+<h2>Pamatteksts</h2>
+<p>Raksta galvenais saturs atrodas raksta pamattekstā.</p>
+<p>Veidojot vai gatavojot rakstus publicēšanai Textpattern, autors var pārslēgties starp trim raksta skatiem: vienkāršs teksts, HTML iezīme (kods, ar kuru pārlūks attēlo rakstu) un izveidotās lapas priekšskatījums.</p>
+        ]]></item>
+        <item id="description" title="Apraksts"><![CDATA[
+<h2>Apraksts</h2>
+<p>Raksta apraksts nav obligāts, taču tas var palīdzēt meklētājprogrammām un tīmekļa kāpuriem labāk identificēt un sakārtot saturu.</p>
+<p>Raksta apraksta garums ir ierobežots līdz 255 rakstzīmēm. Ņemiet vērā, ka dažas meklētājprogrammas praktisku iemeslu dēļ ierobežo lapas <code>meta description</code> garumu meklēšanas rezultātu lapās (SERP), un šis ierobežojums var būt mazāks par 255 rakstzīmēm, ko pieļauj Textpattern.</p>
+<p>Ņemiet vērā, ka raksta apraksts atšķiras no raksta ievadteksta, lai gan abos var būt līdzīgs saturs. Raksta apraksts ir galvenokārt paredzēts izmantošanai meklētājprogrammās un kāpuriem, savukārt raksta ievadteksts ir piemērotāks cilvēkam lasāmam raksta kopsavilkumam, ja tas ir nepieciešams.</p>
+        ]]></item>
+        <item id="excerpt" title="Ievadteksts"><![CDATA[
+<h2>Ievadteksts</h2>
+<p>Raksta ievadteksts nav obligāts. To var izmantot kā īsu raksta kopsavilkumu, kas tiek rādīts satura rādītājā, izmantots pilnā pamatteksta vietā vietnes RSS/Atom plūsmās vai citiem nolūkiem.</p>
+        ]]></item>
+        <item id="expire_date" title="Beigu datums"><![CDATA[
+<h2>Beigu datums</h2>
+<p>Laiks, kad raksts tiek atzīmēts kā termiņš beidzies. Laiks nav obligāts, un to var iestatīt uz jebkuru brīdi pagātnē vai nākotnē.</p>
+<p>Lauki atbilst šādai informācijai:</p>
+<ul>
+    <li>Gads / Mēnesis / Diena</li>
+    <li>Stunda (24 stundu formāts) : Minūte : Sekunde</li>
+</ul>
+<p>Kad pienāk norādītais brīdis, vai, ja norādīts jau pagājis laiks, raksts beidzas (kļūst novecojis).</p>
+<p>Ja ir ieslēgta opcija rādīt termiņu beigušos rakstus, raksts paliek redzams. Ja opcija ir izslēgta, raksta lapas apmeklētāji raksta satura vietā saņems HTTP 410 kļūdu.</p>
+        ]]></item>
+        <item id="keywords" title="Atslēgvārdi"><![CDATA[
+<h2>Atslēgvārdi</h2>
+<p>Atslēgvārdi ir noderīgi, lai precizētu sakarības starp rakstiem ārpus tā, ko nodrošina kategorijas.</p>
+<p>Atslēgvārdiem jābūt atsevišķiem vārdiem, kas atdalīti ar komatiem.</p>
+        ]]></item>
+        <item id="override_form" title="Pārrakstīšanas forma"><![CDATA[
+<h2>Pārrakstīšanas forma</h2>
+<p>Raksts pēc izvēles var izmantot citu formu, nekā tā, kas piešķirta pēc noklusējuma – piemēram, lai parādītu raksta ievadtekstu ar <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> pamatteksta ar <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> vietā – to var iestatīt šeit.</p>
+        ]]></item>
+        <item id="publish_date" title="Publicēšanas datums"><![CDATA[
+<h2>Publicēšanas datums</h2>
+<p>Laiks, kad raksts vai fails ir publicēts vai kad tas pēdējo reizi labots. Laiku var iestatīt uz brīdi, kad vienība tiek publicēta, vai uz jebkuru brīdi pagātnē vai nākotnē.</p>
+<p>Lauki atbilst šādai informācijai:</p>
+<ul>
+    <li>Gads / Mēnesis / Diena</li>
+    <li>Stunda (24 stundu formāts) : Minūte : Sekunde</li>
+</ul>
+<p>Vienība ar zīmogu, kas ir lielāks par pašreizējo laiku (t. i., nākotnē), neparādīsies publiskajā daļā un RSS/Atom plūsmās, līdz šis brīdis nepienāks.</p>
+        ]]></item>
+        <item id="status" title="Statuss"><![CDATA[
+<h2>Statuss</h2>
+<p>Nosaka šī Textpattern raksta publicēšanas redzamības statusu.</p>
+<p>Publicēšanas statuss var būt kāds no šiem:</p>
+<ul>
+<li><strong>Draft</strong>: tiek uzskatīts par tapšanas stadijā esošu un nav redzams ārpus Textpattern administrācijas vides (t. i., nav redzams vietnē un netiek sindicēts plūsmās).</li>
+<li><strong>Hidden</strong>: raksts nav redzams ārpus Textpattern administrācijas vides. Noderīgs, lai noņemt saturu no vietnes, to neizdzēšot.</li>
+<li><strong>Pending</strong>: tiek uzskatīts par gatavu publicēšanai un gaida apstiprinājumu, taču nav redzams ārpus Textpattern administrācijas vides.</li>
+<li><strong>Live</strong>: parasti ir redzams ārpus Textpattern administrācijas vides (t. i., redzams vietnē, sindicēts plūsmās, ja iestatījumi to atļauj). Ja raksts ir live un tam ir beigu datums, statuss pēc šī datuma paliek Live, bet raksts ārpus administrācijas vides būs redzams tikai tad, ja atļauta beigušos rakstu publicēšana.</li>
+<li><strong>Sticky</strong>: līdzīgs <strong>Live</strong> rakstam, ciktāl tas ir redzams vietnes apmeklētājiem, taču <strong>netiks</strong> parādīts rakstu sarakstos, ja vien iezīmē <code>article</code> vai <code>article_custom</code> nav norādīts atribūts <code>status</code> ar vērtību <code>sticky</code>.</li>
+</ul>
+<p>Piezīme: saturs, kas nav publiski redzams vietnē, joprojām var tikt priekšskatīts lietotājiem, kas ir pieteikušies.</p>
+        ]]></item>
+        <item id="title" title="Nosaukums"><![CDATA[
+<h2>Nosaukums</h2>
+<p>Pievienojiet šim rakstam atbilstošu nosaukumu.</p>
+<p>Raksta nosaukums ir ierobežots līdz 255 rakstzīmēm.</p>
+        ]]></item>
+        <item id="url_title" title="Tikai‑URL virsraksts"><![CDATA[
+<h2>Tikai‑URL virsraksts</h2>
+<p>Lai izmantotu konkrētu virsrakstu raksta pastāvīgajā URL, ierakstiet to šeit. Ja atstājat tukšu, URL virsraksts tiks automātiski ģenerēts no raksta virsraksta.</p>
+<p>Īpaši noderīgi tas ir tad, ja raksta virsrakstā tiek izmantotas ne‑ASCII rakstzīmes.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategoriju panelis">
+        <item id="article_category" title="Raksti"><![CDATA[
+<h2>Raksti</h2>
+<p>Atšķirībā no sadaļām, kas nosaka vietnes navigācijas struktūru, rakstu kategorijas ļauj sakārtot rakstus pēc to tematikas. Kad kategorijas ir piešķirtas, var pārlūkot sarakstus ar rakstiem, kas pieder konkrētām kategorijām.</p>
+<p>Piemēram, vietnē par ēdienu ticamās rakstu kategorijas varētu būt:</p>
+<ul>
+    <li>svaigas sastāvdaļas</li>
+    <li>iepirkšanās</li>
+    <li>receptes</li>
+    <li>noformējums</li>
+    <li>restorāni</li>
+    <li>pavāri</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Apraksts"><![CDATA[
+<h2>Kategorijas apraksts</h2>
+<p>Kategorijas apraksts nav obligāts, taču tas var palīdzēt meklētājprogrammām un tīmekļa kāpuriem labāk identificēt un sakārtot saturu.</p>
+<p>Kategorijas apraksta garums ir ierobežots līdz 255 rakstzīmēm. Ņemiet vērā, ka dažas meklētājprogrammas praktisku iemeslu dēļ ierobežo lapas <code>meta description</code> garumu meklēšanas rezultātu lapās (SERP), un šis ierobežojums var būt mazāks par 255 rakstzīmēm, ko pieļauj Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Faili"><![CDATA[
+<h2>Faili</h2>
+<p>Failu kategorijas nav obligātas, taču tās ir noderīgas augšuplādēto failu grupēšanai.</p>
+        ]]></item>
+        <item id="image_category" title="Attēli"><![CDATA[
+<h2>Attēli</h2>
+<p>Attēlu kategorijas nav obligātas, taču tās ir noderīgas gan iekšējai organizēšanai, gan attēlu kopu definēšanai, kuras var parādīt ar iezīmi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Saites"><![CDATA[
+<h2>Saites</h2>
+<p>Saišu kategorijas nav obligātas, taču tās ir noderīgas dažādu saišu grupu parādīšanai, piem., “Draugi”, “Romieši”, “Tautieši”.</p>
+<p>Šādus atlasītus saišu sarakstus izvada ar <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code> iezīmi <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>, piemēram:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostikas panelis">
+        <item id="clean_url_data_failed" title="Tīro URL datu pārbaude neizdevās"><![CDATA[
+<h2>Tīro URL datu pārbaude neizdevās</h2>
+<p>Iespējams, ka vietnes adreses (piem., <code>https://example.com/section/article</code>) pašlaik nedarbojas vai arī tīmekļa serveris neatbalsta testa procedūru, ar kuru var noteikt, vai tīrie URL darbojas; ja tīrie URL vietnē darbojas, kā paredzēts, šo paziņojumu var droši ignorēt.</p>
+<p>Ja tīrie URL <em>nedarbojas</em>, tas var nozīmēt:</p>
+<ul>
+    <li>iestatījums “Site URL” ir nepareizs vai arī norādīto adresi neapkalpo šī Textpattern instance</li>
+    <li>serverim ir nepieciešamas izmaiņas failā <code>.htaccess</code> vai līdzīgā servera direktīvā, lai nodrošinātu tīro URL darbību</li>
+    <li>serveris vispār neatbalsta tīros URL</li>
+</ul>
+<p>Tīro URL tests mēģina ielādēt lapu no tīmekļa adreses, kas norādīta iestatījumā “Site URL”, lai pārbaudītu, vai visi tīro URL parametri darbojas pareizi. Ja šis URL norāda uz citu vietni vai ir aizstāts ar statisku lapu u. tml., tests neizdosies. Līdz problēmas atrisināšanai jālieto “netīrie” URL (piem., <code>https://example.com?s=section&amp;id=4</code>). Pārliecinieties, ka iestatījumā “Permanent link mode” administratora iestatījumos ir izvēlēts atbilstošs režīms.</p>
+<p>Ņemiet vērā, ka spraudņa izmantošana vietnes pārslēgšanai “uzturēšanas režīmā” var izraisīt šo brīdinājumu.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Tīro URL pārbaude neizdevās"><![CDATA[
+<h2>Tīro URL pārbaude neizdevās</h2>
+<p>Iespējams, ka vietnes adreses (piem., <code>https://example.com/section/article</code>) pašlaik nedarbojas vai arī tīmekļa serveris neatbalsta testa procedūru, ar kuru var noteikt, vai tīrie URL darbojas; ja tīrie URL vietnē darbojas, kā paredzēts, šo paziņojumu var droši ignorēt.</p>
+<p>Ja tīrie URL <em>nedarbojas</em>, tas var nozīmēt:</p>
+<ul>
+    <li>iestatījums “Site URL” ir nepareizs vai arī norādīto adresi neapkalpo šī Textpattern instance</li>
+    <li>serverim ir nepieciešamas izmaiņas failā <code>.htaccess</code> vai līdzīgā servera direktīvā, lai nodrošinātu tīro URL darbību</li>
+    <li>serveris vispār neatbalsta tīros URL</li>
+</ul>
+<p>Tīro URL tests mēģina ielādēt lapu no tīmekļa adreses, kas norādīta iestatījumā “Site URL”, lai pārbaudītu, vai visi tīro URL parametri darbojas pareizi. Ja šis URL norāda uz citu vietni vai ir aizstāts ar statisku lapu u. tml., tests neizdosies. Līdz problēmas atrisināšanai jālieto “netīrie” URL (piem., <code>https://example.com?s=section&amp;id=4</code>). Pārliecinieties, ka iestatījumā “Permanent link mode” administratora iestatījumos ir izvēlēts atbilstošs režīms.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Vienlaicīgas pieteikšanās uz dzīva servera"><![CDATA[
+<h2>Vienlaicīgas pieteikšanās uz dzīva servera</h2>
+<p>Atļaut lietotāja kontam pieteikties no vairākām sesijām ir drošības risks un nav ieteicams. Lūdzu, izslēdziet šo funkciju paplašināto iestatījumu panelī, ja vien riski nav saprasti un pieņemami.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Slēpt privātu informāciju"><![CDATA[
+<h2>Slēpt privātu informāciju</h2>
+<p>Slēpj privātu informāciju papildu drošībai. Ja diagnostikas informācija ir jākopīgo publiski redzamā formātā, piemēram, Textpattern atbalsta forumā, tas samazina drošības risku, izlaižot sensitīvu informāciju par serveri.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Izstrādes kods uz dzīva servera"><![CDATA[
+<h2>Izstrādes kods uz dzīva servera</h2>
+<p>Textpattern izstrādes versijas nav ieteicamas izmantošanai produkcijas vietnēs. Šo brīdinājumu var droši ignorēt, ja riski ir saprasti un pieņemami.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Direktorija nav rakstāma"><![CDATA[
+<h2>Direktorija nav rakstāma</h2>
+<p>Lai izmantotu failu un attēlu augšuplādes iespējas, šīm direktorijām jābūt rakstāmajām ar PHP, izmantojot tīmekļa servera lietotāju. To var izdarīt ar (S)FTP klientu vai komandrindā, izpildot komandu <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS kļūme"><![CDATA[
+<h2>DNS meklēšana neizdevās</h2>
+<p>Izskatās, ka norādītais URL kā vietnes adrese nav sasniedzams.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Failu augšuplāde ir atslēgta"><![CDATA[
+<h2>Failu augšuplāde ir atslēgta</h2>
+<p>Pašreizējā servera konfigurācija norāda, ka failu augšuplāde ir atslēgta. Pārbaudiet un mainiet iestatījumu <code>file_uploads</code> failā <code>php.ini</code> vai sazinieties ar servera uzturētāju.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess fails iztrūkst"><![CDATA[
+<h2>.htaccess fails iztrūkst</h2>
+<p>Ir iestatīts pastāvīgo saišu režīms, kam nepieciešams fails <code>.htaccess</code>, taču fails nav atrasts. Fails ir iekļauts Textpattern izplatījumā un atrodas Textpattern saknes direktorijā blakus <code>index.php</code> un direktorijai <code>textpattern</code>. Ieteiktās direktīvas ir:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  &lt;IfModule mod_rewrite.c&gt;
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  &lt;/IfModule&gt;
+
+  &lt;IfModule mod_mime.c&gt;
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  &lt;/IfModule&gt;
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Vietnes indekss nav pieejams"><![CDATA[
+<h2>Vietnes indekss nav pieejams</h2>
+<p>Saknes fails <code>index.php</code>, kas norādīts kā vietnes indekss, nav serverim nolasāms. Pārbaudiet tā esamību un piekļuves tiesības.</p>
+        ]]></item>
+        <item id="missing_files" title="Trūkstoši faili"><![CDATA[
+<h2>Trūkstoši faili</h2>
+<p>Textpattern trūkst viena vai vairāku obligātu failu. Pārliecinieties, ka visi sarakstā norādītie faili ir uz servera un atrodas pareizajās vietās.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Trūkst Apache mod_rewrite"><![CDATA[
+<h2>Trūkst Apache mod_rewrite</h2>
+<p>Apache modulis <code>mod_rewrite</code> nav instalēts vai ir izslēgts. Tas ir ieteicams Textpattern pareizai darbībai. Pārliecinieties, ka modulis ir pieejams un ieslēgts, vai sazinieties ar servera uzturētāju.</p>
+        ]]></item>
+        <item id="modified_files" title="Mainīti faili"><![CDATA[
+<h2>Mainīti faili</h2>
+<p>Faili tiek uzskatīti par mainītiem, ja to kontroles summa atšķiras no Textpattern piegādātajā zināmo labo kontrolsummu saraksta. Ja kāds Textpattern instalācijas fails ir citāds, nekā paredzēts, tas tiks izcelts šeit.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL tabulu kļūdas"><![CDATA[
+<h2>MySQL tabulu kļūdas</h2>
+<p>Iespējams, Textpattern MySQL datubāzē ir bojājumi vai kļūmes. Mēģiniet salabot skartās tabulas, izmantojot MySQL pārvaldības rīku, piemēram, <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> vai <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Nav norādīta pagaidu direktorija"><![CDATA[
+<h2>Nav norādīta pagaidu direktorija</h2>
+<p>Lai gan Textpattern darbosies arī bez pagaidu direktorijas, daļa funkcionalitātes var nedarboties kā paredzēts, ja šis iestatījums nav aizpildīts. Apmeklējiet administratora iestatījumus un aizpildiet lauku “Temporary directory path”.</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Sadaļas nosaukums sakrīt ar direktorijas nosaukumu"><![CDATA[
+<h2>Sadaļas nosaukums sakrīt ar direktorijas nosaukumu</h2>
+<p>Esošie direktoriju nosaukumi var konfliktēt ar sadaļu nosaukumiem, kas tiek izmantoti rakstu pastāvīgo saišu shēmā. Lai izvairītos no problēmām, pārbaudiet un izdzēsiet skartos direktorijas nosaukumus, ja tas ir droši, vai mainiet sadaļu nosaukumus tā, lai tie nesakristu.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Vietnes direktorija nav nolasāma"><![CDATA[
+<h2>Vietnes direktorija nav nolasāma</h2>
+<p>Direktorija, kurā atrodas saknes fails <code>index.php</code>, kas norādīts kā vietnes indekss, nav serverim nolasāma. Pārbaudiet piekļuves tiesības.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP skripti ir atļauti"><![CDATA[
+<h2>PHP skripti ir atļauti</h2>
+<p>Textpattern ļauj autoriem un administratoriem iekļaut PHP kodu rakstos un lapu/formu veidnēs, ja šīs iespējas ir ieslēgtas. Tā kā tas ir drošības risks – var tikt izpildīts jebkāds PHP kods, tostarp potenciāli kaitīgs / bīstams, kas var novest pie instalācijas bojāšanas vai informācijas noplūdes trešajām pusēm –, ir ļoti ieteicams šīs iespējas izslēgt iestatījumu panelī <a href="?event=prefs#prefs_group_publish">Preferences</a>, ja vien tās nav absolūti nepieciešamas.</p>
+<p>Daudzas Textpattern vietņu paplašināšanas iespējas, kam agrāk vajadzēja PHP fragmentus, tagad var īstenot ar <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">kodoliezīmēm</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minimālās versiju prasības"><![CDATA[
+<h2>Minimālās versiju prasības</h2>
+<p>Textpattern nepieciešama noteikta funkcionalitāte PHP programmēšanas valodā un MySQL datubāzes serverī. Lūdzu, skatiet šo tabulu, lai noteiktu minimālās sistēmas prasības:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern versija</th>
+                <th scope="col">Minimālā PHP versija</th>
+                <th scope="col">Minimālā MySQL versija</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Papildus iepriekš minētajām sistēmas prasībām ir nepieciešami šādi PHP paplašinājumi:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a></li>
+</ul>
+<p>Vietnes <code>php.ini</code> failā (globālajā vai lokālajā) ir jābūt iestatījumam <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Setup direktorija joprojām pastāv"><![CDATA[
+<h2>Setup direktorija joprojām pastāv</h2>
+<p>Pēc Textpattern instalēšanas direktorija <code>textpattern/setup</code> un tās saturs vairs nav vajadzīgi, un drošības apsvērumu dēļ tie ir jāizdzēš.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Vietnes URL neatbilstība"><![CDATA[
+<h2>Vietnes URL neatbilstība</h2>
+<p>Paneļa “Preferences” iestatījumā “Site URL” norādītā adrese neatbilst faktiskajam URL, ar kuru tiek apmeklēta vietne.</p>
+<p>Ja vietnei var piekļūt ar vairākiem dažādiem URL un tā darbojas, kā paredzēts, šo paziņojumu var droši ignorēt.</p>
+<p>Pretējā gadījumā pārbaudiet un vajadzības gadījumā labojiet iestatījumu “Site URL” administratora iestatījumos. Uzminētais korektais vietnes URL ir parādīts pirmsstarta brīdinājuma paziņojumā panelī “Diagnostics”.</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP funkcijas [&#8230;] ir atslēgtas uz jūsu servera"><![CDATA[
+<h2>PHP funkcijas [&#8230;] ir atslēgtas uz jūsu servera</h2>
+<p>Vietnes uzturētājs vai servera administrators ir atslēdzis vienu vai vairākas PHP funkcijas, un dažas no tām var ietekmēt Textpattern darbību.</p>
+<p>Papildu informāciju skatiet <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern lietotāja dokumentācijā <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Pieejams Textpattern versijas atjauninājums"><![CDATA[
+<h2>Pieejams Textpattern versijas atjauninājums</h2>
+<p>Ir pieejama jaunāka Textpattern versija. Lai izmantotu jaunākās iespējas un drošības labojumus, ieteicams veikt jaunināšanu.</p>
+<p>Lūdzu, ņemiet vērā, ka mēs cenšamies padarīt jaunināšanas procesu maksimāli vienkāršu un nesāpīgu, tomēr:</p>
+<ul>
+    <li>ja no pašreizējās versijas atšķiras tikai pēdējais cipars, jauninājums, visticamāk, ir savietojams atpakaļ ar spraudņiem un tēmām.</li>
+    <li>ja atšķiras pēdējie divi cipari, jauninājums var prasīt atjaunināt dažus spraudņus un/vai tēmas, lai gan tie, iespējams, turpinās darboties ierobežotā apmērā.</li>
+    <li>ja no pašreizējās versijas atšķiras pirmais cipars, jauninājums, visticamāk, prasīs atjaunināt lielāko daļu spraudņu un tēmu. Ja ļoti paļaujaties uz kādu konkrētu spraudņa vai tēmas funkciju, pirms jaunināšanas sazinieties ar autora vai kopienu.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Pieejama Textpattern pirmsizlaides versija"><![CDATA[
+<h2>Pieejams Textpattern pirmsizlaides atjauninājums</h2>
+<p>Ir pieejama jaunāka Textpattern pirmsizlaides (beta) versija. Mēs meklējam aktīvus brīvprātīgos, kas testētu šo versiju, lai gala laidienu padarītu pēc iespējas stabilāku. Mēs cenšamies nodrošināt, lai jaunināšana būtu vienkārša un droša arī beta versijām.</p>
+<p>Ja nolemjat piedalīties, ņemiet vērā:</p>
+<ul>
+    <li>nelietojiet šo beta laidienu produkcijas vietnē, ja vien jums nav darba rezerves kopijas gan vietnes failiem, gan datubāzei un jūs zināt, kā to atjaunot.</li>
+    <li>Lūdzu, <a href="https://github.com/textpattern/textpattern/issues">ziņojiet par jebkurām problēmām</a>, norādot beta versiju, kuru izmantojat. Atkarībā no ziņotajām problēmām pirms stabilā laidiena var būt nepieciešami vairāki beta laidieni.</li>
+    <li>Ja izvietojat šo beta laidienu, pārliecinieties, ka pēc gala versijas iznākšanas atjaunināt arī uz to.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Pagaidu un spraudņu keša direktoriju ceļiem nevajadzētu sakrist"><![CDATA[
+<h2>Pagaidu un spraudņu keša direktoriju ceļiem nevajadzētu sakrist</h2>
+<p>Spraudņiem jāizmanto sava direktorija un nevajadzētu koplietot pagaidu direktoriju. Tas ir potenciāls drošības risks un var negatīvi ietekmēt jūsu vietni, ja pagaidu direktorija tiek iztīrīta. Pārliecinieties, ka pagaidu direktorijas ceļš atšķiras no spraudņu keša ceļa.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Atjauninājumu serveris nav pieejams"><![CDATA[
+<h2>Atjauninājumu serveris nav pieejams</h2>
+<p>Atjauninājumu pārbaude neizdevās, bieži tīkla noslodzes vai savienojuma noildzes dēļ. Parasti šī situācija atrisinās pati dažu stundu laikā, tāpēc vēlāk atgriezieties šajā panelī.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="Jūsu PHP instalācijā trūkst funkcijas mail()"><![CDATA[
+<h2>Jūsu PHP instalācijā trūkst funkcijas mail()</h2>
+<p>PHP funkcija <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> ir atslēgta. Tādēļ Textpattern nevar sūtīt e‑pastus, un daļa funkcionalitātes nebūs pieejama. Piemēram, netiks sūtīti paziņojumi par jauniem komentāriem un jaunie lietotāji nesaņems sveiciena e‑pastu. Tomēr lietotājus joprojām varēs pievienot.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Failu panelis">
+        <item id="file_reassign" title="Pārpiešķirt failu"><![CDATA[
+<h2>Pārpiešķirt failu</h2>
+<p>Ja augšuplādējat failu esoša faila, kas atzīmēts kā “Missing”, vietā, jūsu izvēlētais fails tiek augšuplādēts uz serveri un sasaistīts ar sākotnējo faila informāciju datubāzē. Tas nozīmē, ka sākotnējā faila nosaukums un cita ar to saistītā informācija, piemēram, lejupielāžu skaits un kategorija, paliks nemainīgi. Taču faila izmērs tiks atjaunināts, lai atspoguļotu jauno failu.</p>
+        ]]></item>
+        <item id="file_replace" title="Aizvietot failu"><![CDATA[
+<h2>Aizvietot failu</h2>
+<p>Šeit augšuplādēts fails aizvietos esošā faila saturu serverī, taču faila nosaukums paliks nemainīgs. Lejupielāžu skaits un cita ar failu saistītā informācija netiks ietekmēta.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Publicēšanas datums"><![CDATA[
+<h2>Publicēšanas datums</h2>
+<p>Laiks, kad fails ir publicēts vai pēdējo reizi labots. Laiku var iestatīt uz brīdi, kad vienība tiek publicēta, vai uz jebkuru brīdi pagātnē vai nākotnē.</p>
+<p>Lauki atbilst šādai informācijai:</p>
+<ul>
+    <li>Gads / Mēnesis / Diena</li>
+    <li>Stunda (24 stundu formāts) : Minūte : Sekunde</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Augšuplādēt failu"><![CDATA[
+<h2>Augšuplādēt failu</h2>
+<p>Izmantojiet šo formu, lai augšuplādētu failus vai attēlus uz serveri.</p>
+<p>Izmantojiet Textile kodu, lai attēlotu grafiku rakstos, Textpattern kodu, lai novietotu grafiku lapu veidnēs, vai HTML kodu, lai ievietotu grafiku citur.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Formu panelis">
+        <item id="forms_overview" title="Ievads formās"><![CDATA[
+<h2>Ievads formās</h2>
+<p>Textpattern formu veido atkārtoti izmantojams teksta, HTML un Textpattern iezīmju fragments, ko var lietot satura attēlošanai.</p>
+<p>Šis ir piemērā izmantots forms, kam varētu piešķirt nosaukumu <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>To var izmantot, lai parādītu HTML neordenētu saistīto rakstu sarakstu:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Tā kā šī forma izvada virsrakstu sarakstu, to var izmantot arī citās iezīmēs, piemēram, parādot 20 rakstus no pašreizējās sadaļas:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Formu var izmantot arī atkārtota satura rādīšanai, piemēram, galvenei un kājenei lapu veidnēs. Tas nozīmē, ka saturs atrodas tikai vienuviet, un, ja nolemjat to mainīt, tas jādara tikai vienreiz. Saturu no formas parasti izvada ar:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Formas maksimālais izmērs ir 64 KB. Kājenes piemērā varētu būt virsraksti, rindkopas, saites, nosacījumu iezīmes un atsauces uz citām formām, piemēram, <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Attēlu panelis">
+        <item id="create_thumbnail" title="Izveidot sīktēlu"><![CDATA[
+<h2>Izveidot sīktēlu</h2>
+<p>Ļauj (no jauna) izveidot sīktēlu ar norādītajiem izmēriem no pilna izmēra attēla.</p>
+<p>Ja izvēlēti pielāgoti izmēri, sīktēls tiks mērogots atbilstoši jūsu izvēlētajiem izmēriem, ja vien nav atzīmēta izvēles rūtiņa “Crop”. Šajā gadījumā sīktēls tiks izgriezts no attēla centra bez mērogošanas.</p>
+<p>Ja izvēlēta automātiskā izmērošana, sīktēls tiks mērogots atbilstoši izmēriem un (pēc izvēles) apgriešanas iestatījumiem pašreizējā administrēšanas tēmā.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Nomainīt attēlu"><![CDATA[
+<h2>Nomainīt attēlu</h2>
+<p>Šeit augšuplādēts attēls vienkārši aizvietos esošo attēlu, kas ir sasaistīts ar šo ierakstu datubāzē.</p>
+        ]]></item>
+        <item id="upload_image" title="Augšuplādēt attēlu"><![CDATA[
+<h2>Augšuplādēt attēlu</h2>
+<p>Augšuplādējiet vienu vai vairākus attēlus uz serveri.</p>
+<p>Pēc augšuplādes direktorijā <code>images</code> sākotnējā attēla faila nosaukums tiks saglabāts tikai Textpattern datubāzē; pats attēla fails tiks pārdēvēts par secīgu skaitli + faila paplašinājumu.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Augšuplādēt sīktēlu"><![CDATA[
+<h2>Augšuplādēt sīktēlu</h2>
+<p>Pilna izmēra attēliem var piešķirt savus sīktēlus. Tie ir noderīgi, lai veidotu saites uz pilna izmēra attēliem un to indeksēšanu.</p>
+<p>Norāde uz sīktēlu ir tieši tāda pati kā norāde uz pilna izmēra attēlu, tikai faila nosaukumam ir pievienots burts <code>t</code>. Piemēram, lai norādītu sīktēlu, kas saistīts ar pilna izmēra attēlu, kas atrodas <code>/images/12.jpg</code>, jāizmanto <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Valodu panelis">
+        <item id="get_textpack" title="Instalēt Textpack"><![CDATA[
+<h2>Instalēt Textpack</h2>
+<p>Ielīmējiet šajā laukā papildu valodu virknes savai vietnei un, lai tās instalētu, izvēlieties “Upload”.</p>
+<p>Virknes bieži tiek piegādātas lejupielādējama Textpack veidā kopā ar spraudni, lai spraudņa valodu virknes varētu izmantot Textpattern vidē.</p>
+<p>Tulkotāji var iztulkot šos pakotnes pēc vajadzības un izplatīt lokalizēto saturu kopienā.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Saišu panelis">
+        <item id="link_description" title="Apraksts"><![CDATA[
+<h2>Apraksts</h2>
+<p>Saišu apraksti nav obligāti, taču tie ir noderīgi, lai pievienotu parakstus saitēm, veidotu saišu <code>title=""</code> (rīka padoma) atribūtus vai vienkārši uzturētu iekšējo dokumentāciju.</p>
+        ]]></item>
+        <item id="link_sort" title="Šķirošanas vērtība"><![CDATA[
+<h2>Šķirošanas vērtība</h2>
+<p>Noderīga dabiskas valodas saišu sarakstu kārtošanai, piemēram, pēc cilvēka uzvārda, nevis vārda, vai pēc frāzēm, kas sākas ar noteikto vai nenoteikto artikulu.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Saites adrese. Ja saite norāda uz citu vietni, tai jāsākas ar <code>http://</code> vai <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Publicēšanas datums"><![CDATA[
+<h2>Publicēšanas datums</h2>
+<p>Laiks, kad saite ir publicēta vai pēdējo reizi labota. Laiku var iestatīt uz brīdi, kad vienība tiek publicēta, vai uz jebkuru brīdi pagātnē vai nākotnē.</p>
+<p>Lauki atbilst šādai informācijai:</p>
+<ul>
+    <li>Gads / Mēnesis / Diena</li>
+    <li>Stunda (24 stundu formāts) : Minūte : Sekunde</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Pieteikšanās panelis">
+        <item id="remember_login" title="Atcerēties mani šajā pārlūkprogrammā"><![CDATA[
+<h2>Atcerēties mani šajā pārlūkprogrammā</h2>
+<p>Ja atzīmēts, jūs paliksiet pieteicies savā Textpattern kontā ar pašreizējo tīmekļa pārlūkprogrammu, līdz izvēlēsieties atteikties. Ja nav atzīmēts, jūs pēc kāda dīkstāves laika tiksiet automātiski atteikts.</p>
+<p>Prasa, lai pārlūkprogrammā būtu ieslēgtas sīkdatnes.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Spraudņu panelis">
+        <item id="install_plugin" title="Instalēt spraudni"><![CDATA[
+<h2>Instalēt spraudni</h2>
+<p>Ielīmējiet šeit kompilētā spraudņa teksta faila saturu un pēc tam nospiediet “Upload”, lai sāktu instalēšanu. Jebkurš šeit augšuplādēts spraudnis ar tādu pašu nosaukumu kā jau iepriekš instalēts spraudnis tiks pārrakstīts ar augšuplādēto versiju.</p>
+<p>Spraudņa teksts, ko šeit ielīmējat, <strong>nav</strong> neapstrādāts PHP kods, bet gan Base64 kodēts teksts, kam parasti priekšā ir galvene ar informāciju par spraudni (piemēram, spraudņa nosaukums, versija un apraksts, autora vārds utt.).</p>
+<p>Kompilētas spraudņu versijas bieži var iegūt no <a rel="external" target="_blank" href="https://plugins.textpattern.com/">spraudņu repozitorija <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> vai spraudņa autora norādītās vietas, piemēram, vietnes vai GitHub.</p>
+<p>Ja ārējā vietne to atļauj, šeit var ielīmēt arī URL uz Textpattern kompilēto teksta failu.</p>
+<p>Visi augšuplādētie spraudņi izies verifikācijas soli, kas ļaus jums pirms instalēšanas pārskatīt spraudņa kodu un saturu.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Augšuplādēt spraudni"><![CDATA[
+<h2>Augšuplādēt spraudni</h2>
+<p>Izmantojiet šo formu, lai augšuplādētu spraudņa failu. Augšuplādes laikā spraudņi (un jebkādi resursi) tiek glabāti direktorijā “plugins”.</p>
+<p>Šeit var augšuplādēt šādus spraudņu tipus:</p>
+<ul>
+<li>Textpattern PHP veidņu (Template) failus ar pilnu kodu, metadatiem, Textpack virknēm un palīdzības tekstu.</li>
+<li>Textpattern kompilētus teksta failus ar pilnu kodu, metadatiem, Textpack virknēm un palīdzības tekstu.</li>
+<li>Textpattern zip pakotnes ar manifest informāciju un kodu, metadatiem, Textpack virknēm, palīdzības tekstu un atbalsta failiem.</li>
+<li>Neapstrādātus PHP failus (tie neaizpildīs papildus metadatus un nav ieteicami).</li>
+</ul>
+<p>Jebkurš šeit augšuplādēts spraudnis ar tādu pašu nosaukumu kā jau iepriekš instalēts tiks pārrakstīts ar augšuplādēto versiju.</p>
+<p>Visi augšuplādētie spraudņi izies verifikācijas soli, kas ļaus jums pirms instalēšanas pārskatīt spraudņa kodu un saturu.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Iestatījumu panelis">
+        <item id="admin_side_plugins" title="Lietot administrācijas daļas spraudņus?"><![CDATA[
+<h2>Lietot administrācijas daļas spraudņus?</h2>
+<p>Administrācijas daļas spraudņi var mainīt administrēšanas saskarnes darbību. Tie var pieslēgties jau esošām darbībām, piemēram, rakstu rediģēšanai vai publicēšanai, vai arī pievienot jaunus paneļus papildu / paplašinātai funkcionalitātei.</p>
+<p>Ja vēlaties uzzināt vairāk par administrācijas daļas spraudņiem, skatiet lapu <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> sadaļā <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern lietotāja dokumentācija <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>. Visu veidu spraudņu saraksts pieejams vietnē <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Paplašinātās opcijas"><![CDATA[
+<h2>Paplašinātās opcijas</h2>
+<p>Parāda paplašināto iestatījumu grupu, kurā var konfigurēt papildu iestatījumus, piemēram:</p>
+<ul>
+    <li>PHP funkcijas, kas atļautas <code>txp:evaluate</code>.</li>
+    <li>Pielāgotus formu veidņu tipus.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Atļaut PHP rakstos?"><![CDATA[
+<h2>Atļaut PHP rakstos?</h2>
+<p>Ja ieslēgts, šis iestatījums ļaus izmantot PHP rakstos. Autoram tam ir vajadzīgas atbilstošas tiesības (pēc noklusējuma to var tikai <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“Publicētāji” <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“Redaktori” <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> un <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">“Korektori” <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>).</p>
+<p><strong>Stingri iesakām šo iespēju izslēgt</strong>, ja vien tā nav absolūti nepieciešama. Jebkāds potenciāli kaitīgs / bīstams PHP kods, kas var iznīcināt jūsu vietni vai nopludināt informāciju trešajām pusēm, varētu tikt pievienots ar jebkura autora starpniecību un izpildīts jebkuram, kas skatās šo rakstu.</p>
+<p>PHP kodam jābūt bez atverošās un noslēdzošās PHP iezīmes un tas arī jāieliek Textpattern iezīmē <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Atļaut formu pārrakstīšanu?"><![CDATA[
+<h2>Atļaut formu pārrakstīšanu?</h2>
+<p>Šis iestatījums ļauj rakstu autoriem pārrakstīt formu, kas tiek izmantota raksta attēlošanā. Ja ieslēgts, raksta rediģēšanas laikā būs pieejams nolaižamais saraksts “Override form”.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Atļaut PHP lapās?"><![CDATA[
+<h2>Atļaut PHP lapās?</h2>
+<p>Ja ieslēgts, šis iestatījums ļauj izmantot PHP kodu lapu un formu veidnēs.</p>
+<p><strong>Stingri iesakām šo iespēju izslēgt</strong>, ja vien tā nav absolūti nepieciešama. Jebkāds potenciāli kaitīgs / bīstams PHP kods, kas var iznīcināt jūsu vietni vai nopludināt informāciju trešajām pusēm, var tikt pievienots jebkura cita lietotāja veidnēs un izpildīts, piemēram, administratoram vai vietnes apmeklētājam.</p>
+<p>PHP kodam jābūt bez atverošās un noslēdzošās PHP iezīmes un tas arī jāieliek Textpattern iezīmē <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arhīva datuma formāts"><![CDATA[
+<h2>Arhīva datuma formāts</h2>
+<p>Formāts, kādā datumi tiks rādīti rakstos sadaļās jūsu vietnē.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Rādīt ievadtekstu raksta rediģēšanas lapā?"><![CDATA[
+<h2>Rādīt ievadtekstu raksta rediģēšanas lapā?</h2>
+<p>Ja iestatīts uz “No”, ievadteksta lauks raksta rediģēšanas ekrānā autoram netiks rādīts.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Pievienot virsrakstus pastāvīgajām saitēm?"><![CDATA[
+<h2>Pievienot virsrakstus pastāvīgajām saitēm?</h2>
+<p>Šis iestatījums pievienos URL automātiski ģenerētu versiju no raksta virsraksta. URL daļa tiek ģenerēta automātiski vai arī to var manuāli pārrakstīt laukā “Tikai‑URL virsraksts”, rediģējot rakstu.</p>
+<p>Iestatījumam ir efekts tikai tad, ja izmantojat tīros URL. Dažām valodām tas var izraisīt garus un neglītus URL, tādā gadījumā, visticamāk, vēlēsieties šo iestatījumu izslēgt.</p>
+        ]]></item>
+        <item id="auto_dst" title="Automātiski koriģēt vasaras laika uzstādījumu?"><![CDATA[
+<h2>Automātiski koriģēt vasaras laika uzstādījumu?</h2>
+<p>Šis iestatījums ļauj Textpattern mainīt DST (Daylight Saving Time) piemērošanas brīžus jūsu reģionā. Ja tas ir iestatīts uz “No”, jūs varēsiet pārslēgt iestatījumu “DST enabled” manuāli.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Jauns komentārs nozīmē, ka vietne ir atjaunota?"><![CDATA[
+<h2>Jauns komentārs nozīmē, ka vietne ir atjaunota?</h2>
+<p>Textpattern datubāze seko līdzi tam, kad notikusi pēdējā izmaiņa jūsu vietnē. Ja šis iestatījums ir “Yes”, jauns komentārs arī atjauninās šo vērtību. Piemēram, šī vērtība tiek izmantota funkcionalitātē <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Pielietot komentāros atribūtu rel=&quot;nofollow&quot;?"><![CDATA[
+<h2>Pielietot komentāros atribūtu rel="nofollow"?</h2>
+<p>Ja iestatīts uz “Yes”, tas saites, kas veidotas komentāros, papildinās ar papildu atribūtu. Tas ir paredzēts kā pasākums, kas mazina stimulu komentāru mēstuļu izplatītājiem, un to ir ieviesušas vairākas meklētājprogrammas un programmatūras izstrādātāji. Vairāk lasiet <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google paziņojumā <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+<p><strong>Piezīme.</strong> Šis iestatījums neietekmē vietnes funkcionalitāti. Tas var mazināt vai ierobežot jūsu komentāru ietekmi, kad dažas meklētājprogrammas vērtē vietnes, uz kurām ved saites no komentāriem.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Rādīt komentārus kā numurētu sarakstu?"><![CDATA[
+<h2>Rādīt komentārus kā numurētu sarakstu?</h2>
+<p>Nosaka, vai raksta komentāri tiks ietverti HTML iezīmē <code>&lt;ol&gt;</code> un atsevišķi komentāri tiks ietverti <code>&lt;li&gt;</code> (komentāri tiek rādīti kā numurēts saraksts), vai arī atsevišķi komentāri tiks ietverti <code>&lt;div&gt;</code> iezīmē.</p>
+<p>Abos gadījumos var pārrakstīt izmantotās iezīmes katrai formai atsevišķi, mainot iezīmi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>, kas atrodas formā <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automātiski pievienot komentārus rakstu beigās?"><![CDATA[
+<h2>Automātiski pievienot komentārus rakstu beigās?</h2>
+<p>Šis iestatījums nosaka, vai komentāri un komentāru forma automātiski tiek pievienoti visiem atsevišķiem rakstiem (automātiski iekļaujot formas <code>comments_display</code> saturu).</p>
+<p>Lielāko daļu laika šo iestatījumu vēlams atstāt “No”, jo tas sniedz lielāku elastību komentāru novietojumam jūsu vietnes dizainā. Jums būs pašiem jāpievieno iezīme <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> jebkurā uz rakstiem balstītā veidnē, kurā vēlaties rādīt komentārus.</p>
+<p>Ja konstatējat komentāru dubultu attēlošanu rakstā, visticamāk, jūsu veidnēs ir iekļauta iezīme <code>&lt;txp:comments /&gt;</code> un vienlaikus iestatījums “Automātiski pievienot komentārus rakstu beigās?” ir “Yes”.</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Komentāru datuma formāts"><![CDATA[
+<h2>Komentāru datuma formāts</h2>
+<p>Formāts, kādā jūsu vietnes apmeklētājiem tiks rādīti komentāru datumi.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Noklusētais uzaicinājums komentēt"><![CDATA[
+<h2>Noklusētais uzaicinājums komentēt</h2>
+<p>Ja atļaujat apmeklētājiem komentēt jūsu vietnē, šis ir noklusētais uzaicinājuma teksts. Piemēram:</p>
+<ul>
+    <li>Komentāri</li>
+    <li>Pievienot komentāru</li>
+    <li>Atsauksmes</li>
+    <li>Piezīmes</li>
+</ul>
+<p>Ņemiet vērā, ka uzaicinājuma tekstu vienmēr var mainīt katram rakstam atsevišķi.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Pārtraukt komentēšanas iespēju pēc"><![CDATA[
+<h2>Pārtraukt komentēšanas iespēju pēc</h2>
+<p>Izmantojiet šo iestatījumu, lai norādītu, cik ilgi pēc publicēšanas rakstiem būs iespējams pievienot komentārus (var iestatīt “Never”, lai komentēšanu ļautu neierobežotu laiku).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Atļaut komentāros attēlus?"><![CDATA[
+<h2>Atļaut komentāros attēlus?</h2>
+<p>Ja šis iestatījums ir “No”, jebkuri komentāros iekļautie attēli tiks izņemti.</p>
+        ]]></item>
+        <item id="comments_mode" title="Komentāru režīms"><![CDATA[
+<h2>Komentāru režīms</h2>
+<p>Ja izvēlēts “nopopup” (ieteicams), pašreizējais logs tiks atsvaidzināts, lai parādītu tikai pašreizējo rakstu ar komentāriem zem tā.</p>
+<p>Ja izvēlēts “popup”, noklikšķinot uz komentāru saites, tiks atvērts jauns pārlūka logs (tas izmanto formu <code>popup_comments</code>).</p>
+        ]]></item>
+        <item id="comments_moderate" title="Apstiprināt komentārus pirms publiskošanas?"><![CDATA[
+<h2>Apstiprināt komentārus pirms publiskošanas?</h2>
+<p>Ja iestatīts uz “Yes”, katram jaunam komentāram redzamība būs izslēgta, līdz tas tiks pārskatīts. Katrs komentārs jāapstiprina manuāli, lai tas kļūtu redzams (kad ir saņemts jauns komentārs, autoram tiek nosūtīts ziņojums pa e‑pastu).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Komentāri atļauti pēc noklusējuma?"><![CDATA[
+<h2>Komentāri atļauti pēc noklusējuma?</h2>
+<p>Ja iestatīts uz “Yes”, komentāri tiks automātiski ieslēgti katram publicētajam rakstam. Ja iestatīts uz “No”, katru reizi, kad vēlaties saņemt komentārus, tie būs jāieslēdz raksta panelī “Write”.</p>
+<p>Komentārus jebkurā brīdī var ieslēgt vai izslēgt katram rakstam atsevišķi.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Komentāros obligāta komentētāja e‑pasta adrese?"><![CDATA[
+<h2>Komentāros obligāta lietotāja e‑pasta adrese?</h2>
+<p>Ja iestatīts uz “Yes”, cilvēkiem, kas vēlas komentēt jūsu rakstu, komentāra ievades formā būs jānorāda e‑pasta adrese. Bez tās komentāru iesniegt nevarēs.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Komentāros obligāts komentētāja vārds?"><![CDATA[
+<h2>Komentāros obligāts komentētāja vārds?</h2>
+<p>Ja iestatīts uz “Yes”, cilvēkiem, kas vēlas komentēt jūsu rakstu, komentāra ievades formā būs jānorāda vārds. Bez tā komentāru iesniegt nevarēs.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Nosūtīt komentārus autoram pa e‑pastu?"><![CDATA[
+<h2>Nosūtīt komentārus autoram pa e‑pastu?</h2>
+<p>Ja iestatīts uz “Yes”, ikreiz, kad rakstam tiks saņemts jauns komentārs, tā kopija tiks nosūtīta pa e‑pastu šī raksta autoram.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Atļaut paplašinātu Textile sintaksi komentāros?"><![CDATA[
+<h2>Atļaut paplašinātu Textile sintaksi komentāros?</h2>
+<p>Ja iestatīts uz “Yes”, komentāros drīkstēs izmantot <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> elementus, kas citādi tiktu apstrādāti kā vienkāršs teksts, piemēram:</p>
+<ul>
+    <li>virsrakstus</li>
+    <li>kārtotus un nekārtotus sarakstus</li>
+    <li>zemsvītras piezīmes</li>
+    <li>tabulas</li>
+    <li>kodu</li>
+    <li>paplašināto bloku sintaksi (<code>bc..</code>, <code>bq..</code> u. c.)</li>
+</ul>
+<p><strong>Piezīme.</strong> Drošības apsvērumu dēļ neapstrādāts HTML tiek pārveidots par parastu tekstu.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Konti, kam atļautas vienlaicīgas pieteikšanās"><![CDATA[
+<h2>Konti, kam atļautas vienlaicīgas pieteikšanās</h2>
+<p>Ar komatiem atdalīts kontu pieteikšanās vārdu saraksts, kuros atļauts pieteikties no vairākām pārlūku / sesijām vienlaikus. Tas ir ērti izstrādes laikā, lai dalītos pieslēgšanās datos ar klientiem.</p>
+<p>Šīs iespējas izmantošana ir drošības risks un <strong>nav ieteicama dzīvajās vietnēs</strong>. Diagnostikas panelis parādīs brīdinājumu, ja jūsu lietotāja konts dzīvajā vietnē ir atļauts vienlaicīgai pieteikšanās lietošanai.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Pielāgotie formu veidņu tipi"><![CDATA[
+<h2>Pielāgotie formu veidņu tipi</h2>
+<p>Papildus standarta formu veidņu tipiem (article, file, misc u. c.) publicētāji var definēt arī pielāgotus tipus. Pielāgotu formu veidņu tipu mērķis ir divējāds: ērtāka veidņu klasifikācija un pielāgoti resursi.</p>
+<p>Šī iestatījuma formāts ir <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>, kur katrai sadaļai atbilst formu veidņu tips.</p>
+<p>Lai definētu pielāgotu formu tipu (piem., <code>js</code>), jāpieliek (atsevišķā rindā) sadaļa <code>[js]</code>. Noklusējuma nosaukumu var norādīt ar ierakstu <code>title="Javascript"</code> atbilstošajā sadaļā. Vajadzības gadījumā var pievienot lokalizētus nosaukumus (piem., <code>ru="Скрипт"</code>).</p>
+<p>Papildus var norādīt arī formu veidņu <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">mediju tipu <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> (agrāk sauktu par MIME tipu), piem., <code>mediatype="application/javascript"</code>. Tas pārvērš šī tipa formu veidnes par pielāgotiem resursiem, kurus var atdot ar attiecīgo mediju tipu vai no datubāzes, vai no diska (plakaniem failiem) ar iezīmi <code>&lt;txp:output_form /&gt;</code>. Piemēram, formu veidni <code>myscript.js</code> ar tipu <code>[js]</code> un mediju tipu <code>application/javascript</code> var iekļaut kodā šādi:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Rezultātā tiks izveidota šāda HTML <code>&lt;script&gt;</code> iezīme:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Tikai tādas formu veidnes, kuru nosaukumā ir paplašinājums, kas atbilst to tipam (piem., <code>myscript.js</code>), var tikt atdotas kā plakanie faili. Šādā gadījumā tos Textpattern vispār neapstrādās un tie būs pieejami ar savu URL.</p>
+Ja formai ir nepieciešama apstrāde (tajā ir Textpattern iezīmes), tās saturu jāatdod no datubāzes. Šādā gadījumā paplašinājumu formai nevajadzētu pievienot – nosauciet to vienkārši <code>myscript</code> (bez <code>.js</code>), lai tā nebūtu pieejama ar standarta URL, un iekļaujiet to šādi:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Pielāgotie lauki"><![CDATA[
+<h2>Pielāgotie lauki</h2>
+<p>Pielāgotie lauki tiek izmantoti papildu rakstu datu glabāšanai. Jūs varat definēt līdz desmit šādiem laukiem, šeit tiem piešķirot nosaukumus. Katrs no tiem parādīsies kā atsevišķs lauks rakstīšanas panelī “Write”, ļaujot ar katru rakstu sasaistīt pielāgotus datus.</p>
+<p>Laukus varat nosaukt, kā vēlaties, tomēr jāņem vērā:</p>
+<ul>
+<li>atstarpes uzlabo lasāmību panelī “Write”, bet šādus laukus <em>nevar</em> izmantot kārtošanai vai filtrēšanai iezīmē article_custom. Ja vēlaties šādu funkcionalitāti, apsveriet iespēju izmantot pasvītrojumus atstarpju vietā.</li>
+<li>uzmanieties, lai pielāgoto lauku nosaukumi nekonfliktētu ar Textpattern rezervētajiem lauku nosaukumiem. Piemēram, neizmantojiet <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> utml., jo tas var radīt dīvainu uzvedību vai pat sabojāt vietni.</li>
+<li>datu garums katrā laukā ir ierobežots līdz 255 rakstzīmēm (tikai teksts).</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Datuma formāts"><![CDATA[
+<h2>Datuma formāts</h2>
+<p>Šis iestatījums ietekmēs tikai to, kā datumi tiks rādīti jūsu vietnes sākumlapā esošajiem rakstiem.</p>
+        ]]></item>
+        <item id="default_event" title="Noklusētā administrācijas sadaļa"><![CDATA[
+<h2>Noklusētā administrācijas sadaļa</h2>
+<p>Textpattern administrācijas paneļa sadaļa, kas pirmā tiks parādīta ikvienam, kas piesakās.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Noklusētais publicēšanas statuss"><![CDATA[
+<h2>Noklusētais publicēšanas statuss</h2>
+<p>Nosaka publicēšanas redzamības statusu jaunizveidotiem Textpattern rakstiem.</p>
+<p>Ņemiet vērā, ka šis iestatījums neietekmē rakstus, kas izveidoti vai rediģēti pirms izmaiņām.</p>
+<p>Noklusētais publicēšanas statuss var būt kāds no šiem:</p>
+<ul>
+    <li>Draft</li>
+    <li>Hidden</li>
+    <li>Pending</li>
+    <li>Live</li>
+    <li>Sticky</li>
+</ul>
+<p><strong>Draft</strong> raksts tiek uzskatīts par tapšanas stadijā esošu un nav redzams ārpus Textpattern administrācijas vides (t. i., nav redzams Textpattern publiskajā daļā un netiek sindicēts plūsmās).</p>
+<p><strong>Hidden</strong> raksts nav redzams ārpus Textpattern administrācijas vides.</p>
+<p><strong>Pending</strong> raksts tiek uzskatīts par gatavu publicēšanai un gaida apstiprinājumu, taču nav redzams ārpus Textpattern administrācijas vides.</p>
+<p><strong>Live</strong> raksts parasti ir redzams ārpus Textpattern administrācijas vides (t. i., redzams Textpattern publiskajā daļā, sindicēts plūsmās, ja iestatījumi to atļauj). Ja raksts ir live un tam ir derīguma beigu datums, statuss pēc šī datuma paliek live, bet raksts ārpus administrācijas vides būs redzams tikai tad, ja atļauta beigušos rakstu publicēšana.</p>
+<p><strong>Sticky</strong> raksts ir līdzīgs <strong>live</strong> rakstam, ciktāl tas ir redzams ārpus Textpattern administrācijas vides, taču <strong>netiks</strong> parādīts rakstu sarakstos, ja vien iezīmē <code>article</code> vai <code>article_custom</code> nav norādīts atribūts <code>status</code> ar vērtību <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Izvēlieties, kuru HTML doctype vēlaties izmantot (vai nu HTML5, vai XHTML). Tas ietekmē komentāru ievades formas, Textile apstrādi iezīmēm <code>&lt;abbr&gt;</code> vai <code>&lt;acronym&gt;</code> un <code>&lt;link&gt;</code> iezīmes, ko ģenerē iezīme <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Iespējot izstrādes tēmas priekšskatījumu?"><![CDATA[
+<h2>Iespējot izstrādes tēmas priekšskatījumu?</h2>
+<p>Lietotāji ar pietiekamām tiesībām (pēc noklusējuma ar Publicētāja un Dizainera lomām) var droši izstrādāt un priekšskatīt jaunu tēmu, kamēr pārējie lietotāji joprojām redz veco tēmu (līdz jaunā tēma tiek ieviesta).</p>
+<p>Tomēr lietotāji ar paplašinātām tiesībām, kuri nevēlas piedalīties tēmu izstrādē, var atslēgt izstrādes tēmas priekšskatījumu. Tad viņiem, tāpat kā parastiem vietnes apmeklētājiem, tiks pasniegta pašreizējā “publiskā” tēma.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Iespējot īso iezīmju atbalstu?"><![CDATA[
+<h2>Iespējot īso iezīmju atbalstu?</h2>
+<p>Textpattern iezīmes parasti ir formā <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Var samazināt ievadāmā teksta apjomu, ieslēdzot saīsinātu pierakstu, kurā var izlaist prefiksu <code>txp:</code>, ja ievēro dažus vienkāršus noteikumus. Lūk, daži piemēri, kas parāda ideju:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> kļūst par <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> kļūst par <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> kļūst par <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> kļūst par <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> kļūst par <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (ņemiet vērā, ka spraudņa prefiksu var izmantot arī iezīmei <code>else</code>).</li>
+</ul>
+<p>Ja iezīmes nosaukumā ir pasvītrojums un esat ieslēdzis īsās iezīmes, pamatdoma ir šāda:</p>
+<ol>
+    <li>Noņemiet prefiksu <code>txp:</code>.</li>
+    <li>Aizstājiet pirmo pasvītrojumu ar <code>::</code>.</li>
+</ol>
+<p>Ņemiet vērā, ka šis iestatījums neietekmē iespēju izmantot īskodus ar <code>&lt;txp:output_form /&gt;</code>, lai izvadītu formu fragmentus. Jūs joprojām varat lietot <code>&lt;txp::shortcode /&gt;</code>, ko interpretēs kā <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Iespējot XML-RPC serveri?"><![CDATA[
+<h2>Iespējot XML-RPC serveri?</h2>
+<p>Ja vēlaties izmantot <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> Textpattern attālinātai pārvaldībai (piemēram, darbvirsmas vai mobilās lietotnes), XML-RPC serveris jāpārslēdz uz “Yes”.</p>
+        ]]></item>
+        <item id="enhanced_email" title="Lietot paplašinātas e‑pasta iespējas"><![CDATA[
+<h2>Lietot paplašinātas e‑pasta iespējas</h2>
+<p>Ja iestatīts uz “No”, viss e‑pasts – piemēram, paroles atiestatīšanas pieprasījumi un e‑pasti no spraudņiem, piemēram, com_connect – tiks sūtīts, izmantojot PHP funkciju <code>mail()</code>. Ja izvēlaties “Yes”, tiks lietots komplektā iekļautais PHPMailer, kas atver iespējas sūtīt e‑pastu caur ārējiem SMTP serveriem.</p>
+<p>Ja rodas problēmas ar e‑pasta piegādi (īpaši, ja izmantojat tādus tiešsaistes pakalpojumus kā Gmail, Outlook, Yahoo! u. c.), iemesls, visticamāk, ir tas, ka jūsu domēnu neuzskata par uzticamu avotu. Pārslēgšanās uz “Yes” var uzlabot piegādi. Turklāt SMTP izmantošana var nodrošināt labāku savietojamību ar atsevišķiem e‑pasta pakalpojumu sniedzējiem un vēl vairāk uzlabot piegādi.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Cik dienu glabāt žurnālus?"><![CDATA[
+<h2>Cik dienu glabāt žurnālus?</h2>
+<p>Ja Textpattern ir ieslēgta reģistrēšana, varat norādīt, cik dienu žurnālus saglabāt. Piemēram, “7” saglabās žurnālus septiņas dienas.</p>
+<p><strong>Piezīme.</strong> Žurnāli tiek apgriezti tikai tad, kad atverat paneli “Visitor logs”, pretējā gadījumā to apjoms turpinās pieaugt.</p>
+        ]]></item>
+        <item id="file_base_path" title="Failu direktorijas ceļš"><![CDATA[
+<h2>Failu direktorijas ceļš</h2>
+<p>Nosaka <strong>absolūto ceļu</strong> uz direktoriju, kurā tiks pastāvīgi glabāti augšuplādētie faili. PHP šai direktorijai ir jābūt rakstāmai.</p>
+<p><strong>Piezīme.</strong> Drošības nolūkos apsveriet iespēju šīs direktorijas pārvietot ārpus vietnes publiski pieejamās saknes (docroot).</p>
+        ]]></item>
+        <item id="file_download_header" title="Failu lejupielādes galvene"><![CDATA[
+<h2>Failu lejupielādes galvene</h2>
+<p>Ļauj pielāgot, kā tiek apstrādātas failu lejupielādes.</p>
+<p>Parasti visi lejupielādētie faili tiek apstrādāti kā pielikumi un lejupielādēti (atkarībā no tā, kā pārlūkprogramma apstrādā attiecīgo faila tipu). Ja vēlaties norādīt, kā vēlaties, lai atsevišķus vai visus failu tipus apstrādā, šeit varat norādīt iezīmju kodu. Piemēram, lai PDF failus, kas Textpattern kategorijā “inline-pdf”, parādītu iebūvēti esošajā logā, nevis lejupielādētu, varat lietot šādu kodu:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maksimālais augšuplādes faila izmērs (baitos)"><![CDATA[
+<h2>Maksimālais augšuplādes faila izmērs (baitos)</h2>
+<p>Varat ierobežot maksimālo failu izmēru (baitos) augšuplādei. Ņemiet vērā, ka šo vērtību ierobežo arī PHP konfigurācija. Ja Textpattern konstatē, ka PHP konfigurācijā atļautais augšupielādes izmērs ir mazāks, iestatījums tiks automātiski samazināts. Ja vēlaties pārlūkā atļaut lielāku failu augšuplādi, sazinieties ar hostinga pakalpojumu sniedzēju (attiecīgie parametri failā <code>php.ini</code> ir <code>post_max_size</code>, <code>upload_max_filesize</code> un <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Laika josla"><![CDATA[
+<h2>Laika josla</h2>
+<p>Lai datumi tiktu attēloti jūsu vietējā laikā, lūdzu, izvēlieties savu laika joslu.</p>
+        ]]></item>
+        <item id="img_dir" title="Attēlu mape"><![CDATA[
+<h2>Attēlu mape</h2>
+<p>Ja vēlaties pielāgot attēlu mapes nosaukumu, to var izdarīt šeit. Vispirms šī direktorija jāizveido Textpattern instalācijas saknes direktorijā un jāpārliecinās, ka PHP var tajā rakstīt.</p>
+<p>Šis ceļš vienmēr ir <strong>relatīvs ceļš</strong> (pret Textpattern instalācijas saknes direktoriju).</p>
+<p>Noklusētais nosaukums ir <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Ietvert e‑pasta adresi Atom plūsmās?"><![CDATA[
+<h2>Ietvert e‑pasta adresi Atom plūsmās?</h2>
+<p>Šis iestatījums ļauj Atom plūsmu sadaļā <code>author</code> iekļaut raksta autora (kā norādīts viņa lietotāja kontā) e‑pasta adresi.</p>
+        ]]></item>
+        <item id="is_dst" title="Ievērot vasaras laika maiņu?"><![CDATA[
+<h2>Ievērot vasaras laika maiņu?</h2>
+<p>Vai DST (Daylight Saving Time, vasaras laiks) pašlaik ir ieslēgts jūsu laika joslā.</p>
+        ]]></item>
+        <item id="logging" title="Reģistrēšana"><![CDATA[
+<h2>Reģistrēšana</h2>
+<p>Varat izvēlēties, kādā līmenī Textpattern reģistrēs apmeklētājus:</p>
+<ul>
+    <li><strong>All hits:</strong> Textpattern reģistrēs visus vietnes lapu skatījumus</li>
+    <li><strong>Referrers only:</strong> Textpattern reģistrēs tikai apmeklējumus, kas nāk no citām vietnēm</li>
+    <li><strong>None:</strong> Textpattern nereģistrēs lapu skatījumus</li>
+</ul>
+<p>Kopš Textpattern 4.7.0 apmeklētāju IP adreses informācija netiek vāktas un glabātas. Ja glabājat IP adreses ārpus Textpattern, rūpējieties par to drošu glabāšanu / izmantošanu atbilstoši piemērojamajiem likumiem (piemēram, <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>) un nodrošiniet spēcīgu servera un Textpattern instalācijas aizsardzību, lai šie dati nenonāktu atklātībā.</p>
+<p>Stingri iesakām atstāt šo iestatījumu “None”, ja vien jums šī informācija nav absolūti nepieciešama un jūs publiski nepaziņojat, kā to plānojat izmantot.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maksimālais URL garums (rakstzīmēs)"><![CDATA[
+<h2>Maksimālais URL garums (rakstzīmēs)</h2>
+<p>Neļauj darboties URL, kas ir garāki par šeit norādīto garumu. Tas var palīdzēt ierobežot ļaunprātīgus pieprasījumus un uzlabot drošību.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Rādīt administrācijas iekšējās palīdzības saites"><![CDATA[
+<h2>Rādīt administrācijas iekšējās palīdzības saites</h2>
+<p>Ja vēlaties paslēpt administrācijas iekšējās palīdzības saites (Textpattern palīdzības uznirstošos logus) visā sistēmā, pārslēdziet šo iestatījumu uz “None”.</p>
+        ]]></item>
+        <item id="never_display_email" title="Nerādīt komentētāja e‑pasta adresi?"><![CDATA[
+<h2>Nerādīt komentētāja e‑pasta adresi?</h2>
+<p>Šis iestatījums nosaka, vai komentētāja e‑pasta adrese tiks rādīta publiski.</p>
+<p>Ieteicams e‑pasta adreses nerādīt, lai aizsargātu lietotāju privātumu, tomēr ir situācijas, kad komentētāju e‑pasta adrešu rādīšana var būt vēlama.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Lietot ISO-8859-1 kodējumu e‑pastos? (noklusēti UTF-8)"><![CDATA[
+<h2>Lietot ISO-8859-1 kodējumu e‑pastos? (noklusēti UTF-8)</h2>
+<p>Textpattern pēc noklusējuma iespējami visur izmanto UTF-8 kodējumu, arī izejošiem e‑pastiem. Tomēr dažiem vecākiem e‑pasta klientiem (tai skaitā atsevišķām Microsoft Outlook versijām) nav pilnvērtīga UTF-8 atbalsta. Ja e‑pastos redzat “sajauktas” rakstzīmes, šis iestatījums pirms sūtīšanas pārveidos tekstu ISO-8859-1 kodējumā.</p>
+<p><strong>Piezīme.</strong> Ja lietojat valodu, kuras rakstzīmes nevar attēlot ISO-8859-1 kodējumā, šis iestatījums diemžēl nepalīdzēs. Jums vajadzētu izmantot e‑pasta klientu ar UTF-8 (vai Unicode) atbalstu.</p>
+        ]]></item>
+        <item id="override_form_types" title="Pārrakstīšanas formu tipi"><![CDATA[
+<h2>Pārrakstīšanas formu tipi</h2>
+<p>Izvēlieties, kuri formu tipi padarīs savas veidnes pieejamas rakstīšanas panelī “Write” kā pārrakstīšanas formas (override forms).</p>
+        ]]></item>
+        <item id="permlink_format" title="Pastāvīgās saites virsraksta URL šablons"><![CDATA[
+<h2>Pastāvīgās saites virsraksta URL šablons</h2>
+<p>Nosaka metodi, kādā tiek veidoti un piešķirti rakstu URL, ja izmantojat netīro režīmu (“clean URLs”).</p>
+<p>Publicējot rakstu, tā URL tiek ģenerēts no raksta virsraksta, ja vien laukā “Tikai‑URL virsraksts” nav norādīts īpašs URL virsraksts.</p>
+<p>Piemēra raksta virsraksts: <em>Ann and Bob eat cake</em></p>
+<p>Ja iestatījums “Permalink title URL pattern” ir “Hyphenated (title-like-this)”, raksta URL būs:</p>
+<pre><code>https://example.com/ann-and-bob-eat-cake</code></pre>
+<p>Ja tas ir “Intercapped (TitleLikeThis)”, raksta URL būs:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Raksta URL šablons"><![CDATA[
+<h2>Raksta URL šablons</h2>
+<p>Nosaka, kā atsevišķi raksti tiek sasniegti ar URL, ko izvada iezīme <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+<p>Režīms “?=messy” ir visvienkāršāk lietojamais – tas darbosies ar minimālu vai bez jebkādas konfigurēšanas –, bet vismazāk labvēlīgs URL lasāmībai un meklētājprogrammu optimizācijai (SEO). Šajā režīmā rakstu URL izskatās šādi:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Pārējos režīmos ir nepieciešama tīmekļa servera URL pārrakstīšanas funkcionalitāte (piemēram, Apache <code>mod_rewrite</code> vai NGINX pārrakstīšanas direktīvas blokā <code>server</code>). Ja serveris šādu funkcionalitāti neatbalsta, sazinieties ar hostinga pakalpojumu sniedzēju vai izmantojiet minēto režīmu “?=messy”.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Spraudņu keša direktorijas ceļš"><![CDATA[
+<h2>Spraudņu keša direktorijas ceļš</h2>
+<p>Šis iestatījums galvenokārt paredzēts spraudņu izstrādātājiem. Kad tas ir iestatīts, varat šajā direktorijā novietot spraudņa avota failu (nekompilētu), un Textpattern to ielādēs automātiski, lai jūs varētu viegli rediģēt spraudni un nekavējoties redzēt izmaiņu efektu, neinstalējot / neaktivizējot spraudni. <strong>Esiet uzmanīgi</strong>: šādā režīmā nedarbojošs spraudnis (kas nekompilējas) var izraisīt arī Textpattern kļūmes!</p>
+<p>Produkcionālās vietnēs spraudņus ieteicams ielādēt, izmantojot standarta paneli “Plugins”, nevis izmantojot spraudņu keša direktoriju.</p>
+<p><strong>Piezīme.</strong> Nelietojiet vienu un to pašu direktoriju gan “temporary”, gan “plugin cache”, jo tas radīs problēmas (Textpattern mēģinās izpildīt pagaidu žurnālu failu saturu kā spraudņus).</p>
+        ]]></item>
+        <item id="production_status" title="Lapas statuss"><![CDATA[
+<h2>Lapas statuss</h2>
+<p>Textpattern vietnei ir trīs režīmi:</p>
+<ol>
+    <li>“Debugging”</li>
+    <li>“Testing”</li>
+    <li>“Live”</li>
+</ol>
+<h3>Debugging režīms</h3>
+<p>Visi PHP kļūdu ziņojumi jūsu dzīvajā vietnē būs redzami, tāpat kā brīdinājumi par kļūdainu kodu un spraudņiem. Turklāt, atverot dzīvo lapu HTML avotu, būs redzama šāda informācija:</p>
+<ul>
+    <li>laiks, ko serveris patērējis lapas ģenerēšanai (“Runtime”)</li>
+    <li>izpildīto MySQL vaicājumu skaits</li>
+    <li>aptuvenais maksimālais atmiņas patēriņš</li>
+    <li>visas Textpattern iezīmes, kas sastaptas lapas ģenerēšanas laikā (tā sauktais tag trace)</li>
+</ul>
+<h3>Testing režīms</h3>
+<p>Visi PHP kļūdu ziņojumi jūsu dzīvajā vietnē būs redzami, tāpat kā brīdinājumi par kļūdainu kodu un spraudņiem. Atverot dzīvo lapu HTML avotu, būs redzama šāda informācija:</p>
+<ul>
+    <li>laiks, ko serveris patērējis lapas ģenerēšanai (“Runtime”)</li>
+    <li>izpildīto MySQL vaicājumu skaits</li>
+    <li>aptuvenais maksimālais atmiņas patēriņš</li>
+</ul>
+<h3>Live režīms</h3>
+<p>Lappusē netiks izvadīti kļūdu ziņojumi vai diagnostikas informācija. Parasti Live režīms ir vēlamais, jo tas nodrošina labāko lietošanas pieredzi un mazāko noslodzi uz serveri.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Publiskās daļas tēma"><![CDATA[
+<h2>Publiskās daļas tēma</h2>
+<p>Noklusējuma publiskās daļas tēma, kas tiks izmantota, kad apmeklētāji nāk uz jūsu publisko vietni. Textpattern ietver iepriekš instalētu noklusējuma tēmu un iespēju sākt bez tēmas. Varat arī pievienot tēmu pakotnes direktorijā <code>textpattern/themes</code>, lai tās padarītu pieejamas izmantošanai.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publicēt rakstus ar beigušos termiņu?"><![CDATA[
+<h2>Publicēt rakstus ar beigušos termiņu?</h2>
+<p>Ja iestatīts uz “Yes”, derīguma termiņu pārsniegušie raksti turpinās tikt rādīti jūsu vietnē arī pēc beigu datuma. Varat izmantot iezīmi <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>, lai beigušos rakstiem parādītu citu saturu vai iezīmes.</p>
+<p>Ja iestatīts uz “No”, beigušies raksti no publiskās vietnes tiks noņemti un atbildē tiks atgriezts HTTP statuss “410 Gone”. Noklusējuma iestatījums ir “No”.</p>
+        ]]></item>
+        <item id="publisher_email" title="Sūtīt pieslēgšanās datus no šīs e‑pasta adreses"><![CDATA[
+<h2>Sūtīt pieslēgšanās datus no šīs e‑pasta adreses</h2>
+<p>Norādiet e‑pasta adresi, kas tiks izmantota kā sūtītāja “From:” adrese ziņojumiem ar jaunu lietotāju pieslēgšanās informāciju.</p>
+<p>Ja šis iestatījums atstāts tukšs vai satur nederīgu e‑pasta adresi, Textpattern izmantos pašreiz pieteikušā lietotāja vārdu un adresi.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Cik rakstus iekļaut plūsmās?"><![CDATA[
+<h2>Cik rakstus iekļaut plūsmās?</h2>
+<p>Šis ir maksimālais aktuālo rakstu skaits, kas vienlaikus tiks sindicēti RSS un Atom formātos.</p>
+<p>Ieteicams izvēlēties salīdzinoši nelielu skaitli, piemēram, no <code>5</code> līdz <code>15</code>.</p>
+        ]]></item>
+        <item id="secondpass" title="Papildu analizatora pāreju skaits"><![CDATA[
+<h2>Papildu analizatora pāreju skaits</h2>
+<p>Textpattern iezīmju analizators parasti vienā pārejā aizstāj visas iezīmes ar saturu no datubāzes. Dažos gadījumos ar to var nepietikt, piemēram:</p>
+<ul>
+    <li>izmantojot zema ielādes secības spraudņus iezīmju atribūtos</li>
+    <li>koda aizvietojumus iekš <code>&lt;txp:php&gt;</code> iezīmēm</li>
+    <li>izlaižot agrāk lapā esošos elementus, lai tie saņemtu saturu no vēlāk apstrādātas iezīmes</li>
+</ul>
+<p>Tradicionāli Textpattern vēsturisku iemeslu dēļ veic vienu papildu pāreju (saukta par “secondpass”), tāpēc šī iestatījuma noklusējuma vērtība ir <code>1</code>. Papildu pārejas tomēr palielina risku, ka nejauši tiks apstrādātas iezīmes, kurām tas nav paredzēts. Pateicoties nesenajiem uzlabojumiem iezīmju analizatorā, nepieciešamība pēc šīs otrās pārejas ir samazinājusies. Tādēļ, ja vien jums nav īpaša iemesla otrajai pārejai, lūdzu, samaziniet šo vērtību uz <code>0</code>, lai padarītu vietni drošāku.</p>
+<p>Ja pēc tam redzat, ka vietnē tiek parādītas neapstrādātas iezīmes (un Testing/Debugging režīmā nav citu kļūdu par nepareizi sapārotām iezīmēm), lūdzu, sazinieties ar mums, norādot savas lapas veidni / kodu / spraudņa piemēru. Mēs cenšamies izskaust vajadzību pēc papildu pārejām un šāda informācija mums palīdzēs to sasniegt.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Sūtīt galveni &quot;Last-Modified&quot;?"><![CDATA[
+<h2>Sūtīt galveni "Last-Modified"?</h2>
+<p>Ja ieslēgts, Textpattern nolasīs apmeklētāja HTTP galveni <code>If-Modified-Since</code> (ja tāda ir) un salīdzinās to ar pēdējo vietnes atjauninājumu. Ja kopš apmeklētāja pēdējās lapas ielādes nekas nav mainījies (t. i., ja pārlūkprogrammas nosūtītais zīmogs sakrīt ar pēdējā atjauninājuma laiku), atbildē tiks nosūtīta galvene, kas norādīs pārlūkprogrammai izmantot kešoto lapas versiju.</p>
+<p>Tas var samazināt datu pārraides apjomu, lapu ielādes laiku un servera noslodzi.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Rādīt komentāru skaitu plūsmās?"><![CDATA[
+<h2>Rādīt komentāru skaitu plūsmās?</h2>
+<p>Ja šis iestatījums ir “Yes”, tas RSS/Atom plūsmās pievienos rakstu virsrakstiem komentāru skaitu.</p>
+        ]]></item>
+        <item id="site_slogan" title="Vietnes sauklis"><![CDATA[
+<h2>Vietnes sauklis</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Vietnes sauklis <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> ir jūsu vietnes kopsavilkums vai apraksts. Tas tiks izmantots kā vietnes apraksts, kur tas nepieciešams, piemēram, RSS/Atom plūsmās, un, pēc jūsu ieskata, dažādās vietnēs visā vietnē.</p>
+<p><strong>Piezīme.</strong> Vietnes sauklis nav obligāts, taču tas var būt vajadzīgs, lai RSS vai Atom plūsma būtu derīga.</p>
+        ]]></item>
+        <item id="sitename" title="Vietnes nosaukums"><![CDATA[
+<h2>Vietnes nosaukums</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Vietnes nosaukums jeb virsraksts <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>. Tas parasti būs redzams apmeklētāju pārlūkprogrammas virsraksta joslā vai plūsmu lasītājā un, pēc jūsu ieskata, daudzviet pašā vietnē.</p>
+        ]]></item>
+        <item id="siteurl" title="Vietnes adrese"><![CDATA[
+<h2>Vietnes adrese</h2>
+<p>Šī ir jūsu Textpattern vietnes adrese, piemēram, <code>www.example.com</code>.</p>
+<p><strong>Piezīme.</strong> Nav nepieciešams rakstīt <code>http://</code>, <code>https://</code> vai beigu slīpsvītru <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Tēmas mape"><![CDATA[
+<h2>Tēmas mape</h2>
+<p>Ja vēlaties pielāgot direktorijas nosaukumu, kurā pastāvīgi glabāt publiskās daļas tēmu plakanos failus, varat to norādīt šeit. Vispirms šī direktorija jāizveido Textpattern instalācijas saknē un jāpārliecinās, ka PHP var tajā rakstīt.</p>
+<p>Šis ceļš vienmēr ir <strong>relatīvs ceļš</strong> (pret Textpattern instalācijas saknes direktoriju).</p>
+<p>Noklusējuma nosaukums ir <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP ietvara sūtītāja adrese"><![CDATA[
+<h2>SMTP ietvara sūtītāja adrese</h2>
+<p>Šo iestatījumu ieteicams atstāt tukšu, ja vien nerodas problēmas ar e‑pasta sūtīšanu Textpattern (ja vispār netiek nosūtīts neviens e‑pasts). Šādā gadījumā šeit varat ierakstīt jebkuru derīgu e‑pasta adresi, vēlams ar tādu pašu domēna vārdu kā vietnei, kurā instalēts Textpattern (piemēram, ja vietnes adrese ir <code>https://example.com</code>, varētu izmantot <code>you@example.com</code>).</p>
+<p>Tehniskām detaļām:</p>
+<ul>
+    <li>UNIX tipa / macOS serveros šeit ierakstītā e‑pasta adrese tiek izmantota kā 4. parametrs (ar prefiksu “-f”) PHP funkcijai <code>mail()</code></li>
+    <li>Windows serveros šeit ierakstītā adrese tiek lietota, lai iestatītu (vai pārrakstītu) parametru <code>sendmail_from</code> failā php.ini</li>
+</ul>
+<p>Tas nodrošina, ka SMTP ietvara sūtītāja adrese (kas ne vienmēr sakrīt ar galveni “From:”, ko redzat e‑pastā) būs šeit norādītā adrese, kas dažos serveros ir priekšnoteikums veiksmīgai e‑pasta sūtīšanai.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP serveris"><![CDATA[
+<h2>SMTP serveris</h2>
+<p>Lai uzlabotu vēstuļu piegādi un izmantotu e‑pasta sūtīšanu caur ārēju servisu (piemēram, SendGrid, AWS SES, Mailchimp, Mailgun u. c.), šeit norādiet SMTP serveri. Šo vērtību noskaidrojiet pie SMTP pakalpojuma sniedzēja.</p>
+<p>Šo vērtību var noteikt, definējot konstanti <code>SMTP_HOST</code> failā <code>config.php</code>. Šādā gadījumā panelī Preferences lauks būs pelēkots.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP parole"><![CDATA[
+<h2>SMTP parole</h2>
+<p>Ja SMTP savienojumam nepieciešama parole norādītajam lietotājvārdam, ierakstiet to šeit. Sīkāku informāciju skatiet pakalpojumu sniedzēja dokumentācijā.</p>
+<p>Piezīme: lai gan parole šeit netiks parādīta, tā <em>tiks</em> saglabāta atklātā tekstā datubāzes prefs tabulā. Ja vēlaties uzlabot drošību, varat tā vietā definēt konstantu <code>SMTP_PASS</code> failā <code>config.php</code>.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP ports"><![CDATA[
+<h2>SMTP ports</h2>
+<p>Ja esat norādījis SMTP serveri, jums jānorāda arī ports, lai ieslēgtu SMTP izmantošanu. Biežāk lietotie porti ir:</p>
+<ul>
+    <li>25 – nedrošs e‑pasts</li>
+    <li>465 – novecojis (neoficiāls) drošam e‑pastam</li>
+    <li>587 – noklusētais (ieteicamais) ports drošam TLS e‑pastam</li>
+</ul>
+<p>Jūsu SMTP pakalpojumu sniedzējs var izmantot citu portu, tāpēc skatiet attiecīgo dokumentāciju.</p>
+<p>Šo vērtību var noteikt, definējot konstanti <code>SMTP_PORT</code> failā <code>config.php</code>. Šādā gadījumā panelī Preferences lauks būs pelēkots.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP drošības metode"><![CDATA[
+<h2>SMTP drošības metode</h2>
+<p>Izvēlieties mehānismu, ko jūsu SMTP pakalpojumu sniedzējs izmanto kā e‑pasta drošības protokolu. Sīkāku informāciju skatiet attiecīgajā dokumentācijā.</p>
+<p>Šo vērtību var noteikt, definējot konstanti <code>SMTP_SECTYPE</code> failā <code>config.php</code>. Šādā gadījumā panelī Preferences lauks būs pelēkots.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP lietotājvārds"><![CDATA[
+<h2>SMTP lietotājvārds</h2>
+<p>Ja SMTP savienojumam nepieciešams lietotāja / pieteikšanās vārds, ierakstiet to šeit. Sīkāku informāciju skatiet pakalpojumu sniedzēja dokumentācijā.</p>
+<p>Šo vērtību var noteikt, definējot konstanti <code>SMTP_USER</code> failā <code>config.php</code>. Šādā gadījumā panelī Preferences lauks būs pelēkots.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Mēstuļu melnie saraksti (ar komatu atdalīti)"><![CDATA[
+<h2>Mēstuļu melnie saraksti (ar komatu atdalīti)</h2>
+<p>Šeit norādītie <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">melno sarakstu pakalpojumu sniedzēji <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> tiks aptaujāti ikreiz, kad blogam pievienos komentāru, un tajos pārbaudīs komentētāja IP adresi. Ja adrese ir sarakstā, tas nozīmē, ka par šo IP iepriekš bijuši mēstuļu ziņojumi, un komentārs tiks noraidīts. Neatkarīgi no pārbaudes rezultāta Textpattern neglabā komentētaja IP adresi.</p>
+<p>Varat ievadīt ar komatiem atdalītu domēna vārdu sarakstu. Lūdzu, ņemiet vērā, ka atbildība par melno sarakstu atbilstību mērķiem ir jūsu ziņā.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Sindicēt tikai raksta ievadtekstu?"><![CDATA[
+<h2>Sindicēt <strong>tikai</strong> raksta ievadtekstu?</h2>
+<p>Ja iestatīts uz “No”, plūsmu vienības saturēs pilnos rakstu pamattekstus.</p>
+<p>Ja iestatīts uz “Yes”, plūsmu vienības saturēs ievadtekstu raksta pamatteksta vietā, ja tas ir pieejams.</p>
+        ]]></item>
+        <item id="tempdir" title="Pagaidu direktorijas ceļš"><![CDATA[
+<h2>Pagaidu direktorijas ceļš</h2>
+<p>Nosaka <strong>absolūto ceļu</strong> uz pagaidu (dažkārt sauktu par “tmp” vai “temp”) direktoriju. PHP šai direktorijai ir jābūt rakstāmai. Tā tiek izmantota pagaidu failiem, piemēram, dažādu veidu augšuplādēm (spraudņi, faili vai attēli).</p>
+<p><strong>Piezīmes:</strong>
+<ul>
+    <li>nelietojiet vienu un to pašu direktoriju kā “temporary” un “plugin cache”, jo tas radīs problēmas (Textpattern mēģinās izpildīt pagaidu žurnālu failu saturu kā spraudņus);</li>
+    <li>drošības nolūkos apsveriet iespēju šo direktoriju pārvietot ārpus vietnes publiski pieejamās saknes (docroot).</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Administrācijas paneļa motīvs"><![CDATA[
+<h2>Administrācijas paneļa motīvs</h2>
+<p>Noklusējuma administrācijas motīvs, kas tiks izmantots ikvienam, kas piesakās Textpattern. Textpattern ietver vairākus iepriekš instalētus administrācijas motīvus, un varat pievienot arī pielāgotus motīvu pakotnes direktorijā <code>textpattern/admin-themes</code>, lai tos padarītu pieejamus izmantošanai.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Pievienot slīpsvītru URL beigās"><![CDATA[
+<h2>Pievienot slīpsvītru URL beigās</h2>
+<p>Nosaka, vai Textpattern automātiski pievienos slīpsvītru URL beigās, ko tas ģenerē. Iespējas ir:</p>
+<ul>
+    <li><strong>No</strong> – nekad</li>
+    <li><strong>List</strong> – tikai sarakstveida nolaišanās lapām (t. i., ne skatot atsevišķus rakstus)</li>
+    <li><strong>Yes</strong> – vienmēr</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP funkcijas, kas atļautas txp:evaluate"><![CDATA[
+<h2>PHP funkcijas, kas atļautas txp:evaluate</h2>
+<p>Tas ir ar komatiem atdalīts <code>function</code> vai <code>alias=function</code> vienību saraksts, piem., <code>md5</code>, <code>replace=str_replace</code>. Sarakstā norādītās vienības var izmantot iezīmes <code>&lt;txp:evaluate /&gt;</code> atribūtā <code>query</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p>Funkcijai <code>function</code> jāatgriež skalāra vērtība (<strong>nevis</strong> masīvs vai objekts).</p>
+        ]]></item>
+        <item id="use_comments" title="Atļaut komentārus?"><![CDATA[
+<h2>Atļaut komentārus?</h2>
+<p>Šis iestatījums nosaka, vai Textpattern komentēšanas funkcionalitāte kopumā ir ieslēgta vai izslēgta.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Lietot e‑pasta adresi plūsmu ID veidošanai (noklusēti vietnes URL)?"><![CDATA[
+<h2>Lietot e‑pasta adresi plūsmu ID veidošanai (noklusēti vietnes URL)?</h2>
+<p>Atom plūsmas vienībām nepieciešams unikāls ID.</p>
+<p>Lai ģenerētu jūsu vietnei unikālus ID, Textpattern ļauj izvēlēties, vai šajos ID iekļaut e‑pasta adresi vai domēna vārdu. Kā e‑pasta adrese tiks izmantota pirmā adrese, kas tika ievadīta vietnes izveides laikā. Ja tuvākajā laikā neplānojat mainīt vietnes domēna vārdu, droši varat šo iestatījumu atstāt “No”.</p>
+        ]]></item>
+        <item id="use_plugins" title="Lietot spraudņus?"><![CDATA[
+<h2>Lietot spraudņus?</h2>
+<p>Šis iestatījums ļauj pilnībā izslēgt Textpattern spraudņu atbalstu. Tas ir ērti, ja atkļūdojat kļūdas vietnē un vēlaties pārbaudīt, vai tajās nav iesaistīti spraudņi.</p>
+        ]]></item>
+        <item id="use_textile" title="Noklusējuma teksta formatēšana"><![CDATA[
+<h2>Noklusējuma teksta formatēšana</h2>
+<p>Šeit izvēlētā teksta formāta iestatīšana kļūs par noklusējumu ievadteksta un pamatteksta apstrādei panelī “Write”. Varat atļaut pilnu Textile apstrādi, pārveidot rindas pārneses par HTML rindkopām vai vispār neveikt teksta pārveidi.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a> ir rīks, kas paredzēts, lai vienkāršotu vienkārša teksta pārveidi uz HTML. Ja ieslēgts, Textile apstrādās rakstu pamattekstu un atgriezīs strukturāli korektu HTML.</p>
+<p>Textile piedāvā arī jaudīgu, taču viegli apgūstamu komandu kopu, ar ko formatēt tekstu, veidot struktūras, piemēram, sarakstus, virsrakstus un citātus, kā arī ievietot saites un attēlus.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Sadaļu panelis">
+        <item id="section_category" title="Ievads"><![CDATA[
+<h2>Ievads</h2>
+<p>Textpattern sadaļas ir vislabāk iztēloties kā laikraksta sadaļas: tās pieder vienam izdevumam, taču katrai var būt atšķirīgs izkārtojums, atšķirīgs rakstu stils utt.</p>
+<p>Lielākajai daļai vietņu pietiek izveidot tikai dažas sadaļas.</p>
+<h3>Iespējama situācija vietnei ar trim sadaļām:</h3>
+<ol>
+    <li><strong>Archive:</strong> sadaļa, kurai pieder visi raksti, kas tiek rādīti sākumlapā. Kad lasītājs noklikšķina uz raksta pastāvīgās saites, tas tiks parādīts šai sadaļai piesaistītajā lapas izkārtojumā. Lai dotos uz lapotu jaunāko šai sadaļai piešķirto rakstu sarakstu “Archive” sadaļā, URL būtu <code>https://example.com/archive/</code>.</li>
+    <li><strong>About:</strong> lapa “par šo vietni”, kas atšķiras no sākumlapas un sadaļas “Archive” ar to, ka ir statiskāka, varbūt citā izkārtojumā un, visticamāk, satur tikai vienu rakstu. Sadaļa “About” būtu sasniedzama ar URL <code>https://example.com/about/</code>.</li>
+    <li><strong>Photos:</strong> sadaļa ar atšķirīgu izkārtojumu (un, iespējams, citu CSS), kuras uzdevums ir parādīt fotogrāfijas, nevis rakstus.</li>
+</ol>
+<p>Ņemiet vērā, ka vienmēr pastāv īpaša slēpta sadaļa ar nosaukumu default. Šī noklusētā sadaļa izmanto lapu default un stilu default, un no tās tiek veidota jūsu vietnes sākumlapa.</p>
+        ]]></item>
+        <item id="section_default" title="Noklusētā publicēšanas sadaļa"><![CDATA[
+<h2>Noklusētā publicēšanas sadaļa</h2>
+<p>Šī opcija nosaka, kura sadaļa rakstīšanas panelī “Write” būs iepriekš izvēlēta laukā “Section”, veidojot jaunu rakstu.</p>
+<p>Ja lielākā daļa jūsu rakstu nonāk noteiktā sadaļā, izvēlieties to šajā sarakstā. Izmaiņas stāsies spēkā uzreiz.</p>
+<p>Katram rakstam atsevišķi sadaļu var mainīt panelī “Write”, sadaļā “Sort and display”, izvēloties citu sadaļu.</p>
+        ]]></item>
+        <item id="section_description" title="Apraksts"><![CDATA[
+<h2>Apraksts</h2>
+<p>Sadaļas apraksts nav obligāts, taču tas var palīdzēt meklētājprogrammām un tīmekļa kāpuriem labāk identificēt un sakārtot saturu.</p>
+<p>Raksta apraksts ir ierobežots līdz 255 rakstzīmēm. Ņemiet vērā, ka dažas meklētājprogrammas praktisku iemeslu dēļ ierobežo lapas <code>meta description</code> garumu meklēšanas rezultātu lapās (SERP), un šis ierobežojums var būt mazāks par 255 rakstzīmēm, ko pieļauj Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Parādīt šīs sadaļas rakstus sākumlapā?"><![CDATA[
+<h2>Parādīt šīs sadaļas rakstus sākumlapā?</h2>
+<p>Dažu sadaļu raksti, piemēram, tie, kas līdzinās “statiskām” tīmekļa lapām, var šķist neiederīgi jūsu vietnes sākumlapas laika plūsmā.</p>
+<p>Iestatot šo uz “No”, raksti, kas piešķirti šai sadaļai, netiks rādīti sākumlapā.</p>
+        ]]></item>
+        <item id="section_searchable" title="Ietvert šo sadaļu vietnes meklēšanā?"><![CDATA[
+<h2>Ietvert šo sadaļu vietnes meklēšanā?</h2>
+<p>Šis iestatījums nosaka, vai raksti no šīs sadaļas tiks iekļauti meklēšanas rezultātos visā vietnē.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Sindicēt šīs sadaļas rakstus?"><![CDATA[
+<h2>Sindicēt šīs sadaļas rakstus?</h2>
+<p>Nosaka, vai šīs sadaļas raksti tiks iekļauti vietnes RSS un Atom plūsmās.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Izmanto stilu"><![CDATA[
+<h2>Izmanto stilu</h2>
+<p>Ja noteiktai sadaļai vēlaties pārrakstīt noklusēto stila lapu, to var iestatīt šeit.</p>
+<p>Šis iestatījums attiecas tikai uz stila lapām, kas atrodas Textpattern panelī “Styles”. Ja jūsu CSS faili atrodas ārpus Textpattern (kas ļoti ieteicams), šī opcija neietekmēs izskatu.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Izmanto lapu"><![CDATA[
+<h2>Izmanto lapu</h2>
+<p>Textpattern sadaļas ir “saistītas laulībā” ar lapu veidnēm.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Izmanto tēmu"><![CDATA[
+<h2>Izmanto tēmu</h2>
+<p>Ja noteiktai sadaļai vēlaties izmantot citu tēmu, to var izvēlēties šeit no pašlaik instalēto tēmu saraksta.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Uzstādīšanas panelis">
+        <item id="setup_admin_url" title="Admin apakšdomēns"><![CDATA[
+<h2>Admin apakšdomēns</h2>
+<p>Apakšdomēns, ar kuru vēlaties piekļūt Textpattern administrēšanas saskarnei (piem., <code>admin.example.com</code>).</p>
+<p>Sīkāku informāciju skatiet sadaļā <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookie domēns"><![CDATA[
+<h2>Cookie domēns</h2>
+<p>(Apakš)domēns, kuru vēlaties izmantot Textpattern sīkdatnēm.</p>
+<p>Sīkāku informāciju skatiet sadaļā <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">Textpattern multi-site installation</a>.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Lietotājvārds"><![CDATA[
+<h2>Lietotājvārds</h2>
+<p>Administratora (“Publisher”) konta pieteikšanās vārds, kas tiks izmantots vietnes pārvaldībai.</p>
+<p>Lai arī nosaukumam nav ierobežojumu, vislabāk izvairīties gan no sarežģītām rakstzīmju kombinācijām, gan arī no viegli uzminamiem lietotājvārdiem (piem., <code>admin</code>, <code>administrator</code> u. c.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Lietotāja parole"><![CDATA[
+<h2>Lietotāja parole</h2>
+<p>Šim kontam ir augstākais piekļuves līmenis Textpattern, tādēļ izvēlieties ļoti drošu paroli vai, vēl labāk, paroli–frāzi.</p>
+<h3>Padomi</h3>
+<ul>
+    <li>lietojiet gan lielos, gan mazos burtus</li>
+    <li>lietojiet skaitļus</li>
+    <li>lietojiet simbolus</li>
+    <li>izvēlieties vismaz astoņas rakstzīmes</li>
+    <li><strong>izvairieties</strong> no jebkādas personiskas informācijas (datumi, vārdi, vietas, tuvinieki, mājdzīvnieki u. c.)</li>
+    <li><strong>izvairieties</strong> no vieniem vai atkārtotiem vārdnīcas vārdiem neatkarīgi no valodas, pareizrakstības vai reģistra</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tabulu prefikss"><![CDATA[
+<h2>Tabulu prefikss</h2>
+    <p>Tabulu prefikss nepieciešams tikai tad, ja vienā datubāzē izmantojat vairākas Textpattern instalācijas. Katrā instalācijā prefiksam jābūt unikālam.</p>
+    <p>Ņemiet vērā, ka prefiksam jāatbilst šādiem noteikumiem:</p>
+<ul>
+    <li><strong>1. rakstzīme:</strong> jābūt burtam a-z, A-Z vai pasvītrojumam</li>
+    <li><strong>turpmākās rakstzīmes:</strong> drīkst būt tikai a-z, A-Z, 0-9 vai pasvītrojums</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Tēmu panelis">
+        <item id="skin_author" title="Tēmas autors"><![CDATA[
+<h2>Tēmas autors</h2>
+<p>Šīs tēmas autors(i) (nav obligāti).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Tēmas vietne"><![CDATA[
+<h2>Tēmas vietne</h2>
+<p>URL, kur atrodama pilna informācija un/vai jaunākās šīs tēmas versijas (nav obligāti).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Dzēst arī tēmas veidnes no diska"><![CDATA[
+<h2>Dzēst arī tēmas veidnes no diska</h2>
+<p>Ja atzīmēts, visi izvēlēto tēmu veidņu faili tiks neatgriezeniski dzēsti no diska. Tēmu mapes un to apakšmapes netiks dzēstas, ja tajās ir citi faili (piemēram, JavaScript, attēli utt.).</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Importējot dzēst neizmantotās veidnes no datubāzes"><![CDATA[
+<h2>Importējot dzēst neizmantotās veidnes no datubāzes</h2>
+<p>Ja atzīmēts, katra izvēlētās(-o) tēmas(-u) veidne, kurai nav atbilstoša faila uz diska, tiks neatgriezeniski dzēsta no datubāzes. Rezultātā datubāzes veidnes pēc iespējas precīzāk atbildīs tam, kas atrodas uz diska.</p>
+<p>Ņemiet vērā, ka, ja esat izdzēsis veidnes failus, kas Textpattern darbībai ir obligāti, datubāzē tiks izveidotas tukšas šo veidņu versijas.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Eksportējot dzēst neizmantotās veidnes no diska"><![CDATA[
+<h2>Eksportējot dzēst neizmantotās veidnes no diska</h2>
+<p>Ja atzīmēts, katrs izvēlēto tēmu veidnes fails, kuram nav atbilstoša ieraksta datubāzē, tiks neatgriezeniski izdzēsts no diska. Rezultātā failu sistēmas veidnes precīzi atbildīs tam, kas atrodas datubāzē.</p>
+        ]]></item>
+        <item id="skin_description" title="Tēmas apraksts"><![CDATA[
+<h2>Tēmas apraksts</h2>
+<p>Var norādīt īsu šīs tēmas dizaina / izkārtojuma kopsavilkumu (nav obligāti).</p>
+<p>Tēmas apraksta garums ir ierobežots līdz 255 rakstzīmēm.</p>
+        ]]></item>
+        <item id="skin_import" title="Importēt tēmu"><![CDATA[
+<h2>Importēt tēmu no diska</h2>
+<p>Šī forma ļauj importēt tēmu Textpattern datubāzē no tēmu direktorijas.</p>
+<p>Importējamai tēmai jābūt lasāmai vecāka direktorijai ar tēmas nosaukumu kā mapes nosaukumu un tajā esošam lasāmam failam <code>manifest.json</code> paredzētajā formātā. Tēmas direktorijā jābūt arī lapām, formām un stiliem ar tādu pašu nosaukumu apakšmapēs.</p>
+<p>Lapas un formas ir jāglabā ar paplašinājumu <code>.txp</code>, bet stila lapām jābūt <code>.css</code> failiem. Formām jābūt sagrupētām pa tipiem atsevišķās direktorijās. Textpattern importējot izveidos trūkstošās obligātās veidnes.</p>
+<p>Sīkāku informāciju par tēmu izveidi, instalēšanu un izmantošanu Textpattern CMS skatiet <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">tēmu dokumentācijā <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="skin_name" title="Tēmas nosaukums"><![CDATA[
+<h2>Tēmas nosaukums</h2>
+<p>Tēmas nosaukums tiek izmantots tēmas direktorijas nosaukumam un citiem tehniskiem nolūkiem (obligāti).</p>
+<p>Nosaukumā nevajadzētu izmantot īpašās rakstzīmes vai atstarpes.</p>
+        ]]></item>
+        <item id="skin_overview" title="Ievads tēmās"><![CDATA[
+<h2>Ievads tēmās</h2>
+<p>Textpattern tēmu veido lapu (Pages), formu (Forms) un stila (Stylesheets) kopa. Tēmas ļauj loģiski sadalīt vietnes resursus grupās, lai tos būtu vieglāk identificēt vai koplietot ar citiem. Tēmas (vai tajā ietverto elementu) izveidošana vai importēšana <em>neietekmē</em> jūsu esošo vietni. Varat brīvi rediģēt jebkuru resursu, kas nav sasaistīts ar jūsu vietnes sadaļu, un tas neietekmēs pašu vietni.</p>
+<p>Lai rediģētu tēmas resursus, apmeklējiet lapu, formu vai stilu paneli un izmantojiet nolaižamo izvēlni, lai izvēlētos tēmu, ar kuru vēlaties strādāt. Tēma, ar kuru strādājat, tiek atcerēta visā administrēšanas daļā, ļaujot ātri un viegli pāriet starp dažādu resursu tipiem. Uz to atsaucas kā uz jūsu <em>darba tēmu</em> (working theme).</p>
+<p>Papildu informāciju skatiet <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern lietotāja dokumentācijā <span class="ui-icon ui-icon-extlink">(atver ārēju saiti jaunā logā)</span></a>.</p>
+        ]]></item>
+        <item id="skin_title" title="Tēmas virsraksts"><![CDATA[
+<h2>Tēmas virsraksts</h2>
+<p>Tēmas aprakstošais virsraksts, kas tiek izmantots tēmas identificēšanai Textpattern paneļos.</p>
+<p>Virsraksts drīkst saturēt īpašās rakstzīmes un atstarpes.</p>
+        ]]></item>
+        <item id="skin_version" title="Tēmas versija"><![CDATA[
+<h2>Tēmas versija</h2>
+<p>Šīs tēmas instalētās versijas numurs (nav obligāts).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>

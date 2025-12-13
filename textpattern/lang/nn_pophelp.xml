@@ -1,0 +1,1204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<help lang="nn">
+    <group id="admin" title="Brukaroversiktspanel">
+        <item id="about_privileges" title="Om roller"><![CDATA[
+<h2>Om roller</h2>
+<h3>Utgjevar</h3>
+<ul>
+    <li>kan handtere artiklar, kommentarar og lenkjer</li>
+    <li>kan bruke PHP i artiklar dersom administratorinnstillinga «Tillat PHP i artiklar?» er sett til «Ja»</li>
+    <li>kan handtere bilete og filer</li>
+    <li>kan handtere seksjonar og kategoriar</li>
+    <li>kan handtere sider, skjema og stil</li>
+    <li>kan vise diagnostisk informasjon</li>
+    <li>kan handtere nettstadsinnstillingar</li>
+    <li>kan handtere brukarar</li>
+    <li>kan handtere besøksloggar</li>
+    <li>kan handtere programtillegg</li>
+    <li>kan importere data</li>
+</ul>
+<h3>Administrerande redaktør</h3>
+<ul>
+    <li>kan handtere artiklar, kommentarar og lenkjer</li>
+    <li>kan bruke PHP i artiklar dersom administratorinnstillinga «Tillat PHP i artiklar?» er sett til «Ja»</li>
+    <li>kan handtere bilete og filer</li>
+    <li>kan handtere seksjonar og kategoriar</li>
+    <li>kan handtere sider, skjema og stil</li>
+    <li>kan vise diagnostisk informasjon</li>
+    <li>kan handtere nettstadsinnstillingar</li>
+    <li>kan vise brukarar</li>
+    <li>kan handtere besøksloggar</li>
+    <li>kan handtere programtillegg</li>
+    <li>kan importere data</li>
+</ul>
+<h3>Tekstredaktør</h3>
+<ul>
+    <li>kan handtere artiklar med éi avgrensing:
+        <ul>
+            <li>kan ikkje slette artiklar som høyrer til andre brukarar</li>
+        </ul>
+    </li>
+    <li>kan handtere kommentarar og lenkjer</li>
+    <li>kan handtere bilete og filer</li>
+    <li>kan handtere kategoriar</li>
+    <li>kan handtere sider og skjema</li>
+    <li>kan vise brukarar</li>
+    <li>kan handtere besøksloggar</li>
+</ul>
+<h3>Journalist</h3>
+<ul>
+    <li>kan handtere eigne artiklar og vise andre brukarar sine artiklar</li>
+    <li>kan handtere bilete og filer</li>
+</ul>
+<h3>Frilansar</h3>
+<ul>
+    <li>kan handtere eigne artiklar i avgrensa grad:
+        <ul>
+            <li>kan berre endre artikkelen fram til han er publisert</li>
+            <li>kan berre bruke statusane <em>berre</em> Utkast, Gøymd eller Ventar</li>
+        </ul>
+    </li>
+    <li>kan vise andre brukarar sine artiklar</li>
+</ul>
+<h3>Designar</h3>
+<ul>
+    <li>kan handtere eigne artiklar i avgrensa grad:
+        <ul>
+            <li>kan berre endre artikkelen fram til han er publisert</li>
+            <li>kan berre bruke statusane <em>berre</em> Utkast, Gøymd eller Ventar</li>
+        </ul>
+    </li>
+    <li>kan vise andre brukarar sine artiklar</li>
+    <li>kan handtere bilete</li>
+    <li>kan handtere seksjonar</li>
+    <li>kan handtere sider, skjema og stil</li>
+</ul>
+        ]]></item>
+        <item id="create_author" title="Opprett forfattar"><![CDATA[
+<h2>Legg til ny forfattar</h2>
+<p>Ei velkomstmelding og innloggingsinstruksjonar vert sendt på e‑post til den nye forfattaren.</p>
+        ]]></item>
+    </group>
+
+    <group id="article" title="Skrivepanel">
+        <item id="article_image" title="Artikkelbilete"><![CDATA[
+<h2>Artikkelbilete</h2>
+<p>For å knyte bilete til denne artikkelen, legg du inn eitt av følgjande her:</p>
+<ol>
+    <li>ein eller fleire Textpattern‑bilet‑ID‑ar, skilde med komma (til dømes <code>12, 25, 18</code>)</li>
+    <li>ein eller fleire relative URL‑ar til biletet, skilde med komma (til dømes <code>/images/my_pic.jpg</code>)</li>
+    <li>ein eller fleire fullstendige URL‑ar, skilde med komma (til dømes <code>https://example.com/path/to/images/my_pic.jpg</code>)</li>
+</ol>
+<p>Det første biletet kan visast ved å plassere merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/article_image"><code>&lt;txp:article_image /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> inni eit artikkelskjema. Som standard skriv det ut eit komplett HTML‑merke <code>&lt;img&gt;</code> til det valde biletet.</p>
+<p>Du kan vise galleri ved å bruke merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="body" title="Brødtekst"><![CDATA[
+<h2>Brødtekst</h2>
+<p>Hovudinnhaldet i ein artikkel ligg i sjølve artikkelteksten.</p>
+<p>Når ein forfattar skriv eller førebur artiklar for publisering i Textpattern, kan vedkomande byta mellom tre visingar av artikkelen: rein tekst, HTML‑merking (koden som nettlesaren brukar for å visa artikkelen), og ei gjengitt førehandsvising.</p>
+        ]]></item>
+        <item id="description" title="Skildring"><![CDATA[
+<h2>Skildring</h2>
+<p>Artikkelskildringa er ein valfri komponent som kan hjelpe søkjemotorar og nettstadrobotar å identifisere og sortere innhald betre.</p>
+<p>Artikkelskildringa er avgrensa til maksimalt 255 teikn. Merk at somme søkjemotorar set grenser for kor mange teikn ei sides <code>meta description</code> kan ha av omsyn til vising i søkeresultatsider (SERP‑ar), og denne grensa kan vere lågare enn grensa på 255 teikn i Textpattern.</p>
+<p>Merk at artikkelskildringa er noko anna enn artikkelutvalet, sjølv om dei begge kan innehalde liknande innhald. Artikkelskildringa er primært tenkt for bruk av søkjemotorar og robotar, medan artikkelutvalet er meir egna som ein kort samandragstekst for lesarar der det er ønskeleg.</p>
+        ]]></item>
+        <item id="excerpt" title="Utval"><![CDATA[
+<h2>Utval</h2>
+<p>Artikkelutval er valfrie. Utval kan brukast som ein kort samandragstekst av artikkelen som vert vist som del av ei innhaldsliste, brukt i staden for heile artikkelteksten i nettstaden sine RSS-/Atom-strøymar, eller til andre føremål.</p>
+        ]]></item>
+        <item id="expire_date" title="Utløpsdato"><![CDATA[
+<h2>Utløpsdato</h2>
+<p>Tidspunktet når ein artikkel vert merka som utløpen. Tidspunktet er valfritt og kan setjast til eit vilkårleg tidspunkt i fortid eller framtid.</p>
+<p>Boksane svarar til følgjande informasjon:</p>
+<ul>
+    <li>År / Månad / Dag</li>
+    <li>Time (24‑timarsformat) : Minutt : Sekund</li>
+</ul>
+<p>Når tidspunktet kjem, eller dersom eit tidspunkt i fortida er oppgjeve, går artikkelen ut.</p>
+<p>Viss valet om å vise utløpne artiklar er slått på, vert artikkelen verande synleg. Viss valet om å vise utløpne artiklar er slått av, vil besøkande på artikkelsida få ein HTTP 410‑feil i staden for artikkelinnhaldet.</p>
+        ]]></item>
+        <item id="keywords" title="Stikkord"><![CDATA[
+<h2>Stikkord</h2>
+<p>Stikkord er nyttige for å finjustere samanhengar mellom artiklar utover det som kategoriane gjev.</p>
+<p>Stikkord må vere enkeltord skilde med komma.</p>
+        ]]></item>
+        <item id="override_form" title="Overstyringsskjema"><![CDATA[
+<h2>Overstyringsskjema</h2>
+<p>Ein artikkel kan valfritt bruke eit skjema som er annleis enn det som er tildelt som standard – til dømes for å vise eit artikkelutval med <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/excerpt"><code>&lt;txp:excerpt /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> i staden for artikkelteksten med <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/body"><code>&lt;txp:body /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> – dette kan setjast her.</p>
+        ]]></item>
+        <item id="publish_date" title="Publiseringsdato"><![CDATA[
+<h2>Publiseringsdato</h2>
+<p>Tidspunktet ein artikkel eller ei fil vert publisert eller sist oppdatert. Tidspunktet kan setjast til det augeblikket elementet vert publisert, eller til eit vilkårleg tidspunkt i fortid eller framtid.</p>
+<p>Boksane svarar til følgjande informasjon:</p>
+<ul>
+    <li>År / Månad / Dag</li>
+    <li>Time (24‑timarsformat) : Minutt : Sekund</li>
+</ul>
+<p>Eit element med eit tidsstempel som er større enn noverande tidspunkt (dvs. i framtida) vil ikkje visast på framsida og i RSS-/Atom‑straumar før dette tidspunktet er nådd.</p>
+        ]]></item>
+        <item id="status" title="Status"><![CDATA[
+<h2>Status</h2>
+<p>Definerer publiseringssynlegheita til denne Textpattern‑artikkelen.</p>
+<p>Publiseringsstatusen er ein av følgjande:</p>
+<ul>
+<li><strong>Utkast</strong>: vert rekna som arbeid undervegs og er ikkje synleg utanfor administrasjonsområdet i Textpattern (dvs. ikkje synleg på nettstaden og ikkje syndikert i straumar).</li>
+<li><strong>Gøymd</strong>: artikkelen er ikkje synleg utanfor administrasjonsområdet i Textpattern. Nyttig når du vil fjerne innhald frå nettstaden utan å slette det.</li>
+<li><strong>Ventar</strong>: vert rekna som klar for publisering og ventar på godkjenning, men er ikkje synleg utanfor administrasjonsområdet i Textpattern.</li>
+<li><strong>Publisert</strong>: vanlegvis synleg utanfor administrasjonsområdet i Textpattern (dvs. synleg på nettstaden, syndikert i straumar dersom innstillinga tillet det). Dersom ein artikkel er publisert og har ein utløpsdato, vil statusen halde fram med å vere Publisert etter at datoen er nådd, men artikkelen vert berre vist utanfor administrasjonsområdet dersom utløpne artiklar er tillatne.</li>
+<li><strong>Klebrig</strong>: liknar på ein <strong>publisert</strong> artikkel ved at han kan visast for nettstadsbesøkande, men vil <strong>ikkje</strong> dukke opp i artikkellister med mindre merket <code>article</code> eller <code>article_custom</code> har eit <code>status</code>-attributt med verdien <code>sticky</code>.</li>
+</ul>
+<p>Merk: Innhald som ikkje er offentleg synleg på nettstaden, kan likevel førehandsvisast av innlogga brukarar.</p>
+        ]]></item>
+        <item id="title" title="Tittel"><![CDATA[
+<h2>Tittel</h2>
+<p>Legg til ein passande tittel for denne artikkelen.</p>
+<p>Ei artikkeltittel er avgrensa til maksimalt 255 teikn.</p>
+        ]]></item>
+        <item id="url_title" title="URL‑berre tittel"><![CDATA[
+<h2>URL‑berre tittel</h2>
+<p>For å bruke ei bestemt tittel i den permanente lenkje‑URL‑en for ein artikkel, skriv ho inn her. Dersom feltet vert ståande tomt, vert URL‑tittelen automatisk generert frå artikkeltittelen.</p>
+<p>Dette er særleg nyttig dersom tittelen på artikkelen bruker ikkje‑ASCII‑teikn.</p>
+        ]]></item>
+    </group>
+
+    <group id="category" title="Kategoripanel">
+        <item id="article_category" title="Artiklar"><![CDATA[
+<h2>Artiklar</h2>
+<p>I motsetnad til seksjonar, som definerer navigasjonsstrukturen på ein nettstad, gjev artikkelkategoriar høve til å organisere artiklar etter emne. Når kategoriar er tildelte, kan lister over artiklar som høyrer til bestemte kategoriar, lesast.</p>
+<p>Til dømes kan moglege artikkelkategoriar på ein nettstad om mat vere:</p>
+<ul>
+    <li>råvarer</li>
+    <li>handel</li>
+    <li>oppskrifter</li>
+    <li>anretning</li>
+    <li>restaurantar</li>
+    <li>kokkar</li>
+</ul>
+        ]]></item>
+        <item id="category_description" title="Skildring"><![CDATA[
+<h2>Kategoriskildring</h2>
+<p>Kategoriskildringa er ein valfri komponent som kan hjelpe søkjemotorar og nettstadrobotar å identifisere og sortere innhald betre.</p>
+<p>Kategoriskildringa er avgrensa til maksimalt 255 teikn. Merk at somme søkjemotorar set grenser for kor mange teikn ei sides <code>meta description</code> kan ha av omsyn til vising i søkeresultatsider (SERP‑ar), og denne grensa kan vere lågare enn grensa på 255 teikn i Textpattern.</p>
+        ]]></item>
+        <item id="file_category" title="Filer"><![CDATA[
+<h2>Filer</h2>
+<p>Filkategoriar er valfrie, og nyttige for å gruppere utvalde opplasta filer.</p>
+        ]]></item>
+        <item id="image_category" title="Bilete"><![CDATA[
+<h2>Bilete</h2>
+<p>Biletkategoriar er valfrie og nyttige både for intern organisering og for å definere biletsett som kan visast med merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/images"><code>&lt;txp:images /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="link_category" title="Lenkjer"><![CDATA[
+<h2>Lenkjer</h2>
+<p>Lenkjekategoriar er valfrie, og nyttige for å vise ulike grupperingar av lenkjer, til dømes «Vener», «Romarar», «Landsmenn».</p>
+<p>Slike utvalde lenkjelister vert skrivne ut med <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/linklist"><code>&lt;txp:linklist /&gt;</code>-merket <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> slik:</p>
+<pre><code>&lt;code&gt;&lt;txp:linklist category="Friends" /&gt;&lt;/code&gt;.</code></pre>
+        ]]></item>
+    </group>
+
+    <group id="diag" title="Diagnostikkpanel">
+        <item id="clean_url_data_failed" title="Reine URL‑data feila"><![CDATA[
+<h2>Reine URL‑data feila</h2>
+<p>Det ser ut til at anten nettstads‑URL‑ane (t.d. <code>https://example.com/section/article</code>) ikkje fungerer akkurat no, eller at vevtenaren ikkje støttar testprosedyren som vert brukt for å avgjera om reine URL‑ar fungerer eller ikkje. Dersom reine URL‑ar på nettstaden fungerer som venta, kan denne meldinga trygt ignorerast.</p>
+<p>Dersom reine URL‑ar <em>ikkje</em> fungerer, kan det tyde på anten:</p>
+<ul>
+    <li>at innstillinga «Nettstad‑URL» er feil, eller at sida på den adressa ikkje vert handtert av denne Textpattern‑installasjonen</li>
+    <li>at tenaren krev nokre endringar i <code>.htaccess</code> eller liknande tenardirektiv for at reine URL‑ar skal fungere</li>
+    <li>at tenaren ikkje støttar reine URL‑ar i det heile</li>
+</ul>
+<p>Testen for reine URL‑ar prøver å henta ei side frå vevadressa som er oppgjeven i innstillinga «Nettstad‑URL» for å kontrollere at alle parametra for reine URL‑ar fungerer rett. Dersom denne URL‑en peikar til ein annan nettstad, eller er erstatta av ei statisk side eller liknande, vil testen feile. Til problemet er løyst bør rotete URL‑ar (t.d. <code>https://example.com?s=section&amp;id=4</code>) brukast. Sjå til at «Permanent lenkjemodus» i administratorinnstillingane er sett deretter.</p>
+<p>Merk at bruk av eit programtillegg for å setja nettstaden i «vedlikehaldsmodus» kan utløyse denne åtvaringa.</p>
+        ]]></item>
+        <item id="clean_url_test_failed" title="Test av reine URL‑ar feila"><![CDATA[
+<h2>Test av reine URL‑ar feila</h2>
+<p>Det ser ut til at anten nettstads‑URL‑ane (t.d. <code>https://example.com/section/article</code>) ikkje fungerer akkurat no, eller at vevtenaren ikkje støttar testprosedyren som vert brukt for å avgjera om reine URL‑ar fungerer eller ikkje. Dersom reine URL‑ar på nettstaden fungerer som venta, kan denne meldinga trygt ignorerast.</p>
+<p>Dersom reine URL‑ar <em>ikkje</em> fungerer, kan det tyde på anten:</p>
+<ul>
+    <li>at innstillinga «Nettstad‑URL» er feil, eller at sida på den adressa ikkje vert handtert av denne Textpattern‑installasjonen</li>
+    <li>at tenaren krev nokre endringar i <code>.htaccess</code> eller liknande tenardirektiv for at reine URL‑ar skal fungere</li>
+    <li>at tenaren ikkje støttar reine URL‑ar i det heile</li>
+</ul>
+<p>Testen for reine URL‑ar prøver å henta ei side frå vevadressa som er oppgjeven i innstillinga «Nettstad‑URL» for å kontrollere at alle parametra for reine URL‑ar fungerer rett. Dersom denne URL‑en peikar til ein annan nettstad, eller er erstatta av ei statisk side eller liknande, vil testen feile. Til problemet er løyst bør rotete URL‑ar (t.d. <code>https://example.com?s=section&amp;id=4</code>) brukast. Sjå til at «Permanent lenkjemodus» i administratorinnstillingane er sett deretter.</p>
+        ]]></item>
+        <item id="concurrent_user_live" title="Samtidige innloggingar på ein produksjonstenar"><![CDATA[
+<h2>Samtidige innloggingar på ein produksjonstenar</h2>
+<p>Å tillate brukarkontoen din å vere innlogga frå fleire økter samstundes er ein tryggleiksrisiko og ikkje tilrådd. Slå av denne funksjonen i panelet for avanserte innstillingar, med mindre du forstår og aksepterer risikoen.</p>
+        ]]></item>
+        <item id="diag_clear_private" title="Gøym privat informasjon"><![CDATA[
+<h2>Gøym privat informasjon</h2>
+<p>Gøym privat informasjon for ekstra tryggleik. Dersom diagnostisk informasjon skal delast i eit offentleg forum, til dømes støtteforumet for Textpattern, reduserer dette risikoen ved å utelate sensitiv tenarinformasjon.</p>
+        ]]></item>
+        <item id="dev_version_live" title="Utviklingskode på ein produksjonstenar"><![CDATA[
+<h2>Utviklingskode på ein produksjonstenar</h2>
+<p>Utviklingsversjonar av Textpattern er ikkje tilrådde å bruke på produksjonsnettstader. Denne åtvaringa kan trygt ignorerast dersom risikoen er forstått og akseptert.</p>
+        ]]></item>
+        <item id="dir_not_writable" title="Katalogen er ikkje skrivbar"><![CDATA[
+<h2>Katalogen er ikkje skrivbar</h2>
+<p>For å bruke opplasting av filer og bilete må desse katalogane vere skrivbare for PHP via vevtenarbrukaren. Dette kan gjerast med ein (S)FTP‑klient eller på kommandolinja ved å køyre kommandoen <code>chmod 755 /path/to/dir</code>.</p>
+        ]]></item>
+        <item id="dns_lookup_fails" title="DNS feilar"><![CDATA[
+<h2>DNS‑oppslag feila</h2>
+<p>Det ser ut til at URL‑en som er oppgjeven som adressa til nettstaden, ikkje kan nåast.</p>
+        ]]></item>
+        <item id="file_uploads_disabled" title="Filopplasting er slått av"><![CDATA[
+<h2>Filopplasting er slått av</h2>
+<p>Denne tenarkonfigurasjonen tyder at filopplasting er slått av. Kontroller og endre innstillinga <code>file_uploads</code> i <code>php.ini</code> eller kontakt nettstadverten for hjelp.</p>
+        ]]></item>
+        <item id="htaccess_missing" title=".htaccess-fil manglar"><![CDATA[
+<h2>.htaccess-fil manglar</h2>
+<p>Det er valt ein permanent lenkjemodus som krev ei <code>.htaccess</code>-fil, og fila kan ikkje finnast. Ho er inkludert i Textpattern og ligg i installasjonsroten, saman med <code>index.php</code> og katalogen <code>textpattern</code>. Dei tilrådde direktiva er:</p>
+<pre><code># BEGIN Textpattern
+  #DirectoryIndex index.php index.html
+
+  #Options +FollowSymLinks
+  #Options -Indexes
+  #ErrorDocument 403 default
+
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    #RewriteBase /relative/web/path/
+
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(.+) - [PT,L]
+
+    RewriteCond %{REQUEST_URI} !=/favicon.ico
+    RewriteRule ^(.*) index.php
+
+    RewriteCond %{HTTP:Authorization}  !^$
+    RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+  </IfModule>
+
+  <IfModule mod_mime.c>
+    AddType image/svg+xml  svg svgz
+    AddEncoding gzip       svgz
+  </IfModule>
+  # END Textpattern</code></pre>
+        ]]></item>
+        <item id="index_inaccessible" title="Nettstadindeks utilgjengeleg"><![CDATA[
+<h2>Nettstadindeks utilgjengeleg</h2>
+<p>Rotfila <code>index.php</code>, som er oppgjeven som indeks for nettstaden, kan ikkje lesast av tenaren. Kontroller at ho finst og har rette løyve.</p>
+        ]]></item>
+        <item id="missing_files" title="Manglande filer"><![CDATA[
+<h2>Manglande filer</h2>
+<p>Ei eller fleire essensielle filer manglar i Textpattern. Sjå til at alle opplista filer er på plass på tenaren og ligg på rett stad.</p>
+        ]]></item>
+        <item id="mod_rewrite_missing" title="Apache mod_rewrite manglar"><![CDATA[
+<h2>Apache mod_rewrite manglar</h2>
+<p>Apache‑modulen <code>mod_rewrite</code> er ikkje installert eller er slått av. Ho er tilrådd for at Textpattern skal fungere rett. Kontroller at ho finst og er aktivert, eller kontakt nettstadverten for hjelp.</p>
+        ]]></item>
+        <item id="modified_files" title="Endra filer"><![CDATA[
+<h2>Endra filer</h2>
+<p>Filer vert rekna som endra dersom kontrollsummen deira skil seg frå lista over kjende, gyldige kontrollsummar som følgjer med Textpattern. Dersom nokon filer i Textpattern‑installasjonen er annleis enn forventa, vert dei utheva her.</p>
+        ]]></item>
+        <item id="mysql_table_errors" title="MySQL-tabellfeil"><![CDATA[
+<h2>MySQL-tabellfeil</h2>
+<p>Det kan vere noko korrupsjon eller skade i MySQL‑databasen til Textpattern. Prøv å reparere dei råka tabellane med eit MySQL‑administrasjonsverktøy, til dømes <a rel="external" target="_blank" href="https://www.adminer.org">Adminer <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> eller <a rel="external" target="_blank" href="https://www.phpmyadmin.net">phpMyAdmin <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="no_temp_dir" title="Ingen mellombels katalog definert"><![CDATA[
+<h2>Ingen mellombels katalog definert</h2>
+<p>Sjølv om Textpattern kan køyre utan ein mellombels katalog, kan noko funksjonalitet ikkje fungere som venta dersom denne innstillinga ikkje er sett. Gå til Administratorinnstillingar og set «Stig til mellombels katalog».</p>
+        ]]></item>
+        <item id="old_placeholder_exists" title="Seksjon med same namn som katalog"><![CDATA[
+<h2>Seksjon med same namn som katalog</h2>
+<p>Eksisterande katalognamn kan komme i konflikt med seksjonsnamn som vert brukte i artikkelen si permanente lenkjestruktur. For å unngå problem bør du kontrollere og slette dei aktuelle katalognamna dersom det er trygt, eller endre seksjonsnamn slik at dei ikkje kolliderer.</p>
+        ]]></item>
+        <item id="path_to_site_inaccessible" title="Nettstadkatalog uleseleg"><![CDATA[
+<h2>Nettstadkatalog uleseleg</h2>
+<p>Katalogen som inneheld rotfila <code>index.php</code>, som er oppgjeven som indeks for nettstaden, kan ikkje lesast av tenaren. Kontroller løyva.</p>
+        ]]></item>
+        <item id="php_scripting_enabled" title="PHP‑køyring slått på"><![CDATA[
+<h2>PHP‑køyring slått på</h2>
+<p>Textpattern lèt forfattarar og administratorar leggja PHP‑kode inn i artiklar og sider/skjema dersom desse funksjonane er slått på. Sidan dette er eit tryggleiksproblem – kva som helst PHP kan køyrast, inkludert skadeleg/farleg kode som kan øydeleggje installasjonen din eller lekke informasjon til tredjepartar – er det sterkt tilrådd å slå desse vala av i <a href="?event=prefs#prefs_group_publish">innstillingspanelet</a> med mindre du absolutt treng funksjonen.</p>
+<p>Mange utvidingar av Textpattern‑nettstader som tidlegare kravde små PHP‑snuttar, kan no gjerast med <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/">kjernetaggar</a>.</p>
+        ]]></item>
+        <item id="php_version_required" title="Minstekrav til versjonar"><![CDATA[
+<h2>Minstekrav til versjonar</h2>
+<p>Textpattern krev visse funksjonar i PHP‑språket og MySQL‑databasetenaren. Sjå følgjande tabell for å finne minstekrava til systemet:</p>
+<div class="txp-listtables">
+    <table class="txp-list">
+        <thead>
+            <tr>
+                <th scope="col">Textpattern‑versjon</th>
+                <th scope="col">Minste PHP‑versjon</th>
+                <th scope="col">Minste MySQL‑versjon</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th scope="row">4.9.x</th>
+                <td>5.6.0</td>
+                <td>5.5.0</td>
+            </tr>
+            <tr>
+                <th scope="row">4.8.x</th>
+                <td>5.5.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.7.x</th>
+                <td>5.4.0</td>
+                <td>5.0.3</td>
+            </tr>
+            <tr>
+                <th scope="row">4.6.x</th>
+                <td>5.3.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.5.x</th>
+                <td>5.2.3</td>
+                <td>4.1</td>
+            </tr>
+            <tr>
+                <th scope="row">4.0.1 - 4.4.1</th>
+                <td>4.3</td>
+                <td>3.23</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>I tillegg til systemkrava ovanfor er følgjande PHP‑utvidingar påkravde:</p>
+<ul>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.mysqli.php">mysqli <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.xml.php">XML <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a></li>
+    <li><a rel="external" target="_blank" href="https://www.php.net/manual/en/book.json.php">JSON <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a></li>
+</ul>
+<p>Nettstaden si <code>php.ini</code>-fil, global eller lokal, må innehalde ei innstilling <code>date.timezone</code>.</p>
+        ]]></item>
+        <item id="setup_still_exists" title="Oppsettkatalogen finst framleis"><![CDATA[
+<h2>Oppsettkatalogen finst framleis</h2>
+<p>Når Textpattern er installert, trengst ikkje lenger katalogen <code>textpattern/setup</code> og innhaldet i han, og dei bør slettast av tryggleiksomsyn.</p>
+        ]]></item>
+        <item id="site_url_mismatch" title="Nettstad‑URL samsvarer ikkje"><![CDATA[
+<h2>Nettstad‑URL samsvarer ikkje</h2>
+<p>Nettstad‑URL‑en som er sett i panelet «Innstillingar», samsvarer ikkje med den faktiske URL‑en som er brukt for å vitje nettstaden.</p>
+<p>Viss nettstaden kan nåast via fleire ulike URL‑ar, og nettstaden oppfører seg som venta, kan denne meldinga trygt ignorerast.</p>
+<p>Om ikkje, bør du kontrollere og endre innstillinga «Nettstad‑URL» i administratorinnstillingane etter behov. Eit kvalifisert forsøk på rett nettstad‑URL vert vist i førehandssjekk‑åtvaringa på panelet «Diagnostikk».</p>
+        ]]></item>
+        <item id="some_php_functions_disabled" title="PHP‑funksjonane [&#8230;] er slått av på tenaren din"><![CDATA[
+<h2>PHP‑funksjonane [&#8230;] er slått av på tenaren din</h2>
+<p>Nettstadverten eller tenaradministratoren har slått av éin eller fleire PHP‑funksjonar, nokre av dei kan påverke drifta av Textpattern.</p>
+<p>Sjå <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/diagnostics-panel#diagnostic-reporting-on-php-functions">Textpattern‑brukardokumentasjonen <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> for meir informasjon.</p>
+        ]]></item>
+        <item id="textpattern_version_update" title="Textpattern‑versjonstilgjengeleg oppdatering"><![CDATA[
+<h2>Textpattern‑versjonstilgjengeleg oppdatering</h2>
+<p>Det finst ein nyare versjon av Textpattern. For å dra nytte av dei siste funksjonane og tryggleiksoppdateringane er det tilrådd å oppgradere.</p>
+<p>Merk at sjølv om vi prøver å gjere oppgraderingsprosessen så smidig og problemfri som mogleg:</p>
+<ul>
+    <li>Dersom berre det siste sifferet skil seg frå versjonen du brukar, vil oppgraderinga truleg vere bakoverkompatibel med programtillegg og tema.</li>
+    <li>Dersom dei to siste sifra skil seg frå versjonen du brukar, kan oppgraderinga krevje oppdatering av nokre programtillegg og/eller tema, sjølv om ho truleg vil halde fram med å fungere i avgrensa grad.</li>
+    <li>Dersom det første sifferet er annleis enn i versjonen du brukar, vil oppgraderinga truleg krevje oppdatering av dei fleste programtillegg og tema. Dersom du er avhengig av bestemte funksjonar i programtillegg eller tema, bør du sjekke med forfattaren eller fellesskapet før du oppgraderer.</li>
+</ul>
+        ]]></item>
+        <item id="textpattern_version_update_beta" title="Textpattern førehandsutgåve tilgjengeleg"><![CDATA[
+<h2>Textpattern‑førehandstilgjengeleg oppdatering</h2>
+<p>Det finst ein nyare førehandsversjon av Textpattern. Vi ser etter aktive frivillige som kan teste denne versjonen slik at vi kan gjere den endelege utgåva så stabil som mogleg. Vi strekkjer oss langt for at oppgradering skal vere smidig og problemfri, sjølv for betakode.</p>
+<p>Dersom du vel å delta, merk følgjande:</p>
+<ul>
+    <li>Ikkje bruk denne betautgåva på ein produksjonsnettstad med mindre du har ein fungerande sikkerheitskopi av både filene og databasen til nettstaden og veit korleis du brukar han.</li>
+    <li><a href="https://github.com/textpattern/textpattern/issues">Meld frå om eventuelle problem</a>, og oppgje betaversjonen du brukar. Fleire betautgåver kan vere nødvendige før den stabile utgåva, avhengig av innrapporterte problem.</li>
+    <li>Sjå til at du oppgraderer til den endelege versjonen når han vert sleppt, dersom du har teke i bruk denne betautgåva.</li>
+</ul>
+        ]]></item>
+        <item id="tmp_plugin_paths_match" title="Mellombels katalog og programtillegg-buffer skal ikkje vere same katalognamn"><![CDATA[
+<h2>Mellombels katalog og programtillegg-buffer skal ikkje vere same katalognamn</h2>
+<p>Programtillegg bør ha sin eigen katalog og ikkje dele mellombelskatalogen. Dette er ein potensiell tryggleiksrisiko og kan skade nettstaden din dersom mellombelskatalogen vert tømt. Sjå til at stigen til mellombelskatalogen er annleis enn stigen til programtillegg‑bufferen.</p>
+        ]]></item>
+        <item id="update_server_inaccessible" title="Oppdateringstenar utilgjengeleg"><![CDATA[
+<h2>Oppdateringstenar utilgjengeleg</h2>
+<p>Sjekken etter oppdateringar feila, ofte på grunn av nettverksproblem eller tidsavbrot. Dette går vanlegvis over av seg sjølv i løpet av ein time eller to, så prøv å vitje dette panelet på nytt seinare.</p>
+        ]]></item>
+        <item id="warn_mail_unavailable" title="PHP‑installasjonen din manglar funksjonen mail()"><![CDATA[
+<h2>PHP‑installasjonen din manglar funksjonen mail()</h2>
+<p>PHP‑funksjonen <a rel="external" target="_blank" href="https://www.php.net/manual/en/function.mail.php">mail <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> er slått av. Dermed kan ikkje Textpattern sende e‑post, og noko funksjonalitet vil ikkje vere tilgjengeleg. Til dømes vert det ikkje sendt e‑postvarsel om nye kommentarar, og nye brukarar får ikkje velkomst‑e‑post. Brukarar kan likevel leggjast til.</p>
+        ]]></item>
+    </group>
+
+    <group id="file" title="Filpanel">
+        <item id="file_reassign" title="Tilknytt fil på nytt"><![CDATA[
+<h2>Tilknytt fil på nytt</h2>
+<p>Når du lastar opp ei fil i staden for ei som er merka «Manglar», vert den valde fila lasta opp til tenaren og knytt til den opphavlege filinformasjonen i databasen. Det tyder at filnamnet til den opphavlege fila vert verande, saman med all anna tilhøyrande informasjon som nedlastings­tal og kategori. Filstorleiken vert derimot oppdatert for å gjenspegle den nye fila.</p>
+        ]]></item>
+        <item id="file_replace" title="Byt ut fil"><![CDATA[
+<h2>Byt ut fil</h2>
+<p>Å lasta opp ei fil her vil erstatte innhaldet i den eksisterande fila på tenaren, men filnamnet vert verande det same som før. Nedlastings­talet og anna informasjon som er knytt til fila, vert ikkje påverka.</p>
+        ]]></item>
+        <item id="timestamp_file" title="Publiseringsdato"><![CDATA[
+<h2>Publiseringsdato</h2>
+<p>Tidspunktet ei fil vert publisert eller sist oppdatert. Tidspunktet kan setjast til det augeblikket elementet vert publisert, eller til eit vilkårleg tidspunkt i fortid eller framtid.</p>
+<p>Boksane svarar til følgjande informasjon:</p>
+<ul>
+    <li>År / Månad / Dag</li>
+    <li>Time (24‑timarsformat) : Minutt : Sekund</li>
+</ul>
+        ]]></item>
+        <item id="upload" title="Last opp fil"><![CDATA[
+<h2>Last opp fil</h2>
+<p>Bruk dette skjemaet for å laste opp filer eller bilete til tenaren din.</p>
+<p>Bruk Textile‑kode for å vise grafikk i artiklar, Textpattern‑kode for å plassere grafikk i sidemalane dine, eller HTML‑kode for å plassere grafikken andre stader.</p>
+        ]]></item>
+    </group>
+
+    <group id="form" title="Skjemapanel">
+        <item id="forms_overview" title="Introduksjon til skjema"><![CDATA[
+<h2>Introduksjon til skjema</h2>
+<p>I Textpattern er eit skjema ein snutt eller ein bit med tekst, HTML og Textpattern‑taggar som kan gjenbrukast for å vise innhald.</p>
+<p>Her er eit døme på eit skjema som kan ha namnet <code>ordinary_list</code>:</p>
+<pre><code>&lt;li&gt;
+    &lt;txp:permlink&gt;
+        &lt;txp:title /&gt;
+    &lt;/txp:permlink&gt;
+&lt;/li&gt;</code></pre>
+<p>Du kan bruke det til å vise ei usortert HTML‑liste over relaterte artiklar:</p>
+<pre><code>&lt;txp:related_articles form="ordinary_list" wraptag="ul" /&gt;</code></pre>
+<p>Sidan rolla til dette skjemaet er å skriva ut ei liste med titlar, kan det òg vere aktuelt inni andre taggar, til dømes for å vise 20 artiklar frå gjeldande seksjon:</p>
+<pre><code>&lt;txp:article form="ordinary_list" limit="20" wraptag="ol" /&gt;</code></pre>
+<p>Du kan òg bruke eit skjema til å vise gjentekne innhaldselement, som topptekst og botntekst i sidemalane dine. Det tyder at innhaldet berre finst éin stad, og om du vil endre det, treng du berre gjere det éin gong. Innhald frå eit skjema vert vanlegvis vist med:</p>
+<pre><code>&lt;txp:output_form form="your_form_name" /&gt;</code></pre>
+<p>Eit skjema kan vere opptil 64 KB stort. Eit døme på ein botntekst kan innehalde overskrifter, avsnitt, lenkjer, vilkårlege taggar og referansar til andre skjema, som <code>ordinary_list</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="image" title="Biletpanel">
+        <item id="create_thumbnail" title="Lag miniatyrbilete"><![CDATA[
+<h2>Lag miniatyrbilete</h2>
+<p>Lèt deg (re)skape eit miniatyrbilete med dei oppgjevne dimensjonane frå biletet i full storleik.</p>
+<p>Ved tilpassa storleik vert miniatyrbiletet skalert til dimensjonane du vel, med mindre du vel avkryssingsboksen «Beskyre». I så fall vert miniatyrbiletet laga frå midten av biletet utan skalering.</p>
+<p>Ved automatisk storleik vert miniatyrbiletet skalert etter dimensjonane og (eventuelle) beskjæringsinnstillingar i gjeldande administrasjonstema.</p>
+        ]]></item>
+        <item id="replace_image_form" title="Byt ut bilete"><![CDATA[
+<h2>Byt ut bilete</h2>
+<p>Eit bilete som vert lasta opp her, vil erstatte det eksisterande som er knytt til denne posten i databasen.</p>
+        ]]></item>
+        <item id="upload_image" title="Last opp bilete"><![CDATA[
+<h2>Last opp bilete</h2>
+<p>Last opp eitt eller fleire bilete til tenaren din.</p>
+<p>Når dei vert lasta opp til <code>images</code>-katalogen, vert filnamnet til det opphavlege biletet berre lagra internt i Textpattern‑databasen. Sjølve biletfila vert gjeven eit sekvensielt nummer + filending.</p>
+        ]]></item>
+        <item id="upload_thumbnail" title="Last opp miniatyrbilete"><![CDATA[
+<h2>Last opp miniatyrbilete</h2>
+<p>Bilete i full storleik kan få sine eigne miniatyrbilete. Desse er nyttige både for lenking til – og for indeksering av – bilete i full storleik.</p>
+<p>Ein referanse til miniatyrbiletet er akkurat den same som referansen til biletet i full storleik, men med ein <code>t</code> lagt til filnamnet. Til dømes, for å referere til eit miniatyrbilete som høyrer til eit bilete i full storleik lagra som <code>/images/12.jpg</code>, brukar du <code>/images/12t.jpg</code>.</p>
+        ]]></item>
+    </group>
+
+    <group id="lang" title="Språkpanel">
+        <item id="get_textpack" title="Installer Textpack"><![CDATA[
+<h2>Installer Textpack</h2>
+<p>Lim inn ekstra språkstrengar for nettstaden din i denne boksen og vel «Last opp» for å installere dei.</p>
+<p>Strengane kjem ofte som ein nedlastbar Textpack, distribuert saman med eit programtillegg for at språkstrengane til programtillegget skal kunne brukast direkte i Textpattern.</p>
+<p>Omsetjarar kan deretter omsetje desse pakkane etter behov og distribuere det lokaliserte innhaldet vidare til fellesskapet.</p>
+        ]]></item>
+    </group>
+
+    <group id="link" title="Lenkjepanel">
+        <item id="link_description" title="Skildring"><![CDATA[
+<h2>Skildring</h2>
+<p>Skildringar for lenkjer er valfrie, og nyttige for å leggje til bildetekstar til lenkjer, for å lage <code>title=""</code>-attributt (verktøytips) for lenkjer, eller berre for å halde eiga intern dokumentasjon.</p>
+        ]]></item>
+        <item id="link_sort" title="Sorteringsverdi"><![CDATA[
+<h2>Sorteringsverdi</h2>
+<p>Nyttig for naturleg språksortering av lenkjelister, til dømes på etternamn i staden for førenamn, eller på uttrykk som startar med ein artikkel.</p>
+        ]]></item>
+        <item id="link_url" title="URL"><![CDATA[
+<h2>URL</h2>
+<p>Adressa til lenkja. Dersom lenkja peikar til ein annan nettstad, må ho starte med <code>http://</code> eller <code>https://</code>.</p>
+        ]]></item>
+        <item id="timestamp_link" title="Publiseringsdato"><![CDATA[
+<h2>Publiseringsdato</h2>
+<p>Tidspunktet ei lenkje vert publisert eller sist oppdatert. Tidspunktet kan setjast til det augeblikket elementet vert publisert, eller til eit vilkårleg tidspunkt i fortid eller framtid.</p>
+<p>Boksane svarar til følgjande informasjon:</p>
+<ul>
+    <li>År / Månad / Dag</li>
+    <li>Time (24‑timarsformat) : Minutt : Sekund</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="login" title="Innloggingspanel">
+        <item id="remember_login" title="Ver forblitt innlogga med denne nettlesaren"><![CDATA[
+<h2>Ver forblitt innlogga med denne nettlesaren</h2>
+<p>Når dette er kryssa av, vil du vere innlogga i Textpattern‑kontoen din i den noverande nettlesaren heilt til du vel å logge ut. Viss det ikkje er kryssa av, vert du automatisk logga ut etter ein periode utan aktivitet.</p>
+<p>Krev at informasjonskapslar (cookies) er slått på i nettlesaren din.</p>
+        ]]></item>
+    </group>
+
+    <group id="plugin" title="Programtilleggspanel">
+        <item id="install_plugin" title="Installer programtillegg"><![CDATA[
+<h2>Installer programtillegg</h2>
+<p>Lim inn innhaldet i den kompilerte programtilleggstekstfila her, og bruk deretter «Last opp» for å starte installasjonen. Eit programtillegg du lastar opp med same namn som eit du allereie har installert, vert overskrive av den opplasta versjonen.</p>
+<p>Programtilleggsteksten du limer inn her, er <strong>ikkje</strong> rå PHP‑kode, men Base64‑koda tekst, vanlegvis med eit hovud som inneheld informasjon om programtillegget (som namn, versjon og skildring, forfattarnamn osv.).</p>
+<p>Du kan ofte få tak i kompilerte versjonar av programtillegg frå <a rel="external" target="_blank" href="https://plugins.textpattern.com/">programtilleggsarkivet <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> eller ein programtilleggsforfattar sin kanal, som nettstaden eller GitHub.</p>
+<p>Du kan òg lime inn ein URL til ei kompilert Textpattern‑tekstfil her, dersom den eksterne nettstaden tillèt det.</p>
+<p>Alle opplasta programtillegg går gjennom eit kontrollsteg som lèt deg inspisere koden og innhaldet før installasjon.</p>
+        ]]></item>
+        <item id="upload_plugin" title="Last opp programtillegg"><![CDATA[
+<h2>Last opp programtillegg</h2>
+<p>Bruk dette skjemaet for å laste opp ei programtilleggsfil. Opplasta programtillegg (og ressursar) vert lagra i katalogen «plugins».</p>
+<p>Programtilleggstypar som kan lastast opp her, er:</p>
+<ul>
+<li>Textpattern PHP‑malfiler som inneheld komplett kode, metadata, Textpack‑strengar og hjelpetekst.</li>
+<li>Kompilerte Textpattern‑tekstfiler som inneheld komplett kode, metadata, Textpack‑strengar og hjelpetekst.</li>
+<li>Textpattern‑zip‑pakker som inneheld manifestinformasjon og kode, metadata, Textpack‑strengar, hjelpetekst og støttefiler.</li>
+<li>Rå PHP‑filer (desse fyller ikkje ut ekstra metadata og er ikkje tilrådde).</li>
+</ul>
+<p>Eit programtillegg du lastar opp med same namn som eit du allereie har installert, vert overskrive av den opplasta versjonen.</p>
+<p>Alle opplasta programtillegg går gjennom eit kontrollsteg som lèt deg inspisere koden og innhaldet før installasjon.</p>
+        ]]></item>
+    </group>
+
+    <group id="prefs" title="Innstillingspanel">
+        <item id="admin_side_plugins" title="Bruke programtillegg på administrasjonssida?"><![CDATA[
+<h2>Bruke programtillegg på administrasjonssida?</h2>
+<p>Programtillegg på administrasjonssida kan endre korleis administrasjonsgrensesnittet verkar. Dei kan hekte seg på eksisterande handlingar, som redigering eller publisering av artiklar, eller dei kan leggje til nye panel for ekstra/utvida funksjonalitet.</p>
+<p>Viss du vil lære meir om programtillegg på administrasjonssida, sjå sida <a rel="external" target="_blank" href="https://docs.textpattern.com/development/">Extending Textpattern <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> i <a rel="external" target="_blank" href="https://docs.textpattern.com/">Textpattern‑brukardokumentasjonen <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>. Programtillegg av alle slag er lista opp på nettstaden <a rel="external" target="_blank" href="https://plugins.textpattern.com/">Textpattern Plugins <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="advanced_options" title="Avanserte innstillingar"><![CDATA[
+<h2>Avanserte innstillingar</h2>
+<p>Vis gruppa for avanserte innstillingar, der du kan konfigurere fleire tilleggsval, som til dømes:</p>
+<ul>
+    <li>PHP‑funksjonar som er aktiverte i <code>txp:evaluate</code>.</li>
+    <li>Tilpassa skjemamaltypar.</li>
+</ul>
+        ]]></item>
+        <item id="allow_article_php_scripting" title="Tillate PHP i artiklar?"><![CDATA[
+<h2>Tillate PHP i artiklar?</h2>
+<p>Når dette er slått på, kan ein bruke PHP i artiklar. Forfattaren må ha tilstrekkelege løyve til å gjere det (som standard er det berre <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Utgjevarar» <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>, <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Administrerande redaktørar» <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> og <a rel="external" target="_blank" href="https://docs.textpattern.com/administration/user-roles-and-privileges">«Tekstredaktørar» <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> som kan det).</p>
+<p><strong>Det er sterkt tilrådd å slå av dette valet</strong> med mindre du absolutt treng funksjonen. Kva som helst potensielt skadeleg/farleg PHP‑kode som kan øydeleggje nettstaden din eller lekke informasjon til tredjepartar, kan leggjast inn av ein forfattar og køyrast av kven som helst som ser artikkelen.</p>
+<p>PHP‑kode må ha utelatne opnings- og avslutningsmerke for PHP, og òg omslutjast av merka <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="allow_form_override" title="Tillate overstyring av skjema?"><![CDATA[
+<h2>Tillate overstyring av skjema?</h2>
+<p>Denne innstillinga gjer at artikkelforfattarar kan overstyre kva skjema som skal brukast når artikkelen vert gjengitt. Dersom det er slått på, vert ei rullegardinsliste «Overstyringsskjema» tilgjengeleg når ein redigerer ein artikkel.</p>
+        ]]></item>
+        <item id="allow_page_php_scripting" title="Tillate PHP på sider?"><![CDATA[
+<h2>Tillate PHP på sider?</h2>
+<p>Når dette er slått på, kan ein bruke PHP‑kode i sidemalar og skjemamaler.</p>
+<p><strong>Det er sterkt tilrådd å slå av dette valet</strong> med mindre du absolutt treng funksjonen. Kva som helst potensielt skadeleg/farleg PHP‑kode som kan øydeleggje nettstaden din eller lekke informasjon til tredjepartar, kan leggjast inn av andre brukarar og køyrast av ein intetanande administrator eller nettstadsbesøkande.</p>
+<p>PHP‑kode må utelate opnings- og avslutningsmerke for PHP og omslutjast av merka <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="archive_dateformat" title="Arkivdatoformat"><![CDATA[
+<h2>Arkivdatoformat</h2>
+<p>Korleis datoar skal visast på artiklar i seksjonar på nettstaden din.</p>
+        ]]></item>
+        <item id="articles_use_excerpts" title="Vise utval på artikkelredigeringssida?"><![CDATA[
+<h2>Vise utval på artikkelredigeringssida?</h2>
+<p>Ved å velje «Nei» vert ikkje utvals­feltet vist for forfattaren på skjermen for artikkelredigering.</p>
+        ]]></item>
+        <item id="attach_titles_to_permalinks" title="Leggje titlar til permanente lenkjer?"><![CDATA[
+<h2>Leggje titlar til permanente lenkjer?</h2>
+<p>Denne innstillinga legg til ein automatisk generert versjon av artikkeltittelen i URL‑en. Han vert anten generert automatisk eller kan overstyrast manuelt i «URL‑berre tittel» når du redigerer ein artikkel.</p>
+<p>Innstillinga har berre verknad når du brukar reine URL‑ar. For visse språk kan dette gje lange og lite pene URL‑ar, og då vil du truleg setje dette til «Av».</p>
+        ]]></item>
+        <item id="auto_dst" title="Automatisk justere sommartid?"><![CDATA[
+<h2>Automatisk justere sommartid?</h2>
+<p>Denne innstillinga lèt Textpattern endre når DST (sommartid) gjeld på staden din. Dersom dette er sett til «Nei», kan du endre innstillinga «Sommartid slått på» manuelt.</p>
+        ]]></item>
+        <item id="comment_means_site_updated" title="Ny kommentar tyder at nettstaden er oppdatert?"><![CDATA[
+<h2>Ny kommentar tyder at nettstaden er oppdatert?</h2>
+<p>Textpattern‑databasen held styr på når den siste endringa på nettstaden din fann stad. Når denne innstillinga er sett til «Ja», vil ein ny kommentar òg oppdatere denne verdien. Denne verdien vert til dømes brukt for funksjonen <code>"Send Last-Modified header"</code>.</p>
+        ]]></item>
+        <item id="comment_nofollow" title="Bruke rel=&quot;nofollow&quot; på kommentarar?"><![CDATA[
+<h2>Bruke rel="nofollow" på kommentarar?</h2>
+<p>Viss dette er sett til «Ja», vert det lagt til eit ekstra attributt på lenkjer som vert laga i kommentarar. Det er meint som eit tiltak mot kommentarspammarar, og vart innført av ei rekkje søkjemotorar og programvareutviklarar. Du kan lese meir i <a rel="external" target="_blank" href="https://googleblog.blogspot.com/2005/01/preventing-comment-spam.html">Google si kunngjering <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+<p><strong>Merk:</strong> Denne innstillinga påverkar ikkje funksjonaliteten til nettstaden din. Ho kan hindre eller redusere påverknaden kommentarane dine har når enkelte søkjemotorar rangerer nettstader som er lenkte til frå kommentarane.</p>
+        ]]></item>
+        <item id="comments_are_ol" title="Vise kommentarar som nummerert liste?"><![CDATA[
+<h2>Vise kommentarar som nummerert liste?</h2>
+<p>Avgjer om artikkelkommentarar skal omkransast av HTML‑merket <code>&lt;ol&gt;</code> og kvar enkelt kommentar omkransast av <code>&lt;li&gt;</code>-merket (som gjer at kommentarane vert viste som ei nummerert liste), eller om kvar enkelt kommentar skal omkransast av <code>&lt;div&gt;</code>-merket i staden.</p>
+<p>Med begge verdiane kan du overstyre merka som vert brukte per skjema ved å endre merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>, som ligg i skjemaet <code>comments_display</code>.</p>
+        ]]></item>
+        <item id="comments_auto_append" title="Automatisk leggje kommentarar til artiklar?"><![CDATA[
+<h2>Automatisk leggje kommentarar til artiklar?</h2>
+<p>Denne innstillinga avgjer om kommentarar og kommentarskjema automatisk skal leggjast til alle einskildartiklar (ved automatisk å inkludere innhaldet i skjemaet <code>comments_display</code>).</p>
+<p>Stort sett vil du ha dette sett til «Nei», sidan det gjev større fridom til å plassere kommentarane der du vil i designen på nettstaden. Du må då leggje til merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> manuelt i alle sidemalar for artiklar der du vil ha kommentarar.</p>
+<p>Viss du opplever at kommentarar vert viste dobbelt i ein artikkel, er det truleg fordi sidemalen din inneheld merket <code>&lt;txp:comments /&gt;</code>, samstundes som innstillinga «Automatisk leggje kommentarar til artiklar?» er sett til «Ja».</p>
+        ]]></item>
+        <item id="comments_dateformat" title="Datoformat for kommentarar"><![CDATA[
+<h2>Datoformat for kommentarar</h2>
+<p>Korleis commentdatoren skal visast for dei som vitjar nettstaden din.</p>
+        ]]></item>
+        <item id="comments_default_invite" title="Standardtekst for kommentarinvitasjon"><![CDATA[
+<h2>Standardtekst for kommentarinvitasjon</h2>
+<p>Viss du lèt besøkande kommentere på nettstaden din, er dette standardteksten som inviterer til kommentar. Til dømes:</p>
+<ul>
+    <li>Kommentarar</li>
+    <li>Legg til ein kommentar</li>
+    <li>Tilbakemelding</li>
+    <li>Kommenter</li>
+</ul>
+<p>Merk at invitasjonsteksten alltid kan endrast per artikkel.</p>
+        ]]></item>
+        <item id="comments_disabled_after" title="Kommentarar slått av etter"><![CDATA[
+<h2>Kommentarar slått av etter</h2>
+<p>Bruk dette for å setje kor lang tid som skal gå før kommentering vert slått av for artiklar (kan setjast til «Aldri» for å tillate uavgrensa tid til å kommentere).</p>
+        ]]></item>
+        <item id="comments_disallow_images" title="Tillate kommentarbilete i kommentarar?"><![CDATA[
+<h2>Tillate kommentarbilete i kommentarar?</h2>
+<p>Når dette er sett til «Nei», vert alle bilete i kommentarar fjerna.</p>
+        ]]></item>
+        <item id="comments_mode" title="Kommentarmodus"><![CDATA[
+<h2>Kommentarmodus</h2>
+<p>Viss «nopopup» er vald (tilrådd), vert det gjeldande vindauget oppdatert slik at berre den aktuelle artikkelen vert vist, med kommentarane under.</p>
+<p>Viss «popup» er vald, vert eit nytt nettlesarvindauge opna når det vert klikka på kommentarlene.</p>
+        ]]></item>
+        <item id="comments_moderate" title="Moderere kommentarar?"><![CDATA[
+<h2>Moderere kommentarar?</h2>
+<p>Når dette er sett til «Ja», vert synlegheita på kvar ny kommentar skrudd av til han er gjennomgått. Du må manuelt moderere og gjere kvar kommentar synleg (ei melding vert sendt på e‑post til artikkelforfattaren når ein ny kommentar er komen).</p>
+        ]]></item>
+        <item id="comments_on_default" title="Kommentarar på som standard?"><![CDATA[
+<h2>Kommentarar på som standard?</h2>
+<p>Viss dette er sett til «Ja», vert kommentarar automatisk slått på for kvar artikkel som vert publisert. Viss det er sett til «Nei», må du slå på kommentarar i panelet «Skriv» kvar gong du vil ta imot kommentarar.</p>
+<p>Kommentarar kan når som helst slåast av eller på per artikkel.</p>
+        ]]></item>
+        <item id="comments_require_email" title="Kommentarar krev e‑postadresse til kommentator?"><![CDATA[
+<h2>Kommentarar krev e‑postadresse til brukaren?</h2>
+<p>Dersom dette er sett til «Ja», må dei som vil kommentere på artikkelen din, oppgje ei e‑postadresse i kommentarskjemaet. Dei vil ikkje kunne sende ein kommentar utan å oppgje e‑postadresse.</p>
+        ]]></item>
+        <item id="comments_require_name" title="Kommentarar krev namn på kommentator?"><![CDATA[
+<h2>Kommentarar krev namn på kommentator?</h2>
+<p>Dersom dette er sett til «Ja», må dei som vil kommentere på artikkelen din, oppgje eit namn i kommentarskjemaet. Dei vil ikkje kunne sende ein kommentar utan å oppgje namn.</p>
+        ]]></item>
+        <item id="comments_sendmail" title="Sende kommentarar til forfattar på e‑post?"><![CDATA[
+<h2>Sende kommentarar til forfattar på e‑post?</h2>
+<p>Dersom dette er sett til «Ja», vert ein kopi av kvar ny kommentar på ein artikkel sendt via e‑post til forfattaren av artikkelen.</p>
+        ]]></item>
+        <item id="comments_use_fat_textile" title="Tillate meir Textile‑merking i kommentarar?"><![CDATA[
+<h2>Tillate meir Textile‑merking i kommentarar?</h2>
+<p>Når dette er sett til «Ja», kan kommentarar innehalde <a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>-element som elles ville vore behandla som rein tekst, til dømes:</p>
+<ul>
+    <li>overskrifter</li>
+    <li>nummererte og unummererte lister</li>
+    <li>fotnotar</li>
+    <li>tabellar</li>
+    <li>kode</li>
+    <li>utvida blokk-syntaks (<code>bc..</code>, <code>bq..</code> osv.)</li>
+</ul>
+<p><strong>Merk:</strong> Av tryggleiksomsyn vert rå HTML gjort om til vanleg tekst.</p>
+        ]]></item>
+        <item id="concurrent_logins" title="Kontoar som kan vere innlogga samstundes"><![CDATA[
+<h2>Kontoar som kan vere innlogga samstundes</h2>
+<p>Ei kommaseparert liste over innloggingsnamn på kontoar som kan vere innlogga på tvers av fleire nettlesarar/økter. Dette er nyttig under utvikling når du vil dele ein innlogging med kundar.</p>
+<p>Å bruke denne funksjonen er ein tryggleiksrisiko og <strong>ikkje tilrådd på produksjonsnettstader</strong>. Diagnostikken vil gje ei åtvaring dersom brukarkontoen din er sett opp for samtidige innloggingar på ein produksjonsnettstad.</p>
+        ]]></item>
+        <item id="custom_form_types" title="Tilpassa skjemamaltypar"><![CDATA[
+<h2>Tilpassa skjemamaltypar</h2>
+<p>I tillegg til dei vanlege skjemamaltypane (artikkel, fil, misc osv.) kan utgjevarar definere eigne typar. Føremålet med tilpassa skjemamaltypar er tosidig: lettare klassifisering av skjemamaler og tilpassa ressursdefinisjonar.</p>
+<p>Formatet på innstillinga er <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/INI_file">INI <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>, med kvar seksjon som svarer til ein skjemamaltype.</p>
+<p>For å definere ein tilpassa skjematype (t.d. <code>js</code>) må du legge til (på ei eiga linje) ein seksjon <code>[js]</code>. Ei standardtittel kan setjast via ein <code>title="Javascript"</code>-oppføring i den tilsvarande seksjonen. Ved behov kan lokaliserte titlar òg leggjast til (t.d. <code>ru="Скрипт"</code>).</p>
+<p>I tillegg kan du oppgje ein <a rel="external" target="_blank" href="https://www.iana.org/assignments/media-types/media-types.xhtml">medietype for skjemamalen <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> (tidlegare kjend som MIME‑type), t.d. <code>mediatype="application/javascript"</code>. Dette gjer skjemamaler av denne typen til tilpassa ressursar som kan leverast som den valde medietypen, anten frå databasen eller frå disk (flate filer) via merket <code>&lt;txp:output_form /&gt;</code>. Til dømes kan ein skjemamal med namnet <code>myscript.js</code> av typen <code>[js]</code> og medietypen <code>application/javascript</code> inkluderast slik:</p>
+<pre><code>&lt;txp:output_form form="myscript.js"
+    format="flat.script" /&gt;</code></pre>
+<p>Dette vil generere følgjande HTML‑merke <code>&lt;script&gt;</code>:<p>
+<pre><code>&lt;script src="path/to/flat/myscript.js"&gt;&lt;/script&gt;</code></pre>
+<p>Berre skjemamaler med eit namn med ending som svarer til typen (t.d. <code>myscript.js</code>) kan leverast som flate filer. I så fall vert dei ikkje behandla av Textpattern i det heile og er tilgjengelege via URL‑en sin.</p>
+If a form template needs processing (if it contains Textpattern tags), you must serve it from the database. In this case you shouldn’t add the extension to the form name - call it just <code>myscript</code> (without <code>.js</code>) to make it inaccessible via a standard URL - and include it like so:</p>
+<pre><code>&lt;txp::myscript format="script" /&gt;</code></pre>
+        ]]></item>
+        <item id="custom_overview" title="Eigne felt"><![CDATA[
+<h2>Eigne felt</h2>
+<p>Eigne felt vert brukte til å lagre ekstra artikkeldata. Du kan definere opptil ti ved å gje dei eit namn her. Kvar vert vist som eit eige felt på panelet «Skriv», slik at du kan knyte tilpassa data til kvar artikkel.</p>
+<p>Du kan kalle felta kva du vil, men ver merksam på følgjande:</p>
+<ul>
+<li>Å bruke mellomrom gjer det lettare å lese på panelet «Skriv», men felta kan då <em>ikkje</em> brukast som sorterings- eller filtreringsparametrar i eit article_custom‑merke. Vurder understreking i staden dersom du vil bruke denne funksjonaliteten.</li>
+<li>Ver varsam når du namngjev felt, slik at dei ikkje kolliderer med reserverte feltnamn i Textpattern. Til dømes bør du ikkje bruke <code>title</code>, <code>category</code>, <code>limit</code>, <code>status</code> osv., elles kan du få merkelege resultat eller øydelagde nettstader.</li>
+<li>Data i kvart felt er avgrensa til 255 teikn med berre tekst.</li>
+</ul>
+        ]]></item>
+        <item id="dateformat" title="Datoformat"><![CDATA[
+<h2>Datoformat</h2>
+<p>Denne innstillinga påverkar berre korleis artikkeldatoar vert viste på framsida av nettstaden din.</p>
+        ]]></item>
+        <item id="default_event" title="Standardpanel"><![CDATA[
+<h2>Standardpanel</h2>
+<p>Det panelet i administrasjonsgrensesnittet til Textpattern som vert vist først når nokon loggar inn.</p>
+        ]]></item>
+        <item id="default_publish_status" title="Standardpubliseringsstatus"><![CDATA[
+<h2>Standardpubliseringsstatus</h2>
+<p>Definerer publiseringssynlegheita til nyskapt artiklar i Textpattern.</p>
+<p>Merk at denne innstillinga ikkje påverkar statusen til artiklar som er oppretta eller redigerte før endringa.</p>
+<p>Standardpubliseringsstatus kan vere éin av følgjande:</p>
+<ul>
+    <li>Utkast</li>
+    <li>Gøymd</li>
+    <li>Ventar</li>
+    <li>Publisert</li>
+    <li>Klebrig</li>
+</ul>
+<p>Ein <strong>utkast</strong>-artikkel vert rekna som arbeid undervegs og er ikkje synleg utanfor administrasjonsområdet i Textpattern (dvs. ikkje synleg på framsida og ikkje syndikert i straumar).</p>
+<p>Ein <strong>gøymd</strong> artikkel er ikkje synleg utanfor administrasjonsområdet i Textpattern.</p>
+<p>Ein <strong>ventar</strong>-artikkel vert rekna som klar for publisering og ventar på godkjenning, men er ikkje synleg utanfor administrasjonsområdet i Textpattern.</p>
+<p>Ein <strong>publisert</strong> artikkel er vanlegvis synleg utanfor administrasjonsområdet i Textpattern (dvs. synleg på framsida, syndikert i straumar dersom innstillinga tillet det). Dersom ein artikkel er publisert og har ein utløpsdato, vil statusen halde fram med å vere publisert etter at datoen er nådd, men artikkelen vert berre vist utanfor administrasjonsområdet dersom utløpne artiklar er tillatne.</p>
+<p>Ein <strong>klebrig</strong> artikkel liknar på ein <strong>publisert</strong> artikkel ved at han kan visast utanfor administrasjonsområdet i Textpattern, men vil <strong>ikkje</strong> dukke opp i artikkellister med mindre merket <code>article</code> eller <code>article_custom</code> har eit <code>status</code>-attributt med verdien <code>sticky</code>.</p>
+        ]]></item>
+        <item id="doctype" title="Doctype"><![CDATA[
+<h2>Doctype</h2>
+<p>Vel kva HTML‑doctype du vil bruke (antenn HTML5 eller XHTML). Dette påverkar kommentarskjema, Textile‑handsaminga av <code>&lt;abbr&gt;</code> eller <code>&lt;acronym&gt;</code>, og <code>&lt;link&gt;</code>-merke som vert genererte av <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/css"><code>&lt;txp:css /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+        ]]></item>
+        <item id="enable_dev_preview" title="Slå på førehandsvising av utviklingstema?"><![CDATA[
+<h2>Slå på førehandsvising av utviklingstema?</h2>
+<p>Brukarar med tilstrekkelege løyve (som standard dei med rollene Utgjevar og Designar) kan trygt utvikle og førehandsvise eit nytt tema medan alle andre brukarar framleis ser det gamle temaet (til det nye vert teke i bruk).</p>
+<p>Privilegerte brukarar som ikkje vil delta i temautvikling, kan slå av førehandsvising av utviklingstema. Dei vil då sjå det gjeldande «offentlege» temaet, på same måte som vanlege besøkande.</p>
+        ]]></item>
+        <item id="enable_short_tags" title="Slå på støtte for korte taggar?"><![CDATA[
+<h2>Slå på støtte for korte taggar?</h2>
+<p>Textpattern‑taggar har forma <code>&lt;txp:tag_name attribute1="value" ... /&gt;</code>. Det er mogleg å redusere skrivearbeidet ved å slå på ein kortare notasjon der <code>txp:</code> kan utelatast etter eit par enkle retningsliner. Her er nokre døme på prinsippet:</p>
+<ul>
+    <li><code>&lt;txp:article_id /&gt;</code> vert <code>&lt;article::id /&gt;</code></li>
+    <li><code>&lt;txp:recent_articles/&gt;</code> vert <code>&lt;recent::articles /&gt;</code></li>
+    <li><code>&lt;txp:file_download_list /&gt;</code> vert <code>&lt;file::download_list /&gt;</code></li>
+    <li><code>&lt;txp:smd_if /&gt;</code> vert <code>&lt;smd::if /&gt;</code></li>
+    <li><code>&lt;txp:smd_if&gt; ... &lt;txp:else /&gt; ... &lt;/txp:smd_if&gt;</code> vert <code>&lt;smd::if&gt; ... &lt;smd::else /&gt; ... &lt;/smd::if&gt;</code> (merk at programtilleggsprefikset kan brukast for merket <code>else</code>).</li>
+</ul>
+<p>Dersom ein tagg inneheld ei understreking og du slår på korte taggar, er hovudprinsippet:</p>
+<ol>
+    <li>Fjern prefikset <code>txp:</code>.</li>
+    <li>Byt ut første førekomsten av understreking med <code>::</code>.</li>
+</ol>
+<p>Merk at denne innstillinga ikkje påverkar moglegheita til å bruke korte <code>&lt;txp:output_form /&gt;</code>-kodar for å gjengi skjema‑snuttar. Du kan framleis bruke <code>&lt;txp::shortcode /&gt;</code>, som vert tolka som <code>&lt;txp:output_form form="shortcode" /&gt;</code>.</p>
+        ]]></item>
+        <item id="enable_xmlrpc_server" title="Slå på XML‑RPC‑tenar?"><![CDATA[
+<h2>Slå på XML‑RPC‑tenar?</h2>
+<p>Dersom du vil bruke <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/XML-RPC">XML-RPC <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> for å styre Textpattern eksternt (t.d. skrivebords- eller mobilappar), må du slå på XML‑RPC‑tenaren ved å setje dette til «Ja».</p>
+        ]]></item>
+        <item id="enhanced_email" title="Bruke utvida e‑postfunksjonar"><![CDATA[
+<h2>Bruke utvida e‑postfunksjonar</h2>
+<p>Ved å setje dette til «Nei» vert all e‑post – som førespurnader om tilbakestilling av passord, og e‑post frå programtillegg som com_connect – sendt via PHP‑funksjonen <code>mail()</code>. Ved å velje «Ja» vert den medfølgjande PHPMailer brukt i staden, noko som opnar for ekstra innstillingar for å sende e‑post via eksterne SMTP‑tenarar.</p>
+<p>Viss du har problem med at e‑post ikkje kjem fram (særleg til nettbaserte leverandørar som Gmail, Outlook, Yahoo! osv.), er årsaka ofte at domenet ditt ikkje vert sett på som ein påliteleg avsendar. Å setje dette til «Ja» kan betre leveringsevna. I tillegg kan bruk av SMTP gje betre kompatibilitet med enkelte e‑posttilbydarar og ytterlegare forbetre leveringsevna.</p>
+        ]]></item>
+        <item id="expire_logs_after" title="Loggar går ut etter kor mange dagar?"><![CDATA[
+<h2>Loggar går ut etter kor mange dagar?</h2>
+<p>Når logging i Textpattern er slått på, kan du oppgje kor lenge (i dagar) loggane skal takast vare på. «7» vil halde loggane tilgjengelege i sju dagar.</p>
+<p><strong>Merk:</strong> Loggane vert berre trimma når du ser på panelet «Besøksloggar», elles vil dei halde fram med å vekse.</p>
+        ]]></item>
+        <item id="file_base_path" title="Stig til filkatalog"><![CDATA[
+<h2>Stig til filkatalog</h2>
+<p>Dette set <strong>absolutt sti</strong> til katalogen der opplasta filer vert lagra permanent. PHP må ha skriveløyve til denne katalogen.</p>
+<p><strong>Merk:</strong> Vurder å leggje denne katalogen utanfor det offentleg tilgjengelege dokrootet til nettstaden din, for ekstra tryggleik.</p>
+        ]]></item>
+        <item id="file_download_header" title="Nedlastingshovud for filer"><![CDATA[
+<h2>Nedlastingshovud for filer</h2>
+<p>Lèt deg tilpasse korleis nedlasting av filer skal handterast.</p>
+<p>Vanlegvis vert alle nedlastingar handsama som vedlegg og vert lasta ned (avhengig av korleis nettlesaren din er konfigurert for den filtypen). Dersom du vil gje hint om korleis du føretrekk at somme eller alle filtypar skal handsamast, kan du leggje inn taggkode her. Til dømes kan du vise PDF‑filer som du har lagt i Textpattern‑kategorien «inline-pdf», direkte i nettlesaren i staden for å laste dei ned:</p>
+<pre><code>&lt;txp:evaluate query='&lt;txp:file_download_category escape="quote" /&gt;="inline-pdf"'&gt;
+    &lt;txp:header name="Content-Disposition" value="inline" /&gt;
+    &lt;txp:header name="Content-Type" value="application/pdf" /&gt;
+&lt;/txp:evaluate&gt;
+</code></pre>
+        ]]></item>
+        <item id="file_max_upload_size" title="Maksimal filstorleik på opplastingar (i byte)"><![CDATA[
+<h2>Maksimal filstorleik på opplastingar (i byte)</h2>
+<p>Du kan avgrense maksimal storleik (i byte) for opplasting av filer. Merk at denne verdien òg er avgrensa av PHP‑konfigurasjonen. Dersom Textpattern oppdagar at PHP‑konfigurasjonen din avgrensar opplastingsstorleiken til ein lågare verdi, vert innstillinga automatisk justert ned. Dersom du vil tillate større opplastingar via nettlesaren, kontakt nettstadverten (dei relevante verdiane i <code>php.ini</code> er <code>post_max_size</code>, <code>upload_max_filesize</code> og <code>memory_limit</code>).</p>
+        ]]></item>
+        <item id="gmtoffset" title="Tidssone"><![CDATA[
+<h2>Tidssone</h2>
+<p>For å vise datoar i di lokale tidssone, vel tidssona di.</p>
+        ]]></item>
+        <item id="img_dir" title="Biletkatalog"><![CDATA[
+<h2>Biletkatalog</h2>
+<p>Dersom du vil tilpasse namnet på bilet­katalogen din, kan du gjere det her. Du må først opprette katalogen i rota av Textpattern‑installasjonen din, og du må òg sjå til at PHP kan skrive til denne katalogen.</p>
+<p>Denne stigen er alltid ein <strong>relativ sti</strong> (til katalogen for Textpattern‑roten).</p>
+<p>Standardverdien er <code>images</code>.</p>
+        ]]></item>
+        <item id="include_email_atom" title="Ta med e‑postadresse i Atom‑straumar?"><![CDATA[
+<h2>Ta med e‑postadresse i Atom‑straumar?</h2>
+<p>Dette gjev deg høve til å ta med e‑postadressa til forfattaren (som sett i brukarkontoen) av ein artikkel i <code>author</code>-delen av Atom‑straumane dine.</p>
+        ]]></item>
+        <item id="is_dst" title="Sommartid slått på?"><![CDATA[
+<h2>Sommartid slått på?</h2>
+<p>Om DST (sommartid) for tida er slått på for tidssona di.</p>
+        ]]></item>
+        <item id="logging" title="Logging"><![CDATA[
+<h2>Logging</h2>
+<p>Du kan velje nivået på logging av besøkande som Textpattern skal utføre:</p>
+<ul>
+    <li><strong>Alle treff:</strong> Textpattern loggfører alle sidevisingar på nettstaden din</li>
+    <li><strong>Berre referansar:</strong> Textpattern loggfører berre vitjingar som kjem frå andre nettstader</li>
+    <li><strong>Ingen:</strong> Textpattern loggfører ikkje sidevisingar</li>
+</ul>
+<p>Frå og med Textpattern 4.7.0 vert ingen IP‑adresser til besøkande samla inn eller lagra av Textpattern. Dersom du samlar inn eller lagrar IP‑adresser utanfor Textpattern, må du ta naudsynte førebyggjande omsyn for å lagre og/eller bruke data i samsvar med gjeldande lovverk, som til dømes <a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/General_Data_Protection_Regulation">GDPR <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>, og sørgje for god tryggleik i alle delar av tenaren og Textpattern‑installasjonen for å unngå at dataa vert kompromitterte.</p>
+<p>Det er sterkt tilrådd at du lèt denne innstillinga stå på standardverdien «Ingen», med mindre du absolutt treng denne informasjonen, og at du offentleg gjer greie for korleis du har tenkt å bruke ho.</p>
+        ]]></item>
+        <item id="max_url_len" title="Maksimal URL‑lengd (i teikn)"><![CDATA[
+<h2>Maksimal URL‑lengd (i teikn)</h2>
+<p>Dette hindrar URL‑ar som er lenger enn den oppgjevne lengda frå å fungere. Det kan vere nyttig for skadeavgrensing og tryggleik på nettstaden.</p>
+        ]]></item>
+        <item id="module_pophelp" title="Vis hjelpelenkjer innebygd på administrasjonssida"><![CDATA[
+<h2>Vis hjelpelenkjer innebygd på administrasjonssida</h2>
+<p>Dersom du vil gøyme innebygde hjelpelenkjer på administrasjonssida (popup‑hjelpevindauge for Textpattern) i heile systemet, set du dette til «Ingen».</p>
+        ]]></item>
+        <item id="never_display_email" title="Gøym e‑postadressa til kommentatorar?"><![CDATA[
+<h2>Gøym e‑postadressa til kommentatorar?</h2>
+<p>Denne innstillinga styrer om e‑postadressa til ein kommentator skal visast offentleg.</p>
+<p>Det er vanlegvis tilrådd å ikkje vise e‑postadressene, av omsyn til brukarane dine, men i somme situasjonar kan det vere ynskjeleg å vise kommentatorar sine e‑postadresser.</p>
+        ]]></item>
+        <item id="override_emailcharset" title="Bruke ISO-8859-1‑koding i e‑post (standard er UTF‑8)?"><![CDATA[
+<h2>Bruke ISO-8859-1‑koding i e‑post (standard er UTF‑8)?</h2>
+<p>Textpattern brukar UTF‑8‑koding der det er mogleg som standard, òg for utgåande e‑post. Nokre eldre e‑postklientar (inkludert enkelte versjonar av Microsoft Outlook) har likevel ikkje skikkeleg støtte for UTF‑8. Dersom du opplever forvrengde teikn i e‑post, vil denne innstillinga konvertere tekst til ISO-8859-1 før ho vert sendt.</p>
+<p><strong>Merk:</strong> Dersom du brukar eit språk med teikn som ikkje kan representerast i ISO-8859-1, vil denne innstillinga diverre ikkje hjelpe. Du bør då finne ein e‑postklient som støttar UTF‑8 (eller Unicode).</p>
+        ]]></item>
+        <item id="override_form_types" title="Typar overstyringsskjema"><![CDATA[
+<h2>Typar overstyringsskjema</h2>
+<p>Vel kva skjematypar som skal ha malane sine tilgjengelege i panelet «Skriv» som overstyringsskjema.</p>
+        ]]></item>
+        <item id="permlink_format" title="Mønster for permanent lenkjetittel‑URL"><![CDATA[
+<h2>Mønster for permanent lenkjetittel‑URL</h2>
+<p>Definerer korleis artikkel‑URL‑ar vert bygde og tildelte når ein ikkje‑rotete modus vert brukt.</p>
+<p>Når ein artikkel vert publisert, vert URL‑en generert frå artikkeltittelen dersom det ikkje er gitt ei eiga URL i feltet URL‑berre tittel.</p>
+<p>Ta følgjande døme på artikkeltittel: <em>Ann og Bob et kake</em></p>
+<p>Når mønsteret for permanent lenkjetittel‑URL er sett til «Med bindestrek (tittel-slik-som-dette)», vil URL‑en til artikkelen vere:</p>
+<pre><code>https://example.com/ann-og-bob-et-kake</code></pre>
+<p>Når mønsteret er sett til «Samanbundne store bokstavar (TitleLikeThis)», vil URL‑en til artikkelen vere:</p>
+<pre><code>https://example.com/AnnandBobeatcake</code></pre>
+        ]]></item>
+        <item id="permlink_mode" title="Mønster for artikkel‑URL"><![CDATA[
+<h2>Mønster for artikkel‑URL</h2>
+<p>Definerer korleis einskildartiklar vert nådde via URL‑en som vert vist ved bruk av merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/permlink"><code>&lt;txp:permlink&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>.</p>
+<p>Modusen «?=messy» er mest kompatibel – han fungerer med liten eller ingen konfigurasjon – men minst gunstig når det gjeld lesbarheit og søkjemotoroptimalisering (SEO). I denne modusen vil URL‑ar til artiklar på nettstaden din sjå slik ut:</p>
+<pre><code>https://example.com/index.php?id=123</code></pre>
+<p>Alle andre modusar krev at vevtenaren støttar omskriving av URL‑ar (t.d. Apache <code>mod_rewrite</code> eller NGINX‑omskrivingsreglar i <code>server</code>-blokka). Dersom tenaren din ikkje støttar URL‑omskriving, kontakt nettstadverten eller bruk modusen «?=messy» som skildra ovanfor.</p>
+        ]]></item>
+        <item id="plugin_cache_dir" title="Stig til programtillegg‑buffer"><![CDATA[
+<h2>Stig til programtillegg‑buffer</h2>
+<p>Denne innstillinga er hovudsakleg for programtilleggsutviklarar. Når ho er sett, kan du leggje sjølve programtilleggskjeldefila (ikkje den kompilerte) i denne katalogen, og Textpattern vil laste ho automatisk, slik at du enkelt kan redigere programtillegget og straks sjå verknaden utan å installere/aktivere programtillegget på nytt. <strong>Ver merksam</strong> på at om du brukar denne metoden, kan eit øydelagt programtillegg (som ikkje lèt seg kompilere) òg øydeleggje Textpattern!</p>
+<p>På ein produksjonsnettstad er det tilrådd å laste programtillegg via det vanlege panelet «Programtillegg» i staden for å bruke programtillegg‑bufferen.</p>
+<p><strong>Merk:</strong> Ikkje bruk same katalog for både «mellombels» og «programtillegg‑buffer», sidan det vil skape problem (Textpattern vil prøve å køyre innhaldet i mellombelse loggfiler som programtillegg).</p>
+        ]]></item>
+        <item id="production_status" title="Produksjonsstatus"><![CDATA[
+<h2>Produksjonsstatus</h2>
+<p>Ein Textpattern‑nettstad kan vere i éin av tre modusar:</p>
+<ol>
+    <li>«Feilsøking»</li>
+    <li>«Testing»</li>
+    <li>«Produksjon»</li>
+</ol>
+<h3>Feilsøkingsmodus</h3>
+<p>All PHP‑feilrapportering på den offentlege nettstaden din vert synleg, saman med åtvaringar om kode og programtillegg som ikkje fungerer. I tillegg vert følgjande informasjon synleg når du ser på HTML‑kjelda til sider:</p>
+<ul>
+    <li>tida tenaren brukte på å byggje sida («Runtime»)</li>
+    <li>tal MySQL‑spørjingar som vart køyrde</li>
+    <li>omtrentleg høgaste minnebruk</li>
+    <li>alle Textpattern‑taggar som vart behandla medan sida vart bygd (òg kalla ei tagg‑sporingsliste)</li>
+</ul>
+<h3>Testmodus</h3>
+<p>All PHP‑feilrapportering på den offentlege nettstaden din vert synleg, saman med åtvaringar om kode og programtillegg som ikkje fungerer. Følgjande informasjon vert synleg når du ser på HTML‑kjelda til sider:</p>
+<ul>
+    <li>tida tenaren brukte på å byggje sida («Runtime»)</li>
+    <li>tal MySQL‑spørjingar som vart køyrde</li>
+    <li>omtrentleg høgaste minnebruk</li>
+</ul>
+<h3>Produksjonsmodus</h3>
+<p>Ingen feilrapportering eller diagnostisk informasjon vert sende til sida. Vanlegvis er produksjonsmodus å føretrekke, sidan han gjev best brukaroppleving og minst belastning på tenaren.</p>
+        ]]></item>
+        <item id="public_theme_name" title="Tema for framsida"><![CDATA[
+<h2>Tema for framsida</h2>
+<p>Standardtemaet på framsida som vert brukt når nokon vitjar den offentlege nettstaden din. Eit førehandsinstallert standardtema følgjer med Textpattern, i tillegg til valet om å starte utan tema. Du kan òg leggje temapakkar i katalogen <code>textpattern/themes</code> for å gjere dei tilgjengelege for bruk.</p>
+        ]]></item>
+        <item id="publish_expired_articles" title="Publisere utløpne artiklar?"><![CDATA[
+<h2>Publisere utløpne artiklar?</h2>
+<p>Når dette er sett til «Ja», vil utløpne artiklar framleis visast på nettstaden din etter at utløpsdatoen har passert. Du kan bruke merket <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/if_expired"><code>&lt;txp:if_expired /&gt;</code> <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> for å vise alternativt innhald eller merking for utløpne artiklar.</p>
+<p>Når dette er sett til «Nei», vert utløpne artiklar fjerna frå den offentlege nettstaden og returnerer HTTP‑statusen «410 Gone» i staden. Standardinnstillinga er «Nei».</p>
+        ]]></item>
+        <item id="publisher_email" title="Sende innloggingsdetaljar frå denne e‑postadressa"><![CDATA[
+<h2>Sende innloggingsdetaljar frå denne e‑postadressa</h2>
+<p>Oppgje ei e‑postadresse som skal brukast som avsendarfeltet «Frå:» på meldingar med innloggingsinformasjon til nye brukarar.</p>
+<p>Viss denne innstillinga er tom eller inneheld ei ugyldig e‑postadresse, brukar Textpattern namnet og adressa til den brukaren som er innlogga.</p>
+        ]]></item>
+        <item id="rss_how_many" title="Kor mange artiklar skal inkluderast i straumar?"><![CDATA[
+<h2>Kor mange artiklar skal inkluderast i straumar?</h2>
+<p>Dette er det maksimale talet på gjeldande artiklar som skal syndikerast om gongen, i RSS‑ og Atom‑format.</p>
+<p>Ein låg verdi, som <code>5</code> til <code>15</code>, er tilrådd.</p>
+        ]]></item>
+        <item id="secondpass" title="Tal på ekstra gjennomkøyringar av tolken"><![CDATA[
+<h2>Tal på ekstra gjennomkøyringar av tolken</h2>
+<p>Tagg­tolken i Textpattern erstattar vanlegvis alle taggar med innhald frå databasen i éi gjennomkøyring av sidemalen. I enkelte tilfelle kan dette ikkje vere nok, til dømes:</p>
+<ul>
+    <li>når lågt lasta programtillegg vert brukte som taggattributt</li>
+    <li>kodestiftingar inni <code>&lt;txp:php&gt;</code>-merke</li>
+    <li>om du hoppar over sideelement tidlegare på sida for at dei skal kunne få innhald som kjem frå ein tagg som vert behandla seinare</li>
+</ul>
+<p>Av tradisjonelle grunnar har Textpattern køyrt éi ekstra gjennomkøyring (kalla «secondpass»), og derfor er standardverdien til denne innstillinga <code>1</code>. Fleire gjennomkøyringar aukar likevel sjansen for at uønskte taggar slepp gjennom og vert behandla. Nylege forbetringar i taggtolken har redusert behovet for denne andre runden. Så, med mindre du nyttar den ekstra gjennomkøyringa til eit bestemt føremål, bør du setje verdien til <code>0</code> for å gjere nettstaden din meir trygg.</p>
+<p>Dersom du seinare oppdagar ubehandla taggar som vert viste på nettstaden (utan at det finst andre taggfeil i test-/feilsøkingsmodus på grunn av taggpar som ikkje stemmer), kontakt oss med sidemalen/koden/programtillegget som døme. Vi prøver å fjerne behovet for ekstra gjennomkøyringar, og denne informasjonen vil hjelpe oss med det.</p>
+        ]]></item>
+        <item id="send_lastmod" title="Sende &quot;Last-Modified&quot;-hovud?"><![CDATA[
+<h2>Sende "Last-Modified"-hovud?</h2>
+<p>Når dette er slått på, vil Textpattern lese HTTP‑hovudet <code>If-Modified-Since</code> frå ein besøkjande (viss det finst) og samanlikne det med tidspunktet for siste endring på nettstaden. Dersom ingenting er endra sidan sist brukaren lasta sida (dvs. dersom tidsstempelet nettlesaren sender er det same som tid for siste endring), vert det sendt eit hovud tilbake som instruerer nettlesaren om å bruke den mellomlagra versjonen av sida.</p>
+<p>Dette kan redusere bandbreiddsbruk, lastetid og last på vevtenaren.</p>
+        ]]></item>
+        <item id="show_comment_count_in_feed" title="Vise talet på kommentarar i straumar?"><![CDATA[
+<h2>Vise talet på kommentarar i straumar?</h2>
+<p>Når dette er sett til «Ja», vert talet på kommentarar lagt til artikkeltitlane i RSS-/Atom‑straumane dine.</p>
+        ]]></item>
+        <item id="site_slogan" title="Slagord for nettstaden"><![CDATA[
+<h2>Slagord for nettstaden</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_slogan">Slagordet for nettstaden <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> er eit samandrag eller ei skildring av nettstaden din. Det vert brukt som skildring av nettstaden der det trengst, til dømes i RSS-/Atom‑straumane dine, og kan brukast på mange stader på nettstaden etter eige ønskje.</p>
+<p><strong>Merk:</strong> Slagordet er valfritt, men kan vere påkravd for ein gyldig RSS- eller Atom‑straum.</p>
+        ]]></item>
+        <item id="sitename" title="Nettstadnamn"><![CDATA[
+<h2>Nettstadnamn</h2>
+<p><a rel="external" target="_blank" href="https://docs.textpattern.com/tags/site_name">Namnet eller tittelen på nettstaden din <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a>. Dette vert vist i tittellinja i nettlesaren eller i lesaren for straumane til ein besøkjande, og kan brukast på mange stader på nettstaden etter eige ønskje.</p>
+        ]]></item>
+        <item id="siteurl" title="Nettstad‑URL"><![CDATA[
+<h2>Nettstad‑URL</h2>
+<p>Dette er adressa til Textpattern‑nettstaden din, til dømes <code>www.example.com</code>.</p>
+<p><strong>Merk:</strong> Du treng ikkje ta med <code>http://</code>, <code>https://</code> eller avsluttande skråstrek <code>/</code>.</p>
+        ]]></item>
+        <item id="skin_dir" title="Temakatalog"><![CDATA[
+<h2>Temakatalog</h2>
+<p>Dersom du vil tilpasse namnet på katalogen der temafiler for framsida skal lagrast permanent, kan du gjere det her. Du må først opprette katalogen i rota av Textpattern‑installasjonen din, og du må òg sjå til at PHP kan skrive til denne katalogen.</p>
+<p>Denne stigen er alltid ein <strong>relativ sti</strong> (til katalogen for Textpattern‑roten).</p>
+<p>Standardverdien er <code>themes</code>.</p>
+        ]]></item>
+        <item id="smtp_from" title="SMTP‑avsendaradresse (envelope)"><![CDATA[
+<h2>SMTP‑avsendaradresse (envelope)</h2>
+<p>Denne innstillinga bør stå tom med mindre du har problem med å sende e‑post frå Textpattern (viss det ikkje vert sendt e‑post i det heile). Dersom det skjer, kan du leggje inn ei gyldig e‑postadresse her, helst med same domenenamn som nettstaden der du har installert Textpattern (dvs. dersom nettstaden er <code>https://example.com</code>, kan du bruke <code>you@example.com</code>).</p>
+<p>For dei som er interesserte i dei tekniske detaljane:</p>
+<ul>
+    <li>På UNIX‑liknande/macOS‑tenarar vert e‑postadressa brukt som fjerde parameter (med prefikset «-f») til PHP‑funksjonen <code>mail()</code></li>
+    <li>På Windows‑tenarar vert e‑postadressa brukt for å setje (eller overstyre) innstillinga <code>sendmail_from</code> i php.ini</li>
+</ul>
+<p>Dette sikrar at SMTP‑avsendaradressa (som ikkje nødvendigvis er den same som hovudet «From:» du vanlegvis ser i e‑post) vert sett til adressa du har skrive inn her, noko som er eit krav for å sende e‑post på somme vevtenarar.</p>
+        ]]></item>
+        <item id="smtp_host" title="SMTP‑tenar"><![CDATA[
+<h2>SMTP‑tenar</h2>
+<p>For å betre leveringa av meldingar og kunne sende e‑post via ein ekstern teneste (som SendGrid, AWS SES, Mailchimp, Mailgun osv.), oppgjev du SMTP‑tenaren her. Sjå dokumentasjonen til SMTP‑leverandøren din for denne verdien.</p>
+<p>Denne verdien kan òg setjast ved å definere ein konstant <code>SMTP_HOST</code> i <code>config.php</code>, i så fall vert verdien gråa ut i innstillingspanelet.</p>
+        ]]></item>
+        <item id="smtp_pass" title="SMTP‑passord"><![CDATA[
+<h2>SMTP‑passord</h2>
+<p>Dersom SMTP‑tilkoplinga di krev eit passord for det oppgjevne brukarnamnet, skriv du det inn her. Sjå dokumentasjonen til leverandøren for detaljar.</p>
+<p>Merk: Sjølv om passordet ikkje vert vist her, vert det <em>lagra i klartekst</em> i databasen (i tabellen prefs). Dersom du vil auke tryggleiken, kan du definere ein konstant <code>SMTP_PASS</code> i <code>config.php</code> i staden.</p>
+        ]]></item>
+        <item id="smtp_port" title="SMTP‑port"><![CDATA[
+<h2>SMTP‑port</h2>
+<p>Dersom du har oppgjeve ein SMTP‑tenar, må du oppgje ein port for å slå på SMTP‑ruting. Vanlege portar er:</p>
+<ul>
+    <li>25 – for usikra e‑post</li>
+    <li>465 – eldre (uoffisiell) port for sikker e‑post</li>
+    <li>587 – standard (tilrådd) port for sikker TLS‑e‑post</li>
+</ul>
+<p>SMTP‑leverandøren din kan bruke ein annan port, sjå dokumentasjonen deira.</p>
+<p>Denne verdien kan òg setjast ved å definere ein konstant <code>SMTP_PORT</code> i <code>config.php</code>, i så fall er verdien gråa ut i innstillingspanelet.</p>
+        ]]></item>
+        <item id="smtp_sectype" title="SMTP‑tryggleiksmetode"><![CDATA[
+<h2>SMTP‑tryggleiksmetode</h2>
+<p>Vel mekanismen SMTP‑leverandøren din brukar som tryggleiksprotokoll for e‑post. Sjå dokumentasjonen deira for detaljar.</p>
+<p>Denne verdien kan òg setjast ved å definere ein konstant <code>SMTP_SECTYPE</code> i <code>config.php</code>, i så fall er verdien gråa ut i innstillingspanelet.</p>
+        ]]></item>
+        <item id="smtp_user" title="SMTP‑brukarnamn"><![CDATA[
+<h2>SMTP‑brukarnamn</h2>
+<p>Dersom SMTP‑tilkoplinga di krev brukarnamn/innloggingsnamn, skriv du det inn her. Sjå dokumentasjonen til leverandøren for detaljar.</p>
+<p>Denne verdien kan òg setjast ved å definere ein konstant <code>SMTP_USER</code> i <code>config.php</code>, i så fall er verdien gråa ut i innstillingspanelet.</p>
+        ]]></item>
+        <item id="spam_blocklists" title="Spamblokklister (kommaseparert)"><![CDATA[
+<h2>Spamblokklister (kommaseparert)</h2>
+<p><a rel="external" target="_blank" href="https://en.wikipedia.org/wiki/blocklisting">Blokkliste‑ <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> leverandørane du skriv inn her, vert spurde kvar gong ein kommentar vert lagt inn på bloggen din, og IP‑adressa til kommentarsendaren vert kontrollert. Dersom IP‑adressa står på lista, tyder det at ho tidlegare er meldt inn for spam, og kommentaren vert avvist. Uavhengig av resultatet av sjekken vert ikkje IP‑adressa til kommentarsendaren lagra av Textpattern.</p>
+<p>Du kan leggje inn ei liste med domenenamn her, skilde med komma. Merk at det er ditt ansvar å sørgje for at blokklister er eigna for føremålet ditt.</p>
+        ]]></item>
+        <item id="syndicate_body_or_excerpt" title="Berre syndikere artikkelutval?"><![CDATA[
+<h2>Berre syndikere artikkelutval <strong>berre</strong>?</h2>
+<p>Dersom dette er sett til «Nei», vil element i straumen innehalde heile artikkelteksten.</p>
+<p>Dersom dette er sett til «Ja», vil element i straumen innehalde artikkelutvalet i staden for artikkelteksten der det finst.</p>
+        ]]></item>
+        <item id="tempdir" title="Stig til mellombels katalog"><![CDATA[
+<h2>Stig til mellombels katalog</h2>
+<p>Set ein <strong>absolutt sti</strong> til ein mellombels katalog (ofte kalla «tmp» eller «temp»). PHP må ha skriveløyve til denne katalogen. Katalogen vert brukt til mellombels filer, til dømes ved opplastingar (programtillegg, filer eller bilete).</p>
+<p><strong>Merknader:</strong>
+<ul>
+    <li>Ikkje bruk same katalog til både «mellombels» og «programtillegg‑buffer», då det vil skape problem (Textpattern vil prøve å køyre innhaldet i mellombelse loggfiler som programtillegg).</li>
+    <li>Vurder å leggje denne katalogen utanfor det offentleg tilgjengelege dokrootet til nettstaden din, for ekstra tryggleik.</li>
+</ul>
+</p>
+        ]]></item>
+        <item id="theme_name" title="Tema for administrasjonssida"><![CDATA[
+<h2>Tema for administrasjonssida</h2>
+<p>Standardtemaet på administrasjonssida som vert brukt når nokon loggar inn i Textpattern. Nokre førehandsinstallerte admintema følgjer med Textpattern, og du kan òg leggje til eigne temapakkar i katalogen <code>textpattern/admin-themes</code> for å gjere dei tilgjengelege.</p>
+        ]]></item>
+        <item id="trailing_slash" title="Leggje til avsluttande skråstrek i URL‑ar"><![CDATA[
+<h2>Leggje til avsluttande skråstrek i URL‑ar</h2>
+<p>Om Textpattern automatisk skal leggje til avsluttande skråstrek i URL‑ar det genererer. Vala er:</p>
+<ul>
+    <li><strong>Nei</strong> – Aldri</li>
+    <li><strong>Liste</strong> – Berre på listesider (dvs. ikkje når ein ser einskildartiklar)</li>
+    <li><strong>Ja</strong> – Alltid</li>
+</ul>
+        ]]></item>
+        <item id="txp_evaluate_functions" title="PHP‑funksjonar som er slått på i txp:evaluate"><![CDATA[
+<h2>PHP‑funksjonar som er slått på i txp:evaluate</h2>
+<p>Dette er ei kommaseparert liste med element av typen <code>funksjon</code> eller <code>alias=funksjon</code>, t.d. <code>md5</code>, <code>replace=str_replace</code>. Element som er oppførte i denne lista, kan brukast i attributtet <code>query</code> i merket <code>&lt;txp:evaluate /&gt;</code>:</p>
+<pre><code>&lt;txp:evaluate query="replace('cats', 'dogs', 'I like cats.')" /&gt;</code></pre>
+<p><code>funksjon</code> må returnere ein skalarverdi (<strong>ikkje</strong> ein array/objekt).</p>
+        ]]></item>
+        <item id="use_comments" title="Godta kommentarar?"><![CDATA[
+<h2>Godta kommentarar?</h2>
+<p>Dette styrer om kommentarfunksjonen i Textpattern skal vere slått på eller av.</p>
+        ]]></item>
+        <item id="use_mail_on_feeds_id" title="Bruke e‑postadresse til å konstruere straum‑ID‑ar (standard er nettstad‑URL)?"><![CDATA[
+<h2>Bruke e‑postadresse til å konstruere straum‑ID‑ar (standard er nettstad‑URL)?</h2>
+<p>Element i ein Atom‑straum treng ein unik ID.</p>
+<p>For å generere ID‑ar som er unike for nettstaden din, lèt Textpattern deg velje mellom anten ei e‑postadresse eller domenenamnet ditt som del av desse ID‑ane. E‑postadressa vert den første som vart brukt då nettstaden vart oppretta. Dersom du truleg ikkje kjem til å endre domenenamnet ditt, er det vanlegvis trygt å setje dette til «Nei».</p>
+        ]]></item>
+        <item id="use_plugins" title="Bruke programtillegg?"><![CDATA[
+<h2>Bruke programtillegg?</h2>
+<p>Dette gjev deg høve til å slå av all støtte for programtillegg i Textpattern. Det er nyttig dersom du feilsøkjer feil på nettstaden og vil kontrollere om eitt eller fleire programtillegg er involverte.</p>
+        ]]></item>
+        <item id="use_textile" title="Standard tekstformatering"><![CDATA[
+<h2>Standard tekstformatering</h2>
+<p>Tekstformatet du vel her, vert standard for utvals‑ og brødtekstmerking på panelet «Skriv». Du kan velje å tillate full Textile‑handsaming, konvertere linjeskift til HTML‑avsnittsmerke eller ikkje konvertere noko tekst i det heile.</p>
+<p><a rel="external" target="_blank" href="https://textpattern.com/textile-sandbox">Textile <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> er eit verktøy som skal gjere det enklare å konvertere rein tekst til HTML. Når det er slått på, vil Textile handsame brødteksten i artiklar og gje att strukturelt god HTML.</p>
+<p>Textile byr òg på eit kraftig, men lettlært sett med kommandoar for å formatere tekst, definere strukturar som lister, overskrifter og blokksitat, og sette inn lenkjer og bilete.</p>
+        ]]></item>
+    </group>
+
+    <group id="section" title="Seksjonspanel">
+        <item id="section_category" title="Introduksjon"><![CDATA[
+<h2>Introduksjon</h2>
+<p>Seksjonar i Textpattern kan best samanliknast med seksjonar i ei avis; dei høyrer alle til same publikasjon, men kan ha ulik utforming, ulik type artiklar og så vidare.</p>
+<p>For dei fleste nettstader treng ein berre opprette eit minimum av seksjonar.</p>
+<h3>Eit sannsynleg oppsett for ein nettstad med tre seksjonar:</h3>
+<ol>
+    <li><strong>Arkiv:</strong> Seksjonen som alle artiklar på framsida høyrer til. Når ein lesar klikkar på den permanente lenkja til ein artikkel, vert han vist i sidelayouten som er tildelt denne seksjonen. For å gå til ei sidevis liste over dei nyaste artiklane i seksjonen «Arkiv», vil URL‑en vere <code>https://example.com/archive/</code>.</li>
+    <li><strong>Om:</strong> Ei «om nettstaden»-side, som skil seg frå framsida og seksjonen «Arkiv» ved å vere meir statisk, ha eit anna oppsett og truleg berre innehalde éin artikkel. Seksjonen «Om» vert nådd på <code>https://example.com/about/</code>.</li>
+    <li><strong>Foto:</strong> Ein seksjon med eit anna oppsett (og kanskje ein annan CSS) for å vise foto i staden for artiklar.</li>
+</ol>
+<p>Merk at det alltid finst ein spesiell gøymd seksjon som heiter default. Denne seksjonen bruker sida som heiter default og stilen som heiter default, og bygg opp framsida på nettstaden din.</p>
+        ]]></item>
+        <item id="section_default" title="Standardpubliseringsseksjon"><![CDATA[
+<h2>Standardpubliseringsseksjon</h2>
+<p>Dette valet styrer kva seksjon som er førehandsvald i menyen Seksjon når du opprettar ein ny artikkel i panelet «Skriv».</p>
+<p>Dersom dei fleste artiklane dine hamnar i ein bestemt seksjon, vel du denne frå lista her. Endringar vert tekne i bruk med det same.</p>
+<p>Du kan overstyre dette per artikkel i panelet «Skriv» ved å velje ein annan seksjon i vindauget «Sorter og vis».</p>
+        ]]></item>
+        <item id="section_description" title="Skildring"><![CDATA[
+<h2>Skildring</h2>
+<p>Seksjonsskildringa er ein valfri komponent som kan hjelpe søkjemotorar og nettstadrobotar å identifisere og sortere innhald betre.</p>
+<p>Artikkelskildringa er avgrensa til maksimalt 255 teikn. Merk at somme søkjemotorar set grenser for kor mange teikn ei sides <code>meta description</code> kan ha av omsyn til vising i søkeresultatsider (SERP‑ar), og denne grensa kan vere lågare enn grensa på 255 teikn i Textpattern.</p>
+        ]]></item>
+        <item id="section_on_frontpage" title="Skal artiklar i denne seksjonen visast på framsida?"><![CDATA[
+<h2>Skal artiklar i denne seksjonen visast på framsida?</h2>
+<p>Artiklane i somme seksjonar, til dømes dei som liknar meir på «statiske» nettsider, kan verke malplasserte i den tidsstyrte straumen på framsida av nettstaden din.</p>
+<p>Ved å setje dette til «Nei» hindrar du artiklar i denne seksjonen frå å dukke opp på framsida.</p>
+        ]]></item>
+        <item id="section_searchable" title="Ta med denne seksjonen i nettsøk?"><![CDATA[
+<h2>Ta med denne seksjonen i nettsøk?</h2>
+<p>Dette avgjer om artiklar i denne seksjonen skal visast som del av nettstaddekkjande søkeresultat.</p>
+        ]]></item>
+        <item id="section_syndicate" title="Syndikere artiklar i denne seksjonen?"><![CDATA[
+<h2>Syndikere artiklar i denne seksjonen?</h2>
+<p>Avgjer om artiklar i denne seksjonen skal visast i nettstaden sine RSS‑ og Atom‑straumar.</p>
+        ]]></item>
+        <item id="section_uses_css" title="Brukar stil"><![CDATA[
+<h2>Brukar stil</h2>
+<p>Viss du vil overstyre standardstilsettet for ein bestemt seksjon, kan du setje det her.</p>
+<p>Dette er berre relevant for stilsett som vert haldne i panelet «Stilar» i Textpattern – dersom du lagrar CSS‑filene dine utanfor Textpattern (sterkt tilrådd), har dette valet ingen verknad.</p>
+        ]]></item>
+        <item id="section_uses_page" title="Brukar side"><![CDATA[
+<h2>Brukar side</h2>
+<p>I Textpattern er seksjonar knytte til sidemalar.</p>
+        ]]></item>
+        <item id="section_uses_skin" title="Brukar tema"><![CDATA[
+<h2>Brukar tema</h2>
+<p>Viss du vil endre kva tema som vert brukt for ein bestemt seksjon, kan du velje det her frå lista over installerte tema.</p>
+        ]]></item>
+    </group>
+
+    <group id="setup" title="Oppsettpanel">
+        <item id="setup_admin_url" title="Admin-subdomene"><![CDATA[
+<h2>Admin-subdomene</h2>
+<p>Subdomenet du vil bruke for å få tilgang til administrasjonsgrensesnittet til Textpattern (t.d. <code>admin.example.com</code>).</p>
+<p>Sjå <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">oppsett av Textpattern med fleire nettstader</a> for meir informasjon.</p>
+        ]]></item>
+    <item id="setup_cookie_domain" title="Cookiedomene"><![CDATA[
+<h2>Cookiedomene</h2>
+<p>(Sub)domenet du vil bruke for informasjonskapslar (cookies) i Textpattern.</p>
+<p>Sjå <a rel="external" target="_blank" href="https://docs.textpattern.com/setup/multi-site-installation">oppsett av Textpattern med fleire nettstader</a> for meir informasjon.</p>
+        ]]></item>
+        <item id="setup_user_login" title="Brukarinnlogging"><![CDATA[
+<h2>Brukarinnlogging</h2>
+<p>Innloggingsnamnet til administratorkontoen («Utgjevar») som du vil bruke til å administrere nettstaden.</p>
+<p>Sjølv om det ikkje finst formelle avgrensingar på namnet, er det best å unngå kompliserte teiknsekvensar og lett gissa brukarnamn (t.d. <code>admin</code>, <code>administrator</code> osv.).</p>
+        ]]></item>
+        <item id="setup_user_pass" title="Brukarpassord"><![CDATA[
+<h2>Brukarpassord</h2>
+<p>Sidan denne kontoen har høgaste tilgangsnivå i Textpattern, bør du velje eit svært sterkt passord eller, helst, ein passfrase.</p>
+<h3>Tips</h3>
+<ul>
+    <li>Bruk ein miks av store og små bokstavar</li>
+    <li>Bruk tal</li>
+    <li>Bruk symbol</li>
+    <li>Gjer det minst åtte teikn langt</li>
+    <li><strong>Unngå</strong> personleg informasjon (datoar, namn, stader, familiemedlemmar, kjæledyr osv.)</li>
+    <li><strong>Unngå</strong> einslege eller gjentekne ordbokord, uansett skrivemåte, språk eller bruk av store/små bokstavar</li>
+</ul>
+        ]]></item>
+        <item id="table_prefix" title="Tabellprefiks"><![CDATA[
+<h2>Tabellprefiks</h2>
+    <p>Du treng berre bruke eit tabellprefiks dersom du vil ha fleire Textpattern‑installasjonar i éin database. Kvar installasjon treng eit unikt prefiks.</p>
+    <p>Merk at prefikset må følgje desse reglane:</p>
+<ul>
+    <li><strong>Første teikn:</strong> må vere a–z, A–Z eller understreking</li>
+    <li><strong>Påfølgjande teikn:</strong> kan berre vere a–z, A–Z, 0–9 eller understreking</li>
+</ul>
+        ]]></item>
+    </group>
+
+    <group id="skin" title="Temapanel">
+        <item id="skin_author" title="Temaforfattar"><![CDATA[
+<h2>Temaforfattar</h2>
+<p>Forfattaren eller forfattarane av dette temaet (valfritt).</p>
+        ]]></item>
+        <item id="skin_author_uri" title="Tema-nettstad"><![CDATA[
+<h2>Tema-nettstad</h2>
+<p>URL‑en der full informasjon og/eller siste versjonar av dette temaet kan finnast (valfritt).</p>
+        ]]></item>
+        <item id="skin_delete_entirely" title="Slette temamaler frå disk òg"><![CDATA[
+<h2>Slette temamaler frå disk òg</h2>
+<p>Viss dette er kryssa av, vert alle malfiler i dei valde temaa sletta permanent frå disken. Temakatalogar og underkatalogane deira vert likevel ikkje sletta dersom det finst andre filer (som JavaScript, bilete, …) i dei.</p>
+        ]]></item>
+        <item id="skin_delete_from_database" title="Slette ubrukte malar frå databasen ved import"><![CDATA[
+<h2>Slette ubrukte malar frå databasen ved import</h2>
+<p>Viss dette er kryssa av, vert kvar mal i dei valde temaa som ikkje har ei tilsvarande fil på disken, sletta permanent frå databasen. Etter at handlinga er utført, vil databasemalane dine i størst mogleg grad samsvare med det som ligg på disken.</p>
+<p>Merk at dersom du har fjerna malfiler som Textpattern krev, vert tomme versjonar lagde inn for deg i databasen.</p>
+        ]]></item>
+        <item id="skin_delete_from_disk" title="Slette ubrukte malar frå disk ved eksport"><![CDATA[
+<h2>Slette ubrukte malar frå disk ved eksport</h2>
+<p>Viss dette er kryssa av, vert kvar malfil i dei valde temaa som ikkje har eit tilsvarande element i databasen, sletta permanent frå temafila på disken. Etter at handlinga er utført, vil malsystemet på filsystemet samsvare nøyaktig med det som ligg i databasen.</p>
+        ]]></item>
+        <item id="skin_description" title="Temaskildring"><![CDATA[
+<h2>Temaskildring</h2>
+<p>Ei kort skildring av design/layout for dette temaet kan leggjast inn (valfritt).</p>
+<p>Temaskildringa er avgrensa til maksimalt 255 teikn.</p>
+        ]]></item>
+        <item id="skin_import" title="Importer tema"><![CDATA[
+<h2>Importer tema frå disk</h2>
+<p>Dette skjemaet lèt deg importere eit tema til Textpattern‑databasen frå temakatalogen din.</p>
+<p>Eit tema som kan importerast, må bestå av ein lesbar foreldremappe som brukar temanamnet som mappenamn, og inni mappa ei lesbar <code>manifest.json</code>-fil i forventa format. Temamappa bør òg innehalde sider, skjema og stilar i eponyme underkatalogar.</p>
+<p>Sider og skjema skal normalt bruke filendinga <code>.txp</code>, medan stilsett ventast å vere <code>.css</code>-filer. Skjema bør òg grupperast etter type i eigne katalogar. Textpattern vil opprette manglande, essensielle malar ved import.</p>
+<p>Sjå <a rel="external" target="_blank" href="https://docs.textpattern.com/themes/">dokumentasjonen om tema <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> for meir informasjon om korleis du lagar, installerer og brukar tema i Textpattern CMS.</p>
+        ]]></item>
+        <item id="skin_name" title="Temanamn"><![CDATA[
+<h2>Temanamn</h2>
+<p>Namnet på temaet vert brukt som katalognamn for temaet og til andre tekniske føremål (påkravd).</p>
+<p>Namnet bør ikkje innehalde spesialteikn eller mellomrom.</p>
+        ]]></item>
+        <item id="skin_overview" title="Introduksjon til tema"><![CDATA[
+<h2>Introduksjon til tema</h2>
+<p>Eit Textpattern‑tema er ei samling sider, skjema og stilsett. Tema gjev deg høve til å dele nettstadsressursane dine inn i logiske grupper for lettare å kjenne dei att eller dele dei med andre. Det å opprette eller importere eit tema – og alle ressursane det inneheld – har <em>inga</em> påverknad på den eksisterande nettstaden din. Du står fritt til å redigere eller endre alle ressursar som ikkje er knytte til ein seksjon på nettstaden, utan at det påverkar sjølve nettstaden.</p>
+<p>For å redigere ressursar i eit tema, går du til panelet «Sider», «Skjema» eller «Stilar» og brukar rullegardinlista til å velje temaet du vil arbeide med. Temaet du arbeider på, vert hugsa i heile administrasjonsområdet, slik at du raskt og enkelt kan hoppe mellom ressurs­typane. Det vert kalla <em>arbeidstemaet</em> ditt.</p>
+<p>Sjå <a rel="external" target="_blank" href="https://docs.textpattern.com/build/themes-creating-using-and-sharing">Textpattern‑brukardokumentasjonen <span class="ui-icon ui-icon-extlink">(opnar ei ekstern lenkje i eit nytt vindauge)</span></a> for meir informasjon.</p>
+        ]]></item>
+        <item id="skin_title" title="Temaoverskrift"><![CDATA[
+<h2>Temaoverskrift</h2>
+<p>Ei skildrande overskrift for temaet, brukt til å identifisere temaet i Textpattern‑panel.</p>
+<p>Overskrifta kan innehalde spesialteikn og mellomrom.</p>
+        ]]></item>
+        <item id="skin_version" title="Temaversjon"><![CDATA[
+<h2>Temaversjon</h2>
+<p>Versjonsnummeret til den installerte versjonen av dette temaet (valfritt).</p>
+        ]]></item>
+    </group>
+</help>
+</resources>
