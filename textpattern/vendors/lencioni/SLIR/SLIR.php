@@ -230,7 +230,6 @@ class SLIR
                 $this->url = $url;
             }
         }
-
     }
 
     /**
@@ -471,7 +470,7 @@ class SLIR
         // The request cache can't be used if the request is falling back to the
         // default image path because it will prevent the actual image from being
         // shown if it eventually ends up on the server
-        if (SLIRConfig::$enableRequestCache == true && !$this->getRequest()->isUsingDefaultImagePath()) {
+        if (SLIRConfig::$enableRequestCache === true && !$this->getRequest()->isUsingDefaultImagePath()) {
             return true;
         } else {
             return false;
@@ -543,7 +542,7 @@ class SLIR
      */
     public function collectGarbage()
     {
-        // Shut down the connection so the user can go about his or her business
+        // Shut down the connection so the user can go about their business
         $this->header('Connection: close');
         ignore_user_abort(true);
         flush();
@@ -1038,7 +1037,7 @@ class SLIR
      */
     private function renderedCacheFilename()
     {
-        return '/' . $this->getRendered()->getHash();
+        return '/' . $this->getRequest()->paramString . '/' . basename($this->getRequest()->path);
     }
 
     /**
@@ -1062,7 +1061,7 @@ class SLIR
      */
     private function requestCacheFilename()
     {
-        return '/' . hash('md4', $this->getHTTPHost() . '/' . $this->requestURI(array('token')) . '/' . SLIRConfig::$defaultCropper);
+        return $this->requestURI(array('token'));
     }
 
     /**
@@ -1085,6 +1084,7 @@ class SLIR
         }
 
         $parsedUrl = parse_url($url);
+
         $query = array();
         $remove = is_array($remove) ? $remove : (array)$remove;
 
@@ -1099,8 +1099,7 @@ class SLIR
         $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '/'.$img_dir;
         $query = !empty($query) ? '?'. http_build_query($query) : '';
 
-        return (isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '') .
-            (isset($parsedUrl['host']) ? $parsedUrl['host'] : ''). $path. $query;
+        return ihu . $path . $query;
     }
 
     /**
@@ -1200,7 +1199,8 @@ class SLIR
             }
         }
 
-        // Create the file
+        // Create the drectory and file
+        $this->initializeDirectory(dirname($cacheFilePath));
         if (!file_put_contents($cacheFilePath, $imageData)) {
             return false;
         }
@@ -1383,7 +1383,7 @@ class SLIR
     private function initializeDirectory($path, $verifyReadWriteability = true, $test = false)
     {
         if (!file_exists($path)) {
-            if (!@mkdir($path, 0755, true)) {
+            if (!mkdir($path, 0755, true)) {
                 $this->header('HTTP/1.1 500 Internal Server Error');
                 throw new \RuntimeException("Directory ($path) does not exist and was unable to be created. Please create the directory.");
             }

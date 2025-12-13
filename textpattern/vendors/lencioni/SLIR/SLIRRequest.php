@@ -125,6 +125,15 @@ class SLIRRequest
     private $request = null;
 
     /**
+     * The full paramstring extracted from the URL
+     *
+     * @since 2.0
+     * @var string
+     */
+    private $paramString = null;
+
+
+    /**
      * @since 2.0
      */
     final public function __construct($request = null)
@@ -338,8 +347,23 @@ class SLIRRequest
             return $this->getParametersFromURL();
         } else {
             // Using the query string version
+            $this->paramString = $this->reconstructParameters($_GET);
             return $_GET;
         }
+    }
+
+    /**
+     * [reconstructParameters description]
+     * @param  [type] $params [description]
+     * @return [type]         [description]
+     */
+    private function reconstructParameters($params)
+    {
+        unset($params['token'], $params['i']);
+
+        return implode('-', array_map(function($k, $v){
+            return "$k$v";
+        }, array_keys($params), array_values($params)));
     }
 
     /**
@@ -355,8 +379,7 @@ class SLIRRequest
         $params = array();
 
         // The parameters should be the first set of characters after the SLIR path
-        $request = preg_replace('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`', '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
-
+        $request = preg_replace(array('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`', '`cache\/rendered\/`'), '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
         $paramString  = strtok($request, '/');
 
         if ($paramString === false || $paramString === $request) {
@@ -376,6 +399,7 @@ Example usage:
         }
 
         // The image path should start right after the parameters
+        $this->paramString = $paramString;
         $params['i']  = substr($request, strlen($paramString) + 1); // +1 for the slash
 
         // The parameters are separated by hyphens

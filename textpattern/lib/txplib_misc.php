@@ -5368,9 +5368,9 @@ function imageBuildURL($img = array(), $thumbnail = null)
                 $params['token'] = $token;
             }
 
-            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.TEXTPATTERN_THUMB_DIR.'?'.http_build_query($params);
+            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.TEXTPATTERN_THUMB_DIR.'?'.http_build_query($params);
         } else {
-            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
+            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.$paramlist.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
         }
     } elseif ($thumbnail == THUMB_CUSTOM) {
         $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];

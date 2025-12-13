@@ -77,9 +77,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      */
     public function __destruct()
     {
-        unset(
-                $this->image
-        );
+        unset($this->image);
         return parent::__destruct();
     }
 
@@ -156,6 +154,10 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      */
     public function imagecreatefrombmp($path)
     {
+        if (function_exists('imagecreatefrombmp')) {
+            return imagecreatefrombmp($path);
+        }
+
         // Load the image into a string
         $read = file_get_contents($path);
 
@@ -195,25 +197,25 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         // Using a for-loop with index-calculation instaid of str_split to avoid large memory consumption
         // Calculate the next DWORD-position in the body
         for ($i = 0; $i < $bodySize; $i += 3) {
-                // Calculate line-ending and padding
-                if ($x >= $width) {
-                    // If padding needed, ignore image-padding
-                    // Shift i to the ending of the current 32-bit-block
-                    if ($usePadding) {
-                        $i += $width % 4;
-                    }
-
-                    // Reset horizontal position
-                    $x  = 0;
-
-                    // Raise the height-position (bottom-up)
-                    ++$y;
-
-                    // Reached the image-height? Break the for-loop
-                    if ($y > $height) {
-                        break;
-                    }
+            // Calculate line-ending and padding
+            if ($x >= $width) {
+                // If padding needed, ignore image-padding
+                // Shift i to the ending of the current 32-bit-block
+                if ($usePadding) {
+                    $i += $width % 4;
                 }
+
+                // Reset horizontal position
+                $x  = 0;
+
+                // Raise the height-position (bottom-up)
+                ++$y;
+
+                // Reached the image-height? Break the for-loop
+                if ($y > $height) {
+                    break;
+                }
+            }
 
             // Calculation of the RGB-pixel (defined as BGR in image-data)
             // Define $iPos as absolute position in the body

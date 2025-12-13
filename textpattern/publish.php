@@ -338,10 +338,11 @@ function preText($store, $prefs = null)
     extract($prefs);
 
     // Set messy variables.
-    $out += makeOut(array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'token', 'imgref'));
+    $out += makeOut(array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'token'));
     $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
+
     $title = null;
     $status = strpos($out['id'], '.') === false ? " AND Status IN (" . STATUS_LIVE . "," . STATUS_STICKY . ")" : '';
 
@@ -398,6 +399,8 @@ function preText($store, $prefs = null)
     // First we sniff out some of the preset URL schemes.
     extract($url);
 
+    $imgParts = explode('/', $img_dir);
+
     // If messy vars exist, bypass URL parsing.
     if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
         if ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
@@ -405,7 +408,6 @@ function preText($store, $prefs = null)
         } else {
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
-            $imgParts = explode('/', $img_dir);
 
             switch (strtolower($u1)) {
                 case 'atom':
@@ -448,20 +450,11 @@ function preText($store, $prefs = null)
                     break;
                     // AuthorID gets resolved from Name further down.
 
-                case 'file_download':
-                case urldecode(strtolower(urlencode(gTxt('file_download')))):
-                    $out['s'] = 'file_download';
-                    $out['id'] = (!empty($u2)) ? $u2 : '';
-                    $out['filename'] = (!empty($u3)) ? $u3 : '';
-                    break;
-
-                case $imgParts[0]:
+                case $imgParts[0] === $u1:
                     $matchImg = array_intersect($url, $imgParts);
                     $offset = substr_count($img_dir, '/') + 2;
 
                     if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-                        $out['imgref'] = TEXTPATTERN_THUMB_DIR;
-
                         if ($permlink_mode === 'messy') {
                             parse_str($out['qs'], $parts);
                             unset($parts['token']);
@@ -471,13 +464,22 @@ function preText($store, $prefs = null)
                                 return "$k$v";
                             }, array_keys($parts), array_values($parts)));
                         } else {
-                            $xform = ${'u' . ++$offset};
+                            $offset += 3; // Skip /thumb/cache/rendered
+                            $xform = ${'u' . $offset};
                             $imgfile = basename($u0);
                         }
 
                         output_thumb(array('param' => $xform, 'img' => $imgfile));
                         exit;
                     }
+
+                case 'file_download':
+                case urldecode(strtolower(urlencode(gTxt('file_download')))):
+                    $out['s'] = 'file_download';
+                    $out['id'] = (!empty($u2)) ? $u2 : '';
+                    $out['filename'] = (!empty($u3)) ? $u3 : '';
+                    break;
+
                 default:
                     $permlink_modes = array('default' => $permlink_mode) + array_column($txp_sections, 'permlink_mode', 'name');
                     $custom_modes = array_filter($permlink_modes, function ($v) use ($permlink_mode) {
@@ -699,6 +701,20 @@ function preText($store, $prefs = null)
             if ($status && !$publish_expired_articles && $uExpires && time() > $uExpires) {
                 $is_404 = '410';
             }
+        }
+    }
+
+    if ($is_404 && $imgParts[0] === $u1) {
+        $matchImg = array_intersect($url, $imgParts);
+        $offset = substr_count($img_dir, '/') + 2;
+
+        if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
+            $offset += 3; // Skip /thumb/cache/rendered
+            $xform = ${'u' . $offset};
+            $imgfile = basename($u0);
+
+            output_thumb(array('param' => $xform, 'img' => $imgfile));
+            exit;
         }
     }
 

@@ -88,7 +88,7 @@ class SLIRConfigDefaults
      * @since 2.0
      * @var boolean
      */
-    public static $enableRequestCache = true;
+    public static $enableRequestCache = false;
 
     /**
      * How much memory (in megabytes) SLIR is allowed to allocate for memory-intensive processes such as rendering and cropping.
@@ -96,7 +96,7 @@ class SLIRConfigDefaults
      * @since 2.0
      * @var integer
      */
-    public static $maxMemoryToAllocate  = 100;
+    public static $maxMemoryToAllocate  = 128;
 
     /**
      * Default crop mode setting to use if crop mode is not specified in the request.
