@@ -1255,7 +1255,7 @@ class SLIR
      */
     public function uncache()
     {
-        return $this->uncacheRequest()->uncacheRendered();
+        return $this->uncacheRendered();
     }
 
     /**

@@ -30,7 +30,6 @@
 use Textpattern\Validator\CategoryConstraint;
 use Textpattern\Validator\Validator;
 use Textpattern\Search\Filter;
-use lencioni\SLIR\SLIR;
 
 if (!defined('txpinterface')) {
     die('txpinterface is undefined.');
@@ -1270,9 +1269,6 @@ function image_delete($ids = array())
                 $rsd = safe_delete('txp_image', "id = '$id'");
                 $ul = false;
 
-                $slir = new SLIR(rhu.$img_dir.'/'.$id.$ext);
-                $slir->uncache();
-
                 if (is_file(IMPATH . $id . $ext)) {
                     $ul = unlink(realpath(IMPATH . $id . $ext));
                 }
@@ -1390,8 +1386,6 @@ function thumbnail_delete()
     }
 
     $rs = safe_row("id, ext", 'txp_image', "id = $id");
-    $slir = new SLIR(rhu.$img_dir.'/'.$rs['id'].$rs['ext']);
-    $slir->uncache();
 
     $t = new txp_thumb($id);
 
