@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Archive date format"><![CDATA[
 <h2>Archive date format</h2>
-<p>How dates will appear on articles in sections of your site.</p>
+<p>How dates will appear on articles on the front page of your site. The date format can be selected from the dropdown menu or configured using <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> syntax.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Show excerpt on article edit page?"><![CDATA[
 <h2>Show excerpt on article edit page?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Comments date format"><![CDATA[
 <h2>Comments date format</h2>
-<p>How comment dates will appear to your site visitors.</p>
+<p>How comment dates will appear to your site visitors. The date format can be selected from the dropdown menu or configured using <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> syntax.</p>
         ]]></item>
         <item id="comments_default_invite" title="Default comments invite"><![CDATA[
 <h2>Default comments invite</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Date format"><![CDATA[
 <h2>Date format</h2>
-<p>This option will affect how article dates appear on the front page of your site only.</p>
+<p>This option will affect how article dates appear on the front page of your site only. The date format can be selected from the dropdown menu or configured using <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> syntax.</p>
         ]]></item>
         <item id="default_event" title="Default panel"><![CDATA[
 <h2>Default panel</h2>
