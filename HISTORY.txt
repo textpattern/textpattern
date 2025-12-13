@@ -34,9 +34,9 @@ Changes in 4.9.0 (upcoming)
 * Added: Shift+Space shortcut for 'Tab' indent in textareas.
 * Added: Input length tooltip when appropriate.
 * Added: PHPMailer for third-party SMTP delivery. See Admin>Preferences>Mail.
+* Added: <txp:date /> tag.
 * Added: <txp:if_article_status /> tag.
 * Added: <txp:if_items_count /> tag.
-* Added: <txp:date /> tag.
 * Added: Global 'variable' attribute.
 * Added: Global 'offset' can be set by URL parameters.
 * Added: 'parent' attribute to <txp:category />.
@@ -69,12 +69,10 @@ Changes in 4.9.0 (upcoming)
 * Added: Support for aggregate window functions in compatible MySQL versions.
 * Added: metaWeblog.newMediaObject for image upload over the MovableType API
   (thanks, Melonking906).
-
 * Changed: Pending articles may be displayed on the site.
 * Changed: Theme page maximum size increased from 64KB to 16MB.
 * Changed: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
   Epochalypse/Year 2038 problem for info.
-
 * Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
