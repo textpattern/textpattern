@@ -5305,7 +5305,7 @@ function imagesrcurl($id, $ext, $thumbnail = false)
 
 function imageBuildURL($img = array(), $thumbnail = null)
 {
-    global $img_dir, $thisimage, $permlink_mode;
+    global $path_to_site, $img_dir, $thisimage;
 
     if (empty($img)) {
         $img = $thisimage;
@@ -5343,7 +5343,9 @@ function imageBuildURL($img = array(), $thumbnail = null)
             return "$k$v";
         }, array_keys($params), array_values($params)));
 
-        if ($sec_mode === 'always') {
+        $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.$paramlist.'/'.$img['id'].$img['ext'];
+
+        if (!file_exists($path_to_site.'/'.$base) && $sec_mode === 'always') {
             // Need to use some unique visitor identifier so two requests for the same resource
             // don't overwrite each others' token.
             session_start();
@@ -5357,21 +5359,17 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $ref = substr(hexdec(hash('crc32c', $hash_url)), 0, 8);
             $txpToken = \Txp::get('\Textpattern\Security\Token');
 
-            $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
-            $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
-        }
-
-        if (false/*$permlink_mode === 'messy'*/) {
-            $params['i'] = $img['id'].$img['ext'];
-
-            if (!empty($token)) {
-                $params['token'] = $token;
+            if ($exists = $txpToken->fetch('image_verify', array('ref' => $ref))) {
+                $token = $exists['token'].$exists['selector'];
+            } else {
+                $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
+                $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
             }
 
-            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.TEXTPATTERN_THUMB_DIR.'?'.http_build_query($params);
-        } else {
-            $base = ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.$paramlist.'/'.$img['id'].$img['ext'].(!empty($token) ? '?token='.$token : '');
+            $base .= (!empty($token) ? '?token='.$token : '');
         }
+
+        $base = ihu.$base;
     } elseif ($thumbnail == THUMB_CUSTOM) {
         $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];
     } elseif ($thumbnail === THUMB_NONE) {

@@ -195,18 +195,40 @@ class Token implements \Textpattern\Container\ReusableInterface
     /**
      * Return the given token by its type and selector.
      *
-     * @param  string $type     The type of token
-     * @param  string $selector The selector to locate the token row
-     * @return array            The relevant fields from the found row, or empty array if not found
+     * @param  string       $type  The type of token
+     * @param  string|array $match The selector/ref to locate the token row
+     * @return array               The relevant fields from the found row, or empty array if not found
      */
 
-    public function fetch($type, $selector)
+    public function fetch($type, $match)
     {
-        return safe_row(
-            "reference_id, token, expires",
-            'txp_token',
-            "selector = '".doSlash($selector)."' AND type='".doSlash($type)."'"
-        );
+        if (is_array($match)) {
+            $selector = !empty($match['selector']) ? $match['selector'] : '';
+            $ref = !empty($match['ref']) ? $match['ref'] : '';
+        } else {
+            $selector = $match;
+            $ref = '';
+        }
+
+        $set = array();
+
+        if ($selector) {
+            $set[] = "selector = '".doSlash($selector)."'";
+        }
+
+        if ($ref) {
+            $set[] = "reference_id = '".doSlash($ref)."'";
+        }
+
+        if (count($set) > 0) {
+            return safe_row(
+                "reference_id, selector, token, expires",
+                'txp_token',
+                (join(' AND ', $set)) . " AND type='".doSlash($type)."'"
+            );
+        }
+
+        return array();
     }
 
     /**

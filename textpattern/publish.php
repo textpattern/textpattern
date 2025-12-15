@@ -455,18 +455,8 @@ function preText($store, $prefs = null)
                     $offset = substr_count($img_dir, '/') + 2;
 
                     if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-                        if (false/*$permlink_mode === 'messy'*/) {
-                            parse_str($out['qs'], $parts);
-                            unset($parts['token']);
-                            $imgfile = basename($parts['i']);
-                            unset($parts['i']);
-                            $xform = implode('-', array_map(function($k, $v){
-                                return "$k$v";
-                            }, array_keys($parts), array_values($parts)));
-                        } else {
-                            $xform = ${'u' . ($out[0] - 1)};
-                            $imgfile = $un;//basename($u0);
-                        }
+                        $xform = ${'u' . ($out[0] - 1)};
+                        $imgfile = $un;//basename($u0);
 
                         output_thumb(array('param' => $xform, 'img' => $imgfile));
                         exit;
