@@ -2116,7 +2116,7 @@ function article_image($atts)
                 }
 
                 $w = $isAuto ? $payload['w'] : ($width == '' ? ($isCustom && $thumb_w ? $thumb_w : $w) : $width);
-                $h = $isAuto ? $payload['h'] : ($height == '' ? ($thumbnail && $thumb_h ? $thumb_h : $h): $height);
+                $h = $isAuto ? $payload['h'] : ($height == '' ? ($isCustom && $thumb_h ? $thumb_h : $h): $height);
                 $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
 
                 if ($title === true) {
