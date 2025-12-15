@@ -394,7 +394,7 @@ Available parameters:
  p = Progressive (0 or 1)
 
 Example usage:
-/slir/w300-h300-c1.1/path/to/image.jpg');
+/images/thumb/w300-h300-c1.1/42.jpg');
 
         }
 
