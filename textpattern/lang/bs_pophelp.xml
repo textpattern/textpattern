@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Format datuma arhive"><![CDATA[
 <h2>Format datuma arhive</h2>
-<p>Način na koji će datumi biti prikazani na člancima u sekcijama vašeg sajta.</p>
+<p>Kako će se datumi prikazivati na člancima u odjeljcima vaše stranice. Format datuma se može odabrati iz padajućeg izbornika ili podesiti pomoću sintakse <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Prikazati sažetak na stranici za uređivanje članka?"><![CDATA[
 <h2>Prikazati sažetak na stranici za uređivanje članka?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Oblik datuma komentara"><![CDATA[
 <h2>Format datuma komentara</h2>
-<p>Način na koji će datumi komentara biti prikazani posjetiocima vašeg sajta.</p>
+<p>Kako će se datumi komentara prikazivati posjetiocima vaše stranice. Format datuma se može odabrati iz padajućeg izbornika ili podesiti pomoću sintakse <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Podrazumijevani poziv za komentare"><![CDATA[
 <h2>Podrazumijevani poziv za komentare</h2>
@@ -710,7 +710,7 @@ Ako je šablon formulara potrebno obraditi (ako sadrži Textpattern oznake), mor
         ]]></item>
         <item id="dateformat" title="Format datuma"><![CDATA[
 <h2>Format datuma</h2>
-<p>Ova opcija utiče samo na to kako će datumi članaka biti prikazani na naslovnoj stranici vašeg sajta.</p>
+<p>Kako će se datumi prikazivati na člancima na naslovnici vaše stranice. Format datuma se može odabrati iz padajućeg izbornika ili podesiti pomoću sintakse <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Podrazumijevani panel"><![CDATA[
 <h2>Podrazumijevani panel</h2>

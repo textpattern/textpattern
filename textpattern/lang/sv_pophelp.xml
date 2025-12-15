@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Datumformat för arkiv"><![CDATA[
 <h2>Datumformat för arkiv</h2>
-<p>Hur datum ska visas på artiklar i sektioner på din webbplats.</p>
+<p>Hur datum visas på artiklar i avsnitt på din webbplats. Datumformatet kan väljas från rullgardinsmenyn eller konfigureras med syntaxen för <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Visa utdrag på sidan för artikelredigering?"><![CDATA[
 <h2>Visa utdrag på sidan för artikelredigering?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Datumformat för kommentarer"><![CDATA[
 <h2>Datumformat för kommentarer</h2>
-<p>Hur datum för kommentarer ska visas för dina webbplatsbesökare.</p>
+<p>Hur kommentarsdatum visas för besökare på din webbplats. Datumformatet kan väljas från rullgardinsmenyn eller konfigureras med syntaxen för <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Förvald kommentarsinbjudan"><![CDATA[
 <h2>Standardrubrik för kommentarer</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Datumformat"><![CDATA[
 <h2>Datumformat</h2>
-<p>Detta alternativ påverkar endast hur artikeldatum visas på webbplatsens startsida.</p>
+<p>Hur datum visas på artiklar på startsidan för din webbplats. Datumformatet kan väljas från rullgardinsmenyn eller konfigureras med syntaxen för <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Förvald panel"><![CDATA[
 <h2>Förvald panel</h2>

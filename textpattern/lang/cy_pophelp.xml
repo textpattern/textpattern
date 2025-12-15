@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Fformat dyddiad archif"><![CDATA[
 <h2>Fformat dyddiad archif</h2>
-<p>Sut y bydd dyddiadau’n ymddangos ar erthyglau mewn adrannau o’ch safle.</p>
+<p>Sut y bydd dyddiadau yn ymddangos ar erthyglau mewn adrannau o’ch safle. Gellir dewis y fformat dyddiad o’r ddewislen ostwng neu ei ffurfweddu gan ddefnyddio cystrawen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Dangos dyfyniad ar dudalen golygu erthygl?"><![CDATA[
 <h2>Dangos dyfyniad ar dudalen golygu erthygl?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Fformat dyddiad sylwadau"><![CDATA[
 <h2>Fformat dyddiad sylwadau</h2>
-<p>Sut y bydd dyddiadau sylwadau yn ymddangos i ymwelwyr â’ch safle.</p>
+<p>Sut y bydd dyddiadau sylwadau yn ymddangos i ymwelwyr â’ch safle. Gellir dewis y fformat dyddiad o’r ddewislen ostwng neu ei ffurfweddu gan ddefnyddio cystrawen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Gwahoddiad sylwadau rhagosodedig"><![CDATA[
 <h2>Gwahoddiad sylwadau rhagosodedig</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Fformat dyddiad"><![CDATA[
 <h2>Fformat dyddiad</h2>
-<p>Bydd yr opsiwn hwn yn effeithio ar sut y bydd dyddiadau erthygl yn ymddangos ar dudalen flaen eich safle yn unig.</p>
+<p>Sut y bydd dyddiadau yn ymddangos ar erthyglau ar brif dudalen eich safle. Gellir dewis y fformat dyddiad o’r ddewislen ostwng neu ei ffurfweddu gan ddefnyddio cystrawen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Panel rhagosodedig"><![CDATA[
 <h2>Panel rhagosodedig</h2>

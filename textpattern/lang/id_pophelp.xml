@@ -575,7 +575,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Format tanggal arsip"><![CDATA[
 <h2>Format tanggal arsip</h2>
-<p>Bagaimana tanggal akan muncul di artikel di seksi situs Anda.</p>
+<p>Bagaimana tanggal akan ditampilkan pada artikel di bagian-bagian situs Anda. Format tanggal dapat dipilih dari menu tarik-turun atau dikonfigurasi menggunakan sintaks <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Tampilkan ringkasan di halaman sunting artikel?"><![CDATA[
 <h2>Tampilkan ringkasan di halaman sunting artikel?</h2>
@@ -611,7 +611,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Format tanggal komentar"><![CDATA[
 <h2>Format tanggal komentar</h2>
-<p>Cara tanggal komentar akan muncul bagi pengunjung situs Anda.</p>
+<p>Bagaimana tanggal komentar akan ditampilkan kepada pengunjung situs Anda. Format tanggal dapat dipilih dari menu tarik-turun atau dikonfigurasi menggunakan sintaks <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Undangan komentar bawaan"><![CDATA[
 <h2>Ajakan komentar bawaan</h2>
@@ -702,7 +702,7 @@ Jika sebuah templat formulir perlu diproses (misalnya berisi tag Textpattern), A
         ]]></item>
         <item id="dateformat" title="Format tanggal"><![CDATA[
 <h2>Format tanggal</h2>
-<p>Opsi ini hanya akan memengaruhi bagaimana tanggal artikel muncul di halaman depan situs Anda.</p>
+<p>Bagaimana tanggal akan ditampilkan pada artikel di halaman depan situs Anda. Format tanggal dapat dipilih dari menu tarik-turun atau dikonfigurasi menggunakan sintaks <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Panel bawaan"><![CDATA[
 <h2>Panel bawaan</h2>

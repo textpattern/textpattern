@@ -581,8 +581,8 @@
 <p>PHP コードでは、PHP の開始・終了タグを省略し、さらに <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> タグ <span class="ui-icon ui-icon-extlink">(新しいウィンドウで外部リンクを開きます)</span></a> で囲む必要があります。</p>
         ]]></item>
         <item id="archive_dateformat" title="アーカイブの日付フォーマット"><![CDATA[
-<h2>アーカイブの日付フォーマット</h2>
-<p>サイト内のセクションにある記事の日付の表示形式です。</p>
+<h2>アーカイブの日付形式</h2>
+<p>サイト内の各セクションの記事に表示される日付の形式を指定します。日付形式はドロップダウンメニューから選択するか、<a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP の <code>strftime()</code></a> 構文を使って設定できます。</p>
         ]]></item>
         <item id="articles_use_excerpts" title="記事編集ページで抜粋を表示しますか？"><![CDATA[
 <h2>記事編集ページで抜粋を表示しますか？</h2>
@@ -618,8 +618,8 @@
 <p>記事内でコメントが重複表示されている場合は、テンプレート内に <code>&lt;txp:comments /&gt;</code> タグが含まれているのに加え、「記事へ自動的にコメントを付けますか？」が「はい」に設定されている可能性が高いです。</p>
         ]]></item>
         <item id="comments_dateformat" title="コメントの日付フォーマット"><![CDATA[
-<h2>コメントの日付フォーマット</h2>
-<p>サイト訪問者に表示されるコメントの日付形式です。</p>
+<h2>コメントの日付形式</h2>
+<p>サイト訪問者に表示されるコメントの日付の形式を指定します。日付形式はドロップダウンメニューから選択するか、<a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP の <code>strftime()</code></a> 構文を使って設定できます。</p>
         ]]></item>
         <item id="comments_default_invite" title="形式の初期設定"><![CDATA[
 <h2>コメント招待文のデフォルト</h2>
@@ -709,8 +709,8 @@
 </ul>
         ]]></item>
         <item id="dateformat" title="日付フォーマット"><![CDATA[
-<h2>日付フォーマット</h2>
-<p>このオプションは、サイトのトップページに表示される記事の日付形式にのみ影響します。</p>
+<h2>日付形式</h2>
+<p>サイトのフロントページに表示される記事の日付の形式を指定します。日付形式はドロップダウンメニューから選択するか、<a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP の <code>strftime()</code></a> 構文を使って設定できます。</p>
         ]]></item>
         <item id="default_event" title="ログイン後の初期画面"><![CDATA[
 <h2>ログイン後の初期画面</h2>

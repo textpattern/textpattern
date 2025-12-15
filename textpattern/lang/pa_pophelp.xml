@@ -581,8 +581,8 @@
 <p>PHP ਕੋਡ ਵਿੱਚ opening ਅਤੇ closing PHP–ਟੈਗਾਂ ਨੂੰ ਛੱਡਣਾ ਲਾਜ਼ਮੀ ਹੈ ਅਤੇ ਇਸਨੂੰ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> ਟੈਗਾਂ <span class="ui-icon ui-icon-extlink">(ਨਵੇਂ ਵਿੰਡੋ ਵਿੱਚ ਬਾਹਰੀ ਲਿੰਕ ਖੋਲ੍ਹਦਾ ਹੈ)</span></a> ਦੇ ਅੰਦਰ enclosure ਕਰਨਾ ਲਾਜ਼ਮੀ ਹੈ।</p>
         ]]></item>
         <item id="archive_dateformat" title="ਆਰਕਾਈਵ ਮਿਤੀ–ਫਾਰਮੈਟ"><![CDATA[
-<h2>ਆਰਕਾਈਵ ਮਿਤੀ–ਫਾਰਮੈਟ</h2>
-<p>ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਸੈਕਸ਼ਨਾਂ ਵਿੱਚ ਲੇਖਾਂ ‘ਤੇ ਮਿਤੀਆਂ ਕਿਵੇਂ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।</p>
+<h2>ਆਰਕਾਈਵ ਮਿਤੀ ਫਾਰਮੈਟ</h2>
+<p>ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਸੈਕਸ਼ਨਾਂ ਵਿੱਚ ਲੇਖਾਂ ‘ਤੇ ਮਿਤੀਆਂ ਕਿਵੇਂ ਦਿਖਾਈ ਦੇਣਗੀਆਂ। ਮਿਤੀ ਦਾ ਫਾਰਮੈਟ ਡਰੌਪਡਾਊਨ ਮੀਨੂ ‘ਚੋਂ ਚੁਣਿਆ ਜਾ ਸਕਦਾ ਹੈ ਜਾਂ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> ਸਿੰਟੈਕਸ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਸੰਰਚਿਤ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।</p>
         ]]></item>
         <item id="articles_use_excerpts" title="ਲੇਖ ਸੋਧ–ਸਫ਼ੇ ‘ਤੇ ਐਕਸਰਪਟ ਦਿਖਾਉਣਾ ਹੈ?"><![CDATA[
 <h2>ਲੇਖ ਸੋਧ–ਸਫ਼ੇ ‘ਤੇ ਐਕਸਰਪਟ ਦਿਖਾਉਣਾ ਹੈ?</h2>
@@ -618,8 +618,8 @@
 <p>ਜੇਕਰ ਤੁਹਾਡੇ ਕਿਸੇ ਲੇਖ ਵਿੱਚ ਟਿੱਪਣੀਆਂ ਦੋਹਰੇ ਤੌਰ ‘ਤੇ ਦਿਖ ਰਹੀਆਂ ਹਨ, ਤਾਂ ਸਭ ਤੋਂ ਵੱਧ ਸੰਭਾਵਨਾ ਇਹ ਹੈ ਕਿ ਤੁਹਾਡੇ ਟੈਂਪਲੇਟਾਂ ਵਿੱਚ <code>&lt;txp:comments /&gt;</code> ਟੈਗ ਮੌਜੂਦ ਹੈ ਅਤੇ ‘ਟਿੱਪਣੀਆਂ ਆਪਣੇ–ਆਪ ਲੇਖਾਂ ਨਾਲ ਜੋੜਨੀਆਂ ਹਨ?’ ਵੀ ‘Yes’ ‘ਤੇ ਸੈੱਟ ਹੈ।</p>
         ]]></item>
         <item id="comments_dateformat" title="ਟਿੱਪਣੀ ਮਿਤੀ–ਫਾਰਮੈਟ"><![CDATA[
-<h2>ਟਿੱਪਣੀ ਮਿਤੀ–ਫਾਰਮੈਟ</h2>
-<p>ਟਿੱਪਣੀ ਦੀਆਂ ਮਿਤੀਆਂ ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਵਿਜ਼ਟਰਾਂ ਨੂੰ ਕਿਵੇਂ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।</p>
+<h2>ਟਿੱਪਣੀਆਂ ਦੀ ਮਿਤੀ ਦਾ ਫਾਰਮੈਟ</h2>
+<p>ਟਿੱਪਣੀਆਂ ਦੀਆਂ ਮਿਤੀਆਂ ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਵਿਜ਼ਟਰਾਂ ਨੂੰ ਕਿਵੇਂ ਦਿਖਾਈ ਦੇਣਗੀਆਂ। ਮਿਤੀ ਦਾ ਫਾਰਮੈਟ ਡਰੌਪਡਾਊਨ ਮੀਨੂ ‘ਚੋਂ ਚੁਣਿਆ ਜਾ ਸਕਦਾ ਹੈ ਜਾਂ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> ਸਿੰਟੈਕਸ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਸੰਰਚਿਤ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।</p>
         ]]></item>
         <item id="comments_default_invite" title="ਡਿਫ਼ਾਲਟ ਟਿੱਪਣੀ ਸੱਦਾ–ਪਾਠ"><![CDATA[
 <h2>ਡਿਫ਼ਾਲਟ ਟਿੱਪਣੀ ਸੱਦਾ–ਪਾਠ</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="ਮਿਤੀ–ਫਾਰਮੈਟ"><![CDATA[
-<h2>ਮਿਤੀ–ਫਾਰਮੈਟ</h2>
-<p>ਇਹ ਵਿਕਲਪ ਸਿਰਫ਼ ਇਹ ਨਿਰਧਾਰਤ ਕਰੇਗੀ ਕਿ ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਮੁੱਖ–ਸਫ਼ੇ ‘ਤੇ ਲੇਖਾਂ ਦੀਆਂ ਮਿਤੀਆਂ ਕਿਵੇਂ ਦਿਖਾਈਆਂ ਜਾਣਗੀਆਂ।</p>
+<h2>ਮਿਤੀ ਦਾ ਫਾਰਮੈਟ</h2>
+<p>ਤੁਹਾਡੀ ਸਾਈਟ ਦੇ ਫਰੰਟ ਪੇਜ ‘ਤੇ ਲੇਖਾਂ ‘ਤੇ ਮਿਤੀਆਂ ਕਿਵੇਂ ਦਿਖਾਈ ਦੇਣਗੀਆਂ। ਮਿਤੀ ਦਾ ਫਾਰਮੈਟ ਡਰੌਪਡਾਊਨ ਮੀਨੂ ‘ਚੋਂ ਚੁਣਿਆ ਜਾ ਸਕਦਾ ਹੈ ਜਾਂ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> ਸਿੰਟੈਕਸ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਸੰਰਚਿਤ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ।</p>
         ]]></item>
         <item id="default_event" title="ਡਿਫ਼ਾਲਟ ਪੈਨਲ"><![CDATA[
 <h2>ਡਿਫ਼ਾਲਟ ਪੈਨਲ</h2>

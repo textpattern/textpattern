@@ -549,8 +549,10 @@
 <p><strong>Es wird dringend empfohlen, diese Option zu deaktivieren</strong>, sofern Sie diese Funktion nicht unbedingt benötigen. Jeder beliebige, potenziell schädliche/gefährliche PHP-Code, der Ihre Website zerstören oder Informationen an Dritte weitergeben könnte, kann von einem anderen Benutzer hinzugefügt und von einem ahnungslosen Administrator oder Website-Besucher ausgeführt werden.</p>
 <p>PHP-Code darf keine einleitenden oder abschließenden PHP-Tags enthalten und muss in <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-Tags <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> eingeschlossen werden.</p>
         ]]></item>
-        <item id="archive_dateformat" title="Archivdatumsformat"><![CDATA[<h2>Das Archiv-Datumsformat</h2>
-<p>Wie Datumsangaben in den Artikeln in den Abschnitten Ihrer Website anzeigt werden.</p>]]></item>
+        <item id="archive_dateformat" title="Archivdatumsformat"><![CDATA[
+<h2>Archiv-Datumsformat</h2>
+<p>Wie Datumsangaben in Artikeln in den Archivbereichen Ihrer Website angezeigt werden. Das Datumsformat kann aus dem Dropdown-Menü ausgewählt oder mit der <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP-<code>strftime()</code></a>-Syntax konfiguriert werden.</p>
+        ]]></item>
         <item id="articles_use_excerpts" title="Auszug auf Artikelbearbeitungsseite anzeigen?"><![CDATA[
 <h2>Auszug auf Artikelbearbeitungsseite anzeigen?</h2>
 <p>Wenn Sie "Nein" wählen, wird das Exzerptfeld dem Autor im Bearbeitungsfenster des Artikels nicht angezeigt.</p>
@@ -574,8 +576,8 @@
 <p>In den meisten Fällen werden Sie diese Einstellung auf „Nein“ setzen wollen, da dies eine größere Flexibilität beim Anordnen der Kommentare in Ihrem Website-Design ermöglicht. Sie müssen das <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/comments"><code>&lt;txp:comments /&gt;</code>-Tag <span class="ui-icon ui-icon-extlink">(öffnet einen externen Link in einem neuen Fenster)</span></a> manuell in alle artikelbasierten Vorlagen einfügen, in denen Kommentare erscheinen sollen.</p>
 <p>Wenn Sie Doppelungen von Kommentaren in einem Artikel vorfinden, ist es sehr wahrscheinlich, dass Ihre Vorlagen das <code>&lt;txp:comments /&gt;</code>-Tag in einer Vorlage enthalten, aber auch die Option „Kommentare automatisch an Artikel anhängen“ auf „Ja“ steht.</p>]]></item>
         <item id="comments_dateformat" title="Datumsformat bei Kommentaren"><![CDATA[
-<h2>Datumsformat bei Kommentaren</h2>
-<p>Wie die Kommentardaten für die Besucher der Website angezeigt werden.</p>
+<h2>Datumsformat für Kommentare</h2>
+<p>Wie Kommentardaten Ihren Website-Besuchern angezeigt werden. Das Datumsformat kann aus dem Dropdown-Menü ausgewählt oder mit der <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP-<code>strftime()</code></a>-Syntax konfiguriert werden.</p>
         ]]></item>
         <item id="comments_default_invite" title="Standardeinladung für Kommentare"><![CDATA[<h2>Standardeinladung für Kommentare</h2>
 <p>Wenn Sie Besuchern erlauben, auf Ihrer Website zu kommentieren, ist dies der Standardeinladungstext. Zum Beispiel:</p>
@@ -650,7 +652,7 @@
         ]]></item>
         <item id="dateformat" title="Datumsformat"><![CDATA[
 <h2>Datumsformat</h2>
-<p>Diese Option wirkt sich nur darauf aus, wie das Artikeldatum auf der Startseite Ihrer Website angezeigt wird.</p>
+<p>Wie Datumsangaben in Artikeln auf der Startseite Ihrer Website angezeigt werden. Das Datumsformat kann aus dem Dropdown-Menü ausgewählt oder mit der <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP-<code>strftime()</code></a>-Syntax konfiguriert werden.</p>
         ]]></item>
         <item id="default_event" title="Standard-Fenster"><![CDATA[
 <h2>Standard-Fenster</h2>

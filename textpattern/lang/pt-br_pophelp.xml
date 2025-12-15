@@ -581,8 +581,8 @@
 <p>O código PHP deve omitir as tags de abertura e fechamento de PHP e também deve ficar dentro de tags <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(abre um link externo em uma nova janela)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Formato de data no arquivo"><![CDATA[
-<h2>Formato de data de arquivo</h2>
-<p>Como as datas aparecerão nos artigos em seções do seu site.</p>
+<h2>Formato de data do arquivo</h2>
+<p>Como as datas vão aparecer nos artigos em seções do seu site. O formato de data pode ser selecionado no menu suspenso ou configurado usando a sintaxe do <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Mostrar resumo na página de edição do artigo?"><![CDATA[
 <h2>Mostrar resumo na página de edição do artigo?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Formato de data para os comentários"><![CDATA[
 <h2>Formato de data dos comentários</h2>
-<p>Como as datas dos comentários aparecerão para os visitantes do seu site.</p>
+<p>Como as datas dos comentários vão aparecer para os visitantes do seu site. O formato de data pode ser selecionado no menu suspenso ou configurado usando a sintaxe do <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Convite padrão para comentários"><![CDATA[
 <h2>Convite padrão para comentários</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Formato de data"><![CDATA[
 <h2>Formato de data</h2>
-<p>Esta opção afetará apenas como as datas dos artigos aparecem na página inicial do seu site.</p>
+<p>Como as datas vão aparecer nos artigos na página inicial do seu site. O formato de data pode ser selecionado no menu suspenso ou configurado usando a sintaxe do <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Painel padrão"><![CDATA[
 <h2>Painel padrão</h2>

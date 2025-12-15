@@ -575,8 +575,8 @@
 <p>Le code PHP doit être fourni sans les balises ouvrantes et fermantes PHP et doit être inclus dans des balises <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(ouvre le lien externe dans une nouvelle fenêtre)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Format de la date des archives"><![CDATA[
-<h2>Format de la date des archives</h2>
-<p>Définit l’aspect des dates pour les articles dans les sections de votre site.</p>
+<h2>Format de date des archives</h2>
+<p>Détermine la façon dont les dates apparaîtront sur les articles dans les sections de votre site. Le format de date peut être sélectionné dans le menu déroulant ou configuré à l’aide de la syntaxe <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Afficher le résumé sur la page d'édition d'article ?"><![CDATA[
 <h2>Afficher le résumé sur la page de modification des articles ?</h2>
@@ -612,8 +612,8 @@
 <p>Si vous constatez un double affichage des commentaires dans un article, il est probable que la balise <code>&lt;txp:comments /&gt;</code> soit présente dans votre modèle et que le paramètre «Ajout automatique des commentaires après un article ?» soit réglé sur «Oui» également.</p>
         ]]></item>
         <item id="comments_dateformat" title="Format de la date des commentaires"><![CDATA[
-<h2>Format de la date des commentaires</h2>
-<p>Contrôle la présentation de la date des commentaires sur votre site public.</p>
+<h2>Format de date des commentaires</h2>
+<p>Détermine la façon dont les dates des commentaires apparaîtront aux visiteurs de votre site. Le format de date peut être sélectionné dans le menu déroulant ou configuré à l’aide de la syntaxe <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Phrase – par défaut – d’invitation à poster"><![CDATA[
 <h2>Phrase – par défaut – d’invitation à poster</h2>
@@ -701,8 +701,8 @@
 </ul>
         ]]></item>
         <item id="dateformat" title="Format de la date"><![CDATA[
-<h2>Format de la date</h2>
-<p>Cette option affecte uniquement la façon dont les dates des articles apparaissent sur la partie publique de votre site.</p>
+<h2>Format de date</h2>
+<p>Détermine la façon dont les dates apparaîtront sur les articles en page d’accueil de votre site. Le format de date peut être sélectionné dans le menu déroulant ou configuré à l’aide de la syntaxe <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Onglet actif par défaut"><![CDATA[
 <h2>Onglet actif par défaut</h2>

@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Archyvo datos formatas"><![CDATA[
 <h2>Archyvo datos formatas</h2>
-<p>Kaip datos bus rodomos straipsniuose jūsų svetainės skiltyse.</p>
+<p>Kaip straipsnių datos bus rodomos jūsų svetainės skirsnių straipsniuose. Datos formatą galima pasirinkti iš išskleidžiamojo meniu arba sukonfigūruoti, naudojant <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksę.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Rodyti ištrauką straipsnio redagavimo puslapyje?"><![CDATA[
 <h2>Rodyti ištrauką straipsnio redagavimo puslapyje?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Komentarų datos formatas"><![CDATA[
 <h2>Komentarų datos formatas</h2>
-<p>Kaip komentarų datos bus rodomos jūsų svetainės lankytojams.</p>
+<p>Kaip komentarų datos bus rodomos jūsų svetainės lankytojams. Datos formatą galima pasirinkti iš išskleidžiamojo meniu arba sukonfigūruoti, naudojant <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksę.</p>
         ]]></item>
         <item id="comments_default_invite" title="Numatytasis pakvietimas"><![CDATA[
 <h2>Numatytasis pakvietimas komentuoti</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Datos formatas"><![CDATA[
 <h2>Datos formatas</h2>
-<p>Ši parinktis paveiks tik tai, kaip straipsnių datos bus rodomos jūsų svetainės pradžios puslapyje.</p>
+<p>Kaip datos bus rodomos straipsniuose jūsų svetainės pradiniame puslapyje. Datos formatą galima pasirinkti iš išskleidžiamojo meniu arba sukonfigūruoti, naudojant <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksę.</p>
         ]]></item>
         <item id="default_event" title="Numatytasis skydelis"><![CDATA[
 <h2>Numatytasis skydelis</h2>

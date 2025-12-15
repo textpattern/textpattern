@@ -578,8 +578,8 @@
 <p>PHP-koodista on jätettävä pois PHP:n avaus- ja lopetustagit, ja se on lisäksi suljettava <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tagien <span class="ui-icon ui-icon-extlink">(avautuu uuteen ikkunaan ulkoiselle sivulle)</span></a> sisään.</p>
         ]]></item>
         <item id="archive_dateformat" title="Arkiston päiväysmuoto"><![CDATA[
-<h2>Arkistopäivämäärän muoto</h2>
-<p>Määrittää, missä muodossa päivämäärät näytetään artikkeleissa sivustosi osioissa.</p>
+<h2>Arkiston päivämäärän muoto</h2>
+<p>Määrittää, miten päivämäärät näkyvät sivustosi osioiden artikkeleissa. Päivämäärän muoto voidaan valita avattavasta valikosta tai määrittää käyttäen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP:n <code>strftime()</code></a>-syntaksia.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Näytä johdanto artikkelin muokkaussivulla?"><![CDATA[
 <h2>Näytä johdanto artikkelin muokkaussivulla?</h2>
@@ -615,8 +615,8 @@
 <p>Jos artikkeleissa näkyy kommentit kahteen kertaan, syynä on yleensä se, että sivupohjassasi on jo <code>&lt;txp:comments /&gt;</code>-tagi, ja lisäksi asetus ”Lisätäänkö kommentit automaattisesti artikkeleihin?” on asetettu arvoon ”Kyllä”.</p>
         ]]></item>
         <item id="comments_dateformat" title="Kommenttien päiväysmuoto"><![CDATA[
-<h2>Kommenttien päiväyksen muoto</h2>
-<p>Määrittää, missä muodossa kommenttien päivämäärät näytetään sivuston kävijöille.</p>
+<h2>Kommenttien päivämäärän muoto</h2>
+<p>Määrittää, miten kommenttien päivämäärät näkyvät sivustosi kävijöille. Päivämäärän muoto voidaan valita avattavasta valikosta tai määrittää käyttäen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP:n <code>strftime()</code></a>-syntaksia.</p>
         ]]></item>
         <item id="comments_default_invite" title="Kommenttien oletuskehoite"><![CDATA[
 <h2>Kommenttikutsun oletusteksti</h2>
@@ -705,8 +705,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="Päiväyksen muoto"><![CDATA[
-<h2>Päiväyksen muoto</h2>
-<p>Tämä asetus vaikuttaa siihen, miten artikkelien päivämäärät näytetään vain sivustosi etusivulla.</p>
+<h2>Päivämäärän muoto</h2>
+<p>Määrittää, miten päivämäärät näkyvät sivustosi etusivun artikkeleissa. Päivämäärän muoto voidaan valita avattavasta valikosta tai määrittää käyttäen <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP:n <code>strftime()</code></a>-syntaksia.</p>
         ]]></item>
         <item id="default_event" title="Oletushallintasivu"><![CDATA[
 <h2>Oletushallintasivu</h2>

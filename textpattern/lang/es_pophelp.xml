@@ -562,7 +562,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Formato de fecha de archivo"><![CDATA[
 <h2>Formato de fecha de archivo</h2>
-<p>Cómo aparecerán las fechas en los artículos de las secciones de tu sitio.</p>
+<p>Cómo aparecerán las fechas en los artículos de las secciones de tu sitio. El formato de fecha se puede seleccionar en el menú desplegable o configurar mediante la sintaxis de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="¿Mostrar extracto en la página de edición de artículos?"><![CDATA[
 <h2>¿Usar resúmenes en los artículos?</h2>
@@ -598,8 +598,8 @@
 <p>Si los comentarios se muestran duplicados en un artículo,  es posible que sus plantillas tengan la etiqueta <code>&lt;txp:comments /&gt;</code> en una plantilla y '¿Adjuntar comentarios automáticamente a los artículos? configurado como "Sí" también.</p>
         ]]></item>
         <item id="comments_dateformat" title="Formato de fecha para comentarios"><![CDATA[
-<h2>Formato de fecha para comentarios</h2>
-<p>Cómo aparecerán las fechas de los comentarios a los visitantes de tu sitio.</p>
+<h2>Formato de fecha de comentarios</h2>
+<p>Cómo aparecerán las fechas de los comentarios a los visitantes de tu sitio. El formato de fecha se puede seleccionar en el menú desplegable o configurar mediante la sintaxis de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Invitación a comentar por defecto"><![CDATA[
 <h2>Invitación a comentar por defecto</h2>
@@ -690,7 +690,7 @@
         ]]></item>
         <item id="dateformat" title="Formato de fecha"><![CDATA[
 <h2>Formato de fecha</h2>
-<p>Esta opción afectará solo a cómo aparecen las fechas de los artículos en la página principal de tu sitio.</p>
+<p>Cómo aparecerán las fechas en los artículos de la página principal de tu sitio. El formato de fecha se puede seleccionar en el menú desplegable o configurar mediante la sintaxis de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Panel predeterminado"><![CDATA[
 <h2>Panel predeterminado</h2>

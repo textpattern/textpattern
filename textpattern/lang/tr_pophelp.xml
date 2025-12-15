@@ -581,7 +581,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Arşiv tarih biçimi"><![CDATA[
 <h2>Arşiv tarih biçimi</h2>
-<p>Sitenizdeki bölümlerde makaleler üzerindeki tarihlerin nasıl görüneceğini belirler.</p>
+<p>Site bölümlerinizdeki makalelerde tarihlerinin nasıl görüneceği. Tarih biçimi, açılır menüden seçilebilir veya <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> söz dizimi kullanılarak yapılandırılabilir.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Makale düzenleme sayfasında alıntı alanı gösterilsin mi?"><![CDATA[
 <h2>Makale düzenleme sayfasında alıntı alanı gösterilsin mi?</h2>
@@ -617,8 +617,9 @@
 <p>Eğer bir makalede yorumların iki kez görüntülendiğini görüyorsanız, büyük olasılıkla şablonlarınızda <code>&lt;txp:comments /&gt;</code> etiketi yer alıyordur ve aynı zamanda ‘Yorumlar otomatik olarak makalelere eklensin mi?’ de ‘Evet’ olarak ayarlanmıştır.</p>
         ]]></item>
         <item id="comments_dateformat" title="Yorumların tarihini gösterme biçimi"><![CDATA[
-<h2>Yorumların tarihini gösterme biçimi</h2>
-<p>Yorumların tarihi site ziyaretçilerine nasıl görünecek.</p>        ]]></item>
+<h2>Yorum tarih biçimi</h2>
+<p>Yorum tarihlerinin site ziyaretçilerinize nasıl görüneceği. Tarih biçimi, açılır menüden seçilebilir veya <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> söz dizimi kullanılarak yapılandırılabilir.</p>
+        ]]></item>
         <item id="comments_default_invite" title="Varsayılan yorum daveti"><![CDATA[
 <h2>Varsayılan yorum daveti</h2>
 <p>Ziyaretçilerin sitenizde yorum yapmasına izin veriyorsanız, bu varsayılan davet metnidir. Örneğin:</p>
@@ -708,7 +709,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Tarih biçimi"><![CDATA[
 <h2>Tarih biçimi</h2>
-<p>Bu seçenek, makale tarihlerinin yalnızca sitenizin ön sayfasında nasıl görüneceğini etkiler.</p>
+<p>Tarihler, sitenizin ön sayfasındaki makalelerde nasıl görünecek. Tarih biçimi, açılır menüden seçilebilir veya <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> söz dizimi kullanılarak yapılandırılabilir.</p>
         ]]></item>
         <item id="default_event" title="Varsayılan panel"><![CDATA[
 <h2>Varsayılan panel</h2>

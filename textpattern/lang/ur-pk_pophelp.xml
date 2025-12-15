@@ -581,8 +581,8 @@
 <p>PHP کوڈ میں اوپننگ اور کلوزنگ PHP ٹیگز شامل نہیں ہونے چاہئیں، اور اسے <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code dir="ltr">&lt;txp:php&gt;</code> ٹیگز <span class="ui-icon ui-icon-extlink">(نئی ونڈو میں بیرونی لنک کھلتا ہے)</span></a> کے اندر لازماً بند کیا جانا چاہیے۔</p>
         ]]></item>
         <item id="archive_dateformat" title="آرکائیو تاریخ فارمیٹ"><![CDATA[
-<h2>آرکائیو تاریخ فارمیٹ</h2>
-<p>یہ طے کرتا ہے کہ آپ کی سائٹ کے سیکشنز میں مضامین پر تاریخیں کس طرح نظر آئیں گی۔</p>
+<h2>آرکائیو کی تاریخ کا فارمیٹ</h2>
+<p>آپ کی سائٹ کے سیکشنز میں مضامین پر تاریخیں کس طرح نظر آئیں گی۔ تاریخ کا فارمیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا پھر <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> کی سنٹیکس استعمال کرکے ترتیب دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="articles_use_excerpts" title="آرٹیکل ایڈیٹ صفحہ پر خلاصہ دکھائیں؟"><![CDATA[
 <h2>آرٹیکل ایڈیٹ صفحہ پر خلاصہ دکھائیں؟</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="تبصروں کی تاریخ کا فارمیٹ"><![CDATA[
 <h2>تبصروں کی تاریخ کا فارمیٹ</h2>
-<p>یہ طے کرتا ہے کہ آپ کی سائٹ کے وزیٹرز کو تبصروں کی تاریخیں کس طرح نظر آئیں گی۔</p>
+<p>تبصروں کی تاریخیں آپ کی سائٹ کے وزیٹرز کو کس طرح دکھائی دیں گی۔ تاریخ کا فارمیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا پھر <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> کی سنٹیکس استعمال کرکے ترتیب دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="comments_default_invite" title="طے شدہ تبصرہ دعوت"><![CDATA[
 <h2>طے شدہ تبصرہ دعوت</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="تاریخ کا فارمیٹ"><![CDATA[
 <h2>تاریخ کا فارمیٹ</h2>
-<p>یہ آپشن صرف آپ کی سائٹ کے فرنٹ پیج پر مضامین کی تاریخوں کے ظاہر ہونے کے انداز کو متاثر کرے گا۔</p>
+<p>آپ کی سائٹ کے فرنٹ پیج پر مضامین پر تاریخیں کس طرح نظر آئیں گی۔ تاریخ کا فارمیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا پھر <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> کی سنٹیکس استعمال کرکے ترتیب دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="default_event" title="طے شدہ پینل"><![CDATA[
 <h2>طے شدہ پینل</h2>

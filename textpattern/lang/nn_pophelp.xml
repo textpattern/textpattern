@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Arkivdatoformat"><![CDATA[
 <h2>Arkivdatoformat</h2>
-<p>Korleis datoar skal visast på artiklar i seksjonar på nettstaden din.</p>
+<p>Korleis datoar blir viste på artiklar i seksjonar på nettstaden din. Du kan velje datoformat frå nedtrekksmenyen eller setje det opp med syntaksen til <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Vise utval på artikkelredigeringssida?"><![CDATA[
 <h2>Vise utval på artikkelredigeringssida?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Datoformat for kommentarar"><![CDATA[
 <h2>Datoformat for kommentarar</h2>
-<p>Korleis commentdatoren skal visast for dei som vitjar nettstaden din.</p>
+<p>Korleis kommentardatoar blir viste for besøkjande på nettstaden din. Du kan velje datoformat frå nedtrekksmenyen eller setje det opp med syntaksen til <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Standardtekst for kommentarinvitasjon"><![CDATA[
 <h2>Standardtekst for kommentarinvitasjon</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Datoformat"><![CDATA[
 <h2>Datoformat</h2>
-<p>Denne innstillinga påverkar berre korleis artikkeldatoar vert viste på framsida av nettstaden din.</p>
+<p>Korleis datoar blir viste på artiklar på framsida av nettstaden din. Du kan velje datoformat frå nedtrekksmenyen eller setje det opp med syntaksen til <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Standardpanel"><![CDATA[
 <h2>Standardpanel</h2>

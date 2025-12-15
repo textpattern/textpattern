@@ -581,8 +581,8 @@
 <p>PHP‑kode skal udelade de indledende og afsluttende PHP‑tags og skal desuden være omgivet af <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code>-tags <span class="ui-icon ui-icon-extlink">(åbner et eksternt link i et nyt vindue)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Format for arkivdato"><![CDATA[
-<h2>Format for arkivdato</h2>
-<p>Hvordan datoer skal vises på artikler i sektioner på dit websted.</p>
+<h2>Arkivdatoformat</h2>
+<p>Hvordan datoer vises på artikler i sektioner på dit websted. Datoformatet kan vælges fra rullemenuen eller konfigureres ved hjælp af <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP‑syntaksen <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Vis uddrag på siden til redigering af artikel?"><![CDATA[
 <h2>Vis uddrag på siden til redigering af artikel?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Datoformat for kommentarer"><![CDATA[
 <h2>Datoformat for kommentarer</h2>
-<p>Hvordan kommentardatoer vises for dine besøgende.</p>
+<p>Hvordan kommentardatoer vises for dine besøgende. Datoformatet kan vælges fra rullemenuen eller konfigureres ved hjælp af <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP‑syntaksen <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Standardinvitation til kommentarer"><![CDATA[
 <h2>Standardinvitation til kommentarer</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Datoformat"><![CDATA[
 <h2>Datoformat</h2>
-<p>Denne indstilling påvirker kun, hvordan artikeldatoer vises på forsiden af dit websted.</p>
+<p>Hvordan datoer vises på artikler på forsiden af dit websted. Datoformatet kan vælges fra rullemenuen eller konfigureres ved hjælp af <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP‑syntaksen <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Standardpanel"><![CDATA[
 <h2>Standardpanel</h2>

@@ -581,8 +581,8 @@
 <p>PHP কোডের শুরু ও শেষের PHP ট্যাগ অবশ্যই বাদ দিতে হবে, এবং কোডটি <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> ট্যাগের <span class="ui-icon ui-icon-extlink">(নতুন উইন্ডোতে বাহ্যিক লিঙ্ক খুলবে)</span></a> ভেতরে রাখতে হবে।</p>
         ]]></item>
         <item id="archive_dateformat" title="আর্কাইভের তারিখ প্রদর্শন"><![CDATA[
-<h2>আর্কাইভের তারিখ প্রদর্শন</h2>
-<p>আপনার সাইটের সেকশনগুলোর মধ্যে থাকা নিবন্ধের তারিখগুলো কীভাবে প্রদর্শিত হবে।</p>
+<h2>সংরক্ষণাগারের তারিখের ফরম্যাট</h2>
+<p>আপনার সাইটের বিভিন্ন সেকশনের নিবন্ধে তারিখ কীভাবে প্রদর্শিত হবে। ড্রপডাউন মেনু থেকে একটি তারিখের ফরম্যাট বেছে নেওয়া যেতে পারে, অথবা <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> সিনট্যাক্স ব্যবহার করে নিজে কনফিগার করা যেতে পারে।</p>
         ]]></item>
         <item id="articles_use_excerpts" title="নিবন্ধ সম্পাদনা পাতায় এক্সার্প্ট দেখাবেন?"><![CDATA[
 <h2>নিবন্ধ সম্পাদনা পাতায় এক্সার্প্ট দেখাবেন?</h2>
@@ -618,8 +618,8 @@
 <p>যদি কোনো নিবন্ধে মন্তব্য দ্বিগুণবার দেখা যায়, তাহলে খুব সম্ভবত আপনার টেমপ্লেটে ইতিমধ্যে <code>&lt;txp:comments /&gt;</code> ট্যাগ আছে, এবং পাশাপাশি ‘Automatically append comments to articles?’ সেটিংও ‘Yes’ এ সেট করা।</p>
         ]]></item>
         <item id="comments_dateformat" title="মন্তব্যের তারিখ প্রদর্শন"><![CDATA[
-<h2>মন্তব্যের তারিখ প্রদর্শন</h2>
-<p>মন্তব্যের তারিখ আপনার সাইটে ভিজিটরদের কাছে কীভাবে দেখাবে তা নির্ধারণ করে।</p>
+<h2>মন্তব্যের তারিখের ফরম্যাট</h2>
+<p>আপনার সাইটের দর্শকদের কাছে মন্তব্যের তারিখ কীভাবে দেখা যাবে। ড্রপডাউন মেনু থেকে একটি তারিখের ফরম্যাট বেছে নেওয়া যেতে পারে, অথবা <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> সিনট্যাক্স ব্যবহার করে নিজে কনফিগার করা যেতে পারে।</p>
         ]]></item>
         <item id="comments_default_invite" title="ডিফল্ট মন্তব্য আমন্ত্রণ"><![CDATA[
 <h2>ডিফল্ট মন্তব্য আমন্ত্রণ</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="তারিখ প্রদর্শন"><![CDATA[
-<h2>তারিখ প্রদর্শন</h2>
-<p>এটি কেবল আপনার সাইটের সামনের পাতায় নিবন্ধের তারিখ কীভাবে দেখাবে তা প্রভাবিত করে।</p>
+<h2>তারিখের ফরম্যাট</h2>
+<p>আপনার সাইটের সামনের পাতার নিবন্ধগুলিতে তারিখ কীভাবে প্রদর্শিত হবে। ড্রপডাউন মেনু থেকে একটি তারিখের ফরম্যাট বেছে নেওয়া যেতে পারে, অথবা <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> সিনট্যাক্স ব্যবহার করে নিজে কনফিগার করা যেতে পারে।</p>
         ]]></item>
         <item id="default_event" title="ডিফল্ট প্যানেল"><![CDATA[
 <h2>ডিফল্ট প্যানেল</h2>

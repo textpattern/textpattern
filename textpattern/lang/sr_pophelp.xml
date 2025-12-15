@@ -573,7 +573,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Format datuma arhive"><![CDATA[
 <h2>Format datuma arhive</h2>
-<p>Kako će se datumi pojavljivati u člancima u sekcijama vašeg sajta.</p>
+<p>Kako će se datumi prikazivati na člancima u rubrikama vašeg sajta. Format datuma možete izabrati iz padajućeg menija ili ga podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Prikazati uvodni tekst na stranici za uređivanje članka?"><![CDATA[
 <h2>Prikazati uvodni tekst na stranici za uređivanje članka?</h2>
@@ -610,7 +610,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Format datuma komentara"><![CDATA[
 <h2>Format datuma komentara</h2>
-<p>Kako će se datumi komentara prikazivati posetiocima vašeg sajta.</p>
+<p>Kako će se datumi komentara prikazivati posetiocima vašeg sajta. Format datuma možete izabrati iz padajućeg menija ili ga podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="comments_default_invite" title="Podrazumevana pozivnica za komentare"><![CDATA[
 <h2>Podrazumevana pozivnica za komentare</h2>
@@ -700,7 +700,7 @@ Ako šablon obrasca treba da se obrađuje (ako sadrži Textpattern tagove), mora
         ]]></item>
         <item id="dateformat" title="Format datuma"><![CDATA[
 <h2>Format datuma</h2>
-<p>Ova opcija utiče samo na to kako se datumi članaka prikazuju na naslovnoj strani vašeg sajta.</p>
+<p>Kako će se datumi prikazivati na člancima na početnoj stranici vašeg sajta. Format datuma možete izabrati iz padajućeg menija ili ga podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="default_event" title="Podrazumevani panel"><![CDATA[
 <h2>Podrazumevani panel</h2>

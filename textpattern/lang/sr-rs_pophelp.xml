@@ -581,8 +581,8 @@
 <p>PHP код мора да изостави почетне и завршне PHP ознаке и да буде обухваћен ознакама <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Формат датума архиве"><![CDATA[
-<h2>Формат датума архиве</h2>
-<p>Како ће датуми изгледати на чланцима у одељцима вашег сајта.</p>
+<h2>Формат датума за архиву</h2>
+<p>Начин на који ће датуми бити приказани на чланцима у одељцима вашег сајта. Формат датума можете изабрати из падајућег менија или подесити помоћу синтаксе <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP функције <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Приказати уводну реч на страници за уређивање чланка?"><![CDATA[
 <h2>Приказати уводну реч на страници за уређивање чланка?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Формат датума за коментаре"><![CDATA[
 <h2>Формат датума за коментаре</h2>
-<p>Како ће датуми коментара изгледати посетиоцима вашег сајта.</p>
+<p>Начин на који ће датуми коментара бити приказани посетиоцима вашег сајта. Формат датума можете изабрати из падајућег менија или подесити помоћу синтаксе <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP функције <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Подразумевани позив за коментаре"><![CDATA[
 <h2>Подразумевани позив за коментаре</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Формат датума"><![CDATA[
 <h2>Формат датума</h2>
-<p>Ово подешавање ће утицати само на то како ће датуми чланака изгледати на насловној страни вашег сајта.</p>
+<p>Начин на који ће датуми бити приказани на чланцима на насловној страни вашег сајта. Формат датума можете изабрати из падајућег менија или подесити помоћу синтаксе <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP функције <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Подразумевани панел"><![CDATA[
 <h2>Подразумевани панел</h2>

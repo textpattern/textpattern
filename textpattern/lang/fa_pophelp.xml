@@ -581,8 +581,8 @@
 <p>کد PHP باید بدون تگ‌های آغاز و پایان PHP نوشته شود و هم‌چنین درون تگ‌های <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code dir="ltr">&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(در پنجره‌ای جدید باز می‌شود)</span></a> قرار گیرد.</p>
         ]]></item>
         <item id="archive_dateformat" title="فرمت تاریخ بایگانی"><![CDATA[
-<h2>فرمت تاریخ بایگانی</h2>
-<p>نحوهٔ نمایش تاریخ روی نوشته‌ها در بخش‌های مختلف سایت‌تان.</p>
+<h2>قالب نمایش تاریخ بایگانی</h2>
+<p>نحوهٔ نمایش تاریخ‌ها در مقاله‌های موجود در بخش‌های مختلف سایت شما. قالب تاریخ را می‌توان از منوی کشویی انتخاب کرد یا با استفاده از نگارش <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> پیکربندی نمود.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="نمایش خلاصه در صفحهٔ ویرایش نوشته؟"><![CDATA[
 <h2>نمایش خلاصه در صفحهٔ ویرایش نوشته؟</h2>
@@ -618,8 +618,8 @@
 <p>اگر با نمایش تکراری نظرات در یک نوشته روبه‌رو هستید، احتمالاً قالب‌های شما حاوی تگ <code dir="ltr">&lt;txp:comments /&gt;</code> هستند و در عین حال گزینهٔ «افزودن خودکار نظرات به نوشته‌ها؟» نیز روی «بله» تنظیم شده است.</p>
         ]]></item>
         <item id="comments_dateformat" title="فرمت تاریخ نظرات"><![CDATA[
-<h2>فرمت تاریخ نظرات</h2>
-<p>نحوهٔ نمایش تاریخ نظرات برای بازدیدکنندگان سایت شما.</p>
+<h2>قالب نمایش تاریخ دیدگاه‌ها</h2>
+<p>نحوهٔ نمایش تاریخ دیدگاه‌ها برای بازدیدکنندگان سایت شما. قالب تاریخ را می‌توان از منوی کشویی انتخاب کرد یا با استفاده از نگارش <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> پیکربندی نمود.</p>
         ]]></item>
         <item id="comments_default_invite" title="متن پیش‌فرض دعوت به نظردهی"><![CDATA[
 <h2>متن پیش‌فرض دعوت به نظردهی</h2>
@@ -709,8 +709,8 @@
 </ul>
         ]]></item>
         <item id="dateformat" title="فرمت تاریخ"><![CDATA[
-<h2>فرمت تاریخ</h2>
-<p>این گزینه فقط روی نحوهٔ نمایش تاریخ نوشته‌ها در صفحهٔ اول سایت شما اثر می‌گذارد.</p>
+<h2>قالب نمایش تاریخ</h2>
+<p>نحوهٔ نمایش تاریخ‌ها در مقاله‌های صفحهٔ اول سایت شما. قالب تاریخ را می‌توان از منوی کشویی انتخاب کرد یا با استفاده از نگارش <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> پیکربندی نمود.</p>
         ]]></item>
         <item id="default_event" title="تب پیش‌فرض"><![CDATA[
 <h2>تب پیش‌فرض</h2>
