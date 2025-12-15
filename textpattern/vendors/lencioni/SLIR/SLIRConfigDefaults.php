@@ -234,7 +234,7 @@ class SLIRConfigDefaults
         }
 
         if (self::$pathToCacheDir === null) {
-            self::$pathToCacheDir = IMPATH . TEXTPATTERN_THUMB_DIR . '/cache';
+            self::$pathToCacheDir = IMPATH . TEXTPATTERN_THUMB_DIR;
         }
 
         if (self::$pathToErrorLog === null) {

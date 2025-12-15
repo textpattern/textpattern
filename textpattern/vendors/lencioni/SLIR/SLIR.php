@@ -1019,7 +1019,7 @@ class SLIR
      */
     private function getRenderedCacheDir()
     {
-        return SLIRConfig::$pathToCacheDir . '/rendered';
+        return SLIRConfig::$pathToCacheDir;
     }
 
     /**
@@ -1108,7 +1108,7 @@ class SLIR
      */
     private function getRequestCacheDir()
     {
-        return SLIRConfig::$pathToCacheDir . '/request';
+        return SLIRConfig::$pathToCacheDir;
     }
 
     /**
@@ -1331,8 +1331,7 @@ class SLIR
         }
 
         $this->initializeDirectory(SLIRConfig::$pathToCacheDir);
-        $this->initializeDirectory(SLIRConfig::$pathToCacheDir . '/rendered', false);
-        $this->initializeDirectory(SLIRConfig::$pathToCacheDir . '/request', false);
+        $this->initializeDirectory(SLIRConfig::$pathToCacheDir, false);
 
         $this->isCacheInitialized = true;
         return true;
