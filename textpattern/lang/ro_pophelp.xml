@@ -581,8 +581,8 @@
 <p>Codul PHP trebuie să omită etichetele de deschidere și închidere PHP și, de asemenea, să fie încapsulat în taguri <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(se deschide un link extern într‑o fereastră nouă)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Format dată arhivă"><![CDATA[
-<h2>Format dată arhivă</h2>
-<p>Modul în care datele vor apărea la articolele din secțiunile site‑ului tău.</p>
+<h2>Formatul datei pentru arhivă</h2>
+<p>Cum vor apărea datele la articolele din secțiunile site‑ului tău. Formatul datei poate fi selectat din meniul derulant sau configurat folosind sintaxa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Afișezi rezumatul pe pagina de editare a articolului?"><![CDATA[
 <h2>Afișezi rezumatul pe pagina de editare a articolului?</h2>
@@ -618,8 +618,8 @@
 <p>Dacă întâmpini afișarea dublată a comentariilor într‑un articol, atunci este probabil ca șabloanele tale să aibă tagul <code>&lt;txp:comments /&gt;</code> într‑un șablon și, de asemenea, opțiunea „Anexezi automat comentariile la articole?” setată pe „Da”.</p>
         ]]></item>
         <item id="comments_dateformat" title="Format dată comentarii"><![CDATA[
-<h2>Format dată comentarii</h2>
-<p>Modul în care datele comentariilor vor apărea vizitatorilor site‑ului tău.</p>
+<h2>Formatul datei pentru comentarii</h2>
+<p>Cum vor apărea datele comentariilor pentru vizitatorii site‑ului tău. Formatul datei poate fi selectat din meniul derulant sau configurat folosind sintaxa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Invitație implicită la comentarii"><![CDATA[
 <h2>Invitație implicită la comentarii</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Formatul datei"><![CDATA[
 <h2>Formatul datei</h2>
-<p>Această opțiune va afecta doar modul în care datele articolelor apar pe prima pagină a site‑ului tău.</p>
+<p>Cum vor apărea datele la articolele de pe prima pagină a site‑ului tău. Formatul datei poate fi selectat din meniul derulant sau configurat folosind sintaxa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Panou implicit"><![CDATA[
 <h2>Panou implicit</h2>

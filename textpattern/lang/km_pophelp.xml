@@ -578,8 +578,8 @@
 <p>កូដ PHP ត្រូវ​តែ​ដក tag បើក/បិទ PHP ចេញ ហើយ​ត្រូវ​តែ​រុំព័ទ្ធ​ក្នុង tag <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> tags <span class="ui-icon ui-icon-extlink">(opens an external link in a new window)</span></a>។</p>
         ]]></item>
         <item id="archive_dateformat" title="ទម្រង់​កាលបរិច្ឆេទ​បណ្ណសារ"><![CDATA[
-<h2>ទម្រង់​កាលបរិច្ឆេទ​បណ្ណសារ</h2>
-<p>របៀប​ដែល​កាលបរិច្ឆេទ​នឹង​បង្ហាញ​លើ​អត្ថបទ​នៅ​ក្នុង​ផ្នែក​របស់​វេបសាយ​របស់​អ្នក។</p>
+<h2>ទម្រង់កាលបរិច្ឆេទ​ប័ណ្ណសារ</h2>
+<p>របៀបបង្ហាញកាលបរិច្ឆេទ​លើអត្ថបទ​នៅក្នុងផ្នែកផ្សេងៗ​នៃវេបសាយរបស់អ្នក។ អ្នកអាចជ្រើសទម្រង់កាលបរិច្ឆេទ​ពីម៉ឺនុយទម្លាក់ចុះ ឬកំណត់រចនាសម្ព័ន្ធដោយប្រើវាក្យសម្ពន្ធ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>។</p>
         ]]></item>
         <item id="articles_use_excerpts" title="បង្ហាញ​សេចក្តីសង្ខេប​នៅ​លើ​ទំព័រ​កែសម្រួល​អត្ថបទ?"><![CDATA[
 <h2>បង្ហាញ​សេចក្តីសង្ខេប​នៅ​លើ​ទំព័រ​កែសម្រួល​អត្ថបទ?</h2>
@@ -615,8 +615,8 @@
 <p>ប្រសិនបើ​អ្នក​ជួប​បញ្ហា​មតិយោបល់​បង្ហាញ​ស្ទួន​នៅ​ក្នុង​អត្ថបទ នោះ​មាន​ឱកាស​ខ្ពស់​ថា​ពុម្ព​របស់​អ្នក​មាន tag <code>&lt;txp:comments /&gt;</code> រួច​ហើយ តែ​ក៏​មាន​ការ​កំណត់ ‘Automatically append comments to articles?’ ជា ‘Yes’ ផងដែរ។</p>
         ]]></item>
         <item id="comments_dateformat" title="ទម្រង់​កាលបរិច្ឆេទ​មតិយោបល់"><![CDATA[
-<h2>ទម្រង់​កាលបរិច្ឆេទ​មតិយោបល់</h2>
-<p>របៀប​ដែល​កាលបរិច្ឆេទ​មតិយោបល់​នឹង​បង្ហាញ​ដល់​អ្នក​ទស្សនា​វេបសាយ​របស់​អ្នក។</p>
+<h2>ទម្រង់កាលបរិច្ឆេទមតិយោបល់</h2>
+<p>របៀបបង្ហាញកាលបរិច្ឆេទមតិយោបល់​ទៅកាន់អ្នកទស្សនាវេបសាយរបស់អ្នក។ អ្នកអាចជ្រើសទម្រង់កាលបរិច្ឆេទ​ពីម៉ឺនុយទម្លាក់ចុះ ឬកំណត់រចនាសម្ព័ន្ធដោយប្រើវាក្យសម្ពន្ធ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>។</p>
         ]]></item>
         <item id="comments_default_invite" title="អត្ថបទ​អញ្ជើញ​មតិយោបល់​លំនាំដើម"><![CDATA[
 <h2>អត្ថបទ​អញ្ជើញ​មតិយោបល់​លំនាំដើម</h2>
@@ -706,8 +706,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="ទម្រង់​កាលបរិច្ឆេទ"><![CDATA[
-<h2>ទម្រង់​កាលបរិច្ឆេទ</h2>
-<p>ជម្រើស​នេះ​នឹង​ប៉ះពាល់​ដល់​របៀប​ដែល​កាលបរិច្ឆេទ​អត្ថបទ​បង្ហាញ​លើ​ទំព័រ​មុខ​របស់​វេបសាយ​អ្នក​តែប៉ុណ្ណោះ។</p>
+<h2>ទម្រង់កាលបរិច្ឆេទ</h2>
+<p>របៀបបង្ហាញកាលបរិច្ឆេទ​លើអត្ថបទ​នៅទំព័រដើមរបស់វេបសាយអ្នក។ អ្នកអាចជ្រើសទម្រង់កាលបរិច្ឆេទ​ពីម៉ឺនុយទម្លាក់ចុះ ឬកំណត់រចនាសម្ព័ន្ធដោយប្រើវាក្យសម្ពន្ធ <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>។</p>
         ]]></item>
         <item id="default_event" title="បន្ទះ​លំនាំដើម"><![CDATA[
 <h2>បន្ទះ​លំនាំដើម</h2>

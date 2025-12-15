@@ -580,7 +580,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Archívum dátumformátuma"><![CDATA[
 <h2>Archívum dátumformátuma</h2>
-<p>Meghatározza, hogy az egyes szekciókban lévő cikkek dátuma hogyan jelenjen meg.</p>
+<p>Ahogyan a dátumok megjelennek a webhelye szekcióiban található cikkeken. A dátumformátum kiválasztható a legördülő menüből, vagy beállítható a <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> szintaxisának használatával.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Szemelvény megjelenítése a cikk szerkesztő oldalán?"><![CDATA[
 <h2>Szemelvény megjelenítése a cikk szerkesztő oldalán?</h2>
@@ -616,8 +616,8 @@
 <p>Ha azt tapasztalja, hogy a megjegyzések duplán jelennek meg egy cikkben, akkor valószínűleg a sablon már tartalmazza a <code>&lt;txp:comments /&gt;</code> címkét, miközben a „Megjegyzések automatikus hozzáfűzése a cikkekhez?” beállítás „Igen”-re van állítva.</p>
         ]]></item>
         <item id="comments_dateformat" title="Megjegyzések dátumformátuma"><![CDATA[
-<h2>Megjegyzések dátumformátuma</h2>
-<p>Meghatározza, hogy a megjegyzések dátuma hogyan jelenjen meg a látogatók számára.</p>
+<h2>Hozzászólások dátumformátuma</h2>
+<p>Ahogyan a hozzászólások dátumai megjelennek a webhelye látogatói számára. A dátumformátum kiválasztható a legördülő menüből, vagy beállítható a <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> szintaxisának használatával.</p>
         ]]></item>
         <item id="comments_default_invite" title="Alapértelmezett megjegyzés-felhívás"><![CDATA[
 <h2>Alapértelmezett megjegyzés-felhívás</h2>
@@ -708,7 +708,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Dátumformátum"><![CDATA[
 <h2>Dátumformátum</h2>
-<p>Ez a beállítás kizárólag azt határozza meg, hogy a cikkek dátuma hogyan jelenjen meg a webhely címlapján.</p>
+<p>Ahogyan a dátumok megjelennek a webhelye címlapján található cikkeken. A dátumformátum kiválasztható a legördülő menüből, vagy beállítható a <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> szintaxisának használatával.</p>
         ]]></item>
         <item id="default_event" title="Alapértelmezett panel"><![CDATA[
 <h2>Alapértelmezett panel</h2>

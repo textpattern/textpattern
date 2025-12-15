@@ -581,7 +581,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Formato data archivio"><![CDATA[
 <h2>Formato data archivio</h2>
-<p>Definisce l’aspetto delle date per gli articoli nelle sezioni del sito.</p>
+<p>Come verranno visualizzate le date degli articoli nelle sezioni del tuo sito. Il formato della data può essere selezionato dal menu a discesa oppure configurato usando la sintassi di <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Mostrare l’estratto nella pagina di modifica dell’articolo?"><![CDATA[
 <h2>Articoli con sommario?</h2>
@@ -617,7 +617,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Formato data commenti"><![CDATA[
 <h2>Formato data commenti</h2>
-<p>Come le date dei commenti appariranno ai visitatori del sito.</p>
+<p>Come verranno visualizzate le date dei commenti ai visitatori del tuo sito. Il formato della data può essere selezionato dal menu a discesa oppure configurato usando la sintassi di <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Invito predefinito a commentare"><![CDATA[
 <h2>Invito predefinito a commentare</h2>
@@ -707,7 +707,7 @@
         ]]></item>
         <item id="dateformat" title="Formato data"><![CDATA[
 <h2>Formato data</h2>
-<p>Questa opzione influisce su come le date degli articoli vengono visualizzate solo nella pagina iniziale del sito.</p>
+<p>Come verranno visualizzate le date degli articoli nella pagina iniziale del tuo sito. Il formato della data può essere selezionato dal menu a discesa oppure configurato usando la sintassi di <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Pannello predefinito"><![CDATA[
 <h2>Pannello predefinito</h2>

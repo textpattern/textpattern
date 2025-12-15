@@ -581,8 +581,8 @@
 <p>יש להשמיט תגיות פתיחה וסגירה של PHP מהקוד, ויש לעטוף אותו בתגי <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code dir="ltr">&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(נפתח בחלון חיצוני חדש)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="מבנה תאריך הארכיון"><![CDATA[
-<h2>מבנה תאריך הארכיון</h2>
-<p>כיצד תאריכים יוצגו במאמרים במדורים של האתר שלך.</p>
+<h2>תבנית תאריך לארכיון</h2>
+<p>אופן הצגת התאריכים במאמרים במקטעים שונים של האתר שלך. ניתן לבחור את תבנית התאריך מתפריט הבחירה או להגדיר אותה באמצעות תחביר <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="להציג תקציר בעמוד עריכת המאמר?"><![CDATA[
 <h2>להציג תקציר בעמוד עריכת המאמר?</h2>
@@ -618,8 +618,8 @@
 <p>אם אתה נתקל בתצוגה כפולה של תגובות במאמר, קרוב לוודאי שבתבניות שלך קיים התג <code dir="ltr">&lt;txp:comments /&gt;</code> וגם ההגדרה ‘Automatically append comments to articles?’ מוגדרת ל-‘Yes’.</p>
         ]]></item>
         <item id="comments_dateformat" title="מבנה תאריך התגובות"><![CDATA[
-<h2>מבנה תאריך התגובות</h2>
-<p>כיצד תאריכי תגובות יוצגו למבקרים באתר שלך.</p>
+<h2>תבנית תאריך לתגובות</h2>
+<p>אופן הצגת תאריכי התגובות למבקרי האתר שלך. ניתן לבחור את תבנית התאריך מתפריט הבחירה או להגדיר אותה באמצעות תחביר <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="הזמנת תגובות ברירת מחדל"><![CDATA[
 <h2>הזמנת תגובות ברירת מחדל</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="מבנה תאריך"><![CDATA[
-<h2>מבנה תאריך</h2>
-<p>אפשרות זו תשפיע על אופן הצגת תאריכי מאמרים בעמוד הראשי של האתר בלבד.</p>
+<h2>תבנית תאריך</h2>
+<p>אופן הצגת התאריכים במאמרים בעמוד הראשי של האתר שלך. ניתן לבחור את תבנית התאריך מתפריט הבחירה או להגדיר אותה באמצעות תחביר <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="לוח ברירת מחדל"><![CDATA[
 <h2>לוח ברירת מחדל</h2>

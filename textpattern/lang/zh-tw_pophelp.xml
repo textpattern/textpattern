@@ -581,8 +581,8 @@
 <p>PHP 程式碼必須省略 PHP 開頭與結尾標籤，並且包在 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 標籤 <span class="ui-icon ui-icon-extlink">(在新視窗開啟外部連結)</span></a> 中。</p>
         ]]></item>
         <item id="archive_dateformat" title="彙整日期格式"><![CDATA[
-<h2>彙整日期格式</h2>
-<p>決定你的網站各版區中文章所顯示的日期格式。</p>
+<h2>封存日期格式</h2>
+<p>決定網站各欄目中文章所顯示的日期格式。可以從下拉式選單中選取預設格式，或使用 <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 語法自行設定。</p>
         ]]></item>
         <item id="articles_use_excerpts" title="文章使用摘要？"><![CDATA[
 <h2>文章使用摘要？</h2>
@@ -618,8 +618,8 @@
 <p>如果你發現文章中的迴響顯示重複，很可能是因為樣板中已含有 <code>&lt;txp:comments /&gt;</code> 標籤，同時「Automatically append comments to articles?」也被設為「Yes」。</p>
         ]]></item>
         <item id="comments_dateformat" title="迴響日期格式"><![CDATA[
-<h2>迴響日期格式</h2>
-<p>決定訪客在網站上看到的迴響日期格式。</p>
+<h2>留言日期格式</h2>
+<p>決定訪客在網站上看到的留言日期格式。可以從下拉式選單中選取預設格式，或使用 <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 語法自行設定。</p>
         ]]></item>
         <item id="comments_default_invite" title="預設迴響標示"><![CDATA[
 <h2>預設迴響標示</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="日期格式"><![CDATA[
 <h2>日期格式</h2>
-<p>此選項只會影響網站首頁上文章日期的顯示方式。</p>
+<p>決定網站首頁文章所顯示的日期格式。可以從下拉式選單中選取預設格式，或使用 <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 語法自行設定。</p>
         ]]></item>
         <item id="default_event" title="預設面板"><![CDATA[
 <h2>預設面板</h2>

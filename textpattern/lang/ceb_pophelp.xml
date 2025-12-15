@@ -581,8 +581,8 @@
 <p>Ang PHP code kinahanglan nga wagtangon ang opening ug closing nga PHP tag, ug sab ibalot sulod sa <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> nga mga tag <span class="ui-icon ui-icon-extlink">(nagbukas og eksternal nga link sa bag-ong bintana)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Pormat sa petsa sa archive"><![CDATA[
-<h2>Pormat sa petsa sa archive</h2>
-<p>Giunsa pagpakita ang mga petsa sa mga artikulo sa mga seksyon sa imong site.</p>
+<h2>Porma sa petsa sa archive</h2>
+<p>Paagi sa pagpakita sa mga petsa sa mga artikulo sa mga seksyon sa imong site. Ang porma sa petsa mahimong pilion gikan sa dropdown menu o ikompigura gamit ang sintaks sa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Ipakita ba ang kinutlo sa panid sa pag-edit sa artikulo?"><![CDATA[
 <h2>Ipakita ba ang kinutlo sa panid sa pag-edit sa artikulo?</h2>
@@ -618,8 +618,8 @@
 <p>Kon nakasinati ka nga nadoble ang pagpakita sa mga komento sa usa ka artikulo, dako ang posibilidad nga ang imong mga template adunay <code>&lt;txp:comments /&gt;</code> tag sa template apan nakaset usab ang ‘Automatically append comments to articles?’ sa ‘Yes’.</p>
         ]]></item>
         <item id="comments_dateformat" title="Pormat sa petsa sa mga komento"><![CDATA[
-<h2>Pormat sa petsa sa mga komento</h2>
-<p>Giunsa pagpakita sa imong mga bisita sa site ang mga petsa sa komento.</p>
+<h2>Porma sa petsa sa mga komento</h2>
+<p>Paagi sa pagpakita sa mga petsa sa komento sa mga bisita sa imong site. Ang porma sa petsa mahimong pilion gikan sa dropdown menu o ikompigura gamit ang sintaks sa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Default nga paanyaya sa komento"><![CDATA[
 <h2>Default nga paanyaya sa komento</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="Pormat sa petsa"><![CDATA[
-<h2>Pormat sa petsa</h2>
-<p>Kini nga opsyon makaapekto lamang kon giunsa pagpakita ang mga petsa sa artikulo sa front page sa imong site.</p>
+<h2>Porma sa petsa</h2>
+<p>Paagi sa pagpakita sa mga petsa sa mga artikulo sa front page sa imong site. Ang porma sa petsa mahimong pilion gikan sa dropdown menu o ikompigura gamit ang sintaks sa <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Default nga panel"><![CDATA[
 <h2>Default nga panel</h2>

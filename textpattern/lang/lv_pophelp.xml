@@ -582,7 +582,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Arhīva datuma formāts"><![CDATA[
 <h2>Arhīva datuma formāts</h2>
-<p>Formāts, kādā datumi tiks rādīti rakstos sadaļās jūsu vietnē.</p>
+<p>Kā sadaļās jūsu vietnē rakstos tiks rādīti datumi. Datuma formātu var izvēlēties nolaižamajā izvēlnē vai konfigurēt, izmantojot <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksi.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Rādīt ievadtekstu raksta rediģēšanas lapā?"><![CDATA[
 <h2>Rādīt ievadtekstu raksta rediģēšanas lapā?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Komentāru datuma formāts"><![CDATA[
 <h2>Komentāru datuma formāts</h2>
-<p>Formāts, kādā jūsu vietnes apmeklētājiem tiks rādīti komentāru datumi.</p>
+<p>Kā jūsu vietnes apmeklētājiem tiks rādīti komentāru datumi. Datuma formātu var izvēlēties nolaižamajā izvēlnē vai konfigurēt, izmantojot <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksi.</p>
         ]]></item>
         <item id="comments_default_invite" title="Noklusētais uzaicinājums komentēt"><![CDATA[
 <h2>Noklusētais uzaicinājums komentēt</h2>
@@ -710,7 +710,7 @@ Ja formai ir nepieciešama apstrāde (tajā ir Textpattern iezīmes), tās satur
         ]]></item>
         <item id="dateformat" title="Datuma formāts"><![CDATA[
 <h2>Datuma formāts</h2>
-<p>Šis iestatījums ietekmēs tikai to, kā datumi tiks rādīti jūsu vietnes sākumlapā esošajiem rakstiem.</p>
+<p>Kā datumi tiks rādīti rakstos jūsu vietnes sākumlapā. Datuma formātu var izvēlēties nolaižamajā izvēlnē vai konfigurēt, izmantojot <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintaksi.</p>
         ]]></item>
         <item id="default_event" title="Noklusētā administrācijas sadaļa"><![CDATA[
 <h2>Noklusētā administrācijas sadaļa</h2>

@@ -558,7 +558,7 @@
         ]]></item>
         <item id="archive_dateformat" title="حجم تاريخ الأرشيف"><![CDATA[
 <h2>تنسيق تاريخ الأرشيف</h2>
-<p>كيفية ظهور التواريخ على المقالات في أقسام موقعك.</p>
+<p>كيفية ظهور التواريخ في المقالات داخل أقسام موقعك. يمكن اختيار تنسيق التاريخ من قائمة الاختيار المنسدلة أو تهيئته باستخدام صياغة <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">دالة PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="عرض المقتطف في صفحة تحرير المقالة؟"><![CDATA[
 <h2>عرض المقتطف في صفحة تحرير المقالة؟</h2>
@@ -595,7 +595,7 @@
         ]]></item>
         <item id="comments_dateformat" title="حجم تاريخ التعليقات"><![CDATA[
 <h2>تنسيق تاريخ التعليقات</h2>
-<p>كيفية ظهور تواريخ التعليقات لزوّار موقعك.</p>
+<p>كيفية ظهور تواريخ التعليقات لزوار موقعك. يمكن اختيار تنسيق التاريخ من قائمة الاختيار المنسدلة أو تهيئته باستخدام صياغة <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">دالة PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="الجملة التي تدعو مباشرة للإرسال"><![CDATA[
 <h2>دعوة التعليقات الافتراضية</h2>
@@ -686,7 +686,7 @@ If a form template needs processing (if it contains <bdi dir="ltr">Textpattern</
         ]]></item>
         <item id="dateformat" title="تنسيق التاريخ"><![CDATA[
 <h2>تنسيق التاريخ</h2>
-<p>يؤثّر هذا الخيار على كيفية ظهور تواريخ المقالات على الصفحة الرئيسية لموقعك فقط.</p>
+<p>كيفية ظهور التواريخ في المقالات على الصفحة الرئيسية لموقعك. يمكن اختيار تنسيق التاريخ من قائمة الاختيار المنسدلة أو تهيئته باستخدام صياغة <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">دالة PHP <code dir="ltr">strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="اللوحة الافتراضية"><![CDATA[
 <h2>اللوحة الافتراضية</h2>

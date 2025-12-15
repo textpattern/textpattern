@@ -581,8 +581,8 @@
 <p>PHP kôd mora izostaviti početne i završne PHP oznake te također biti obuhvaćen <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> oznakama <span class="ui-icon ui-icon-extlink">(otvara vanjsku poveznicu u novom prozoru)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Arhiva format datuma"><![CDATA[
-<h2>Format datuma arhive</h2>
-<p>Kako će se datumi pojavljivati na člancima u odjeljcima tvog web-mjesta.</p>
+<h2>Format datuma za arhivu</h2>
+<p>Kako će se datumi prikazivati na člancima u odjeljcima vaše web‑stranice. Format datuma može se odabrati iz padajućeg izbornika ili podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Prikazati sažetak na stranici za uređivanje članka?"><![CDATA[
 <h2>Prikazati sažetak na stranici za uređivanje članka?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Format datuma za komentare"><![CDATA[
 <h2>Format datuma komentara</h2>
-<p>Kako će se datumi komentara prikazivati posjetiteljima tvog web-mjesta.</p>
+<p>Kako će se datumi komentara prikazivati posjetiteljima vaše web‑stranice. Format datuma može se odabrati iz padajućeg izbornika ili podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="comments_default_invite" title="Default pozivnica"><![CDATA[
 <h2>Zadani poziv na komentiranje</h2>
@@ -710,7 +710,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Format datuma"><![CDATA[
 <h2>Format datuma</h2>
-<p>Ova opcija utječe samo na način na koji se datumi članaka prikazuju na naslovnici tvog web-mjesta.</p>
+<p>Kako će se datumi prikazivati na člancima na naslovnici vaše web‑stranice. Format datuma može se odabrati iz padajućeg izbornika ili podesiti pomoću <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> sintakse.</p>
         ]]></item>
         <item id="default_event" title="Zadani panel"><![CDATA[
 <h2>Zadani panel</h2>

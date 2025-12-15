@@ -581,8 +581,8 @@
 <p>PHP 코드는 여는/닫는 PHP 태그를 생략해야 하며, 또한 <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> 태그 <span class="ui-icon ui-icon-extlink">(새 창에서 외부 링크 열림)</span></a> 안에 둘러싸여야 합니다.</p>
         ]]></item>
         <item id="archive_dateformat" title="글목록 날짜 형식"><![CDATA[
-<h2>글목록 날짜 형식</h2>
-<p>사이트의 섹션에 있는 글에 날짜가 어떻게 표시될지 결정합니다.</p>
+<h2>보관 날짜 형식</h2>
+<p>사이트의 각 섹션에 있는 글에 날짜가 어떻게 표시될지 설정합니다. 날짜 형식은 드롭다운 메뉴에서 선택하거나, <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 문법을 사용해 구성할 수 있습니다.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="글 편집 페이지에 요약을 표시합니까?"><![CDATA[
 <h2>글 편집 페이지에 요약을 표시합니까?</h2>
@@ -619,7 +619,7 @@
         ]]></item>
         <item id="comments_dateformat" title="댓글 날짜 형식"><![CDATA[
 <h2>댓글 날짜 형식</h2>
-<p>사이트 방문자에게 댓글 날짜가 어떻게 보일지 설정합니다.</p>
+<p>사이트 방문자에게 댓글 날짜가 어떻게 표시될지 설정합니다. 날짜 형식은 드롭다운 메뉴에서 선택하거나, <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 문법을 사용해 구성할 수 있습니다.</p>
         ]]></item>
         <item id="comments_default_invite" title="댓글 안내"><![CDATA[
 <h2>댓글 안내</h2>
@@ -710,7 +710,7 @@
         ]]></item>
         <item id="dateformat" title="날짜 형식"><![CDATA[
 <h2>날짜 형식</h2>
-<p>이 옵션은 사이트 첫 페이지에 표시되는 글의 날짜 형식에만 영향을 줍니다.</p>
+<p>사이트 첫 페이지의 글에 날짜가 어떻게 표시될지 설정합니다. 날짜 형식은 드롭다운 메뉴에서 선택하거나, <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> 문법을 사용해 구성할 수 있습니다.</p>
         ]]></item>
         <item id="default_event" title="기본 관리자 탭"><![CDATA[
 <h2>기본 관리자 탭</h2>

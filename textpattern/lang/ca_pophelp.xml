@@ -580,8 +580,8 @@
 <p>El codi PHP ha d’ometre les etiquetes d’obertura i tancament de PHP i també ha d’estar envoltat per etiquetes <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> <span class="ui-icon ui-icon-extlink">(obre un enllaç extern en una finestra nova)</span></a>.</p>
         ]]></item>
         <item id="archive_dateformat" title="Format de data dels arxius"><![CDATA[
-<h2>Format de data d’arxiu</h2>
-<p>Com es mostraran les dates dels articles a les seccions del teu lloc.</p>
+<h2>Format de data dels arxius</h2>
+<p>Com es mostraran les dates als articles de les seccions del lloc. El format de data es pot seleccionar des del menú desplegable o configurar utilitzant la sintaxi de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Mostrar l’extracte a la pàgina d’edició de l’article?"><![CDATA[
 <h2>Mostrar l’extracte a la pàgina d’edició de l’article?</h2>
@@ -618,7 +618,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Format de data per comentaris"><![CDATA[
 <h2>Format de data dels comentaris</h2>
-<p>Com es mostraran les dates dels comentaris als visitants del lloc.</p>
+<p>Com es mostraran les dates dels comentaris als visitants del lloc. El format de data es pot seleccionar des del menú desplegable o configurar utilitzant la sintaxi de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Invitació a comentar predeterminada"><![CDATA[
 <h2>Invitació a comentar predeterminada</h2>
@@ -709,7 +709,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Format de data"><![CDATA[
 <h2>Format de data</h2>
-<p>Aquesta opció afectarà només la manera com es mostren les dates dels articles a la portada del lloc.</p>
+<p>Com es mostraran les dates dels articles a la pàgina inicial del lloc. El format de data es pot seleccionar des del menú desplegable o configurar utilitzant la sintaxi de <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Panell predeterminat"><![CDATA[
 <h2>Panell predeterminat</h2>

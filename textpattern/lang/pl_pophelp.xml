@@ -581,7 +581,7 @@
         ]]></item>
         <item id="archive_dateformat" title="Format daty w archiwum"><![CDATA[
 <h2>Format daty archiwum</h2>
-<p>Sposób wyświetlania dat przy artykułach w sekcjach Twojej witryny.</p>
+<p>Sposób wyświetlania dat przy artykułach w sekcjach Twojej witryny. Format daty można wybrać z menu rozwijanego lub skonfigurować przy użyciu składni <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="articles_use_excerpts" title="Pokazywać zajawkę na stronie edycji artykułu?"><![CDATA[
 <h2>Pokazywać zajawkę na stronie edycji artykułu?</h2>
@@ -618,7 +618,7 @@
         ]]></item>
         <item id="comments_dateformat" title="Format daty komentarzy"><![CDATA[
 <h2>Format daty komentarzy</h2>
-<p>Sposób wyświetlania dat komentarzy odwiedzającym Twoją witrynę.</p>
+<p>Sposób wyświetlania dat komentarzy odwiedzającym Twoją witrynę. Format daty można wybrać z menu rozwijanego lub skonfigurować przy użyciu składni <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="comments_default_invite" title="Domyślne zaproszenie do komentarzy"><![CDATA[
 <h2>Domyślny tekst zaproszenia do komentowania</h2>
@@ -709,7 +709,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="dateformat" title="Format daty"><![CDATA[
 <h2>Format daty</h2>
-<p>Ta opcja wpływa wyłącznie na sposób, w jaki daty artykułów są wyświetlane na stronie głównej Twojej witryny.</p>
+<p>Sposób wyświetlania dat przy artykułach na stronie głównej Twojej witryny. Format daty można wybrać z menu rozwijanego lub skonfigurować przy użyciu składni <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a>.</p>
         ]]></item>
         <item id="default_event" title="Domyślny panel"><![CDATA[
 <h2>Domyślny panel</h2>

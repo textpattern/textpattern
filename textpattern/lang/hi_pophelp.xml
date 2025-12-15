@@ -581,8 +581,8 @@
 <p>PHP कोड में ओपनिंग और क्लोज़िंग PHP टैग्स छोड़ने होंगे, और इसे <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code>&lt;txp:php&gt;</code> टैग्स <span class="ui-icon ui-icon-extlink">(एक नई विंडो में बाहरी लिंक खोलता है)</span></a> के भीतर रखना होगा।</p>
         ]]></item>
         <item id="archive_dateformat" title="आर्काइव तिथि फ़ॉर्मेट"><![CDATA[
-<h2>आर्काइव तिथि फ़ॉर्मेट</h2>
-<p>आपकी साइट के सेक्शनों में लेखों पर तारीखें कैसे दिखाई देंगी।</p>
+<h2>आर्काइव दिनांक प्रारूप</h2>
+<p>आपकी साइट के अनुभागों में लेखों पर तिथियाँ कैसी दिखाई देंगी। दिनांक प्रारूप को ड्रॉपडाउन मेनू से चुना जा सकता है या <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> सिंटैक्स का उपयोग करके कॉन्फ़िगर किया जा सकता है।</p>
         ]]></item>
         <item id="articles_use_excerpts" title="लेख संपादन पेज पर सारांश दिखाएं?"><![CDATA[
 <h2>लेख संपादन पेज पर सारांश दिखाएं?</h2>
@@ -618,8 +618,8 @@
 <p>यदि आप किसी लेख में टिप्पणियों के डुप्लिकेट दिखने का अनुभव कर रहे हैं, तो सम्भावना है कि आपके टेम्पलेट्स में <code>&lt;txp:comments /&gt;</code> टैग भी मौजूद है और साथ ही ‘टिप्पणियां स्वतः लेखों में जोड़ें?’ सेटिंग भी ‘Yes’ पर है।</p>
         ]]></item>
         <item id="comments_dateformat" title="टिप्पणियों की तिथि फ़ॉर्मेट"><![CDATA[
-<h2>टिप्पणियों की तिथि फ़ॉर्मेट</h2>
-<p>आपकी साइट के विज़िटर्स के लिए टिप्पणी की तिथियाँ कैसे दिखाई देंगी।</p>
+<h2>टिप्पणी दिनांक प्रारूप</h2>
+<p>आपकी साइट के आगंतुकों को टिप्पणियों की तिथियाँ कैसी दिखाई देंगी। दिनांक प्रारूप को ड्रॉपडाउन मेनू से चुना जा सकता है या <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> सिंटैक्स का उपयोग करके कॉन्फ़िगर किया जा सकता है।</p>
         ]]></item>
         <item id="comments_default_invite" title="डिफ़ॉल्ट टिप्पणी आमंत्रण"><![CDATA[
 <h2>डिफ़ॉल्ट टिप्पणी आमंत्रण</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="तिथि फ़ॉर्मेट"><![CDATA[
-<h2>तिथि फ़ॉर्मेट</h2>
-<p>यह विकल्प केवल आपकी साइट के फ्रंट पेज पर लेख की तिथियाँ कैसे दिखाई देंगी, उस पर प्रभाव डालेगा।</p>
+<h2>दिनांक प्रारूप</h2>
+<p>आपकी साइट के मुखपृष्ठ पर लेखों पर तिथियाँ कैसी दिखाई देंगी। दिनांक प्रारूप को ड्रॉपडाउन मेनू से चुना जा सकता है या <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code>strftime()</code></a> सिंटैक्स का उपयोग करके कॉन्फ़िगर किया जा सकता है।</p>
         ]]></item>
         <item id="default_event" title="डिफ़ॉल्ट पैनल"><![CDATA[
 <h2>डिफ़ॉल्ट पैनल</h2>

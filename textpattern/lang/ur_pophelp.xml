@@ -581,8 +581,8 @@
 <p>PHP کوڈ میں اوپننگ اور کلوزنگ PHP ٹیگز شامل نہیں ہونے چاہییں، اور یہ <a rel="external" target="_blank" href="https://docs.textpattern.com/tags/php"><code dir="ltr">&lt;txp:php&gt;</code> ٹیگز <span class="ui-icon ui-icon-extlink">(نئی ونڈو میں بیرونی لنک کھلتا ہے)</span></a> کے اندر محصور ہونا چاہیے۔</p>
         ]]></item>
         <item id="archive_dateformat" title="محفوظہ (آرکائیو) تاریخ کی وضع"><![CDATA[
-<h2>محفوظہ تاریخ کی وضع</h2>
-<p>یہ طے کرتا ہے کہ آپ کی سائٹ کے سیکشنز میں مضامین پر تاریخیں کس طرح ظاہر ہوں گی۔</p>
+<h2>آرکائیو تاریخ کا فارمَیٹ</h2>
+<p>آپ کی سائٹ کے سیکشنز میں مضامین پر تاریخیں کس طرح نظر آئیں گی۔ تاریخ کا فارمَیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> سنٹیکس استعمال کرتے ہوئے تشکیل دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="articles_use_excerpts" title="کیا مضمون کے ایڈیٹ صفحے پر اقتباس دکھایا جائے؟"><![CDATA[
 <h2>کیا مضمون کے ایڈیٹ صفحے پر اقتباس دکھایا جائے؟</h2>
@@ -618,8 +618,8 @@
 <p>اگر آپ کسی مضمون میں تبصروں کے دہرا کر دکھائی دینے کا مسئلہ دیکھ رہے ہیں تو غالباً ایسا اس لیے ہے کہ آپ کے ٹیمپلیٹس میں <code dir="ltr">&lt;txp:comments /&gt;</code> ٹیگ بھی موجود ہے اور ساتھ ہی ‘تبصرے خودکار طور پر مضامین کے ساتھ جوڑیں؟’ بھی ‘Yes’ پر سیٹ ہے۔</p>
         ]]></item>
         <item id="comments_dateformat" title="تبصرے کی تاریخ کی وضع"><![CDATA[
-<h2>تبصرے کی تاریخ کی وضع</h2>
-<p>یہ طے کرتا ہے کہ آپ کے سائٹ کے وزیٹرز کے لیے تبصروں کی تاریخیں کس طرح ظاہر ہوں گی۔</p>
+<h2>تبصروں کی تاریخ کا فارمَیٹ</h2>
+<p>آپ کی سائٹ کے وزیٹرز کو تبصروں کی تاریخیں کس طرح نظر آئیں گی۔ تاریخ کا فارمَیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> سنٹیکس استعمال کرتے ہوئے تشکیل دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="comments_default_invite" title="طے شدہ تبصرہ دعوت نامہ"><![CDATA[
 <h2>طے شدہ تبصرہ دعوت نامہ</h2>
@@ -709,8 +709,8 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 </ul>
         ]]></item>
         <item id="dateformat" title="تاریخ کی وضع"><![CDATA[
-<h2>تاریخ کی وضع</h2>
-<p>یہ آپشن صرف آپ کی سائٹ کے فرنٹ پیج پر مضامین کی تاریخوں کے ظاہر ہونے کے انداز کو متاثر کرے گا۔</p>
+<h2>تاریخ کا فارمَیٹ</h2>
+<p>آپ کی سائٹ کے فرنٹ پیج پر مضامین پر تاریخیں کس طرح نظر آئیں گی۔ تاریخ کا فارمَیٹ ڈراپ ڈاؤن مینو سے منتخب کیا جا سکتا ہے یا <a href="https://www.php.net/manual/en/function.strftime.php" rel="external">PHP <code dir="ltr">strftime()</code></a> سنٹیکس استعمال کرتے ہوئے تشکیل دیا جا سکتا ہے۔</p>
         ]]></item>
         <item id="default_event" title="طے شدہ پینل"><![CDATA[
 <h2>طے شدہ پینل</h2>
