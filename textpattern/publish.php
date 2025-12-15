@@ -698,7 +698,7 @@ function preText($store, $prefs = null)
         $offset = substr_count($img_dir, '/') + 2;
 
         if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-            $offset += 3; // Skip /thumb/cache/rendered
+            $offset += 1; // Skip /thumb
             $xform = ${'u' . $offset};
             $imgfile = basename($u0);
 

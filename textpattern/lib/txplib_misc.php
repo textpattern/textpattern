@@ -5343,7 +5343,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
             return "$k$v";
         }, array_keys($params), array_values($params)));
 
-        $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/cache/rendered/'.$paramlist.'/'.$img['id'].$img['ext'];
+        $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'];
 
         if (!file_exists($path_to_site.'/'.$base) && $sec_mode === 'always') {
             // Need to use some unique visitor identifier so two requests for the same resource

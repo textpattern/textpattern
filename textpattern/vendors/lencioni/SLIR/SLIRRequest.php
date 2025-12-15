@@ -379,7 +379,7 @@ class SLIRRequest
         $params = array();
 
         // The parameters should be the first set of characters after the SLIR path
-        $request = preg_replace(array('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`', '`cache\/rendered\/`'), '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
+        $request = preg_replace(array('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`'), '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
         $paramString  = strtok($request, '/');
 
         if ($paramString === false || $paramString === $request) {
@@ -394,7 +394,7 @@ Available parameters:
  p = Progressive (0 or 1)
 
 Example usage:
-/slir/w300-h300-c1.1/path/to/image.jpg');
+/images/thumb/w300-h300-c1.1/42.jpg');
 
         }
 

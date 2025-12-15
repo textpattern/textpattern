@@ -146,12 +146,6 @@ class SLIR
     const CROP_CLASS_SMART = 'smart';
 
     /**
-     * @var string
-     * @since 2.0
-     */
-    const CONFIG_FILENAME = 'slirconfig.class.php';
-
-    /**
      * Request object
      *
      * @since 2.0
@@ -284,11 +278,6 @@ class SLIR
     public function processRequestFromURL()
     {
         $this->initialize();
-
-        // Check the cache based on the request URI
-        if ($this->shouldUseRequestCache() && $this->isRequestCached()) {
-            return $this->serveRequestCachedImage();
-        }
 
         // See if there is anything we actually need to do
         if ($this->isSourceImageDesired()) {
@@ -460,24 +449,6 @@ class SLIR
     }
 
     /**
-     * Checks to see if the request cache should be used
-     *
-     * @since 2.0
-     * @return boolean
-     */
-    private function shouldUseRequestCache()
-    {
-        // The request cache can't be used if the request is falling back to the
-        // default image path because it will prevent the actual image from being
-        // shown if it eventually ends up on the server
-        if (SLIRConfig::$enableRequestCache === true && !$this->getRequest()->isUsingDefaultImagePath()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Disables E_STRICT and E_NOTICE error reporting
      *
      * @since 2.0
@@ -548,7 +519,6 @@ class SLIR
         flush();
 
         $garbageCollector = new SLIRGarbageCollector(array(
-            $this->getRequestCacheDir() => false,
             $this->getRenderedCacheDir() => true,
         ));
     }
@@ -865,7 +835,7 @@ class SLIR
     }
 
     /**
-     * Detemrines if the image should be resized based on its width (i.e. the width is the constraining dimension for this request)
+     * Determines if the image should be resized based on its width (i.e. the width is the constraining dimension for this request)
      *
      * @since 2.0
      * @return boolean
@@ -880,7 +850,7 @@ class SLIR
     }
 
     /**
-     * Detemrines if the image should be resized based on its height (i.e. the height is the constraining dimension for this request)
+     * Determines if the image should be resized based on its height (i.e. the height is the constraining dimension for this request)
      * @since 2.0
      * @return boolean
      */
@@ -975,17 +945,6 @@ class SLIR
     }
 
     /**
-     * Determines if the request is symlinked to the rendered file
-     *
-     * @since 2.0
-     * @return boolean
-     */
-    public function isRequestCached()
-    {
-        return $this->isCached($this->requestCacheFilePath());
-    }
-
-    /**
      * Determines if a given file exists in the cache
      *
      * @since 2.0
@@ -1019,7 +978,7 @@ class SLIR
      */
     private function getRenderedCacheDir()
     {
-        return SLIRConfig::$pathToCacheDir . '/rendered';
+        return SLIRConfig::$pathToCacheDir;
     }
 
     /**
@@ -1108,7 +1067,7 @@ class SLIR
      */
     private function getRequestCacheDir()
     {
-        return SLIRConfig::$pathToCacheDir . '/request';
+        return SLIRConfig::$pathToCacheDir;
     }
 
     /**
@@ -1130,11 +1089,7 @@ class SLIR
     {
         $this->cacheRendered();
 
-        if ($this->shouldUseRequestCache()) {
-            return $this->cacheRequest($this->getRendered()->getData(), true);
-        } else {
-            return true;
-        }
+        return true;
     }
 
     /**
@@ -1151,24 +1106,6 @@ class SLIR
         );
 
         return true;
-    }
-
-    /**
-     * Write an image to the cache based on the request URI
-     *
-     * @since 2.0
-     * @param string $imageData
-     * @param boolean $copyEXIF
-     * @return string
-     */
-    private function cacheRequest($imageData, $copyEXIF = true)
-    {
-        return $this->cacheFile(
-                $this->requestCacheFilePath(),
-                $imageData,
-                $copyEXIF,
-                $this->renderedCacheFilePath()
-        );
     }
 
     /**
@@ -1231,18 +1168,6 @@ class SLIR
     {
         if (file_exists($this->renderedCacheFilePath())) {
             unlink($this->renderedCacheFilePath());
-        }
-        return $this;
-    }
-
-    /**
-     * @since 2.0
-     * @return SLIR
-     */
-    public function uncacheRequest()
-    {
-        if (file_exists($this->requestCacheFilePath())) {
-            unlink($this->requestCacheFilePath());
         }
         return $this;
     }
@@ -1331,8 +1256,7 @@ class SLIR
         }
 
         $this->initializeDirectory(SLIRConfig::$pathToCacheDir);
-        $this->initializeDirectory(SLIRConfig::$pathToCacheDir . '/rendered', false);
-        $this->initializeDirectory(SLIRConfig::$pathToCacheDir . '/request', false);
+        $this->initializeDirectory(SLIRConfig::$pathToCacheDir, false);
 
         $this->isCacheInitialized = true;
         return true;
@@ -1465,12 +1389,6 @@ class SLIR
                 null,
                 "$cacheType cache"
         );
-
-        // If we are serving from the rendered cache, create a symlink in the
-        // request cache to the rendered file
-        if ($cacheType != 'request') {
-            $this->cacheRequest(file_get_contents($cacheFilePath), false);
-        }
     }
 
     /**
