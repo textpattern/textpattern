@@ -456,7 +456,7 @@ function preText($store, $prefs = null)
 
                     if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
                         $xform = ${'u' . ($out[0] - 1)};
-                        $imgfile = $un;//basename($u0);
+                        $imgfile = $un;
 
                         output_thumb(array('param' => $xform, 'img' => $imgfile));
                         exit;
@@ -698,9 +698,8 @@ function preText($store, $prefs = null)
         $offset = substr_count($img_dir, '/') + 2;
 
         if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-            $offset += 1; // Skip /thumb
-            $xform = ${'u' . $offset};
-            $imgfile = basename($u0);
+            $xform = ${'u' . ($out[0] - 1)};
+            $imgfile = $un;
 
             output_thumb(array('param' => $xform, 'img' => $imgfile));
             exit;
@@ -827,8 +826,6 @@ function output_component($n = '')
 // -------------------------------------------------------------
 function output_thumb($data = array())
 {
-    global $permlink_mode;
-
     try {
         static $storedTokens = array();
         $sec_mode = get_pref('thumb_security', 'always');
