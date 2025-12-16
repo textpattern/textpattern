@@ -81,16 +81,6 @@ class SLIRConfigDefaults
     public static $browserCacheTTL  = 604800; // 7 days = 7 * 24 * 60 * 60
 
     /**
-     * If true, enables the faster, symlink-based request cache as a first-line cache. If false, the request cache is disabled.
-     *
-     * The request cache seems to have issues on some Windows servers.
-     *
-     * @since 2.0
-     * @var boolean
-     */
-    public static $enableRequestCache = false;
-
-    /**
      * How much memory (in megabytes) SLIR is allowed to allocate for memory-intensive processes such as rendering and cropping.
      *
      * @since 2.0
