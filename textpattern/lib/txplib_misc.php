@@ -5335,7 +5335,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
         }
     }
 
-    if ($thumbnail == THUMB_AUTO && is_writable(IMPATH.TEXTPATTERN_THUMB_DIR) && $params) {
+    if ($thumbnail == THUMB_AUTO && is_writable(IMPATH.TEXTPATTERN_THUMB_DIR) && $params && $img['ext'] !== '.svg') {
         // Resized image.
         $sec_mode = get_pref('thumb_security', 'always');
 
