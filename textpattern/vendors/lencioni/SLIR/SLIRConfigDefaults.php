@@ -184,7 +184,7 @@ class SLIRConfigDefaults
      * @since 2.0
      * @var integer
      */
-    public static $garbageCollectFileCacheMaxLifetime = 604800; // 7 days = 7 * 24 * 60 * 60
+    public static $garbageCollectFileCacheMaxLifetime = 2592000; // 30 days = 30 * 24 * 60 * 60
 
     /**
      * If true, SLIR will copy EXIF information should from the source image to the rendered image.
