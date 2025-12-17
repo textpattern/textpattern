@@ -245,10 +245,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     public function resample(SLIRImageLibrary $destination)
     {
         if (!$this->isSVG()) {
-            if ($this->isAbleToHaveTransparency()) {
-                $this->enableTransparency($destination);
-            }
-
             imagecopyresampled(
                 $destination->getImage(),
                 $this->getImage(),
@@ -275,10 +271,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     public function copy(SLIRImageLibrary $destination)
     {
         if (!$this->isSVG()) {
-            if ($this->isAbleToHaveTransparency()) {
-                $this->enableTransparency($destination);
-            }
-
             imagecopy(
                 $destination->getImage(),
                 $this->getImage(),
@@ -350,19 +342,13 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
     /**
      * Turns on the alpha channel to enable transparency in the image
-     *
-     * @param SLIRImageLibrary $destination The image to apply alpha to. If not specified, uses 'this' image
      * @return SLIRImageLibrary
      * @since 2.0
      */
-    public function enableTransparency(SLIRImageLibrary $destination = null)
+    public function enableTransparency()
     {
-        if ($destination) {
-            imagealphablending($destination->getImage(), false);
-            imagesavealpha($destination->getImage(), true);
-        } else {
-            imagealphablending($this->getImage(), true);
-        }
+        imagealphablending($this->getImage(), false);
+        imagesavealpha($this->getImage(), true);
 
         $this->transparencyEnabled = true;
 
@@ -379,7 +365,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         $color = $this->getBackground();
 
         if ($color === null) {
-            $color = SLIRConfig::$backgroundFillColor;
+            $color = "ffffff";
         }
 
         $background = null;
@@ -394,12 +380,14 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
             );
         }
         else {
+
             $background = imagecolorallocate(
                     $this->getImage(),
                     hexdec($color[0].$color[1]),
                     hexdec($color[2].$color[3]),
                     hexdec($color[4].$color[5])
             );
+
         }
 
         imagefilledrectangle($this->getImage(), 0, 0, $this->getWidth(), $this->getHeight(), $background);
@@ -472,9 +460,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                             ->setHeight($this->getCropHeight())
                             ->setBackground($this->getBackground());
                          
-            if ($this->isAbleToHaveTransparency()) {
-                $this->enableTransparency($cropped);
-            }
 
             $cropped->background();
 

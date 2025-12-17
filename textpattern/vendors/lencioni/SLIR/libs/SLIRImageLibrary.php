@@ -265,7 +265,7 @@ interface SLIRImageLibrary
    * @return SLIRImageLibrary
    * @since 2.0
    */
-  public function enableTransparency(SLIRImageLibrary $destination = null);
+  public function enableTransparency();
 
   /**
    * Fills the image with the set background color
