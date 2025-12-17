@@ -5335,6 +5335,8 @@ function imageBuildURL($img = array(), $thumbnail = null)
         }
     }
 
+    callback_event_ref('txp.image', 'thumbnail.params', 0, $params, $thumbnail);
+
     if ($thumbnail == THUMB_AUTO && is_writable(IMPATH.TEXTPATTERN_THUMB_DIR) && $params && $img['ext'] !== '.svg') {
         // Resized image.
         $sec_mode = get_pref('thumb_security', 'always');
@@ -5379,7 +5381,9 @@ function imageBuildURL($img = array(), $thumbnail = null)
         $base = ihu.$img_dir.'/'.$img['id'].$img['ext'];
     }
 
-    return $base;
+    $secondBase = callback_event('txp.image', 'url', $thumbnail, compact('base', 'img', 'params', 'thumbnail'));
+
+    return $secondBase ? $secondBase : $base;
 }
 
 /**
