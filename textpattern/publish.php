@@ -400,22 +400,31 @@ function preText($store, $prefs = null)
     extract($url);
 
     $imgParts = explode('/', $img_dir);
+    $u1 = strtolower($u1);
 
     // If messy vars exist, bypass URL parsing.
     if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
-        if ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
+        if ($imgParts[0] === $u1) {
+            $matchImg = array_intersect($url, $imgParts);
+            $offset = substr_count($img_dir, '/') + 2;
+
+            if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
+                $xform = ${'u' . ($out[0] - 1)};
+                $imgfile = ${'u' . $out[0]};
+
+                output_thumb(array('param' => $xform, 'img' => $imgfile));
+                exit;
+            }
+        } elseif ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
             $is_404 = true;
         } else {
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
-            switch (strtolower($u1)) {
+            switch ($u1) {
                 case 'atom':
-                    $out['feed'] = 'atom';
-                    break;
-
                 case 'rss':
-                    $out['feed'] = 'rss';
+                    $out['feed'] = $u1;
                     break;
 
                 // urldecode(strtolower(urlencode())) looks ugly but is the
@@ -449,19 +458,6 @@ function preText($store, $prefs = null)
                     $out['author'] = (!empty($out['author'])) ? $out['author'] : '';
                     break;
                     // AuthorID gets resolved from Name further down.
-
-                case $imgParts[0] === $u1:
-                    $matchImg = array_intersect($url, $imgParts);
-                    $offset = substr_count($img_dir, '/') + 2;
-
-                    if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-                        $xform = ${'u' . ($out[0] - 1)};
-                        $imgfile = $un;
-
-                        output_thumb(array('param' => $xform, 'img' => $imgfile));
-                        exit;
-                    }
-
                 case 'file_download':
                 case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
@@ -693,19 +689,6 @@ function preText($store, $prefs = null)
         }
     }
 
-    if ($is_404 && $imgParts[0] === $u1) {
-        $matchImg = array_intersect($url, $imgParts);
-        $offset = substr_count($img_dir, '/') + 2;
-
-        if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
-            $xform = ${'u' . ($out[0] - 1)};
-            $imgfile = $un;
-
-            output_thumb(array('param' => $xform, 'img' => $imgfile));
-            exit;
-        }
-    }
-
     // Stats: found or not.
     $out['status'] = is_numeric($is_404) ? $is_404 : ($is_404 ? '404' : '200');
     $out['pg'] = is_numeric($out['pg']) ? intval($out['pg']) : '';
@@ -832,15 +815,13 @@ function output_thumb($data = array())
 
         if ($sec_mode === 'always') {
             $imgToken = gps('token');
-            extract($data);
 
             if ($imgToken) {
-                if (empty($storedTokens[$imgToken])) {
-                    $selector = substr($imgToken, SALT_LENGTH);
-                    $txpToken = \Txp::get('\Textpattern\Security\Token');
-                    $fetched = $txpToken->fetch('image_verify', $selector);
+                $txpToken = \Txp::get('\Textpattern\Security\Token');
+                $selector = substr($imgToken, SALT_LENGTH);
 
-                    if ($fetched) {
+                if (empty($storedTokens[$imgToken])) {
+                    if ($fetched = $txpToken->fetch('image_verify', $selector)) {
                         $storedTokens[$imgToken] = $fetched;
                     }
                 }
@@ -849,6 +830,7 @@ function output_thumb($data = array())
                 $sid = session_id();
                 session_write_close();
 
+//                $sid = '';
                 $hash_url = $sid . filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'] . get_pref('blog_uid');
                 $hash = sha1($hash_url);
                 $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
