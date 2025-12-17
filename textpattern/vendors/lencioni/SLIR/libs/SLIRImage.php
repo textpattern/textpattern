@@ -357,7 +357,7 @@ abstract class SLIRImage
      */
     final public function isAbleToHaveTransparency()
     {
-        if ($this->isPNG() || $this->isGIF()) {
+        if ($this->isPNG() || $this->isGIF() || $this->isWEBP() || $this->isAVIF()) {
             return true;
         } else {
             return false;
