@@ -5326,7 +5326,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $params['c'] = $img['c'];
         }
 
-        if (!empty($img['q'])) {
+        if (!empty($img['q']) && $img['q'] > 0 && $img['q'] <= 100) {
             $params['q'] = $img['q'];
         }
 
