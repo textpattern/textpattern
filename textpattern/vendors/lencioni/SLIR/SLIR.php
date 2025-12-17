@@ -1115,26 +1115,11 @@ class SLIR
      * @param string $cacheFilePath
      * @param string $imageData
      * @param boolean $copyEXIF
-     * @param string $symlinkToPath
      * @return string|boolean
      */
-    private function cacheFile($cacheFilePath, $imageData, $copyEXIF = true, $symlinkToPath = null)
+    private function cacheFile($cacheFilePath, $imageData, $copyEXIF = true)
     {
         $this->initializeCache();
-
-        // Try to create just a symlink to minimize disk space
-        if ($symlinkToPath && function_exists('symlink')) {
-            if (file_exists($cacheFilePath) || is_link($cacheFilePath)) {
-                return true;
-            } elseif (file_exists($symlinkToPath)) {
-                $dir = dirname($cacheFilePath);
-
-                // Directory must exist and be writable
-                if (is_writable($dir) && is_executable($dir) && symlink($symlinkToPath, $cacheFilePath)) {
-                    return true;
-                }
-            }
-        }
 
         // Create the drectory and file
         $this->initializeDirectory(dirname($cacheFilePath));
