@@ -58,17 +58,6 @@ interface SLIRImageLibrary
   public function copy(SLIRImageLibrary $destination);
 
   /**
-   * Gets a hash that represents the properties of the image.
-   *
-   * Used for caching.
-   *
-   * @param array $infosToInclude
-   * @return string
-   * @since 2.0
-   */
-  public function getHash(array $infosToInclude = array());
-
-  /**
    * Sets the path of the file
    * @param string $path
    * @return SLIRImageLibrary

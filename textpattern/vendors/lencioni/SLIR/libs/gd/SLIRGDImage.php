@@ -82,25 +82,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     }
 
     /**
-     * Gets a hash that represents the properties of the image.
-     *
-     * Used for caching.
-     *
-     * @param $infosToInclude
-     * @return string
-     * @since 2.0
-     */
-    public function getHash(array $infosToInclude = array())
-    {
-        $infos  = array(
-        );
-
-        $infos = array_merge($infos, $infosToInclude);
-
-        return parent::getHash($infos);
-    }
-
-    /**
      * @return resource
      * @since 2.0
      */

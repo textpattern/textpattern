@@ -102,32 +102,6 @@ abstract class SLIRImage
     }
 
     /**
-     * Gets a hash that represents the properties of the image.
-     *
-     * Used for caching.
-     *
-     * @param $infosToInclude
-     * @return string
-     * @since 2.0
-     */
-    public function getHash(array $infosToInclude = array())
-    {
-        $infos  = array(
-            $this->getOriginalPath(),
-            $this->getBackground(),
-            $this->getSharpeningFactor(),
-            $this->getProgressive(),
-            $this->getInfo(),
-            $this->getCropper(),
-            $this->getQuality()
-        );
-
-        $infos = array_merge($infos, $infosToInclude);
-
-        return hash('md4', serialize($infos));
-    }
-
-    /**
      * Sets the path of the file
      * @param string $path
      * @return SLIRImageLibrary
