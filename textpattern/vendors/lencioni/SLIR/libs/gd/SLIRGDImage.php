@@ -117,6 +117,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 try {
                     if ($this->isJPEG()) {
                         $this->image  = imagecreatefromjpeg($this->getFullPath());
+                        $this->fixRotation();
                     } elseif ($this->isWEBP()) {
                         $this->image  = imagecreatefromwebp($this->getFullPath());
                     } elseif ($this->isAVIF()) {
@@ -126,11 +127,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                     } elseif ($this->isPNG()) {
                         $this->image  = imagecreatefrompng($this->getFullPath());
                     } elseif ($this->isBMP()) {
-                        if (function_exists('imagecreatefrombmp')) {
-                            $this->image  = imagecreatefrombmp($this->getFullPath());
-                        } else {
-                            $this->image  = $this->imagecreatefrombmp($this->getFullPath());
-                        }
+                        $this->image  = $this->imagecreatefrombmp($this->getFullPath());
                     } elseif ($this->isSVG()) {
                         $this->image  = imagecreatefromsvg($this->getFullPath());
                     }
@@ -338,7 +335,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      */
     public function create()
     {
-        $this->image  = imagecreatetruecolor($this->getWidth(), $this->getHeight());
+        $this->image = imagecreatetruecolor($this->getWidth(), $this->getHeight());
 
         return $this;
     }
@@ -655,13 +652,55 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     }
 
     /**
+     * Check EXIF file rotation info and fix image rotation so the thumbs
+     * appear in the correct orientation.
+     */
+    private function fixRotation()
+    {
+        $path = $this->getFullPath();
+
+        if ($path) {
+            // Check exif orientation of JPEG source image.
+            $exif = exif_read_data($path);
+
+            if (!empty($exif['Orientation'])) {
+                // Correct thumbnail orientation based on exif value.
+                switch ($exif['Orientation']) {
+                    case 3: // upside-down.
+                    case 4: // upside-down (mirrored).
+                        $this->image = imagerotate($this->image, -180, 0);
+                        break;
+                    case 5: // rotate-left (mirrored).
+                    case 6: // rotate-left.
+                        $this->image = imagerotate($this->image, -90, 0);
+                        break;
+                    case 7: // rotate-right (mirrored).
+                    case 8: // rotate-right.
+                        $this->image = imagerotate($this->image, 90, 0);
+                        break;
+                }
+                // Swap height and width values if thumbnail is rotated by 90°.
+                if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
+                    $currWidth = $this->getWidth();
+                    $this->setWidth($this->getHeight());
+                    $this->setHeight($currWidth);
+                }
+
+                // Flip thumbnail if exif orientation is mirrored.
+                if (in_array($exif['Orientation'], [2, 5, 7, 4])) {
+                    imageflip($this->image, IMG_FLIP_HORIZONTAL);
+                }
+            }
+        }
+    }
+
+    /**
      * @param string $path
      * @return boolean
      * @since 2.0
      */
     private function render($path)
     {
-        // @todo SVG
         if ($this->isJPEG()) {
             return imagejpeg($this->image, $path, $this->getQuality());
         } elseif ($this->isWEBP()) {
