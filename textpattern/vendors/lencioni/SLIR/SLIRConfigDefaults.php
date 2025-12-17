@@ -197,6 +197,14 @@ class SLIRConfigDefaults
     public static $copyEXIF = false;
 
     /**
+     * The default RGB hex background color to apply to alpha-enabled images (without the #).
+     *
+     * @since 2.0
+     * @var string
+     */
+    public static $backgroundFillColor = 'ffffff';
+
+    /**
      * Initialize variables that require some dynamic processing.
      *
      * @since 2.0
