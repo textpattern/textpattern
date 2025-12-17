@@ -2029,13 +2029,14 @@ function article_image($atts)
         'title'     => '',
         'class'     => '',
         'crop'      => '',
+        'quality'   => '',
         'html_id'   => '',
         'width'     => '',
         'height'    => '',
-        'thumbnail' => false,
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
+        'thumbnail' => false,
     );
 
     $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
@@ -2113,6 +2114,7 @@ function article_image($atts)
                     $payload['w'] = $width;
                     $payload['h'] = $height;
                     $payload['c'] = $crop;
+                    $payload['q'] = $quality;
                 }
 
                 $w = $isAuto ? $payload['w'] : ($width == '' ? ($isCustom && $thumb_w ? $thumb_w : $w) : $width);
