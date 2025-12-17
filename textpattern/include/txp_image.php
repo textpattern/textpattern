@@ -432,6 +432,7 @@ function image_list($message = '')
                     'w' => $theme->get_pref('thumb_width', TEXTPATTERN_THUMB_WIDTH),
                     'h' => $theme->get_pref('thumb_height', TEXTPATTERN_THUMB_HEIGHT),
                     'c' => $theme->get_pref('thumb_cropping', TEXTPATTERN_THUMB_CROPPING),
+                    'q' => TEXTPATTERN_THUMB_QUALITY,
                 );
 
                 $thumb_w = $thumbnail == THUMB_AUTO ? $payload['w'] : $thumb_w;
@@ -725,6 +726,7 @@ function image_edit($message = '', $id = '')
         $payload['w'] = $theme->get_pref('thumb_width', TEXTPATTERN_THUMB_WIDTH);
         $payload['h'] = $theme->get_pref('thumb_height', TEXTPATTERN_THUMB_HEIGHT);
         $payload['c'] = $theme->get_pref('thumb_cropping', TEXTPATTERN_THUMB_CROPPING);
+        $payload['q'] = TEXTPATTERN_THUMB_QUALITY;
 
         $canThumb = !in_array($ext, array('.swf', '.svg'));
 

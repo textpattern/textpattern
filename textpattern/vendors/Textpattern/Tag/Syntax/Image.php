@@ -55,6 +55,7 @@ class Image
             'loading'   => null,
             'name'      => '',
             'poplink'   => 0, // Deprecated, 4.7
+            'quality'   => '',
             'wraptag'   => '',
             'width'     => '',
             'thumbnail' => false,
@@ -109,6 +110,7 @@ class Image
                 $payload['w'] = $width;
                 $payload['h'] = $height;
                 $payload['c'] = $crop;
+                $payload['q'] = $quality;
             }
 
             $width = $isAuto ? $payload['w'] : ($width == '' ? (($colPrefix && $thumb_w) ? ${$colPrefix.'w'} : $w) : $width);
@@ -504,6 +506,7 @@ class Image
             'width'     => '',
             'height'    => '',
             'crop'      => '',
+            'quality'   => '',
         ), $atts));
 
         $thumbnail = !$thumbnail ? null : $thumbnail;
@@ -518,6 +521,7 @@ class Image
                 $thisimage['w'] = $width;
                 $thisimage['h'] = $height;
                 $thisimage['c'] = $crop;
+                $thisimage['q'] = $quality;
             } elseif ($thumbnail == THUMB_CUSTOM) {
                 // Leave only thumb_w and thumb_h for the builder to use.
                 $thisimage['w'] = '';
