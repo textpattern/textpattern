@@ -56,6 +56,8 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      */
     private $data;
 
+    private $transparencyEnabled = false;
+
     /**
      * @param string $path
      * @return void
@@ -359,9 +361,10 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
             imagealphablending($destination->getImage(), false);
             imagesavealpha($destination->getImage(), true);
         } else {
-            imagealphablending($this->getImage(), false);
-            imagesavealpha($this->getImage(), true);
+            imagealphablending($this->getImage(), true);
         }
+
+        $this->transparencyEnabled = true;
 
         return $this;
     }
@@ -381,13 +384,23 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
         $background = null;
 
-        $background = imagecolorallocatealpha(
-            $this->getImage(),
-            hexdec($color[0].$color[1]),
-            hexdec($color[2].$color[3]),
-            hexdec($color[4].$color[5]),
-            127
-        );
+        if ($this->transparencyEnabled === true) {
+            $background = imagecolorallocatealpha(
+                $this->getImage(),
+                hexdec($color[0].$color[1]),
+                hexdec($color[2].$color[3]),
+                hexdec($color[4].$color[5]),
+                127
+            );
+        }
+        else {
+            $background = imagecolorallocate(
+                    $this->getImage(),
+                    hexdec($color[0].$color[1]),
+                    hexdec($color[2].$color[3]),
+                    hexdec($color[4].$color[5])
+            );
+        }
 
         imagefilledrectangle($this->getImage(), 0, 0, $this->getWidth(), $this->getHeight(), $background);
 
