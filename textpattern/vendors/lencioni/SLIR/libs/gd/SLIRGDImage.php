@@ -226,6 +226,10 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     public function resample(SLIRImageLibrary $destination)
     {
         if (!$this->isSVG()) {
+            if ($this->isAbleToHaveTransparency()) {
+                $this->enableTransparency($destination);
+            }
+
             imagecopyresampled(
                 $destination->getImage(),
                 $this->getImage(),
@@ -252,6 +256,9 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     public function copy(SLIRImageLibrary $destination)
     {
         if (!$this->isSVG()) {
+            if ($this->isAbleToHaveTransparency()) {
+                $this->enableTransparency($destination);
+            }
             imagecopy(
                 $destination->getImage(),
                 $this->getImage(),
@@ -326,10 +333,14 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * @return SLIRImageLibrary
      * @since 2.0
      */
-    public function enableTransparency()
+    public function enableTransparency($destination = '')
     {
-        imagealphablending($this->getImage(), false);
-        imagesavealpha($this->getImage(), true);
+        if ($destination instanceof SLIRImageLibrary) {
+            imagealphablending($destination->getImage(), false);
+            imagesavealpha($destination->getImage(), true);
+        } else {
+            imagealphablending($this->getImage(), true);
+        }
 
         $this->transparencyEnabled = true;
 
@@ -359,16 +370,13 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 hexdec($color[4].$color[5]),
                 127
             );
-        }
-        else {
-
+        } else {
             $background = imagecolorallocate(
                     $this->getImage(),
                     hexdec($color[0].$color[1]),
                     hexdec($color[2].$color[3]),
                     hexdec($color[4].$color[5])
             );
-
         }
 
         imagefilledrectangle($this->getImage(), 0, 0, $this->getWidth(), $this->getHeight(), $background);
@@ -440,7 +448,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                             ->setWidth($this->getCropWidth())
                             ->setHeight($this->getCropHeight())
                             ->setBackground($this->getBackground());
-                         
 
             $cropped->background();
 
