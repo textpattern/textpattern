@@ -179,14 +179,13 @@ class SLIRConfigDefaults
     public static $garbageCollectDivisor  = 200;
 
     /**
-     * Specifies the number of seconds after which data will be seen as 'garbage' and potentially cleaned up (deleted from the cache).
-     *
-     * Default: 30 days (30 * 24 * 60 * 60)
+     * Specifies the number of seconds after which data will be seen as 'garbage' and potentially
+     * cleaned up (deleted from the cache).
      *
      * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectFileCacheMaxLifetime = 2592000;
+    public static $garbageCollectFileCacheMaxLifetime = THUMB_CACHE_SECONDS;
 
     /**
      * If true, SLIR will copy EXIF information from the source image to the rendered image.

@@ -1139,6 +1139,18 @@ if (!defined('TEXTPATTERN_THUMB_DIR')) {
     define('TEXTPATTERN_THUMB_DIR', 'thumb');
 }
 
+if (!defined('THUMB_CACHE_SECONDS')) {
+    /**
+     * Number of seconds after which an unaccessed, cached image becomes eligible for deletion
+     *
+     * Default: 30 days (30 * 24 * 60 * 60)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_CACHE_SECONDS', 2592000);
+}
+
 if (!defined('THUMB_SECRET_REGEN_SECONDS')) {
     /**
      * After this many seconds, a new thumbnail random token is generated,
