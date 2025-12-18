@@ -310,11 +310,12 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
             if ($this->isJPEG()) {
                 $filepath = $this->getFullPath();
+
                 if (is_readable($filepath)) {
                     $exif = exif_read_data($filepath);
 
                     // Swap height and width values if thumbnail is rotated by 90°.
-                    if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
+                    if (!empty($exif['Orientation']) && in_array($exif['Orientation'], [5, 6, 7, 8])) {
                         $currWidth = $this->info['width'];
                         $this->setWidth($this->info['height']);
                         $this->setHeight($currWidth);
