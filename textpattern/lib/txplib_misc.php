@@ -5347,7 +5347,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
 
         $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'];
 
-        if (/*!file_exists($path_to_site.'/'.$base) &&*/ $sec_mode === 'always') {
+        if (!file_exists($path_to_site.'/'.$base) && $sec_mode === 'always') {
             $sid = get_pref('thumb_secret');
             $hash_url = $img['id'].$paramlist;
             $token = hash_hmac('sha256', $hash_url, $sid);
