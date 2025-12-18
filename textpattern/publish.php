@@ -818,14 +818,10 @@ function output_thumb($data = array())
             $imgToken = gps('token');
 
             if ($imgToken) {
-                $txpToken = \Txp::get('\Textpattern\Security\Token');
-                $selector = substr($imgToken, SALT_LENGTH);
                 $sid = get_pref('thumb_secret');
-                $hash_url = $sid . filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'];
-                $hash = sha1($hash_url);
-                $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
+                $hash_url = filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'];
 
-                if ($imgToken === $computedToken.$selector) {
+                if ($imgToken === hash_hmac('sha256', $hash_url, $sid)) {
                     $slir = new SLIR();
                     $slir->processRequestFromURL();
                 }
