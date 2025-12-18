@@ -5384,7 +5384,7 @@ function setImageToken() {
 
     if (empty($prefs['thumb_secret']) || empty($prefs['thumb_secret_lastmod']) ||
             $now > $prefs['thumb_secret_lastmod'] + THUMB_SECRET_REGEN_SECONDS) {
-        set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
+        set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(SALT_LENGTH), 'publish', PREF_HIDDEN);
         set_pref('thumb_secret_lastmod', $now, 'publish', PREF_HIDDEN);
     }
 }
