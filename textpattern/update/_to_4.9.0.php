@@ -25,6 +25,13 @@ if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
 }
 
+// Add the thumb cache subdirectory.
+$toAdd = IMPATH . TEXTPATTERN_THUMB_DIR;
+
+if (!file_exists($toAdd)) {
+    mkdir($toAdd);
+}
+
 safe_update('txp_prefs', "name = 'spam_blocklists'", "name = 'spam_blacklists'");
 
 $cols = getThings('describe `' . PFX . 'txp_prefs`');
