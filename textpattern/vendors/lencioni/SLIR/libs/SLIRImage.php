@@ -48,7 +48,7 @@ abstract class SLIRImage
     /**
      * Mime types
      * @var array
-     * @since 2.0
+     * @since 4.9.0
      */
     private $mimeTypes  = array(
         'JPEG'  => array(
@@ -105,7 +105,7 @@ abstract class SLIRImage
      * Sets the path of the file
      * @param string $path
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function setPath($path)
     {
@@ -116,7 +116,7 @@ abstract class SLIRImage
     /**
      * Gets the path of the file
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function getPath()
     {
@@ -125,7 +125,7 @@ abstract class SLIRImage
 
     /**
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function getFullPath()
     {
@@ -136,7 +136,7 @@ abstract class SLIRImage
      * Sets the path of the original file
      * @param string $path
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function setOriginalPath($path)
     {
@@ -147,7 +147,7 @@ abstract class SLIRImage
     /**
      * Gets the path of the original file
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function getOriginalPath()
     {
@@ -156,7 +156,7 @@ abstract class SLIRImage
 
     /**
      * @return integer
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getQuality()
     {
@@ -175,7 +175,7 @@ abstract class SLIRImage
 
     /**
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getBackground()
     {
@@ -194,7 +194,7 @@ abstract class SLIRImage
 
         /**
      * @return boolean
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getProgressive()
     {
@@ -215,7 +215,7 @@ abstract class SLIRImage
      * Sets the sharpening factor of the image
      * @param float $sharpeningFactor
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function setSharpeningFactor($sharpeningFactor)
     {
@@ -226,7 +226,7 @@ abstract class SLIRImage
     /**
      * Gets the sharpening factor of the image
      * @return float
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function getSharpeningFactor()
     {
@@ -236,7 +236,7 @@ abstract class SLIRImage
     /**
      * Checks the mime type to see if it is an image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isImage()
@@ -249,7 +249,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string $type Can be 'JPEG', 'GIF', 'PNG', or 'BMP'
      * @return boolean
      */
@@ -263,7 +263,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isJPEG()
@@ -272,7 +272,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isWEBP()
@@ -281,7 +281,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isAVIF()
@@ -290,7 +290,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isSVG()
@@ -299,7 +299,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isGIF()
@@ -308,7 +308,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isBMP()
@@ -317,7 +317,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isPNG()
@@ -326,7 +326,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isAbleToHaveTransparency()
@@ -339,7 +339,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final protected function isSharpeningDesired()
@@ -352,7 +352,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return integer
      */
     final public function getArea()
@@ -361,7 +361,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     final public function getRatio()
@@ -374,7 +374,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     final public function getCropRatio()
@@ -387,7 +387,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return integer
      */
     final public function getCropWidth()
@@ -396,7 +396,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return integer
      */
     final public function getCropHeight()
@@ -405,7 +405,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $width
      * @return SLIRImage
      */
@@ -416,7 +416,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $height
      * @return SLIRImage
      */
@@ -429,7 +429,7 @@ abstract class SLIRImage
     /**
      * Gets the width of the image
      * @return integer
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getWidth()
     {
@@ -439,7 +439,7 @@ abstract class SLIRImage
     /**
      * Gets the height of the image
      * @return integer
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getHeight()
     {
@@ -447,7 +447,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $width
      * @return SLIRImage
      */
@@ -458,7 +458,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $height
      * @return SLIRImage
      */
@@ -471,7 +471,7 @@ abstract class SLIRImage
     /**
      * Gets the MIME type of the image
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getMimeType()
     {
@@ -482,7 +482,7 @@ abstract class SLIRImage
      * Sets the MIME type of the image
      * @param string $mime
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function setMimeType($mime)
     {
@@ -492,7 +492,7 @@ abstract class SLIRImage
 
     /**
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getCropper()
     {
@@ -506,7 +506,7 @@ abstract class SLIRImage
     /**
      * @param string $cropper
      * @return SLIRImage
-     * @since 2.0
+     * @since 4.9.0
      */
     public function setCropper($cropper)
     {
@@ -526,7 +526,7 @@ abstract class SLIRImage
      * Turns on transparency for image if no background fill color is
      * specified, otherwise, fills background with specified color
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRImageLibrary
      */
     final public function background()
@@ -545,7 +545,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     protected function croppingIsNeeded()
@@ -560,7 +560,7 @@ abstract class SLIRImage
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      */
     public function applyTransformations()
     {

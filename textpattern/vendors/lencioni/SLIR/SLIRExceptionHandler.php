@@ -26,14 +26,14 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
 /**
  * Exception and error handler
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
@@ -44,7 +44,7 @@ class SLIRExceptionHandler
     /**
      * Max number of characters to wrap error message at
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     const WRAP_AT   = 65;
@@ -52,7 +52,7 @@ class SLIRExceptionHandler
     /**
      * Text size to use in imagestring(). Possible values are 1, 2, 3, 4, or 5
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     const TEXT_SIZE   = 4;
@@ -60,7 +60,7 @@ class SLIRExceptionHandler
     /**
      * Height of one line of text, in pixels
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     const LINE_HEIGHT = 16;
@@ -68,7 +68,7 @@ class SLIRExceptionHandler
     /**
      * Width of one character of text, in pixels
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     const CHAR_WIDTH  = 8;
@@ -76,7 +76,7 @@ class SLIRExceptionHandler
     /**
      * Logs the error to a file
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param Exception $e
      * @return boolean
      */
@@ -102,7 +102,7 @@ class SLIRExceptionHandler
     /**
      * Create and output an image with an error message
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param Exception $e
      */
     private static function errorImage(Exception $e)
@@ -156,7 +156,7 @@ class SLIRExceptionHandler
     /**
      * Outputs the error as plain text
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param Exception $e
      * @return void
      */
@@ -168,7 +168,7 @@ class SLIRExceptionHandler
     /**
      * Exception handler
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param Exception $e
      * @return void
      */
@@ -188,7 +188,7 @@ class SLIRExceptionHandler
      *
      * Converts all errors into exceptions so they can be handled with the SLIR exception handler
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $severity Level of the error raised
      * @param string $message Error message
      * @param string $filename Filename that the error was raised in

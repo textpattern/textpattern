@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  * @subpackage Croppers
  */
@@ -40,7 +40,7 @@ use \lencioni\SLIR\libs\gd\croppers\SLIRCropperCentered;
  *
  * Calculates the crop offset anchored in the top of the image if the top and bottom are being cropped, or the center of the image if the left and right are being cropped
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  * @subpackage Croppers
@@ -48,7 +48,7 @@ use \lencioni\SLIR\libs\gd\croppers\SLIRCropperCentered;
 class SLIRCropperTopcentered extends SLIRCropperCentered
 {
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return integer
    */

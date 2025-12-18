@@ -26,14 +26,14 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
 /**
  * SLIR Config Class
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
@@ -42,7 +42,7 @@ namespace lencioni\SLIR;
 class SLIRConfigDefaults
 {
     /**
-     * Path to default the source image to if the requested image cannot be found.
+     * Default path to the source image if the requested image cannot be found.
      *
      * This should match the style of path you would normally pass to SLIR in the URL (not the full path on the filesystem).
      *
@@ -50,15 +50,17 @@ class SLIRConfigDefaults
      *
      * If null, SLIR will throw an exception if the requested image cannot be found.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $defaultImagePath = null;
 
     /**
-     * Default quality setting to use if quality is not specified in the request. Ranges from 0 (worst quality, smaller file) to 100 (best quality, largest filesize).
+     * Default quality setting to use if quality is not specified in the request.
      *
-     * @since 2.0
+     * Ranges from 0 (worst quality, smaller file) to 100 (best quality, largest filesize).
+     *
+     * @since 4.9.0
      * @var integer
      */
     public static $defaultQuality = TEXTPATTERN_THUMB_QUALITY;
@@ -66,27 +68,27 @@ class SLIRConfigDefaults
     /**
      * Default setting for whether JPEGs should be progressive JPEGs (interlaced) or not.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
     public static $defaultProgressiveJPEG = true;
 
     /**
      * How long (in seconds) the web browser should use its cached copy of the image
-     * before checking with the server for a new version
+     * before checking with the server for a new version.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
-    public static $browserCacheTTL  = TEXTPATTERN_THUMB_TTL;
+    public static $browserCacheTTL = TEXTPATTERN_THUMB_TTL;
 
     /**
      * How much memory (in megabytes) SLIR is allowed to allocate for memory-intensive processes such as rendering and cropping.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
-    public static $maxMemoryToAllocate  = 128;
+    public static $maxMemoryToAllocate = 128;
 
     /**
      * Default crop mode setting to use if crop mode is not specified in the request.
@@ -96,7 +98,7 @@ class SLIRConfigDefaults
      * SLIR::CROP_CLASS_TOP_CENTERED
      * SLIR::CROP_CLASS_SMART
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $defaultCropper = SLIR::CROP_CLASS_CENTERED;
@@ -104,10 +106,10 @@ class SLIRConfigDefaults
     /**
      * If true, SLIR will generate and output images from error messages. If false, error messages will be plaintext.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
-    public static $enableErrorImages  = true;
+    public static $enableErrorImages = true;
 
     /**
      * Absolute path to the web root (location of files when visiting http://example.com/) (no trailing slash).
@@ -116,19 +118,17 @@ class SLIRConfigDefaults
      *
      * By default, this is dyanmically determined, so it is set in the init() function and hopefully will not need to be overwritten. However, if SLIR isn't working correctly, it might not be determining your document root correctly and you might need to set this manually in your configuration file.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $documentRoot = null;
 
     /**
-     * Absolute path to SLIR (no trailing slash) from the root directory on your server's filesystem.
+     * Web path to SLIR trigger URL (no trailing slash). For example http://example.com/images/thumb.
      *
-     * For example, if the files on your website are in /var/www/ and slir is accessible at http://example.com/slir/, then the value of this setting should be '/var/www/slir'.
+     * By default, this is dyanmically determined in the init() function and hopefully will not need to be overwritten. However, if SLIR isn't working correctly, it might not be determining the path to SLIR correctly and you might need to set this manually in your configuration file.
      *
-     * By default, this is dyanmically determined, so it is set in the init() function and hopefully will not need to be overwritten. However, if SLIR isn't working correctly, it might not be determining the path to SLIR correctly and you might need to set this manually in your configuration file.
-     *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $pathToSLIR = null;
@@ -136,7 +136,7 @@ class SLIRConfigDefaults
     /**
      * Absolute path to cache directory (no trailing slash). This directory must be world-readable, writable by the web server. Ideally, this directory should be located outside of the web tree for security reasons.
      *
-     * By default, this is dynamically determined in the init() function and it defaults to /path/to/slir/cache (or $pathToSlir . '/cache') which is the cache directory inside the directory SLIR is located.
+     * By default, this is dynamically determined in the init() function and it defaults to /path/to/images/thumb (or $pathToSlir . '/thumb') which is the cache directory inside the directory images are located.
      *
      * @var string
      */
@@ -145,9 +145,9 @@ class SLIRConfigDefaults
     /**
      * Path to the error log file. Needs to be writable by the web server. Ideally, this should be located outside of the web tree.
      *
-     * If not specified, defaults to 'slir-error-log' in the directory SLIR is located.
+     * If not specified, defaults to 'slir-error-log' in the temp directory.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $pathToErrorLog = null;
@@ -155,7 +155,7 @@ class SLIRConfigDefaults
     /**
      * If true, forces SLIR to always use the query string for parameters instead of mod_rewrite.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
     public static $forceQueryString = false;
@@ -163,7 +163,7 @@ class SLIRConfigDefaults
     /**
      * In conjunction with $garbageCollectDivisor is used to manage probability that the garbage collection routine is started.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     public static $garbageCollectProbability  = 1;
@@ -173,7 +173,7 @@ class SLIRConfigDefaults
      *
      * The probability is calculated by using $garbageCollectProbability/$garbageCollectDivisor, e.g. 1/100 means there is a 1% chance that the garbage collection process starts on each request.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     public static $garbageCollectDivisor  = 200;
@@ -181,17 +181,21 @@ class SLIRConfigDefaults
     /**
      * Specifies the number of seconds after which data will be seen as 'garbage' and potentially cleaned up (deleted from the cache).
      *
-     * @since 2.0
+     * Default: 30 days (30 * 24 * 60 * 60)
+     *
+     * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectFileCacheMaxLifetime = 2592000; // 30 days = 30 * 24 * 60 * 60
+    public static $garbageCollectFileCacheMaxLifetime = 2592000;
 
     /**
-     * If true, SLIR will copy EXIF information should from the source image to the rendered image.
+     * If true, SLIR will copy EXIF information from the source image to the rendered image.
      *
      * This can be particularly useful (necessary?) if you use an embedded color profile.
      *
-     * @since 2.0
+     * CURRENTLY DOES NOT WORK: DO NOT USE.
+     *
+     * @since 4.9.0
      * @var boolean
      */
     public static $copyEXIF = false;
@@ -199,7 +203,7 @@ class SLIRConfigDefaults
     /**
      * The default RGB hex background color to apply to alpha-enabled images (without the #).
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     public static $backgroundFillColor = 'ffffff';
@@ -207,7 +211,7 @@ class SLIRConfigDefaults
     /**
      * Initialize variables that require some dynamic processing.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     public static function init()

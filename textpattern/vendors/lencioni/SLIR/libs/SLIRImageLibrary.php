@@ -26,14 +26,14 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
 /**
  * SLIR Image Library interface
  * @package SLIR
- * @since 2.0
+ * @since 4.9.0
  */
 namespace lencioni\SLIR\libs;
 
@@ -45,7 +45,7 @@ interface SLIRImageLibrary
    * @param integer $width
    * @param integer $height
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function resample(SLIRImageLibrary $destination);
 
@@ -53,7 +53,7 @@ interface SLIRImageLibrary
    * Copies the image into the destination image without reszing
    * @param SLIRImageLibrary $destination
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function copy(SLIRImageLibrary $destination);
 
@@ -61,14 +61,14 @@ interface SLIRImageLibrary
    * Sets the path of the file
    * @param string $path
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setPath($path);
 
   /**
    * Gets the path of the file
    * @return string
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getPath();
 
@@ -76,28 +76,28 @@ interface SLIRImageLibrary
    * Sets the path of the original file
    * @param string $path
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setOriginalPath($path);
 
   /**
    * Gets the path of the original file
    * @return string
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getOriginalPath();
 
   /**
    * Gets the width of the image
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getWidth();
 
   /**
    * Gets the height of the image
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getHeight();
 
@@ -105,7 +105,7 @@ interface SLIRImageLibrary
    * Sets the width of the image
    * @param integer $width
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setWidth($width);
 
@@ -113,21 +113,21 @@ interface SLIRImageLibrary
    * Sets the height of the image
    * @param integer $height
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setHeight($height);
 
   /**
    * Gets the width of the cropped image
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getCropWidth();
 
   /**
    * Gets the height of the cropped image
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getCropHeight();
 
@@ -135,7 +135,7 @@ interface SLIRImageLibrary
    * Sets the width of the cropped image
    * @param integer $width
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setCropWidth($width);
 
@@ -143,14 +143,14 @@ interface SLIRImageLibrary
    * Sets the height of the cropped image
    * @param integer $height
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setCropHeight($height);
 
   /**
    * Gets cropper to be used
    * @return string
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getCropper();
 
@@ -158,13 +158,13 @@ interface SLIRImageLibrary
    * Sets the cropper to be used
    * @param string $cropper
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function setCropper($cropper);
 
   /**
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getArea();
 
@@ -172,34 +172,34 @@ interface SLIRImageLibrary
    * Gets info about the image
    * @param string $info
    * @return mixed
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getInfo($info = null);
 
   /**
    * Gets the width / height
    * @return float
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getRatio();
 
   /**
    * Gets the cropWidth / cropHeight
    * @return float
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getCropRatio();
 
   /**
    * Gets the MIME type of the image
    * @return string
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getMimeType();
 
   /**
    * @return string raw image data
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getData();
 
@@ -218,7 +218,7 @@ interface SLIRImageLibrary
 
   /**
    * @return integer
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getQuality();
 
@@ -230,7 +230,7 @@ interface SLIRImageLibrary
 
   /**
    * @return string
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getBackground();
 
@@ -244,7 +244,7 @@ interface SLIRImageLibrary
    * Turns on transparency for image if no background fill color is
    * specified, otherwise, fills background
    *
-   * @since 2.0
+   * @since 4.9.0
    * @return SLIRImageLibrary
    */
   public function background();
@@ -252,20 +252,20 @@ interface SLIRImageLibrary
   /**
    * Turns on the alpha channel to enable transparency in the image
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function enableTransparency($destination = '');
 
   /**
    * Fills the image with the set background color
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function fill();
 
   /**
    * @return boolean
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getProgressive();
 
@@ -278,7 +278,7 @@ interface SLIRImageLibrary
   /**
    * Turns interlacing on or off
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function interlace();
 
@@ -289,13 +289,13 @@ interface SLIRImageLibrary
    * @param integer $cropHeight
    * @param string $fill color in hex
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function crop();
 
   /**
    * @return float
-   * @since 2.0
+   * @since 4.9.0
    */
   public function getSharpeningFactor();
 
@@ -308,14 +308,14 @@ interface SLIRImageLibrary
   /**
    * Sharpens the image
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function sharpen();
 
   /**
    * Outputs the image to the client
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function output();
 
@@ -323,21 +323,21 @@ interface SLIRImageLibrary
    * Saves the image to disk
    * @param string $path
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function save();
 
   /**
    * Destroys the image resource
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function destroy();
 
   /**
    * Resizes, crops, sharpens, fills background, etc.
    * @return SLIRImageLibrary
-   * @since 2.0
+   * @since 4.9.0
    */
   public function applyTransformations();
 }

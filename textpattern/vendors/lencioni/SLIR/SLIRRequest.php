@@ -26,14 +26,14 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
 /**
  * SLIR request class
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
@@ -47,7 +47,7 @@ class SLIRRequest
     /**
      * Path to image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     private $path;
@@ -55,7 +55,7 @@ class SLIRRequest
     /**
      * Maximum width for resized image, in pixels
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     private $width;
@@ -63,7 +63,7 @@ class SLIRRequest
     /**
      * Maximum height for resized image, in pixels
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     private $height;
@@ -75,7 +75,7 @@ class SLIRRequest
      * or if a long rectangle is desired, the crop ratio could be "4:1". Stored
      * as an associative array with keys being 'width' and 'height'.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var array
      */
     private $cropRatio;
@@ -83,7 +83,7 @@ class SLIRRequest
     /**
      * Name of the cropper to use, e.g. 'centered' or 'smart'
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     private $cropper;
@@ -91,7 +91,7 @@ class SLIRRequest
     /**
      * Quality of rendered image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     private $quality;
@@ -99,19 +99,19 @@ class SLIRRequest
     /**
      * Whether or not progressive JPEG output is turned on
      * @var boolean
-     * @since 2.0
+     * @since 4.9.0
      */
     private $progressive;
 
     /**
      * Color to fill background of transparent PNGs and GIFs
      * @var string
-     * @since 2.0
+     * @since 4.9.0
      */
     private $background;
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
     private $isUsingDefaultImagePath  = false;
@@ -119,7 +119,7 @@ class SLIRRequest
     /**
      * Supplied request - overrides the URL
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     private $request = null;
@@ -127,14 +127,14 @@ class SLIRRequest
     /**
      * The full paramstring extracted from the URL
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     private $paramString = null;
 
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function __construct($request = null)
     {
@@ -144,7 +144,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function initialize()
     {
@@ -170,7 +170,7 @@ class SLIRRequest
      * Destructor method. Try to clean up memory.
      *
      * @return void
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function __destruct()
     {
@@ -186,7 +186,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     final public function __set($name, $value)
@@ -233,7 +233,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return mixed
      */
     final public function __get($name)
@@ -242,7 +242,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function setWidth($value)
@@ -254,7 +254,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function setHeight($value)
@@ -266,7 +266,7 @@ class SLIRRequest
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function setQuality($value)
@@ -337,7 +337,7 @@ class SLIRRequest
     /**
      * Determines the parameters to use for resizing
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return array
      */
     private function getParameters()
@@ -371,7 +371,7 @@ class SLIRRequest
      *
      * This is used for requests that are using the mod_rewrite syntax
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return array
      */
     private function getParametersFromURL()
@@ -421,7 +421,7 @@ Example usage:
      * Determines if the request is using the mod_rewrite version or the query
      * string version
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isUsingQueryString()
@@ -438,7 +438,7 @@ Example usage:
     /**
      * Checks if the default image path set in the config is being used for this request
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     public function isUsingDefaultImagePath()
@@ -447,7 +447,7 @@ Example usage:
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string $path
      */
     private function setPath($path)
@@ -470,7 +470,7 @@ Example usage:
 
     /**
      * Strips the domain and query string from the path if either is there
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function localizePath($path)
@@ -480,7 +480,7 @@ Example usage:
 
     /**
      * Strips the protocol and domain from the path if it is there
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function stripProtocolAndDomain($path)
@@ -490,7 +490,7 @@ Example usage:
 
     /**
      * Strips the query string from the path if it is there
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function stripQueryString($path)
@@ -504,7 +504,7 @@ Example usage:
      * For security, directories may not contain ':' and images may not contain
      * '..', '<', or '>'.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isPathSecure()
@@ -519,7 +519,7 @@ Example usage:
     /**
      * Determines if the path exists
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function pathExists()
@@ -529,7 +529,7 @@ Example usage:
 
     /**
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function fullPath()
     {
@@ -537,7 +537,7 @@ Example usage:
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isBackground()
@@ -550,7 +550,7 @@ Example usage:
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isQuality()
@@ -563,7 +563,7 @@ Example usage:
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     final public function isCropping()

@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  * @subpackage Croppers
  */
@@ -39,7 +39,7 @@ use \lencioni\SLIR\libs\gd\croppers\SLIRCropper;
 /**
  * Smart SLIR cropper
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  * @subpackage Croppers
@@ -74,7 +74,7 @@ class SLIRCropperSmart implements SLIRCropper
    * Destruct method. Try to clean up memory a little.
    *
    * @return void
-   * @since 2.0
+   * @since 4.9.0
    */
   public function __destruct()
   {
@@ -84,7 +84,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Determines if the top and bottom need to be cropped
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return boolean
    */
@@ -101,7 +101,7 @@ class SLIRCropperSmart implements SLIRCropper
    * Determines the optimal number of rows in from the top or left to crop
    * the source image
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return integer|boolean
    */
@@ -235,7 +235,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Calculate the interestingness value of a row of pixels
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @param integer $row
    * @param integer $pixelStep Number of pixels to jump after each step when comparing interestingness
@@ -277,7 +277,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Get the interestingness value of a pixel
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @param integer $x x-axis position of pixel to calculate
    * @param integer $y y-axis position of pixel to calculate
@@ -304,7 +304,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Load the color information of the requested pixel into the $colors array
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @param integer $x x-axis position of pixel to calculate
    * @param integer $y y-axis position of pixel to calculate
@@ -334,7 +334,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Calculates each adjacent pixel's Delta E in relation to the pixel requested
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @param integer $x x-axis position of pixel to calculate
    * @param integer $y y-axis position of pixel to calculate
@@ -377,7 +377,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Calculates and stores requested pixel's Delta E in relation to comparison pixel
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @param integer $xA x-axis position of pixel to calculate
    * @param integer $yA y-axis position of pixel to calculate
@@ -417,7 +417,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Calculates and stores a pixel's overall interestingness value
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param integer $x x-axis position of pixel to calculate
    * @param integer $y y-axis position of pixel to calculate
    * @return boolean
@@ -432,7 +432,7 @@ class SLIRCropperSmart implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param integer $int
    * @return array
    */
@@ -446,7 +446,7 @@ class SLIRCropperSmart implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param integer $int
    * @return array
    */
@@ -465,7 +465,7 @@ class SLIRCropperSmart implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param array $rgb
    * @return array XYZ
    * @link http://easyrgb.com/index.php?X=MATH&H=02#text2
@@ -528,7 +528,7 @@ class SLIRCropperSmart implements SLIRCropper
 
   /**
    * Converts a color from RGB colorspace to CIE-L*ab colorspace
-   * @since 2.0
+   * @since 4.9.0
    * @param array $xyz
    * @return array LAB
    * @link http://www.easyrgb.com/index.php?X=MATH&H=05#text5
@@ -569,7 +569,7 @@ class SLIRCropperSmart implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param array $labA LAB color array
    * @param array $labB LAB color array
    * @return float
@@ -588,7 +588,7 @@ class SLIRCropperSmart implements SLIRCropper
    *
    * @link http://en.wikipedia.org/wiki/Color_difference#CIEDE2000
    * @link http://easyrgb.com/index.php?X=DELT&H=05#text5
-   * @since 2.0
+   * @since 4.9.0
    * @param array $labA LAB color array
    * @param array $labB LAB color array
    * @return float
@@ -670,7 +670,7 @@ class SLIRCropperSmart implements SLIRCropper
   /**
    * Compute the Delta CMC value of two colors in the LAB colorspace
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param array $labA LAB color array
    * @param array $labB LAB color array
    * @return float
@@ -712,7 +712,7 @@ class SLIRCropperSmart implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param integer $a
    * @param integer $b
    * @return CIE-H° value
@@ -750,7 +750,7 @@ class SLIRCropperSmart implements SLIRCropper
    * Calculates the crop offset using an algorithm that tries to determine
    * the most interesting portion of the image to keep.
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return array Associative array with the keys of x and y that specify the top left corner of the box that should be cropped
    */

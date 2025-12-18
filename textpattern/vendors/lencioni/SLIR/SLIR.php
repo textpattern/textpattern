@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
@@ -122,25 +122,25 @@ use \lencioni\SLIR\icc\JPEG_ICC;
 class SLIR
 {
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     const VERSION = '2.0b4';
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     const CROP_CLASS_CENTERED = 'centered';
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     const CROP_CLASS_TOP_CENTERED = 'topcentered';
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @var string
      */
     const CROP_CLASS_SMART = 'smart';
@@ -148,7 +148,7 @@ class SLIR
     /**
      * Request object
      *
-     * @since 2.0
+     * @since 4.9.0
      * @uses SLIRRequest
      * @var object
      */
@@ -157,7 +157,7 @@ class SLIR
     /**
      * Source image object
      *
-     * @since 2.0
+     * @since 4.9.0
      * @uses SLIRImage
      * @var object
      */
@@ -166,7 +166,7 @@ class SLIR
     /**
      * Rendered image object
      *
-     * @since 2.0
+     * @since 4.9.0
      * @uses SLIRImage
      * @var object
      */
@@ -175,7 +175,7 @@ class SLIR
     /**
      * Whether or not SLIR has alerady been initialized
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
     private $isSLIRInitialized = false;
@@ -183,7 +183,7 @@ class SLIR
     /**
      * Whether or not the cache has already been initialized
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var boolean
      */
     private $isCacheInitialized = false;
@@ -193,7 +193,7 @@ class SLIR
      *
      * This is primarily used for testing.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var array
      */
     private $headers = array();
@@ -201,7 +201,7 @@ class SLIR
     /**
      * URL to process. Uses the $_GET URL if not set
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var array
      */
     private $url = null;
@@ -209,7 +209,7 @@ class SLIR
     /**
      * The magic starts here
      *
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function __construct($path = null, $url = null)
     {
@@ -230,7 +230,7 @@ class SLIR
      * Destructor method. Try to clean up memory a little.
      *
      * @return void
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function __destruct()
     {
@@ -242,7 +242,7 @@ class SLIR
     /**
      * Sets up SLIR to be able to process image resizing requests
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     public function initialize()
@@ -273,7 +273,7 @@ class SLIR
     /**
      * Processes the SLIR request from the parameters passed through the URL
      *
-     * @since 2.0
+     * @since 4.9.0
      */
     public function processRequestFromURL()
     {
@@ -296,7 +296,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRRequest
      */
     private function getRequest()
@@ -310,7 +310,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRImage
      */
     private function getSource()
@@ -334,7 +334,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRImage
      */
     private function getRendered()
@@ -451,7 +451,7 @@ class SLIR
     /**
      * Disables E_STRICT and E_NOTICE error reporting
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return integer
      */
     private function disableStrictErrorReporting()
@@ -462,7 +462,7 @@ class SLIR
     /**
      * Escapes from output buffering.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     final public function escapeOutputBuffering()
@@ -480,7 +480,7 @@ class SLIR
     /**
      * Determines if the garbage collector should run for this request.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function garbageCollectionShouldRun()
@@ -495,7 +495,7 @@ class SLIR
     /**
      * Checks to see if the garbage collector should be initialized, and if it should, initializes it.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function initializeGarbageCollection()
@@ -509,7 +509,7 @@ class SLIR
 
     /**
      * @return void
-     * @since 2.0
+     * @since 4.9.0
      */
     public function collectGarbage()
     {
@@ -528,7 +528,7 @@ class SLIR
      *
      * If the configuration file cannot be included, this will throw an error that will hopefully explain what needs to be done.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     final public function getConfig()
@@ -539,7 +539,7 @@ class SLIR
     /**
      * @param string $path
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     final public function resolveRelativePath($path)
     {
@@ -555,7 +555,7 @@ class SLIR
     /**
      * Renders requested changes to the image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function render()
@@ -569,7 +569,7 @@ class SLIR
     /**
      * Copies the source image to the rendered image, resizing (resampling) it if resizing is requested
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function copySourceToRendered()
@@ -592,7 +592,7 @@ class SLIR
     /**
      * Calculates how much to sharpen the image based on the difference in dimensions of the source image and the rendered image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return integer Sharpness factor
      */
     private function calculateSharpnessFactor()
@@ -604,7 +604,7 @@ class SLIR
      * Calculates sharpness factor to be used to sharpen an image based on the
      * area of the source image and the area of the destination image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @author Ryan Rud
      * @link http://adryrun.com
      *
@@ -627,7 +627,7 @@ class SLIR
     /**
      * Copies IPTC data from the source image to the cached file
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $cacheFilePath
      * @return boolean
      */
@@ -653,7 +653,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @author Thies C. Arntzen
      */
     private function makeIPTCTag($rec, $data, $value)
@@ -680,7 +680,7 @@ class SLIR
      * anything needs to be changed or if we simply need to serve up the source
      * image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      * @todo Add check for JPEGs and progressiveness
      */
@@ -704,7 +704,7 @@ class SLIR
     /**
      * Determines if the requested width is different than the width of the source image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isWidthDifferent()
@@ -719,7 +719,7 @@ class SLIR
     /**
      * Determines if the requested height is different than the height of the source image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isHeightDifferent()
@@ -734,7 +734,7 @@ class SLIR
     /**
      * Determines if a background fill has been requested and if the image is able to have transparency (not for JPEG files)
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isBackgroundFillOn()
@@ -749,7 +749,7 @@ class SLIR
     /**
      * Determines if the user included image quality in the request
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isQualityOn()
@@ -764,7 +764,7 @@ class SLIR
     /**
      * Determines if the image should be cropped based on the requested crop ratio and the width:height ratio of the source image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isCroppingNeeded()
@@ -779,7 +779,7 @@ class SLIR
     /**
      * Determine the quality to use when rendering the image
      * @return integer
-     * @since 2.0
+     * @since 4.9.0
      */
     private function getQuality()
     {
@@ -793,7 +793,7 @@ class SLIR
     /**
      * Determine whether the rendered image should be progressive or not
      * @return boolean
-     * @since 2.0
+     * @since 4.9.0
      */
     private function getProgressive()
     {
@@ -809,7 +809,7 @@ class SLIR
     /**
      * Get the mime type that we want to render as
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     private function getMimeType()
     {
@@ -823,7 +823,7 @@ class SLIR
 
     /**
      * @return string
-     * @since 2.0
+     * @since 4.9.0
      */
     private function getBackground()
     {
@@ -837,7 +837,7 @@ class SLIR
     /**
      * Determines if the image should be resized based on its width (i.e. the width is the constraining dimension for this request)
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function shouldResizeBasedOnWidth()
@@ -851,7 +851,7 @@ class SLIR
 
     /**
      * Determines if the image should be resized based on its height (i.e. the height is the constraining dimension for this request)
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function shouldResizeBasedOnHeight()
@@ -864,7 +864,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeWidthFactor()
@@ -877,7 +877,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeUncroppedWidthFactor()
@@ -886,7 +886,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeCroppedWidthFactor()
@@ -899,7 +899,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeHeightFactor()
@@ -912,7 +912,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeUncroppedHeightFactor()
@@ -921,7 +921,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return float
      */
     private function resizeCroppedHeightFactor()
@@ -936,7 +936,7 @@ class SLIR
     /**
      * Determines if the rendered file is in the rendered cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     public function isRenderedCached()
@@ -947,7 +947,7 @@ class SLIR
     /**
      * Determines if a given file exists in the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $cacheFilePath
      * @return boolean
      */
@@ -973,7 +973,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function getRenderedCacheDir()
@@ -982,7 +982,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function renderedCacheFilePath()
@@ -991,7 +991,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function renderedCacheFilename()
@@ -1000,7 +1000,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function getHTTPHost()
@@ -1015,7 +1015,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function requestCacheFilename()
@@ -1024,7 +1024,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string|array $remove Query string param(s) to remove (e.g. security token)
      * @return string
      */
@@ -1062,7 +1062,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function getRequestCacheDir()
@@ -1071,7 +1071,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return string
      */
     private function requestCacheFilePath()
@@ -1082,7 +1082,7 @@ class SLIR
     /**
      * Write an image to the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function cache()
@@ -1095,7 +1095,7 @@ class SLIR
     /**
      * Write an image to the cache based on the properties of the rendered image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function cacheRendered()
@@ -1111,7 +1111,7 @@ class SLIR
     /**
      * Write an image to the cache based on the properties of the rendered image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $cacheFilePath
      * @param string $imageData
      * @param boolean $copyEXIF
@@ -1146,7 +1146,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIR
      */
     public function uncacheRendered()
@@ -1160,7 +1160,7 @@ class SLIR
     /**
      * Removes an image from the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIR
      */
     public function uncache()
@@ -1171,7 +1171,7 @@ class SLIR
     /**
      * Copy the source image's EXIF information to the new file in the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @uses PEL
      * @param string $cacheFilePath
      * @return mixed string contents of image on success, false on failure
@@ -1208,7 +1208,7 @@ class SLIR
     /**
      * Copy the source images' ICC Profile (color profile) to the new file in the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @uses PHP JPEG ICC profile manipulator
      * @param string $cacheFilePath
      * @return string contents of image
@@ -1231,7 +1231,7 @@ class SLIR
     /**
      * Makes sure the cache directory exists, is readable, and is writable
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function initializeCache()
@@ -1250,7 +1250,7 @@ class SLIR
     /**
      * Determines if SLIR is being run from a command line interface.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isCLI()
@@ -1259,7 +1259,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string $header
      * @return SLIR
      */
@@ -1275,7 +1275,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return array
      */
     public function getHeaders()
@@ -1284,7 +1284,7 @@ class SLIR
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string $path Directory to initialize
      * @param boolean $verifyReadWriteability
      * @return boolean
@@ -1317,7 +1317,7 @@ class SLIR
     /**
      * Serves the unmodified source image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function serveSourceImage()
@@ -1336,7 +1336,7 @@ class SLIR
      * Serves the image from the cache based on the properties of the rendered
      * image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function serveRenderedCachedImage()
@@ -1347,7 +1347,7 @@ class SLIR
     /**
      * Serves the image from the cache based on the request URI
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function serveRequestCachedImage()
@@ -1358,7 +1358,7 @@ class SLIR
     /**
      * Serves the image from the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $cacheFilePath
      * @param string $cacheType Can be 'request' or 'image'
      * @return void
@@ -1379,7 +1379,7 @@ class SLIR
     /**
      * Determines the mime type of an image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $path
      * @return string
      */
@@ -1392,7 +1392,7 @@ class SLIR
     /**
      * Serves the rendered image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function serveRenderedImage()
@@ -1417,7 +1417,7 @@ class SLIR
     /**
      * Serves a file
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $imagePath Path to file to serve
      * @param string $data Data of file to serve
      * @param integer $lastModified Timestamp of when the file was last modified
@@ -1463,7 +1463,7 @@ class SLIR
     /**
      * Serves headers for file for optimal browser caching
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $lastModified Time when file was last modified in 'D, d M Y H:i:s' format
      * @param string $mimeType
      * @param integer $fileSize
@@ -1502,7 +1502,7 @@ class SLIR
      * Converts a UNIX timestamp into the format needed for the Last-Modified
      * header
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $timestamp
      * @return string
      */
@@ -1514,7 +1514,7 @@ class SLIR
     /**
      * Checks the to see if the file is different than the browser's cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param string $lastModified
      * @return boolean true to continue, false to stop
      */

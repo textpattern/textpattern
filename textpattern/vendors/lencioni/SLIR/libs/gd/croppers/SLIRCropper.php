@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  * @subpackage Croppers
  */
@@ -34,7 +34,7 @@
 /**
  * SLIR cropper interface
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  * @subpackage Croppers
@@ -47,7 +47,7 @@ use \lencioni\SLIR\libs\SLIRImage;
 interface SLIRCropper
 {
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return array Associative array with the keys of x, y, width, and height that specify the box that should be cropped
    */

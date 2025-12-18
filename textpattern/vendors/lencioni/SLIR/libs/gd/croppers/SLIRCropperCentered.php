@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  * @subpackage Croppers
  */
@@ -40,7 +40,7 @@ use \lencioni\SLIR\libs\gd\croppers\SLIRCropper;
  *
  * Calculates the crop offset anchored in the center of the image
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  * @subpackage Croppers
@@ -50,7 +50,7 @@ class SLIRCropperCentered implements SLIRCropper
   /**
    * Determines if the top and bottom need to be cropped
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return boolean
    */
@@ -64,7 +64,7 @@ class SLIRCropperCentered implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return integer
    */
@@ -74,7 +74,7 @@ class SLIRCropperCentered implements SLIRCropper
   }
 
   /**
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return integer
    */
@@ -86,7 +86,7 @@ class SLIRCropperCentered implements SLIRCropper
   /**
    * Calculates the crop offset anchored in the center of the image
    *
-   * @since 2.0
+   * @since 4.9.0
    * @param SLIRImage $image
    * @return array Associative array with the keys of x and y that specify the top left corner of the box that should be cropped
    */

@@ -26,7 +26,7 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
@@ -42,7 +42,7 @@ use \lencioni\SLIR\libs\gd\croppers\SLIRCropperTopcentered;
 /**
  * Class for working with the GD image library
  * @package SLIR
- * @since 2.0
+ * @since 4.9.0
  */
 class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 {
@@ -61,7 +61,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * @param string $path
      * @return void
-     * @since 2.0
+     * @since 4.9.0
      */
     public function __construct($path = null)
     {
@@ -73,7 +73,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
     /**
      * @return void
-     * @since 2.0
+     * @since 4.9.0
      */
     public function __destruct()
     {
@@ -83,7 +83,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
     /**
      * @return resource
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getImage()
     {
@@ -128,7 +128,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @param string $path path to BMP file
      * @return resource
      * @link http://us.php.net/manual/en/function.imagecreatefromwbmp.php#86214
@@ -224,7 +224,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * Resamples the image into the destination image
      * @param SLIRGDImage $destination
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function resample(SLIRImageLibrary $destination)
     {
@@ -254,7 +254,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * Copies the image into the destination image without reszing
      * @param SLIRGDImage $destination
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function copy(SLIRImageLibrary $destination)
     {
@@ -281,7 +281,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * Gets width, height, and iptc information from the image
      * @param string $info
      * @return mixed
-     * @since 2.0
+     * @since 4.9.0
      */
     public function getInfo($info = null)
     {
@@ -348,7 +348,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Turns on the alpha channel to enable transparency in the image
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function enableTransparency($destination = '')
     {
@@ -367,7 +367,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Fills the image with the set background color
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function fill()
     {
@@ -404,7 +404,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Turns interlacing on or off
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function interlace()
     {
@@ -418,7 +418,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Gets the class that will be used to determine the crop offset for the image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRCropper
      */
     final public function getCropperClass()
@@ -433,7 +433,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * Performs the actual cropping of the image
      *
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function crop()
     {
@@ -449,7 +449,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Performs the actual cropping of the image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param integer $leftOffset Number of pixels from the left side of the image to crop in
      * @param integer $topOffset Number of pixels from the top side of the image to crop in
      * @param string $fill color in hex
@@ -498,7 +498,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Sharpens the image
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function sharpen()
     {
@@ -517,7 +517,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * @param integer $sharpness
      * @return array
-     * @since 2.0
+     * @since 4.9.0
      */
     private function sharpenMatrix($sharpness)
     {
@@ -531,7 +531,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Determines if the image can be converted to a palette image
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return array colors in image, otherwise false if image is not palette
      */
     private function isPalette()
@@ -571,7 +571,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      * @link http://us.php.net/manual/ro/function.imagetruecolortopalette.php#44803
      */
@@ -607,7 +607,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     }
 
     /**
-     * @since 2.0
+     * @since 4.9.0
      * @return SLIRImage
      */
     public function optimize()
@@ -636,7 +636,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Outputs the image
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function output()
     {
@@ -648,7 +648,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      * Saves the image to disk
      * @param string $filename
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function save()
     {
@@ -696,7 +696,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * @param string $path
      * @return boolean
-     * @since 2.0
+     * @since 4.9.0
      */
     private function render($path)
     {
@@ -724,7 +724,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     /**
      * Destroys the image
      * @return SLIRImageLibrary
-     * @since 2.0
+     * @since 4.9.0
      */
     public function destroy()
     {

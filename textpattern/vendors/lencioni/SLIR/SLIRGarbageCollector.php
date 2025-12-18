@@ -26,14 +26,14 @@
  *
  * @copyright Copyright © 2014, Joe Lencioni
  * @license MIT
- * @since 2.0
+ * @since 4.9.0
  * @package SLIR
  */
 
 /**
  * SLIR garbage collector class
  *
- * @since 2.0
+ * @since 4.9.0
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
@@ -45,7 +45,7 @@ class SLIRGarbageCollector
     /**
      * Setting for the garbage collector to sleep for a second after looking at this many files
      *
-     * @since 2.0
+     * @since 4.9.0
      * @var integer
      */
     const BREATHE_EVERY = 5000;
@@ -55,7 +55,7 @@ class SLIRGarbageCollector
      *
      * Clears out old files from the cache
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param array $directories
      * @return void
      */
@@ -130,7 +130,7 @@ class SLIRGarbageCollector
     /**
      * Checks to see if the garbage collector is currently running.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return boolean
      */
     private function isRunning()
@@ -146,7 +146,7 @@ class SLIRGarbageCollector
     /**
      * Writes a file to the cache to use as a signal that the garbage collector is currently running.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @return void
      */
     private function start()
@@ -160,7 +160,7 @@ class SLIRGarbageCollector
     /**
      * Removes the file that signifies that the garbage collector is currently running.
      *
-     * @since 2.0
+     * @since 4.9.0
      * @param boolean $successful
      * @return void
      */
