@@ -34,7 +34,6 @@
 namespace lencioni\SLIR\libs\gd\croppers;
 
 use \lencioni\SLIR\libs\gd\croppers\SLIRCropperCentered;
-use \lencioni\SLIR\libs\SLIRImage;
 
 /**
  * Top/centered SLIR cropper
@@ -53,7 +52,7 @@ class SLIRCropperTopcentered extends SLIRCropperCentered
    * @param SLIRImage $image
    * @return integer
    */
-  public function getCropY(SLIRImage $image)
+  public function getCropY($image)
   {
     return 0;
   }
