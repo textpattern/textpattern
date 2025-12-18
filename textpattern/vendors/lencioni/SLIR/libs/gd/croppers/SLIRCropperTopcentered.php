@@ -33,6 +33,9 @@
 
 namespace lencioni\SLIR\libs\gd\croppers;
 
+use \lencioni\SLIR\libs\gd\croppers\SLIRCropperCentered;
+use \lencioni\SLIR\libs\SLIRImage;
+
 /**
  * Top/centered SLIR cropper
  *

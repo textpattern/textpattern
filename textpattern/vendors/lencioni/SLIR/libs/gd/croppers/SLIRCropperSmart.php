@@ -33,9 +33,8 @@
 
 namespace lencioni\SLIR\libs\gd\croppers;
 
+use \lencioni\SLIR\libs\SLIRImage;
 use \lencioni\SLIR\libs\gd\croppers\SLIRCropper;
-use \lencioni\SLIR\libs\gd\croppers\SLIRImage;
-use \lencioni\SLIR\libs\gd\croppers\SLIRGDImage;
 
 /**
  * Smart SLIR cropper
@@ -755,7 +754,7 @@ class SLIRCropperSmart implements SLIRCropper
    * @param SLIRImage $image
    * @return array Associative array with the keys of x and y that specify the top left corner of the box that should be cropped
    */
-  public function getCrop(SLIRGDImage $image)
+  public function getCrop(SLIRImage $image)
   {
     // Try contrast detection
     $o  = $this->cropSmartOffsetRows($image);

@@ -42,6 +42,8 @@
 
 namespace lencioni\SLIR\libs\gd\croppers;
 
+use \lencioni\SLIR\libs\SLIRImage;
+
 interface SLIRCropper
 {
   /**
