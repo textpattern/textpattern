@@ -98,7 +98,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 try {
                     if ($this->isJPEG()) {
                         $this->image  = imagecreatefromjpeg($this->getFullPath());
-                        $this->fixRotation();
                     } elseif ($this->isWEBP()) {
                         $this->image  = imagecreatefromwebp($this->getFullPath());
                     } elseif ($this->isAVIF()) {
@@ -118,6 +117,10 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 }
 
                 $this->info = null;
+
+                if ($this->isJPEG()) {
+                    $this->fixRotation();
+                }
             }
         }
 
@@ -303,6 +306,20 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
                 $this->info['width']  =& $this->info[0];
                 $this->info['height'] =& $this->info[1];
+            }
+
+            if ($this->isJPEG()) {
+                $filepath = $this->getFullPath();
+                if (is_readable($filepath)) {
+                    $exif = exif_read_data($filepath);
+
+                    // Swap height and width values if thumbnail is rotated by 90°.
+                    if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
+                        $currWidth = $this->info['width'];
+                        $this->setWidth($this->info['height']);
+                        $this->setHeight($currWidth);
+                    }
+                }
             }
         }
 
@@ -666,12 +683,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                     case 8: // rotate-right.
                         $this->image = imagerotate($this->image, 90, 0);
                         break;
-                }
-                // Swap height and width values if thumbnail is rotated by 90°.
-                if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
-                    $currWidth = $this->getWidth();
-                    $this->setWidth($this->getHeight());
-                    $this->setHeight($currWidth);
                 }
 
                 // Flip thumbnail if exif orientation is mirrored.
