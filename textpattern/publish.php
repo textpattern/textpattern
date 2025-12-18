@@ -75,6 +75,10 @@ $txp_atts = null;
 $timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
 date_default_timezone_set($timezone_key);
 
+if (empty($prefs['thumb_secret'])) {
+    set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
+}
+
 isset($pretext) or $pretext = array();
 
 // Set a higher error level during initialisation.
@@ -819,23 +823,12 @@ function output_thumb($data = array())
             if ($imgToken) {
                 $txpToken = \Txp::get('\Textpattern\Security\Token');
                 $selector = substr($imgToken, SALT_LENGTH);
-
-                if (empty($storedTokens[$imgToken])) {
-                    if ($fetched = $txpToken->fetch('image_verify', $selector)) {
-                        $storedTokens[$imgToken] = $fetched;
-                    }
-                }
-
-                session_start();
-                $sid = session_id();
-                session_write_close();
-
-//                $sid = '';
-                $hash_url = $sid . filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'] . get_pref('blog_uid');
+                $sid = get_pref('thumb_secret');
+                $hash_url = $sid . filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'];
                 $hash = sha1($hash_url);
                 $computedToken = $txpToken->constructHash($selector, $hash, $hash_url);
 
-                if (!empty($storedTokens[$computedToken.$selector]['token']) && $computedToken === $storedTokens[$computedToken.$selector]['token']) {
+                if ($imgToken === $computedToken.$selector) {
                     $slir = new SLIR();
                     $slir->processRequestFromURL();
                 }

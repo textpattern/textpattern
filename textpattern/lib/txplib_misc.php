@@ -5348,25 +5348,13 @@ function imageBuildURL($img = array(), $thumbnail = null)
         $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'];
 
         if (!file_exists($path_to_site.'/'.$base) && $sec_mode === 'always') {
-            // Need to use some unique visitor identifier so two requests for the same resource
-            // don't overwrite each others' token.
-            session_start();
-            $sid = session_id();
-            session_write_close();
-
-            $hash_url = $sid.$img['id'].$paramlist.get_pref('blog_uid');
+            $sid = get_pref('thumb_secret');
+            $hash_url = $sid.$img['id'].$paramlist;
             $hash = sha1($hash_url);
 
-            // The reference int can't just be the image id since they vary by resize/crop parameters.
-            $ref = substr(hexdec(hash('crc32c', $hash_url)), 0, 8);
             $txpToken = \Txp::get('\Textpattern\Security\Token');
-
-            if ($exists = $txpToken->fetch('image_verify', array('ref' => $ref))) {
-                $token = $exists['token'].$exists['selector'];
-            } else {
-                $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
-                $token = $txpToken->generate($ref, 'image_verify', $expiryTimestamp, $hash, $hash_url);
-            }
+            $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
+            $token = $txpToken->generate(null, 'image_verify', $expiryTimestamp, $hash, $hash_url);
 
             $base .= (!empty($token) ? '?token='.$token : '');
         }

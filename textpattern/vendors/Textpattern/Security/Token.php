@@ -137,17 +137,16 @@ class Token implements \Textpattern\Container\ReusableInterface
     /**
      * Create a secure token hash in the database from the passed information.
      *
-     * @param  int    $ref             Reference to the user's account (user_id) or some other id
-     * @param  string $type            Flavour of token to create
-     * @param  int    $expiryTimestamp UNIX timestamp of when the token will expire
-     * @param  string $pass            Password, used as part of the token generation
-     * @param  string $nonce           Random nonce associated with the token
-     * @return string                  Secure token suitable for emailing as part of a link
+     * @param  int|null $ref             Reference to the user's account (user_id) or some other id
+     * @param  string   $type            Flavour of token to create
+     * @param  int      $expiryTimestamp UNIX timestamp of when the token will expire
+     * @param  string   $pass            Password, used as part of the token generation
+     * @param  string   $nonce           Random nonce associated with the token
+     * @return string                    Secure token suitable for emailing as part of a link
      */
 
     public function generate($ref, $type, $expiryTimestamp, $pass, $nonce)
     {
-        $ref = assert_int($ref);
         $expiry = safe_strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // The selector becomes an indirect reference to the user row id,
@@ -164,16 +163,19 @@ class Token implements \Textpattern\Container\ReusableInterface
         $token = $this->constructHash($selector, $pass, $nonce);
         $user_token = $token.$selector;
 
+        if (isset($ref)) {
         // Remove any previous activation tokens and insert the new one.
-        $safe_type = doSlash($type);
-        $this->remove($safe_type, $ref);
-        safe_insert("txp_token",
+            $ref = assert_int($ref);
+            $safe_type = doSlash($type);
+            $this->remove($safe_type, $ref);
+            safe_insert("txp_token",
                 "reference_id = '$ref',
                 type = '$safe_type',
                 selector = '".doSlash($selector)."',
                 token = '".doSlash($token)."',
                 expires = '".doSlash($expiry)."'
             ");
+        }
 
         return $user_token;
     }
