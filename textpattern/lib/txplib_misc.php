@@ -5353,7 +5353,7 @@ function imageBuildURL($img = array(), $thumbnail = null)
             $hash = sha1($hash_url);
 
             $txpToken = \Txp::get('\Textpattern\Security\Token');
-            $expiryTimestamp = time() + THUMB_VALIDITY_SECONDS;
+            $expiryTimestamp = time() + THUMB_SECRET_REGEN_SECONDS;
             $token = $txpToken->generate(null, 'image_verify', $expiryTimestamp, $hash, $hash_url);
 
             $base .= (!empty($token) ? '?token='.$token : '');
@@ -5387,7 +5387,7 @@ function setImageToken() {
     $now = time();
 
     if (empty($prefs['thumb_secret']) || empty($prefs['thumb_secret_lastmod']) ||
-            $now > $prefs['thumb_secret_lastmod'] + THUMB_VALIDITY_SECONDS) {
+            $now > $prefs['thumb_secret_lastmod'] + THUMB_SECRET_REGEN_SECONDS) {
         set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
         set_pref('thumb_secret_lastmod', $now, 'publish', PREF_HIDDEN);
     }

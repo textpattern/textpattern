@@ -1139,16 +1139,19 @@ if (!defined('TEXTPATTERN_THUMB_DIR')) {
     define('TEXTPATTERN_THUMB_DIR', 'thumb');
 }
 
-if (!defined('THUMB_VALIDITY_SECONDS')) {
+if (!defined('THUMB_SECRET_REGEN_SECONDS')) {
     /**
-     * Number of seconds that an auto-generated thumbnail token remains valid
+     * After this many seconds, a new thumbnail random token is generated,
      *
-     * Default: Around 2 days.
+     * Making it change frequently increases security (less likelhood of someone guessing/obtaining it and
+     * being able to generate thumbnails en masse).
+     *
+     * Default: Around 2 days (2 * 24 * 60 * 60).
      *
      * @since   4.9.0
      * @package Image
      */
-    define('THUMB_VALIDITY_SECONDS', '172800');
+    define('THUMB_SECRET_REGEN_SECONDS', '172800');
 }
 
 /**
