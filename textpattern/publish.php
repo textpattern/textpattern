@@ -74,10 +74,7 @@ $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array
 $txp_atts = null;
 $timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
 date_default_timezone_set($timezone_key);
-
-if (empty($prefs['thumb_secret'])) {
-    set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
-}
+setImageToken();
 
 isset($pretext) or $pretext = array();
 

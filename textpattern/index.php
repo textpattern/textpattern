@@ -75,9 +75,7 @@ if ($connected && numRows(safe_query("SHOW TABLES LIKE '".PFX."textpattern'"))) 
     $prefs = get_prefs();
     extract($prefs);
 
-    if (empty($prefs['thumb_secret'])) {
-        set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
-    }
+    setImageToken();
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);

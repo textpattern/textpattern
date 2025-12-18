@@ -5375,6 +5375,25 @@ function imageBuildURL($img = array(), $thumbnail = null)
 }
 
 /**
+ * (Re)generate a thumbnail image token every so often.
+ *
+ * @since 4.9.0
+ * @package Image
+ */
+
+function setImageToken() {
+    global $prefs;
+
+    $now = time();
+
+    if (empty($prefs['thumb_secret']) || empty($prefs['thumb_secret_lastmod']) ||
+            $now > $prefs['thumb_secret_lastmod'] + THUMB_VALIDITY_SECONDS) {
+        set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH), 'publish', PREF_HIDDEN);
+        set_pref('thumb_secret_lastmod', $now, 'publish', PREF_HIDDEN);
+    }
+}
+
+/**
  * Find SVG element in XML tree
  *
  * @param   SimpleXMLElement  $node  start tree
