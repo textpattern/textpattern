@@ -374,7 +374,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         $color = $this->getBackground();
 
         if ($color === null) {
-            $color = "ffffff";
+            $color = SLIRConfig::$backgroundFillColor;
         }
 
         $background = null;

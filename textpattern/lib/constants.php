@@ -1077,6 +1077,18 @@ const HTML5_VOID_TAGS = array(
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
 );
 
+if (!defined('TEXTPATTERN_THUMB_TTL')) {
+    /**
+     * Thumbnail time-to-live value for cache headers (Cache-control max-age/Expires)
+     *
+     * Default = 7 days (7 * 24 * 60 *60)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_TTL', 604800);
+}
+
 if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
     /**
      * Thumbnail quality percent

@@ -78,7 +78,7 @@ class SLIRConfigDefaults
      * @since 2.0
      * @var integer
      */
-    public static $browserCacheTTL  = 604800; // 7 days = 7 * 24 * 60 * 60
+    public static $browserCacheTTL  = TEXTPATTERN_THUMB_TTL;
 
     /**
      * How much memory (in megabytes) SLIR is allowed to allocate for memory-intensive processes such as rendering and cropping.
@@ -195,6 +195,14 @@ class SLIRConfigDefaults
      * @var boolean
      */
     public static $copyEXIF = false;
+
+    /**
+     * The default RGB hex background color to apply to alpha-enabled images (without the #).
+     *
+     * @since 2.0
+     * @var string
+     */
+    public static $backgroundFillColor = 'ffffff';
 
     /**
      * Initialize variables that require some dynamic processing.
