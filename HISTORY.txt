@@ -26,6 +26,8 @@ Changes in 4.9.0 (upcoming)
 * Added: Support for PHP 8.2, PHP 8.3.1+, PHP 8.4, and PHP 8.5.
 * Added: Full article previews directly from the Write panel.
 * Added: Filter articles by image.
+* Added: Admin Theme prefs.
+* Added: Automatic, dynamic thumbnail generation (tags and back-end).
 * Added: SVG image support (thanks, osadl and jools-r).
 * Added: Activity indicator for extended duration file/image upload processes.
 * Added: Multi-edit for changing author language.
@@ -71,12 +73,15 @@ Changes in 4.9.0 (upcoming)
   (thanks, Melonking906).
 * Changed: Pending articles may be displayed on the site.
 * Changed: Theme page maximum size increased from 64KB to 16MB.
-* Changed: Allow content dates beyond 03:14:07 UTC on 19 Jan 2038. Refer to
-  Epochalypse/Year 2038 problem for info.
+* Changed: Allow content dates prior to 01-01-1970, and beyond 03:14:07 UTC
+  on 19 Jan 2038. Refer to Epochalypse/Year 2038 problem for info. Adjustments
+  for non-Gregorian (AD) dates are performed.
+* Changed: Display/edit 'modified' date on Files panel.
 * Changed: Refactored article Save panel (thanks jools-r, phiw13, and cara-tm).
 * Changed: File Edit panel has the ability to rename and delete files, and
   change the download counter value (thanks, adi).
 * Changed: Image Edit panel has the ability to delete images.
+* Changed: Image Edit panel includes published date/time, which can be altered.
 * Changed: Pre-flight check visibility toggle.
 * Changed: In-use languages can not be deleted.
 * Changed: Deprecate <txp:search_result_count />. Use <txp:items_count />
@@ -131,6 +136,7 @@ Changes in 4.9.0 (upcoming)
   (was: 'log') to prevent conflicts with privacy filters.
 * Developer: File upload callbacks (file_uploaded and files_uploaded pre+post).
 * Developer: Activation emails can be skipped via hidden notify="skip" field.
+* Developer: Can add &checksums=1 on Diagnostics panel URL to verify checksums.
 * Vendors: Textile 4.1.3. (thanks, gocom).
 * Vendors: DOMPurify 3.3.1.
 * Vendors: jQuery 3.7.1.
