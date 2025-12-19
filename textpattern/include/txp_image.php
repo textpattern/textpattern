@@ -370,8 +370,9 @@ function image_list($message = '')
 
                 $headings = array();
                 $headings[] = hCell(
+                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                        '', ' class="txp-list-col-multi-edit" scope="col"'
                 );
 
                 foreach ($fields as $col => $opts) {
@@ -477,7 +478,12 @@ function image_list($message = '')
 
                 $contentBlock .= tr(
                     td(
-                        $can_edit ? fInput('checkbox', 'selected[]', $id) : '&#160;', '', 'txp-list-col-multi-edit'
+                        $can_edit
+                        ? '<label for="bulk_select-' . $id . '" class="txp-accessibility">' . gTxt('bulk_select_row', array('{id}' => $id)) .
+                            '</label>'.
+                            fInput('checkbox', 'selected[]', $id, '', '', '', '', '', 'bulk_select-'.$id)
+                        : '&#160;'
+                        , '', 'txp-list-col-multi-edit'
                     ) .
                     hCell(
                         ($can_view ? href($id, $edit_url, array('title' => gTxt('edit'))) : $id),
