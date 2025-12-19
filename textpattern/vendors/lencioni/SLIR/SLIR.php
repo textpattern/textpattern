@@ -1406,7 +1406,7 @@ class SLIR
         set_headers(array(
             1 => 307,
             'Location' => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename(),
-            'Cache-Control' => '',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
             'Content-Length' => 0,
             'Content-Type' => $this->getRendered()->getMimeType(),
         ), true);
