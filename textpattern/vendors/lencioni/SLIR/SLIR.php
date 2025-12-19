@@ -1427,6 +1427,8 @@ class SLIR
      */
     private function serveFile($imagePath, $data, $lastModified, $length, $mimeType, $slirHeader)
     {
+        global $img_dir;
+
         if ($imagePath !== null) {
             if ($lastModified === null) {
                 $lastModified = filemtime($imagePath);
@@ -1449,15 +1451,11 @@ class SLIR
                 $slirHeader
         );
 
-        if (!$continue) {
-            return;
-        }
-
-        if ($data === null) {
-            readfile($imagePath);
-        } else {
-            echo $data;
-        }
+        set_headers(array(
+            1 => 301,
+            "Location" => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename()
+        ));
+        exit;
     }
 
     /**
