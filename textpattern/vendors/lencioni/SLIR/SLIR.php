@@ -1404,10 +1404,11 @@ class SLIR
 
         // Redirect to the cached file
         set_headers(array(
-            1 => 308,
+            1 => 307,
             'Location' => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename(),
-            'Cache-Control' => sprintf('max-age=%d, public, immutable', SLIRConfig::$browserCacheTTL),
+            'Cache-Control' => '',
             'Content-Length' => 0,
+            'Content-Type' => $this->getRendered()->getMimeType(),
         ), true);
         exit;
 /*
@@ -1460,6 +1461,16 @@ class SLIR
                 $length,
                 $slirHeader
         );
+
+        if (!$continue) {
+            return;
+        }
+
+        if ($data === null) {
+            readfile($imagePath);
+        } else {
+            echo $data;
+        }
     }
 
     /**
