@@ -33,8 +33,8 @@ Table of Contents
     /themes/
 * If multi-site functionality is required, copy or upload the following:
     /sites/
-  Note: obtain and extract the Textpattern .tar.gz archive. The .zip archive is
-    not suitable for multi-site installations.
+  Note: obtain and extract the Textpattern .tar.gz or .tar.xz archive. The .zip
+    archive does not include the scaffold for multi-site support.
 * If XML-RPC server functionality is required, copy or upload the following:
     /rpc/
 * For Apache web server and derivatives, copy or upload the following:
@@ -44,7 +44,7 @@ Table of Contents
 * For Apache web server and derivatives, rename:
     /textpattern/plugins/.htaccess-dist to /textpattern/plugins/.htaccess
   This is so plugin code cannot be executed directly from the browser.
-  For systems other than Apache, please ensure direct access to the plugins
+  For web servers other than Apache, please ensure direct access to the plugins
   directory from the browser is prohibited.
 
 
@@ -71,6 +71,7 @@ Table of Contents
   The following URLs are updated as part of every production release cycle:
     Latest release (.zip):    https://textpattern.com/latest.zip
     Latest release (.tar.gz): https://textpattern.com/latest.tar.gz
+    Latest release (.tar.xz): https://textpattern.com/latest.tar.gz
 
   Administrators wishing to automate checking for new releases can refer to the
   following JSON endpoints:
