@@ -1397,9 +1397,20 @@ class SLIR
      */
     private function serveRenderedImage()
     {
+        global $img_dir;
+
         // Cache the image
         $this->cache();
 
+        // Redirect to the cached file
+        set_headers(array(
+            1 => 308,
+            'Location' => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename(),
+            'Cache-Control' => sprintf('max-age=%d, public, immutable', SLIRConfig::$browserCacheTTL),
+            'Content-Length' => 0,
+        ), true);
+        exit;
+/*
         // Serve the file
         $this->serveFile(
                 null,
@@ -1412,6 +1423,7 @@ class SLIR
 
         // Clean up memory
         $this->getRendered()->destroy();
+*/
     }
 
     /**
@@ -1427,8 +1439,6 @@ class SLIR
      */
     private function serveFile($imagePath, $data, $lastModified, $length, $mimeType, $slirHeader)
     {
-        global $img_dir;
-
         if ($imagePath !== null) {
             if ($lastModified === null) {
                 $lastModified = filemtime($imagePath);
@@ -1450,12 +1460,6 @@ class SLIR
                 $length,
                 $slirHeader
         );
-
-        set_headers(array(
-            1 => 301,
-            "Location" => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename()
-        ));
-        exit;
     }
 
     /**
