@@ -308,8 +308,9 @@ function file_list($message = '', $ids = array())
                 n . tag_start('thead') .
                 tr(
                     hCell(
+                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                        '', ' class="txp-list-col-multi-edit" scope="col"'
                     ) .
                     column_head(
                         'ID', 'id', 'file', true, $switch_dir, $crit, $search_method,
@@ -423,7 +424,8 @@ function file_list($message = '', $ids = array())
 
                 if ($can_edit) {
                     $id_column = href($id, $edit_url, array('title' => gTxt('edit')));
-                    $multi_edit = checkbox('selected[]', $id, in_array($id, $ids));
+                    $multi_edit = '<label for="bulk_select-' . $id . '" class="txp-accessibility">' . gTxt('bulk_select_row', array('{id}' => $id)) .
+                            '</label>'.fInput('checkbox', 'selected[]', $id, '', '', '', '', '', 'bulk_select-'.$id);
                 } else {
                     $id_column = $id;
                     $multi_edit = '';
