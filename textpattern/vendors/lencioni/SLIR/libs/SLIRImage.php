@@ -344,7 +344,7 @@ abstract class SLIRImage
      */
     final protected function isSharpeningDesired()
     {
-        if ($this->isJPEG()) {
+        if ($this->isJPEG() || $this->isWEBP()) {
             return true;
         } else {
             return false;
