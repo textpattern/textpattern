@@ -75,8 +75,8 @@ Table of Contents
 
   Administrators wishing to automate checking for new releases can refer to the
   following JSON endpoints:
-    Website: https://textpattern.com/version.json
-    GitHub:  https://github.com/textpattern/textpattern/blob/main/package.json
+   Website: https://textpattern.com/version.json
+   GitHub:  https://github.com/textpattern/textpattern/blob/main/package.json
 
 
 == Resources ==
