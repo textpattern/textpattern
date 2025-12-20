@@ -66,12 +66,12 @@ Table of Contents
   friction and are accompanied by release notes indicating historical changes.
 * The software version number is displayed on every admin-side page by default.
   The latest production Textpattern release can be obtained from:
-    Website landing page:     https://textpattern.com/download
-    GitHub releases page:     https://github.com/textpattern/textpattern/releases
-  The following URLs are updated as part of every production release cycle:
-    Latest release (.zip):    https://textpattern.com/latest.zip
-    Latest release (.tar.gz): https://textpattern.com/latest.tar.gz
-    Latest release (.tar.xz): https://textpattern.com/latest.tar.xz
+   Website landing page:     https://textpattern.com/download
+   GitHub releases page:     https://github.com/textpattern/textpattern/releases
+* The following URLs are updated as part of every production release cycle:
+   Latest release (.zip):    https://textpattern.com/latest.zip
+   Latest release (.tar.gz): https://textpattern.com/latest.tar.gz
+   Latest release (.tar.xz): https://textpattern.com/latest.tar.xz
 
   Administrators wishing to automate checking for new releases can refer to the
   following JSON endpoints:
