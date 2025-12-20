@@ -15,7 +15,7 @@ Changes in 4.9.0 (upcoming)
   (thanks, jools-r).
 * Fixed: Avoid directory traversal when uploading plugins (thanks, bg1).
 * Fixed: Compiled plugins upload on PHP 5.6.
-* Fixed: Windows-generated .zip plugins installable on Linux.
+* Fixed: Windows-generated .zip plugins installable on UNIX/Linux.
 * Fixed: Restored empty 'height' and 'width' attributes behaviour of
   <txp:image />.
 * Fixed: Self-closing tag output for html5 doctype to silence validator
