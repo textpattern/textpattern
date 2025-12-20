@@ -2056,6 +2056,7 @@ function article_image($atts)
 
     $out = array();
     $thumb = $thumbnail;
+    $resize = isset($atts['width']) || isset($atts['height']) || isset($atts['crop']);
 
     if ($range === true) {
         $items = array_keys($images);
@@ -2096,30 +2097,40 @@ function article_image($atts)
 
                 $rs = $dbimages[$image];
 
-                if ($thumb && empty($rs['thumbnail'])) {
+                if ($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) {
                     continue;
                 }
 
                 extract($rs);
+
+                $isAuto = ($thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO);
+
+                if ($isAuto) {
+                    $thumb_w = TEXTPATTERN_THUMB_WIDTH;
+                    $thumb_h = TEXTPATTERN_THUMB_HEIGHT;
+                }
+
+                $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
+                $shrink = $thumb_wanted === THUMB_CUSTOM || ($thumb_wanted && !$resize && !$quality);
+                $w = ($shrink ? $thumb_w : $w);
+                $h = ($shrink ? $thumb_h : $h);
+
+                if ($resize) {
+                    $w = $width === true ? $w : $width;
+                    $h = $height === true ? $h : $height;
+                }
 
                 $payload = array(
                     'id' => $id,
                     'ext' => $ext,
                 );
 
-                $isAuto = $thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO;
-                $isCustom = ($thumbnail == THUMB_CUSTOM && $thumb) || $thumb == THUMB_CUSTOM;
-
                 if ($isAuto) {
-                    $payload['w'] = $width;
-                    $payload['h'] = $height;
+                    $payload['w'] = $width === true ? $w : $width;
+                    $payload['h'] = $height === true ? $h : $height;
                     $payload['c'] = $crop;
                     $payload['q'] = $quality;
                 }
-
-                $w = $isAuto ? $payload['w'] : ($width == '' ? ($isCustom && $thumb_w ? $thumb_w : $w) : $width);
-                $h = $isAuto ? $payload['h'] : ($height == '' ? ($isCustom && $thumb_h ? $thumb_h : $h): $height);
-                $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
 
                 if ($title === true) {
                     $title = $caption;
