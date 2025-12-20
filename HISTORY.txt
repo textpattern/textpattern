@@ -47,7 +47,7 @@ Changes in 4.9.0 (upcoming)
 * Added: Ability to serve files via 'type' attribute to <txp:file_download />.
 * Added: 'exclude' attribute to <txp:file_download_list />
   and <txp:linklist />.
-* Added: Site status values to 'process' attribute of <txp:hide />.
+* Added: Site production status values to 'process' attribute of <txp:hide />.
 * Added: 'level' attribute to <txp:if_category />.
 * Added: 'match', 'separator' attribute capability to <txp:if_yield />.
 * Added: 'exclude', 'month' and 'time' attributes to <txp:images />.
