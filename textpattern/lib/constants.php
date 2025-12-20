@@ -1176,12 +1176,12 @@ if (!defined('THUMB_SECRET_REGEN_SECONDS')) {
      * Making it change frequently increases security (less likelhood of someone guessing/obtaining it and
      * being able to generate thumbnails en masse).
      *
-     * Default: Around 2 days (2 * 24 * 60 * 60).
+     * Default: Around 7 days (7 * 24 * 60 * 60).
      *
      * @since   4.9.0
      * @package Image
      */
-    define('THUMB_SECRET_REGEN_SECONDS', '172800');
+    define('THUMB_SECRET_REGEN_SECONDS', '604800');
 }
 
 /**
