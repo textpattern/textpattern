@@ -2103,7 +2103,7 @@ function article_image($atts)
 
                 extract($rs);
 
-                $isAuto = ($thumbnail == THUMB_AUTO || $thumb == THUMB_AUTO);
+                $isAuto = ($thumbnail === THUMB_AUTO || $thumb === THUMB_AUTO);
 
                 if ($isAuto) {
                     $thumb_w = TEXTPATTERN_THUMB_WIDTH;
