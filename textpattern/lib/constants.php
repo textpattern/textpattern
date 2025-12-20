@@ -1139,6 +1139,24 @@ if (!defined('TEXTPATTERN_THUMB_DIR')) {
     define('TEXTPATTERN_THUMB_DIR', 'thumb');
 }
 
+if (!defined('THUMB_REDIRECT')) {
+    /**
+     * Whether to redirect to the cached thumb or serve it as-is.
+     *
+     * Redirects _should_ work better than raw requests, but if thumbs are missing or caches are a bit
+     * too aggressive, set this to a different redirect type, or use false or 0 to turn it off.
+     *
+     * You may use any valid 300-style redirect code here:
+     * * 301 or 308 (permanent)
+     * * 302, 303, or 307 (temporary)
+     * * 304 (not-modified)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_REDIRECT', 307);
+}
+
 if (!defined('THUMB_CACHE_SECONDS')) {
     /**
      * Number of seconds after which an unaccessed, cached image becomes eligible for deletion
@@ -1158,12 +1176,12 @@ if (!defined('THUMB_SECRET_REGEN_SECONDS')) {
      * Making it change frequently increases security (less likelhood of someone guessing/obtaining it and
      * being able to generate thumbnails en masse).
      *
-     * Default: Around 2 days (2 * 24 * 60 * 60).
+     * Default: Around 7 days (7 * 24 * 60 * 60).
      *
      * @since   4.9.0
      * @package Image
      */
-    define('THUMB_SECRET_REGEN_SECONDS', '172800');
+    define('THUMB_SECRET_REGEN_SECONDS', '604800');
 }
 
 /**
