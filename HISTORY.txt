@@ -40,7 +40,7 @@ Changes in 4.9.0 (upcoming)
 * Added: <txp:if_article_status /> tag.
 * Added: <txp:if_items_count /> tag.
 * Added: Global 'variable' attribute.
-* Added: Global 'offset' can be set by URL parameters.
+* Added: Global 'offset' attribute can be set by URL parameters.
 * Added: 'parent' attribute to <txp:category />.
 * Added: 'inline' value to 'format' attribute of <txp:css /> (thanks, jools-r).
 * Added: 'alias' attribute to <txp:evaluate />.
