@@ -1402,29 +1402,31 @@ class SLIR
         // Cache the image
         $this->cache();
 
-        // Redirect to the cached file
-        set_headers(array(
-            1 => 307,
-            'Location' => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename(),
-            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-            'Content-Length' => 0,
-            'Content-Type' => $this->getRendered()->getMimeType(),
-        ), true);
-        exit;
-/*
-        // Serve the file
-        $this->serveFile(
-                null,
-                $this->getRendered()->getData(),
-                gmdate('U'),
-                $this->getRendered()->getDatasize(),
-                $this->getRendered()->getMimeType(),
-                'rendered'
-        );
+        // Redirect to the cached file if instructed.
+        if (THUMB_REDIRECT && in_array(THUMB_REDIRECT, array(301, 302, 303, 304, 307, 308))) {
+            set_headers(array(
+                1 => THUMB_REDIRECT,
+                'Location' => ihu.$img_dir.'/'.TEXTPATTERN_THUMB_DIR.$this->renderedCacheFilename(),
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+                'Content-Length' => 0,
+                'Content-Type' => $this->getRendered()->getMimeType(),
+            ), true);
 
-        // Clean up memory
-        $this->getRendered()->destroy();
-*/
+            exit;
+        } else {
+            // Serve the file directly as-is.
+            $this->serveFile(
+                    null,
+                    $this->getRendered()->getData(),
+                    gmdate('U'),
+                    $this->getRendered()->getDatasize(),
+                    $this->getRendered()->getMimeType(),
+                    'rendered'
+            );
+
+            // Clean up memory
+            $this->getRendered()->destroy();
+        }
     }
 
     /**
