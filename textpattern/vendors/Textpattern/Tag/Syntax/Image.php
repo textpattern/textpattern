@@ -105,6 +105,8 @@ class Image
             );
 
             $isAuto = $thumbnail == THUMB_AUTO || $thumb_type == THUMB_AUTO;
+            $width = ($width == '' || $width === true ? (($colPrefix && $thumb_w) ? ${$colPrefix.'w'} : $w) : $width);
+            $height = ($height == '' || $height === true ? (($colPrefix && $thumb_h) ? ${$colPrefix.'h'} : $h) : $height);
 
             if ($isAuto) {
                 $payload['w'] = $width;
@@ -113,8 +115,6 @@ class Image
                 $payload['q'] = $quality;
             }
 
-            $width = $isAuto ? $payload['w'] : ($width == '' ? (($colPrefix && $thumb_w) ? ${$colPrefix.'w'} : $w) : $width);
-            $height = $isAuto ? $payload['h'] : ($height == '' ? (($colPrefix && $thumb_h) ? ${$colPrefix.'h'} : $h) : $height);
             $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
 
             $out = '<img src="'.imageBuildURL($payload, $thumb_wanted).
@@ -517,6 +517,9 @@ class Image
         }
 
         if ($thisimage = imageFetchInfo($id, $name)) {
+            $width = ($width == '' || $width === true ? ($thumbnail && $thisimage['thumb_w'] ? $thisimage['thumb_w'] : $thisimage['w']) : $width);
+            $height = ($height == '' || $height === true ? ($thumbnail && $thisimage['thumb_h'] ? $thisimage['thumb_h'] : $thisimage['h']) : $height);
+
             if ($thumbnail == THUMB_AUTO || $width || $height || $crop) {
                 $thisimage['w'] = $width;
                 $thisimage['h'] = $height;
