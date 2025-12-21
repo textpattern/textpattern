@@ -63,7 +63,7 @@ The following table outlines anticipated forthcoming changes to system requireme
 
 #### Textpattern development versions
 
-We are targeting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements for Textpattern 4.9.
+We are targeting Textpattern 5 as the next major release. Refer to the following table for anticipated changes to system requirements for Textpattern 5.
 
 We generally recommend running Textpattern on platforms with active vendor support where possible, though we also maintain a minimum system requirements list for situations where that isn't viable.
 
@@ -71,10 +71,10 @@ Note that versions listed may change multiple times during the development proce
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.4 or 8.5) |
-| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.4) |
-| Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.28) or stable (1.29) |
+| PHP    | &mdash; | [vendor supported](https://php.net/supported-versions.php) |
+| MySQL  | &mdash; | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html) |
+| Apache | &mdash; | vendor supported |
+| Nginx  | &mdash; | mainline or stable |
 
 ## Contributing
 
