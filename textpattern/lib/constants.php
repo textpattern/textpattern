@@ -29,7 +29,7 @@
  * Textpattern version.
  */
 
-$thisversion = '4.9.0';
+$thisversion = '4.9.1-dev';
 
 /**
  * Development environment?
@@ -37,7 +37,7 @@ $thisversion = '4.9.0';
  * Set false for releases.
  */
 
-$txp_is_dev = false;
+$txp_is_dev = true;
 
 if (!defined('TXP_DEBUG')) {
     /**
