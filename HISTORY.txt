@@ -1,4 +1,4 @@
-Changes in 4.9.0 (upcoming)
+Changes in 4.9.0 (21 Dec 2025)
 
 * Feature release with support for PHP 8.5, MySQL 8.4, new functionality,
   security enhancements, improvements, and bug fixes.
