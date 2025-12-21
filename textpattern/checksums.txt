@@ -268,7 +268,7 @@
 /include/txp_page.php: 5abd69bd022876c7d79404f04f11bba948ace1a135c19c83
 /include/txp_plugin.php: a3afb2d3b3863ffbf4a134ca058d33a87a5452825689ce8c
 /include/txp_discuss.php: 6a2aa2134a023b9faff9f9a6ba84c5cc848d89e50d33ddf0
-/textpattern.js: 17a27df423d8cffef06f4b47d38b645951af97483ba5ec36
+/textpattern.js: 8587bcf3ad0b121ac8d9baa320f0c72e9f63357c37f3b8e5
 /publish/rss.php: 011bce43e9c6c88854e33014b187d209df9b9490ad14cdb7
 /publish/taghandlers.php: 15563e41ea41615234e13b056fb745f41893f6d85625e0b0
 /publish/search.php: 265a6e0c536df68c4132ba51a5ac3bb3670eb646000465ac
@@ -283,7 +283,7 @@
 /lib/PasswordHash.php: e27ad1c7be80975898b6c510cfb5f097c2e145cd7f89b724
 /lib/txplib_update.php: 18592186ae8d33d2ba3d84725b2178b7013d6b9d12497ff2
 /lib/taglib.php: 352fdb155ba4a8e004e63064950fe25dfacdf5d513cd65fb
-/lib/constants.php: 09059e71ac490ed5800591549ae9aec8278831e6bfcfde6e
+/lib/constants.php: e4bc9cea79b5b0ba163134f4376372176acba019160c7ad9
 /lib/txplib_forms.php: edacbd09bf4cf6ba19fa4dd5f6cf880f9e1d8d201f2ae825
 /lib/txplib_head.php: 4a5e02172d8c800d6b276b9ff4d6d09a248b7d021bface0b
 /lib/txplib_html.php: dd7e5ad88ce4db088d741cd473fa9c78d9b0211ba9360c56
