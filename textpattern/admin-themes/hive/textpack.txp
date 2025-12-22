@@ -1,0 +1,6 @@
+#@prefs
+#@language en, en-gb, en-us
+thumb_width => Images panel thumbnail width (px)
+thumb_height => Images panel thumbnail height (px)
+thumb_cropping => Images panel crop ratio
+instructions_thumb_cropping => Use the format 'wxh' (width x height)
