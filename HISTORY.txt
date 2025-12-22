@@ -1,3 +1,7 @@
+Changes in 4.9.1 (upcoming)
+
+* Fixed: Correct admin theme file scaffold for dynamic thumbnails.
+
 Changes in 4.9.0 (21 Dec 2025)
 
 * Feature release with support for PHP 8.5, MySQL 8.4, new functionality,
