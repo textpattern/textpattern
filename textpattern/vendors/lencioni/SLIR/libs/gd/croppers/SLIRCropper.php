@@ -42,8 +42,6 @@
 
 namespace lencioni\SLIR\libs\gd\croppers;
 
-use \lencioni\SLIR\libs\SLIRImage;
-
 interface SLIRCropper
 {
   /**
@@ -51,5 +49,5 @@ interface SLIRCropper
    * @param SLIRImage $image
    * @return array Associative array with the keys of x, y, width, and height that specify the box that should be cropped
    */
-  public function getCrop(SLIRImage $image);
+  public function getCrop($image);
 }

@@ -1775,7 +1775,7 @@ function find_files_matching($path, $pat)
     $it = new \RecursiveIteratorIterator($it);
     $it = new \RegexIterator($it, $pat, \RegexIterator::MATCH);
 
-    yield from $it;
+    return $it;
 }
 
 /**

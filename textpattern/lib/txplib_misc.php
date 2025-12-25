@@ -3210,7 +3210,7 @@ function fileDownloadFormatTime($params)
     return '';
 }
 
-function safe_curl_close(&$ch): void
+function safe_curl_close(&$ch)
 {
     if ($ch instanceof CurlHandle) {
         // PHP 8.0+ returns CurlHandle objects
