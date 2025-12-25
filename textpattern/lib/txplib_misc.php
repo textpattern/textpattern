@@ -2373,25 +2373,19 @@ function txpMail($to_address, $subject, $body, $reply_to = null, $from = null)
     global $txp_user;
 
     if (!$from) {
-        // Send the email as the currently logged in user.
-        if ($txp_user) {
-            $sender = safe_row(
-                "RealName, email",
-                'txp_users',
-                "name = '".doSlash($txp_user)."'"
-            );
+        /// Send the email as the currently logged in user, or recipient is sender.
+        $crit = $txp_user
+            ? "name = '" . doSlash($txp_user) . "'"
+            : "email = '" . doSlash($to_address) . "'";
 
-            if ($sender && is_valid_email(get_pref('publisher_email'))) {
-                $sender['email'] = get_pref('publisher_email');
-            }
-        }
-        // If not logged in, the receiver is the sender.
-        else {
-            $sender = safe_row(
-                "RealName, email",
-                'txp_users',
-                "email = '".doSlash($to_address)."'"
-            );
+        $sender = safe_row("RealName", "txp_users", $crit);
+
+        // Send the email from publisher_email pref
+        $sender["email"] = get_pref("publisher_email");
+
+        // Fallback to no-reply@… if invalid
+        if (!is_valid_email($sender["email"])) {
+            $sender["email"] = "no-reply@" . get_pref("siteurl");
         }
     } else {
         // Send the email from an email address specified in $from
