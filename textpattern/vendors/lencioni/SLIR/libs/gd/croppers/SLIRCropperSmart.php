@@ -754,7 +754,7 @@ class SLIRCropperSmart implements SLIRCropper
    * @param SLIRImage $image
    * @return array Associative array with the keys of x and y that specify the top left corner of the box that should be cropped
    */
-  public function getCrop(SLIRImage $image)
+  public function getCrop($image)
   {
     // Try contrast detection
     $o  = $this->cropSmartOffsetRows($image);
