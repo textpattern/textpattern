@@ -25,10 +25,12 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
  */
+namespace lencioni\SLIR;
 
 /**
  * SLIR garbage collector class
@@ -37,8 +39,6 @@
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
-namespace lencioni\SLIR;
-
 class SLIRGarbageCollector
 {
 
