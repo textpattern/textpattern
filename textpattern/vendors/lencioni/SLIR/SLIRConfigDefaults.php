@@ -215,7 +215,7 @@ class SLIRConfigDefaults
      */
     public static function init()
     {
-        global $img_dir;
+        global $img_dir, $path_to_site;
 
         if (!defined('__DIR__')) {
             define('__DIR__', dirname(__FILE__));
@@ -227,7 +227,7 @@ class SLIRConfigDefaults
         }
 
         if (self::$documentRoot === null) {
-            self::$documentRoot = $_SERVER['DOCUMENT_ROOT'];
+            self::$documentRoot = $path_to_site;
         }
 
         if (self::$pathToSLIR === null) {
