@@ -80,6 +80,10 @@ Note that versions listed may change multiple times during the development proce
 
 Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development. 
 
+## Additional development tools
+
+Please refer to the [additional devevelopment tools](https://github.com/textpattern/textpattern/blob/dev/DEVTOOLS.md) document.
+
 ## GitHub topic tags
 
 If you use GitHub for Textpattern-related development please consider adding some of the following [topic](https://help.github.com/articles/about-topics/) keywords to your public project repositories, so we can expand the network of discoverable resources:
