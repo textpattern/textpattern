@@ -59,6 +59,7 @@ rm textpattern-$VER/CODE_OF_CONDUCT.md
 rm textpattern-$VER/composer.json
 rm textpattern-$VER/composer.lock
 rm textpattern-$VER/CONTRIBUTING.md
+rm textpattern-$VER/DEVTOOLS.md
 rm textpattern-$VER/package.json
 rm textpattern-$VER/phpcs.xml
 rm textpattern-$VER/README.md
