@@ -2033,8 +2033,8 @@ function article_image($atts)
         'crop'      => '',
         'quality'   => '',
         'html_id'   => '',
-        'width'     => '',
-        'height'    => '',
+        'width'     => '0',
+        'height'    => '0',
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
@@ -2057,8 +2057,11 @@ function article_image($atts)
     }
 
     $out = array();
+
+    // Stash the tag's 'thumbnail' attribute since $thumbnail is overwritten when
+    // extracting the image from the DB.
     $thumb = $thumbnail;
-    $resize = isset($atts['width']) || isset($atts['height']) || isset($atts['crop']);
+    $resize = !empty($atts['width']) || !empty($atts['height']) || isset($atts['crop']);
 
     if ($range === true) {
         $items = array_keys($images);
@@ -2117,10 +2120,8 @@ function article_image($atts)
                 $w = ($shrink ? $thumb_w : $w);
                 $h = ($shrink ? $thumb_h : $h);
 
-                if ($resize) {
-                    $w = $width === true ? $w : $width;
-                    $h = $height === true ? $h : $height;
-                }
+                $w = $width === true ? $w : $width;
+                $h = $height === true ? $h : $height;
 
                 $payload = array(
                     'id' => $id,

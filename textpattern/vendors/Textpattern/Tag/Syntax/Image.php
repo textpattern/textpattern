@@ -48,7 +48,7 @@ class Image
             'class'     => '',
             'crop'      => '',
             'html_id'   => '',
-            'height'    => '',
+            'height'    => '0',
             'id'        => '',
             'link'      => 0,
             'link_rel'  => '',
@@ -57,7 +57,7 @@ class Image
             'poplink'   => 0, // Deprecated, 4.7
             'quality'   => '',
             'wraptag'   => '',
-            'width'     => '',
+            'width'     => '0',
             'thumbnail' => false,
         );
 
@@ -503,8 +503,8 @@ class Image
             'id'        => '',
             'thumbnail' => 0,
             'link'      => 'auto',
-            'width'     => '',
-            'height'    => '',
+            'width'     => '0',
+            'height'    => '0',
             'crop'      => '',
             'quality'   => '',
         ), $atts));
