@@ -63,7 +63,7 @@ The following table outlines anticipated forthcoming changes to system requireme
 
 #### Textpattern development versions
 
-We are targeting Textpattern 4.9 as the next minor release. Refer to the following table for anticipated changes to system requirements for Textpattern 4.9.
+We are targeting Textpattern 5 as the next major release. Refer to the following table for anticipated changes to system requirements for Textpattern 5.
 
 We generally recommend running Textpattern on platforms with active vendor support where possible, though we also maintain a minimum system requirements list for situations where that isn't viable.
 
@@ -71,14 +71,18 @@ Note that versions listed may change multiple times during the development proce
 
 |        |  Minimum  | Recommended |
 |--------|:-------:|:-----:|
-| PHP    | 5.6 | [vendor supported](https://php.net/supported-versions.php)<br />(8.4 or 8.5) |
-| MySQL  | 5.5 | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html)<br />(8.4) |
-| Apache | &mdash; | vendor supported<br />(2.4) |
-| Nginx  | &mdash; | mainline (1.28) or stable (1.29) |
+| PHP    | &mdash; | [vendor supported](https://php.net/supported-versions.php) |
+| MySQL  | &mdash; | [vendor supported LTS](https://www.mysql.com/support/supportedplatforms/database.html) |
+| Apache | &mdash; | vendor supported |
+| Nginx  | &mdash; | mainline or stable |
 
 ## Contributing
 
 Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development. 
+
+## Additional development tools
+
+Please refer to the [additional devevelopment tools](https://github.com/textpattern/textpattern/blob/dev/DEVTOOLS.md) document.
 
 ## GitHub topic tags
 
@@ -89,49 +93,6 @@ If you use GitHub for Textpattern-related development please consider adding som
 * [`textpattern-theme`](https://github.com/topics/textpattern-theme)
 * [`textpattern-website`](https://github.com/topics/textpattern-website) (for websites built with Textpattern)
 * [`textpattern-development`](https://github.com/topics/textpattern-development) (for development resources)
-
-## Additional development tools
-
-Various components used within Textpattern (such as the bundled themes and language translations) are maintained in other repositories. Textpattern has a simple development toolset built on [Node.js](https://nodejs.org/) to pull the distribution files of those repositories into the core as required.
-
-You can install Node.js using the [installer](https://nodejs.org/en/download/) or [package manager](https://nodejs.org/en/download/package-manager/).
-
-Install required dev tools:
-
-```ShellSession
-npm install
-```
-
-Pull the following components from the CLI:
-
-```ShellSession
-npm run get-default-theme
-npm run get-classic-admin-theme
-npm run get-hive-admin-theme
-npm run get-pophelp
-npm run get-textpacks
-npm run get-dependencies
-```
-
-To request a specific tag or branch:
-
-```ShellSession
-npm run get-default-theme 4.9.0
-npm run get-classic-admin-theme 4.9.0
-npm run get-classic-admin-theme 4.9.x
-npm run get-hive-admin-theme 4.9.x
-npm run get-textpacks 4.9.x
-```
-
-Release tools:
-
-Usage: `npm run txp-gitdist <version> [dest-dir]` (`dest-dir` defaults to a temporary location).
-
-```ShellSession
-npm run txp-index
-npm run txp-checksums ./textpattern
-npm run txp-gitdist 1.2.3 ../my-dest-dir
-```
 
 ## Thank You
 
