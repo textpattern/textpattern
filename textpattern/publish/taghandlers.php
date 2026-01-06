@@ -2090,6 +2090,7 @@ function article_image($atts)
     foreach ($items as $item) {
         if (isset($images[$item])) {
             $image = $images[$item];
+            $img = '';
 
             if (intval($image)) {
                 $image = intval($image);
@@ -2102,7 +2103,7 @@ function article_image($atts)
 
                 $rs = $dbimages[$image];
 
-                if ($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) {
+                if (($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) || $thumb === THUMB_NONE) {
                     continue;
                 }
 
@@ -2111,8 +2112,6 @@ function article_image($atts)
                 $isAuto = ($thumbnail === THUMB_AUTO || $thumb === THUMB_AUTO);
 
                 if ($isAuto) {
-                    $thumb_w = TEXTPATTERN_THUMB_WIDTH;
-                    $thumb_h = TEXTPATTERN_THUMB_HEIGHT;
                     $crop = ($crop === true ? TEXTPATTERN_THUMB_CROPPING : $crop);
                 }
 
@@ -2140,9 +2139,13 @@ function article_image($atts)
                     $title = $caption;
                 }
 
-                $img = '<img src="' . imageBuildURL($payload, $thumb_wanted) .
-                '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
-                ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                $imageURL = imageBuildURL($payload, $thumb_wanted);
+
+                if ($imageURL) {
+                    $img = '<img src="' . $imageURL .
+                        '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
+                        ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                }
             } else {
                 $w = $width !== '' ? $width : 0;
                 $h = $height !== '' ? $height : 0;
@@ -2154,15 +2157,16 @@ function article_image($atts)
                 $img .= ' loading="' . $loading . '"';
             }
 
-            $img .=
-            (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
-            (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
-            ($w ? ' width="' . (int) $w . '"' : '') .
-            ($h ? ' height="' . (int) $h . '"' : '') .
-            $extAtts .
-            (get_pref('doctype') === 'html5' ? '>' : ' />');
-
-            $out[] = $img;
+            if ($img) {
+                $img .=
+                    (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
+                    (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                    ($w ? ' width="' . (int) $w . '"' : '') .
+                    ($h ? ' height="' . (int) $h . '"' : '') .
+                    $extAtts .
+                    (get_pref('doctype') === 'html5' ? '>' : ' />');
+                $out[] = $img;
+            }
         }
     }
 
