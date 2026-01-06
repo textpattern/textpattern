@@ -109,6 +109,10 @@ class Image
             $height = ($height == '' || $height === true ? (($colPrefix && $thumb_h) ? ${$colPrefix.'h'} : $h) : $height);
 
             if ($isAuto) {
+                $crop = ($crop === true ? '1x1' : $crop);
+            }
+
+            if ($isAuto) {
                 $payload['w'] = $width;
                 $payload['h'] = $height;
                 $payload['c'] = $crop;
@@ -519,6 +523,7 @@ class Image
         if ($thisimage = imageFetchInfo($id, $name)) {
             $width = ($width == '' || $width === true ? ($thumbnail && $thisimage['thumb_w'] ? $thisimage['thumb_w'] : $thisimage['w']) : $width);
             $height = ($height == '' || $height === true ? ($thumbnail && $thisimage['thumb_h'] ? $thisimage['thumb_h'] : $thisimage['h']) : $height);
+            $crop = ($crop === true ? '1x1' : $crop);
 
             if ($thumbnail == THUMB_AUTO || $width || $height || $crop) {
                 $thisimage['w'] = $width;
