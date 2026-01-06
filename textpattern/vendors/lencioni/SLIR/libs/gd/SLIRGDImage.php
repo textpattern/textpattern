@@ -294,7 +294,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 } else {
                     $this->info['width']  = imagesx($this->getImage());
                     $this->info['height'] = imagesy($this->getImage());
-                    // @todo mime
+                    $this->info['mime'] = image_type_to_mime_type(exif_imagetype($this->getImage()));
                 }
             } else {
                 // There is a path, so get the info from the file
@@ -307,6 +307,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
                 $this->info['width']  =& $this->info[0];
                 $this->info['height'] =& $this->info[1];
+                $this->info['mime'] = image_type_to_mime_type(exif_imagetype($this->getFullPath()));
             }
 
             if ($this->isJPEG()) {
@@ -595,7 +596,6 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
             $this->destroy();
             $this->image  = $palette;
-            $this->setMimeType('image/png');
         }
 
         /* For some reason, ImageTrueColorToPalette produces horrible results for true color images that have less than 256 colors. http://stackoverflow.com/questions/5187480/imagetruecolortopalette-losing-colors
