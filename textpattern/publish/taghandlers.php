@@ -2113,6 +2113,7 @@ function article_image($atts)
                 if ($isAuto) {
                     $thumb_w = TEXTPATTERN_THUMB_WIDTH;
                     $thumb_h = TEXTPATTERN_THUMB_HEIGHT;
+                    $crop = ($crop === true ? TEXTPATTERN_THUMB_CROPPING : $crop);
                 }
 
                 $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
