@@ -82,7 +82,7 @@ Please refer to the [contributing documentation](https://github.com/textpattern/
 
 ## Additional development tools
 
-Please refer to the [additional devevelopment tools](https://github.com/textpattern/textpattern/blob/dev/DEVTOOLS.md) document.
+Please refer to the [additional development tools](https://github.com/textpattern/textpattern/blob/dev/DEVTOOLS.md) document.
 
 ## GitHub topic tags
 
