@@ -1,5 +1,6 @@
 Changes in 4.9.1 (upcoming)
 
+* Fixed: Dynamic thumbnail MIME detection (thanks, rezozero).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 
 Changes in 4.9.0 (21 Dec 2025)
