@@ -2112,7 +2112,7 @@ function article_image($atts)
                 $isAuto = ($thumbnail === THUMB_AUTO || $thumb === THUMB_AUTO);
 
                 if ($isAuto) {
-                    $crop = ($crop === true ? TEXTPATTERN_THUMB_CROPPING : $crop);
+                    $crop = ($crop === true ? '1x1' : $crop);
                 }
 
                 $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
