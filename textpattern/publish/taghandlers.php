@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2033,8 +2033,8 @@ function article_image($atts)
         'crop'      => '',
         'quality'   => '',
         'html_id'   => '',
-        'width'     => '',
-        'height'    => '',
+        'width'     => '0',
+        'height'    => '0',
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
@@ -2057,8 +2057,11 @@ function article_image($atts)
     }
 
     $out = array();
+
+    // Stash the tag's 'thumbnail' attribute since $thumbnail is overwritten when
+    // extracting the image from the DB.
     $thumb = $thumbnail;
-    $resize = isset($atts['width']) || isset($atts['height']) || isset($atts['crop']);
+    $resize = !empty($atts['width']) || !empty($atts['height']) || isset($atts['crop']);
 
     if ($range === true) {
         $items = array_keys($images);
@@ -2087,6 +2090,7 @@ function article_image($atts)
     foreach ($items as $item) {
         if (isset($images[$item])) {
             $image = $images[$item];
+            $img = '';
 
             if (intval($image)) {
                 $image = intval($image);
@@ -2099,7 +2103,7 @@ function article_image($atts)
 
                 $rs = $dbimages[$image];
 
-                if ($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) {
+                if (($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) || $thumb === THUMB_NONE) {
                     continue;
                 }
 
@@ -2108,8 +2112,7 @@ function article_image($atts)
                 $isAuto = ($thumbnail === THUMB_AUTO || $thumb === THUMB_AUTO);
 
                 if ($isAuto) {
-                    $thumb_w = TEXTPATTERN_THUMB_WIDTH;
-                    $thumb_h = TEXTPATTERN_THUMB_HEIGHT;
+                    $crop = ($crop === true ? '1x1' : $crop);
                 }
 
                 $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
@@ -2117,10 +2120,8 @@ function article_image($atts)
                 $w = ($shrink ? $thumb_w : $w);
                 $h = ($shrink ? $thumb_h : $h);
 
-                if ($resize) {
-                    $w = $width === true ? $w : $width;
-                    $h = $height === true ? $h : $height;
-                }
+                $w = $width === true ? $w : $width;
+                $h = $height === true ? $h : $height;
 
                 $payload = array(
                     'id' => $id,
@@ -2138,9 +2139,13 @@ function article_image($atts)
                     $title = $caption;
                 }
 
-                $img = '<img src="' . imageBuildURL($payload, $thumb_wanted) .
-                '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
-                ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                $imageURL = imageBuildURL($payload, $thumb_wanted);
+
+                if ($imageURL) {
+                    $img = '<img src="' . $imageURL .
+                        '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
+                        ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                }
             } else {
                 $w = $width !== '' ? $width : 0;
                 $h = $height !== '' ? $height : 0;
@@ -2152,15 +2157,16 @@ function article_image($atts)
                 $img .= ' loading="' . $loading . '"';
             }
 
-            $img .=
-            (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
-            (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
-            ($w ? ' width="' . (int) $w . '"' : '') .
-            ($h ? ' height="' . (int) $h . '"' : '') .
-            $extAtts .
-            (get_pref('doctype') === 'html5' ? '>' : ' />');
-
-            $out[] = $img;
+            if ($img) {
+                $img .=
+                    (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
+                    (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                    ($w ? ' width="' . (int) $w . '"' : '') .
+                    ($h ? ' height="' . (int) $h . '"' : '') .
+                    $extAtts .
+                    (get_pref('doctype') === 'html5' ? '>' : ' />');
+                $out[] = $img;
+            }
         }
     }
 

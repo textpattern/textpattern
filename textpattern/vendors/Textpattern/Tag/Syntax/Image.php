@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -48,7 +48,7 @@ class Image
             'class'     => '',
             'crop'      => '',
             'html_id'   => '',
-            'height'    => '',
+            'height'    => '0',
             'id'        => '',
             'link'      => 0,
             'link_rel'  => '',
@@ -57,7 +57,7 @@ class Image
             'poplink'   => 0, // Deprecated, 4.7
             'quality'   => '',
             'wraptag'   => '',
-            'width'     => '',
+            'width'     => '0',
             'thumbnail' => false,
         );
 
@@ -107,6 +107,10 @@ class Image
             $isAuto = $thumbnail == THUMB_AUTO || $thumb_type == THUMB_AUTO;
             $width = ($width == '' || $width === true ? (($colPrefix && $thumb_w) ? ${$colPrefix.'w'} : $w) : $width);
             $height = ($height == '' || $height === true ? (($colPrefix && $thumb_h) ? ${$colPrefix.'h'} : $h) : $height);
+
+            if ($isAuto) {
+                $crop = ($crop === true ? '1x1' : $crop);
+            }
 
             if ($isAuto) {
                 $payload['w'] = $width;
@@ -503,8 +507,8 @@ class Image
             'id'        => '',
             'thumbnail' => 0,
             'link'      => 'auto',
-            'width'     => '',
-            'height'    => '',
+            'width'     => '0',
+            'height'    => '0',
             'crop'      => '',
             'quality'   => '',
         ), $atts));
@@ -519,6 +523,7 @@ class Image
         if ($thisimage = imageFetchInfo($id, $name)) {
             $width = ($width == '' || $width === true ? ($thumbnail && $thisimage['thumb_w'] ? $thisimage['thumb_w'] : $thisimage['w']) : $width);
             $height = ($height == '' || $height === true ? ($thumbnail && $thisimage['thumb_h'] ? $thisimage['thumb_h'] : $thisimage['h']) : $height);
+            $crop = ($crop === true ? '1x1' : $crop);
 
             if ($thumbnail == THUMB_AUTO || $width || $height || $crop) {
                 $thisimage['w'] = $width;

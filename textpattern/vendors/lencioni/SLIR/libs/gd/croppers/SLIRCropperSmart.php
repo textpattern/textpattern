@@ -25,6 +25,7 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
@@ -754,7 +755,7 @@ class SLIRCropperSmart implements SLIRCropper
    * @param SLIRImage $image
    * @return array Associative array with the keys of x and y that specify the top left corner of the box that should be cropped
    */
-  public function getCrop(SLIRImage $image)
+  public function getCrop($image)
   {
     // Try contrast detection
     $o  = $this->cropSmartOffsetRows($image);

@@ -25,11 +25,13 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
  * @subpackage Croppers
  */
+namespace lencioni\SLIR\libs\gd\croppers;
 
 /**
  * SLIR cropper interface
@@ -39,11 +41,6 @@
  * @package SLIR
  * @subpackage Croppers
  */
-
-namespace lencioni\SLIR\libs\gd\croppers;
-
-use \lencioni\SLIR\libs\SLIRImage;
-
 interface SLIRCropper
 {
   /**
@@ -51,5 +48,5 @@ interface SLIRCropper
    * @param SLIRImage $image
    * @return array Associative array with the keys of x, y, width, and height that specify the box that should be cropped
    */
-  public function getCrop(SLIRImage $image);
+  public function getCrop($image);
 }

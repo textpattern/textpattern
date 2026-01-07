@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1106,7 +1106,7 @@ if (!defined('TEXTPATTERN_THUMB_WIDTH')) {
      * @since   4.9.0
      * @package Image
      */
-    define('TEXTPATTERN_THUMB_WIDTH', 160);
+    define('TEXTPATTERN_THUMB_WIDTH', 200);
 }
 
 if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
@@ -1116,7 +1116,7 @@ if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
      * @since   4.9.0
      * @package Image
      */
-    define('TEXTPATTERN_THUMB_HEIGHT', 160);
+    define('TEXTPATTERN_THUMB_HEIGHT', 200);
 }
 
 if (!defined('TEXTPATTERN_THUMB_CROPPING')) {

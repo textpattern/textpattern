@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -3197,7 +3197,7 @@ function fileDownloadFormatTime($params)
     return '';
 }
 
-function safe_curl_close(&$ch): void
+function safe_curl_close(&$ch)
 {
     if ($ch instanceof CurlHandle) {
         // PHP 8.0+ returns CurlHandle objects

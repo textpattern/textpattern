@@ -25,10 +25,12 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
  */
+namespace lencioni\SLIR;
 
 /**
  * SLIR Config Class
@@ -37,8 +39,6 @@
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
-namespace lencioni\SLIR;
-
 class SLIRConfigDefaults
 {
     /**
@@ -215,7 +215,7 @@ class SLIRConfigDefaults
      */
     public static function init()
     {
-        global $img_dir;
+        global $img_dir, $path_to_site;
 
         if (!defined('__DIR__')) {
             define('__DIR__', dirname(__FILE__));
@@ -227,7 +227,7 @@ class SLIRConfigDefaults
         }
 
         if (self::$documentRoot === null) {
-            self::$documentRoot = $_SERVER['DOCUMENT_ROOT'];
+            self::$documentRoot = $path_to_site;
         }
 
         if (self::$pathToSLIR === null) {

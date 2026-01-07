@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1775,7 +1775,7 @@ function find_files_matching($path, $pat)
     $it = new \RecursiveIteratorIterator($it);
     $it = new \RegexIterator($it, $pat, \RegexIterator::MATCH);
 
-    yield from $it;
+    return $it;
 }
 
 /**
