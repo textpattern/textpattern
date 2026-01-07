@@ -2167,7 +2167,7 @@ function is_blocklisted($ip, $checks = '')
 
     foreach ((array) $checks as $a) {
         $parts = explode(':', $a, 2);
-        $rbl   = $parts[0];
+        $rbl = $parts[0];
 
         if (isset($parts[1])) {
             foreach (explode(':', $parts[1]) as $code) {
@@ -3430,14 +3430,14 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $hash = txp_hash($thing);
     }
 
-    $inside  = array($parsed[0]);
-    $tags    = array($inside);
-    $tag     = array();
+    $inside = array($parsed[0]);
+    $tags = array($inside);
+    $tag = array();
     $outside = array();
     $order = array(array());
-    $else    = array(-1);
-    $count   = array(-1);
-    $level   = 0;
+    $else = array(-1);
+    $count = array(-1);
+    $level = 0;
 
     for ($i = 1; $i < $last || $level > 0; $i++) {
         $chunk = $i < $last ? $parsed[$i] : '</txp:'.$tag[$level-1][2].'>';

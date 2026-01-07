@@ -537,7 +537,7 @@ function cat_event_category_create($event)
 
 function cat_event_category_edit($evname, $message = '')
 {
-    $id     = assert_int(gps('id'));
+    $id = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
     $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_category', 'name, title, description');
 

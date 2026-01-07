@@ -249,17 +249,17 @@ function doTxpValidate()
 {
     global $logout, $txp_user;
 
-    $p_userid   = ps('p_userid');
+    $p_userid = ps('p_userid');
     $p_password = ps('p_password');
-    $p_reset    = ps('p_reset');
-    $p_alter    = ps('p_alter');
-    $p_set      = ps('p_set');
-    $stay       = ps('stay');
-    $p_confirm  = gps('confirm');
-    $logout     = gps('logout');
-    $lang       = sanitizeForUrl(gps('lang'));
-    $message    = '';
-    $pub_path   = preg_replace('|//$|', '/', rhu . '/');
+    $p_reset = ps('p_reset');
+    $p_alter = ps('p_alter');
+    $p_set = ps('p_set');
+    $stay = ps('stay');
+    $p_confirm = gps('confirm');
+    $logout = gps('logout');
+    $lang = sanitizeForUrl(gps('lang'));
+    $message = '';
+    $pub_path = preg_replace('|//$|', '/', rhu . '/');
     $cookie_domain = (defined('cookie_domain')) ? cookie_domain : '';
     $conUsers = do_list_unique(get_pref('concurrent_logins'));
 
@@ -268,7 +268,7 @@ function doTxpValidate()
         $c_hash = end($txp_login);
         $c_userid = join(',', array_slice($txp_login, 0, -1));
     } else {
-        $c_hash   = '';
+        $c_hash = '';
         $c_userid = '';
     }
 
@@ -313,7 +313,7 @@ function doTxpValidate()
 
         if ($name !== false) {
             $c_hash = md5(uniqid(mt_rand(), true));
-            $nonce  = md5($name . pack('H*', $c_hash));
+            $nonce = md5($name . pack('H*', $c_hash));
 
             safe_update(
                 'txp_users',

@@ -528,7 +528,7 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $status = selectInput('status', $file_statuses, '', true);
 
     $methods = array(
-        'changestatus'   => array(
+        'changestatus' => array(
             'label' => gTxt('changestatus'),
             'html'  => $status,
         ),
@@ -536,12 +536,12 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'label' => gTxt('changecategory'),
             'html'  => $categories,
         ),
-        'changeauthor'   => array(
+        'changeauthor' => array(
             'label' => gTxt('changeauthor'),
             'html'  => $authors,
         ),
-        'changecount'    => array('label' => gTxt('reset_download_count')),
-        'delete'         => gTxt('delete'),
+        'changecount' => array('label' => gTxt('reset_download_count')),
+        'delete'      => gTxt('delete'),
     );
 
     if (!$categories) {
@@ -579,8 +579,8 @@ function file_multi_edit()
     }
 
     $selected = array_map('assert_int', $selected);
-    $method   = ps('edit_method');
-    $changed  = array();
+    $method = ps('edit_method');
+    $changed = array();
     $key = '';
 
     switch ($method) {

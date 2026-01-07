@@ -139,7 +139,7 @@ function populateArticleData($rs, $all = true)
 
 function article_format_info($rs, $all = true)
 {
-    $rs['uPosted']  = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
+    $rs['uPosted'] = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
     $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
     $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
     populateArticleData($rs, $all);
@@ -854,18 +854,18 @@ function filterAtts($atts = null, $iscustom = null)
     );
 
     $sortAtts = array(
-        'fields'        => null,
-        'sort'          => '',
-        'image'         => '',
-        'keywords'      => '',
-        'time'          => null,
-        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
-        'frontpage'     => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
-        'match'         => 'Category',
-        'depth'         => 0,
-        'id'            => isset($excluded['id']) ? true : '',
-        'excerpted'     => '',
-        'exclude'       => ''
+        'fields'    => null,
+        'sort'      => '',
+        'image'     => '',
+        'keywords'  => '',
+        'time'      => null,
+        'status'    => empty($atts['id']) ? STATUS_LIVE : true,
+        'frontpage' => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
+        'match'     => 'Category',
+        'depth'     => 0,
+        'id'        => isset($excluded['id']) ? true : '',
+        'excerpted' => '',
+        'exclude'   => ''
     );
 
     // For the txp:article tag, some attributes are taken from globals;
@@ -873,11 +873,11 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($iscustom && (int)$iscustom >= 0) {
         $sortAtts += array(
-            'category'  => isset($excluded['category']) ? true : '',
-            'section'   => isset($excluded['section']) ? true : '',
-            'author'    => isset($excluded['author']) ? true : '',
-            'month'     => isset($excluded['month']) ? true : '',
-            'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
+            'category' => isset($excluded['category']) ? true : '',
+            'section'  => isset($excluded['section']) ? true : '',
+            'author'   => isset($excluded['author']) ? true : '',
+            'month'    => isset($excluded['month']) ? true : '',
+            'expired'  => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         );
     } else {
         $sortAtts += array(
@@ -998,7 +998,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && $excluded === true || isset($excluded['category']) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
-    $category  = !$catquery  ? '' : " AND $not($catquery)";
+    $category = !$catquery  ? '' : " AND $not($catquery)";
 
     // ID
     $not = $excluded === true || isset($excluded['id']) ? 'NOT' : '';
@@ -1014,13 +1014,13 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && $excluded === true || isset($excluded['section']) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
-    $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
+    $section = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
         ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
     $not = $iscustom && $excluded === true || isset($excluded['author']) ? 'NOT' : '';
     $author !== true or $author = processTags('author', 'escape="" title=""');
-    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
+    $author = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage('Section', 'on_frontpage', (int)$frontpage < 0) : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";

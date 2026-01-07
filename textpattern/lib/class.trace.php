@@ -29,7 +29,7 @@ class Trace
         $trace['level'] = sizeof($this->nest);
         $trace['begin'] = microtime(true);
         $trace['query'] = $query;
-        $trace['msg']   = $msg;
+        $trace['msg'] = $msg;
         array_push($this->trace, $trace);
 
         if (is_array($stats)) {
@@ -122,9 +122,9 @@ class Trace
     public function summary($array = false)
     {
         $summary = array(
-            'Runtime'    => sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000).' ms',
+            'Runtime' => sprintf('%4.2f', (microtime(true) - $this->bigBang) * 1000).' ms',
             'Query time' => sprintf('%4.2f', $this->queryTime * 1000).' ms',
-            'Queries'    => $this->queries,
+            'Queries' => $this->queries,
         );
 
         if ($this->memFunc) {

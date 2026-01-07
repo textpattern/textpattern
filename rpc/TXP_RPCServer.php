@@ -350,7 +350,7 @@ EOD;
         $contents = $this->_getBloggerContents($content);
 
         $contents['Section'] = $blogid;
-        $contents['Status']  = $publish ? '4' : '1';
+        $contents['Status'] = $publish ? '4' : '1';
 
         $rs = $txp->newArticle($contents);
 
@@ -443,7 +443,7 @@ EOD;
             list($firstname, $lastname) = explode(' ', $RealName);
         } else {
             $firstname = $RealName;
-            $lastname  = '';
+            $lastname = '';
         }
 
         $uinfo = array(
@@ -956,7 +956,7 @@ EOD;
 
         // Trick to add title, category and excerpts using XML-RPC.
         if (preg_match('/<title>(.*)<\/title>(.*)/s', $content, $matches)) {
-            $body  = $matches[2];
+            $body = $matches[2];
             $title = $matches[1];
         }
 
@@ -977,9 +977,9 @@ EOD;
         global $gmtoffset, $is_dst;
 
         $contents = array(
-            'Body'   => str_replace('\n', n, $struct['description']),
+            'Body' => str_replace('\n', n, $struct['description']),
             'Status' => $publish ? '4' : '1',
-            'Title'  => $struct['title'],
+            'Title' => $struct['title'],
         );
 
         if (!empty($struct['categories'])) {
@@ -1088,9 +1088,9 @@ EOD;
                 break;
         }
 
-        $cat  = $txp->getCategory($rs['Category1']);
+        $cat = $txp->getCategory($rs['Category1']);
         $cat1 = isset($cat['title']) ? $cat['title'] : '';
-        $cat  = $txp->getCategory($rs['Category2']);
+        $cat = $txp->getCategory($rs['Category2']);
         $cat2 = isset($cat['title']) ? $cat['title'] : '';
         
         switch ($rs['Status']) {
