@@ -93,28 +93,28 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 if (!$this->isSVG()) {
                     $this->create();
                 } else {
-                    $this->image  = imagecreatefromsvg($this->getFullPath());
+                    $this->image = imagecreatefromsvg($this->getFullPath());
                 }
             } else {
                 try {
                     if ($this->isJPEG()) {
-                        $this->image  = imagecreatefromjpeg($this->getFullPath());
+                        $this->image = imagecreatefromjpeg($this->getFullPath());
                     } elseif ($this->isWEBP()) {
-                        $this->image  = imagecreatefromwebp($this->getFullPath());
+                        $this->image = imagecreatefromwebp($this->getFullPath());
                     } elseif ($this->isAVIF()) {
-                        $this->image  = imagecreatefromavif($this->getFullPath());
+                        $this->image = imagecreatefromavif($this->getFullPath());
                     } elseif ($this->isGIF()) {
-                        $this->image  = imagecreatefromgif($this->getFullPath());
+                        $this->image = imagecreatefromgif($this->getFullPath());
                     } elseif ($this->isPNG()) {
-                        $this->image  = imagecreatefrompng($this->getFullPath());
+                        $this->image = imagecreatefrompng($this->getFullPath());
                     } elseif ($this->isBMP()) {
-                        $this->image  = $this->imagecreatefrombmp($this->getFullPath());
+                        $this->image = $this->imagecreatefrombmp($this->getFullPath());
                     } elseif ($this->isSVG()) {
-                        $this->image  = imagecreatefromsvg($this->getFullPath());
+                        $this->image = imagecreatefromsvg($this->getFullPath());
                     }
                 } catch (Exception $e) {
                     // Try an alternate catch-all method
-                    $this->image  = imagecreatefromstring(file_get_contents($this->getFullPath()));
+                    $this->image = imagecreatefromstring(file_get_contents($this->getFullPath()));
                 }
 
                 $this->info = null;
@@ -144,25 +144,25 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         $read = file_get_contents($path);
 
         $temp = unpack('H*', $read);
-        $hex  = $temp[1];
+        $hex = $temp[1];
         $header = substr($hex, 0, 108);
 
         // Process the header
         // Structure: http://www.fastgraph.com/help/bmp_header_format.html
         if (substr($header, 0, 4) == '424d') {
             // Get the width 4 bytes
-            $width  = hexdec($header[38] . $header[39] . $header[36] . $header[37]);
+            $width = hexdec($header[38] . $header[39] . $header[36] . $header[37]);
 
             // Get the height 4 bytes
             $height = hexdec($header[46] . $header[47] . $header[44] . $header[45]);
         }
 
         // Define starting X and Y
-        $x  = 0;
-        $y  = 1;
+        $x = 0;
+        $y = 1;
 
         // Create newimage
-        $image  = imagecreatetruecolor($width, $height);
+        $image = imagecreatetruecolor($width, $height);
 
         // Grab the body from the image
         $body = substr($hex, 108);
@@ -170,8 +170,8 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         // Calculate if padding at the end-line is needed
         // Divided by two to keep overview.
         // 1 byte = 2 HEX-chars
-        $bodySize    = (strlen($body) / 2);
-        $headerSize  = ($width * $height);
+        $bodySize = (strlen($body) / 2);
+        $headerSize = ($width * $height);
 
         // Use end-line padding? Only when needed
         $usePadding = ($bodySize > ($headerSize * 3) + 4);
@@ -188,7 +188,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 }
 
                 // Reset horizontal position
-                $x  = 0;
+                $x = 0;
 
                 // Raise the height-position (bottom-up)
                 ++$y;
@@ -202,12 +202,12 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
             // Calculation of the RGB-pixel (defined as BGR in image-data)
             // Define $iPos as absolute position in the body
             $iPos = $i * 2;
-            $r    = hexdec($body[$iPos + 4] . $body[$iPos + 5]);
-            $g    = hexdec($body[$iPos + 2] . $body[$iPos + 3]);
-            $b    = hexdec($body[$iPos] . $body[$iPos + 1]);
+            $r = hexdec($body[$iPos + 4] . $body[$iPos + 5]);
+            $g = hexdec($body[$iPos + 2] . $body[$iPos + 3]);
+            $b = hexdec($body[$iPos] . $body[$iPos + 1]);
 
             // Calculate and draw the pixel
-            $color  = imagecolorallocate($image, $r, $g, $b);
+            $color = imagecolorallocate($image, $r, $g, $b);
             imagesetpixel($image, $x, $height - $y, $color);
 
             // Raise the horizontal position
@@ -292,7 +292,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                 if ($this->getImage() === null) {
                     // There is nothing to get
                 } else {
-                    $this->info['width']  = imagesx($this->getImage());
+                    $this->info['width'] = imagesx($this->getImage());
                     $this->info['height'] = imagesy($this->getImage());
                     $this->info['mime'] = image_type_to_mime_type(exif_imagetype($this->getImage()));
                 }
@@ -305,7 +305,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                     throw new \RuntimeException('getimagesize failed (source file may not be an image): ' . $this->getFullPath());
                 }
 
-                $this->info['width']  =& $this->info[0];
+                $this->info['width'] =& $this->info[0];
                 $this->info['height'] =& $this->info[1];
                 $this->info['mime'] = image_type_to_mime_type(exif_imagetype($this->getFullPath()));
             }
@@ -426,8 +426,8 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
      */
     final public function getCropperClass()
     {
-        $cropClass  = strtolower($this->getCropper());
-        $class      = '\lencioni\SLIR\libs\gd\croppers\SLIRCropper' . ucfirst($cropClass);
+        $cropClass = strtolower($this->getCropper());
+        $class = '\lencioni\SLIR\libs\gd\croppers\SLIRCropper' . ucfirst($cropClass);
 
         return \Txp::get($class);
     }
@@ -441,8 +441,8 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     public function crop()
     {
         if ($this->croppingIsNeeded()) {
-            $cropper  = $this->getCropperClass();
-            $offset   = $cropper->getCrop($this);
+            $cropper = $this->getCropperClass();
+            $offset = $cropper->getCrop($this);
             $this->cropImage($offset['x'], $offset['y']);
         }
 
@@ -461,8 +461,8 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     private function cropImage($leftOffset, $topOffset)
     {
         if (!$this->isSVG()) {
-            $class    = __CLASS__;
-            $cropped  = new $class();
+            $class = __CLASS__;
+            $cropped = new $class();
 
             $cropped->setMimeType($this->getMimeType()) // To enable again transparency on PNGs !
                             ->setWidth($this->getCropWidth())
@@ -485,10 +485,10 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
 
             // Replace pre-cropped image with cropped image
             $this->destroy();
-            $this->image          = $cropped->getImage();
+            $this->image = $cropped->getImage();
 
             // Update width and height
-            $this->info['width']  = $cropped->getWidth();
+            $this->info['width'] = $cropped->getWidth();
             $this->info['height'] = $cropped->getHeight();
 
             // Clean up memory
@@ -540,7 +540,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     private function isPalette()
     {
         $colors = array();
-        $image  = $this->getImage();
+        $image = $this->getImage();
         // Loop over all of the pixels in the image, counting the colors and checking their alpha channels
         if (!$this->isSVG()) {
             for ($x = 0, $width = $this->getWidth(); $x < $width; ++$x) {
@@ -560,7 +560,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                     }
 
                     // Get the alpha channel of the color
-                    $alpha  = ($color & 0x7F000000) >> 24;
+                    $alpha = ($color & 0x7F000000) >> 24;
 
                     // What is the threshold for visibility in an alpha channel? (out of 127)
                     if ($alpha > 1 && $alpha < 126) {
@@ -581,7 +581,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
     private function trueColorToPalette($dither, $ncolors)
     {
         if (!$this->isSVG()) {
-            $palette  = imagecreate($this->getWidth(), $this->getHeight());
+            $palette = imagecreate($this->getWidth(), $this->getHeight());
 
             imagecopy(
                     $palette,
@@ -595,7 +595,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
             );
 
             $this->destroy();
-            $this->image  = $palette;
+            $this->image = $palette;
         }
 
         /* For some reason, ImageTrueColorToPalette produces horrible results for true color images that have less than 256 colors. http://stackoverflow.com/questions/5187480/imagetruecolortopalette-losing-colors

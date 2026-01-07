@@ -114,7 +114,7 @@ class SLIRRequest
      * @since 4.9.0
      * @var boolean
      */
-    private $isUsingDefaultImagePath  = false;
+    private $isUsingDefaultImagePath = false;
 
     /**
      * Supplied request - overrides the URL
@@ -247,7 +247,7 @@ class SLIRRequest
      */
     private function setWidth($value)
     {
-        $this->width  = (int) $value;
+        $this->width = (int) $value;
         if ($this->width < 1) {
             throw new \RuntimeException('Width must be greater than 0: ' . $this->width);
         }
@@ -271,7 +271,7 @@ class SLIRRequest
      */
     private function setQuality($value)
     {
-        $this->quality  = (int) $value;
+        $this->quality = (int) $value;
         if ($this->quality < 0 || $this->quality > 100) {
             throw new \RuntimeException('Quality must be between 0 and 100: ' . $this->quality);
         }
@@ -283,7 +283,7 @@ class SLIRRequest
      */
     private function setProgressive($value)
     {
-        $this->progressive  = (bool) $value;
+        $this->progressive = (bool) $value;
     }
 
     /**
@@ -313,21 +313,21 @@ class SLIRRequest
     private function setCropRatio($value)
     {
         $delimiters = preg_quote(self::CROP_RATIO_DELIMITERS);
-        $ratio      = preg_split("/[$delimiters]/", (string) urldecode($value));
+        $ratio = preg_split("/[$delimiters]/", (string) urldecode($value));
         if (count($ratio) >= 2) {
             if ((float) $ratio[0] == 0 || (float) $ratio[1] == 0) {
                 throw new \RuntimeException('Crop ratio must not contain a zero: ' . (string) $value);
             }
 
-            $this->cropRatio  = array(
-                'width'   => (float) $ratio[0],
-                'height'  => (float) $ratio[1],
-                'ratio'   => (float) $ratio[0] / (float) $ratio[1]
+            $this->cropRatio = array(
+                'width' => (float) $ratio[0],
+                'height' => (float) $ratio[1],
+                'ratio' => (float) $ratio[0] / (float) $ratio[1]
             );
 
             // If there was a third part, that is the cropper being specified
             if (count($ratio) >= 3) {
-                $this->cropper  = (string) $ratio[2];
+                $this->cropper = (string) $ratio[2];
             }
         } else {
             throw new \RuntimeException('Crop ratio must be in [width]x[height] format (e.g. 2x1): ' . (string) $value);
@@ -380,7 +380,7 @@ class SLIRRequest
 
         // The parameters should be the first set of characters after the SLIR path
         $request = preg_replace(array('`.*?/' . preg_quote(basename(SLIRConfig::$pathToSLIR)) . '/`'), '', (string) ($this->request === null ? $_SERVER['REQUEST_URI'] : $this->request), 1);
-        $paramString  = strtok($request, '/');
+        $paramString = strtok($request, '/');
 
         if ($paramString === false || $paramString === $request) {
             throw new \RuntimeException('Not enough parameters were given.
@@ -400,10 +400,10 @@ Example usage:
 
         // The image path should start right after the parameters
         $this->paramString = $paramString;
-        $params['i']  = substr($request, strlen($paramString) + 1); // +1 for the slash
+        $params['i'] = substr($request, strlen($paramString) + 1); // +1 for the slash
 
         // The parameters are separated by hyphens
-        $rawParam   = strtok($paramString, '-');
+        $rawParam = strtok($paramString, '-');
 
         while ($rawParam !== false) {
             if (strlen($rawParam) > 1) {
@@ -460,7 +460,7 @@ Example usage:
         } else if (!$this->pathExists()) {
             // Make sure the image file exists
             if (SLIRConfig::$defaultImagePath !== null && !$this->isUsingDefaultImagePath()) {
-                $this->isUsingDefaultImagePath  = true;
+                $this->isUsingDefaultImagePath = true;
                 return $this->setPath(SLIRConfig::$defaultImagePath.$this->path);
             } else {
                 throw new \RuntimeException('Image does not exist: ' . $this->fullPath());

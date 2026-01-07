@@ -89,7 +89,7 @@ class SLIRGarbageCollector
      */
     private function deleteStaleFilesFromDirectory($path, $useAccessedTime = true)
     {
-        $now  = time();
+        $now = time();
         $dirs = new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS);
         $iterator = new \RecursiveIteratorIterator($dirs, \RecursiveIteratorIterator::CHILD_FIRST);
 

@@ -166,7 +166,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectProbability  = 1;
+    public static $garbageCollectProbability = 1;
 
     /**
      * Coupled with $garbageCollectProbability defines the probability that the garbage collection process is started on every request.
@@ -176,7 +176,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectDivisor  = 200;
+    public static $garbageCollectDivisor = 200;
 
     /**
      * Specifies the number of seconds after which data will be seen as 'garbage' and potentially

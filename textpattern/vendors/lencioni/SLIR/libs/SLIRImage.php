@@ -81,29 +81,29 @@ abstract class SLIRImage
      * @var array
      * @since 4.9.0
      */
-    private $mimeTypes  = array(
-        'JPEG'  => array(
-            'image/jpeg'  => 1,
+    private $mimeTypes = array(
+        'JPEG' => array(
+            'image/jpeg' => 1,
         ),
-        'WEBP'  => array(
-            'image/webp'  => 1,
+        'WEBP' => array(
+            'image/webp' => 1,
         ),
-        'AVIF'  => array(
-            'image/avif'  => 1,
+        'AVIF' => array(
+            'image/avif' => 1,
         ),
         'GIF' => array(
-            'image/gif'   => 1,
+            'image/gif' => 1,
         ),
         'PNG' => array(
-            'image/png'   => 1,
+            'image/png' => 1,
             'image/x-png' => 1,
         ),
         'BMP' => array(
-            'image/bmp'       => 1,
-            'image/x-ms-bmp'  => 1,
+            'image/bmp' => 1,
+            'image/x-ms-bmp' => 1,
         ),
         'SVG' => array(
-            'image/svg+xml'   => 1,
+            'image/svg+xml' => 1,
         ),
     );
 
