@@ -227,7 +227,7 @@ class SLIRCropperSmart implements SLIRCropper
     if ($ratio > (1 + ($tolerance * 1.25))) {
       $offset[self::OFFSET_NEAR] -= round($length * .03);
     } else if ($ratio < (1 / (1 + ($tolerance * 1.25)))) {
-      $offset[self::OFFSET_NEAR]  += round($length * .03);
+      $offset[self::OFFSET_NEAR] += round($length * .03);
     }
 
     return min($rowsToCrop, max(0, $offset[self::OFFSET_NEAR]));
@@ -254,10 +254,10 @@ class SLIRCropperSmart implements SLIRCropper
 
         // Content at the very edge of an image tends to be less interesting than
         // content toward the center, so we give it a little extra push away from the edge
-        //$i          += min($row, $originalLength - $row, $originalLength * .04);
+        //$i += min($row, $originalLength - $row, $originalLength * .04);
 
         $max = max($i, $max);
-        $interestingness  += $i;
+        $interestingness += $i;
       }
     } else {
       for ($totalPixels = 0; $totalPixels < $image->getHeight(); $totalPixels += $pixelStep) {
@@ -265,10 +265,10 @@ class SLIRCropperSmart implements SLIRCropper
 
         // Content at the very edge of an image tends to be less interesting than
         // content toward the center, so we give it a little extra push away from the edge
-        //$i          += min($row, $originalLength - $row, $originalLength * .04);
+        //$i += min($row, $originalLength - $row, $originalLength * .04);
 
         $max = max($i, $max);
-        $interestingness  += $i;
+        $interestingness += $i;
       }
     }
 
@@ -495,9 +495,9 @@ class SLIRCropperSmart implements SLIRCropper
       $b = $b / 12.92;
     }
 
-    $r  *= 100;
-    $g  *= 100;
-    $b  *= 100;
+    $r *= 100;
+    $g *= 100;
+    $b *= 100;
 
     //Observer. = 2°, Illuminant = D65
     return array(

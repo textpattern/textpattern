@@ -400,9 +400,9 @@ function parse($thing, $condition = true, $in_tag = true)
 
     if ($condition) {
         $last = $first - 2;
-        $first   = 1;
+        $first = 1;
     } elseif ($first <= $last) {
-        $first  += 2;
+        $first += 2;
     } else {
         return '';
     }
