@@ -1,6 +1,11 @@
 Changes in 4.9.1 (upcoming)
 
-* Fixed: Dynamic thumbnail MIME detection (thanks, rezozero).
+* Changed: (Article)Image tags only output dimensions on demand.
+* Changed: <txp:article_image> skips empty images/thumbnails.
+* Changed: Valueless width/height/crop behaviour in (Article)Image tags.
+* Changed: Thumb path now permits virtual/multiple host setups too.
+* Fixed: PHP 5.6 support. Thanks, pinalgirkar.
+* Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 
 Changes in 4.9.0 (21 Dec 2025)
