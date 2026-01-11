@@ -499,7 +499,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         $pack->parse($textpack);
 
         if (!isset($useLang)) {
-            $useLang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
+            $useLang = get_pref(TXPINTERFACE === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         }
 
         $wholePack = $pack->getStrings($useLang);
@@ -617,7 +617,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
      * Fetch the given language's strings from the database as an array.
      *
      * If no $events are specified, only appropriate strings for the current context
-     * are returned. If the 'txpinterface' constant is 'public' only strings from
+     * are returned. If the 'TXPINTERFACE' constant is 'public' only strings from
      * events 'common' and 'public' are returned.
      *
      * Note the returned array includes the language if the fallback has been used.
@@ -642,7 +642,7 @@ class Lang implements \Textpattern\Container\ReusableInterface
         // naming convention, the owner clause can be removed.
         $ownClause = $this->hasOwnerSupport() ? " OR owner != ''" : '';
 
-        if (txpinterface === 'admin') {
+        if (TXPINTERFACE === 'admin') {
             $admin_events = $txp_user ? array('admin-side', 'common') : array('admin', 'common');
 
             if ($events) {

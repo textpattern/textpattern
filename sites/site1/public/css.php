@@ -29,5 +29,6 @@
 
 $nolog = 1;
 
-define('txpinterface', 'css');
+define('TXPINTERFACE', 'css');
+define('txpinterface', TXPINTERFACE); // @deprecated 5.0.0
 require __DIR__ . '/index.php';

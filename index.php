@@ -25,12 +25,18 @@
 error_reporting(E_ALL);
 ini_set("display_errors", "1");
 
-if (!defined('txpinterface')) {
-    define('txpinterface', 'public');
+if (!defined('TXPINTERFACE')) {
+    define('TXPINTERFACE', 'public');
 }
 
 if (!defined('txpath')) {
     define("txpath", dirname(__FILE__) . '/textpattern');
+}
+
+// Be kind to plugins and define the old lower case constant(s).
+// @deprecated 5.0.0
+if (!defined('txpinterface')) {
+    define('txpinterface', TXPINTERFACE);
 }
 
 // Save server path to site root.

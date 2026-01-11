@@ -197,7 +197,7 @@ function txpspecialchars($string, $flags = ENT_QUOTES, $encoding = 'UTF-8', $dou
     //
     //    if (defined(ENT_HTML5)) {
     //        if ($h5 === null) {
-    //            $h5 = ($prefs['doctype'] == 'html5' && txpinterface == 'public');
+    //            $h5 = ($prefs['doctype'] == 'html5' && TXPINTERFACE == 'public');
     //        }
     //
     //        if ($h5) {
@@ -317,7 +317,7 @@ function gTxt($var, $atts = array(), $escape = 'html')
 
     if ($txpLang === null) {
         $txpLang = Txp::get('\Textpattern\L10n\Lang');
-        $lang = txpinterface == 'admin' ? get_pref('language_ui', gps('lang', LANG)) : LANG;
+        $lang = TXPINTERFACE == 'admin' ? get_pref('language_ui', gps('lang', LANG)) : LANG;
         $loaded = $txpLang->load($lang, true);
         $evt = isset($event) ? trim($event) : '';
 
@@ -401,7 +401,7 @@ function dmp()
  * as an array.
  *
  * If no $events is specified, only appropriate strings for the current context
- * are returned. If 'txpinterface' constant equals 'admin' all strings are
+ * are returned. If 'TXPINTERFACE' constant equals 'admin' all strings are
  * returned. Otherwise, only strings from events 'common' and 'public'.
  *
  * If $events is FALSE, returns all strings.
@@ -2763,7 +2763,7 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
     );
 
     $formats['%s'] = $time;
-    $override_locale = $override_locale ?: (txpinterface == 'admin' ? $lang_ui : LANG);
+    $override_locale = $override_locale ?: (TXPINTERFACE == 'admin' ? $lang_ui : LANG);
 
     if ($DateTime === null) {
         $DateTime = new DateTime();
@@ -4042,7 +4042,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (TXPINTERFACE === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4918,7 +4918,7 @@ function txp_die($msg, $status = '503', $url = '')
     $out = false;
     $skin = empty($pretext['skin']) ? null : $pretext['skin'];
 
-    if ($connected && @txpinterface == 'public') {
+    if ($connected && @TXPINTERFACE == 'public') {
         $out = fetch_page("error_{$code}", $skin) or $out = fetch_page('error_default', $skin);
     }
 
@@ -5306,7 +5306,7 @@ function permlinkurl($article_array, $hu = null)
     if (empty($prefs['publish_expired_articles']) &&
         !empty($expires) &&
         $prefs['production_status'] != 'live' &&
-        txpinterface == 'public' &&
+        TXPINTERFACE == 'public' &&
         (is_numeric($expires) ? $expires < time()
             : (isset($uexpires) ? $uexpires < time()
             : $expires < $now)

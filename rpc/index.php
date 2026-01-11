@@ -32,7 +32,8 @@ error_reporting(E_ALL & ~E_NOTICE);
 ini_set("display_errors", "0");
 
 define('txpath', dirname(dirname(__FILE__)) . '/textpattern');
-define('txpinterface', 'xmlrpc');
+define('TXPINTERFACE', 'xmlrpc');
+define('txpinterface', TXPINTERFACE); // @deprecated 5.0.0
 
 require_once txpath . '/config.php';
 require_once txpath . '/lib/class.trace.php';

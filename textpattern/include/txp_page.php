@@ -30,8 +30,8 @@
 use Textpattern\Skin\Skin;
 use Textpattern\Skin\Page;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 if ($event == 'page') {

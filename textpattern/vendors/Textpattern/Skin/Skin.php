@@ -963,8 +963,8 @@ class Skin extends CommonBase implements SkinInterface
 
     public function admin()
     {
-        if (!defined('txpinterface')) {
-            die('txpinterface is undefined.');
+        if (!defined('TXPINTERFACE')) {
+            die('TXPINTERFACE is undefined.');
         }
 
         global $event, $step;

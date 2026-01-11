@@ -28,8 +28,8 @@
  * @since   4.6.0
  */
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 if ($event == 'lang') {

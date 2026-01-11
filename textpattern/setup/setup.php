@@ -44,7 +44,8 @@ if (empty($cfg)) {
     msg("Error in JSON config file", MSG_ERROR);
 }
 
-define("txpinterface", "admin");
+define('TXPINTERFACE', 'admin');
+define('txpinterface', TXPINTERFACE); // @deprecated 5.0.0
 
 if (!defined('txpath')) {
     define("txpath", dirname(dirname(__FILE__)));

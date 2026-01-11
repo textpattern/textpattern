@@ -19,7 +19,7 @@
  * along with Textpattern. If not, see <http://www.gnu.org/licenses/>.
  */
 
-define('txpinterface', 'cli');
+define('TXPINTERFACE', 'cli');
 
 if (php_sapi_name() !== 'cli') {
     die('command line only');

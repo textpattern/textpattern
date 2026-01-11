@@ -2860,7 +2860,7 @@ function custom_field($atts = array(), $thing = null, $if = false)
     $dlm = $no === null ? null : $customFields[$type]['by_delimiter'][$no];
 
     if ($title) {
-        $lang = get_pref(txpinterface === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
+        $lang = get_pref(TXPINTERFACE === 'admin' ? 'language_ui' : 'language', TEXTPATTERN_DEFAULT_LANG);
         $title = empty($customFields[$type]['by_title'][$name][$lang]) ? '' : $customFields[$type]['by_title'][$name][$lang];
 
         if (!$if) {

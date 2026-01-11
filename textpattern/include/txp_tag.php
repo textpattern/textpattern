@@ -29,8 +29,8 @@
 
 namespace Textpattern\Tag;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 $tagName = gps('tag_name');

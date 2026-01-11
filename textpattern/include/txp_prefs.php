@@ -29,8 +29,8 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 include_once(txpath . DS . 'lib' . DS . 'txplib_publish.php');

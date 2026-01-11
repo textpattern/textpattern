@@ -25,7 +25,7 @@ if (!defined('txpath')) {
     define("txpath", dirname(__FILE__));
 }
 
-if (!defined("txpinterface")) {
+if (!defined("TXPINTERFACE")) {
     die('If you just updated and expect to see your site here, please also update the files in your main installation directory.' .
         ' (Otherwise note that publish.php cannot be called directly.)');
 }
@@ -209,7 +209,7 @@ if (empty($pretext['feed'])) {
     handle_lastmod();
 }
 
-if (txpinterface === 'css') {
+if (TXPINTERFACE === 'css') {
     output_css(gps('s'), gps('n'), gps('t'));
 
     exit;
@@ -419,7 +419,7 @@ function preText($store, $prefs = null)
     $u1 = strtolower($u1);
 
     // If messy vars exist, bypass URL parsing.
-    if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
+    if (!$is_404 && !$out['id'] && !$out['s'] && TXPINTERFACE != 'css' && TXPINTERFACE != 'admin' && strlen($u1)) {
         if ($imgParts[0] === $u1) {
             $matchImg = array_intersect($url, $imgParts);
             $offset = substr_count($img_dir, '/') + 2;
@@ -723,7 +723,7 @@ function preText($store, $prefs = null)
 
     // By this point we should know the section, so grab its page and CSS.
     // Logged-in users with enough privs use the skin they're currently editing.
-    if (txpinterface != 'css') {
+    if (TXPINTERFACE != 'css') {
         if ($userInfo && has_privs('skin.preview', $userInfo)) {
             foreach ($txp_sections as &$rs) {
                 empty($rs['dev_skin']) or $rs['skin'] = $rs['dev_skin'];

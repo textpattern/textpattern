@@ -35,8 +35,8 @@ use Textpattern\Validator\FormConstraint;
 use Textpattern\Validator\SectionConstraint;
 use Textpattern\Validator\Validator;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 global $vars, $statuses;

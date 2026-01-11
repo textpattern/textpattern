@@ -29,8 +29,8 @@
 
 use Textpattern\Search\Filter;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 $levels = get_groups();

@@ -155,7 +155,7 @@ class Field
             'expires',
         );
 
-        if (txpinterface === 'admin') {
+        if (TXPINTERFACE === 'admin') {
             $this->lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
         } else {
             $this->lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
@@ -306,7 +306,7 @@ class Field
         }
 
         if (!isset($this->definition['title'][$lang]) || $force) {
-            $userlang = txpinterface == 'admin' ? get_pref('language_ui', LANG) : LANG;
+            $userlang = TXPINTERFACE == 'admin' ? get_pref('language_ui', LANG) : LANG;
             $label = $this->getLabelReference($this->get('name'));
             $this->definition['title'][$lang] = $lang == $userlang ? gTxt($label) : safe_field('data', 'txp_lang', "name = '" . doSlash($label) . "' AND lang = '" . doSlash($lang) . "'");
         }

@@ -33,8 +33,8 @@ use Textpattern\Validator\Validator;
 use Textpattern\Search\Filter;
 use Textpattern\Admin\Customiser;
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 if ($event == 'list') {

@@ -21,8 +21,8 @@
  * along with Textpattern. If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (!defined('txpinterface')) {
-    die('txpinterface is undefined.');
+if (!defined('TXPINTERFACE')) {
+    die('TXPINTERFACE is undefined.');
 }
 
 class classic_theme extends \Textpattern\Admin\Theme

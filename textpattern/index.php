@@ -25,7 +25,8 @@ if (!defined('txpath')) {
     define("txpath", dirname(__FILE__));
 }
 
-define("txpinterface", "admin");
+define('TXPINTERFACE', 'admin');
+define('txpinterface', TXPINTERFACE); // @deprecated 5.0.0
 
 ob_start(null, 2048);
 
