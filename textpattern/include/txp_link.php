@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -257,8 +257,9 @@ function link_list($message = '')
                 n . tag_start('thead') .
                 tr(
                     hCell(
+                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                        '', ' class="txp-list-col-multi-edit" scope="col"'
                     ) .
                     column_head(
                         'ID', 'id', 'link', true, $switch_dir, $crit, $search_method,
@@ -324,7 +325,9 @@ function link_list($message = '')
 
                 $contentBlock .= tr(
                     td(
-                        fInput('checkbox', 'selected[]', $link_id), '', 'txp-list-col-multi-edit'
+                        '<label for="bulk_select-' . $link_id . '" class="txp-accessibility">' . gTxt('bulk_select_row', array('{id}' => $link_id)) .
+                            '</label>'.
+                            fInput('checkbox', 'selected[]', $link_id, '', '', '', '', '', 'bulk_select-'.$link_id), '', 'txp-list-col-multi-edit'
                     ) .
                     hCell(
                         ($can_edit ? href($link_id, $edit_url, ' title="' . gTxt('edit') . '"') : $link_id), '', ' class="txp-list-col-id" scope="row"'

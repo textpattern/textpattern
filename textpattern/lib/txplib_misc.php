@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -2204,7 +2204,7 @@ function is_blocklisted($ip, $checks = '')
 
     foreach ((array) $checks as $a) {
         $parts = explode(':', $a, 2);
-        $rbl   = $parts[0];
+        $rbl = $parts[0];
 
         if (isset($parts[1])) {
             foreach (explode(':', $parts[1]) as $code) {
@@ -3246,7 +3246,7 @@ function fileDownloadFormatTime($params)
     return '';
 }
 
-function safe_curl_close(&$ch): void
+function safe_curl_close(&$ch)
 {
     if ($ch instanceof CurlHandle) {
         // PHP 8.0+ returns CurlHandle objects
@@ -3466,14 +3466,14 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $hash = txp_hash($thing);
     }
 
-    $inside  = array($parsed[0]);
-    $tags    = array($inside);
-    $tag     = array();
+    $inside = array($parsed[0]);
+    $tags = array($inside);
+    $tag = array();
     $outside = array();
     $order = array(array());
-    $else    = array(-1);
-    $count   = array(-1);
-    $level   = 0;
+    $else = array(-1);
+    $count = array(-1);
+    $level = 0;
 
     for ($i = 1; $i < $last || $level > 0; $i++) {
         $chunk = $i < $last ? $parsed[$i] : '</txp:'.$tag[$level-1][2].'>';
@@ -3604,9 +3604,9 @@ function getIfElse($thing, $condition = true)
 
     if ($condition) {
         $last = $first - 2;
-        $first   = 1;
+        $first = 1;
     } elseif ($first <= $last) {
-        $first  += 2;
+        $first += 2;
     } else {
         return null;
     }
@@ -4230,7 +4230,7 @@ function set_pref($name, $val, $event = 'publish', $type = PREF_CORE, $html = 't
  *
  * @param   string $thing   The named variable
  * @param   mixed  $default Used as a replacement if named pref isn't found
- * @param   bool   $from_db If TRUE checks database opposed $prefs variable in memory
+ * @param   bool   $from_db If TRUE checks database instead of $prefs variable in memory
  * @return  string Preference value or $default
  * @package Pref
  * @example
@@ -5465,6 +5465,356 @@ function imagesrcurl($id, $ext, $thumbnail = false)
     $thumbnail = $thumbnail ? 't' : '';
 
     return preg_match('/^\d+$/', $id) ? ihu.$img_dir.'/'.$id.$thumbnail.$ext : $id;
+}
+
+/**
+ * Builds an image's absolute URL.
+ *
+ * @param   int    $img       The image data structure - $thisimage
+ * @param   int    $thumbnail Whether to fetch the full image URL (0) or a thumbnail flavour (>0)
+ * @return  string
+ * @package Image
+ */
+
+function imageBuildURL($img = array(), $thumbnail = null)
+{
+    global $path_to_site, $img_dir, $thisimage;
+
+    if (empty($img)) {
+        $img = $thisimage;
+    }
+
+    $params = array();
+
+    if ($thumbnail == THUMB_AUTO) {
+        if (!empty($img['w'])) {
+            $params['w'] = $img['w'];
+        }
+
+        if (!empty($img['h'])) {
+            $params['h'] = $img['h'];
+        }
+
+        if (!empty($img['c'])) {
+            $params['c'] = $img['c'];
+        }
+
+        if (!empty($img['q']) && $img['q'] > 0 && $img['q'] <= 100) {
+            $params['q'] = $img['q'];
+        }
+
+        if (!empty($img['b'])) {
+            $params['b'] = $img['b'];
+        }
+    }
+
+    callback_event_ref('txp.image', 'thumbnail.params', 0, $params, $thumbnail);
+
+    if ($thumbnail == THUMB_AUTO && is_writable(IMPATH.TEXTPATTERN_THUMB_DIR) && $params && $img['ext'] !== '.svg') {
+        // Resized image.
+        $sec_mode = get_pref('thumb_security', 'always');
+
+        $paramlist = implode('-', array_map(function($k, $v){
+            return "$k$v";
+        }, array_keys($params), array_values($params)));
+
+        $base = $img_dir.'/'.TEXTPATTERN_THUMB_DIR.'/'.$paramlist.'/'.$img['id'].$img['ext'];
+
+        if (!file_exists($path_to_site.'/'.$base) && $sec_mode === 'always') {
+            $sid = get_pref('thumb_secret');
+            $hash_url = $img['id'].$paramlist;
+            $token = hash_hmac('sha256', $hash_url, $sid);
+
+            $base .= (!empty($token) ? '?token='.$token : '');
+        }
+
+        $base = ihu.$base;
+    } elseif ($thumbnail == THUMB_CUSTOM) {
+        $base = preg_match('/^\d+$/', $img['id']) ? ihu.$img_dir.'/'.$img['id'].'t'.$img['ext'] : $img['id'];
+    } elseif ($thumbnail === THUMB_NONE) {
+        $base = '';
+    } else {
+        // Main image.
+        $base = ihu.$img_dir.'/'.$img['id'].$img['ext'];
+    }
+
+    $secondBase = callback_event('txp.image', 'url', $thumbnail, compact('base', 'img', 'params', 'thumbnail'));
+
+    return $secondBase ? $secondBase : $base;
+}
+
+/**
+ * (Re)generate a thumbnail image token every so often.
+ *
+ * @since 4.9.0
+ * @package Image
+ */
+
+function setImageToken() {
+    global $prefs;
+
+    $now = time();
+
+    if (empty($prefs['thumb_secret']) || empty($prefs['thumb_secret_lastmod']) ||
+            $now > $prefs['thumb_secret_lastmod'] + THUMB_SECRET_REGEN_SECONDS) {
+        set_pref('thumb_secret', \Txp::get('\Textpattern\Password\Random')->generate(SALT_LENGTH), 'publish', PREF_HIDDEN);
+        set_pref('thumb_secret_lastmod', $now, 'publish', PREF_HIDDEN);
+    }
+}
+
+/**
+ * Find SVG element in XML tree
+ *
+ * @param   SimpleXMLElement  $node  start tree
+ * @param   SimpleXMLElement  &$svg  return SVG tree, if any
+ * @package Image
+ */
+
+function txpfindSVG($node, &$svg) {
+    if ($node->getName() == 'svg') {
+        $svg = $node;
+        return;
+    }
+
+    foreach ($node->children() as $child) {
+        txpfindSVG($child, $svg);
+    }
+}
+
+/**
+ * Provide GD equivalent function to create image from SVG
+ *
+ * @param   string  $file             Filename
+ * @param   bool    $makestandalone   Remove non-svg elements from tree
+ * @package Image
+ */
+if(!function_exists('imagecreatefromsvg')) {
+function imagecreatefromsvg($file, $makestandalone = true)
+{
+    $xml = file_get_contents($file);
+
+    if ($makestandalone) {
+        $xmlend = strpos($xml, '?>') + 2;
+        $xmltree = simplexml_load_string($xml);
+        $svg = null;
+
+        txpfindSVG($xmltree, $svg);
+
+        if ($svg == null) {
+            return false;
+        }
+
+        $newxml = $svg->asXML();
+
+        if (substr($newxml, 0, 5) != "<?xml") {
+            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
+        } else {
+            return $newxml . PHP_EOL;
+        }
+    } else {
+        return $xml;
+    }
+}
+}
+
+/**
+ * Private implementation of PHP getimagesize() that includes SVG
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpgetimagesize($file)
+{
+    $content = file_get_contents($file);
+
+    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
+        $info = webpinfo($file);
+
+        if (isset($info['Animation']) && $info['Animation'] === true) {
+            return false;
+        }
+
+        $out = getimagesize($file, $extraInfo);
+
+        if (is_array($extraInfo) && isset($extraInfo['APP13'])) {
+            $out['iptc'] = iptcparse($extraInfo['APP13']);
+        }
+
+        return $out;
+    }
+
+    if (strpos($content, "<svg") === false) {
+        return false;
+    }
+
+    if (($xml = simplexml_load_string($content)) === false) {
+        return false;
+    }
+
+    $svg = null;
+    txpfindSVG($xml, $svg);
+
+    if ($svg == null) {
+        return false;
+    }
+
+    $width = txpsvgtopx($svg['width']);
+    $height = txpsvgtopx($svg['height']);
+
+    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
+        if (empty($svg['viewBox'])) {
+            return false;
+        }
+
+        $viewbox = explode(' ', $svg['viewBox']);
+        $width = (int)$viewbox[2];
+        $height = (int)$viewbox[3];
+
+        if ($width <= 0 || $height <= 0) {
+            return false;
+        }
+    }
+
+    $data = array();
+    $data[0] = $width;
+    $data[1] = $height;
+    $data[2] = IMAGETYPE_SVG;
+    $data['mime'] = 'image/svg+xml';
+
+    return $data;
+}
+
+/**
+ * Returns the given image file data.
+ *
+ * @param   array      $file     HTTP file upload variables
+ * @return  array|bool An array of image data on success, false on error
+ * @package Image
+ */
+
+function txpimagesize($file, $create = false)
+{
+    if ($data = txpgetimagesize($file)) {
+        list($w, $h, $ext) = $data;
+        $exts = get_safe_image_types();
+        $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
+    }
+
+    if (empty($ext)) {
+        return false;
+    }
+
+    $imgf = 'imagecreatefrom'.($ext == '.jpg' ? 'jpeg' : ltrim($ext, '.'));
+    $data['ext'] = $ext;
+
+    if (($create || empty($w) || empty($h)) && function_exists($imgf)) {
+        // Make sure we have enough memory if the image is large.
+        if (filesize($file) > 256*1024) {
+            $shorthand = array('K', 'M', 'G');
+            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
+
+            // Do not *decrease* memory_limit.
+            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
+
+            if ($ml < $extra) {
+                ini_set('memory_limit', EXTRA_MEMORY);
+            }
+        }
+
+        $errlevel = error_reporting(0);
+
+        if ($ext == '.svg') {
+            $data['image'] = $imgf($file, false);
+        } else {
+            $data['image'] = $imgf($file);
+        }
+
+        if ($data['image']) {
+            $data[0] or $data[0] = imagesx($data['image']);
+            $data[1] or $data[1] = imagesy($data['image']);
+            $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
+        }
+
+        error_reporting($errlevel);
+    }
+
+    return $data;
+}
+
+/**
+ * Get WebP file info to check for unsupported content.
+ *
+ * @link https://www.php.net/manual/en/function.pack.php unpack format reference.
+ * @link https://developers.google.com/speed/webp/docs/riff_container WebP document.
+ * @link https://stackoverflow.com/a/68491679/128761
+ * @param string $file
+ *
+ * @return array|false Return associative array if success, return `false` for otherwise.
+ */
+
+function webpinfo($file)
+{
+    if (!is_file($file)) {
+        return false;
+    } else {
+        $file = realpath($file);
+    }
+
+    $fp = fopen($file, 'rb');
+
+    if (!$fp) {
+        return false;
+    }
+
+    $data = fread($fp, 90);
+
+    fclose($fp);
+    unset($fp);
+
+    $header_format = 'A4Riff/' . // get n string
+        'I1Filesize/' . // get integer (file size but not actual size)
+        'A4Webp/' . // get n string
+        'A4Vp/' . // get n string
+        'A74Chunk';
+    $header = unpack($header_format, $data);
+    unset($data, $header_format);
+
+    if (!isset($header['Riff']) || strtoupper($header['Riff']) !== 'RIFF') {
+        return false;
+    }
+    if (!isset($header['Webp']) || strtoupper($header['Webp']) !== 'WEBP') {
+        return false;
+    }
+    if (!isset($header['Vp']) || strpos(strtoupper($header['Vp']), 'VP8') === false) {
+        return false;
+    }
+
+    if (
+        strpos(strtoupper($header['Chunk']), 'ANIM') !== false ||
+        strpos(strtoupper($header['Chunk']), 'ANMF') !== false
+    ) {
+        $header['Animation'] = true;
+    } else {
+        $header['Animation'] = false;
+    }
+
+    if (strpos(strtoupper($header['Chunk']), 'ALPH') !== false) {
+        $header['Alpha'] = true;
+    } else {
+        if (strpos(strtoupper($header['Vp']), 'VP8L') !== false) {
+            // If it's VP8L, assume that this image will have transparency, as described in
+            // https://developers.google.com/speed/webp/docs/riff_container#simple_file_format_lossless
+            $header['Alpha'] = true;
+        } else {
+            $header['Alpha'] = false;
+        }
+    }
+
+    unset($header['Chunk']);
+
+    return $header;
 }
 
 /**

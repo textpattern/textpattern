@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -333,173 +333,6 @@ function check_gd($image_type)
 }
 
 /**
- * Find SVG element in XML tree
- *
- * @param   SimpleXMLElement  $node  start tree
- * @param   SimpleXMLElement  &$svg  return SVG tree, if any
- * @package Image
- */
-
-function txpfindSVG($node, &$svg) {
-    if ($node->getName() == 'svg') {
-        $svg = $node;
-        return;
-    }
-
-    foreach ($node->children() as $child) {
-        txpfindSVG($child, $svg);
-    }
-}
-
-/**
- * Provide GD equivalent function to create image from SVG
- *
- * @param   string  $file             Filename
- * @param   bool    $makestandalone   Remove non-svg elements from tree
- * @package Image
- */
-
-function imagecreatefromsvg($file, $makestandalone = true)
-{
-    $xml = file_get_contents($file);
-
-    if ($makestandalone) {
-        $xmlend = strpos($xml, '?>') + 2;
-        $xmltree = simplexml_load_string($xml);
-        $svg = null;
-
-        txpfindSVG($xmltree, $svg);
-
-        if ($svg == null) {
-            return false;
-        }
-
-        $newxml = $svg->asXML();
-
-        if (substr($newxml, 0, 5) != "<?xml") {
-            return substr($xml, 0, $xmlend) . PHP_EOL . $newxml . PHP_EOL;
-        } else {
-            return $newxml . PHP_EOL;
-        }
-    } else {
-        return $xml;
-    }
-}
-
-/**
- * Private implementation of PHP getimagesize() that includes SVG
- *
- * @param   array      $file     HTTP file upload variables
- * @return  array|bool An array of image data on success, false on error
- * @package Image
- */
-
-function txpgetimagesize($file)
-{
-    $content = file_get_contents($file);
-
-    if (substr($content, 0, 6) != "<?xml " && substr($content, 0, 5) != "<svg ") {
-        return getimagesize($file);
-    }
-    
-    if (strpos($content, "<svg") === false) {
-        return false;
-    }
-
-    if (($xml = simplexml_load_string($content)) === false) {
-        return false;
-    }
-
-    $svg = null;
-    txpfindSVG($xml, $svg);
-
-    if ($svg == null) {
-        return false;
-    }
- 
-    $width = txpsvgtopx($svg['width']);
-    $height = txpsvgtopx($svg['height']);
-
-    if (!is_numeric($width) || $width <= 0 || !is_numeric($height) || $height <= 0) {
-        if (empty($svg['viewBox'])) {
-            return false;
-        }
-
-        $viewbox = explode(' ', $svg['viewBox']);
-        $width = (int)$viewbox[2];
-        $height = (int)$viewbox[3];
-
-        if ($width <= 0 || $height <= 0) {
-            return false;
-        }
-    }
-
-    $data = array();
-    $data[0] = $width;
-    $data[1] = $height;
-    $data[2] = IMAGETYPE_SVG;
-
-    return $data;
-}
-
-/**
- * Returns the given image file data.
- *
- * @param   array      $file     HTTP file upload variables
- * @return  array|bool An array of image data on success, false on error
- * @package Image
- */
-
-function txpimagesize($file, $create = false)
-{
-    if ($data = txpgetimagesize($file)) {
-        list($w, $h, $ext) = $data;
-        $exts = get_safe_image_types();
-        $ext = !empty($exts[$ext]) ? $exts[$ext] : false;
-    }
-
-    if (empty($ext)) {
-        return false;
-    }
-
-    $imgf = 'imagecreatefrom'.($ext == '.jpg' ? 'jpeg' : ltrim($ext, '.'));
-    $data['ext'] = $ext;
-
-    if (($create || empty($w) || empty($h)) && function_exists($imgf)) {
-        // Make sure we have enough memory if the image is large.
-        if (filesize($file) > 256*1024) {
-            $shorthand = array('K', 'M', 'G');
-            $tens = array('000', '000000', '000000000'); // A good enough decimal approximation of K, M, and G.
-
-            // Do not *decrease* memory_limit.
-            list($ml, $extra) = str_ireplace($shorthand, $tens, array(ini_get('memory_limit'), EXTRA_MEMORY));
-
-            if ($ml < $extra) {
-                ini_set('memory_limit', EXTRA_MEMORY);
-            }
-        }
-
-        $errlevel = error_reporting(0);
-
-        if ($ext == '.svg') {
-            $data['image'] = $imgf($file, false);
-        } else {
-            $data['image'] = $imgf($file);
-        }
-
-        if ($data['image']) {
-            $data[0] or $data[0] = imagesx($data['image']);
-            $data[1] or $data[1] = imagesy($data['image']);
-            $data[3] = 'width="'.$data[0].'" height="'.$data[1].'"';
-        }
-
-        error_reporting($errlevel);
-    }
-
-    return $data;
-}
-
-/**
  * Uploads an image.
  *
  * Can be used to upload a new image or replace an existing one.
@@ -507,6 +340,8 @@ function txpimagesize($file, $create = false)
  * $file can take a local file instead of HTTP file upload variable.
  *
  * All uploaded files will included on the Images panel.
+ *
+ * Thumbnails default to 'auto' if no other system is currently in force.
  *
  * @param   array        $file     HTTP file upload variables
  * @param   array        $meta     Image meta data, allowed keys 'caption', 'alt', 'category'
@@ -532,6 +367,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     $name = $file['name'];
     $error = $file['error'];
     $file = $file['tmp_name'];
+    $thumbtype = (int) get_pref('thumbnail_type', THUMB_AUTO);
 
     if ($uploaded) {
         if ($error !== UPLOAD_ERR_OK) {
@@ -577,6 +413,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         caption = '$caption',
         category = '$category',
         date = NOW(),
+        thumbnail = '$thumbtype',
         author = '".doSlash($txp_user)."'
     ";
 
@@ -614,7 +451,7 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
     // GD is supported
     if (check_gd($ext)) {
         // Auto-generate a thumbnail using the last settings
-        if (get_pref('thumb_w') > 0 || get_pref('thumb_h') > 0) {
+        if ($thumbtype == THUMB_CUSTOM && (get_pref('thumb_w') > 0 || get_pref('thumb_h') > 0)) {
             $t = new txp_thumb($id);
             $t->crop = (bool) get_pref('thumb_crop');
             $t->hint = '0';
@@ -901,14 +738,14 @@ function get_essential_forms()
 function permlinkmodes($name, $val, $blank = false)
 {
     $vals = array(
-        'messy'                     => gTxt('messy'),
-        'id_title'                  => gTxt('id_title'),
-        'section_id_title'          => gTxt('section_id_title'),
-        'section_category_title'    => gTxt('section_category_title'),
-        'year_month_day_title'      => gTxt('year_month_day_title'),
-        'breadcrumb_title'          => gTxt('breadcrumb_title'),
-        'section_title'             => gTxt('section_title'),
-        'title_only'                => gTxt('title_only')
+        'messy'                  => gTxt('messy'),
+        'id_title'               => gTxt('id_title'),
+        'section_id_title'       => gTxt('section_id_title'),
+        'section_category_title' => gTxt('section_category_title'),
+        'year_month_day_title'   => gTxt('year_month_day_title'),
+        'breadcrumb_title'       => gTxt('breadcrumb_title'),
+        'section_title'          => gTxt('section_title'),
+        'title_only'             => gTxt('title_only')
     );
 
     return selectInput($name, $vals, $val, $blank, '', $name);
@@ -1949,7 +1786,7 @@ function find_files_matching($path, $pat)
     $it = new \RecursiveIteratorIterator($it);
     $it = new \RegexIterator($it, $pat, \RegexIterator::MATCH);
 
-    yield from $it;
+    return $it;
 }
 
 /**

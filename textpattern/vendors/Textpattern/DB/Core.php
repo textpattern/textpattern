@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -216,22 +216,22 @@ class Core
         $path_to_public_site = (isset($txpcfg['multisite_root_path'])) ? $txpcfg['multisite_root_path'].DS.'public' : dirname(txpath);
 
         $pf = array();
-        $pf['file_base_path']  = $path_to_public_site.DS.'files';
-        $pf['path_to_site']    = $path_to_public_site;
-        $pf['tempdir']         = find_temp_dir();
-        $pf['siteurl']         = $siteurl;
-        $pf['theme_name']      = empty($theme_name) ? 'hive' : $theme_name;
-        $pf['blog_mail_uid']   = empty($_SESSION['email']) ? md5(rand()).'blog@example.com' : $_SESSION['email'];
-        $pf['blog_uid']        = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
-        $pf['language']        = $language;
-        $pf['language_ui']     = $language;
-        $pf['locale']          = getlocale($language);
-        $pf['sitename']        = gTxt('my_site');
-        $pf['site_slogan']     = gTxt('my_slogan');
-        $pf['gmtoffset']       = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
-        $pf['permlink_mode']   = empty($permlink_mode) ? 'messy' : $permlink_mode;
+        $pf['file_base_path'] = $path_to_public_site.DS.'files';
+        $pf['path_to_site'] = $path_to_public_site;
+        $pf['tempdir'] = find_temp_dir();
+        $pf['siteurl'] = $siteurl;
+        $pf['theme_name'] = empty($theme_name) ? 'hive' : $theme_name;
+        $pf['blog_mail_uid'] = empty($_SESSION['email']) ? md5(rand()).'blog@example.com' : $_SESSION['email'];
+        $pf['blog_uid'] = empty($pref['blog_uid']) ? md5(uniqid(rand(), true)) : $pref['blog_uid'];
+        $pf['language'] = $language;
+        $pf['language_ui'] = $language;
+        $pf['locale'] = getlocale($language);
+        $pf['sitename'] = gTxt('my_site');
+        $pf['site_slogan'] = gTxt('my_slogan');
+        $pf['gmtoffset'] = sprintf("%+d", gmmktime(0, 0, 0) - mktime(0, 0, 0));
+        $pf['permlink_mode'] = empty($permlink_mode) ? 'messy' : $permlink_mode;
         $pf['permlink_format'] = $permlink_format;
-        $pf['sql_now_posted']  = $pf['sql_now_expires'] = $pf['sql_now_created'] = $pf['sql_now_date'] = time();
+        $pf['sql_now_posted'] = $pf['sql_now_expires'] = $pf['sql_now_created'] = $pf['sql_now_date'] = time();
         $pf['comments_default_invite'] = (gTxt('setup_comment_invite') == 'setup_comment_invite') ? 'Comment'
             : gTxt('setup_comment_invite');
         $pf['default_section'] = empty($pref['default_section']) ? safe_field('name', 'txp_section', "name<>'default'")

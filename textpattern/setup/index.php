@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -192,10 +192,10 @@ eod;
         script_js('../vendors/jquery/jquery-ui/jquery-ui.js', TEXTPATTERN_SCRIPT_URL) .
         script_js(
             'var textpattern = ' . json_encode(array(
-                'prefs'         => (object) null,
-                'event'         => 'setup',
-                'step'          => $step,
-                'textarray'     => (object) $textarray_script,
+                'prefs'     => (object) null,
+                'event'     => 'setup',
+                'step'      => $step,
+                'textarray' => (object) $textarray_script,
             ), TEXTPATTERN_JSON) . ';'
         ) .
         script_js('../textpattern.js', TEXTPATTERN_SCRIPT_URL);
@@ -580,10 +580,10 @@ function step_fbCreate()
     $warnings = find_temp_dir() ? '' : msg(gTxt('set_temp_dir_prefs'), MSG_ALERT);
 
     if (defined('is_multisite')) {
-        $login_url  = $multisite_admin_login_url . DS . 'index.php?lang=' . $cfg['site']['language_code'];
+        $login_url = $multisite_admin_login_url . DS . 'index.php?lang=' . $cfg['site']['language_code'];
         $setup_path = multisite_root_path . DS . 'admin' . DS;
     } else {
-        $login_url  = $GLOBALS['rel_txpurl'] . DS . 'index.php?lang=' . $cfg['site']['language_code'];
+        $login_url = $GLOBALS['rel_txpurl'] . DS . 'index.php?lang=' . $cfg['site']['language_code'];
         $setup_path = DS . basename(txpath) . DS;
     }
 

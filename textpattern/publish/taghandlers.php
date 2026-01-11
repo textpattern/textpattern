@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -126,7 +126,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_author'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'image_date'))
     ->register(array('\Textpattern\Tag\Syntax\Image', 'if_thumbnail'))
-    ->register(array('\Textpattern\Tag\Syntax\Image', 'image'), array('thumbnail', array('thumbnail' => null)))
+    ->register(array('\Textpattern\Tag\Syntax\Image', 'thumbnail'), array('thumbnail', array('thumbnail' => null)))
     ->register('if_first', 'if_first_image', 'image')
     ->register('if_last', 'if_last_image', 'image')
     ->register(array('\Textpattern\Tag\Syntax\Search', 'search_result_title'))
@@ -1729,19 +1729,19 @@ function txp_sandbox($atts = array(), $thing = null, $raw = false)
     $is_article_body = $thisarticle['authorid'];
     $was_form = $is_form;
     $is_form = 0;
-    $out = array();
-    $clean = true;
 
-    if (isset($thing)) {
-        foreach((array)$thing as $i => $chunk) {
-            $out[] = $raw ? $chunk : parse($chunk);
-            $clean = $clean && !preg_match('@<(?:' . TXP_PATTERN . '):@', current($out));
-        }
+    $thing = isset($thing) ?
+        parse($thing) :
+        (isset($field) && isset($thisarticle[$field]) ? parse($thisarticle[$field]) : '');
 
-        $thing = $out;
-    } else {
-        $thing = parse($thisarticle[$field]);
-        $clean = !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing);
+    $is_article_body = $was_article_body;
+    $is_form = $was_form;
+    $thisarticle = $oldarticle;
+
+    $field and $stack[$id]--;
+
+    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing)) {
+        return $thing;
     }
 
     $is_article_body = $was_article_body;
@@ -2040,13 +2040,15 @@ function article_image($atts)
         'range'     => '1',
         'title'     => '',
         'class'     => '',
+        'crop'      => '',
+        'quality'   => '',
         'html_id'   => '',
-        'width'     => '',
-        'height'    => '',
-        'thumbnail' => 0,
+        'width'     => '0',
+        'height'    => '0',
         'wraptag'   => '',
         'break'     => '',
         'loading'   => null,
+        'thumbnail' => false,
     );
 
     $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
@@ -2065,7 +2067,11 @@ function article_image($atts)
     }
 
     $out = array();
+
+    // Stash the tag's 'thumbnail' attribute since $thumbnail is overwritten when
+    // extracting the image from the DB.
     $thumb = $thumbnail;
+    $resize = !empty($atts['width']) || !empty($atts['height']) || isset($atts['crop']);
 
     if ($range === true) {
         $items = array_keys($images);
@@ -2094,6 +2100,7 @@ function article_image($atts)
     foreach ($items as $item) {
         if (isset($images[$item])) {
             $image = $images[$item];
+            $img = '';
 
             if (intval($image)) {
                 $image = intval($image);
@@ -2106,22 +2113,49 @@ function article_image($atts)
 
                 $rs = $dbimages[$image];
 
-                if ($thumb && empty($rs['thumbnail'])) {
+                if (($thumb === THUMB_CUSTOM && empty($rs['thumbnail'])) || $thumb === THUMB_NONE) {
                     continue;
                 }
 
-                $w = $width !== '' ? $width : $rs[$thumb ? 'thumb_w' : 'w'];
-                $h = $height !== '' ? $height : $rs[$thumb ? 'thumb_h' : 'h'];
-
                 extract($rs);
+
+                $isAuto = ($thumbnail === THUMB_AUTO || $thumb === THUMB_AUTO);
+
+                if ($isAuto) {
+                    $crop = ($crop === true ? '1x1' : $crop);
+                }
+
+                $thumb_wanted = ($thumb === true ? $thumbnail : $thumb);
+                $shrink = $thumb_wanted === THUMB_CUSTOM || ($thumb_wanted && !$resize && !$quality);
+                $w = ($shrink ? $thumb_w : $w);
+                $h = ($shrink ? $thumb_h : $h);
+
+                $w = $width === true ? $w : $width;
+                $h = $height === true ? $h : $height;
+
+                $payload = array(
+                    'id' => $id,
+                    'ext' => $ext,
+                );
+
+                if ($isAuto) {
+                    $payload['w'] = $width === true ? $w : $width;
+                    $payload['h'] = $height === true ? $h : $height;
+                    $payload['c'] = $crop;
+                    $payload['q'] = $quality;
+                }
 
                 if ($title === true) {
                     $title = $caption;
                 }
 
-                $img = '<img src="' . imagesrcurl($id, $ext, !empty($atts['thumbnail'])) .
-                '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
-                ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                $imageURL = imageBuildURL($payload, $thumb_wanted);
+
+                if ($imageURL) {
+                    $img = '<img src="' . $imageURL .
+                        '" alt="' . txpspecialchars($alt, ENT_QUOTES, 'UTF-8', false) . '"' .
+                        ($title ? ' title="' . txpspecialchars($title, ENT_QUOTES, 'UTF-8', false) . '"' : '');
+                }
             } else {
                 $w = $width !== '' ? $width : 0;
                 $h = $height !== '' ? $height : 0;
@@ -2133,15 +2167,16 @@ function article_image($atts)
                 $img .= ' loading="' . $loading . '"';
             }
 
-            $img .=
-            (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
-            (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
-            ($w ? ' width="' . (int) $w . '"' : '') .
-            ($h ? ' height="' . (int) $h . '"' : '') .
-            $extAtts .
-            (get_pref('doctype') === 'html5' ? '>' : ' />');
-
-            $out[] = $img;
+            if ($img) {
+                $img .=
+                    (($html_id && !$wraptag) ? ' id="' . txpspecialchars($html_id) . '"' : '') .
+                    (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
+                    ($w ? ' width="' . (int) $w . '"' : '') .
+                    ($h ? ' height="' . (int) $h . '"' : '') .
+                    $extAtts .
+                    (get_pref('doctype') === 'html5' ? '>' : ' />');
+                $out[] = $img;
+            }
         }
     }
 
@@ -3149,9 +3184,7 @@ function variable($atts, $thing = null)
 
     $var = isset($variable[$name]) ? $variable[$name] : null;
 
-    if (empty($name)) {
-        trigger_error(gTxt('variable_name_empty'));
-    } elseif (!$set && !isset($var) && !isset($output)) {
+    if ($name !== '' && !$set && !isset($var) && !isset($output)) {
         $trace->log("[<txp:variable>: Unknown variable '$name']");
     } else {
         if ($add === true) {
@@ -3172,6 +3205,7 @@ function variable($atts, $thing = null)
             $var = isset($value) ?
                 $value :
                 (isset($thing) ? parse($thing) : $var);
+            $breakform = isset($value) && isset($thing) ? array(trim($thing)) : null;
         }
     }
 
@@ -3191,18 +3225,21 @@ function variable($atts, $thing = null)
         global $txp_atts;
 
         if ($txp_atts) {
+            $txp_atts += isset($breakform) ? compact('breakform') : array();
             $var = txp_wraptag($txp_atts, $var);
         }
 
-        if (isset($reset)) {
-            $variable[$name] = $reset === true ? null : $reset;
-            isset($output) or $output = 1;
-        } else {
-            $variable[$name] = $var;
+        if ($name !== '') {
+            if (isset($reset)) {
+                $variable[$name] = $reset === true ? null : $reset;
+                isset($output) or $output = 1;
+            } else {
+                $variable[$name] = $var;
+            }
         }
-    } else {
-        isset($output) or $output = 1;
     }
+
+    (isset($output) || $set && $name !== '') or $output = 1;
 
     return !$output ? '' : ((int)$output ? $var : txp_escape(array('escape' => $output), $var));
 }

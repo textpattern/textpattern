@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -374,13 +374,15 @@ abstract class Theme
      *
      * Theme name and delimiter will be automatically prefixed.
      *
-     * @param string $name The preference name to fetch
+     * @param string $name    The preference name to fetch
+     * @param string $default The default value if the named pref isn't set
+     * @param bool   $from_db Force fetch value from database
      *
      * @return pref value, if it exists
      */
-    public function get_pref($name)
+    public function get_pref($name, $default = '', $from_db = false)
     {
-        return get_pref($this->name.PREF_THEME_DELIMITER.$name);
+        return get_pref($this->name.PREF_THEME_DELIMITER.$name, $default, $from_db);
     }
 
     /**

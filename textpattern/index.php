@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -80,6 +80,8 @@ if ($connected) {
     // content, such as custom fields, and also allows a dedicated time
     // value to be passed to SQL queries, alleviating NOW().
     $txpnow = time();
+
+    setImageToken();
 
     if (empty($siteurl)) {
         $httphost = preg_replace('/[^-_a-zA-Z0-9.:]/', '', $_SERVER['HTTP_HOST']);

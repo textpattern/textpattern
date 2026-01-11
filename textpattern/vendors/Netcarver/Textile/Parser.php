@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.2';
+    protected $ver = '4.1.4';
 
     /**
      * Regular expression snippets.
@@ -3865,7 +3865,12 @@ class Parser
             foreach ($items as $id) {
                 $out[] = '<sup><a href="#noteref'.$id.'">'. (($decode) ? $this->decodeHigh($i_) : $i_) .'</a></sup>';
                 if ($allow_inc) {
-                    $i_++;
+                    if (function_exists('str_increment')) {
+                        // @phpstan-ignore-next-line
+                        $i_ = str_increment($i_);
+                    } else {
+                        $i_++;
+                    }
                 }
             }
 
@@ -4718,6 +4723,10 @@ class Parser
         $url = $m['url'];
         $title = (isset($m['title'])) ? $m['title'] : '';
         $href = (isset($m['href'])) ? $m['href'] : '';
+
+        if ($href && !$this->isValidUrl($href)) {
+            return $m[0];
+        }
 
         $alignments = array(
             '<'    => 'left',

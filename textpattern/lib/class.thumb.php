@@ -221,13 +221,13 @@ class wet_thumb
             return false;
         }
 
-        $this->_SRC['file']       = $infile;
-        $this->_SRC['width']      = $temp[0];
-        $this->_SRC['height']     = $temp[1];
-        $this->_SRC['type']       = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF, 99=SVG.
-        $this->_SRC['string']     = $temp[3];
-        $this->_SRC['image']      = $temp['image'];
-        $this->_SRC['filename']   = basename($infile);
+        $this->_SRC['file'] = $infile;
+        $this->_SRC['width'] = $temp[0];
+        $this->_SRC['height'] = $temp[1];
+        $this->_SRC['type'] = $temp[2]; // 1=GIF, 2=JPEG, 3=PNG, 18=WebP, 19=AVIF, 99=SVG.
+        $this->_SRC['string'] = $temp[3];
+        $this->_SRC['image'] = $temp['image'];
+        $this->_SRC['filename'] = basename($infile);
         //$this->_SRC['modified'] = filemtime($infile);
 /*
         // Make sure we have enough memory if the image is large.
@@ -288,8 +288,8 @@ class wet_thumb
                 }
                 // Swap height and width values if thumbnail is rotated by 90°.
                 if (in_array($exif['Orientation'], [5, 6, 7, 8])) {
-                    $this->_SRC['width']    = $temp[1];
-                    $this->_SRC['height']   = $temp[0];
+                    $this->_SRC['width'] = $temp[1];
+                    $this->_SRC['height'] = $temp[0];
                 }
                 // Flip thumbnail if exif orientation is mirrored.
                 if (in_array($exif['Orientation'], [2, 5, 7, 4])) {
@@ -307,36 +307,36 @@ class wet_thumb
 
         // Get destination image info.
         if (is_numeric($this->width) and empty($this->height)) {
-            $this->_DST['width']  = $this->width;
+            $this->_DST['width'] = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
         } elseif (is_numeric($this->height) and empty($this->width)) {
             $this->_DST['height'] = $this->height;
-            $this->_DST['width']  = round($this->height/($this->_SRC['height']/$this->_SRC['width']));
+            $this->_DST['width'] = round($this->height/($this->_SRC['height']/$this->_SRC['width']));
         } elseif (is_numeric($this->width) and is_numeric($this->height)) {
-            $this->_DST['width']  = $this->width;
+            $this->_DST['width'] = $this->width;
             $this->_DST['height'] = $this->height;
         } elseif (is_numeric($this->longside) and empty($this->shortside)) {
             // Preserve aspect ratio based on provided height.
             if ($this->_SRC['format'] == 'portrait') {
                 $this->_DST['height'] = $this->longside;
-                $this->_DST['width']  = round($this->longside/($this->_SRC['height']/$this->_SRC['width']));
+                $this->_DST['width'] = round($this->longside/($this->_SRC['height']/$this->_SRC['width']));
             } else {
-                $this->_DST['width']  = $this->longside;
+                $this->_DST['width'] = $this->longside;
                 $this->_DST['height'] = round($this->longside/($this->_SRC['width']/$this->_SRC['height']));
             }
         } elseif (is_numeric($this->shortside)) {
             // Preserve aspect ratio based on provided width.
             if ($this->_SRC['format'] == 'portrait') {
-                $this->_DST['width']  = $this->shortside;
+                $this->_DST['width'] = $this->shortside;
                 $this->_DST['height'] = round($this->shortside/($this->_SRC['width']/$this->_SRC['height']));
             } else {
                 $this->_DST['height'] = $this->shortside;
-                $this->_DST['width']  = round($this->shortside/($this->_SRC['height']/$this->_SRC['width']));
+                $this->_DST['width'] = round($this->shortside/($this->_SRC['height']/$this->_SRC['width']));
             }
         } else {
             // Default dimensions.
-            $this->width          = 100;
-            $this->_DST['width']  = $this->width;
+            $this->width = 100;
+            $this->_DST['width'] = $this->width;
             $this->_DST['height'] = round($this->width/($this->_SRC['width']/$this->_SRC['height']));
         }
 
@@ -666,7 +666,9 @@ class txp_thumb extends wet_thumb
             return false;
         }
 
-        if (unlink(IMPATH.$this->m_id.'t'.$this->m_ext)) {
+        $thumbFile = IMPATH.$this->m_id.'t'.$this->m_ext;
+
+        if (is_readable($thumbFile) && unlink($thumbFile)) {
             safe_update('txp_image', "thumbnail = 0", "id = ".$this->m_id);
 
             return true;

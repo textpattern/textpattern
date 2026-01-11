@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -23,6 +23,13 @@
 
 if (!defined('TXP_UPDATE')) {
     exit("Nothing here. You can't access this file directly.");
+}
+
+// Add the thumb cache subdirectory.
+$toAdd = IMPATH . TEXTPATTERN_THUMB_DIR;
+
+if (!file_exists($toAdd)) {
+    mkdir($toAdd);
 }
 
 safe_update('txp_prefs', "name = 'spam_blocklists'", "name = 'spam_blacklists'");

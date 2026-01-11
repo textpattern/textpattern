@@ -3,7 +3,7 @@
         'name' => 'textpattern/textpattern',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8286690af7c4f067245932684531f22d727f60c5',
+        'reference' => '7991636c1073f6ef19024e600e0bb6e7dc31c3e6',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'phpmailer/phpmailer' => array(
-            'pretty_version' => 'v6.9.1',
-            'version' => '6.9.1.0',
-            'reference' => '039de174cd9c17a8389754d3b877a2ed22743e18',
+            'pretty_version' => 'v6.12.0',
+            'version' => '6.12.0.0',
+            'reference' => 'd1ac35d784bf9f5e61b424901d5a014967f15b12',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpmailer/phpmailer',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'textpattern/textpattern' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8286690af7c4f067245932684531f22d727f60c5',
+            'reference' => '7991636c1073f6ef19024e600e0bb6e7dc31c3e6',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../../',
             'aliases' => array(),

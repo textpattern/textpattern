@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1077,6 +1077,18 @@ const HTML5_VOID_TAGS = array(
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
 );
 
+if (!defined('TEXTPATTERN_THUMB_TTL')) {
+    /**
+     * Thumbnail time-to-live value for cache headers (Cache-control max-age/Expires)
+     *
+     * Default = 7 days (7 * 24 * 60 *60)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_TTL', 604800);
+}
+
 if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
     /**
      * Thumbnail quality percent
@@ -1087,13 +1099,125 @@ if (!defined('TEXTPATTERN_THUMB_QUALITY')) {
     define('TEXTPATTERN_THUMB_QUALITY', 80);
 }
 
+if (!defined('TEXTPATTERN_THUMB_WIDTH')) {
+    /**
+     * Thumbnail width (fallback dimension) in px
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_WIDTH', 200);
+}
+
+if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
+    /**
+     * Thumbnail height (fallback dimension) in px
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_HEIGHT', 200);
+}
+
+if (!defined('TEXTPATTERN_THUMB_CROPPING')) {
+    /**
+     * Thumbnail crop ratio (wxh)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_CROPPING', '1x1');
+}
+
+if (!defined('TEXTPATTERN_THUMB_DIR')) {
+    /**
+     * Thumbnail subdirectory name
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_DIR', 'thumb');
+}
+
+if (!defined('THUMB_REDIRECT')) {
+    /**
+     * Whether to redirect to the cached thumb or serve it as-is.
+     *
+     * Redirects _should_ work better than raw requests, but if thumbs are missing or caches are a bit
+     * too aggressive, set this to a different redirect type, or use false or 0 to turn it off.
+     *
+     * You may use any valid 300-style redirect code here:
+     * * 301 or 308 (permanent)
+     * * 302, 303, or 307 (temporary)
+     * * 304 (not-modified)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_REDIRECT', 307);
+}
+
+if (!defined('THUMB_CACHE_SECONDS')) {
+    /**
+     * Number of seconds after which an unaccessed, cached image becomes eligible for deletion
+     *
+     * Default: 30 days (30 * 24 * 60 * 60)
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_CACHE_SECONDS', 2592000);
+}
+
+if (!defined('THUMB_SECRET_REGEN_SECONDS')) {
+    /**
+     * After this many seconds, a new thumbnail random token is generated,
+     *
+     * Making it change frequently increases security (less likelhood of someone guessing/obtaining it and
+     * being able to generate thumbnails en masse).
+     *
+     * Default: Around 7 days (7 * 24 * 60 * 60).
+     *
+     * @since   4.9.0
+     * @package Image
+     */
+    define('THUMB_SECRET_REGEN_SECONDS', '604800');
+}
+
+/**
+  * 'No thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_NONE')) {
+    define('THUMB_NONE', '0');
+}
+
+/**
+  * 'Custom thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_CUSTOM')) {
+    define('THUMB_CUSTOM', '1');
+}
+
+/**
+  * 'Auto thumbnail' value
+  *
+  * @since   4.9.0
+  */
+if (!defined('THUMB_AUTO')) {
+    define('THUMB_AUTO', '2');
+}
+
 /**
   * Custom image type for SVG
   *
   * @since   4.9.0
   */
 if (!defined('IMAGETYPE_SVG')) {
-    define('IMAGETYPE_SVG', 99);
+    define('IMAGETYPE_SVG', 21);
 }
 
 /**

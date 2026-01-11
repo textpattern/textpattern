@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -322,8 +322,9 @@ function discuss_list($message = '')
                 n . tag_start('thead') .
                 tr(
                     hCell(
+                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
                         fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
+                        '', ' class="txp-list-col-multi-edit" scope="col"'
                     ) .
                     column_head(
                         'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
@@ -415,7 +416,9 @@ function discuss_list($message = '')
 
                 $contentBlock .= tr(
                     td(
-                        fInput('checkbox', 'selected[]', $discussid), '', 'txp-list-col-multi-edit'
+                        '<label for="bulk_select-' . $discussid . '" class="txp-accessibility">' . gTxt('bulk_select_row', array('{id}' => $discussid)) .
+                            '</label>'.
+                        fInput('checkbox', 'selected[]', $discussid, '', '', '', '', '', 'bulk_select-'.$discussid), '', 'txp-list-col-multi-edit'
                     ) .
                     hCell(
                         href($discussid, $edit_url, ' title="' . gTxt('edit') . '"'), '', ' class="txp-list-col-id" scope="row"'

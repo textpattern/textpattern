@@ -4,7 +4,7 @@
 # * Textpattern Content Management System
 # * https://textpattern.com/
 # *
-# * Copyright (C) 2020 The Textpattern Development Team
+# * Copyright (C) 2026 The Textpattern Development Team
 # *
 # * Textpattern is free software; you can redistribute it and/or
 # * modify it under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ rm textpattern-$VER/CODE_OF_CONDUCT.md
 rm textpattern-$VER/composer.json
 rm textpattern-$VER/composer.lock
 rm textpattern-$VER/CONTRIBUTING.md
+rm textpattern-$VER/DEVTOOLS.md
 rm textpattern-$VER/package.json
 rm textpattern-$VER/phpcs.xml
 rm textpattern-$VER/README.md

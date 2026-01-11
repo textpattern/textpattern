@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -226,8 +226,8 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
     }
 
     return href($linktext, array(
-        'event'      => $event,
-        'step'       => $step,
+        'event' => $event,
+        'step'  => $step,
     ) + $atts, array(
         'class' => $class,
         'title' => $title,
@@ -1250,9 +1250,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
     $atts = array(
-        'rel'    => 'help',
-        'title'  => gTxt('help'),
-        'role'   => 'button',
+        'rel'   => 'help',
+        'title' => gTxt('help'),
+        'role'  => 'button',
     );
 
     if ($url === false) {
@@ -1939,11 +1939,12 @@ function doWrap($list, $wraptag = null, $break = null, $class = null, $breakclas
     }
 
     if ($breakform) {
-        array_walk($list, function (&$item, $key) use ($breakform) {
+        $thing = is_array($breakform) ? $breakform[0] : null;
+        array_walk($list, function (&$item, $key) use ($breakform, $thing) {
             global $txp_item;
             $txp_item['count'] = $key + 1;
             $txp_item[true] = $item;
-            $item = str_replace('<+>', $item, parse_form($breakform));
+            $item = str_replace('<+>', $item, isset($thing) ? parse($thing) : parse_form($breakform));
             unset($txp_item);
         });
     }

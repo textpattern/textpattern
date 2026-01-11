@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.0-dev';
+textpattern.version = '4.9.1-dev';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -218,12 +218,13 @@ jQuery.fn.txpMultiEditForm = function (method, opt) {
             var checked = form.boxes.filter(':checked'),
                 count = checked.length,
                 option = form.editMethod.find('[value=""]');
-            checked.closest(opt.highlighted).addClass(opt.selectedClass);
-            form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass);
+            checked.closest(opt.highlighted).addClass(opt.selectedClass).attr('aria-selected', 'true');
+            form.boxes.filter(':not(:checked)').closest(opt.highlighted).removeClass(opt.selectedClass).attr('aria-selected', 'false');
 
             option.gTxt('with_selected_option', {
                 '{count}': count
             });
+
             form.selectAll.prop('checked', count && count === form.boxes.length).change();
             form.editMethod.prop('disabled', !count);
 
@@ -2612,6 +2613,14 @@ textpattern.Route.add('lang', function () {
 
 // Images edit panel.
 textpattern.Route.add('image', function () {
+    $('[name=thumbnail_type]').on('change', function (ev) {
+        let me = $(this).val();
+
+        $('#image_details_form').find('input[name=thumbnail]').val(me);
+        $('.thumbtype_1, .thumbtype_2').hide();
+        $('.thumbtype_'+me).show();
+    });
+
     $('.thumbnail-swap-size').button({
         showLabel: false,
         icon: 'ui-icon-transfer-e-w'

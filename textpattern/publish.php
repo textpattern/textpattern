@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -44,6 +44,7 @@ $loader->register();
 include_once txpath . '/lib/txplib_db.php';
 include_once txpath . '/lib/admin_config.php';
 include_once txpath . '/publish/log.php';
+use lencioni\SLIR\SLIR;
 
 $trace->stop();
 
@@ -73,6 +74,7 @@ $txp_parsed = $txp_else = $txp_item = $txp_context = $txp_yield = $yield = array
 $txp_atts = null;
 $timezone_key = get_pref('timezone_key', date_default_timezone_get()) or $timezone_key = 'UTC';
 date_default_timezone_set($timezone_key);
+setImageToken();
 
 isset($pretext) or $pretext = array();
 
@@ -352,10 +354,11 @@ function preText($store, $prefs = null)
     extract($prefs);
 
     // Set messy variables.
-    $out += makeOut('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f');
+    $out += makeOut(array('id', 's', 'c', 'context', 'q', 'm', 'pg', 'p', 'month', 'author', 'f', 'token'));
     $out['skin'] = $out['page'] = $out['css'] = '';
 
     $is_404 = ($out['status'] == '404');
+
     $title = null;
     $status = strpos($out['id'], '.') === false ? " AND Status IN (" . STATUS_LIVE . "," . STATUS_STICKY . ")" : '';
 
@@ -368,6 +371,7 @@ function preText($store, $prefs = null)
         ksort($harray);
         $token = Txp::get('\Textpattern\Security\Token');
         $userhash = $token->csrf($txp_user);
+
         if (!has_privs('article.preview', $userInfo)
             || strpos($hash, $userhash) !== 0
             || $hash !== $userhash . ($_POST ? $token->csrf(json_encode($harray)) : '')
@@ -399,7 +403,7 @@ function preText($store, $prefs = null)
         }
     }
 
-    // These are deprecated as of Textpattern v1.0 - leaving them here for
+    // These two are deprecated as of Textpattern v1.0 - leaving them here for
     // plugin compatibility.
     $out['path_from_root'] = rhu;
     $out['pfr']            = rhu;
@@ -411,21 +415,32 @@ function preText($store, $prefs = null)
     // First we sniff out some of the preset URL schemes.
     extract($url);
 
+    $imgParts = explode('/', $img_dir);
+    $u1 = strtolower($u1);
+
     // If messy vars exist, bypass URL parsing.
     if (!$is_404 && !$out['id'] && !$out['s'] && txpinterface != 'css' && txpinterface != 'admin' && strlen($u1)) {
-        if ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
+        if ($imgParts[0] === $u1) {
+            $matchImg = array_intersect($url, $imgParts);
+            $offset = substr_count($img_dir, '/') + 2;
+
+            if (count($matchImg) === count($imgParts) && ${'u' . $offset} === TEXTPATTERN_THUMB_DIR) {
+                $xform = ${'u' . ($out[0] - 1)};
+                $imgfile = ${'u' . $out[0]};
+
+                output_thumb(array('param' => $xform, 'img' => $imgfile));
+                exit;
+            }
+        } elseif ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
             $is_404 = true;
         } else {
             $n = $trailing_slash > 0 ? $out[0] - 1 : $out[0];
             $un = $out[$n];
 
-            switch (strtolower($u1)) {
+            switch ($u1) {
                 case 'atom':
-                    $out['feed'] = 'atom';
-                    break;
-
                 case 'rss':
-                    $out['feed'] = 'rss';
+                    $out['feed'] = $u1;
                     break;
 
                 // urldecode(strtolower(urlencode())) looks ugly but is the
@@ -459,7 +474,6 @@ function preText($store, $prefs = null)
                     $out['author'] = (!empty($out['author'])) ? $out['author'] : '';
                     break;
                     // AuthorID gets resolved from Name further down.
-
                 case 'file_download':
                 case urldecode(strtolower(urlencode(gTxt('file_download')))):
                     $out['s'] = 'file_download';
@@ -811,6 +825,35 @@ function output_component($n = '')
 }
 
 // -------------------------------------------------------------
+function output_thumb($data = array())
+{
+    try {
+        static $storedTokens = array();
+        $sec_mode = get_pref('thumb_security', 'always');
+
+        if ($sec_mode === 'always') {
+            $imgToken = gps('token');
+
+            if ($imgToken) {
+                $sid = get_pref('thumb_secret');
+                $hash_url = filter_var($data['img'], FILTER_SANITIZE_NUMBER_INT) . $data['param'];
+
+                if ($imgToken === hash_hmac('sha256', $hash_url, $sid)) {
+                    $slir = new SLIR();
+                    $slir->processRequestFromURL();
+                }
+            }
+        } else {
+            $slir = new SLIR();
+            $slir->processRequestFromURL();
+        }
+    } catch (Exception $e) {
+        echo $e->getMessage();
+    }
+}
+
+
+// -------------------------------------------------------------
 function output_css($s = '', $n = '', $t = '')
 {
     $order = '';
@@ -1116,11 +1159,11 @@ function parseArticles($atts, $iscustom = 0, $thing = null)
 
 // -------------------------------------------------------------
 
-function makeOut()
+function makeOut($args = array())
 {
     $array['status'] = '200';
 
-    foreach (func_get_args() as $a) {
+    foreach ($args as $a) {
         $in = gps($a);
 
         if (is_scalar($in)) {

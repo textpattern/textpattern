@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -63,7 +63,7 @@ class Token implements \Textpattern\Container\ReusableInterface
         }
 
         if (!isset($token[$salt])) {
-            $token[$salt] = md5($nonce.$salt);
+            $token[$salt] = sha1($nonce.$salt);
         }
 
         return $token[$salt];
@@ -137,17 +137,16 @@ class Token implements \Textpattern\Container\ReusableInterface
     /**
      * Create a secure token hash in the database from the passed information.
      *
-     * @param  int    $ref             Reference to the user's account (user_id) or some other id
-     * @param  string $type            Flavour of token to create
-     * @param  int    $expiryTimestamp UNIX timestamp of when the token will expire
-     * @param  string $pass            Password, used as part of the token generation
-     * @param  string $nonce           Random nonce associated with the token
-     * @return string                  Secure token suitable for emailing as part of a link
+     * @param  int|null $ref             Reference to the user's account (user_id) or some other id
+     * @param  string   $type            Flavour of token to create
+     * @param  int      $expiryTimestamp UNIX timestamp of when the token will expire
+     * @param  string   $pass            Password, used as part of the token generation
+     * @param  string   $nonce           Random nonce associated with the token
+     * @return string                    Secure token suitable for emailing as part of a link
      */
 
     public function generate($ref, $type, $expiryTimestamp, $pass, $nonce)
     {
-        $ref = assert_int($ref);
         $expiry = safe_strftime('%Y-%m-%d %H:%M:%S', $expiryTimestamp);
 
         // The selector becomes an indirect reference to the user row id,
@@ -164,16 +163,19 @@ class Token implements \Textpattern\Container\ReusableInterface
         $token = $this->constructHash($selector, $pass, $nonce);
         $user_token = $token.$selector;
 
+        if (isset($ref)) {
         // Remove any previous activation tokens and insert the new one.
-        $safe_type = doSlash($type);
-        safe_delete("txp_token", "reference_id = '$ref' AND type = '$safe_type'");
-        safe_insert("txp_token",
+            $ref = assert_int($ref);
+            $safe_type = doSlash($type);
+            $this->remove($safe_type, $ref);
+            safe_insert("txp_token",
                 "reference_id = '$ref',
                 type = '$safe_type',
                 selector = '".doSlash($selector)."',
                 token = '".doSlash($token)."',
                 expires = '".doSlash($expiry)."'
             ");
+        }
 
         return $user_token;
     }
@@ -195,24 +197,46 @@ class Token implements \Textpattern\Container\ReusableInterface
     /**
      * Return the given token by its type and selector.
      *
-     * @param  string $type     The type of token
-     * @param  string $selector The selector to locate the token row
-     * @return array            The relevant fields from the found row, or empty array if not found
+     * @param  string       $type  The type of token
+     * @param  string|array $match The selector/ref to locate the token row
+     * @return array               The relevant fields from the found row, or empty array if not found
      */
 
-    public function fetch($type, $selector)
+    public function fetch($type, $match)
     {
-        return safe_row(
-            "reference_id, token, expires",
-            'txp_token',
-            "selector = '".doSlash($selector)."' AND type='".doSlash($type)."'"
-        );
+        if (is_array($match)) {
+            $selector = !empty($match['selector']) ? $match['selector'] : '';
+            $ref = !empty($match['ref']) ? $match['ref'] : '';
+        } else {
+            $selector = $match;
+            $ref = '';
+        }
+
+        $set = array();
+
+        if ($selector) {
+            $set[] = "selector = '".doSlash($selector)."'";
+        }
+
+        if ($ref) {
+            $set[] = "reference_id = '".doSlash($ref)."'";
+        }
+
+        if (count($set) > 0) {
+            return safe_row(
+                "reference_id, selector, token, expires",
+                'txp_token',
+                (join(' AND ', $set)) . " AND type='".doSlash($type)."'"
+            );
+        }
+
+        return array();
     }
 
     /**
      * Remove used/unnecessary/expired tokens. Chainable.
      *
-     * @param  string $type     Plugin type
+     * @param  string $type     Token type
      * @param  string $ref      Reference to a particular row
      * @param  string $interval Remove other rows that are outside this time range
      * @example
@@ -233,7 +257,7 @@ class Token implements \Textpattern\Container\ReusableInterface
 
         $whereStr = implode(' OR ', $where);
 
-        safe_delete("txp_token", "type = '".doSlash($type)."' AND (".$whereStr.")");
+        safe_delete("txp_token", "type = '".doSlash($type). "'" . ($whereStr ? " AND (".$whereStr.")" : ''));
 
         return $this;
     }
