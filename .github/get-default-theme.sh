@@ -6,7 +6,7 @@ REPO="textpattern-default-theme";
 EXTRACT="textpattern/setup/themes";
 
 
-TAG="main";
+TAG="4.9.x";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi
