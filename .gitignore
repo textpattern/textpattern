@@ -10,7 +10,7 @@ Icon?
 ehthumbs.db
 Thumbs.db
 /images/*
-/images/!.gitignore
+/images/!.htaccess
 /files/*
 /files/!.htaccess
 /themes/*
