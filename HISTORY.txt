@@ -1,3 +1,7 @@
+Changes in 5.0.0 (upcoming)
+
+* Vendors: jQuery 4.0.0.
+
 Changes in 4.9.1 (upcoming)
 
 * Changed: (Article)Image tags only output dimensions on demand.
