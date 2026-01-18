@@ -7,7 +7,7 @@ Changes in 4.9.1 (upcoming)
 * Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
 * Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
-* Fixed: PHP 5.6 support. Thanks, pinalgirkar.
+* Fixed: PHP 5.6 support (thanks, pinalgirkar).
 
 Changes in 4.9.0 (21 Dec 2025)
 
