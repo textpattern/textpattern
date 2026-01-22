@@ -102,17 +102,17 @@ function list_list($message = '', $post = '')
             'class' => 'title',
         ),
         'posted' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)',
             'label'  => 'posted',
             'class'  => 'posted date',
         ),
         'lastmod' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod)',
             'label'  => 'modified',
             'class'  => 'lastmod date',
         ),
         'expires' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires)',
             'label'  => 'expires',
             'class'  => 'expires date',
         ),

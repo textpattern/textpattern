@@ -1698,7 +1698,7 @@ function txp_sandbox($atts = array(), $thing = null, $raw = false)
 
     if (empty($id)) {
         assert_article();
-        $id = $thisarticle['thisid'];
+        $id = $thisarticle['thisid'] ?: 0;
     } elseif (!isset($articles[$id])) {
         return;
     }
@@ -1726,7 +1726,7 @@ function txp_sandbox($atts = array(), $thing = null, $raw = false)
     $oldarticle = $thisarticle;
     isset($articles[$id]) and $thisarticle = $articles[$id];
     $was_article_body = $is_article_body;
-    $is_article_body = $thisarticle['authorid'];
+    $is_article_body = $thisarticle['authorid'] ?: true;
     $was_form = $is_form;
     $is_form = 0;
 

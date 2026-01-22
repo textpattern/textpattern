@@ -639,7 +639,7 @@ class TXP_Wrapper
 
             if ($field == 'Posted') {
                 $value = strtotime($value) - tz_offset();
-                $value = "FROM_UNIXTIME(0) + INTERVAL $value SECOND";
+                $value = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $value SECOND";
                 $sql = "Posted = $value";
             } elseif ($field == 'Status') {
                 $value = assert_int($value);
@@ -730,7 +730,7 @@ class TXP_Wrapper
             }
         } else {
             $when = strtotime($incoming['Posted']) - tz_offset();
-            $when = "FROM_UNIXTIME(0) + INTERVAL $when SECOND";
+            $when = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $when SECOND";
         }
 
         if ($incoming['Title'] || $incoming['Body'] || $incoming['Excerpt']) {

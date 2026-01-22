@@ -6,7 +6,7 @@ REPO="textpacks";
 EXTRACT="textpattern/lang";
 
 
-TAG="main";
+TAG="4.9.x";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi

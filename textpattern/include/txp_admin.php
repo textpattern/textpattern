@@ -324,7 +324,7 @@ function author_list($message = '')
             'label' => 'privileges',
         ),
         'last_login' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), last_access)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), last_access)',
             'class'  => 'date',
         ),
         'article_count' => array(

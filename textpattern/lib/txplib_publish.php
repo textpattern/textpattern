@@ -87,9 +87,9 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * @param bool  $all Rewrite all data
  * @example
  * if ($rs = safe_rows_start("*,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
  *     'textpattern',
  *     "1 = 1"
  * ))
@@ -240,8 +240,8 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
     }
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
-    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx_j('textpattern');
-    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod';
+    $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
+    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod';
 
     $q = array(
         "SELECT $columns FROM $tables",
@@ -311,13 +311,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
                 break;
             case 'Expires':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
                 break;
             case 'LastMod':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -349,7 +349,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), val)", 'txp_prefs', "name = 'lastmod'");
+    $last = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), val)", 'txp_prefs', "name = 'lastmod'");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -657,7 +657,11 @@ function ckCat($type, $val, $debug = false)
 
 function ckExID($val, $debug = false)
 {
-    return lookupByID($val, $debug);
+    return safe_row(
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
+        'textpattern',
+        "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug
+    );
 }
 
 /**
@@ -684,7 +688,7 @@ function lookupByTitle($val, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
@@ -717,7 +721,7 @@ function lookupByTitleSection($val, $section, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -741,7 +745,7 @@ function lookupByIDSection($id, $section, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -764,7 +768,7 @@ function lookupByID($id, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     return safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($id)." LIMIT 1", $debug
     );
@@ -793,7 +797,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     $customColumns = '';//$customData ? $customData['columns'] : false;
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod".$customColumns,
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
@@ -947,7 +951,11 @@ function filterAtts($atts = null, $iscustom = null)
         }
     }
 
-    $coreColumns = article_column_map(false);
+    $coreColumns = array(
+        'posted'   => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted',
+        'expires'  => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires',
+        'modified' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod',
+        ) + article_column_map();
 
     foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
@@ -1253,7 +1261,7 @@ function filterAtts($atts = null, $iscustom = null)
                 }
 
                 if (isset($date_fields[$field])) {
-                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), '.$what[$field].')';
+                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), '.$what[$field].')';
                     $alias['u'.$field] = " AS `u{$column}`";
                 }
             }
