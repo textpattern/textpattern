@@ -223,7 +223,13 @@ class SLIRConfigDefaults
 
         if (self::$defaultImagePath === null) {
             $parts = parse_url(ihu);
-            self::$defaultImagePath = $parts['path'].$img_dir;
+
+            $incoming = explode('/', $path_to_site);
+            $keep = explode('/', $parts['path']);
+            $result = array_diff($keep, $incoming);
+            $path = implode('/', $result);
+
+            self::$defaultImagePath = '/'.$path.($path ? '/' : '').$img_dir;
         }
 
         if (self::$documentRoot === null) {
