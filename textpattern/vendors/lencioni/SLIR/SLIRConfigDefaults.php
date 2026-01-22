@@ -88,7 +88,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $maxMemoryToAllocate = 128;
+    public static $maxMemoryToAllocate = TEXTPATTERN_THUMB_MEMORY_MB;
 
     /**
      * Default crop mode setting to use if crop mode is not specified in the request.
