@@ -570,7 +570,7 @@ EOJS
 
     $out[] = inputLabel(
         'section_description',
-        '<textarea id="section_description" name="description" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" maxlength="' . $fieldSizes['description'] . '">' . $sec_description . '</textarea>',
+        '<textarea id="section_description" name="description" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" maxlength="' . $fieldSizes['description'] . '">' . txpspecialchars($sec_description) . '</textarea>',
         'description', 'section_description', array('class' => 'txp-form-field txp-form-field-textarea edit-section-description')
     );
 
