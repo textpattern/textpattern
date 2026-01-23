@@ -101,7 +101,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
                         $this->image = imagecreatefromjpeg($this->getFullPath());
                     } elseif ($this->isWEBP()) {
                         $this->image = imagecreatefromwebp($this->getFullPath());
-                    } elseif ($this->isAVIF()) {
+                    } elseif ($this->isAVIF() && function_exists('imagecreatefromavif')) {
                         $this->image = imagecreatefromavif($this->getFullPath());
                     } elseif ($this->isGIF()) {
                         $this->image = imagecreatefromgif($this->getFullPath());
@@ -707,7 +707,7 @@ class SLIRGDImage extends SLIRImage implements SLIRImageLibrary
         } elseif ($this->isWEBP()) {
             return imagewebp($this->image, $path, $this->getQuality());
         } elseif ($this->isAVIF()) {
-            return imageavif($this->image, $path, $this->getQuality());
+            return function_exists('imageavif') && imageavif($this->image, $path, $this->getQuality());
         } elseif ($this->isPNG()) {
             return imagepng($this->image, $path, (int) round(10 - ($this->getQuality() / 10)));
         } elseif ($this->isGIF()) {
