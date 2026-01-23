@@ -111,6 +111,14 @@ class SLIRRequest
     private $background;
 
     /**
+     * Format type of image to export (png, jpg, webp, avif, etc)
+     *
+     * @since 4.9.1
+     * @var string
+     */
+    private $type;
+
+    /**
      * @since 4.9.0
      * @var boolean
      */
@@ -229,6 +237,11 @@ class SLIRRequest
             case 'cropRatio':
                 $this->setCropRatio($value);
                     break;
+
+            case 't':
+            case 'type':
+                $this->setOutputFormat($value);
+                    break;
         } // switch
     }
 
@@ -239,6 +252,19 @@ class SLIRRequest
     final public function __get($name)
     {
         return $this->$name;
+    }
+
+    /**
+     * Note: no type validation is done at this stage, besides forbidding SVG.
+     *
+     * @since 4.9.1
+     * @return void
+     */
+    private function setOutputFormat($value)
+    {
+        if ($value !== 'svg') {
+            $this->type = (string) strtoupper($value);
+        }
     }
 
     /**
@@ -392,6 +418,7 @@ Available parameters:
  q = Quality (0-100)
  b = Background fill color (RRGGBB or RGB)
  p = Progressive (0 or 1)
+ t = type (to change output format)
 
 Example usage:
 /images/thumb/w300-h300-c1.1/42.jpg');
@@ -569,6 +596,19 @@ Example usage:
     final public function isCropping()
     {
         if (!empty($this->cropRatio['width']) && !empty($this->cropRatio['height'])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @since 4.9.1
+     * @return boolean
+     */
+    final public function isReformatting()
+    {
+        if (!empty($this->type)) {
             return true;
         } else {
             return false;

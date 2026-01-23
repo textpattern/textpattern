@@ -2039,6 +2039,7 @@ function article_image($atts)
         'break'     => '',
         'loading'   => null,
         'thumbnail' => false,
+        'type'      => '',
     );
 
     $extAtts = join_atts(array_diff_key($atts, $tagAtts + ($txp_atts ? $txp_atts : array())), TEXTPATTERN_STRIP_EMPTY_STRING | TEXTPATTERN_STRIP_TXP);
@@ -2133,6 +2134,7 @@ function article_image($atts)
                     $payload['h'] = $height === true ? $h : $height;
                     $payload['c'] = $crop;
                     $payload['q'] = $quality;
+                    $payload['t'] = $type;
                 }
 
                 if ($title === true) {

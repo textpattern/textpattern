@@ -5333,6 +5333,10 @@ function imageBuildURL($img = array(), $thumbnail = null)
         if (!empty($img['b'])) {
             $params['b'] = $img['b'];
         }
+
+        if (!empty($img['t'])) {
+            $params['t'] = $img['t'];
+        }
     }
 
     callback_event_ref('txp.image', 'thumbnail.params', 0, $params, $thumbnail);
