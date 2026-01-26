@@ -500,6 +500,16 @@ abstract class SLIRImage
     }
 
     /**
+     * Gets a list of supported MIME types
+     * @return array
+     * @since 4.9.1
+     */
+    public function getMimeTypes()
+    {
+        return $this->mimeTypes;
+    }
+
+    /**
      * Gets the MIME type of the image
      * @return string
      * @since 4.9.0

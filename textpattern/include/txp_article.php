@@ -871,7 +871,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo article_preview();
     echo n . '</div>';// End of .txp-dialog.
 
-    if (has_privs('article.preview')) {
+    if (can_preview($rs)) {
         echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
     }
 
@@ -1801,7 +1801,7 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-notice" title="' . gTxt('preview') . '"></span>' . sp . gTxt('preview'), 'button', array(
+    $clean = can_preview($rs) ? tag('<span class="ui-icon ui-icon-notice" title="' . gTxt('preview') . '"></span>' . sp . gTxt('preview'), 'button', array(
         'class' => 'txp-reduced-ui-button',
         'id'    => 'article_partial_article_preview',
         'type'  => 'button',
@@ -1811,7 +1811,7 @@ function article_partial_article_view($rs)
 
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
-    } elseif ($clean) {
+    } elseif (has_privs('article.preview')) {
         $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
     } else {
         return;
@@ -1856,7 +1856,7 @@ function article_partial_excerpt($rs)
 
 function article_textarea($rs, $field = 'body', $size = array(INPUT_LARGE, TEXTAREA_HEIGHT_REGULAR))
 {
-    $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
+    $textarea_options = can_preview($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => $field,
         'type'              => 'button',
@@ -1953,7 +1953,7 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n . '<div class="txp-textarea-options txp-live-preview">' .
-        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form') . sp . gTxt('tags'), 'label') : '') .
+        (can_preview($rs) ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form') . sp . gTxt('tags'), 'label') : '') .
         tag(checkbox2('', true, 0, 'clean-preview') . sp . gTxt('clean_preview'), 'label') .
         tag(checkbox2('', false, 0, 'live-preview') . sp . gTxt('live_preview'), 'label') .
         n . '</div>' .

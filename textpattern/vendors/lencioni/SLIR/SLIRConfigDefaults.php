@@ -88,7 +88,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $maxMemoryToAllocate = 128;
+    public static $maxMemoryToAllocate = TEXTPATTERN_THUMB_MEMORY_MB;
 
     /**
      * Default crop mode setting to use if crop mode is not specified in the request.
@@ -223,7 +223,13 @@ class SLIRConfigDefaults
 
         if (self::$defaultImagePath === null) {
             $parts = parse_url(ihu);
-            self::$defaultImagePath = $parts['path'].$img_dir;
+
+            $incoming = explode('/', $path_to_site);
+            $keep = explode('/', $parts['path']);
+            $result = array_diff($keep, $incoming);
+            $path = implode('/', $result);
+
+            self::$defaultImagePath = '/'.$path.($path ? '/' : '').$img_dir;
         }
 
         if (self::$documentRoot === null) {

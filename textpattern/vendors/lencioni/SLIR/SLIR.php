@@ -414,11 +414,17 @@ class SLIR
                 $this->rendered->setCropHeight(round($ratio * $this->getSource()->getCropHeight()));
             } // if
 
+            if ($this->isReformattingNeeded()) {
+                $types = $this->getSource()->getMimeTypes();
+                $this->rendered->setMimeType(key($types[$this->getRequest()->type]));
+            } else {
+                $this->rendered->setMimeType($this->getMimeType());
+            }
+
             $this->rendered->setSharpeningFactor($this->calculateSharpnessFactor())
                 ->setBackground($this->getBackground())
                 ->setQuality($this->getQuality())
                 ->setProgressive($this->getProgressive())
-                ->setMimeType($this->getMimeType())
                 ->setCropper($this->getRequest()->cropper);
 
             // Set up the appropriate image handling parameters based on the original
@@ -771,6 +777,23 @@ class SLIR
     private function isCroppingNeeded()
     {
         if ($this->getRequest()->isCropping() && $this->getRequest()->cropRatio['ratio'] != $this->getSource()->getRatio()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Determines if the image type should be changed
+     *
+     * @since 4.9.1
+     * @return boolean
+     */
+    private function isReformattingNeeded()
+    {
+        $format = $this->getRequest()->type;
+
+        if ($this->getRequest()->isReformatting() && array_key_exists($format, $this->getSource()->getMimeTypes())) {
             return true;
         } else {
             return false;
