@@ -623,12 +623,12 @@ function the_privileged($res, $real = false)
 
 /**
  * Check whether a user can modify the article.
- * 
+ *
  * Probably more suitable for Validator class?
  *
  * @param   array  $rs The article data
  * @param   string $user The user name
- * @return  bool  
+ * @return  bool
  * @since   4.9.0
  * @package User
  */
@@ -648,7 +648,7 @@ function can_modify($rs, $user = null) {
  *
  * @param   array  $rs The article data
  * @param   string $user The user name
- * @return  bool  
+ * @return  bool
  * @since   4.9.1
  * @package User
  */
