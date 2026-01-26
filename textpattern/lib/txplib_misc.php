@@ -637,10 +637,25 @@ function can_modify($rs, $user = null) {
     global $txp_user;
 
     isset($user) or $user = $txp_user;
-    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-    (empty($rs['ID']) || ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user) && has_privs('article.edit.own'));
+    $published = $rs['Status'] >= STATUS_LIVE ? '.published' : '';
+
+    return has_privs('article.edit'.$published, $user) ||
+        $rs['AuthorID'] === $user && has_privs('article.edit.own'.$published, $user);
+}
+
+/**
+ * Check whether a user can preview the article.
+ *
+ * @param   array  $rs The article data
+ * @param   string $user The user name
+ * @return  bool  
+ * @since   4.9.1
+ * @package User
+ */
+
+function can_preview($rs, $user = null) {
+    return has_privs('article.preview', $user) &&
+        (empty($rs['ID']) || can_modify($rs, $user));
 }
 
 /**
