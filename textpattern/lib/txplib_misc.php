@@ -5169,7 +5169,7 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    if ($url_mode == 'title_only' && isset($txp_sections[$url_title])) {
+    if ($url_mode == 'title_only' && isset($txp_sections[$url_title]) && $prefs['trailing_slash']) {
         $url_mode = 'id_title';
     }
 
