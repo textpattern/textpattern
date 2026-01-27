@@ -1,6 +1,7 @@
 Changes in 5.0.0 (upcoming)
 
 * Vendors: jQuery 4.0.0.
+* Vendors: jQuery Migrate 4.0.2.
 
 Changes in 4.9.1 (upcoming)
 
