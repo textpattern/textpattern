@@ -128,6 +128,7 @@ function pagetop($pagetitle = '', $message = '')
 <title><?php echo admin_title($pagetitle)?></title><?php echo
 Txp::get('\Textpattern\UI\Style')->setSource('textpattern.css').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery.js').
+Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery/jquery-migrate-4.0.2.min.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/jquery/jquery-ui/jquery-ui.js').
 Txp::get('\Textpattern\UI\Script')->setSource('vendors/blueimp/fileupload/jquery.fileupload.js')
     ->setRoute('file, image').
