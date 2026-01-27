@@ -30,6 +30,7 @@
     "blueimp-file-upload": "10.32.0",
     "dompurify": "3.3.1",
     "jquery": "4.0.0",
+    "jquery-migrate": "4.0.2",
     "jquery-ui": "1.14.1",
     "prismjs": "1.30.0"
   },
