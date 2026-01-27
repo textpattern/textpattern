@@ -623,12 +623,12 @@ function the_privileged($res, $real = false)
 
 /**
  * Check whether a user can modify the article.
- * 
+ *
  * Probably more suitable for Validator class?
  *
  * @param   array  $rs The article data
  * @param   string $user The user name
- * @return  bool  
+ * @return  bool
  * @since   4.9.0
  * @package User
  */
@@ -648,7 +648,7 @@ function can_modify($rs, $user = null) {
  *
  * @param   array  $rs The article data
  * @param   string $user The user name
- * @return  bool  
+ * @return  bool
  * @since   4.9.1
  * @package User
  */
@@ -5342,7 +5342,7 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    if ($url_mode == 'title_only' && isset($txp_sections[$url_title])) {
+    if ($url_mode == 'title_only' && isset($txp_sections[$url_title]) && $prefs['trailing_slash']) {
         $url_mode = 'id_title';
     }
 
