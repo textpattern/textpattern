@@ -2,6 +2,7 @@ Changes in 5.0.0 (upcoming)
 
 * Vendors: jQuery 4.0.0.
 * Vendors: jQuery Migrate 4.0.2.
+* Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.1 (upcoming)
 
@@ -13,6 +14,7 @@ Changes in 4.9.1 (upcoming)
 * Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 * Fixed: PHP 5.6 support (thanks, pinalgirkar).
+* Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
 
