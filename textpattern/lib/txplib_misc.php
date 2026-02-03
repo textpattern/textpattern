@@ -2910,7 +2910,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
  * Converts a time string from the Textpattern timezone to GMT.
  *
  * @param   string $time_str The time string
- * @return  int UNIX timestamp
+ * @return  bool|int UNIX timestamp or false on failure
  * @package DateTime
  */
 
@@ -2918,10 +2918,13 @@ function safe_strtotime($time_str)
 {
     $ts = strtotime($time_str);
 
-    // tz_offset calculations are expensive
-    $tz_offset = tz_offset($ts);
+    if ($ts !== false) {
+        // tz_offset calculations are expensive
+        $tz_offset = tz_offset($ts);
+        $ts = strtotime($time_str, time() + $tz_offset) - $tz_offset;
+    }
 
-    return strtotime($time_str, time() + $tz_offset) - $tz_offset;
+    return $ts;
 }
 
 /**
