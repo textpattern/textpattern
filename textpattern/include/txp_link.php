@@ -479,6 +479,7 @@ function link_edit($message = '')
                 'description', 'link_description', array('class' => 'txp-form-field txp-form-field-textarea edit-link-description')
             ) .
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs) .
+            '<button type="submit" class="hidden"></button>' .
             graf(
                 tag(
                     '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
