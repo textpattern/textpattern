@@ -481,12 +481,15 @@ function link_edit($message = '')
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs) .
             '<button type="submit" class="hidden"></button>' .
             graf(
-                tag(
-                    '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
-                    array(
-                        'class'     => 'txp-clone txp-reduced-ui-button',
-                        'data-form' => 'link_details',
+                ($is_edit
+                    ? tag(
+                        '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
+                        array(
+                            'class'     => 'txp-clone txp-reduced-ui-button',
+                            'data-form' => 'link_details',
+                        )
                     )
+                    : ''
                 ) .
                 sLink('link', '', gTxt('cancel'), 'txp-button') .
                 fInput('submit', '', gTxt('save'), 'publish'),

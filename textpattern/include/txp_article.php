@@ -1795,10 +1795,10 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
+    return ($ID) ? n . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
         'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
-    ));
+    )) : '';
 }
 
 /**
