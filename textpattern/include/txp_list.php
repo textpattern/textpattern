@@ -763,12 +763,7 @@ function list_multi_edit()
     }
 
     foreach ($selected as $item) {
-        if (
-            ($item['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-            ($item['Status'] >= STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-            ($item['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-            ($item['Status'] < STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-        ) {
+        if (can_modify($item)) {
             $allowed[] = $item['ID'];
         }
     }

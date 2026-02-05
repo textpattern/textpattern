@@ -194,7 +194,7 @@ function css_edit($message = '', $refresh_partials = false)
 
     if ($name) {
         $actionsExtras .= sLink('css', 'pour', '<span class="ui-icon ui-extra-icon-new-document" title="' . gTxt('create_css') . '"></span>' . sp . gTxt('create_css'), 'txp-new')
-        . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
+        . tag('<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button', array(
             'class'     => 'txp-clone txp-reduced-ui-button',
             'data-form' => 'style_form',
         ));
