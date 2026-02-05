@@ -6,9 +6,10 @@ Changes in 4.9.1 (upcoming)
 * Changed: Thumb path now permits virtual/multiple host setups too.
 * Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
 * Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
-* Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 * Fixed: PHP 5.6 support (thanks, pinalgirkar).
+* Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 * Fixed: Duplicate action only available for existing content.
+* Fixed: Assets created without a timestamp use time of creation, not epoch.
 * Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
