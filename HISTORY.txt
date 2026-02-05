@@ -6,15 +6,8 @@ Changes in 5.0.0 (upcoming)
 
 Changes in 4.9.1 (upcoming)
 
-* Changed: (Article)Image tags only output dimensions on demand.
-* Changed: <txp:article_image> skips empty images/thumbnails.
-* Changed: Valueless width/height/crop behaviour in (Article)Image tags.
-* Changed: Thumb path now permits virtual/multiple host setups too.
-* Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
-* Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
-* Fixed: Correct admin theme file scaffold for dynamic thumbnails.
-* Fixed: PHP 5.6 support (thanks, pinalgirkar).
-* Vendors: jQuery UI 1.14.2.
+* Refer to HISTORY.txt in 4.9.x branch for details.
+  https://github.com/textpattern/textpattern/blob/4.9.x/HISTORY.txt
 
 Changes in 4.9.0 (21 Dec 2025)
 
