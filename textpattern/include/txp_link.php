@@ -482,7 +482,7 @@ function link_edit($message = '')
             graf(
                 ($is_edit
                     ? tag(
-                        '<span class="ui-icon ui-icon-copy"></span>' . gTxt('duplicate'), 'button',
+                        '<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button',
                         array(
                             'class'     => 'txp-clone txp-reduced-ui-button',
                             'data-form' => 'link_details',

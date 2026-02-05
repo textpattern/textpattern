@@ -1531,7 +1531,7 @@ class Skin extends CommonBase implements SkinInterface
 
             $caption = gTxt('edit_'.$event);
             $extraAction = tag(
-                '<span class="ui-icon ui-icon-copy"></span>' . gTxt('duplicate'), 'button',
+                '<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button',
                 array(
                     'class'     => 'txp-clone txp-reduced-ui-button',
                     'data-form' => $event.'_form',
