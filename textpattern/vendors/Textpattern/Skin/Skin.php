@@ -313,10 +313,9 @@ class Skin extends CommonBase implements SkinInterface
     public function getEditing()
     {
         $editing = get_pref($this->getEvent().'_editing', '', true);
+        $installed = $this->getInstalled();
 
-        if (!$editing) {
-            $installed = $this->getInstalled();
-
+        if (!$editing || !array_key_exists($editing, $installed)) {
             reset($installed);
 
             $editing = $this->setEditing(key($installed));
