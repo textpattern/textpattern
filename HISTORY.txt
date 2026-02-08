@@ -13,7 +13,7 @@ Changes in 4.9.1 (upcoming)
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 * Fixed: Duplicate action only available for existing content.
 * Fixed: Assets created with no timestamp use time of creation, not Unix epoch.
-* Fixed: Internal errors with password reset on PHP 8.5.
+* Fixed: Internal errors with password reset email sending on PHP 8.5.
 * Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
