@@ -676,7 +676,7 @@ class IXR_Client
         $length = $request->getLength();
         $xml = $request->getXml();
         $r = "\r\n";
-        $request  = "POST {$this->path} HTTP/1.0$r";
+        $request = "POST {$this->path} HTTP/1.0$r";
 
         // Merged from WP #8145 - allow custom headers
         $this->headers['Host']          = $this->server;
@@ -686,7 +686,7 @@ class IXR_Client
 
         // Accept gzipped response if zlib and if php4.3+ (fgets turned binary safe)
         if ( extension_loaded('zlib') && preg_match('#^(4\.[3-9])|([5-9])#',phpversion()) )
-            $this->headers['Accept-Encoding']    = 'gzip';
+            $this->headers['Accept-Encoding'] = 'gzip';
 
         foreach( $this->headers as $header => $value ) {
             $request .= "{$header}: {$value}{$r}";

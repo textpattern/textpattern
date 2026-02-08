@@ -227,7 +227,7 @@ function link_list($message = '')
         $rs = safe_query(
             "SELECT
                 txp_link.id,
-                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_link.date) AS uDate,
+                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_link.date) AS uDate,
                 txp_link.category,
                 txp_link.url,
                 txp_link.linkname,
@@ -394,7 +394,7 @@ function link_edit($message = '')
 
     if ($is_edit) {
         $id = assert_int($id);
-        $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), date) AS date", 'txp_link', "id = '$id'");
+        $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS date", 'txp_link', "id = '$id'");
 
         if ($rs) {
             extract($rs);
@@ -480,12 +480,16 @@ function link_edit($message = '')
             ) .
             pluggable_ui('link_ui', 'extend_detail_form', '', $rs) .
             graf(
-                tag(
-                    '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
-                    array(
-                        'class'     => 'txp-clone txp-reduced-ui-button',
-                        'data-form' => 'link_details',
+                ($is_edit
+                    ? tag(
+                        '<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button',
+                        array(
+                            'class'     => 'txp-clone txp-reduced-ui-button',
+                            'data-form' => 'link_details',
+                            'type'      => 'button',
+                        )
                     )
+                    : ''
                 ) .
                 sLink('link', '', gTxt('cancel'), 'txp-button') .
                 fInput('submit', '', gTxt('save'), 'publish'),
@@ -542,7 +546,7 @@ function link_save()
     $created = "NOW()";
 
     if (!$publish_now && $created_ts !== false) {
-        $created = "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
+        $created = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $created_ts SECOND";
     }
 
     $constraints = array(

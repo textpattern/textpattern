@@ -313,10 +313,9 @@ class Skin extends CommonBase implements SkinInterface
     public function getEditing()
     {
         $editing = get_pref($this->getEvent().'_editing', '', true);
+        $installed = $this->getInstalled();
 
-        if (!$editing) {
-            $installed = $this->getInstalled();
-
+        if (!$editing || !array_key_exists($editing, $installed)) {
             reset($installed);
 
             $editing = $this->setEditing(key($installed));
@@ -1530,12 +1529,12 @@ class Skin extends CommonBase implements SkinInterface
             }
 
             $caption = gTxt('edit_'.$event);
-            $extraAction = href(
-                '<span class="ui-icon ui-icon-copy"></span> '.gTxt('duplicate'),
-                '#',
+            $extraAction = tag(
+                '<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button',
                 array(
-                    'class'     => 'txp-clone',
+                    'class'     => 'txp-clone txp-reduced-ui-button',
                     'data-form' => $event.'_form',
+                    'type'      => 'button',
                 )
             );
         } else {

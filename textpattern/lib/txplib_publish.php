@@ -87,9 +87,9 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * @param bool  $all Rewrite all data
  * @example
  * if ($rs = safe_rows_start("*,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires,
- *     TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,
+ *     TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
  *     'textpattern',
  *     "1 = 1"
  * ))
@@ -139,7 +139,7 @@ function populateArticleData($rs, $all = true)
 
 function article_format_info($rs, $all = true)
 {
-    $rs['uPosted']  = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
+    $rs['uPosted'] = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
     $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
     $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
     populateArticleData($rs, $all);
@@ -234,7 +234,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
     $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
-    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod';
+    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod';
 
     $q = array(
         "SELECT $columns FROM $tables",
@@ -304,13 +304,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
                 break;
             case 'Expires':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
                 break;
             case 'LastMod':
-                $threshold = "(FROM_UNIXTIME(0) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
+                $threshold = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -342,7 +342,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), val)", 'txp_prefs', "name = 'lastmod'");
+    $last = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), val)", 'txp_prefs', "name = 'lastmod'");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -400,9 +400,9 @@ function parse($thing, $condition = true, $in_tag = true)
 
     if ($condition) {
         $last = $first - 2;
-        $first   = 1;
+        $first = 1;
     } elseif ($first <= $last) {
-        $first  += 2;
+        $first += 2;
     } else {
         return '';
     }
@@ -651,7 +651,7 @@ function ckCat($type, $val, $debug = false)
 function ckExID($val, $debug = false)
 {
     return safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug
     );
@@ -678,7 +678,7 @@ function ckExID($val, $debug = false)
 function lookupByTitle($val, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
@@ -708,7 +708,7 @@ function lookupByTitle($val, $debug = false)
 function lookupByTitleSection($val, $section, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -729,7 +729,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 function lookupByIDSection($id, $section, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -749,7 +749,7 @@ function lookupByIDSection($id, $section, $debug = false)
 function lookupByID($id, $debug = false)
 {
     return safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "ID = ".intval($id)." LIMIT 1", $debug
     );
@@ -775,7 +775,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     }
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod",
+        "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
         'textpattern',
         "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
@@ -854,18 +854,18 @@ function filterAtts($atts = null, $iscustom = null)
     );
 
     $sortAtts = array(
-        'fields'        => null,
-        'sort'          => '',
-        'image'         => '',
-        'keywords'      => '',
-        'time'          => null,
-        'status'        => empty($atts['id']) ? STATUS_LIVE : true,
-        'frontpage'     => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
-        'match'         => 'Category',
-        'depth'         => 0,
-        'id'            => isset($excluded['id']) ? true : '',
-        'excerpted'     => '',
-        'exclude'       => ''
+        'fields'    => null,
+        'sort'      => '',
+        'image'     => '',
+        'keywords'  => '',
+        'time'      => null,
+        'status'    => empty($atts['id']) ? STATUS_LIVE : true,
+        'frontpage' => !$iscustom && (empty($pretext['s']) || $pretext['s'] == 'default'),
+        'match'     => 'Category',
+        'depth'     => 0,
+        'id'        => isset($excluded['id']) ? true : '',
+        'excerpted' => '',
+        'exclude'   => ''
     );
 
     // For the txp:article tag, some attributes are taken from globals;
@@ -873,11 +873,11 @@ function filterAtts($atts = null, $iscustom = null)
 
     if ($iscustom && (int)$iscustom >= 0) {
         $sortAtts += array(
-            'category'  => isset($excluded['category']) ? true : '',
-            'section'   => isset($excluded['section']) ? true : '',
-            'author'    => isset($excluded['author']) ? true : '',
-            'month'     => isset($excluded['month']) ? true : '',
-            'expired'   => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
+            'category' => isset($excluded['category']) ? true : '',
+            'section'  => isset($excluded['section']) ? true : '',
+            'author'   => isset($excluded['author']) ? true : '',
+            'month'    => isset($excluded['month']) ? true : '',
+            'expired'  => isset($excluded['expired']) ? true : get_pref('publish_expired_articles'),
         );
     } else {
         $sortAtts += array(
@@ -916,9 +916,9 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $coreColumns = array(
-        'posted'   => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted',
-        'expires'  => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires',
-        'modified' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod',
+        'posted'   => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted',
+        'expires'  => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires',
+        'modified' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod',
         ) + article_column_map();
 
     foreach ($windowed + $coreColumns as $field => $val) {
@@ -998,7 +998,7 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && $excluded === true || isset($excluded['category']) ? '!' : '';
     $catquery = join(" $operator ", $catquery);
-    $category  = !$catquery  ? '' : " AND $not($catquery)";
+    $category = !$catquery  ? '' : " AND $not($catquery)";
 
     // ID
     $not = $excluded === true || isset($excluded['id']) ? 'NOT' : '';
@@ -1014,13 +1014,13 @@ function filterAtts($atts = null, $iscustom = null)
 
     $not = $iscustom && $excluded === true || isset($excluded['section']) ? 'NOT' : '';
     $section !== true or $section = processTags('section');
-    $section   = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
+    $section = (!$section ? '' : " AND Section $not IN (".quote_list(do_list_unique($section), ',').")").
         ($getid || $section && !$not || $searchall ? '' : filterFrontPage('Section', 'page'));
 
     // Author
     $not = $iscustom && $excluded === true || isset($excluded['author']) ? 'NOT' : '';
     $author !== true or $author = processTags('author', 'escape="" title=""');
-    $author    = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
+    $author = (!$author)    ? '' : " AND AuthorID $not IN ('".join("','", doSlash(do_list_unique($author)))."')";
 
     $frontpage = ($frontpage && (!$q || $issticky)) ? filterFrontPage('Section', 'on_frontpage', (int)$frontpage < 0) : '';
     $excerpted = (!$excerpted) ? '' : " AND Excerpt !=''";
@@ -1208,7 +1208,7 @@ function filterAtts($atts = null, $iscustom = null)
                 }
 
                 if (isset($date_fields[$field])) {
-                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), '.$what[$field].')';
+                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), '.$what[$field].')';
                     $alias['u'.$field] = " AS `u{$column}`";
                 }
             }

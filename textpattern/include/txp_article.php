@@ -146,9 +146,9 @@ function article_save($write = true)
     if ($incoming['ID']) {
         $oldArticle = safe_row(
             "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
-            TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS sLastMod, LastModID,
-            TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS sExpires",
+            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod, LastModID,
+            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
+            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires",
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -218,7 +218,7 @@ function article_save($write = true)
             $uPosted = $ts - tz_offset($ts);
         }
 
-        $whenposted = "FROM_UNIXTIME(0) + INTERVAL $uPosted SECOND";
+        $whenposted = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uPosted SECOND";
     }
 
     // Set and validate expiry timestamp.
@@ -264,7 +264,7 @@ function article_save($write = true)
     }
 
     if ($uExpires) {
-        $whenexpires = "FROM_UNIXTIME(0) + INTERVAL $uExpires SECOND";
+        $whenexpires = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uExpires SECOND";
     } else {
         $whenexpires = "NULL";
     }
@@ -702,9 +702,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS sExpires,
-            TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS sLastMod",
+            "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
+            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires,
+            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod",
             'textpattern',
             "ID = $ID"
         );
@@ -724,7 +724,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {
@@ -853,7 +853,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo article_preview();
     echo n . '</div>';// End of .txp-dialog.
 
-    if (has_privs('article.preview')) {
+    if (can_preview($rs)) {
         echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
     }
 
@@ -1164,7 +1164,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir (FROM_UNIXTIME(0) + INTERVAL $sPosted SECOND) OR Posted = (FROM_UNIXTIME(0) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) OR Posted = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 
@@ -1557,7 +1557,7 @@ function article_partial_custom_field($rs, $key)
     $custom_x_set = "custom_{$m[1]}_set";
     $custom_x = "custom_{$m[1]}";
 
-    $preview = can_modify($rs) ?
+    $preview = can_preview($rs) ?
         '<div class="txp-textarea-options txp-textfilter-options no-ui-button">'
         . tag(gTxt('view_preview_short'), 'button', array(
             'class'             => 'txp-textarea-preview txp-reduced-ui-button',
@@ -1795,10 +1795,10 @@ function article_partial_article_clone($rs)
 {
     extract($rs);
 
-    return n . tag('<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button', array(
+    return ($ID) ? n . tag('<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button', array(
         'class' => 'txp-clone txp-reduced-ui-button',
         'id'    => 'article_partial_article_clone',
-    ));
+    )) : '';
 }
 
 /**
@@ -1814,7 +1814,7 @@ function article_partial_article_view($rs)
     $ID = intval($rs['ID']);
     $live = in_array($rs['Status'], array(STATUS_LIVE, STATUS_STICKY));
 
-    $clean = has_privs('article.preview') ? tag('<span class="ui-icon ui-icon-notice" title="' . gTxt('preview') . '"></span>' . sp . gTxt('preview'), 'button', array(
+    $clean = can_preview($rs) ? tag('<span class="ui-icon ui-icon-notice" title="' . gTxt('preview') . '"></span>' . sp . gTxt('preview'), 'button', array(
         'class' => 'txp-reduced-ui-button',
         'id'    => 'article_partial_article_preview',
         'type'  => 'button',
@@ -1824,7 +1824,7 @@ function article_partial_article_view($rs)
 
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
-    } elseif ($clean) {
+    } elseif (has_privs('article.preview')) {
         $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
     } else {
         return;
@@ -1869,7 +1869,7 @@ function article_partial_excerpt($rs)
 
 function article_textarea($rs, $field = 'body', $size = array(INPUT_LARGE, TEXTAREA_HEIGHT_REGULAR))
 {
-    $textarea_options = can_modify($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
+    $textarea_options = can_preview($rs) ? n . tag(gTxt('view_preview_short'), 'button', array(
         'class'             => 'txp-textarea-preview txp-reduced-ui-button',
         'data-preview-link' => $field,
         'type'              => 'button',
@@ -1966,7 +1966,7 @@ function article_partial_view_modes($rs)
     global $view;
 
     $out = n . '<div class="txp-textarea-options txp-live-preview">' .
-        (has_privs('article.preview') ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form') . sp . gTxt('tags'), 'label') : '') .
+        (can_preview($rs) ? tag(checkbox2('_txp_parse', false, 0, 'parse-preview', 'article_form') . sp . gTxt('tags'), 'label') : '') .
         tag(checkbox2('', true, 0, 'clean-preview') . sp . gTxt('clean_preview'), 'label') .
         tag(checkbox2('', false, 0, 'live-preview') . sp . gTxt('live_preview'), 'label') .
         n . '</div>' .

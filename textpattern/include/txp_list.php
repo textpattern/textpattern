@@ -100,17 +100,17 @@ function list_list($message = '', $post = '')
             'class' => 'title',
         ),
         'posted' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)',
             'label'  => 'posted',
             'class'  => 'posted date',
         ),
         'lastmod' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod)',
             'label'  => 'modified',
             'class'  => 'lastmod date',
         ),
         'expires' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires)',
             'label'  => 'expires',
             'class'  => 'expires date',
         ),
@@ -721,12 +721,7 @@ function list_multi_edit()
     }
 
     foreach ($selected as $item) {
-        if (
-            ($item['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-            ($item['Status'] >= STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-            ($item['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-            ($item['Status'] < STATUS_LIVE && $item['AuthorID'] === $txp_user && has_privs('article.edit.own'))
-        ) {
+        if (can_modify($item)) {
             $allowed[] = $item['ID'];
         }
     }

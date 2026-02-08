@@ -101,10 +101,10 @@ class SLIRCropperCentered implements SLIRCropper
 
     if ($this->shouldCropTopAndBottom($image)) {
       // Image is too tall so we will crop the top and bottom
-      $crop['y']  = $this->getCropY($image);
+      $crop['y'] = $this->getCropY($image);
     } else {
       // Image is too wide so we will crop off the left and right sides
-      $crop['x']  = $this->getCropX($image);
+      $crop['x'] = $this->getCropX($image);
     }
 
     return $crop;

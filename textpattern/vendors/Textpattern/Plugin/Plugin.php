@@ -33,13 +33,13 @@ namespace Textpattern\Plugin;
 class Plugin
 {
     private static $metaData = array(
-        'type'          => 0,
-        'author'        => '',
-        'author_uri'    => '',
-        'version'       => '1',
-        'description'   => '',
-        'order'         => 5,
-        'flags'         => 0
+        'type'        => 0,
+        'author'      => '',
+        'author_uri'  => '',
+        'version'     => '1',
+        'description' => '',
+        'order'       => 5,
+        'flags'       => 0
     );
 
     /**
@@ -114,10 +114,10 @@ class Plugin
 
         if (!empty($plugin['name'])) {
             extract($plugin + self::$metaData + array(
-                'help'          => '',
-                'code'          => '',
-                'textpack'      => '',
-                'data'          => ''
+                'help'     => '',
+                'code'     => '',
+                'textpack' => '',
+                'data'     => ''
             ));
 
             $name = sanitizeForFile($name);
@@ -152,14 +152,14 @@ class Plugin
                 $rs = safe_update(
                    'txp_plugin',
                     $fields,
-                    "name        = '".doSlash($name)."'"
+                    "name = '".doSlash($name)."'"
                 );
             } else {
                 $rs = safe_insert(
                    'txp_plugin',
-                   "name         = '".doSlash($name)."',
-                    status       = ".(empty($status) ? 0 : 1).",
-                    load_order   = '".$order."',".
+                   "name       = '".doSlash($name)."',
+                    status     = ".(empty($status) ? 0 : 1).",
+                    load_order = '".$order."',".
                     $fields
                 );
             }
@@ -240,7 +240,7 @@ class Plugin
         $this->name = sanitizeForFile($plugin['name']);
 
         if ($normalize) {
-            $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
+            $plugin['type'] = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
             $plugin['order'] = empty($plugin['order']) ? 5 : min(max(intval($plugin['order']), 1), 9);
             $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
         }
@@ -294,7 +294,7 @@ class Plugin
 
         // Assume file has already been uploaded if only name given.
         if (strpos($path, DS) === false) {
-            $safePath  = sanitizeForFile($path);
+            $safePath = sanitizeForFile($path);
             $path = PLUGINPATH.DS.$safePath.DS.$path.'.php';
         }
 
@@ -387,7 +387,7 @@ class Plugin
         $plugin += array('name' => $filename, 'author' => get_author_name($txp_user));
 
         if ($normalize) {
-            $plugin['type']  = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
+            $plugin['type'] = empty($plugin['type'])  ? 0 : min(max(intval($plugin['type']), 0), 5);
             $plugin['order'] = empty($plugin['order']) ? 5 : min(max(intval($plugin['order']), 1), 9);
             $plugin['flags'] = empty($plugin['flags']) ? 0 : intval($plugin['flags']);
         }

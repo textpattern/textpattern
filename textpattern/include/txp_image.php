@@ -99,7 +99,7 @@ function image_list($message = '')
             'class' => 'name',
         ),
         'uDate' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_image.date)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_image.date)',
             'label' => 'date',
             'class'  => 'date',
         ),
@@ -436,13 +436,13 @@ function image_list($message = '')
                 $thumb_w = $thumbnail == THUMB_AUTO ? $payload['w'] : $thumb_w;
                 $thumb_h = $thumbnail == THUMB_AUTO ? $payload['h'] : $thumb_h;
 
-                if ($ext != '.swf') {
+                if ($ext != '.swf' && $thumbnail) {
                     $altinfo = !empty($alt) ? txpspecialchars($alt) : $id . $ext;
-                    $thumbnail = '<img class="content-image" loading="lazy" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail === THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $altinfo . '" height="' . $thumb_h . '" width="' . $thumb_w . '"/>';
+                    $thumbout = '<img class="content-image" loading="lazy" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail === THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $altinfo . '" height="' . $thumb_h . '" width="' . $thumb_w . '"/>';
                     $thumbexists = 1;
                 } else {
-                    $thumbnail = '';
-                    $thumbexists = '';
+                    $thumbout = gTxt('no');
+                    $thumbexists = 0;
                 }
 
                 if ($ext != '.swf') {
@@ -500,8 +500,8 @@ function image_list($message = '')
                     ) .
                     td(
                         pluggable_ui('image_ui', 'thumbnail', ($can_edit
-                            ? href($thumbnail, $edit_url, array('title' => gTxt('edit')))
-                            : $thumbnail), $a), '', 'txp-list-col-thumbnail' . ($thumbexists ? ' has-thumbnail' : '')
+                            ? href($thumbout, $edit_url, array('title' => gTxt('edit')))
+                            : $thumbout), $a), '', 'txp-list-col-thumbnail txp-contain' . ($thumbexists ? ' has-thumbnail' : '')
                     ) .
                     (has_privs('tag')
                         ? td($tagbuilder, '', 'txp-list-col-tag-build')
@@ -690,7 +690,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS uDate", 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -735,9 +735,9 @@ function image_edit($message = '', $id = '')
 
         if ($thumbnail && $canThumb) {
             $thumb_info = $id . ($thumbnail == THUMB_CUSTOM ? 't' : '') . $ext;
-            $thumb = '<img class="content-image" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail == THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $thumb_info . '" />';
+            $thumbout = '<img class="content-image" src="' . imageBuildURL($payload, $thumbnail) . ($thumbnail == THUMB_CUSTOM ? "?$uDate" : '') . '" alt="' . $thumb_info . '" />';
         } else {
-            $thumb = '';
+            $thumbout = '';
 
             if ($thumb_w == 0) {
                 $thumb_w = get_pref('thumb_w', 0);
@@ -836,10 +836,10 @@ function image_edit($message = '', $id = '')
                 'thumbnail_image',
                 '<div id="thumbnail-image" class="thumbnail-image">' .
                 (($thumbnail)
-                    ? $thumb . n . ($can_upload
+                    ? $thumbout . n . ($can_upload
                         ? dLink('image', 'thumbnail_delete', 'id', $id, '', '', '', '', array($page, $sort, $dir, $crit, $search_method))
                         : '')
-                    : gTxt('none')) .
+                    : '') .
                 '</div>',
                 $rs
             );
@@ -1208,7 +1208,7 @@ function image_save()
         $created = "NOW()";
     } else {
         $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-        $created = $created_ts === false ? false : "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
+        $created = $created_ts === false ? false : "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $created_ts SECOND";
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));

@@ -623,12 +623,12 @@ function the_privileged($res, $real = false)
 
 /**
  * Check whether a user can modify the article.
- * 
+ *
  * Probably more suitable for Validator class?
  *
  * @param   array  $rs The article data
  * @param   string $user The user name
- * @return  bool  
+ * @return  bool
  * @since   4.9.0
  * @package User
  */
@@ -637,10 +637,25 @@ function can_modify($rs, $user = null) {
     global $txp_user;
 
     isset($user) or $user = $txp_user;
-    return ($rs['Status'] >= STATUS_LIVE && has_privs('article.edit.published')) ||
-    ($rs['Status'] >= STATUS_LIVE && $rs['AuthorID'] === $txp_user && has_privs('article.edit.own.published')) ||
-    ($rs['Status'] < STATUS_LIVE && has_privs('article.edit')) ||
-    (empty($rs['ID']) || ($rs['Status'] < STATUS_LIVE && $rs['AuthorID'] === $txp_user) && has_privs('article.edit.own'));
+    $published = $rs['Status'] >= STATUS_LIVE ? '.published' : '';
+
+    return has_privs('article.edit'.$published, $user) ||
+        $rs['AuthorID'] === $user && has_privs('article.edit.own'.$published, $user);
+}
+
+/**
+ * Check whether a user can preview the article.
+ *
+ * @param   array  $rs The article data
+ * @param   string $user The user name
+ * @return  bool
+ * @since   4.9.1
+ * @package User
+ */
+
+function can_preview($rs, $user = null) {
+    return has_privs('article.preview', $user) &&
+        (empty($rs['ID']) || can_modify($rs, $user));
 }
 
 /**
@@ -2167,7 +2182,7 @@ function is_blocklisted($ip, $checks = '')
 
     foreach ((array) $checks as $a) {
         $parts = explode(':', $a, 2);
-        $rbl   = $parts[0];
+        $rbl = $parts[0];
 
         if (isset($parts[1])) {
             foreach (explode(':', $parts[1]) as $code) {
@@ -2716,7 +2731,10 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $DateTime = new DateTime();
     }
 
-    $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
+    if (empty($override_locale)) {
+        $override_locale = txpinterface == 'admin' && isset($lang_ui) ? $lang_ui : LANG;
+    }
+
     $formats['%s'] = $time;
 
     if (!isset($IntlDateFormatter[$override_locale])) {
@@ -2882,7 +2900,7 @@ function safe_strftime($format, $time = null, $gmt = false, $override_locale = '
  * Converts a time string from the Textpattern timezone to GMT.
  *
  * @param   string $time_str The time string
- * @return  int UNIX timestamp
+ * @return  bool|int UNIX timestamp or false on failure
  * @package DateTime
  */
 
@@ -2890,10 +2908,13 @@ function safe_strtotime($time_str)
 {
     $ts = strtotime($time_str);
 
-    // tz_offset calculations are expensive
-    $tz_offset = tz_offset($ts);
+    if ($ts !== false) {
+        // tz_offset calculations are expensive
+        $tz_offset = tz_offset($ts);
+        $ts = strtotime($time_str, time() + $tz_offset) - $tz_offset;
+    }
 
-    return strtotime($time_str, time() + $tz_offset) - $tz_offset;
+    return $ts;
 }
 
 /**
@@ -3417,14 +3438,14 @@ function txp_tokenize($thing, $hash = null, $transform = null)
         $hash = txp_hash($thing);
     }
 
-    $inside  = array($parsed[0]);
-    $tags    = array($inside);
-    $tag     = array();
+    $inside = array($parsed[0]);
+    $tags = array($inside);
+    $tag = array();
     $outside = array();
     $order = array(array());
-    $else    = array(-1);
-    $count   = array(-1);
-    $level   = 0;
+    $else = array(-1);
+    $count = array(-1);
+    $level = 0;
 
     for ($i = 1; $i < $last || $level > 0; $i++) {
         $chunk = $i < $last ? $parsed[$i] : '</txp:'.$tag[$level-1][2].'>';
@@ -3555,9 +3576,9 @@ function getIfElse($thing, $condition = true)
 
     if ($condition) {
         $last = $first - 2;
-        $first   = 1;
+        $first = 1;
     } elseif ($first <= $last) {
-        $first  += 2;
+        $first += 2;
     } else {
         return null;
     }
@@ -3993,7 +4014,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4629,7 +4650,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "(FROM_UNIXTIME(0) + INTERVAL $start SECOND)";
+            $from = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)";
         }
 
         if ($time === 'since') {
@@ -4644,8 +4665,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = (FROM_UNIXTIME(0) + INTERVAL $start SECOND)" :
-                "$safe_field BETWEEN (FROM_UNIXTIME(0) + INTERVAL $start SECOND) AND (FROM_UNIXTIME(0) + INTERVAL $stop SECOND)"
+                "$safe_field = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)" :
+                "$safe_field BETWEEN (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND) AND (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $stop SECOND)"
             );
         }
     }
@@ -5039,7 +5060,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS posted, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS posted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS expires",
         'textpattern',
         "ID = $id"
     );
@@ -5141,7 +5162,7 @@ function permlinkurl($article_array, $hu = null)
         $url_mode = $permlink_mode;
     }
 
-    if ($url_mode == 'title_only' && isset($txp_sections[$url_title])) {
+    if ($url_mode == 'title_only' && isset($txp_sections[$url_title]) && $prefs['trailing_slash']) {
         $url_mode = 'id_title';
     }
 
@@ -5319,6 +5340,10 @@ function imageBuildURL($img = array(), $thumbnail = null)
 
         if (!empty($img['b'])) {
             $params['b'] = $img['b'];
+        }
+
+        if (!empty($img['t'])) {
+            $params['t'] = $img['t'];
         }
     }
 

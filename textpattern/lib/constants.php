@@ -1077,6 +1077,20 @@ const HTML5_VOID_TAGS = array(
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
 );
 
+if (!defined('TEXTPATTERN_THUMB_MEMORY_MB')) {
+    /**
+     * Thumbnail image generation memory limit (in MB)
+     *
+     * You shouldn't need to mess with this, but if you have larger images that fail to
+     * create thumbs, you can override the limit up to the maximum installed memory on
+     * the server. Be careful not to set it too high or your server can lock up.
+     *
+     * @since   4.9.1
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_MEMORY_MB', 128);
+}
+
 if (!defined('TEXTPATTERN_THUMB_TTL')) {
     /**
      * Thumbnail time-to-live value for cache headers (Cache-control max-age/Expires)

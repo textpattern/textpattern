@@ -727,14 +727,14 @@ function get_essential_forms()
 function permlinkmodes($name, $val, $blank = false)
 {
     $vals = array(
-        'messy'                     => gTxt('messy'),
-        'id_title'                  => gTxt('id_title'),
-        'section_id_title'          => gTxt('section_id_title'),
-        'section_category_title'    => gTxt('section_category_title'),
-        'year_month_day_title'      => gTxt('year_month_day_title'),
-        'breadcrumb_title'          => gTxt('breadcrumb_title'),
-        'section_title'             => gTxt('section_title'),
-        'title_only'                => gTxt('title_only')
+        'messy'                  => gTxt('messy'),
+        'id_title'               => gTxt('id_title'),
+        'section_id_title'       => gTxt('section_id_title'),
+        'section_category_title' => gTxt('section_category_title'),
+        'year_month_day_title'   => gTxt('year_month_day_title'),
+        'breadcrumb_title'       => gTxt('breadcrumb_title'),
+        'section_title'          => gTxt('section_title'),
+        'title_only'             => gTxt('title_only')
     );
 
     return selectInput($name, $vals, $val, $blank, '', $name);

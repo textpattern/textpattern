@@ -58,6 +58,7 @@ class Image
             'quality'   => '',
             'wraptag'   => '',
             'width'     => '0',
+            'type'      => '',
             'thumbnail' => false,
         );
 
@@ -117,6 +118,7 @@ class Image
                 $payload['h'] = $height;
                 $payload['c'] = $crop;
                 $payload['q'] = $quality;
+                $payload['t'] = $type;
             }
 
             $thumb_wanted = ($thumb_type === null ? $thumbnail : $thumb_type);
@@ -511,6 +513,7 @@ class Image
             'height'    => '0',
             'crop'      => '',
             'quality'   => '',
+            'type'      => '',
         ), $atts));
 
         $thumbnail = !$thumbnail ? null : $thumbnail;
@@ -530,6 +533,7 @@ class Image
                 $thisimage['h'] = $height;
                 $thisimage['c'] = $crop;
                 $thisimage['q'] = $quality;
+                $thisimage['t'] = $type;
             } elseif ($thumbnail == THUMB_CUSTOM) {
                 // Leave only thumb_w and thumb_h for the builder to use.
                 $thisimage['w'] = '';
