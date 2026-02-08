@@ -2402,8 +2402,8 @@ function txpMail($to_address, $subject, $body, $reply_to = null, $from = null)
         $sender['RealName'] = get_pref("sitename");
     }
 
-    // Use publisher_email if sender email not set in $from
-    if (!isset($sender['email'])) {
+    // Use publisher_email if sender email is missing / $from email is invalid
+    if (!isset($sender['email']) || !is_valid_email($sender['email'])) {
         $sender['email'] = get_pref('publisher_email');
     }
 
