@@ -2744,7 +2744,10 @@ function intl_strftime($format, $time = null, $gmt = false, $override_locale = '
         $DateTime = new DateTime();
     }
 
-    $override_locale or $override_locale = txpinterface == 'admin' ? $lang_ui : LANG;
+    if (empty($override_locale)) {
+        $override_locale = txpinterface == 'admin' && isset($lang_ui) ? $lang_ui : LANG;
+    }
+
     $formats['%s'] = $time;
 
     if (!isset($IntlDateFormatter[$override_locale])) {
