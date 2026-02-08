@@ -2387,42 +2387,29 @@ function txpMail($to_address, $subject, $body, $reply_to = null, $from = null)
 {
     global $txp_user;
 
-    if (!$from) {
-        // Send the email as the currently logged in user.
-        if ($txp_user) {
-            $sender = safe_row(
-                "RealName, email",
-                'txp_users',
-                "name = '".doSlash($txp_user)."'"
-            );
-
-            if ($sender && is_valid_email(get_pref('publisher_email'))) {
-                $sender['email'] = get_pref('publisher_email');
-            }
-        }
-        // If not logged in, the receiver is the sender.
-        else {
-            $sender = safe_row(
-                "RealName, email",
-                'txp_users',
-                "email = '".doSlash($to_address)."'"
-            );
-        }
-    } else {
+    if ($from) {
         // Send the email from an email address specified in $from
         $sender['email'] = is_array($from) ? $from[0] : $from;
-
-        // Fallback if invalid
-        if (!is_valid_email($sender['email'])) {
-            $sender['email'] = get_pref('publisher_email');
-        }
 
         // Use sender name from the $from array if specified
         if (is_array($from) && isset($from[1])) {
             $sender['RealName'] = $from[1];
-        } else {
-            $sender['RealName'] = get_pref('sitename');
         }
+    }
+
+    // Fallback to site name if sender name is missing
+    if (!isset($sender['RealName'])) {
+        $sender['RealName'] = get_pref("sitename");
+    }
+
+    // Use publisher_email if sender email not set in $from
+    if (!isset($sender['email'])) {
+        $sender['email'] = get_pref('publisher_email');
+    }
+
+    // Hard-coded fallback if $from email or publisher_email is invalid
+    if (!is_valid_email($sender['email'])) {
+        $sender['email'] = "no-reply@" . get_pref("siteurl");
     }
 
     if ($sender) {
