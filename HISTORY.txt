@@ -4,12 +4,15 @@ Changes in 4.9.1 (upcoming)
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
 * Changed: Thumb path now permits virtual/multiple host setups too.
+* Changed: Use publisher email and fallback if no/invalid sender is supplied
+  (thanks, jools-r).
 * Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
 * Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
 * Fixed: PHP 5.6 support (thanks, pinalgirkar).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
 * Fixed: Duplicate action only available for existing content.
 * Fixed: Assets created without a timestamp use time of creation, not epoch.
+* Fixed: Show template content even if theme is deleted (thanks, Mark Goodwin).
 * Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
