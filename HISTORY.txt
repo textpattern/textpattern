@@ -20,6 +20,7 @@ Changes in 4.9.1 (upcoming)
 * Fixed: Assets created with no timestamp use time of creation, not Unix epoch.
 * Fixed: Internal errors with password reset email sending on PHP 8.5.
 * Vendors: jQuery UI 1.14.2.
+
 Changes in 4.9.0 (21 Dec 2025)
 
 * Feature release with support for PHP 8.5, MySQL 8.4, new functionality,
