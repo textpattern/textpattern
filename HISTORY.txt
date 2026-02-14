@@ -12,7 +12,7 @@ Changes in 4.9.1 (upcoming)
 * Changed: (Article)Image tags only output dimensions on demand.
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
-* Changed: Thumb path now permits virtual/multiple host setups too.
+* Changed: Thumb path now permits virtual/multiple host setups.
 * Changed: Use publisher email and fallback if no/invalid sender is supplied
   (thanks, jools-r).
 * Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
