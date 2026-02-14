@@ -5,6 +5,10 @@ Changes in 5.0.0 (upcoming)
 
 Changes in 4.9.1 (upcoming)
 
+* Security: Resolved access control regression with articles. Many thanks to
+  Federico Frascino.
+* Security: Resolved admin-side XSS vulnerability. Many thanks to
+  Jan Jeffrie Galvez Salloman, aka '0xj4n'.
 * Changed: (Article)Image tags only output dimensions on demand.
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
