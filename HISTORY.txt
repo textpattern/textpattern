@@ -1,4 +1,4 @@
-Changes in 4.9.1 (upcoming)
+Changes in 4.9.1 (14 Feb 2026)
 
 * Security: Resolved access control regression with articles. Many thanks to
   Federico Frascino.
@@ -18,6 +18,7 @@ Changes in 4.9.1 (upcoming)
 * Fixed: Duplicate action only available for existing content.
 * Fixed: Assets created with no timestamp use time of creation, not Unix epoch.
 * Fixed: Internal errors with password reset email sending on PHP 8.5.
+* Added: (Article)Image thumbnails can output any supported format.
 * Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
