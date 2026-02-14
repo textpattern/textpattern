@@ -28,15 +28,15 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.9.0. It can be downloaded from the Textpattern website or GitHub in .zip, .tar.gz, and .tar.xz varieties.
+The current production release is version 4.9.1. It can be downloaded from the Textpattern website or GitHub in .zip, .tar.gz, and .tar.xz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz or .tar.xz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/124/textpattern-4.9.0.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.0/textpattern-4.9.0.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/125/textpattern-4.9.0.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.0/textpattern-4.9.0.tar.gz) |
-| .tar.xz | [Download](https://textpattern.com/file_download/126/textpattern-4.9.0.tar.xz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.0/textpattern-4.9.0.tar.xz) |
+| .zip   | [Download](https://textpattern.com/file_download/127/textpattern-4.9.1.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/128/textpattern-4.9.1.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.tar.gz) |
+| .tar.xz | [Download](https://textpattern.com/file_download/129/textpattern-4.9.1.tar.xz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.tar.xz) |
 
 
 ## Install Textpattern

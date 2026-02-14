@@ -3,8 +3,10 @@ Changes in 5.0.0 (upcoming)
 * Vendors: jQuery 4.0.0.
 * Vendors: jQuery Migrate 4.0.2.
 
-Changes in 4.9.1 (upcoming)
+Changes in 4.9.1 (14 Feb 2026)
 
+* Maintenance release with security enhancements, general improvements and
+  bug fixes.
 * Security: Resolved access control regression with articles. Many thanks to
   Federico Frascino.
 * Security: Resolved admin-side XSS vulnerability. Many thanks to
@@ -20,9 +22,12 @@ Changes in 4.9.1 (upcoming)
 * Fixed: PHP 5.6 support (thanks, pinalgirkar).
 * Fixed: Show template content even if theme is deleted (thanks, Mark Goodwin).
 * Fixed: Correct admin theme file scaffold for dynamic thumbnails.
+* Fixed: Reintroduce 'No' indicator if thumbnail is missing in Images list
+  panel (thanks, wet and phiw13).
 * Fixed: Duplicate action only available for existing content.
 * Fixed: Assets created with no timestamp use time of creation, not Unix epoch.
 * Fixed: Internal errors with password reset email sending on PHP 8.5.
+* Added: (Article)Image thumbnails can output any supported format.
 * Vendors: jQuery UI 1.14.2.
 
 Changes in 4.9.0 (21 Dec 2025)
