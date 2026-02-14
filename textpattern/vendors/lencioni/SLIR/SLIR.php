@@ -25,6 +25,7 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
@@ -402,7 +403,7 @@ class SLIR
                 } // if
             } else if ($this->isCroppingNeeded()) {
                 // No resizing is needed but we still need to crop
-                $ratio  = ($this->resizeUncroppedWidthFactor() > $this->resizeUncroppedHeightFactor())
+                $ratio = ($this->resizeUncroppedWidthFactor() > $this->resizeUncroppedHeightFactor())
                     ? $this->resizeUncroppedWidthFactor()
                     : $this->resizeUncroppedHeightFactor();
 
@@ -413,28 +414,34 @@ class SLIR
                 $this->rendered->setCropHeight(round($ratio * $this->getSource()->getCropHeight()));
             } // if
 
+            if ($this->isReformattingNeeded()) {
+                $types = $this->getSource()->getMimeTypes();
+                $this->rendered->setMimeType(key($types[$this->getRequest()->type]));
+            } else {
+                $this->rendered->setMimeType($this->getMimeType());
+            }
+
             $this->rendered->setSharpeningFactor($this->calculateSharpnessFactor())
                 ->setBackground($this->getBackground())
                 ->setQuality($this->getQuality())
                 ->setProgressive($this->getProgressive())
-                ->setMimeType($this->getMimeType())
                 ->setCropper($this->getRequest()->cropper);
 
             // Set up the appropriate image handling parameters based on the original
             // image's mime type
             // @todo some of this code should be moved to the SLIRImage class
             /*
-            $this->renderedMime       = $this->getSource()->getMimeType();
+            $this->renderedMime = $this->getSource()->getMimeType();
             if ($this->getSource()->isJPEG()) {
-                $this->rendered->progressive  = ($this->getRequest()->progressive !== null)
+                $this->rendered->progressive = ($this->getRequest()->progressive !== null)
                     ? $this->getRequest()->progressive : SLIRConfig::$defaultProgressiveJPEG;
-                $this->rendered->background   = null;
+                $this->rendered->background = null;
             } else if ($this->getSource()->isPNG()) {
-                $this->rendered->progressive  = false;
+                $this->rendered->progressive = false;
             } else if ($this->getSource()->isGIF() || $this->getSource()->isBMP()) {
                 // We convert GIFs and BMPs to PNGs
-                $this->rendered->mime     = 'image/png';
-                $this->rendered->progressive  = false;
+                $this->rendered->mime = 'image/png';
+                $this->rendered->progressive = false;
             } else {
                 throw new \RuntimeException("Unable to determine type of source image ({$this->getSource()->mime})");
             } // if
@@ -614,10 +621,10 @@ class SLIR
      */
     private function calculateASharpnessFactor($sourceArea, $destinationArea)
     {
-        $final  = sqrt($destinationArea) * (750.0 / sqrt($sourceArea));
-        $a      = 52;
-        $b      = -0.27810650887573124;
-        $c      = .00047337278106508946;
+        $final = sqrt($destinationArea) * (750.0 / sqrt($sourceArea));
+        $a = 52;
+        $b = -0.27810650887573124;
+        $c = .00047337278106508946;
 
         $result = $a + $b * $final + $c * $final * $final;
 
@@ -638,13 +645,13 @@ class SLIR
         $iptc = $this->getSource()->iptc;
 
         // Originating program
-        $iptc['2#065']  = array('Smart Lencioni Image Resizer');
+        $iptc['2#065'] = array('Smart Lencioni Image Resizer');
 
         // Program version
-        $iptc['2#070']  = array(SLIR::VERSION);
+        $iptc['2#070'] = array(SLIR::VERSION);
 
         foreach ($iptc as $tag => $iptcData) {
-            $tag  = substr($tag, 2);
+            $tag = substr($tag, 2);
             $data .= $this->makeIPTCTag(2, $tag, $iptcData[0]);
         }
 
@@ -770,6 +777,23 @@ class SLIR
     private function isCroppingNeeded()
     {
         if ($this->getRequest()->isCropping() && $this->getRequest()->cropRatio['ratio'] != $this->getSource()->getRatio()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Determines if the image type should be changed
+     *
+     * @since 4.9.1
+     * @return boolean
+     */
+    private function isReformattingNeeded()
+    {
+        $format = $this->getRequest()->type;
+
+        if ($this->getRequest()->isReformatting() && array_key_exists($format, $this->getSource()->getMimeTypes())) {
             return true;
         } else {
             return false;
@@ -957,13 +981,13 @@ class SLIR
             return false;
         }
 
-        $cacheModified  = filemtime($cacheFilePath);
+        $cacheModified = filemtime($cacheFilePath);
 
         if (!$cacheModified) {
             return false;
         }
 
-        $imageModified  = filectime($this->getRequest()->fullPath());
+        $imageModified = filectime($this->getRequest()->fullPath());
 
         if ($imageModified >= $cacheModified) {
             return false;
@@ -1186,13 +1210,13 @@ class SLIR
             // Make sure to suppress strict warning thrown by PEL
             require_once($pelJpegLib);
 
-            $jpeg   = new PelJpeg($this->getSource()->getFullPath());
-            $exif   = $jpeg->getExif();
+            $jpeg = new PelJpeg($this->getSource()->getFullPath());
+            $exif = $jpeg->getExif();
 
             if ($exif !== null) {
-                $jpeg   = new PelJpeg($cacheFilePath);
+                $jpeg = new PelJpeg($cacheFilePath);
                 $jpeg->setExif($exif);
-                $imageData  = $jpeg->getBytes();
+                $imageData = $jpeg->getBytes();
 
                 if (!file_put_contents($cacheFilePath, $imageData)) {
                     return false;
@@ -1447,13 +1471,13 @@ class SLIR
                 $lastModified = filemtime($imagePath);
             }
             if ($length === null) {
-                $length     = filesize($imagePath);
+                $length = filesize($imagePath);
             }
             if ($mimeType === null) {
-                $mimeType   = $this->mimeType($imagePath);
+                $mimeType = $this->mimeType($imagePath);
             }
         } else if ($length === null) {
-            $length   = strlen($data);
+            $length = strlen($data);
         } // if
 
         // Serve the headers

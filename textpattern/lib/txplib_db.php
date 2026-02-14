@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -1935,12 +1935,12 @@ function now($type, $update = false)
         if ($time > $now or $update) {
             $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
-            $now = safe_field('TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), '.$type.') as utime', $table, $where);
+            $now = safe_field('TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), '.$type.') as utime', $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }
     }
 
-    return "(FROM_UNIXTIME(0) + INTERVAL $now SECOND)";
+    return "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $now SECOND)";
 }

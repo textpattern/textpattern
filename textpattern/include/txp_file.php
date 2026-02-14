@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * "Mod File Upload" by Michael Manfre
  * Copyright (C) 2004 Michael Manfre
@@ -278,8 +278,8 @@ function file_list($message = '', $ids = array())
                 txp_file.title,
                 txp_file.category,
                 txp_file.description,
-                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_file.created) AS uDate,
-                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_file.modified) AS mDate,
+                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_file.created) AS uDate,
+                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_file.modified) AS mDate,
                 txp_file.downloads,
                 txp_file.status,
                 txp_file.author,
@@ -528,7 +528,7 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
     $status = selectInput('status', $file_statuses, '', true);
 
     $methods = array(
-        'changestatus'   => array(
+        'changestatus' => array(
             'label' => gTxt('changestatus'),
             'html'  => $status,
         ),
@@ -536,12 +536,12 @@ function file_multiedit_form($page, $sort, $dir, $crit, $search_method)
             'label' => gTxt('changecategory'),
             'html'  => $categories,
         ),
-        'changeauthor'   => array(
+        'changeauthor' => array(
             'label' => gTxt('changeauthor'),
             'html'  => $authors,
         ),
-        'changecount'    => array('label' => gTxt('reset_download_count')),
-        'delete'         => gTxt('delete'),
+        'changecount' => array('label' => gTxt('reset_download_count')),
+        'delete'      => gTxt('delete'),
     );
 
     if (!$categories) {
@@ -579,8 +579,8 @@ function file_multi_edit()
     }
 
     $selected = array_map('assert_int', $selected);
-    $method   = ps('edit_method');
-    $changed  = array();
+    $method = ps('edit_method');
+    $changed = array();
     $key = '';
 
     switch ($method) {
@@ -676,7 +676,7 @@ function file_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), created) AS created, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), modified) AS modified", 'txp_file', "id = '$id'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), created) AS created, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), modified) AS modified", 'txp_file', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1242,7 +1242,7 @@ function file_save()
         $created = "NOW()";
     } else {
         $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-        $created = $created_ts === false ? false : "FROM_UNIXTIME(0) + INTERVAL $created_ts SECOND";
+        $created = $created_ts === false ? false : "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $created_ts SECOND";
     }
 
     $size = file_exists($new_path) ? filesize($new_path) : $rs['size'];

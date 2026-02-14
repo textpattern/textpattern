@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -324,7 +324,7 @@ function author_list($message = '')
             'label' => 'privileges',
         ),
         'last_login' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), last_access)',
+            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), last_access)',
             'class'  => 'date',
         ),
         'article_count' => array(

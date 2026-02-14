@@ -25,10 +25,12 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
  */
+namespace lencioni\SLIR;
 
 /**
  * Exception and error handler
@@ -37,8 +39,6 @@
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
-namespace lencioni\SLIR;
-
 class SLIRExceptionHandler
 {
     /**
@@ -47,7 +47,7 @@ class SLIRExceptionHandler
      * @since 4.9.0
      * @var integer
      */
-    const WRAP_AT   = 65;
+    const WRAP_AT = 65;
 
     /**
      * Text size to use in imagestring(). Possible values are 1, 2, 3, 4, or 5
@@ -55,7 +55,7 @@ class SLIRExceptionHandler
      * @since 4.9.0
      * @var integer
      */
-    const TEXT_SIZE   = 4;
+    const TEXT_SIZE = 4;
 
     /**
      * Height of one line of text, in pixels
@@ -71,7 +71,7 @@ class SLIRExceptionHandler
      * @since 4.9.0
      * @var integer
      */
-    const CHAR_WIDTH  = 8;
+    const CHAR_WIDTH = 8;
 
     /**
      * Logs the error to a file
@@ -82,9 +82,9 @@ class SLIRExceptionHandler
      */
     private static function log(Exception $e)
     {
-        $userAgent  = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
-        $referrer   = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
-        $request    = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : '';
+        $userAgent = (isset($_SERVER['HTTP_USER_AGENT'])) ? $_SERVER['HTTP_USER_AGENT'] : '';
+        $referrer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+        $request = (isset($_SERVER['REQUEST_URI'])) ? $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] : '';
 
         $message = vsprintf("\n[%s] [%s %s] %s\n\nREFERRER: %s\n\nREQUEST: %s\n\n%s", array(
                 @gmdate('D M d H:i:s Y'),
@@ -119,18 +119,18 @@ class SLIRExceptionHandler
         } // foreach
 
         // set up the image
-        $image  = imagecreatetruecolor(
+        $image = imagecreatetruecolor(
                 $characters * self::CHAR_WIDTH,
                 count($text) * self::LINE_HEIGHT
         );
-        $white  = imagecolorallocate($image, 255, 255, 255);
+        $white = imagecolorallocate($image, 255, 255, 255);
         imagefill($image, 0, 0, $white);
 
         // set text color
-        $textColor  = imagecolorallocate($image, 200, 0, 0); // red
+        $textColor = imagecolorallocate($image, 200, 0, 0); // red
 
         // write the text to the image
-        $i  = 0;
+        $i = 0;
         foreach ($text as $line) {
             imagestring(
                     $image,

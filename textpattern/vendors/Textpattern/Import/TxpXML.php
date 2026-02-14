@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -154,29 +154,29 @@ class TxpXML
                 }
             }
 
-            $article['Title']     = trim($a->title);
+            $article['Title'] = trim($a->title);
             $article['url_title'] = stripSpace($article['Title'], 1);
-            $article['section']   = (isset($a->section) ? (string)$a->section : '');
+            $article['section'] = (isset($a->section) ? (string)$a->section : '');
             $article['Category1'] = (isset($a->category[0]) ? (string)$a->category[0] : '');
             $article['Category2'] = (isset($a->category[1]) ? (string)$a->category[1] : '');
 
             $article['Body'] = trim($this->replaceUrls(isset($a->body) ? $a->body : ''));
             $format = $a->body->attributes()->format;
             if ($format == 'textile') {
-                $article['Body_html']       = $textile->parse($article['Body']);
-                $article['textile_body']    = 1;
+                $article['Body_html'] = $textile->parse($article['Body']);
+                $article['textile_body'] = 1;
             } else {
-                $article['Body_html']       = $article['Body'];
-                $article['textile_body']    = 0;
+                $article['Body_html'] = $article['Body'];
+                $article['textile_body'] = 0;
             }
 
             $article['Excerpt'] = trim($this->replaceUrls(isset($a->excerpt) ? $a->excerpt : ''));
             $format = $a->excerpt->attributes()->format;
             if ($format == 'textile') {
-                $article['Excerpt_html']    = $textile->parse($article['Excerpt']);
+                $article['Excerpt_html'] = $textile->parse($article['Excerpt']);
                 $article['textile_excerpt'] = 1;
             } else {
-                $article['Excerpt_html']    = $article['Excerpt'];
+                $article['Excerpt_html'] = $article['Excerpt'];
                 $article['textile_excerpt'] = 0;
             }
 
@@ -191,13 +191,13 @@ class TxpXML
                     $name = empty($c->name) ? $txp_user : $c->name;
                     $email = empty($c->email) ? stripSpace($name, 1).'@example.com' : $c->email;
                     safe_insert('txp_discuss', "
-                        parentid        = '$id',
-                        name            = '".doSlash($name)."',
-                        email           = '".doSlash($email)."',
-                        web             = '".doSlash($c->web)."',
-                        message         = '".doSlash($c->message)."',
-                        posted          = NOW(),
-                        visible         = 1"
+                        parentid = '$id',
+                        name     = '".doSlash($name)."',
+                        email    = '".doSlash($email)."',
+                        web      = '".doSlash($c->web)."',
+                        message  = '".doSlash($c->message)."',
+                        posted   = NOW(),
+                        visible  = 1"
                     );
                 }
                 update_comments_count($id);

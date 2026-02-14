@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.0';
+textpattern.version = '4.9.1';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.

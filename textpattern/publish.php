@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -479,9 +479,9 @@ function preText($store, $prefs = null)
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
-                            '*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) AS uPosted,'.
-                                'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Expires) AS uExpires,'.
-                                'TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), LastMod) AS uLastMod',
+                            '*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,'.
+                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,'.
+                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod',
                             'textpattern',
                             "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );

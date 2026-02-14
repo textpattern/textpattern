@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -290,7 +290,7 @@ function discuss_list($message = '')
                 txp_discuss.web,
                 txp_discuss.message,
                 txp_discuss.visible,
-                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), txp_discuss.posted) AS posted,
+                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_discuss.posted) AS posted,
                 textpattern.ID AS thisid,
                 textpattern.Section AS section,
                 textpattern.url_title,
@@ -298,7 +298,7 @@ function discuss_list($message = '')
                 textpattern.Category1 AS category1,
                 textpattern.Category2 AS category2,
                 textpattern.Status,
-                TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), textpattern.Posted) AS uPosted,
+                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), textpattern.Posted) AS uPosted,
                 (SELECT COUNT(*) FROM " . safe_pfx('txp_discuss') . " AS count WHERE $spamcrit AND txp_discuss.parentid = count.parentid) AS c
             FROM " . safe_pfx_j('txp_discuss') . "
                 LEFT JOIN " . safe_pfx_j('textpattern') . " ON txp_discuss.parentid = textpattern.ID
@@ -492,7 +492,7 @@ function discuss_edit()
 
     $discussid = assert_int($discussid);
 
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), posted) AS uPosted", 'txp_discuss', "discussid = '$discussid'");
+    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), posted) AS uPosted", 'txp_discuss', "discussid = '$discussid'");
 
     if ($rs) {
         extract($rs);

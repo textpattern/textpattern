@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -537,7 +537,7 @@ function cat_event_category_create($event)
 
 function cat_event_category_edit($evname, $message = '')
 {
-    $id     = assert_int(gps('id'));
+    $id = assert_int(gps('id'));
     $parent = doSlash(gps('parent'));
     $fieldSizes = Txp::get('\Textpattern\DB\Core')->columnSizes('txp_category', 'name, title, description');
 
@@ -574,7 +574,7 @@ function cat_event_category_edit($evname, $message = '')
             ) .
             inputLabel(
                 'category_description',
-                '<textarea id="category_description" name="description" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" maxlength="' . $fieldSizes['description'] . '">' . $description . '</textarea>',
+                '<textarea id="category_description" name="description" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" maxlength="' . $fieldSizes['description'] . '">' . txpspecialchars($description) . '</textarea>',
                 $evname . '_category_description', 'category_description', array('class' => 'txp-form-field txp-form-field-textarea edit-category-description')
             ) .
             pluggable_ui('category_ui', 'extend_detail_form', '', $row) .

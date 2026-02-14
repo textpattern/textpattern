@@ -7,7 +7,7 @@
  * XML-RPC Server for Textpattern 4.0.x
  * https://web.archive.org/web/20150119065246/http://txp.kusor.com/rpc-api
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  * Author: Pedro Palazón
  *
  * This file is part of Textpattern.
@@ -350,7 +350,7 @@ EOD;
         $contents = $this->_getBloggerContents($content);
 
         $contents['Section'] = $blogid;
-        $contents['Status']  = $publish ? '4' : '1';
+        $contents['Status'] = $publish ? '4' : '1';
 
         $rs = $txp->newArticle($contents);
 
@@ -443,7 +443,7 @@ EOD;
             list($firstname, $lastname) = explode(' ', $RealName);
         } else {
             $firstname = $RealName;
-            $lastname  = '';
+            $lastname = '';
         }
 
         $uinfo = array(
@@ -533,7 +533,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $rs = $txp->getArticleID($postid, 'ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted');
+        $rs = $txp->getArticleID($postid, 'ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) as uPosted');
 
         if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
@@ -579,7 +579,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Body, AuthorId, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -610,7 +610,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $rs = $txp->getArticleID($postid, 'ID, Title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, url_title, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted');
+        $rs = $txp->getArticleID($postid, 'ID, Title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, url_title, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) as uPosted');
 
         if (!$rs) {
             return new IXR_Error(205, gTxt('problem_retrieving_article'));
@@ -707,7 +707,7 @@ EOD;
         }
 
         $articles = $txp->getArticleList(
-            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted, Status',
+            'ID, Title, url_title, Body, Excerpt, Annotate, Keywords, Section, Category1, Category2, textile_body, AuthorID, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) as uPosted, Status',
             "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false
         );
 
@@ -739,7 +739,7 @@ EOD;
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        $articles = $txp->getArticleList('ID, Title, AuthorID, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
+        $articles = $txp->getArticleList('ID, Title, AuthorID, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) as uPosted', "Section='" . doSlash($blogid) . "'", '0', $numberOfPosts, false);
 
         if (false === $articles) {
             return new IXR_Error(207, gTxt('problem_getting_articles'));
@@ -956,7 +956,7 @@ EOD;
 
         // Trick to add title, category and excerpts using XML-RPC.
         if (preg_match('/<title>(.*)<\/title>(.*)/s', $content, $matches)) {
-            $body  = $matches[2];
+            $body = $matches[2];
             $title = $matches[1];
         }
 
@@ -977,9 +977,9 @@ EOD;
         global $gmtoffset, $is_dst;
 
         $contents = array(
-            'Body'   => str_replace('\n', n, $struct['description']),
+            'Body' => str_replace('\n', n, $struct['description']),
             'Status' => $publish ? '4' : '1',
-            'Title'  => $struct['title'],
+            'Title' => $struct['title'],
         );
 
         if (!empty($struct['categories'])) {
@@ -1088,9 +1088,9 @@ EOD;
                 break;
         }
 
-        $cat  = $txp->getCategory($rs['Category1']);
+        $cat = $txp->getCategory($rs['Category1']);
         $cat1 = isset($cat['title']) ? $cat['title'] : '';
-        $cat  = $txp->getCategory($rs['Category2']);
+        $cat = $txp->getCategory($rs['Category2']);
         $cat2 = isset($cat['title']) ? $cat['title'] : '';
         
         switch ($rs['Status']) {

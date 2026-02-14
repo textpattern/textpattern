@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -29,7 +29,7 @@
  * Textpattern version.
  */
 
-$thisversion = '4.9.0';
+$thisversion = '4.9.1';
 
 /**
  * Development environment?
@@ -1077,6 +1077,20 @@ const HTML5_VOID_TAGS = array(
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'source', 'track', 'wbr'
 );
 
+if (!defined('TEXTPATTERN_THUMB_MEMORY_MB')) {
+    /**
+     * Thumbnail image generation memory limit (in MB)
+     *
+     * You shouldn't need to mess with this, but if you have larger images that fail to
+     * create thumbs, you can override the limit up to the maximum installed memory on
+     * the server. Be careful not to set it too high or your server can lock up.
+     *
+     * @since   4.9.1
+     * @package Image
+     */
+    define('TEXTPATTERN_THUMB_MEMORY_MB', 128);
+}
+
 if (!defined('TEXTPATTERN_THUMB_TTL')) {
     /**
      * Thumbnail time-to-live value for cache headers (Cache-control max-age/Expires)
@@ -1106,7 +1120,7 @@ if (!defined('TEXTPATTERN_THUMB_WIDTH')) {
      * @since   4.9.0
      * @package Image
      */
-    define('TEXTPATTERN_THUMB_WIDTH', 160);
+    define('TEXTPATTERN_THUMB_WIDTH', 200);
 }
 
 if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
@@ -1116,7 +1130,7 @@ if (!defined('TEXTPATTERN_THUMB_HEIGHT')) {
      * @since   4.9.0
      * @package Image
      */
-    define('TEXTPATTERN_THUMB_HEIGHT', 160);
+    define('TEXTPATTERN_THUMB_HEIGHT', 200);
 }
 
 if (!defined('TEXTPATTERN_THUMB_CROPPING')) {

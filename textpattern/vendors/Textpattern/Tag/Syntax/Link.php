@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -143,7 +143,7 @@ class Link
             ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
         );
     
-        $rs = safe_rows_start("*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), date) AS uDate", 'txp_link', join(' ', $qparts));
+        $rs = safe_rows_start("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS uDate", 'txp_link', join(' ', $qparts));
         $out = parseList($rs, $thislink, function($a) {
             global $thislink;
             $thislink = $a;

@@ -1,4 +1,35 @@
 <?php
+/**
+ * SLIR Image Library
+ *
+ * This file is part of SLIR (Smart Lencioni Image Resizer).
+ *
+ * Copyright (c) 2014 Joe Lencioni <joe.lencioni@gmail.com>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
+ * @license MIT
+ * @since 4.9.0
+ * @package SLIR
+ */
 namespace lencioni\SLIR\libs;
 
 use \lencioni\SLIR\SLIRConfig;
@@ -50,29 +81,29 @@ abstract class SLIRImage
      * @var array
      * @since 4.9.0
      */
-    private $mimeTypes  = array(
-        'JPEG'  => array(
-            'image/jpeg'  => 1,
+    private $mimeTypes = array(
+        'JPEG' => array(
+            'image/jpeg' => 1,
         ),
-        'WEBP'  => array(
-            'image/webp'  => 1,
+        'WEBP' => array(
+            'image/webp' => 1,
         ),
-        'AVIF'  => array(
-            'image/avif'  => 1,
+        'AVIF' => array(
+            'image/avif' => 1,
         ),
         'GIF' => array(
-            'image/gif'   => 1,
+            'image/gif' => 1,
         ),
         'PNG' => array(
-            'image/png'   => 1,
+            'image/png' => 1,
             'image/x-png' => 1,
         ),
         'BMP' => array(
-            'image/bmp'       => 1,
-            'image/x-ms-bmp'  => 1,
+            'image/bmp' => 1,
+            'image/x-ms-bmp' => 1,
         ),
         'SVG' => array(
-            'image/svg+xml'   => 1,
+            'image/svg+xml' => 1,
         ),
     );
 
@@ -466,6 +497,16 @@ abstract class SLIRImage
     {
         $this->info['height'] = $height;
         return $this;
+    }
+
+    /**
+     * Gets a list of supported MIME types
+     * @return array
+     * @since 4.9.1
+     */
+    public function getMimeTypes()
+    {
+        return $this->mimeTypes;
     }
 
     /**

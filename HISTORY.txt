@@ -1,3 +1,30 @@
+Changes in 4.9.1 (14 Feb 2026)
+
+* Maintenance release with security enhancements, general improvements and
+  bug fixes.
+* Security: Resolved access control regression with articles. Many thanks to
+  Federico Frascino.
+* Security: Resolved admin-side XSS vulnerability. Many thanks to
+  Jan Jeffrie Galvez Salloman, aka '0xj4n'.
+* Changed: (Article)Image tags only output dimensions on demand.
+* Changed: <txp:article_image> skips empty images/thumbnails.
+* Changed: Valueless width/height/crop behaviour in (Article)Image tags.
+* Changed: Thumb path now permits virtual/multiple host setups.
+* Changed: Use publisher email and fallback if no/invalid sender is supplied
+  (thanks, jools-r).
+* Fixed: Fatal error with UNIXTIME() changes in MariaDB 11.8+.
+* Fixed: Dynamic thumbnail MIME detection (thanks, rezozero/ambroisemaupate).
+* Fixed: PHP 5.6 support (thanks, pinalgirkar).
+* Fixed: Show template content even if theme is deleted (thanks, Mark Goodwin).
+* Fixed: Correct admin theme file scaffold for dynamic thumbnails.
+* Fixed: Reintroduce 'No' indicator if thumbnail is missing in Images list
+  panel (thanks, wet and phiw13).
+* Fixed: Duplicate action only available for existing content.
+* Fixed: Assets created with no timestamp use time of creation, not Unix epoch.
+* Fixed: Internal errors with password reset email sending on PHP 8.5.
+* Added: (Article)Image thumbnails can output any supported format.
+* Vendors: jQuery UI 1.14.2.
+
 Changes in 4.9.0 (21 Dec 2025)
 
 * Feature release with support for PHP 8.5, MySQL 8.4, new functionality,

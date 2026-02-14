@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -174,7 +174,7 @@ function lore_list($message = '')
             );
     } else {
         $rs = safe_rows_start(
-            "*, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), time) AS uTime",
+            "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), time) AS uTime",
             'txp_log',
             "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );

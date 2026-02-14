@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -501,7 +501,7 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, FROM_UNIXTIME(0), NOW()) AS db_server_timestamp")));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), NOW()) AS db_server_timestamp")));
     $db_server_timeoffset = $db_server_timestamp - $now;
 
     echo pagetop(gTxt('tab_diagnostics'), '');

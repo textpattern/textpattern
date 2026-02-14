@@ -25,10 +25,12 @@
  * THE SOFTWARE.
  *
  * @copyright Copyright © 2014, Joe Lencioni
+ * @copyright Copyright © 2026, The Textpattern Development Team
  * @license MIT
  * @since 4.9.0
  * @package SLIR
  */
+namespace lencioni\SLIR;
 
 /**
  * SLIR Config Class
@@ -37,8 +39,6 @@
  * @author Joe Lencioni <joe@shiftingpixel.com>
  * @package SLIR
  */
-namespace lencioni\SLIR;
-
 class SLIRConfigDefaults
 {
     /**
@@ -88,7 +88,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $maxMemoryToAllocate = 128;
+    public static $maxMemoryToAllocate = TEXTPATTERN_THUMB_MEMORY_MB;
 
     /**
      * Default crop mode setting to use if crop mode is not specified in the request.
@@ -166,7 +166,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectProbability  = 1;
+    public static $garbageCollectProbability = 1;
 
     /**
      * Coupled with $garbageCollectProbability defines the probability that the garbage collection process is started on every request.
@@ -176,7 +176,7 @@ class SLIRConfigDefaults
      * @since 4.9.0
      * @var integer
      */
-    public static $garbageCollectDivisor  = 200;
+    public static $garbageCollectDivisor = 200;
 
     /**
      * Specifies the number of seconds after which data will be seen as 'garbage' and potentially
@@ -215,7 +215,7 @@ class SLIRConfigDefaults
      */
     public static function init()
     {
-        global $img_dir;
+        global $img_dir, $path_to_site;
 
         if (!defined('__DIR__')) {
             define('__DIR__', dirname(__FILE__));
@@ -223,11 +223,17 @@ class SLIRConfigDefaults
 
         if (self::$defaultImagePath === null) {
             $parts = parse_url(ihu);
-            self::$defaultImagePath = $parts['path'].$img_dir;
+
+            $incoming = explode('/', $path_to_site);
+            $keep = explode('/', $parts['path']);
+            $result = array_diff($keep, $incoming);
+            $path = implode('/', $result);
+
+            self::$defaultImagePath = '/'.$path.($path ? '/' : '').$img_dir;
         }
 
         if (self::$documentRoot === null) {
-            self::$documentRoot = $_SERVER['DOCUMENT_ROOT'];
+            self::$documentRoot = $path_to_site;
         }
 
         if (self::$pathToSLIR === null) {

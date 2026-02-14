@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -452,7 +452,7 @@ class Timezone
     public function setTimeZone($identifiers)
     {
         foreach ((array)$identifiers as $identifier) {
-            if (@date_default_timezone_set($identifier)) {
+            if (date_default_timezone_set($identifier)) {
                 return $this;
             }
         }
@@ -474,6 +474,6 @@ class Timezone
 
     public function getTimeZone()
     {
-        return @date_default_timezone_get();
+        return date_default_timezone_get();
     }
 }

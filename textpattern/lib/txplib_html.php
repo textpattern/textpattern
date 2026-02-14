@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -226,8 +226,8 @@ function eLink($event, $step, $thing, $value, $linktext, $thing2 = '', $val2 = '
     }
 
     return href($linktext, array(
-        'event'      => $event,
-        'step'       => $step,
+        'event' => $event,
+        'step'  => $step,
     ) + $atts, array(
         'class' => $class,
         'title' => $title,
@@ -1200,9 +1200,9 @@ function popHelp($help_var, $width = 0, $height = 0, $class = 'pophelp', $inline
     $url = filter_var($help_var, FILTER_VALIDATE_URL);
 
     $atts = array(
-        'rel'    => 'help',
-        'title'  => gTxt('help'),
-        'role'   => 'button',
+        'rel'   => 'help',
+        'title' => gTxt('help'),
+        'role'  => 'button',
     );
 
     if ($url === false) {

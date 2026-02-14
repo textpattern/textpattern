@@ -7,7 +7,7 @@ EXTRACT1="textpattern/admin-themes";
 EXTRACT2="sites/site1/admin/setup";
 
 
-TAG="main";
+TAG="4.9.x";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi

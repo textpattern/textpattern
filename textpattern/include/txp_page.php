@@ -4,7 +4,7 @@
  * Textpattern Content Management System
  * https://textpattern.com/
  *
- * Copyright (C) 2025 The Textpattern Development Team
+ * Copyright (C) 2026 The Textpattern Development Team
  *
  * This file is part of Textpattern.
  *
@@ -160,7 +160,7 @@ function page_edit($message = '', $refresh_partials = false)
     if ($name) {
         $actionsExtras .= sLink('page', 'page_new', '<span class="ui-icon ui-extra-icon-new-document" title="' . gTxt('create_page') . '"></span>' . sp . gTxt('create_page'), 'txp-new')
         . tag(
-            '<span class="ui-icon ui-icon-copy" title="' . gTxt('duplicate') . '"></span>' . sp . gTxt('duplicate'), 'button',
+            '<span class="ui-icon ui-icon-copy"></span>' . sp . gTxt('duplicate'), 'button',
             array(
                 'class'     => 'txp-clone txp-reduced-ui-button',
                 'data-form' => 'page_form',
