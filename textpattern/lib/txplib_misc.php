@@ -778,6 +778,7 @@ function imageFetchInfo($id = "", $name = "")
         } elseif (preg_match('/^\d+$/', trim($id))) {
             $where = 'id = '.intval($id).' LIMIT 1';
         } else {
+            // $id might be a direct URL.
             if (!isset($fields)) {
                 $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
                 $fields['date'] = date('c');
@@ -867,6 +868,7 @@ function image_format_info($image)
     }
 
     $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? txp_image_type_to_mime_type($mime) : '';
+    $image['aspect'] = $image['w'] == $image['h'] ? 'square' : ($image['w'] > $image['h'] ? 'landscape' : 'portrait');
 
     return $image;
 }
