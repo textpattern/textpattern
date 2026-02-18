@@ -1,6 +1,6 @@
 Changes in 4.9.2 (upcoming)
 
-* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN. 
+* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 
 Changes in 4.9.1 (14 Feb 2026)
 
