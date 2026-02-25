@@ -474,12 +474,12 @@ function txp_yield($atts, $thing = null)
     if (isset($item)) {
         $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
     } elseif ($name === '') {
-        $end = empty($yield) ? null : end($yield);
-
-        if (isset($end)) {
+        if (!empty($yield)) {
             $was_form = $is_form;
             $is_form--;
+            $end = array_pop($yield);
             $inner = parse($end, empty($else));
+            $yield[] = $end;
             $is_form = $was_form;
         }
     } elseif (!empty($txp_yield[$name])) {
@@ -513,10 +513,10 @@ function txp_if_yield($atts, $thing = null)
     if (isset($item)) {
         $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
     } elseif ($name === '') {
-        $end = empty($yield) ? null : end($yield);
-
-        if (isset($end)) {
+        if (!empty($yield)) {
+            $end = array_pop($yield);
             $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
+            $yield[] = $end;
         }
     } elseif (empty($txp_yield[$name])) {
         $inner = null;
