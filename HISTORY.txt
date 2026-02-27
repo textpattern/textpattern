@@ -1,5 +1,7 @@
 Changes in 4.9.2 (upcoming)
 
+* Maintenance release with security enhancements, general improvements and
+  bug fixes.
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 * Fixed: Recursive <txp:yield> handling.
 
