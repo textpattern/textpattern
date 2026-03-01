@@ -647,7 +647,11 @@ function doDiagnostics()
             inputLabel(
                 'diag_clear_private',
                 checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
-                'diag_clear_private', 'diag_clear_private', array('class' => 'txp-form-field'),
+                array('diag_clear_private',
+                    '<span class="txp-textarea-options">
+                        <a class="action-copy" href="#"><span class="ui-icon ui-icon-copy"></span> ' . gTxt('copy') . '</a>
+                    </span>'
+                ), 'diag_clear_private', array('class' => 'txp-form-field'),
                 ''
             )
         ),

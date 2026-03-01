@@ -2595,6 +2595,11 @@ textpattern.Route.add('diag', function () {
         $('#diagnostics-detail').val(diag_data);
     });
     $('#diag_clear_private').change();
+    $('.action-copy').click(function(ev) {
+        ev.preventDefault();
+        let diagData = $('#diagnostics-detail').val();
+        navigator.clipboard.writeText(diagData);
+    });
 });
 
 // Languages panel.
