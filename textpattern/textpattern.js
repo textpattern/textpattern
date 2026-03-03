@@ -2595,11 +2595,6 @@ textpattern.Route.add('diag', function () {
         $('#diagnostics-detail').val(diag_data);
     });
     $('#diag_clear_private').change();
-    $('.action-copy').click(function(ev) {
-        ev.preventDefault();
-        let diagData = $('#diagnostics-detail').val();
-        navigator.clipboard.writeText(diagData);
-    });
 });
 
 // Languages panel.
@@ -2845,6 +2840,17 @@ textpattern.Route.add('', function () {
     }).on('focusout', '[maxlength]', function() {
         if ($(this).tooltip('instance')) {
             $(this).tooltip('destroy');
+        }
+    });
+
+    // Copy to clipboard.
+    $('.action-copy-clip').click(function(ev) {
+        ev.preventDefault();
+        let source = $(this).data('source');
+        let $source = $(source);
+
+        if ($source.length) {
+            navigator.clipboard.writeText($source.val());
         }
     });
 
