@@ -1,4 +1,4 @@
 root = true
 
 [*.{md,txt}]
-trim_trailing_whitespace
+trim_trailing_whitespace = true
