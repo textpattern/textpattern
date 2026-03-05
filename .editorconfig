@@ -1,4 +1,4 @@
 root = true
 
-[*.txt]
+[*.{md,txt}]
 trim_trailing_whitespace
