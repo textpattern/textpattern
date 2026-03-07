@@ -695,11 +695,7 @@ function image_edit($message = '', $id = '')
     if ($rs) {
         extract($rs);
 
-        $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
-        $can_delete = has_privs('image.delete') || ($author == $txp_user && has_privs('image.delete.own'));
-        $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
-
-        if (!$can_edit) {
+        if (!has_privs('image.edit') && !has_privs('image.edit.own')) {
             require_privs('image.edit');
 
             return;
@@ -754,6 +750,9 @@ function image_edit($message = '', $id = '')
 
         $imageBlock = array();
         $thumbBlock = array();
+        $can_edit = has_privs('image.edit') || ($author === $txp_user && has_privs('image.edit.own'));
+        $can_delete = has_privs('image.delete') || ($author == $txp_user && has_privs('image.delete.own'));
+        $can_upload = $can_edit && is_dir(IMPATH) && is_writeable(IMPATH);
         $imagetypes = get_safe_image_types();
         $delete = ($can_delete)
             ? form(
