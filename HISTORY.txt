@@ -3,6 +3,7 @@ Changes in 4.9.2 (upcoming)
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
+* Fixed: Improved handling of theme import with invalid JSON manifest.
 * Fixed: Recursive <txp:yield> handling.
 * Vendors: DOMPurify 3.3.2.
 
