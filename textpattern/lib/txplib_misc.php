@@ -5385,6 +5385,38 @@ function imageBuildURL($img = array(), $thumbnail = null)
 }
 
 /**
+ * Remove (automatic and manual) image thumbnails given the image ID
+ *
+ * @param int          $id    Image ID
+ * @param string|array $types Type of thumbnail to remove
+ * @since 4.9.2
+ */
+function deleteThumbnails($id, $types = array(THUMB_AUTO, THUMB_CUSTOM))
+{
+    assert_int($id);
+    $types = do_list($types);
+    $exts = implode('|', array_values(get_safe_image_types()));
+
+    // Remove automatic thumbs of any type.
+    if (in_array(THUMB_AUTO, $types)) {
+        $Directory = new RecursiveDirectoryIterator(IMPATH.TEXTPATTERN_THUMB_DIR);
+        $Directory->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
+        $Iterator = new RecursiveIteratorIterator($Directory);
+        $Regex = new RegexIterator($Iterator, '/'.$id.'('.$exts.')$/i', RecursiveRegexIterator::GET_MATCH);
+
+        foreach ($Regex as $name => $file) {
+            unlink(realpath($name));
+        }
+    }
+
+    // Remove custom thumb of current type.
+    if (in_array(THUMB_CUSTOM, $types)) {
+        $t = new txp_thumb($id);
+        $t->delete();
+    }
+}
+
+/**
  * (Re)generate a thumbnail image token every so often.
  *
  * @since 4.9.0
