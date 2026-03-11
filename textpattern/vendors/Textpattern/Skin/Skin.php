@@ -731,7 +731,7 @@ class Skin extends CommonBase implements SkinInterface
             } else {
                 $skinInfos = array_merge(array('name' => $name), $this->getFileContents());
 
-                if (!$skinInfos) {
+                if (count($skinInfos) == 1) {
                     $this->mergeResult('invalid_json', $filePath);
                 } else {
                     extract($skinInfos);
