@@ -2851,6 +2851,8 @@ textpattern.Route.add('', function () {
 
         if ($source.length) {
             navigator.clipboard.writeText($source.val());
+            console.log(ev);
+            ev.target.innerHTML = '<span class="ui-icon ui-icon-check"></span> ' + textpattern.gTxt('copied');
         }
     });
 

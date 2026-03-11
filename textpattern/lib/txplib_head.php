@@ -96,6 +96,7 @@ function pagetop($pagetitle = '', $message = '')
         'are_you_sure',
         'close',
         'confirm_delete_popup',
+        'copied',
         'cookies_must_be_enabled',
         'custom_field_clash',
         'documentation',
