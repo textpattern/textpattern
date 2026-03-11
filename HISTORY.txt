@@ -5,7 +5,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 * Fixed: Improved handling of theme import with invalid JSON manifest.
 * Fixed: Recursive <txp:yield> handling.
-* Vendors: DOMPurify 3.3.2.
+* Vendors: DOMPurify 3.3.3.
 
 Changes in 4.9.1 (14 Feb 2026)
 
