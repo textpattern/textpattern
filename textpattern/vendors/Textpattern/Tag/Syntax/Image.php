@@ -476,7 +476,7 @@ class Image
             'break'      => '',
         ), $atts));
 
-        $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date');
+        $validItems = array('id', 'name', 'category', 'category_title', 'alt', 'caption', 'ext', 'mime', 'author', 'w', 'h', 'thumbnail', 'thumb_w', 'thumb_h', 'date', 'aspect');
         $type = do_list($type);
 
         $out = array();

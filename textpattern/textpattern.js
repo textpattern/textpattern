@@ -2877,6 +2877,19 @@ textpattern.Route.add('', function () {
         }
     });
 
+    // Copy to clipboard.
+    $('.action-copy-clip').click(function(ev) {
+        ev.preventDefault();
+        let source = $(this).data('source');
+        let $source = $(source);
+
+        if ($source.length) {
+            navigator.clipboard.writeText($source.val());
+            console.log(ev);
+            ev.target.innerHTML = '<span class="ui-icon ui-icon-check"></span> ' + textpattern.gTxt('copied');
+        }
+    });
+
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 

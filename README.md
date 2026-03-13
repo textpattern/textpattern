@@ -78,7 +78,7 @@ Note that versions listed may change multiple times during the development proce
 
 ## Contributing
 
-Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development. 
+Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development.
 
 ## Additional development tools
 

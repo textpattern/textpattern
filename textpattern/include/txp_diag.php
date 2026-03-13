@@ -646,7 +646,9 @@ function doDiagnostics()
             ) .
             inputLabel(
                 'diag_clear_private',
-                checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
+                checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private').'<span class="txp-textarea-options">
+                        <button class="action-copy-clip txp-reduced-ui-button" data-source="#diagnostics-detail"><span class="ui-icon ui-icon-clipboard"></span> ' . gTxt('copy_to_clipboard') . '</button>
+                    </span>',
                 'diag_clear_private', 'diag_clear_private', array('class' => 'txp-form-field'),
                 ''
             )

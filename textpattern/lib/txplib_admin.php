@@ -444,6 +444,9 @@ function image_data($file, $meta = array(), $id = 0, $uploaded = true)
         if (!$rs) {
             return gTxt('image_save_error');
         }
+
+        // Invalidate (delete) any old thumbnails.
+        deleteThumbnails($id);
     }
 
     chmod($newpath, 0644);

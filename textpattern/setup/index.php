@@ -170,7 +170,7 @@ function preamble()
 
     $out = array();
     $bodyclass = ($step == '') ? ' welcome' : '';
-    gTxtScript(array('help'));
+    gTxtScript(array('copied', 'help'));
 
     if (isset($cfg['site']['language_code']) && !isset($_SESSION['direction'])) {
         $file = Txp::get('\Textpattern\L10n\Lang', txpath . DS . 'setup' . DS . 'lang' . DS)->findFilename($cfg['site']['language_code']);
@@ -629,7 +629,7 @@ function setup_config_contents()
             strong(gTxt('before_you_proceed')) . ' ' .
             gTxt('create_config', array('{configpath}' => $config_path . DS))
         ) .
-        graf('<a class="txp-button txp-config-download">' . gTxt('download') . '</a>') .
+        graf('<button class="action-copy-clip" data-source="[name=\'config\']"><span class="ui-icon ui-icon-clipboard"></span> ' . gTxt('copy_to_clipboard') . '</button> <a class="txp-button txp-config-download"><span class="ui-icon ui-icon-arrowstop-1-s"></span> ' . gTxt('download') . '</a>') .
         n . '<textarea class="code" name="config" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_REGULAR . '" dir="ltr" readonly>' .
             setup_makeConfig($cfg, true) .
         n . '</textarea>' .
@@ -638,7 +638,6 @@ function setup_config_contents()
             sInput('step_getTxpLogin') .
         n . '</form>';
 }
-
 
 /**
  * Render a 'back' button that goes to the correct step.

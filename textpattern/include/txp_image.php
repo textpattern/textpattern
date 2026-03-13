@@ -1103,8 +1103,6 @@ function image_replace()
         }
     }
 
-//    $img_result = image_data($_FILES['thefile'], $meta, $id);
-
     if (is_array($img_result)) {
         list($message, $id) = $img_result;
 
@@ -1311,9 +1309,7 @@ function image_delete($ids = array())
                     $ul = unlink(realpath(IMPATH . $id . $ext));
                 }
 
-                if (is_file(IMPATH . $id . 't' . $ext)) {
-                    $ult = unlink(realpath(IMPATH . $id . 't' . $ext));
-                }
+                deleteThumbnails($id);
 
                 if (!$rsd or !$ul) {
                     $fail[] = $id;
@@ -1423,11 +1419,10 @@ function thumbnail_delete()
         return;
     }
 
-    $rs = safe_row("id, ext", 'txp_image', "id = $id");
+    $rs = safe_row("id, ext, thumbnail", 'txp_image', "id = $id");
 
-    $t = new txp_thumb($id);
+    deleteThumbnails($id, $rs['thumbnail']);
 
-    $t->delete();
     safe_update('txp_image', 'thumbnail = 0', "id = $id");
     update_lastmod('thumbnail_deleted', compact('id'));
     callback_event('thumbnail_deleted', '', false, $id);

@@ -239,7 +239,11 @@ class Skin extends CommonBase implements SkinInterface
     {
         $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
-        $contents === null or $contents = $this->parseInfos($contents);
+        if ($contents === null) {
+            $contents = array();
+        } else {
+            $contents = $this->parseInfos($contents);
+        }
 
         return $contents;
     }
@@ -727,7 +731,7 @@ class Skin extends CommonBase implements SkinInterface
             } else {
                 $skinInfos = array_merge(array('name' => $name), $this->getFileContents());
 
-                if (!$skinInfos) {
+                if (count($skinInfos) == 1) {
                     $this->mergeResult('invalid_json', $filePath);
                 } else {
                     extract($skinInfos);

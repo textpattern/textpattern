@@ -875,7 +875,7 @@ class Plugin
     protected function computeHash($src)
     {
         if (!$this->hash) {
-            if ($src && (is_readable($src) !== false)) {
+            if ($src && (strlen($src) <= PHP_MAXPATHLEN && is_readable($src) !== false)) {
                 $this->hash = sha1_file($src);
             } elseif ($src) {
                 $this->hash = sha1(preg_replace('/\s+/', '', $src));
