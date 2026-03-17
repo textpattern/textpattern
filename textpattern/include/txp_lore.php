@@ -195,11 +195,7 @@ function lore_list($message = '')
                 n . tag_start('table', array('class' => 'txp-list')) .
                 n . tag_start('thead') .
                 tr(
-                    hCell(
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '',
-                        ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                    ) .
+                    selectAllCheckbox() .
                     column_head(
                         'time',
                         'time',

@@ -336,10 +336,7 @@ function list_list($message = '', $post = '')
             );
 
             $headings = array();
-            $headings[] = hCell(
-                fInput('checkbox', array('name' => 'select_all', 'id' => 'select_all', 'aria-label' => gTxt('toggle_all_selected')), 0),
-                '', 'class="txp-list-col-multi-edit" scope="col"'
-            ) . column_head(array(
+            $headings[] = selectAllCheckbox() . column_head(array(
                 'options' => array('class' => trim('txp-list-col-id' . ('id' == $sort ? " $dir" : ''))),
                 'value' => 'ID',
                 'sort'  => 'id'

@@ -321,11 +321,7 @@ function discuss_list($message = '')
                 n . tag_start('table', array('class' => 'txp-list')) .
                 n . tag_start('thead') .
                 tr(
-                    hCell(
-                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col"'
-                    ) .
+                    selectAllCheckbox() .
                     column_head(
                         'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('id' == $sort) ? "$dir " : '') . 'txp-list-col-id'
