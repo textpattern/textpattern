@@ -5,8 +5,6 @@ Changes in 5.0.0 (upcoming)
 
 Changes in 4.9.2 (upcoming)
 
-* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
-Changes in 4.9.2 (upcoming)
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
@@ -15,7 +13,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Deleting images deletes corresponding thumbnails (thanks, wet).
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
-* Vendors: DOMPurify 3.3.3.
+* Vendors: DOMPurify 3.4.0.
 
 Changes in 4.9.1 (14 Feb 2026)
 
