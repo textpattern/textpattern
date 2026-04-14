@@ -8,7 +8,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Deleting images deletes corresponding thumbnails (thanks, wet).
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
-* Vendors: DOMPurify 3.3.3.
+* Vendors: DOMPurify 3.4.0.
 
 Changes in 4.9.1 (14 Feb 2026)
 
@@ -17,8 +17,7 @@ Changes in 4.9.1 (14 Feb 2026)
 * Security: Resolved access control regression with articles. Many thanks to
   Federico Frascino.
 * Security: Resolved admin-side XSS vulnerability. Many thanks to
-  Jan Jeffrie Galvez Salloman, aka '0xj4n'. Refer to CVE-2026-29906 for further
-  information.
+  Jan Jeffrie Galvez Salloman, aka '0xj4n'.
 * Changed: (Article)Image tags only output dimensions on demand.
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
