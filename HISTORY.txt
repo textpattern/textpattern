@@ -20,9 +20,10 @@ Changes in 4.9.1 (14 Feb 2026)
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
 * Security: Resolved access control regression with articles. Many thanks to
-  Federico Frascino.
+  Federico Frascino. Refer to CVE-2026-30452 for additional information.
 * Security: Resolved admin-side XSS vulnerability. Many thanks to
-  Jan Jeffrie Galvez Salloman, aka '0xj4n'.
+  Jan Jeffrie Galvez Salloman, aka '0xj4n'. Refer to CVE-2026-29906 for
+  additional information.
 * Changed: (Article)Image tags only output dimensions on demand.
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
