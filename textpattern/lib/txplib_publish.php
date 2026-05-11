@@ -371,7 +371,7 @@ function parse($thing, $condition = true, $in_tag = true)
     if (!isset($short_tags)) {
         $short_tags = get_pref('enable_short_tags', false);
     }
-
+    // TODO: handle array $thing in fields preview
     if (!isset($thing) || !$short_tags && false === strpos($thing, '<txp:') ||
         $short_tags && !preg_match('@<(?:'.TXP_PATTERN.'):@', $thing)) {
         $hash = null;
