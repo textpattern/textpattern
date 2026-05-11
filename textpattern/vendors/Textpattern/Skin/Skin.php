@@ -1329,11 +1329,7 @@ class Skin extends CommonBase implements SkinInterface
                     n.tag_start('table', array('class' => 'txp-list')).
                     n.tag_start('thead');
 
-            $ths = hCell(
-                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                '',
-                ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-            );
+            $ths = selectAllCheckbox();
 
             $thIds = array(
                 'name'          => 'name',

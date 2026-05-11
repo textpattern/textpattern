@@ -532,10 +532,7 @@ function author_list($message = '')
 
                     $headings = array();
                     $headings[] = ($use_multi_edit)
-                        ? hCell(
-                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                            '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                        )
+                        ? selectAllCheckbox()
                         : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"');
 
                 foreach ($fields as $col => $opts) {

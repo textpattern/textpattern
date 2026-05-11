@@ -370,11 +370,7 @@ function image_list($message = '')
                 n . tag_start('thead');
 
                 $headings = array();
-                $headings[] = hCell(
-                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col"'
-                );
+                $headings[] = selectAllCheckbox();
 
                 foreach ($fields as $col => $opts) {
                     if (isset($opts['visible']) && empty($opts['visible'])) {

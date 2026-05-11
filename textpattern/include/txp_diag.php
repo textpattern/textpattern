@@ -194,7 +194,6 @@ function doDiagnostics()
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
     $preflight = $notReadable = array();
-    $now = time();
     $heading = gTxt('tab_diagnostics');
     $isUpdate = defined('TXP_UPDATE_DONE');
 
@@ -205,7 +204,7 @@ function doDiagnostics()
         // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if (empty($lastCheck) || $now > ($lastCheck['when'] + (60 * 60))) {
+        if (empty($lastCheck) || time() > ($lastCheck['when'] + (60 * 60))) {
             $lastCheck = checkUpdates();
         }
 
@@ -502,7 +501,7 @@ function doDiagnostics()
 
     // Database server time.
     extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), NOW()) AS db_server_timestamp")));
-    $db_server_timeoffset = $db_server_timestamp - $now;
+    $db_server_timeoffset = $db_server_timestamp - time();
 
     echo pagetop(gTxt('tab_diagnostics'), '');
 

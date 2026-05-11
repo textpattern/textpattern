@@ -349,11 +349,7 @@ function list_list($message = '', $post = '')
             );
 
             $headings = array();
-            $headings[] = hCell(
-                '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
-                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                '', 'class="txp-list-col-multi-edit" scope="col"'
-            ) . column_head(array(
+            $headings[] = selectAllCheckbox() . column_head(array(
                 'options' => array('class' => trim('txp-list-col-id' . ('id' == $sort ? " $dir" : ''))),
                 'value' => 'ID',
                 'sort'  => 'id'
