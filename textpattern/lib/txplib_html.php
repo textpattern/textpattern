@@ -1217,6 +1217,7 @@ function category_popup($name, $val, $id)
 
     return false;
 }
+/**
  * Renders a 'Select All' checkbox.
  *
  * @return string HTML
