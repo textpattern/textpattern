@@ -916,37 +916,42 @@ EOD;
         list($blogid, $username, $password, $file) = $params;
 
         $txp = new TXP_Wrapper($username, $password);
+
         if (!$txp->loggedin) {
             return new IXR_Error(100, gTxt('bad_login'));
         }
 
-        //Temp File Upload
+        // Temp File Upload.
+        $safeFile = sanitizeForFile($file['name']);
         $tempImageFolder = get_pref('tempdir');
-        file_put_contents($tempImageFolder . $file['name'], $file['bits']);
+        file_put_contents($tempImageFolder . $safeFile, $file['bits']);
 
-        //Convert the file to the standard Textpattern input struct
+        // Convert the file to the standard Textpattern input struct.
         $newfile = array(
-           'name' => $file['name'],
+           'name' => $safeFile,
            'error' => false,
-           'tmp_name' => $tempImageFolder . $file['name']
-        );
-        $id = image_data($newfile, false, 0, false)[1]; //Move the file and input into database
-        $ext = end(explode('.', $file['name'])); //Get the uploaded filetype
-        
-        //case standardization
-        $id = strtolower($id);
-        $ext = strtolower($ext);
-           
-        //Jpeg standardization
-        if($ext == 'jpeg')
-            $ext = 'jpg';
-        
-        //Return
-        $returnValue = array(
-            'url' => DS . get_pref('img_dir') . DS . $id . '.' . $ext
+           'tmp_name' => $tempImageFolder . $safeFile
         );
 
-        return $returnValue;
+        $ret = image_data($newfile, false, 0, false); // Move the file and input into database.
+
+        if (isset($ret[1]) && ($id = assert_int($ret[1]))) {
+            $ext = end(explode('.', $safeFile)); // Get the uploaded filetype.
+            $ext = strtolower($ext);
+
+            // Jpeg standardization.
+            if ($ext == 'jpeg') {
+                $ext = 'jpg';
+            }
+
+            $returnValue = array(
+                'url' => DS . get_pref('img_dir') . DS . $id . '.' . $ext
+            );
+
+            return $returnValue;
+        } else {
+            return new IXR_Error(205, gTxt('problem_adding_image'));
+        }
     }
 
     // Code refactoring for blogger_newPost and blogger_editPost.
