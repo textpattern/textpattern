@@ -6,6 +6,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Improved handling of theme import with invalid JSON manifest.
 * Fixed: Recursive <txp:yield> handling.
 * Fixed: Deleting images deletes corresponding thumbnails (thanks, wet).
+* Fixed: Don't assume exif_read_data() exists and works (thanks, towndock).
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Vendors: DOMPurify 3.4.7.
