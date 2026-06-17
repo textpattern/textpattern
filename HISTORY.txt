@@ -1,3 +1,5 @@
+Textpattern CMS 4.9.1
+
 Changes in 5.0.0 (upcoming)
 
 * Vendors: jQuery 4.0.0.
