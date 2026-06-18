@@ -393,7 +393,7 @@ function doDiagnostics()
             $s = md5(uniqid(rand(), true)) . '/?txpcleantest=1';
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = file(   'blah'.$s);
+            $pretext_data = file(hu . $s);
 
             if ($pretext_data) {
                 $pretext_req = trim(empty($pretext_data[0]) ? '' : $pretext_data[0]);
