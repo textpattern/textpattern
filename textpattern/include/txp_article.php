@@ -218,6 +218,7 @@ function article_save($write = true)
             $uPosted = $ts - tz_offset($ts);
         }
 
+        $uPosted = (int) $uPosted;
         $whenposted = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uPosted SECOND";
     }
 
@@ -262,6 +263,8 @@ function article_save($write = true)
         $uExpires = $oldArticle['sExpires'];
         $msg = array(gTxt('article_expires_before_postdate'), E_ERROR);
     }
+
+    $uExpires = (int) $uExpires;
 
     if ($uExpires) {
         $whenexpires = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uExpires SECOND";
