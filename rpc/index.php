@@ -80,28 +80,6 @@ if ($connected && numRows(safe_query("show tables like '" . PFX . "textpattern'"
     }
 
     $textarray = load_lang(LANG);
-
-// TODO: include txplib_html instead of duplicating?
-    // From txplib_html.php.
-    if (!defined('t')) {
-        define("t", "\t");
-    }
-
-    if (!defined('n')) {
-        define("n", "\n");
-    }
-
-    if (!defined('br')) {
-        define("br", "<br />");
-    }
-
-    if (!defined('sp')) {
-        define("sp", "&#160;");
-    }
-
-    if (!defined('a')) {
-        define("a", "&#38;");
-    }
 }
 
 require_once txpath . '/lib/txplib_wrapper.php';

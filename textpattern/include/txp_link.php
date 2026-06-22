@@ -227,7 +227,7 @@ function link_list($message = '')
         $rs = safe_query(
             "SELECT
                 txp_link.id,
-                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_link.date) AS uDate,
+                TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', txp_link.date) AS uDate,
                 txp_link.category,
                 txp_link.url,
                 txp_link.linkname,
@@ -390,7 +390,7 @@ function link_edit($message = '')
 
     if ($is_edit) {
         $id = assert_int($id);
-        $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS date", 'txp_link', "id = '$id'");
+        $rs = safe_row("*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', date) AS date", 'txp_link', "id = '$id'");
 
         if ($rs) {
             extract($rs);
@@ -542,7 +542,7 @@ function link_save()
     $created = "NOW()";
 
     if (!$publish_now && $created_ts !== false) {
-        $created = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $created_ts SECOND";
+        $created = "'".UNIXTIME_ZERO."' + INTERVAL $created_ts SECOND";
     }
 
     $constraints = array(

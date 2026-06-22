@@ -4016,7 +4016,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4652,7 +4652,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)";
+            $from = "('".UNIXTIME_ZERO."' + INTERVAL $start SECOND)";
         }
 
         if ($time === 'since') {
@@ -4667,8 +4667,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)" :
-                "$safe_field BETWEEN (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND) AND (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $stop SECOND)"
+                "$safe_field = ('".UNIXTIME_ZERO."' + INTERVAL $start SECOND)" :
+                "$safe_field BETWEEN ('".UNIXTIME_ZERO."' + INTERVAL $start SECOND) AND ('".UNIXTIME_ZERO."' + INTERVAL $stop SECOND)"
             );
         }
     }
@@ -5062,7 +5062,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS posted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS posted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS expires",
         'textpattern',
         "ID = $id"
     );

@@ -1900,6 +1900,19 @@ eod;
 }
 
 /**
+  * FROM_UNIXTIME(0) patch for some MySQL/MariaDB versions that don't support it
+  *
+  * @since   4.9.2
+  */
+if (!defined('UNIXTIME_ZERO')) {
+    $UNIXTIME_ZERO = getThing('SELECT FROM_UNIXTIME(0)')
+    or $UNIXTIME_ZERO = getThing('SELECT FROM_UNIXTIME(1) - INTERVAL 1 SECOND')
+    or $UNIXTIME_ZERO = '1970-01-01 00:00:00';
+
+    define('UNIXTIME_ZERO', $UNIXTIME_ZERO);
+}
+
+/**
  * Replacement for SQL NOW()
  *
  * This function can be used when constructing SQL SELECT queries as a
@@ -1935,12 +1948,12 @@ function now($type, $update = false)
         if ($time > $now or $update) {
             $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
-            $now = safe_field('TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), '.$type.') as utime', $table, $where);
+            $now = safe_field('TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", '.$type.') as utime', $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }
     }
 
-    return "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $now SECOND)";
+    return "('".UNIXTIME_ZERO."' + INTERVAL $now SECOND)";
 }

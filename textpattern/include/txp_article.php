@@ -146,9 +146,9 @@ function article_save($write = true)
     if ($incoming['ID']) {
         $oldArticle = safe_row(
             "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod, LastModID,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires",
+            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod, LastModID,
+            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS sPosted,
+            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS sExpires",
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -219,7 +219,7 @@ function article_save($write = true)
         }
 
         $uPosted = (int) $uPosted;
-        $whenposted = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uPosted SECOND";
+        $whenposted = "'".UNIXTIME_ZERO."' + INTERVAL $uPosted SECOND";
     }
 
     // Set and validate expiry timestamp.
@@ -267,7 +267,7 @@ function article_save($write = true)
     $uExpires = (int) $uExpires;
 
     if ($uExpires) {
-        $whenexpires = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uExpires SECOND";
+        $whenexpires = "'".UNIXTIME_ZERO."' + INTERVAL $uExpires SECOND";
     } else {
         $whenexpires = "NULL";
     }
@@ -705,9 +705,9 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod",
+            "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS sPosted,
+            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS sExpires,
+            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod",
             'textpattern',
             "ID = $ID"
         );
@@ -727,7 +727,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {
@@ -1167,7 +1167,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) OR Posted = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir ('".UNIXTIME_ZERO."' + INTERVAL $sPosted SECOND) OR Posted = ('".UNIXTIME_ZERO."' + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 
