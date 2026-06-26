@@ -202,7 +202,7 @@ function article_save($write = true)
 
     // Set and validate article timestamp.
     if ($publish_now || $reset_time) {
-        $whenposted = "NOW()";
+//        $whenposted = "NOW()";
         $uPosted = time();
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -217,10 +217,10 @@ function article_save($write = true)
         } else {
             $uPosted = $ts - tz_offset($ts);
         }
-
-        $uPosted = (int) $uPosted;
-        $whenposted = "'".UNIXTIME_ZERO."' + INTERVAL $uPosted SECOND";
     }
+
+    $uPosted = (int) $uPosted;
+    $whenposted = "'".UNIXTIME_ZERO."' + INTERVAL $uPosted SECOND";
 
     // Set and validate expiry timestamp.
     if ($expire_now) {
