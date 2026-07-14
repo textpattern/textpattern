@@ -145,8 +145,8 @@ function article_save($write = true)
 
     if ($incoming['ID']) {
         $oldArticle = safe_row(
-            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt, LastModID,".
-            txp_timestamp(array('LastMod' => 'sLastMod', 'Posted' => 'sPosted', 'Expires' => 'sExpires')),
+            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt, LastModID, UNIX_TIMESTAMP(LastMod) AS sLastMod, ".
+            txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -700,7 +700,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, " . txp_timestamp(array('LastMod' => 'sLastMod', 'Posted' => 'sPosted', 'Expires' => 'sExpires')),
+            "*, UNIX_TIMESTAMP(LastMod) AS sLastMod, " . txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern',
             "ID = $ID"
         );
@@ -720,7 +720,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field(txp_timestamp(array('LastMod' => 'sLastMod')), 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {

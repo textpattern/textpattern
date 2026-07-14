@@ -1912,6 +1912,7 @@ function txp_timestamp($field, $alias = null)
         return "COALESCE(NULLIF(UNIX_TIMESTAMP($field), 0), TIMESTAMPDIFF( SECOND, '1970-01-01 00:00:00', CONVERT_TZ($field, @@session.time_zone, '+00:00') ))" .
             ($alias ? " AS $alias" : '');
     }
+
     $out = array();
 
     foreach ($field as $f => $a) {
@@ -1926,7 +1927,7 @@ function txp_unixtime($ts, $alias = null)
 {
     $ts = intval($ts);
 
-    return "COALESCE(FROM_UNIXTIME($ts), CONVERT_TZ( DATE_ADD('1970-01-01 00:00:00', INTERVAL $ts SECOND), '+00:00', @@session.time_zone)) " .
+    return "COALESCE(FROM_UNIXTIME($ts), CONVERT_TZ(DATE_ADD('1970-01-01 00:00:00', INTERVAL $ts SECOND), '+00:00', @@session.time_zone))" .
         ($alias ? " AS $alias" : '');
 }
 

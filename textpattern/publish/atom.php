@@ -172,7 +172,7 @@ function atom()
 
         $rs = safe_rows_start(
             "*,
-            ID AS thisid, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+            ID AS thisid, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
             'textpattern',
             $where . " ORDER BY uPosted DESC LIMIT $limit"
         );

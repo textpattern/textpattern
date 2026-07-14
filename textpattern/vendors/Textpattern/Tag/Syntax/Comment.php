@@ -107,7 +107,7 @@ class Comment
         extract(lAtts(array('form' => 'comments_display'), $atts));
     
         $rs = safe_row(
-            "*, " . txp_timestamp(array('Posted' => 'uPosted', 'LastMod' => 'uLastMod', 'Expires' => 'uExpires')),
+            "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
             'textpattern',
             "ID=".intval(gps('parentid'))." AND Status >= 4"
         );

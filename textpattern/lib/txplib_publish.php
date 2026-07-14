@@ -232,7 +232,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
     $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
-    $columns = isset($atts['*']) ? $atts['*'] : '*, ' . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod'));
+    $columns = isset($atts['*']) ? $atts['*'] : '*, UNIX_TIMESTAMP(LastMod) AS uLastMod, ' . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires'));
 
     $q = array(
         "SELECT $columns FROM $tables",
@@ -649,7 +649,7 @@ function ckCat($type, $val, $debug = false)
 function ckExID($val, $debug = false)
 {
     return safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug
     );
@@ -676,7 +676,7 @@ function ckExID($val, $debug = false)
 function lookupByTitle($val, $debug = false)
 {
     $res = safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
@@ -706,7 +706,7 @@ function lookupByTitle($val, $debug = false)
 function lookupByTitleSection($val, $section, $debug = false)
 {
     $res = safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -727,7 +727,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 function lookupByIDSection($id, $section, $debug = false)
 {
     $res = safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -747,7 +747,7 @@ function lookupByIDSection($id, $section, $debug = false)
 function lookupByID($id, $debug = false)
 {
     return safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "ID = ".intval($id)." LIMIT 1", $debug
     );
@@ -773,7 +773,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     }
 
     $res = safe_row(
-        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
+        "*, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
         'textpattern',
         "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
@@ -916,7 +916,7 @@ function filterAtts($atts = null, $iscustom = null)
     $coreColumns = array(
         'posted'   => txp_timestamp(array('Posted' => 'uPosted')),
         'expires'  => txp_timestamp(array('Expires' => 'uExpires')),
-        'modified' => txp_timestamp(array('LastMod' => 'uLastMod')),
+        'modified' => 'UNIX_TIMESTAMP(LastMod) AS uLastMod',
     ) + article_column_map();
 
     foreach ($windowed + $coreColumns as $field => $val) {
