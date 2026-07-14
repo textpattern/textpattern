@@ -99,7 +99,7 @@ function image_list($message = '')
             'class' => 'name',
         ),
         'uDate' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", txp_image.date)',
+            'column' => txp_timestamp('txp_image.date'),
             'label' => 'date',
             'class'  => 'date',
         ),
@@ -686,7 +686,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, " . txp_timestamp(array('date' => 'uDate')), 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1202,7 +1202,7 @@ function image_save()
         $created = "NOW()";
     } else {
         $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-        $created = $created_ts === false ? false : "'".UNIXTIME_ZERO."' + INTERVAL $created_ts SECOND";
+        $created = $created_ts === false ? false : txp_unixtime($created_ts);
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));

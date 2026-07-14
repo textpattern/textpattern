@@ -143,7 +143,7 @@ class Link
             ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
         );
     
-        $rs = safe_rows_start("*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', date) AS uDate", 'txp_link', join(' ', $qparts));
+        $rs = safe_rows_start("*, " . txp_timestamp(array('date' => 'uDate')), 'txp_link', join(' ', $qparts));
         $out = parseList($rs, $thislink, function($a) {
             global $thislink;
             $thislink = $a;

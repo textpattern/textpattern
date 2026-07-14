@@ -278,8 +278,7 @@ function file_list($message = '', $ids = array())
                 txp_file.title,
                 txp_file.category,
                 txp_file.description,
-                TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', txp_file.created) AS uDate,
-                TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', txp_file.modified) AS mDate,
+                " . txp_timestamp(array('txp_file.created' => 'uDate', 'txp_file.modified' => 'mDate')) . ",
                 txp_file.downloads,
                 txp_file.status,
                 txp_file.author,
@@ -672,7 +671,7 @@ function file_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', created) AS created, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', modified) AS modified", 'txp_file', "id = '$id'");
+    $rs = safe_row("*, " . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1238,7 +1237,7 @@ function file_save()
         $created = "NOW()";
     } else {
         $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-        $created = $created_ts === false ? false : "'".UNIXTIME_ZERO."' + INTERVAL $created_ts SECOND";
+        $created = $created_ts === false ? false : txp_unixtime($created_ts);
     }
 
     $size = file_exists($new_path) ? filesize($new_path) : $rs['size'];

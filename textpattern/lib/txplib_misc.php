@@ -4016,7 +4016,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field(txp_timestamp('Posted'), 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4644,7 +4644,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
     } elseif ($time && strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
         $offset = date('P', $start);
-        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."'";
     } else {
         $start = $month ? strtotime($month) : false;
 
@@ -4652,7 +4652,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "('".UNIXTIME_ZERO."' + INTERVAL $start SECOND)";
+            $from = txp_unixtime($start);
         }
 
         if ($time === 'since') {
@@ -4667,8 +4667,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = ('".UNIXTIME_ZERO."' + INTERVAL $start SECOND)" :
-                "$safe_field BETWEEN ('".UNIXTIME_ZERO."' + INTERVAL $start SECOND) AND ('".UNIXTIME_ZERO."' + INTERVAL $stop SECOND)"
+                "$safe_field = ".txp_unixtime($start) :
+                "$safe_field BETWEEN ".txp_unixtime($start) ." AND ".txp_unixtime($stop)
             );
         }
     }
@@ -5062,7 +5062,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS posted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2," . txp_timestamp(array('Posted' => 'posted','Expires' => 'expires')),
         'textpattern',
         "ID = $id"
     );

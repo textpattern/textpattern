@@ -86,10 +86,8 @@ function filterFrontPage($field = 'Section', $column = array('on_frontpage'), $n
  * @param array $rs An article as an associative array
  * @param bool  $all Rewrite all data
  * @example
- * if ($rs = safe_rows_start("*,
- *     TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Posted) AS uPosted,
- *     TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Expires) AS uExpires,
- *     TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", LastMod) AS uLastMod",
+ * if ($rs = safe_rows_start("*, " .
+ *     txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires' ,'LastMod' => 'uLastMod')),
  *     'textpattern',
  *     "1 = 1"
  * ))
@@ -234,7 +232,7 @@ function getNeighbour($threshold, $s, $type, $atts = array(), $threshold_type = 
 
     $where = isset($atts['?']) ? $atts['?'] : '1';
     $tables = isset($atts['#']) ? $atts['#'] : safe_pfx('textpattern');
-    $columns = isset($atts['*']) ? $atts['*'] : '*, TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Posted) AS uPosted, TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Expires) AS uExpires, TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", LastMod) AS uLastMod';
+    $columns = isset($atts['*']) ? $atts['*'] : '*, ' . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod'));
 
     $q = array(
         "SELECT $columns FROM $tables",
@@ -304,13 +302,13 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
         // Attributes with special treatment.
         switch ($atts['sortby']) {
             case 'Posted':
-                $threshold = "('".UNIXTIME_ZERO."' + INTERVAL ".intval($thisarticle['posted'])." SECOND)";
+                $threshold = txp_unixtime($thisarticle['posted']);
                 break;
             case 'Expires':
-                $threshold = "('".UNIXTIME_ZERO."' + INTERVAL ".intval($thisarticle['expires'])." SECOND)";
+                $threshold = txp_unixtime($thisarticle['expires']);
                 break;
             case 'LastMod':
-                $threshold = "('".UNIXTIME_ZERO."' + INTERVAL ".intval($thisarticle['modified'])." SECOND)";
+                $threshold = txp_unixtime($thisarticle['modified']);
                 break;
             default:
                 // Retrieve current threshold value per sort column from $thisarticle.
@@ -342,7 +340,7 @@ function getNextPrev($id = 0, $threshold = null, $s = '')
 
 function lastMod()
 {
-    $last = safe_field("TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', val)", 'txp_prefs', "name = 'lastmod'");
+    $last = safe_field(txp_timestamp('val'), 'txp_prefs', "name = 'lastmod'");
 
     return gmdate("D, d M Y H:i:s \G\M\T", $last);
 }
@@ -651,7 +649,7 @@ function ckCat($type, $val, $debug = false)
 function ckExID($val, $debug = false)
 {
     return safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "ID = ".intval($val)." AND Status >= 4 LIMIT 1", $debug
     );
@@ -678,7 +676,7 @@ function ckExID($val, $debug = false)
 function lookupByTitle($val, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "url_title = '".doSlash($val)."' LIMIT 1", $debug
     );
@@ -708,7 +706,7 @@ function lookupByTitle($val, $debug = false)
 function lookupByTitleSection($val, $section, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "url_title = '".doSlash($val)."' AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -729,7 +727,7 @@ function lookupByTitleSection($val, $section, $debug = false)
 function lookupByIDSection($id, $section, $debug = false)
 {
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "ID = ".intval($id)." AND Section = '".doSlash($section)."' LIMIT 1", $debug
     );
@@ -749,7 +747,7 @@ function lookupByIDSection($id, $section, $debug = false)
 function lookupByID($id, $debug = false)
 {
     return safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "ID = ".intval($id)." LIMIT 1", $debug
     );
@@ -775,7 +773,7 @@ function lookupByDateTitle($when, $title, $debug = false)
     }
 
     $res = safe_row(
-        "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS uPosted, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS uExpires, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS uLastMod",
+        "*, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires', 'LastMod' => 'uLastMod')),
         'textpattern',
         "url_title = '".doSlash($title)."' AND $dateClause LIMIT 1"
     );
@@ -916,10 +914,10 @@ function filterAtts($atts = null, $iscustom = null)
     }
 
     $coreColumns = array(
-        'posted'   => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Posted) AS uPosted',
-        'expires'  => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Expires) AS uExpires',
-        'modified' => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", LastMod) AS uLastMod',
-        ) + article_column_map();
+        'posted'   => txp_timestamp(array('Posted' => 'uPosted')),
+        'expires'  => txp_timestamp(array('Expires' => 'uExpires')),
+        'modified' => txp_timestamp(array('LastMod' => 'uLastMod')),
+    ) + article_column_map();
 
     foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
@@ -1208,7 +1206,7 @@ function filterAtts($atts = null, $iscustom = null)
                 }
 
                 if (isset($date_fields[$field])) {
-                    $what['u'.$field] = 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", '.$what[$field].')';
+                    $what['u'.$field] = txp_timestamp($what[$field]);
                     $alias['u'.$field] = " AS `u{$column}`";
                 }
             }

@@ -145,10 +145,8 @@ function article_save($write = true)
 
     if ($incoming['ID']) {
         $oldArticle = safe_row(
-            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
-            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod, LastModID,
-            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS sExpires",
+            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt, LastModID,".
+            txp_timestamp(array('LastMod' => 'sLastMod', 'Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -202,7 +200,7 @@ function article_save($write = true)
 
     // Set and validate article timestamp.
     if ($publish_now || $reset_time) {
-//        $whenposted = "NOW()";
+        $whenposted = "NOW()";
         $uPosted = time();
     } else {
         if (!is_numeric($year) || !is_numeric($month) || !is_numeric($day) || !is_numeric($hour) || !is_numeric($minute) || !is_numeric($second)) {
@@ -217,10 +215,9 @@ function article_save($write = true)
         } else {
             $uPosted = $ts - tz_offset($ts);
         }
-    }
 
-    $uPosted = (int) $uPosted;
-    $whenposted = "'".UNIXTIME_ZERO."' + INTERVAL $uPosted SECOND";
+        $whenposted = txp_unixtime($uPosted);
+    }
 
     // Set and validate expiry timestamp.
     if ($expire_now) {
@@ -264,10 +261,8 @@ function article_save($write = true)
         $msg = array(gTxt('article_expires_before_postdate'), E_ERROR);
     }
 
-    $uExpires = (int) $uExpires;
-
     if ($uExpires) {
-        $whenexpires = "'".UNIXTIME_ZERO."' + INTERVAL $uExpires SECOND";
+        $whenexpires = txp_unixtime($uExpires);
     } else {
         $whenexpires = "NULL";
     }
@@ -705,9 +700,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', Expires) AS sExpires,
-            TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod",
+            "*, " . txp_timestamp(array('LastMod' => 'sLastMod', 'Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern',
             "ID = $ID"
         );
@@ -727,7 +720,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, '".UNIXTIME_ZERO."', LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field(txp_timestamp(array('LastMod' => 'sLastMod')), 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {
@@ -1167,7 +1160,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir ('".UNIXTIME_ZERO."' + INTERVAL $sPosted SECOND) OR Posted = ('".UNIXTIME_ZERO."' + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir ".txp_unixtime($sPosted)." OR Posted = ".txp_unixtime($sPosted)." AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 

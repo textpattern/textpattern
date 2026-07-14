@@ -100,17 +100,17 @@ function list_list($message = '', $post = '')
             'class' => 'title',
         ),
         'posted' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Posted)',
+            'column' => txp_timestamp('posted'),
             'label'  => 'posted',
             'class'  => 'posted date',
         ),
         'lastmod' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", LastMod)',
+            'column' => txp_timestamp('LastMod'),
             'label'  => 'modified',
             'class'  => 'lastmod date',
         ),
         'expires' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, "'.UNIXTIME_ZERO.'", Expires)',
+            'column' => txp_timestamp('Expires'),
             'label'  => 'expires',
             'class'  => 'expires date',
         ),
