@@ -12,9 +12,9 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 * Fixed: Recursive use of <txp:yield>.
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
-* Fixed: Patched FROM_UNIXTIME(0) on some MySQL/MariaDB versions.
-* Fixed: Improved handling of exif_read_data() (thanks, towndock).
-* Fixed: Improved handling of theme import with invalid JSON manifest.
+* Fixed: Improved FROM_UNIXTIME(0) on some MySQL/MariaDB versions.
+* Fixed: Improved exif_read_data() (thanks, towndock).
+* Fixed: Theme import with invalid JSON manifest.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Vendors: DOMPurify 3.4.12.
