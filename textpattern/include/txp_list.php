@@ -100,17 +100,17 @@ function list_list($message = '', $post = '')
             'class' => 'title',
         ),
         'posted' => array(
-            'column' => txp_timestamp('posted'),
+            'column' => txp_timestamp('textpattern.Posted'),
             'label'  => 'posted',
             'class'  => 'posted date',
         ),
         'lastmod' => array(
-            'column' => txp_timestamp('LastMod'),
+            'column' => 'UNIX_TIMESTAMP(textpattern.LastMod)',
             'label'  => 'modified',
             'class'  => 'lastmod date',
         ),
         'expires' => array(
-            'column' => txp_timestamp('Expires'),
+            'column' => txp_timestamp('textpattern.Expires'),
             'label'  => 'expires',
             'class'  => 'expires date',
         ),
