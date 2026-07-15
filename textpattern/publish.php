@@ -524,7 +524,7 @@ function preText($store, $prefs = null)
                         }
 
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch ($permlink_guess ? $permlink_guess : $permlink_mode) {
+                        switch ($permlink_guess ?: $permlink_mode) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -577,7 +577,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2) || $trailing_slash < 0 && isset($permlink_modes[$u1])) {
+                                if ((isset($u2) || $trailing_slash < 0) && isset($permlink_modes[$u1])) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
