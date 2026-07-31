@@ -38,7 +38,7 @@ class Tag implements UIInterface
      * @var array
      */
 
-    static $flags = null;
+    protected $flags = null;
 
     /**
      * The tag name.
@@ -107,11 +107,19 @@ class Tag implements UIInterface
 
     public function __construct($tag)
     {
-        if (self::$flags === null) {
-            self::$flags['boolean'] = 'html5';
-            self::$flags['self-closing'] = 'html5';
-            self::$flags['break'] = '';
-            self::$flags['break-on'] = '';
+        if ($this->flags === null) {
+            $this->flags['boolean'] = 'html5';
+            $this->flags['self-closing'] = 'html5';
+            $this->flags['break'] = '';
+            $this->flags['break-on'] = '';
+
+            if (preg_match('/^\w[\w\-\.\:]*$/', $tag)) {
+                $this->flags['tagtype'] = 'string';
+            } elseif (strpos($tag, '<+>') === false) {
+                $this->flags['tagtype'] = 'raw';
+            } else {
+                $this->flags['tagtype'] = 'placeholder';
+            }
         }
 
         $this->setTag($tag);
@@ -282,7 +290,7 @@ class Tag implements UIInterface
 
         $props = array('format' => 'bool');
 
-        if (self::$flags['boolean'] === 'html5') {
+        if ($this->flags['boolean'] === 'html5') {
             $props['strip'] = TEXTPATTERN_STRIP_TXP;
         }
 
@@ -320,7 +328,7 @@ class Tag implements UIInterface
         }
 
         foreach ($flag as $key => $val) {
-            self::$flags[$key] = $val;
+            $this->flags[$key] = $val;
         }
 
         return $this;
@@ -433,8 +441,8 @@ class Tag implements UIInterface
 
     public function getBreak()
     {
-        $breaklist = (empty(self::$flags['break-on'])) ? array() : do_list(self::$flags['break-on']);
-        $break = (empty($breaklist) || in_array($this->tag, $breaklist)) ? self::$flags['break'] : '';
+        $breaklist = (empty($this->flags['break-on'])) ? array() : do_list($this->flags['break-on']);
+        $break = (empty($breaklist) || in_array($this->tag, $breaklist)) ? $this->flags['break'] : '';
         $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : $break;
 
         return $break;
@@ -454,14 +462,16 @@ class Tag implements UIInterface
     /**
      * Render the given content as an XML-style element.
      *
-     * @param  string $option To affect the flavour of tag returned - complete, self-closing, open, close, content
+     * @param  string $option To affect the flavour of tag returned - complete, self-closing, open, close, content, replace (placeholder)
      * @return string HTML
      */
 
     public function render($option = null)
     {
         if ($option === null) {
-            if (empty($this->tag)) {
+            if ($this->flags['tagtype'] === 'placeholder') {
+                $option = 'replace';
+            } elseif (empty($this->tag)) {
                 $option = 'content';
             } elseif ($this->content !== null) {
                 $option = 'complete';
@@ -474,16 +484,19 @@ class Tag implements UIInterface
 
         switch ($option) {
             case 'complete':
-                $out = '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>'.$break;
+                $out = ($this->flags['tagtype'] === 'string' ? '<'.$this->tag.$this->atts->render().'>'.$this->content.'</'.$this->tag.'>' : $this->tag.$this->content.$this->tag).$break;
                 break;
             case 'self-closing':
-                $out = '<'.$this->tag.$this->atts->render().(self::$flags['self-closing'] === 'html5' ? '>' : ' />').$break;
+                $out = '<'.$this->tag.$this->atts->render().($this->flags['self-closing'] === 'html5' ? '>' : ' />').$break;
                 break;
             case 'open':
-                $out = '<'.$this->tag.$this->atts->render().'>';
+                $out = $this->flags['tagtype'] === 'string' ? '<'.$this->tag.$this->atts->render().'>' : $this->tag;
                 break;
             case 'close':
-                $out = '</'.$this->tag.'>'.$break;
+                $out = ($this->flags['tagtype'] === 'string' ? '</'.$this->tag.'>' : $this->tag).$break;
+                break;
+            case 'replace':
+                $out = str_replace('<+>', $this->content, $this->tag);
                 break;
             case 'content':
             default:
