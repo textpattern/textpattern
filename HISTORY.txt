@@ -1188,7 +1188,7 @@ Changes in 4.2.0 (17 Sep 2009)
 * Fixed: Tag builders for <txp:category /> and <txp:section />.
 * Fixed: Bogus "Article tags cannot be used outside an article context" warning
   in <txp:else />-branch of <txp:if_keywords>.
-* Fixed: Removed superflous &amp; encoding for article titles in
+* Fixed: Removed superfluous &amp; encoding for article titles in
   <txp:recent_comments />.
 * Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended.
 * New tag: <txp:link_id /> (thanks: Rick Silletti).
