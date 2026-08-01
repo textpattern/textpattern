@@ -33,7 +33,7 @@
     /* layout */
     --txp-spacing: 1em;  /* space between blocks, as margin, padding or gap. use calc() to adjust depending on need, eg @calc(var(—margin) * 0.5)@ for smaller or larger spacing */
 
-    /* Code hightlight */
+    /* Code highlight */
     --txp-prism-token-1: light-dark(#708090, #ccc);
     --txp-prism-token-2: light-dark(#905, #e2777a);
     --txp-prism-token-3: light-dark(#690, #a6e22e);
