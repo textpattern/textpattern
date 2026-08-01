@@ -1068,7 +1068,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="section_default" title="Default publishing section"><![CDATA[
 <h2>Default publishing section</h2>
-<p>This option governs which section will be pre-selected in the Section menu when creating a new article on the ‘Write’ panel.</p>
+<p>This option governs which section will be preselected in the Section menu when creating a new article on the ‘Write’ panel.</p>
 <p>If most of your articles end up belonging to a particular section, select it from the list here. Changes will be reflected immediately.</p>
 <p>You can override this on a per-article basis in the ‘Write’ panel by selecting a different section in the ‘Sort and display’ pane.</p>
         ]]></item>
