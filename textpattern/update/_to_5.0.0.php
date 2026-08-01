@@ -94,7 +94,7 @@ safe_create(
 // using Textpattern\Meta\Field() to instantiate one "new field"
 // per existing cutom_N, then calling ->save() on it with the
 // data populated from each existing custom_N column. The save()
-// rountine is responsible for creating the value tables for
+// routine is responsible for creating the value tables for
 // data types it doesn't already have so, providing the glz_cf
 // datatypes can be mapped to internal types via a tiny plugin
 // on the dataTypes callback, all CF data may possibly be migrated.
