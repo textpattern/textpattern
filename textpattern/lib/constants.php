@@ -857,7 +857,7 @@ define('INTEGRITY_MD5', 0x2);
 /**
  * Return integrity hashes using the current CHECKSUM_ALGORITHM.
  *
- * Replaces INTEGRITY_MD5 (and has the same value so can be used interchangably).
+ * Replaces INTEGRITY_MD5 (and has the same value so can be used interchangeably).
  *
  * @since   4.9.0
  * @package Debug
