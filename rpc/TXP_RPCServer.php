@@ -192,7 +192,7 @@ class TXP_RPCServer extends IXR_IntrospectionServer
                 'mt.supportedTextFilters',
                 'this:mt_supportedTextFilters',
                 array('array'),
-                'return the format filters suported by the server.'
+                'return the format filters supported by the server.'
             );
             $this->addCallback(
                 'mt.getPostCategories',
