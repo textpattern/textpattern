@@ -1068,7 +1068,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="section_default" title="Default nga seksyon sa pagmantala"><![CDATA[
 <h2>Default nga seksyon sa pagmantala</h2>
-<p>Kini nga opsyon nagdumala kon asa nga seksyon ang pre-selected sa Section menu sa dihang naghimo og bag-ong artikulo sa ‘Write’ panel.</p>
+<p>Kini nga opsyon nagdumala kon asa nga seksyon ang preselected sa Section menu sa dihang naghimo og bag-ong artikulo sa ‘Write’ panel.</p>
 <p>Kon kadaghanan sa imong mga artikulo mahuman nga sakop sa piho nga seksyon, pili-a kini gikan sa lista dinhi. Ang mga kausaban makita dayon.</p>
 <p>Mahimo nimong i-override kini sa matag artikulo sa ‘Write’ panel pinaagi sa pagpili og lain nga seksyon sa ‘Sort and display’ nga pane.</p>
         ]]></item>

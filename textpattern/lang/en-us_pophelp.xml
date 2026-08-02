@@ -149,7 +149,7 @@
 <li><strong>Live</strong>: typically viewable outside the Textpattern administration area (i.e. visible on the website, syndicated in feeds if the preference permits). If an article is live and has an expiration date, the status will remain Live after that date has been reached, but the article only appears outside the administration area if expired articles are permitted to be published.</li>
 <li><strong>Sticky</strong>: similar to a <strong>Live</strong> article insofar as it can be viewed by website visitors, but will <strong>not</strong> appear in article lists unless the respective <code>article</code> or <code>article_custom</code> tag includes a <code>status</code> attribute with a <code>sticky</code> value.</li>
 </ul>
-<p>Note: content that is not publicly viewable on the website may still be previewd by logged-in users.</p>
+<p>Note: content that is not publicly viewable on the website may still be previewed by logged-in users.</p>
         ]]></item>
         <item id="title" title="Title"><![CDATA[
 <h2>Title</h2>
