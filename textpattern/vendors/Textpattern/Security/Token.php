@@ -124,7 +124,7 @@ class Token implements \Textpattern\Container\ReusableInterface
         }
 
         // Validate token.
-        if (gps('_txp_token') === $this->csrf()) {
+        if (hash_equals($this->csrf(), gps('_txp_token'))) {
             return true;
         }
 
