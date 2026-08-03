@@ -12,7 +12,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Theme import with invalid JSON manifest.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
-* Vendors: DOMPurify 3.4.12.
+* Vendors: DOMPurify 3.4.13.
 
 Changes in 4.9.1 (14 Feb 2026)
 
