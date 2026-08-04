@@ -1721,10 +1721,11 @@ function asyncHref($item, $parms, $atts = '')
     global $event, $step;
 
     $parms = lAtts(array(
-        'event'    => $event,
-        'step'     => $step,
-        'thing'    => '',
-        'property' => '',
+        'event'      => $event,
+        'step'       => $step,
+        'thing'      => '',
+        'property'   => '',
+        '_txp_token' => form_token(),
     ), $parms);
 
     $class = $parms['step'].' async';

@@ -602,14 +602,12 @@ function sendAsyncEvent(data, fn, format) {
 
     if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&' + $.param({app_mode: 'async', _txp_token: textpattern._txp_token});
+        data = data + '&' + $.param({app_mode: 'async'});
     } else if (data instanceof FormData) {
         formdata = true;
         data.append('app_mode', 'async');
-        data.append('_txp_token', textpattern._txp_token);
     } else {
         data.app_mode = 'async';
-        data._txp_token = textpattern._txp_token;
     }
 
     return formdata ? $.ajax({
@@ -2130,9 +2128,6 @@ textpattern.Route.add('article', function () {
             name: 'app_mode',
             value: 'async'
         },{
-            name: '_txp_token',
-            value: textpattern._txp_token
-        },{
             name: 'preview',
             value: $field
         },{
@@ -3085,7 +3080,7 @@ $(function () {
     // Attach multi-edit form.
     $('.multi_edit_form').txpMultiEditForm();
     $('table.txp-list').txpColumnize();
-    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?' + $.param({logout: 1, lang: textpattern.prefs.language_ui, _txp_token: textpattern._txp_token}));
+    $('a.txp-logout, .txp-logout a').attr('href', 'index.php?' + $.param({logout: 1, lang: textpattern.prefs.language_ui}));
 
     // Initialize panel specific JavaScript.
     textpattern.Route.init();

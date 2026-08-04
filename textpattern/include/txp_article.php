@@ -415,7 +415,7 @@ function article_preview($field = false)
         $id = intval(ps('ID'));
         $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
         ksort($data);
-        $data['id'] = $id . '.' . $token->csrf($txp_user) . $token->csrf(json_encode($data));
+        $data['id'] = $id . '.' . $token->csrf($txp_user, '') . $token->csrf(json_encode($data), '');
         $opts = array(
             'method' => "POST",
             'header' => [
@@ -1530,6 +1530,7 @@ function article_partial_actions($rs)
     hInput('sLastMod', $rs['sLastMod']) .
     hInput('AuthorID', $rs['AuthorID']) .
     hInput('LastModID', $rs['LastModID']) . n .
+    hInput('_txp_token', form_token()) . n .
     $push_button .
     graf(article_partial_article_clone($rs) . article_partial_article_view($rs), array('class' => 'txp-actions')) . n .
     '</div>';
@@ -1821,7 +1822,7 @@ function article_partial_article_view($rs)
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
     } elseif (has_privs('article.preview')) {
-        $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
+        $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user, '')) : false; // Article ID plus token.
     } else {
         return;
     }

@@ -141,7 +141,6 @@ Txp::get('\Textpattern\UI\Script')->setSource('vendors/cure53/DOMPurify/purify.j
         '_txp_uid' => get_pref('blog_uid'),
         'event' => $event,
         'step' => $step,
-        '_txp_token' => form_token(),
         'ajax_timeout' => (int) AJAX_TIMEOUT,
         'prefs' => array(
             'max_file_size' => $file_max_upload_size,

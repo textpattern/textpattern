@@ -42,13 +42,13 @@ class Token implements \Textpattern\Container\ReusableInterface
      * @return string CSRF token
      */
 
-    public function csrf($salt = null)
+    public function csrf($salt = null, $evt = null)
     {
         static $token = array(), $blog_uid = null, $nonce = null;
-        global $txp_user;
+        global $txp_user, $event;
 
         // Generate a ciphered token from the current user's nonce (thus valid for
-        // login time plus 30 days) and a pinch of salt from the blog UID.
+        // login time plus 30 days) and a pinch of salt from the blog UID and current panel.
 
         if (!isset($blog_uid)) {
             $blog_uid = get_pref('blog_uid');
@@ -58,12 +58,16 @@ class Token implements \Textpattern\Container\ReusableInterface
             $salt = $blog_uid;
         }
 
+        if (!isset($evt)) {
+            $evt = $event;
+        }
+
         if (!isset($nonce)) {
             $nonce = $txp_user ? safe_field("nonce", 'txp_users', "name = '".doSlash($txp_user)."'") : '';
         }
 
         if (!isset($token[$salt])) {
-            $token[$salt] = sha1($nonce.$salt);
+            $token[$salt] = substr(hash(HASHING_ALGORITHM, $nonce.$salt.$evt), 0, SALT_LENGTH);
         }
 
         return $token[$salt];
