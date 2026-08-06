@@ -739,7 +739,7 @@ function list_multi_edit()
                     $pid = $a['ID'];
                     $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
-                    $a['uid'] = md5(uniqid(rand(), true));
+                    $a['uid'] = hash(UID_HASHING_ALGORITHM, uniqid(rand(), true));
                     $a['AuthorID'] = $txp_user;
                     $a['LastModID'] = $txp_user;
                     $a['Status'] = ($a['Status'] >= STATUS_LIVE) ? STATUS_DRAFT : $a['Status'];

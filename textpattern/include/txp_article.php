@@ -328,7 +328,7 @@ function article_save($write = true)
             "AnnotateInvite"  => $AnnotateInvite
         ) + (!empty($ID) ? array() : array(
             "AuthorID"        => $txp_user,
-            "uid"             => md5(uniqid(rand(), true)),
+            "uid"             => hash(UID_HASHING_ALGORITHM, uniqid(rand(), true)),
         )) + $cfq;
 
         if (!$write) {
