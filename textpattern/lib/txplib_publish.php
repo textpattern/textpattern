@@ -177,6 +177,7 @@ function article_column_map()
             'excerpt'         => 'Excerpt_html',
             'override_form'   => 'override_form',
             'status'          => 'Status',
+            'uid'             => 'uid',
         );
 
         foreach (getCustomFields() as $i => $name) {
