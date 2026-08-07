@@ -60,6 +60,16 @@ function doAuth()
         }
     }
 
+    // Check that the request came from the same domain as the admin URL.
+    $ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ahu;
+    $dest = isset($_SERVER['HTTP_SEC_FETCH_DEST']) ? $_SERVER['HTTP_SEC_FETCH_DEST'] : '';
+    $mode = isset($_SERVER['HTTP_SEC_FETCH_MODE']) ? $_SERVER['HTTP_SEC_FETCH_MODE'] : '';
+
+    if (($dest !== 'document' || $mode !== 'navigate') && strpos($ref, ahu) !== 0) {
+        http_response_code(403);
+        exit;
+    }
+
     ob_start();
 }
 
