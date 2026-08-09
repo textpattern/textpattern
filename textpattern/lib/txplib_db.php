@@ -318,11 +318,7 @@ function safe_pfx($table)
     global $DB;
     $name = $DB->table_prefix.$table;
 
-    if (preg_match('@[^\w._$]@', $name)) {
-        return '`'.$name.'`';
-    }
-
-    return $name;
+    return '`'.$name.'`';
 }
 
 /**
@@ -356,11 +352,7 @@ function safe_pfx_j($table)
 
     foreach (explode(',', $table) as $t) {
         $name = $DB->table_prefix.trim($t);
-        if (preg_match('@[^\w._$]@', $name)) {
-            $ts[] = "`$name`".($DB->table_prefix ? " as `$t`" : '');
-        } else {
-            $ts[] = "$name".($DB->table_prefix ? " as $t" : '');
-        }
+        $ts[] = "`$name`".($DB->table_prefix ? " as `$t`" : '');
     }
 
     return join(', ', $ts);
