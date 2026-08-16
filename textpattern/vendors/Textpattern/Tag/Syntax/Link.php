@@ -143,13 +143,8 @@ class Link
             ($limit) ? 'LIMIT '.intval($pgoffset).', '.intval($limit) : '',
         );
     
-        $rs = safe_rows_start("*, " . txp_timestamp(array('date' => 'uDate')), 'txp_link', join(' ', $qparts));
-        $out = parseList($rs, $thislink, function($a) {
-            global $thislink;
-            $thislink = $a;
-            $thislink['date'] = $thislink['uDate'];
-            unset($thislink['uDate']);
-        }, compact('form', 'thing'));
+        $rs = safe_rows_start("*, " . txp_timestamp(array('date' => 'date')), 'txp_link', join(' ', $qparts));
+        $out = parseList($rs, $thislink, null, compact('form', 'thing'));
     
         return $out ? doWrap($out, $wraptag, $break, $class) : '';
     }

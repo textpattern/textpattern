@@ -443,9 +443,9 @@ class Image
         ));
 
         $rs = empty($extid) ?
-            safe_rows_start("*", 'txp_image', $qparts) :
+            safe_rows_start("*, " . txp_timestamp(array('date' => 'date')), 'txp_image', $qparts) :
             ($where ?
-                safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts) :
+                safe_rows_start("$extid UNION ALL SELECT *, " . txp_timestamp(array('date' => 'date')), 'txp_image', $qparts) :
                 safe_query("SELECT $extid $qparts")
             );
 

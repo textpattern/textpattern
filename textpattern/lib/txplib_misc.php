@@ -811,7 +811,7 @@ function imageFetchInfo($id = "", $name = "")
         return false;
     }
 
-    $rs = safe_row("*", 'txp_image', $where);
+    $rs = safe_row("*, " . txp_timestamp(array('date' => 'date')), 'txp_image', $where);
 
     if ($rs) {
         $id = (int) $rs['id'];
@@ -859,9 +859,7 @@ function image_format_info($image)
 {
     static $mimetypes;
 
-    if (($unix_ts = strtotime($image['date'])) > 0) {
-        $image['date'] = $unix_ts;
-    }
+    $image = format_date($image);
 
     if (!isset($mimetypes)) {
         $mimetypes = get_safe_image_types();
@@ -884,11 +882,7 @@ function image_format_info($image)
 
 function link_format_info($link)
 {
-    if (($unix_ts = strtotime($link['date'])) > 0) {
-        $link['date'] = $unix_ts;
-    }
-
-    return $link;
+    return format_date($link);
 }
 
 /**
@@ -3142,6 +3136,21 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     return number_format($bytes, $decimals, $sep_dec, $sep_thous).sp.gTxt('units_'.$units[$pow]);
 }
 
+function format_date($file, $fields = array('date' => 'date'))
+{
+    foreach ($fields as $field => $ufield) {
+        if (isset($file[$field])) {
+            $file[$ufield] = is_numeric($file[$field]) || (($unix_ts = strtotime($file[$field])) === false) ?
+                $file[$field] :
+                $unix_ts;
+        } else {
+            $file[$field] = null;
+        }
+    }
+
+    return $file;
+}
+
 /**
  * Gets a file download as an array.
  *
@@ -3157,13 +3166,7 @@ function format_filesize($bytes, $decimals = 2, $format = '')
 
 function fileDownloadFetchInfo($where)
 {
-    $rs = safe_row("*", 'txp_file', $where);
-
-    if ($rs) {
-        return file_download_format_info($rs);
-    }
-
-    return false;
+    return safe_row("*," . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where);
 }
 
 /**
@@ -3180,15 +3183,7 @@ function fileDownloadFetchInfo($where)
 
 function file_download_format_info($file)
 {
-    if (($unix_ts = strtotime($file['created'])) > 0) {
-        $file['created'] = $unix_ts;
-    }
-
-    if (($unix_ts = strtotime($file['modified'])) > 0) {
-        $file['modified'] = $unix_ts;
-    }
-
-    return $file;
+    return format_date($file, array('created' => 'created', 'modified' => 'modified'));
 }
 
 /**

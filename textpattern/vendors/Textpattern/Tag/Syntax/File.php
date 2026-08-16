@@ -162,8 +162,8 @@ class File
             ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
         );
     
-        $rs = safe_rows_start("*", 'txp_file', $where.' '.join(' ', $qparts));
-        $out = parseList($rs, $thisfile, 'file_download_format_info', compact('form', 'thing'));
+        $rs = safe_rows_start("*, " . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where.' '.join(' ', $qparts));
+        $out = parseList($rs, $thisfile, null, compact('form', 'thing'));
     
         return $out ? doWrap($out, $wraptag, compact('break', 'class')) : '';
     }

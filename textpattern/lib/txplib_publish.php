@@ -137,9 +137,7 @@ function populateArticleData($rs, $all = true)
 
 function article_format_info($rs, $all = true)
 {
-    $rs['uPosted'] = isset($rs['Posted']) && ($unix_ts = strtotime($rs['Posted'])) !== false ? $unix_ts : null;
-    $rs['uLastMod'] = isset($rs['LastMod']) && ($unix_ts = strtotime($rs['LastMod'])) !== false ? $unix_ts : null;
-    $rs['uExpires'] = isset($rs['Expires']) && ($unix_ts = strtotime($rs['Expires'])) !== false ? $unix_ts : null;
+    $rs = format_date($rs, array('Posted' => 'uPosted', 'LastMod' => 'uLastMod', 'Expires' => 'uExpires'));
     populateArticleData($rs, $all);
 }
 
@@ -1321,7 +1319,7 @@ function postpone_process($maxpass = null)
 
 // -------------------------------------------------------------
 
-function parseList($rs, &$object, $populate, $atts = array())
+function parseList($rs, &$object, $populate = null, $atts = array())
 {
     global $txp_atts, $txp_item, $txp_sections;
 
@@ -1362,7 +1360,7 @@ function parseList($rs, &$object, $populate, $atts = array())
 
         while ($count++ <= $last) {
             if ($a = nextRow($rs)) {
-                $res = call_user_func($populate, $a);
+                $res = $populate ? call_user_func($populate, $a) : $a;
 
                 if (is_array($res)) {
                     $object = $res;

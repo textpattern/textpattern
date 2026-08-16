@@ -639,9 +639,9 @@ function preText($store, $prefs = null)
             }
 
             $fn = empty($out['filename']) ? '' : " AND filename = '" . doSlash($out['filename']) . "'";
-            $rs = safe_row('*', 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
+            $rs = safe_row('*,' . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
 
-            $thisfile = $rs ? file_download_format_info($rs) : null;
+            $thisfile = $rs ?: null;
         }
 
         $is_404 = $is_404 || empty($rs);
