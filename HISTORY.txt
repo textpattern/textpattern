@@ -14,7 +14,7 @@ Changes in 4.9.2 (upcoming)
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Changed: Article 'uid' uses Tiger-192,3 instead of MD5.
 * Developer: Added 'uid' to global $thisarticle array.
-* Vendors: DOMPurify 3.4.13.
+* Vendors: DOMPurify 3.4.14.
 
 Changes in 4.9.1 (14 Feb 2026)
 
