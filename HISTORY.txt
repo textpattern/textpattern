@@ -17,7 +17,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Theme import with invalid JSON manifest.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
-* Changed: Article 'uid' uses Tiger-192,3 instead of MD5.
+* Changed: Article 'uid' uses Tiger-128,3 instead of MD5.
 * Developer: Added 'uid' to global $thisarticle array.
 * Vendors: DOMPurify 3.4.14.
 
