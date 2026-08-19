@@ -2960,7 +2960,7 @@ function page_url($atts, $thing = null)
         $out = '1';
     } elseif (isset($pretext[$type]) && is_bool($default)) {
         $out = $type == 's' && $pretext['s'] == 'default' ? '' : $pretext[$type];
-        $escape === null or $out = txpspecialchars($out);
+        $escape !== null or $out = txpspecialchars($out);
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
