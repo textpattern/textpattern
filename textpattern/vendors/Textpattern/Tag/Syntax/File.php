@@ -36,7 +36,7 @@ class File
         global $s, $c, $context, $thisfile, $thispage, $pretext;
 
         $filters = isset($atts['id']) || isset($atts['category']) || isset($atts['author']) || isset($atts['realname']) || isset($atts['status']) || isset($atts['month']) || isset($atts['time']);
-    
+
         extract(lAtts(array(
             'break'       => 'br',
             'category'    => '',
@@ -56,24 +56,24 @@ class File
             'wraptag'     => '',
             'status'      => STATUS_LIVE,
         ), $atts));
-    
+
         if (!is_numeric($status)) {
             $status = getStatusNum($status);
         }
-    
+
         // Note: status treated slightly differently.
         $where = array();
         $context_list = empty($auto_detect) ? array() : do_list_unique($auto_detect);
         $pageby = ($pageby == 'limit') ? $limit : $pageby;
         $exclude === true or $exclude = $exclude ? do_list_unique($exclude) : array();
-    
+
         $ids = $id ? array_map('intval', do_list_unique($id, array(',', '-'))) : array();
-    
+
         if ($ids) {
             $not = $exclude === true || in_array('id', $exclude) ? 'NOT ' : '';
             $where[] = "id {$not}IN ('".join("','", $ids)."')";
         }
-    
+
         $category = $category ?
             do_list_unique($category) :
             ($context == 'file' && !empty($c) && in_array('category', $context_list) ? array($c) : array());
@@ -88,14 +88,14 @@ class File
             $not = $exclude === true || in_array('category', $exclude) ? 'NOT ' : '';
             $where[] = $not.'('.implode(' OR ', $catquery).')';
         }
-    
+
         $author = $author ?: ($context == 'file' && !empty($pretext['author']) && in_array('author', $context_list) ? array($pretext['author']) : array());
 
         if ($author) {
             $not = $exclude === true || in_array('author', $exclude) ? 'NOT ' : '';
             $where[] = "author {$not}IN ('".join("','", doSlash(do_list_unique($author)))."')";
         }
-    
+
         if ($realname) {
             $authorlist = safe_column("name", 'txp_users', "RealName IN ('".join("','", doArray(doSlash(do_list_unique($realname)), 'urldecode'))."')");
 
@@ -104,12 +104,12 @@ class File
                 $where[] = "author {$not}IN ('".join("','", doSlash($authorlist))."')";
             }
         }
-    
+
         if ($time || $month) {
             $not = $exclude === true || in_array('month', $exclude) || in_array('time', $exclude) ? 'NOT ' : '';
             $where[] = $not.'('.buildTimeSql($month, $time === null ? 'past' : $time, 'created').')';
         }
-    
+
         if ($status) {
             $not = $exclude === true || in_array('status', $exclude) ? '!' : '';
             $where[] = "status {$not}= '".doSlash($status)."'";
@@ -125,17 +125,17 @@ class File
         }
 
         $where = $where ? join(" AND ", $where) : '1';
-    
+
         // Set up paging if required.
         if ($limit && $pageby) {
             $pg = (!$pretext['pg']) ? 1 : $pretext['pg'];
             $pgoffset = $offset + (($pg - 1) * $pageby);
-    
+
             if (empty($thispage)) {
                 $grand_total = safe_count('txp_file', $where);
                 $total = $grand_total - $offset;
                 $numPages = ($pageby > 0) ? ceil($total/$pageby) : 1;
-    
+
                 // Send paging info to txp:newer and txp:older.
                 $pageout['pg']          = $pg;
                 $pageout['numPages']    = $numPages;
@@ -149,31 +149,31 @@ class File
         } else {
             $pgoffset = $offset;
         }
-    
+
         // Preserve order of custom file ids unless 'sort' attribute is set.
         if (!empty($ids) && empty($atts['sort'])) {
             $safe_sort = "FIELD(id, ".join(',', $ids).")";
         } else {
             $safe_sort = sanitizeForSort($sort);
         }
-    
+
         $qparts = array(
             "ORDER BY ".$safe_sort,
             ($limit) ? "LIMIT ".intval($pgoffset).", ".intval($limit) : '',
         );
-    
+
         $rs = safe_rows_start("*, " . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where.' '.join(' ', $qparts));
         $out = parseList($rs, $thisfile, null, compact('form', 'thing'));
-    
+
         return $out ? doWrap($out, $wraptag, compact('break', 'class')) : '';
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download($atts, $thing = null)
     {
         global $file_base_path, $thisfile;
-    
+
         extract(lAtts(array(
             'filename' => '',
             'form'     => isset($atts['type']) ? '' : 'files',
@@ -181,21 +181,21 @@ class File
             'sort'     => '',
             'type'     => null,
         ), $atts));
-    
+
         $oldfile = $thisfile;
         $sort = $sort ? ' ORDER BY '.$sort : '';
         $where = array();
 
         empty($id) or $where[] = "id IN (".implode(',', array_map('intval', do_list($id, array(',', '-')))).")";
         empty($filename) or $where[] = "filename = '".doSlash($filename)."'";
-    
+
         if ($where) {
             $where = implode(' AND ', $where).($type ? " AND status = ".STATUS_LIVE : '');
             $thisfile = fileDownloadFetchInfo($where." AND created <= ".now('created').$sort.' LIMIT 1');
         } else {
             assert_file();
         }
-    
+
         if (empty($thisfile)) {
             $out = $thing ? parse($thing, false) : '';
         } else {
@@ -214,137 +214,195 @@ class File
 
         return $out;
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_link($atts, $thing = null)
     {
         global $thisfile;
-    
+
         extract(lAtts(array(
             'filename' => '',
             'id'       => '',
         ), $atts));
-    
+
         $from_form = false;
-    
+
         if ($id) {
             $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
         } elseif ($filename) {
             $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
         } else {
             assert_file();
-    
+
             $from_form = true;
         }
-    
+
         if ($thisfile) {
             $url = filedownloadurl($thisfile['id'], $thisfile['filename']);
-    
+
             $out = ($thing) ? href(parse($thing), $url) : $url;
-    
+
             // Cleanup: this wasn't called from a form, so we don't want this
             // value remaining
             if (!$from_form) {
                 $thisfile = '';
             }
-    
+
             return $out;
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
+    public static function file_download_info($atts)
+    {
+        global $thisfile;
+
+        extract(lAtts(array(
+            'filename'   => '',
+            'id'         => '',
+            'type'       => 'description',
+            'escape'     => true,
+            'wraptag'    => '',
+            'class'      => '',
+            'break'      => '',
+        ), $atts));
+
+        $validItems = array('id', 'filename', 'title', 'category', 'category_title', 'description', 'ext', 'mime', 'author', 'size', 'downloads', 'status', 'created', 'modified');
+        $type = do_list($type);
+        $from_form = false;
+
+        $out = array();
+        $where = array();
+
+        if ($id) {
+            $thisfile = fileDownloadFetchInfo('id = '.intval($id));
+        } elseif ($filename) {
+            $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."'");
+        } else {
+            assert_file();
+
+            $from_form = true;
+        }
+
+        if ($thisfile) {
+            foreach ($type as $item) {
+                if (in_array($item, $validItems)) {
+                    if ($item === 'category_title') {
+                        $thisfile['category_title'] = fetch_category_title($thisfile['category'], 'file');
+                    }
+
+                    if (isset($thisfile[$item])) {
+                        $out[] = $escape ? txp_escape($escape, $thisfile[$item]) : $thisfile[$item];
+                    }
+                } else {
+                    trigger_error(gTxt('invalid_attribute_value', array('{name}' => $item)), E_USER_NOTICE);
+                }
+            }
+
+            // Cleanup: this wasn't called from a form, so we don't want this
+            // value remaining
+            if (!$from_form) {
+                $thisfile = '';
+            }
+        }
+
+        return doWrap($out, $wraptag, $break, $class);
+    }
+
+    // -------------------------------------------------------------
+
     public static function file_download_size($atts)
     {
         global $thisfile;
-    
+
         extract(lAtts(array(
             'decimals' => 2,
             'format'   => '',
         ), $atts));
-    
+
         assert_file();
-    
+
         if (is_numeric($decimals) && $decimals >= 0) {
             $decimals = intval($decimals);
         } else {
             $decimals = 2;
         }
-    
+
         if (isset($thisfile['size'])) {
             $format_unit = strtolower(substr($format, 0, 1));
-    
+
             return format_filesize($thisfile['size'], $decimals, $format_unit);
         } else {
             return '';
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_id()
     {
         global $thisfile;
-    
+
         assert_file();
-    
+
         return $thisfile['id'];
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_name($atts)
     {
         global $thisfile;
-    
+
         extract(lAtts(array('title' => 0), $atts));
-    
+
         assert_file();
-    
+
         return ($title) ? $thisfile['title'] : $thisfile['filename'];
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_category($atts)
     {
         global $thisfile;
-    
+
         extract(lAtts(array('title' => 0), $atts));
-    
+
         assert_file();
-    
+
         if ($thisfile['category']) {
             $category = ($title)
                 ? fetch_category_title($thisfile['category'], 'file')
                 : $thisfile['category'];
-    
+
             return $category;
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_author($atts)
     {
         global $thisfile, $s;
-    
+
         extract(lAtts(array(
             'link'         => 0,
             'title'        => 1,
             'section'      => '',
             'this_section' => '',
         ), $atts));
-    
+
         assert_file();
-    
+
         if ($thisfile['author']) {
             $author_name = get_author_name($thisfile['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $thisfile['author']);
-    
+
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-    
+
             $author = ($link)
                 ? href($display_name, pagelinkurl(array(
                     's'       => $section,
@@ -352,32 +410,32 @@ class File
                     'context' => 'file',
                 )))
                 : $display_name;
-    
+
             return $author;
         }
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_downloads()
     {
         global $thisfile;
-    
+
         assert_file();
-    
+
         return $thisfile['downloads'];
     }
-    
+
     // -------------------------------------------------------------
-    
+
     public static function file_download_description($atts)
     {
         global $thisfile;
-    
+
         extract(lAtts(array('escape' => null), $atts));
-    
+
         assert_file();
-    
+
         if ($thisfile['description']) {
             return ($escape === null)
                 ? txpspecialchars($thisfile['description'])

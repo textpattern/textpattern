@@ -571,7 +571,7 @@ class Image
         if ($imageData = imageFetchInfo($id, $name)) {
             $author_name = get_author_name($imageData['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
-    
+
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
             $author = ($link)

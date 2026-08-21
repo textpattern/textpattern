@@ -3166,7 +3166,18 @@ function format_date($file, $fields = array('date' => 'date'))
 
 function fileDownloadFetchInfo($where)
 {
-    return safe_row("*," . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where);
+    $row = safe_row("*," . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where);
+
+    if ($row) {
+        $fullpath = build_file_path(get_pref('file_base_path'), $row['filename']);
+        $row['mime'] = mime_content_type($fullpath);
+        $pathParts = pathinfo($fullpath);
+        $row['ext'] = $pathParts['extension'];
+
+        return $row;
+    } else {
+        return array();
+    }
 }
 
 /**
