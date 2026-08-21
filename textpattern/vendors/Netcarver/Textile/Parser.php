@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.4';
+    protected $ver = '4.1.5';
 
     /**
      * Regular expression snippets.
@@ -3659,7 +3659,7 @@ class Parser
         $atts = $this->parseAttribsToArray($m['atts']);
 
         if ($m['cite'] != '') {
-            $atts['cite'] = trim($m['cite']);
+            $atts['cite'] = $this->encodeHTML(trim($m['cite']));
             ksort($atts);
         }
 
