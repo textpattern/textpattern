@@ -15,10 +15,12 @@ Changes in 4.9.2 (upcoming)
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: Theme import with invalid JSON manifest.
+* Added: <txp:file_download_info /> tag.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Changed: Article 'uid' uses Tiger-128,3 instead of MD5.
 * Developer: Added 'uid' to global $thisarticle array.
+* Developer: Added 'ext' and 'mime' to global $thisfile array.
 * Vendors: Textile 4.1.5. (thanks, gocom).
 * Vendors: DOMPurify 3.4.14.
 
