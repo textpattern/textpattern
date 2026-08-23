@@ -3449,6 +3449,7 @@ function txp_escape($escape, $thing = '')
                 }
 
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
+                !$tidy or $thing = trim($thing); //Textile bug?
                 break;
             case 'quote':
                 $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('" . strtr($thing, array("'" => "',\"'\",'")) . "')";
