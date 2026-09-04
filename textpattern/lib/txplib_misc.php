@@ -6741,7 +6741,7 @@ function get_mediatypes(&$textarray)
             }
 
             if ($textarray !== null) {
-                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                $textarray[$type] = isset($lang_ui) && isset($langpack[$lang_ui]) ?
                     $langpack[$lang_ui] :
                     (isset($langpack['title']) ?
                         $langpack['title'] :
