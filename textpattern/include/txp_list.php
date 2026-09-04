@@ -313,13 +313,11 @@ function list_list($message = '', $post = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
-        if ($crit !== '') {
-            $contentBlock .= graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
-                gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
-                array('class' => 'alert-block information')
-            );
-        }
+        $contentBlock .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
+            gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $rs = safe_query("SELECT " . implode(', ', $fieldlist) .
             " FROM $sql_from".
