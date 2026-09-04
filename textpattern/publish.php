@@ -415,6 +415,8 @@ function preText($store, $prefs = null)
 
                 output_thumb(array('param' => $xform, 'img' => $imgfile));
                 exit;
+            } else {// should be an image URL.
+                $is_404 = true;
             }
         } elseif ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
             $is_404 = true;
