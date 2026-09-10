@@ -69,7 +69,8 @@ function list_languages($message = '')
     $represented_lang = array_merge($active_lang, $installed_lang);
 
     $def_lastmod = $txp_is_dev && isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['file_lastmod'] : 0;
-    $def_count = isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['count'] : 0;
+    $def_count = array_reduce($available_lang, function($carry, $item) { return max($carry, $item['count']); }, 0);
+    //isset($available_lang[TEXTPATTERN_DEFAULT_LANG]) ? $available_lang[TEXTPATTERN_DEFAULT_LANG]['count'] : 0;
 
     $site_lang = get_pref('language', TEXTPATTERN_DEFAULT_LANG, true);
     $ui_lang = get_pref('language_ui', $site_lang, true);
@@ -128,7 +129,7 @@ function list_languages($message = '')
                 $status = gTxt('installed') . ' <span role="separator">/</span> ' . gTxt('update_available');
             } else {
                 $cellclass = 'success';
-                $icon = 'ui-icon-check';
+                $icon = $langname == TEXTPATTERN_DEFAULT_LANG ? 'ui-icon-star' : 'ui-icon-check';
                 $status = gTxt('installed');
             }
 
@@ -154,7 +155,13 @@ function list_languages($message = '')
                         : '')
             );
         } else {
-            $cellclass = $icon = '';
+            if ($langname == TEXTPATTERN_DEFAULT_LANG) {
+                $cellclass = 'error';
+                $icon = 'ui-icon-alert';
+            } else {
+                $cellclass = $icon = '';
+            }
+
             $btnText = '<span class="ui-icon ui-icon-plus"></span>' . sp . escape_title(gTxt('install'));
             $disabled = $btnRemove = '';
         }
