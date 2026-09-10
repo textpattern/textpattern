@@ -121,6 +121,7 @@ function list_languages($message = '')
 
         $file_updated = (isset($langdata['db_lastmod']) && max($def_lastmod, $langdata['file_lastmod']) > $langdata['db_lastmod']);
         $count = $def_count && isset($available_lang[$langname]) ? floor(100 * $available_lang[$langname]['count'] / $def_count) : null;
+        $icon = $langname == TEXTPATTERN_DEFAULT_LANG ? 'ui-icon-gear' : 'ui-icon-check';
 
         if (array_key_exists($langname, $represented_lang)) {
             if ($file_updated) {
@@ -129,7 +130,6 @@ function list_languages($message = '')
                 $status = gTxt('installed') . ' <span role="separator">/</span> ' . gTxt('update_available');
             } else {
                 $cellclass = 'success';
-                $icon = $langname == TEXTPATTERN_DEFAULT_LANG ? 'ui-icon-star' : 'ui-icon-check';
                 $status = gTxt('installed');
             }
 
@@ -145,7 +145,7 @@ function list_languages($message = '')
             $removeText = '<span class="ui-icon ui-icon-minus"></span>' . sp . escape_title(gTxt('remove'));
 
             $btnRemove = (
-                (array_key_exists($langname, $active_lang) || array_key_exists($langname, $langUse))
+                ($langname == TEXTPATTERN_DEFAULT_LANG || array_key_exists($langname, $active_lang) || array_key_exists($langname, $langUse))
                     ? ''
                     : (has_privs('lang.edit')
                         ? tag($removeText, 'button', array(
@@ -157,7 +157,6 @@ function list_languages($message = '')
         } else {
             if ($langname == TEXTPATTERN_DEFAULT_LANG) {
                 $cellclass = 'error';
-                $icon = 'ui-icon-alert';
             } else {
                 $cellclass = $icon = '';
             }
