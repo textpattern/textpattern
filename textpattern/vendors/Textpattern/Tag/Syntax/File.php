@@ -222,11 +222,12 @@ class File
         global $thisfile;
 
         extract(lAtts(array(
+            'download' => false,
             'filename' => '',
             'id'       => '',
         ), $atts));
 
-        $from_form = false;
+        $oldfile = $thisfile;
 
         if ($id) {
             $thisfile = fileDownloadFetchInfo('id = '.intval($id).' and created <= '.now('created'));
@@ -234,23 +235,17 @@ class File
             $thisfile = fileDownloadFetchInfo("filename = '".doSlash($filename)."' and created <= ".now('created'));
         } else {
             assert_file();
-
-            $from_form = true;
         }
 
         if ($thisfile) {
             $url = filedownloadurl($thisfile['id'], $thisfile['filename']);
-
-            $out = ($thing) ? href(parse($thing), $url) : $url;
-
-            // Cleanup: this wasn't called from a form, so we don't want this
-            // value remaining
-            if (!$from_form) {
-                $thisfile = '';
-            }
-
-            return $out;
+            $out = ($thing) ? href(parse($thing), $url, $download === true ? 'download' : compact('download')) : $url;
         }
+
+        // Cleanup: 
+        $thisfile = $oldfile;
+
+        return isset($out) ? $out : ($thing ? parse($thing, false) : null);
     }
 
     // -------------------------------------------------------------
