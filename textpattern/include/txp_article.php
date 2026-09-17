@@ -405,7 +405,7 @@ function article_preview($field = false)
 
         $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : '');
     } else {
-        return '<div id="pane-preview"></div>' . n .
+        return '<div id="pane-preview" tabindex="0"></div>' . n .
             '<template id="pane-template"></template>';
     }
 

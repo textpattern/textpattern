@@ -242,7 +242,7 @@ class File
             $out = ($thing) ? href(parse($thing), $url, $download === true ? 'download' : compact('download')) : $url;
         }
 
-        // Cleanup: 
+        // Cleanup.
         $thisfile = $oldfile;
 
         return isset($out) ? $out : ($thing ? parse($thing, false) : null);
