@@ -430,6 +430,8 @@ function preText($store, $prefs = null)
 
                 output_thumb(array('param' => $xform, 'img' => $imgfile));
                 exit;
+            } else {// should be an image URL.
+                $is_404 = true;
             }
         } elseif ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
             $is_404 = true;
@@ -496,9 +498,7 @@ function preText($store, $prefs = null)
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
-                            '*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,'.
-                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,'.
-                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod',
+                            '*, UNIX_TIMESTAMP(LastMod) AS uLastMod, '.txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
                             'textpattern',
                             "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );
@@ -543,7 +543,7 @@ function preText($store, $prefs = null)
                         }
 
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch ($permlink_guess ? $permlink_guess : $permlink_mode) {
+                        switch ($permlink_guess ?: $permlink_mode) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -596,7 +596,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2) || $trailing_slash < 0 && isset($permlink_modes[$u1])) {
+                                if ((isset($u2) || $trailing_slash < 0) && isset($permlink_modes[$u1])) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
@@ -658,9 +658,9 @@ function preText($store, $prefs = null)
             }
 
             $fn = empty($out['filename']) ? '' : " AND filename = '" . doSlash($out['filename']) . "'";
-            $rs = safe_row('*', 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
+            $rs = safe_row('*,' . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
 
-            $thisfile = $rs ? file_download_format_info($rs) : null;
+            $thisfile = $rs ?: null;
         }
 
         $is_404 = $is_404 || empty($rs);

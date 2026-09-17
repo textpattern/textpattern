@@ -268,8 +268,11 @@ class wet_thumb
         }
 
         // Check exif orientation of JPEG source image.
-        if ($this->_SRC['type'] == 2) { // JPEG format
+        if ($this->_SRC['type'] == 2 && function_exists('exif_read_data')) { // JPEG format
+            set_error_handler(function() { /* ignore errors */ });
             $exif = exif_read_data($this->_SRC['file']);
+            restore_error_handler();
+
             if (!empty($exif['Orientation'])) {
                 // Correct thumbnail orientation based on exif value.
                 switch ($exif['Orientation']) {

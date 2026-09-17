@@ -1907,6 +1907,38 @@ eod;
 }
 
 /**
+  * UNIX_TIMESTAMP() and FROM_UNIXTIME() range extensions for SQL queries.
+  *
+  * @since   4.9.2
+  */
+
+function txp_timestamp($field, $alias = null)
+{
+    // Not sanitised
+    if (!is_array($field)){
+        return "COALESCE(NULLIF(UNIX_TIMESTAMP($field), 0), TIMESTAMPDIFF( SECOND, '1970-01-01 00:00:00', CONVERT_TZ($field, @@session.time_zone, '+00:00') ))" .
+            ($alias ? " AS $alias" : '');
+    }
+
+    $out = array();
+
+    foreach ($field as $f => $a) {
+        $out[] = "COALESCE(NULLIF(UNIX_TIMESTAMP($f), 0), TIMESTAMPDIFF( SECOND, '1970-01-01 00:00:00', CONVERT_TZ($f, @@session.time_zone, '+00:00') ))" .
+            ($a ? " AS $a" : '');
+    }
+
+    return implode(', ', $out);
+}
+
+function txp_unixtime($ts, $alias = null)
+{
+    $ts = intval($ts);
+
+    return "COALESCE(FROM_UNIXTIME($ts), CONVERT_TZ(DATE_ADD('1970-01-01 00:00:00', INTERVAL $ts SECOND), '+00:00', @@session.time_zone))" .
+        ($alias ? " AS $alias" : '');
+}
+
+/**
  * Replacement for SQL NOW()
  *
  * This function can be used when constructing SQL SELECT queries as a
@@ -1942,12 +1974,12 @@ function now($type, $update = false)
         if ($time > $now or $update) {
             $table = ($type === 'date') ? 'txp_link' : (($type === 'created') ? 'txp_file' : 'textpattern');
             $where = '1=1 having utime > '.$time.' order by utime asc limit 1';
-            $now = safe_field('TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), '.$type.') as utime', $table, $where);
+            $now = safe_field(txp_timestamp(array($type => 'utime')), $table, $where);
             $now = ($now === false) ? 2147483647 : intval($now) - 1;
             update_pref($pref, $now);
             $nows[$type] = $now;
         }
     }
 
-    return "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $now SECOND)";
+    return txp_unixtime($now);
 }

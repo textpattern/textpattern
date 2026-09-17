@@ -1152,7 +1152,7 @@ function plugin_form($existing_files = array())
     form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"') . popHelp('install_plugin') .
         n . '<textarea class="code" id="plugin-install" name="plugin" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" dir="ltr" required="required"></textarea>' .
-        fInput('submit', 'install_new', gTxt('upload')) .
+        fInput('submit', 'install_new', gTxt('install')) .
         eInput('plugin') .
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
     );

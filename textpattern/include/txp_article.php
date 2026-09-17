@@ -141,10 +141,8 @@ function article_save($write = true)
 
     if ($incoming['ID']) {
         $oldArticle = safe_row(
-            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod, LastModID,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires",
+            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt, LastModID, UNIX_TIMESTAMP(LastMod) AS sLastMod, ".
+            txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -214,7 +212,7 @@ function article_save($write = true)
             $uPosted = $ts - tz_offset($ts);
         }
 
-        $whenposted = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uPosted SECOND";
+        $whenposted = txp_unixtime($uPosted);
     }
 
     // Set and validate expiry timestamp.
@@ -260,7 +258,7 @@ function article_save($write = true)
     }
 
     if ($uExpires) {
-        $whenexpires = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uExpires SECOND";
+        $whenexpires = txp_unixtime($uExpires);
     } else {
         $whenexpires = "NULL";
     }
@@ -320,7 +318,7 @@ function article_save($write = true)
             "AnnotateInvite"  => $AnnotateInvite
         ) + (!empty($ID) ? array() : array(
             "AuthorID"        => $txp_user,
-            "uid"             => md5(uniqid(rand(), true)),
+            "uid"             => hash(UID_HASHING_ALGORITHM, uniqid(rand(), true)),
         ));
 
         $meta_id = preg_replace('/^custom_([1-9]\d*)$/', '$1', preg_grep('/^custom_\d+$/', array_keys($_POST)));
@@ -420,7 +418,7 @@ function article_preview($field = false)
         $id = intval(ps('ID'));
         $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
         ksort($data);
-        $data['id'] = $id . '.' . $token->csrf($txp_user) . $token->csrf(json_encode($data));
+        $data['id'] = $id . '.' . $token->csrf($txp_user, '') . $token->csrf(json_encode($data), '');
         $opts = array(
             'method' => "POST",
             'header' => [
@@ -688,9 +686,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod",
+            "*, UNIX_TIMESTAMP(LastMod) AS sLastMod, " . txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern',
             "ID = $ID"
         );
@@ -710,7 +706,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {
@@ -1188,7 +1184,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) OR Posted = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir ".txp_unixtime($sPosted)." OR Posted = ".txp_unixtime($sPosted)." AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 
@@ -1508,6 +1504,7 @@ function article_partial_actions($rs)
     hInput('sLastMod', $rs['sLastMod']) .
     hInput('AuthorID', $rs['AuthorID']) .
     hInput('LastModID', $rs['LastModID']) . n .
+    hInput('_txp_token', form_token()) . n .
     $push_button .
     graf(article_partial_article_clone($rs) . article_partial_article_view($rs), array('class' => 'txp-actions')) . n .
     '</div>';
@@ -1812,7 +1809,7 @@ function article_partial_article_view($rs)
     if ($live) {
         $url = permlinkurl_id($rs['ID']);
     } elseif (has_privs('article.preview')) {
-        $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user)) : false; // Article ID plus token.
+        $url = $ID ? hu . '?id=' . $ID . '.' . urlencode(Txp::get('\Textpattern\Security\Token')->csrf($txp_user, '')) : false; // Article ID plus token.
     } else {
         return;
     }

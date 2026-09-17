@@ -303,7 +303,7 @@ function setup_makeConfig($cfg, $doSpecial = false)
             . 'if (!defined(\'txpath\')) { define(\'txpath\', $txpcfg[\'txpath\']); }' . "\n";
     }
 
-    $config_details .=
+    $config_details .= 'define(\'TEXTPATTERN_DEFAULT_LANG\', \'' . $cfg['site']['language_code'] . '\');' . "\n" .
     "// For more customization options, please consult config-dist.php file.";
 
     return $config_details;

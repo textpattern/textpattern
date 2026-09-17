@@ -172,10 +172,7 @@ function atom()
 
         $rs = safe_rows_start(
             "*,
-            ID AS thisid,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod",
+            ID AS thisid, UNIX_TIMESTAMP(LastMod) AS uLastMod, " . txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
             'textpattern',
             $where . " ORDER BY uPosted DESC LIMIT $limit"
         );
@@ -243,7 +240,7 @@ function atom()
     } elseif ($area == 'link') {
         $cfilter = ($category) ? "category IN ('" . join("','", $category) . "')" : '1';
 
-        $rs = safe_rows_start("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS uDate", 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
+        $rs = safe_rows_start("*, " . txp_timestamp(array('date' => 'uDate')), 'txp_link', "$cfilter ORDER BY date DESC, id DESC LIMIT $limit");
 
         if ($rs) {
             while ($a = nextRow($rs)) {

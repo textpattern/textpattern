@@ -525,6 +525,25 @@ if (!defined('LOGIN_COOKIE_HTTP_ONLY')) {
     define('LOGIN_COOKIE_HTTP_ONLY', true);
 }
 
+if (!defined('UID_HASHING_ALGORITHM')) {
+    /**
+     * Algorithm to use for creating content UID hashes.
+     *
+     * No need to be cryptographically secure. And note it currently MUST output a
+     * 32-character value to fit in the database field. Other algo lengths may break.
+     *
+     * This constant can be overridden from the config.php.
+     *
+     * @package User
+     * @since   4.9.2
+     * @see     PHP's hash_algos() function
+     * @example
+     * define('UID_HASHING_ALGORITHM', 'ripemd128');
+     */
+
+    define('UID_HASHING_ALGORITHM', 'tiger128,3');
+}
+
 if (!defined('X_FRAME_OPTIONS')) {
     /**
      * Sets X-Frame-Options HTTP header's value.

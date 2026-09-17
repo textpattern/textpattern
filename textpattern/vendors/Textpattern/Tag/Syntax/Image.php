@@ -443,9 +443,9 @@ class Image
         ));
 
         $rs = empty($extid) ?
-            safe_rows_start("*", 'txp_image', $qparts) :
+            safe_rows_start("*, " . txp_timestamp(array('date' => 'date')), 'txp_image', $qparts) :
             ($where ?
-                safe_rows_start("$extid UNION ALL SELECT *", 'txp_image', $qparts) :
+                safe_rows_start("$extid UNION ALL SELECT *, " . txp_timestamp(array('date' => 'date')), 'txp_image', $qparts) :
                 safe_query("SELECT $extid $qparts")
             );
 
@@ -571,7 +571,7 @@ class Image
         if ($imageData = imageFetchInfo($id, $name)) {
             $author_name = get_author_name($imageData['author']);
             $display_name = txpspecialchars(($title) ? $author_name : $imageData['author']);
-    
+
             $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
 
             $author = ($link)

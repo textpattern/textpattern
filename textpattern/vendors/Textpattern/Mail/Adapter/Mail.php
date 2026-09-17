@@ -57,7 +57,7 @@ class Mail implements \Textpattern\Mail\AdapterInterface
      * @var string
      */
 
-    protected $separator = "\n";
+    protected $separator = "\r\n";
 
     /**
      * The message encoding.
@@ -103,14 +103,6 @@ class Mail implements \Textpattern\Mail\AdapterInterface
         $this->encoded = new Message();
         $this->encoder = new Encode();
         $this->boundary['alternative'] = "Multipart_Boundary_alternative".md5(time());
-
-        if (IS_WIN) {
-            $this->separator = "\r\n";
-        } elseif (ini_get('cgi.rfc2616_headers') != 0) {
-            // Guard against non-Windows setups that use different character sets
-            // or control characters. See http://www.faqs.org/rfcs/rfc2616.html
-            $this->separator = "\r\n";
-        }
 
         if (get_pref('override_emailcharset') && is_callable('utf8_decode')) {
             $this->charset = 'ISO-8859-1';

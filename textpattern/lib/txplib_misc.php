@@ -827,7 +827,7 @@ function imageFetchInfo($id = "", $name = "")
         return false;
     }
 
-    $rs = safe_row("*", 'txp_image', $where);
+    $rs = safe_row("*, " . txp_timestamp(array('date' => 'date')), 'txp_image', $where);
 
     if ($rs) {
         $id = (int) $rs['id'];
@@ -921,11 +921,7 @@ function image_format_info($image)
 
 function link_format_info($link)
 {
-    if (($unix_ts = strtotime($link['date'])) > 0) {
-        $link['date'] = $unix_ts;
-    }
-
-    return $link;
+    return format_date($link);
 }
 
 /**
@@ -3182,6 +3178,21 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     return number_format($bytes, $decimals, $sep_dec, $sep_thous).sp.gTxt('units_'.$units[$pow]);
 }
 
+function format_date($file, $fields = array('date' => 'date'))
+{
+    foreach ($fields as $field => $ufield) {
+        if (isset($file[$field])) {
+            $file[$ufield] = is_numeric($file[$field]) || (($unix_ts = strtotime($file[$field])) === false) ?
+                $file[$field] :
+                $unix_ts;
+        } else {
+            $file[$field] = null;
+        }
+    }
+
+    return $file;
+}
+
 /**
  * Gets a file download as an array.
  *
@@ -3197,13 +3208,18 @@ function format_filesize($bytes, $decimals = 2, $format = '')
 
 function fileDownloadFetchInfo($where)
 {
-    $rs = safe_row("*", 'txp_file', $where);
+    $row = safe_row("*," . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where);
 
-    if ($rs) {
-        return file_download_format_info($rs);
+    if ($row) {
+        $fullpath = build_file_path(get_pref('file_base_path'), $row['filename']);
+        $row['mime'] = mime_content_type($fullpath);
+        $pathParts = pathinfo($fullpath);
+        $row['ext'] = $pathParts['extension'];
+
+        return $row;
+    } else {
+        return array();
     }
-
-    return false;
 }
 
 /**
@@ -3220,15 +3236,7 @@ function fileDownloadFetchInfo($where)
 
 function file_download_format_info($file)
 {
-    if (($unix_ts = strtotime($file['created'])) > 0) {
-        $file['created'] = $unix_ts;
-    }
-
-    if (($unix_ts = strtotime($file['modified'])) > 0) {
-        $file['modified'] = $unix_ts;
-    }
-
-    return $file;
+    return format_date($file, array('created' => 'created', 'modified' => 'modified'));
 }
 
 /**
@@ -4052,7 +4060,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (TXPINTERFACE === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field(txp_timestamp('Posted'), 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4811,7 +4819,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
     } elseif ($time && strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
         $offset = date('P', $start);
-        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."'";
     } else {
         $start = $month ? strtotime($month) : false;
 
@@ -4819,7 +4827,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)";
+            $from = txp_unixtime($start);
         }
 
         if ($time === 'since') {
@@ -4834,8 +4842,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)" :
-                "$safe_field BETWEEN (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND) AND (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $stop SECOND)"
+                "$safe_field = ".txp_unixtime($start) :
+                "$safe_field BETWEEN ".txp_unixtime($start) ." AND ".txp_unixtime($stop)
             );
         }
     }
@@ -5235,7 +5243,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS posted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2," . txp_timestamp(array('Posted' => 'posted','Expires' => 'expires')),
         'textpattern',
         "ID = $id"
     );
@@ -6911,7 +6919,7 @@ function get_mediatypes(&$textarray)
             }
 
             if ($textarray !== null) {
-                $textarray[$type] = isset($langpack[$lang_ui]) ?
+                $textarray[$type] = isset($lang_ui) && isset($langpack[$lang_ui]) ?
                     $langpack[$lang_ui] :
                     (isset($langpack['title']) ?
                         $langpack['title'] :

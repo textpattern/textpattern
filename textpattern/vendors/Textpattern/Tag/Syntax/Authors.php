@@ -54,7 +54,7 @@ class Authors
 
         $sql = array("1 = 1");
         $sql_limit = '';
-        $sql_sort = " ORDER BY ".doSlash($sort);
+        $sql_sort = " ORDER BY ".sanitizeForSort($sort);
 
         if ($name) {
             $sql[] = "name IN (".join(', ', quote_list(do_list($name))).")";

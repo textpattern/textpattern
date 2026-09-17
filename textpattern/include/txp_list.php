@@ -102,17 +102,17 @@ function list_list($message = '', $post = '')
             'class' => 'title',
         ),
         'posted' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)',
+            'column' => txp_timestamp('textpattern.Posted'),
             'label'  => 'posted',
             'class'  => 'posted date',
         ),
         'lastmod' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod)',
+            'column' => 'UNIX_TIMESTAMP(textpattern.LastMod)',
             'label'  => 'modified',
             'class'  => 'lastmod date',
         ),
         'expires' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires)',
+            'column' => txp_timestamp('textpattern.Expires'),
             'label'  => 'expires',
             'class'  => 'expires date',
         ),
@@ -326,13 +326,11 @@ function list_list($message = '', $post = '')
     list($page, $offset, $numPages) = pager($total, $limit, $page);
 
     if ($total < 1) {
-        if ($crit !== '') {
-            $contentBlock .= graf(
-                span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
-                gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
-                array('class' => 'alert-block information')
-            );
-        }
+        $contentBlock .= graf(
+            span(null, array('class' => 'ui-icon ui-icon-info')) . ' ' .
+            gTxt($crit === '' ? 'no_articles_recorded' : 'no_results_found'),
+            array('class' => 'alert-block information')
+        );
     } else {
         $rs = safe_query("SELECT " . implode(', ', $fieldlist) .
             " FROM $sql_from".
@@ -797,7 +795,7 @@ function list_multi_edit()
                     $pid = $a['ID'];
                     $title = $a['Title'];
                     unset($a['ID'], $a['comments_count']);
-                    $a['uid'] = md5(uniqid(rand(), true));
+                    $a['uid'] = hash(UID_HASHING_ALGORITHM, uniqid(rand(), true));
                     $a['AuthorID'] = $txp_user;
                     $a['LastModID'] = $txp_user;
                     $a['Status'] = ($a['Status'] >= STATUS_LIVE) ? STATUS_DRAFT : $a['Status'];

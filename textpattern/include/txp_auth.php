@@ -60,6 +60,16 @@ function doAuth()
         }
     }
 
+    // Check that the request came from the same domain as the admin URL.
+    $ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ahu;
+    $dest = isset($_SERVER['HTTP_SEC_FETCH_DEST']) ? $_SERVER['HTTP_SEC_FETCH_DEST'] : '';
+    $mode = isset($_SERVER['HTTP_SEC_FETCH_MODE']) ? $_SERVER['HTTP_SEC_FETCH_MODE'] : '';
+
+    if (($dest !== 'document' || $mode !== 'navigate') && strpos($ref, ahu) !== 0) {
+        http_response_code(403);
+        exit;
+    }
+
     ob_start();
 }
 
@@ -285,7 +295,7 @@ function doTxpValidate()
             // Cookie is good.
             if ($logout) {
                 $txp_user = $c_userid;
-                bouncer('logout', array('logout' => true));
+                bouncer('logout', array('logout' => false));
                 $txp_user = null;
                 set_cookie('txp_login');
                 set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
