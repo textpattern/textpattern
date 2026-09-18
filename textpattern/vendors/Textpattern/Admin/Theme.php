@@ -393,24 +393,27 @@ abstract class Theme
     public function updateTextpack()
     {
         $lang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
+        $loaded = safe_field('UNIX_TIMESTAMP(MAX(lastmod))', 'txp_lang', "owner = '{$this->name}' AND lang = '{$lang}'") ?: 0;
+        $updated = is_file($this->url.'textpack.txp') ? filemtime($this->url.'textpack.txp') : time();
 
-        $textpack = txp_get_contents($this->url.'textpack.txp');
-        $parser = new \Textpattern\Textpack\Parser();
-        $parser->setOwner($this->name);
-        $parser->setLanguage($lang);
-        $parser->parse($textpack);
-        $entries = $parser->getStrings($lang);
+        if ($updated > $loaded and $textpack = txp_get_contents($this->url.'textpack.txp')) {
+            $parser = new \Textpattern\Textpack\Parser();
+            $parser->setOwner($this->name);
+            $parser->setLanguage($lang);
+            $parser->parse($textpack);
+            $entries = $parser->getStrings($lang);
 
-        // Reindex the pack so it can be merged.
-        $langpack = array();
+            // Reindex the pack so it can be merged.
+            $langpack = array();
 
-        foreach ($entries as $translation) {
-            $translation['name'] = $this->name . PREF_THEME_DELIMITER . $translation['name'];
-            $langpack[$translation['name']] = $translation;
-        }
+            foreach ($entries as $translation) {
+                $translation['name'] = $this->name . PREF_THEME_DELIMITER . $translation['name'];
+                $langpack[$translation['name']] = $translation;
+            }
 
-        if  ($langpack) {
-            \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, array($this->name, $lang));
+            if  ($langpack) {
+                \Txp::get('\Textpattern\L10n\Lang')->upsertPack($langpack, array($this->name, $lang));
+            }
         }
     }
 

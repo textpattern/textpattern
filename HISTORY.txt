@@ -17,9 +17,11 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Theme import with invalid JSON manifest.
 * Added: <txp:file_download_info /> tag.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
+* Added: 'download' attribute to <txp:file_download_link /> tag.
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: Article 'uid' uses Tiger-128,3 instead of MD5.
+* Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
 * Vendors: Textile 4.1.5. (thanks, gocom).
