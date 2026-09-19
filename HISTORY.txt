@@ -11,6 +11,7 @@ Changes in 4.9.2 (upcoming)
   bug fixes.
 * Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 * Fixed: Recursive use of <txp:yield>.
+* Fixed: <txp:password_protect> container error (thanks, wet).
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
