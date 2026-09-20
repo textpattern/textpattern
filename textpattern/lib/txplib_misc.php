@@ -2258,6 +2258,7 @@ function is_logged_in($user = '')
     }
 
     $name = substr(cs('txp_login_public'), 10);
+    $user = (string) $user;
 
     if (!strlen($name) || strlen($user) && $user !== $name) {
         return false;
@@ -3084,15 +3085,15 @@ function make_download_link($id, $label = '', $filename = '')
 function set_error_level($level)
 {
     if ($level == 'debug') {
-        error_reporting(E_ALL);
+        return error_reporting(E_ALL);
     } elseif ($level == 'live') {
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
-        error_reporting(E_ALL ^ $suppress);
         ini_set("display_errors", "1");
+        return error_reporting(E_ALL ^ $suppress);
     } else {
         // Default is 'testing': display everything except notices.
-        error_reporting((E_ALL) ^ (E_NOTICE | E_USER_NOTICE));
+        return error_reporting((E_ALL) ^ (E_NOTICE | E_USER_NOTICE));
     }
 }
 
