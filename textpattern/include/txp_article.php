@@ -350,12 +350,12 @@ function article_save($write = true)
                 );
             }
 
-            if ($Status >= STATUS_LIVE) {
+            if (max($Status, $oldArticle['Status']) >= STATUS_LIVE) {
                 if ($oldArticle['Status'] < STATUS_LIVE) {
                     do_pings();
-                } else {
-                    update_lastmod($ID ? 'article_saved' : 'article_posted', $rs);
                 }
+
+                update_lastmod($ID ? 'article_saved' : 'article_posted', $rs);
             }
 
             now('posted', true);
