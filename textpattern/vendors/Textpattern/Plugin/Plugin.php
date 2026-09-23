@@ -733,7 +733,7 @@ class Plugin
             !empty($plugin['author']) or $plugin['author'] = '';
             !empty($plugin['author_uri']) or $plugin['author_uri'] = 'https://plugins.textpattern.com';
             !empty($plugin['code']) or $plugin['code'] = '';
-            !empty($plugin['load_order']) or $plugin['load_order'] = '5';
+            !empty($plugin['order']) or $plugin['order'] = '5';
 
             $plugin['md5'] = md5($plugin['code']);
             $fname = $name.'_v'.$plugin['version'].($compress ? '' : '_uncompressed').'.txt';
@@ -743,7 +743,7 @@ class Plugin
 # '.$plugin['description'].'
 # Author: '.$plugin['author'].'
 # URL: '.$plugin['author_uri'].'
-# Recommended load order: '.$plugin['load_order'].'
+# Recommended load order: '.$plugin['order'].'
 
 # .....................................................................
 # This is a plugin for Textpattern CMS - https://textpattern.com/

@@ -779,7 +779,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
 <p>Detta anger den <strong>absoluta sökvägen</strong> till katalogen där filuppladdningar sparas permanent. PHP måste ha skrivåtkomst till den katalogen.</p>
 <p><strong>Obs:</strong> Överväg att flytta denna katalog utanför webbplatsens offentligt åtkomliga dokumentrot för ökad säkerhet.</p>
         ]]></item>
-        <item id="file_download_header" title="Rubrik för filnedladdning"><![CDATA[
+        <item id="file_download_header" title="Rubrik för filnerladdning"><![CDATA[
 <h2>Rubrik för filnedladdning</h2>
 <p>Gör att du kan anpassa hur filnedladdningar hanteras.</p>
 <p>Normalt behandlas alla nedladdningar som bilagor och laddas ned (beroende på hur din webbläsare är konfigurerad att hantera filtypen). Om du vill ge webbläsaren ledtrådar om hur du föredrar att vissa eller alla filtyper ska hanteras kan du ange taggkod här. Ett exempel kan vara att visa PDF-filer som du har lagt i Textpattern-kategorin ”inline-pdf” inline istället för att ladda ned dem:</p>
