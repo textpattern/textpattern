@@ -26,7 +26,7 @@ Changes in 4.9.2 (upcoming)
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
 * Vendors: Textile 4.1.5. (thanks, gocom).
-* Vendors: DOMPurify 3.4.15.
+* Vendors: DOMPurify 3.4.16.
 
 Changes in 4.9.1 (14 Feb 2026)
 
