@@ -850,7 +850,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n . '</div>';// End of .txp-dialog.
 
     if (can_preview($rs)) {
-        echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
+        echo '<iframe id="preview-frame" name="preview" sandbox="" class="txp-dialog"></iframe>';
     }
 
     echo n . '</div>' . // End of #main_content.
