@@ -60,6 +60,7 @@ function doAuth()
         }
     }
     // Check that the request came from the same domain as the admin URL.
+/*
     $dest = isset($_SERVER['HTTP_SEC_FETCH_DEST']) ? $_SERVER['HTTP_SEC_FETCH_DEST'] : '';
     $mode = isset($_SERVER['HTTP_SEC_FETCH_MODE']) ? $_SERVER['HTTP_SEC_FETCH_MODE'] : '';
 
@@ -71,7 +72,7 @@ function doAuth()
             exit;
         }
     }
-
+*/
     ob_start();
 }
 

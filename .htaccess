@@ -25,6 +25,9 @@
     AddEncoding gzip       svgz
 </IfModule>
 
+<IfModule mod_headers.c>
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
 # For .htaccess configuration settings and explanations, please refer to:
 # https://github.com/h5bp/server-configs-apache/blob/main/dist/.htaccess
 # https://httpd.apache.org/docs/
