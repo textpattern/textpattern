@@ -2117,7 +2117,10 @@ textpattern.Route.add('article', function () {
     });
 
     $('#clean-preview, #parse-preview').on('change', function () {
-        $viewMode.click();
+        let $this = $(this), mode = $viewMode[0].dataset.viewMode;
+        if (mode == 'html' || !$this.is('#clean-preview') || $this.is(':checked') || !DOMPurify.removed.length || confirm(textpattern.gTxt('are_you_sure'))) {
+            $viewMode.click();
+        } else $this.prop('checked', true);
     });
 
     textpattern.Relay.register('article.preview', function (e) {
@@ -2167,15 +2170,15 @@ textpattern.Route.add('article', function () {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'submit');
     }).on('dialogclose', function (event, ui) {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
-    });
+    });/*
     $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
         `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>&nbsp;`
-    );
+    );*/
 
-    $(document).on('change', '#clean-view', function () {
+    $(document)/*.on('change', '#clean-view', function () {
         $frame.attr('sandbox', this.checked ? '' : null);
         $('#article_partial_article_preview').trigger('click');
-    }).on('click', '#article_partial_article_preview', function (e) {
+    })*/.on('click', '#article_partial_article_preview', function (e) {
         if (!$frame.length) return;
 
         e.preventDefault();
