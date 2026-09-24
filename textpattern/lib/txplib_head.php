@@ -63,6 +63,7 @@ function pagetop($pagetitle = '', $message = '')
     }
 
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
+    header('Referrer-Policy: strict-origin-when-cross-origin');
 
     if ($app_mode == 'async') {
         return;

@@ -59,9 +59,7 @@ function doAuth()
             doLoginForm($message);
         }
     }
-
     // Check that the request came from the same domain as the admin URL.
-    set_headers(array('Referrer-Policy' => false), true);
     $dest = isset($_SERVER['HTTP_SEC_FETCH_DEST']) ? $_SERVER['HTTP_SEC_FETCH_DEST'] : '';
     $mode = isset($_SERVER['HTTP_SEC_FETCH_MODE']) ? $_SERVER['HTTP_SEC_FETCH_MODE'] : '';
 
