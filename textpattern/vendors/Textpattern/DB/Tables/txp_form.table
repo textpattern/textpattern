@@ -1,4 +1,4 @@
-name    VARCHAR(255) NOT NULL DEFAULT '',
+name    VARCHAR(63)  NOT NULL DEFAULT '',
 type    VARCHAR(28)  NOT NULL DEFAULT '',
 Form    TEXT         NOT NULL,
 skin    VARCHAR(63)  NOT NULL DEFAULT 'default',
