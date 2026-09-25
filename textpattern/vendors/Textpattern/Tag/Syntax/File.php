@@ -183,7 +183,7 @@ class File
         ), $atts));
 
         $oldfile = $thisfile;
-        $sort = $sort ? ' ORDER BY '.$sort : '';
+        $sort = $sort ? ' ORDER BY '.sanitizeForSort($sort) : '';
         $where = array();
 
         empty($id) or $where[] = "id IN (".implode(',', array_map('intval', do_list($id, array(',', '-')))).")";
