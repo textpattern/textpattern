@@ -1319,6 +1319,7 @@ function check_url_title($url_title)
     if (strlen($url_title) === 0) {
         return gTxt('url_title_is_blank');
     } else {
+        $url_title = doSlash($url_title);
         $url_title_count = safe_count('textpattern', "url_title = '$url_title'");
 
         if ($url_title_count > 1) {
