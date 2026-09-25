@@ -1076,7 +1076,7 @@ function safe_rows_start($things, $table, $where, $debug = false)
 {
     $q = "SELECT $things FROM ".safe_pfx_j($table)." WHERE $where";
 
-    return startRows($q, $debug);
+    return safe_query($q, $debug);
 }
 
 /**
@@ -1252,10 +1252,16 @@ function startRows($query, $debug = false)
 
 function nextRow($r)
 {
-    $row = mysqli_fetch_assoc($r);
+    if ($r instanceof mysqli_result) {
+        $row = mysqli_fetch_assoc($r);
 
-    if ($row === false) {
-        mysqli_free_result($r);
+        if ($row === false) {
+            mysqli_free_result($r);
+        }
+    } elseif (is_array($r)) {
+        $row = next($r);
+    } else {
+        $row = $r;
     }
 
     return $row;
