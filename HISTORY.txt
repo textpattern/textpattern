@@ -11,6 +11,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: Theme import with invalid JSON manifest.
+* Fixed: Plugin compilation output: order not load_order.
 * Added: <txp:file_download_info /> tag.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: 'download' attribute to <txp:file_download_link /> tag.
@@ -20,6 +21,7 @@ Changes in 4.9.2 (upcoming)
 * Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
+* Performance: Reduced query count if theme textpack is unchanged.
 * Vendors: Textile 4.1.5. (thanks, gocom).
 * Vendors: DOMPurify 3.4.16.
 
