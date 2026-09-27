@@ -298,7 +298,7 @@ function doTxpValidate()
             // Cookie is good.
             if ($logout) {
                 $txp_user = $c_userid;
-                bouncer('logout', array('logout' => false));
+                bouncer('logout', array('logout' => true));
                 $txp_user = null;
                 set_cookie('txp_login');
                 set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
