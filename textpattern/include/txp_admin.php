@@ -92,36 +92,36 @@ function author_save()
         return;
     }
 
-    $rs = update_user($name, $email, $RealName);
+    $msg = array(gTxt('author_save_failed'), E_ERROR);
+    $admin = has_privs('admin.edit');
+    $rs = $txp_user === $name || $admin ? update_user($name, $email, $RealName) : false;
 
-    if ($rs && $language) {
-        safe_upsert(
-            'txp_prefs',
-            "val = '" . doSlash($language) . "',
-            event = 'admin',
-            html = 'text_input',
-            type = " . PREF_HIDDEN . ",
-            position = 0",
-            array(
-                'name'      => 'language_ui',
-                'user_name' => doSlash((string) $name)
-            )
-        );
-    }
-
-    if (has_privs('admin.edit') && $rs && ($txp_user === $name || change_user_group($name, $privs))) {
-        author_list(gTxt('author_updated', array('{name}' => $RealName)));
-
-        return;
-    } elseif ($rs && has_privs('admin.edit.own')) {
+    if ($rs) {
         $msg = gTxt('author_updated', array('{name}' => $RealName));
-    } else {
-        $msg = array(gTxt('author_save_failed'), E_ERROR);
+
+        if ($language) {
+            safe_upsert(
+                'txp_prefs',
+                "val = '" . doSlash($language) . "',
+                event = 'admin',
+                html = 'text_input',
+                type = " . PREF_HIDDEN . ",
+                position = 0",
+                array(
+                    'name'      => 'language_ui',
+                    'user_name' => doSlash((string) $name)
+                )
+            );
+        }
+
+        if ($admin && $txp_user !== $name) {
+            change_user_group($name, $privs);
+        }
     }
 
-    if (has_privs('admin.edit')) {
+    if ($admin) {
         author_edit($msg);
-    } elseif (has_privs('admin.edit.own')) {
+    } else {
         author_list($msg);
     }
 }
