@@ -2032,7 +2032,11 @@ function sanitizeForPage($text)
 
 function sanitizeForSort($text)
 {
-    return trim(strtr($text, array('#' => ' ', '--' => ' ')));
+    if (preg_match('~--[\x00-\x20]|#|/\*|\*/|;~', $text)) {
+        $text = '1';
+    }
+
+    return trim($text);
 }
 
 /**
