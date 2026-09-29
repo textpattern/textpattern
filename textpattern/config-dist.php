@@ -149,21 +149,23 @@ $txpcfg['client_flags'] = 0;
  * Optional, advanced: define a Content Security Policy header.
  * see TODO
  */
-
-//$headerCsp =
-//    "base-uri 'none';".
-//    "connect-src 'self';".
-//    "default-src 'none';".
-//    "font-src 'self';".
-//    "form-action 'self';".
-//    "frame-ancestors 'self';".
-//    "img-src blob: data: 'self';".
-//    "media-src 'self';".
-//    "script-src 'self' 'unsafe-inline';".
-//    "script-src-attr 'none';".
-//    "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
-//    "style-src 'self' 'unsafe-inline';".
-//    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=';".
-//    "style-src-elem 'nonce-{TEXTPATTERN_CSP_NONCE}';".
-//    "worker-src 'none'";
-//define('CONTENT_SECURITY_POLICY', $headerCsp);
+/*
+$headerCsp =
+    "base-uri 'self';".
+    "connect-src 'self';".
+    "default-src 'none';".
+    "font-src 'self';".
+    "form-action 'self';".
+    "frame-ancestors 'self';".
+    "frame-src 'self';".
+    "img-src data: blob: 'self';".
+    "media-src 'self';".
+    "script-src 'self';".
+    "script-src-attr 'unsafe-hashes' {SCRIPT_SRC_ATTR};".
+    "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+    "style-src 'self';".
+    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=' {STYLE_SRC_ATTR};".
+    "style-src-elem 'self' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
+    "worker-src 'none'";
+define('CONTENT_SECURITY_POLICY', $headerCsp);
+*/
