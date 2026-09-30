@@ -52,7 +52,7 @@ function pagetop($pagetitle = '', $message = '')
 
     $csp = CONTENT_SECURITY_POLICY;
 
-    foreach (Txp::get('\Textpattern\Security\Policy')->getHashes() as $rule => $hashes) {
+    foreach (Txp::get('\Textpattern\Security\Policy')->getHash() as $rule => $hashes) {
         $placeholder = '{'.strtoupper(strtr($rule, '-', '_')).'}';
 
         if (strpos($csp, $placeholder) !== false) {

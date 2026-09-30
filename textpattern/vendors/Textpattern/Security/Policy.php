@@ -25,7 +25,7 @@
  * Basic CSP options.
  *
  * <code>
- * \Txp::get('\Textpattern\Security\Policy')->getHashes();
+ * \Txp::get('\Textpattern\Security\Policy')->addHash('alert("hello")', 'script-src-attr');
  * </code>
  *
  * @since   4.9.2
@@ -47,12 +47,17 @@ class Policy implements \Textpattern\Container\ReusableInterface
      * @return \Textpattern\Security\Policy
      */
 
-    public function addHash($code, $rule = 'script-src-attr', $algo = 'sha256')
+    public function addHash($codes, $rule = 'script-src-attr', $algo = 'sha256')
     {
-        if (isset($this->hashes[$rule]) and $code = (string)$code) {
+        if (isset($this->hashes[$rule])) {
             in_array($algo, $this->algos) or $algo = 'sha256';
-            $hash = $algo.'-'.base64_encode(hash($algo, $code, true));
-            $this->hashes[$rule][$code] = $hash;
+
+            foreach ((array)$codes as $code) {
+                if (is_scalar($code) and $code = (string)$code) {
+                    $hash = $algo.'-'.base64_encode(hash($algo, $code, true));
+                    $this->hashes[$rule][$code] = $hash;
+                }
+            }
         }
 
         return $this;
@@ -64,7 +69,7 @@ class Policy implements \Textpattern\Container\ReusableInterface
      * @return Array
      */
 
-    public function getHashes($rule = '')
+    public function getHash($rule = '')
     {
         return isset($this->hashes[$rule]) ? quote_list($this->hashes[$rule], ' ') : $this->hashes;
     }
