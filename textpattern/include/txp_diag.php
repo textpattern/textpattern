@@ -431,11 +431,11 @@ function doDiagnostics()
         $showTypes = '0, 1, 2, 3, 4, 5';
     }
 
-    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 AND type IN (" . $showTypes . ") ORDER BY name")) {
+    if ($rows = safe_rows("name, version, code <> code_restore AS modified", 'txp_plugin', "status > 0 AND type IN (" . $showTypes . ") ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'] . '-' . $row['version'];
 
-            if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
+            if (!empty($row['modified'])) {
                 $n .= ' (' . gTxt('diag_modified') . ')';
             }
 

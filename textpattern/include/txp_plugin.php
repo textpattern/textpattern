@@ -200,7 +200,7 @@ function plugin_list($message = '')
         }
     } else {
         $rs = safe_rows_start(
-            "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
+            "name, status, author, author_uri, version, description, length(help) AS help, code <> code_restore AS modified, load_order, flags, type",
             'txp_plugin',
             "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );

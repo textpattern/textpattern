@@ -507,7 +507,7 @@ function safe_delete($table, $where = '1', $debug = false)
  * }
  */
 
-function safe_update($table, $set, $where, $debug = false)
+function safe_update($table, $set, $where = '1', $debug = false)
 {
     if (is_array($set)) {
         $set = join_qs(quote_list($set), ',');

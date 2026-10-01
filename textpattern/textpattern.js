@@ -2337,8 +2337,8 @@ textpattern.Route.add('article', function () {
                 currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
             } else {
                 const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
-                if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
-                else currentNode.parentNode.insertBefore(node, currentNode);
+                /*if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
+                else*/ currentNode.parentNode.insertBefore(node, currentNode);
             }
         }
     });

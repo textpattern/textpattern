@@ -104,6 +104,12 @@ function prefs_save()
         }
     }
 
+    // Remove hashes from non-concurrent users.
+    // Note: if removing user from list, they need to logout to invalidate sessions on other devices.
+    $conUsers = do_list_unique($post['concurrent_logins']);
+    $userIDs = safe_column('user_id', 'txp_users', "name NOT IN (". quote_list($conUsers, ',') .")");
+    safe_delete('txp_token', "type='shared_login' AND reference_id IN (" . implode(',', $userIDs) . ")");
+
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
     if (!empty($post['timezone_key'])) {
         $key = $post['timezone_key'];

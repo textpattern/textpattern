@@ -120,9 +120,13 @@ class Plugin
                 'data'     => ''
             ));
 
+            if (isset($md5) && $md5 != md5($code)) {
+                return array(gTxt('bad_plugin_code'), E_ERROR);
+            }
+
             $name = sanitizeForFile($name);
             $exists = safe_row('name, version', 'txp_plugin', "name='".doSlash($name)."'");
-            isset($md5) or $md5 = md5($code);
+            $quode = doSlash($code);
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                 // Default: help is in Textile format.
@@ -137,9 +141,8 @@ class Plugin
                     version      = '".doSlash($version)."',
                     description  = '".doSlash($description)."',
                     help         = '".doSlash($help)."',
-                    code         = '".doSlash($code)."',
-                    code_restore = '".doSlash($code)."',
-                    code_md5     = '".doSlash($md5)."',
+                    code         = '$quode',
+                    code_restore = '$quode',
                     textpack     = '".doSlash($textpack)."',
                     data         = '".doSlash($data)."',
                     flags        = $flags

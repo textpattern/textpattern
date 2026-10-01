@@ -50,7 +50,18 @@ function pagetop($pagetitle = '', $message = '')
 {
     global $siteurl, $sitename, $txp_user, $event, $step, $app_mode, $theme, $file_max_upload_size, $csp_nonce;
 
-    if (strpos(CONTENT_SECURITY_POLICY, '{TEXTPATTERN_CSP_NONCE}') !== false && $csp_nonce === null) {
+    $csp = CONTENT_SECURITY_POLICY;
+
+    foreach (Txp::get('\Textpattern\Security\Policy')->getHash() as $rule => $hashes) {
+        $placeholder = '{'.strtoupper(strtr($rule, '-', '_')).'}';
+
+        if (strpos($csp, $placeholder) !== false) {
+            $hashes = (string)quote_list($hashes, ' ');
+            $csp = str_replace($placeholder, $hashes, $csp);
+        }
+    }
+
+    if (strpos($csp, '{TEXTPATTERN_CSP_NONCE}') !== false && $csp_nonce === null) {
         $csp_nonce = base64_encode(Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH));
     }
 
@@ -59,7 +70,7 @@ function pagetop($pagetitle = '', $message = '')
     // if {TEXTPATTERN_CSP_NONCE} is part of the CSP value. It's perfectly valid to
     // create one without this convenience (e.g. via a plugin or callback).
     if ($csp_nonce) {
-        header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, CONTENT_SECURITY_POLICY));
+        header('Content-Security-Policy: '.str_replace('{TEXTPATTERN_CSP_NONCE}', (string)$csp_nonce, $csp));
     }
 
     header('X-Frame-Options: '.X_FRAME_OPTIONS);
