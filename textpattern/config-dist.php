@@ -164,7 +164,7 @@ $headerCsp =
     "script-src-attr 'unsafe-hashes' {SCRIPT_SRC_ATTR};".
     "script-src-elem 'strict-dynamic' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
     "style-src 'self';".
-    "style-src-attr 'unsafe-hashes' 'sha256-aqNNdDLnnrDOnTNdkJpYlAxKVJtLt9CtFLklmInuUAE=' {STYLE_SRC_ATTR};".
+    "style-src-attr 'unsafe-hashes' {STYLE_SRC_ATTR};".
     "style-src-elem 'self' 'nonce-{TEXTPATTERN_CSP_NONCE}';".
     "worker-src 'none'";
 define('CONTENT_SECURITY_POLICY', $headerCsp);
