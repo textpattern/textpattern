@@ -507,7 +507,7 @@ function safe_delete($table, $where, $debug = false)
  * }
  */
 
-function safe_update($table, $set, $where, $debug = false)
+function safe_update($table, $set, $where = '1', $debug = false)
 {
     return (bool) safe_query("UPDATE ".safe_pfx($table)." SET $set WHERE $where", $debug);
 }
