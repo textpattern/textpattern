@@ -338,7 +338,7 @@ function css_save()
         } else {
             if ($savenew or $copy) {
                 if ($newname) {
-                    if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin'")) {
+                    if (safe_insert('txp_css', "name = '$safe_newname', css = '$css', skin = '$safe_skin', lastmod=NOW()")) {
                         set_pref('last_css_saved', $newname, 'css', PREF_HIDDEN, 'text_input', 0, PREF_PRIVATE);
                         update_lastmod('css_created', compact('newname', 'name', 'css'));
 
@@ -361,7 +361,7 @@ function css_save()
             } else {
                 if (safe_update(
                     'txp_css',
-                    "css = '$css', name = '$safe_newname', skin = '$safe_skin'",
+                    "css = '$css', name = '$safe_newname', skin = '$safe_skin', lastmod=NOW()",
                     "name = '$safe_name' AND skin = '$safe_skin'"
                 )
                 ) {

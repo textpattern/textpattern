@@ -248,13 +248,14 @@ function css($atts)
     static $stylebody = array();
 
     extract(lAtts(array(
-        'escape' => true,
-        'format' => 'url',
-        'media'  => 'screen',
-        'name'   => $css,
-        'rel'    => 'stylesheet',
-        'theme'  => $pretext['skin'],
-        'title'  => '',
+        'escape'  => true,
+        'format'  => 'url',
+        'media'   => 'screen',
+        'name'    => $css,
+        'rel'     => 'stylesheet',
+        'theme'   => $pretext['skin'],
+        'title'   => '',
+        'version' => false,
     ), $atts));
 
     if (empty($name)) {
@@ -265,19 +266,6 @@ function css($atts)
     $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format . '.' . $format);
 
-    if (has_handler('css.url')) {
-        $url = callback_event('css.url', '', false, compact('name', 'theme'));
-    } elseif ($mode === 'flat') {
-        $url = array();
-        $skin_dir = urlencode(get_pref('skin_dir'));
-
-        foreach (do_list_unique($name) as $n) {
-            $url[] = hu . $skin_dir . '/' . urlencode($theme) . '/' . TXP_THEME_TREE['styles'] . '/' . urlencode($n) . '.css';
-        }
-    } else {
-        $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme);
-    }
-
     if (empty($format) || $format === "inline") {
         $skinObj = Txp::get('Textpattern\Skin\Skin');
         $safeName = $skinObj->sanitize($name);
@@ -287,6 +275,28 @@ function css($atts)
             $safeName.'_'.$safeTheme => safe_field('css', 'txp_css', "name='".doSlash($safeName)."' AND skin='" . doSlash($safeTheme) . "'")
         );
         $content = ($escape === true) ? $stylebody[$safeName.'_'.$safeTheme] : txp_escape($escape, $stylebody[$safeName.'_'.$safeTheme]);
+    } elseif (has_handler('css.url')) {
+        $url = callback_event('css.url', '', false, compact('name', 'theme'));
+    } elseif ($mode === 'flat') {
+        $url = array();
+        $skin_dir = urlencode(get_pref('skin_dir'));
+        $names = do_list_unique($name);
+
+        if ($version === true) {
+            $versions = safe_column(array('name', 'UNIX_TIMESTAMP(lastmod)'), 'txp_css', "name IN(".quote_list($names, ',').") AND skin='" . doSlash($theme) . "'");
+            $version = false;
+        }
+
+        foreach ($names as $n) {
+            $v = isset($versions[$n]) ? $versions[$n] : $version;
+            $url[] = hu . $skin_dir . '/' . urlencode($theme) . '/' . TXP_THEME_TREE['styles'] . '/' . urlencode($n) . '.css' . (!empty($v) ? '?v=' . urlencode($v) : '');
+        }
+    } else {
+        if ($version === true) {
+            $v = safe_field('UNIX_TIMESTAMP(lastmod)', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($theme) . "'");
+        }
+
+        $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme) . (!empty($v) ? '&v=' . urlencode($v) : '');
     }
 
     switch ($format) {
