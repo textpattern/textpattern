@@ -17,6 +17,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: Theme import with invalid JSON manifest.
 * Fixed: Plugin compilation output: order not load_order.
+* Fixed: Default public theme CSS should not be minified.
 * Added: <txp:file_download_info /> tag.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: 'download' attribute to <txp:file_download_link /> tag.
@@ -25,6 +26,7 @@ Changes in 4.9.2 (upcoming)
 * Added: Latest text translations. Thank you to all our translators.
 * Changed: Article 'uid' uses Tiger-128,3 instead of MD5.
 * Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
+* Changed: Modernisation of default public theme CSS rules.
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
 * Performance: Reduced query count if theme textpack is unchanged.
