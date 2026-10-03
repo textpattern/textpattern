@@ -750,7 +750,7 @@ function form_partial_name($rs)
             'maxlength' => $fieldSizes['name'],
         ));
 
-    if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
+    if (in_array($name, $essential_forms)) {
         $nameInput->setBool('disabled');
     } else {
         $nameInput->setBool('required');
@@ -791,16 +791,7 @@ function form_partial_type($rs)
     $type = $rs['type'];
     $type_widgets = '';
 
-    if ($type && !isset($form_types[$type])) {
-        $typeInput = tag_void('input', array(
-            'id'       => 'types',
-            'name'     => 'type',
-            'type'     => 'text',
-            'value'    => $type,
-            'disabled' => true
-        ));
-        $type_widgets .= hInput('type', $type);
-    } elseif (in_array($name, $essential_forms)) {
+    if (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
         $type_widgets .= hInput('type', $type);
     } else {

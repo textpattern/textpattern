@@ -113,19 +113,14 @@ class Form extends AssetBase implements FormInterface, \Textpattern\Container\Fa
     public function getInstance()
     {
         $textarray = array();
-
-        if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
-            static::$mimeTypes = get_mediatypes($textarray);
-        } else {
-            $custom_types = array();
-        }
+        $custom_types = get_mediatypes($textarray, true);
+        static::$mimeTypes = array_filter($custom_types);
 
         \Txp::get('\Textpattern\L10n\Lang')->setPack($textarray, true);
 
         static::$subdirValues = array_unique(array_merge(
             static::$subdirValues,
-            array_keys($custom_types),
-            array_keys(static::$mimeTypes)
+            array_keys($custom_types)
         ));
 
         return $this;

@@ -3773,7 +3773,7 @@ function parse_form($name, $theme = null)
  * echo fetch_page('default');
  */
 
-function fetch_page($name, $theme)
+function fetch_page($name = 'default', $theme = null)
 {
     global $pretext, $trace;
 
@@ -3791,11 +3791,9 @@ function fetch_page($name, $theme)
         $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '".doSlash($theme)."'");
     }
 
-    if ($page === false) {
-        return false;
+    if ($page !== false) {
+        $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
     }
-
-    $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
 
     return $page;
 }
@@ -3813,11 +3811,11 @@ function fetch_page($name, $theme)
  * echo parse_page('default');
  */
 
-function parse_page($name, $theme, $page = '')
+function parse_page($name, $theme, $page = null)
 {
     global $pretext, $trace, $is_form;
 
-    if (!$page) {
+    if (!isset($page)) {
         $page = fetch_page($name, $theme);
     }
 
@@ -6479,27 +6477,32 @@ function bombShelter()
  *
  * Discards formats with a quality factor below 0.1
  *
- * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss'
+ * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss', 'svg'
  * @return  boolean $format TRUE if accepted
  * @since   4.5.0
  * @package Network
  */
 
-function http_accept_format($format)
+function http_accept_format($format = null)
 {
     static $formats = array(
         'html' => array('text/html', 'application/xhtml+xml', '*/*'),
         'txt'  => array('text/plain', '*/*'),
-        'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
+        'js'   => array('text/javascript', 'application/javascript', 'application/x-javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
         'css'  => array('text/css', '*/*'),
         'json' => array('application/json', 'application/x-json', '*/*'),
-        'xml'  => array('text/xml', 'application/xml', 'application/x-xml', '*/*'),
-        'rdf'  => array('application/rdf+xml', '*/*'),
+        'xml'  => array('application/xml', 'text/xml', 'application/x-xml', '*/*'),
         'atom' => array('application/atom+xml', '*/*'),
         'rss'  => array('application/rss+xml', '*/*'),
+        'rdf'  => array('application/rdf+xml', '*/*'),
+        'svg'  => array('image/svg+xml', '*/*'),
     );
     static $accepts = array();
     static $q = array();
+
+    if ($format === null || !isset($formats[$format])) {
+        return isset($format) ? false : $formats;
+    }
 
     if (empty($accepts)) {
         // Build cache of accepted formats.
@@ -6524,7 +6527,7 @@ function http_accept_format($format)
         }
     }
 
-    return isset($formats[$format]) && count(array_intersect($formats[$format], $accepts)) > 0;
+    return !empty(array_intersect($formats[$format], $accepts));
 }
 
 /**
@@ -6728,29 +6731,38 @@ function txp_match($atts, $what)
 
 // -------------------------------------
 
-function get_mediatypes(&$textarray)
+function get_mediatypes(&$textarray, $all = false)
 {
     global $lang_ui;
 
     $mimeTypes = array();
+    $custom_types = (parse_ini_string(get_pref('custom_form_types'), true) ?: array());
 
-    if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
-        foreach ($custom_types as $type => $langpack) {
-            if (!empty($langpack['mediatype'])) {
-                $mimeTypes[$type] = $langpack['mediatype'];
-            }
+    if (isset($custom_types['*'])) {
+        $key = array_search('*', array_keys($custom_types));
+        $custom_types = array_merge(
+            array_slice($custom_types, 0, $key, true),
+            http_accept_format(),
+            array_slice($custom_types, $key + 1, null, true)
+        );
+    }
 
-            if ($textarray !== null) {
-                $textarray[$type] = isset($lang_ui) && isset($langpack[$lang_ui]) ?
-                    $langpack[$lang_ui] :
-                    (isset($langpack['title']) ?
-                        $langpack['title'] :
-                        (isset($mimeTypes[$type]) ?
-                            strtoupper($type)." (".$mimeTypes[$type].")"
-                            : $type
-                        )
-                    );
-            }
+    foreach ($custom_types as $type => $langpack) {
+        if (!empty($langpack['mediatype'])) {
+            $mimeTypes[$type] = $langpack['mediatype'];
+        } elseif (!empty($langpack[0])) {
+            $mimeTypes[$type] = $langpack[0];
+        } elseif ($all) {
+            $mimeTypes[$type] = null;
+        }
+
+        if ($textarray !== null) {
+            $textarray[$type] = isset($lang_ui) && isset($langpack[$lang_ui]) ?
+                $langpack[$lang_ui] :
+                (isset($langpack['title']) ?
+                    $langpack['title'] :
+                    (isset($mimeTypes[$type]) ? strtoupper($type) : $type)
+                ) . (isset($mimeTypes[$type]) ? " (".$mimeTypes[$type].")" : '');
         }
     }
 
