@@ -151,7 +151,7 @@ if (!defined('SITE_HOST')) {
      * @since   4.6.0
      */
 
-    define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+    define('SITE_HOST', (string) parse_url(hu, PHP_URL_HOST));
 }
 
 if (!defined('IMPATH')) {
@@ -304,7 +304,7 @@ function preText($store, $prefs = null)
         // Another IIS fix.
         if (!$out['request_uri'] and serverSet('argv')) {
             $argv = serverSet('argv');
-            $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
+            $out['request_uri'] = substr($argv[0], strpos($argv[0], ';') + 1);
         }
 
         // Define the usable url, minus any subdirectories.
@@ -775,8 +775,7 @@ function output_component($n = '')
     }
 
     if (!isset($mimetypes)) {
-        $null = null;
-        $mimetypes = get_mediatypes($null);
+        $mimetypes = get_mediatypes();
         $typequery = " AND type IN ('" . implode("','", doSlash(array_keys($mimetypes))) . "')";
     }
 

@@ -6731,7 +6731,7 @@ function txp_match($atts, $what)
 
 // -------------------------------------
 
-function get_mediatypes(&$textarray, $all = false)
+function get_mediatypes(&$textarray = null, $all = false)
 {
     global $lang_ui;
 
