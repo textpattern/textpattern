@@ -749,9 +749,13 @@ function textpattern()
 
     // Useful for clean URLs with error-handlers.
     txp_status_header('200 OK');
-
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page'], $pretext['skin']);
+
+    if (empty($pretext['f'])) {
+        $html = parse_page($pretext['page'], $pretext['skin']);
+    } else {
+        $html = output_component($pretext['f']);
+    }
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -776,7 +780,7 @@ function output_component($n = '')
 
     if (!isset($mimetypes)) {
         $mimetypes = get_mediatypes();
-        $typequery = " AND type IN ('" . implode("','", doSlash(array_keys($mimetypes))) . "')";
+        $typequery = " AND type IN (" . quote_list(array_keys($mimetypes), ',') . ")";
     }
 
     $t = $pretext['skin'];
@@ -798,12 +802,13 @@ function output_component($n = '')
                 $mimetype = $mimetypes[$row['type']];
             }
         }
+    } else {
+        return false;
     }
 
-    set_error_handler('tagErrorHandler');
     header('Content-Type: ' . $mimetype . '; charset=utf-8');
-    echo ltrim(parse_page(null, null, implode(n, $assets)));
-    restore_error_handler();
+
+    return parse_page(null, null, implode(n, $assets));
 }
 
 // -------------------------------------------------------------
