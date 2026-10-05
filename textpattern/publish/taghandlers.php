@@ -353,8 +353,7 @@ function component($atts)
 
     if ($mode === 'flat') {
         if (!isset($mimetypes)) {
-            $null = null;
-            $mimetypes = get_mediatypes($null);
+            $mimetypes = get_mediatypes();
         }
 
         $url = array();

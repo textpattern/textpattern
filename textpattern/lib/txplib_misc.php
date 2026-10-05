@@ -6909,20 +6909,18 @@ function txp_match($atts, $what)
 
 // -------------------------------------
 
-function get_mediatypes(&$textarray, $all = false)
+function get_mediatypes(&$textarray = null, $all = false)
 {
     global $lang_ui;
 
     $mimeTypes = array();
     $custom_types = (parse_ini_string(get_pref('custom_form_types'), true) ?: array());
 
-    if (isset($custom_types['*'])) {
+    while (isset($custom_types['*'])) {
         $key = array_search('*', array_keys($custom_types));
-        $custom_types = array_merge(
-            array_slice($custom_types, 0, $key, true),
-            http_accept_format(),
-            array_slice($custom_types, $key + 1, null, true)
-        );
+        $custom_types = array_slice($custom_types, 0, $key, true) +
+            http_accept_format() +
+            array_slice($custom_types, $key + 1, null, true);
     }
 
     foreach ($custom_types as $type => $langpack) {

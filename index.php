@@ -86,12 +86,9 @@ if (!empty($txpcfg['pre_publish_script'])) {
 }
 
 include txpath . '/publish.php';
+textpattern();
 
-if (!empty($f)) {
-    output_component($f);
-} else {
-    textpattern();
-
+if (empty($f)) {
     if ($production_status !== 'live') {
         echo $trace->summary();
     }

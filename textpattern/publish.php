@@ -151,7 +151,7 @@ if (!defined('SITE_HOST')) {
      * @since   4.6.0
      */
 
-    define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+    define('SITE_HOST', (string) parse_url(hu, PHP_URL_HOST));
 }
 
 if (!defined('IMPATH')) {
@@ -319,7 +319,7 @@ function preText($store, $prefs = null)
         // Another IIS fix.
         if (!$out['request_uri'] and serverSet('argv')) {
             $argv = serverSet('argv');
-            $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
+            $out['request_uri'] = substr($argv[0], strpos($argv[0], ';') + 1);
         }
 
         // Define the usable url, minus any subdirectories.
@@ -766,9 +766,13 @@ function textpattern()
 
     // Useful for clean URLs with error-handlers.
     txp_status_header('200 OK');
-
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page'], $pretext['skin']);
+
+    if (empty($pretext['f'])) {
+        $html = parse_page($pretext['page'], $pretext['skin']);
+    } else {
+        $html = output_component($pretext['f']);
+    }
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -792,9 +796,8 @@ function output_component($n = '')
     }
 
     if (!isset($mimetypes)) {
-        $null = null;
-        $mimetypes = get_mediatypes($null);
-        $typequery = " AND type IN ('" . implode("','", doSlash(array_keys($mimetypes))) . "')";
+        $mimetypes = get_mediatypes();
+        $typequery = " AND type IN (" . quote_list(array_keys($mimetypes), ',') . ")";
     }
 
     $t = $pretext['skin'];
@@ -816,12 +819,13 @@ function output_component($n = '')
                 $mimetype = $mimetypes[$row['type']];
             }
         }
+    } else {
+        return false;
     }
 
-    set_error_handler('tagErrorHandler');
     header('Content-Type: ' . $mimetype . '; charset=utf-8');
-    echo ltrim(parse_page(null, null, implode(n, $assets)));
-    restore_error_handler();
+
+    return parse_page(null, null, implode(n, $assets));
 }
 
 // -------------------------------------------------------------
