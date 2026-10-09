@@ -106,7 +106,7 @@ function prefs_save()
 
     // Remove hashes from non-concurrent users.
     // Note: if removing user from list, they need to logout to invalidate sessions on other devices.
-    $conUsers = do_list_unique($post['concurrent_logins']);
+    $conUsers = isset($post['concurrent_logins']) ? do_list_unique($post['concurrent_logins']) : array();
     $userIDs = safe_column('user_id', 'txp_users', "name NOT IN (". quote_list($conUsers, ',') .")");
     safe_delete('txp_token', "type='shared_login' AND reference_id IN (" . implode(',', $userIDs) . ")");
 
