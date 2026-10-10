@@ -130,7 +130,7 @@ function form_list($current)
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
-                    $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list'));
+                    $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list', 'role' => 'list'));
 
                     $label = isset($form_types[$prev_type]) ? $form_types[$prev_type] : $prev_type;
                     $out[] = wrapRegion($prev_type . '_forms_group', $group_out, 'form_' . $prev_type, $label, 'form_' . $prev_type);
@@ -155,7 +155,7 @@ function form_list($current)
         }
 
         if ($prev_type !== null) {
-            $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list'));
+            $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list', 'role' => 'list'));
 
             $out[] = wrapRegion($prev_type . '_forms_group', $group_out, 'form_' . $prev_type, $form_types[$prev_type], 'form_' . $prev_type);
         }
