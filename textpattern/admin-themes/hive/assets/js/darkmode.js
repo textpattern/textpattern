@@ -1,2 +1,1 @@
-/** global: localStorage */
-(()=>{var d=document.body.classList,e=window.matchMedia("screen and (prefers-color-scheme: dark)");function r(e){null===localStorage.getItem("prefers-color-scheme")&&(e.matches?d.add("darkmode"):d.contains("darkmode")&&d.remove("darkmode"))}"dark"===localStorage.getItem("prefers-color-scheme")&&d.add("darkmode"),r(e),e.addListener(r)})();
+!function(){"use strict";var e=document.body.classList,r=window.matchMedia("screen and (prefers-color-scheme: dark)");function d(r){null===localStorage.getItem("prefers-color-scheme")&&(r.matches?e.add("darkmode"):e.contains("darkmode")&&e.remove("darkmode"))}"dark"===localStorage.getItem("prefers-color-scheme")&&e.add("darkmode"),d(r),r.addListener(d)}();
