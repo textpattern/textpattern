@@ -281,14 +281,6 @@ function image_list($message = '')
             )
         );
 
-    $buttons = array();
-
-    if (has_privs('article.edit.own')) {
-        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
-    }
-
-    callback_event_ref($event, 'controls', 'panel', $buttons);
-
     $createBlock = array();
 
     if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {

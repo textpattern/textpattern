@@ -815,7 +815,6 @@ function output_component($n = '')
 function output_thumb($data = array())
 {
     try {
-        static $storedTokens = array();
         $sec_mode = get_pref('thumb_security', 'always');
 
         if ($sec_mode === 'always') {
