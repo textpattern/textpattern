@@ -16,6 +16,7 @@ Changes in 4.9.2 (upcoming)
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: Theme import with invalid JSON manifest.
+* Fixed: Improved Textile support for BCP 47 language tags.
 * Fixed: Plugin compilation output: order not load_order.
 * Fixed: Default public theme CSS should not be minified.
 * Added: <txp:file_download_info /> tag.
