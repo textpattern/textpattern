@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.5';
+    protected $ver = '4.1.6';
 
     /**
      * Regular expression snippets.
@@ -2565,7 +2565,7 @@ class Parser
             $matched = str_replace($lng[0], '', $matched);
             if ($element === 'code' && preg_match("/\[([a-zA-Z0-9_-]+)\]/U", $lng[0], $lng1)) {
                 $lang = $lng1[1];
-            } elseif (preg_match("/\[([a-zA-Z]{2}(?:[\-\_][a-zA-Z]{2})?)\]/U", $lng[0], $lng2)) {
+            } elseif (preg_match("/\[([a-z]{2,3}(?:[\-\_][a-z0-9]+)*)\]/Ui", $lng[0], $lng2)) {
                 $lang = $lng2[1];
             }
         }
