@@ -49,8 +49,12 @@ function setup_db($cfg = array())
     $s = md5(uniqid(rand(), true));
     $permlink_mode = 'messy';
 
-    // @todo Find a way to remove the error suppression here. Custom error handler?
-    $pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1");
+    $context = stream_context_create(array(
+        'http' => array(
+            'user_agent' => 'Textpattern CMS clean URL test',
+        ),
+    ));
+    $pretext_data = file("{$siteurl}/{$s}/?txpcleantest=1", 0, $context);
 
     if (!empty($pretext_data[0]) && trim($pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
         $permlink_mode = 'section_title';
