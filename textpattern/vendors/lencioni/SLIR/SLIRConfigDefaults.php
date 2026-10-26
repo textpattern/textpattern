@@ -224,7 +224,7 @@ class SLIRConfigDefaults
         if (self::$defaultImagePath === null) {
             $parts = parse_url(ihu);
 
-            $incoming = explode('/', $path_to_site);
+            $incoming = explode(DS, $path_to_site);
             $keep = explode('/', $parts['path']);
             $result = array_diff($keep, $incoming);
             $path = implode('/', $result);
