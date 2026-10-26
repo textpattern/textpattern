@@ -393,7 +393,12 @@ function doDiagnostics()
             $s = md5(uniqid(rand(), true)) . '/?txpcleantest=1';
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = file(hu . $s);
+            $context = stream_context_create(array(
+                'http' => array(
+                    'user_agent' => 'Textpattern CMS clean URL test',
+                ),
+            ));
+            $pretext_data = file(hu . $s, 0, $context);
 
             if ($pretext_data) {
                 $pretext_req = trim(empty($pretext_data[0]) ? '' : $pretext_data[0]);
