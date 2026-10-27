@@ -312,11 +312,11 @@ class Plugin
 
         $keyFiles = array(
             'code'     => $filename.'.php',
-            'manifest' => 'manifest.json',
             'help'     => 'help.html',
             'help_raw' => 'help.textile',
             'textpack' => 'textpack.txp',
             'data'     => 'data.txp',
+            'manifest' => 'manifest.json',
         );
 
         $keyContent = array_fill_keys(array_keys($keyFiles), '');
