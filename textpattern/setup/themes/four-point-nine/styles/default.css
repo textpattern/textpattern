@@ -1,4 +1,81 @@
 @charset "UTF-8";
+:root {
+  color-scheme: light;
+  --color-text: #333;
+  --color-text-heading: #000;
+  --color-text-button: #333;
+  --color-text-button-hover: #333;
+  --color-text-button-active: #222;
+  --color-text-form: #000;
+  --color-text-form-placeholder: #888;
+  --color-text-form-disabled: #aaa;
+  --color-text-footnote: #585858;
+  --color-link: #004cbf;
+  --color-link-hover: #06f;
+  --color-link-focus: #06f;
+  --color-border: #ccc;
+  --color-border-light: #d4d4d4;
+  --color-background: #fff;
+  --color-background-box: #f7f7f7;
+  --color-background-form: #fff;
+  --color-background-form-disabled: #eee;
+  --color-gradient-from-lighter: #fafafa;
+  --color-gradient-from: #eee;
+  --color-gradient-to: #ddd;
+  --color-gradient-to-darker: #d4d4d4;
+  --color-gradient-border: #ccc;
+  --color-highlight-box: #fff9e1;
+  --color-button-gradient-from: #eee;
+  --color-button-gradient-to: #ddd;
+  --color-button-border: #ddd;
+  --color-button-border-hover: #bcbcbc;
+  --color-button-gradient-hover-from: #f8f8f8;
+  --color-button-gradient-hover-to: #e7e7e7;
+  --color-button-border-active: #bcbcbc;
+  --color-button-shadow: #aaa;
+  --color-error-text: #9d261d;
+  --color-error-background: #f2dede;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-text: #d4d4d4;
+    --color-text-heading: #f5f5f5;
+    --color-text-button: #e5e5e5;
+    --color-text-button-hover: #fff;
+    --color-text-button-active: #c4c4c4;
+    --color-text-form: #f0f0f0;
+    --color-text-form-placeholder: #888;
+    --color-text-form-disabled: #707070;
+    --color-text-footnote: #a3a3a3;
+    --color-link: #7db0ff;
+    --color-link-hover: #a5c8ff;
+    --color-link-focus: #a5c8ff;
+    --color-border: #454545;
+    --color-border-light: #383838;
+    --color-background: #171717;
+    --color-background-box: #222;
+    --color-background-form: #202020;
+    --color-background-form-disabled: #292929;
+    --color-gradient-from-lighter: #303030;
+    --color-gradient-from: #292929;
+    --color-gradient-to: #222;
+    --color-gradient-to-darker: #1c1c1c;
+    --color-gradient-border: #414141;
+    --color-highlight-box: #39321b;
+    --color-button-gradient-from: #353535;
+    --color-button-gradient-to: #292929;
+    --color-button-border: #454545;
+    --color-button-border-hover: #656565;
+    --color-button-gradient-hover-from: #414141;
+    --color-button-gradient-hover-to: #333;
+    --color-button-border-active: #777;
+    --color-button-shadow: #101010;
+    --color-error-text: #ffaaa5;
+    --color-error-background: #482525;
+  }
+}
 /* ==========================================================================
    Styling and layout for all media
    ========================================================================== */
@@ -37,10 +114,12 @@ nav ol::after,
     position: relative;
     /* 2 */
     margin: 0;
-    background: #f7f7f7;
+    background: var(--color-background-box);
   }
   /**
    * Outer wrapper for main layouts.
+   *
+   * 1. Prevent child margins from collapsing through the wrapper.
    *
    * Example HTML:
    *
@@ -51,9 +130,10 @@ nav ol::after,
    * </div>
    */
   .wrapper {
-    padding: 1px 0;
-    border-bottom: 1px solid #cccccc;
-    background: #ffffff;
+    /* 1 */
+    padding-block: 1px;
+    border-block-end: 1px solid var(--color-border);
+    background: var(--color-background);
   }
   /**
    * Wrapper for layouts, and for site header/footer.
@@ -71,7 +151,7 @@ nav ol::after,
   .container {
     width: 88%;
     max-width: 54em;
-    margin: 0 auto;
+    margin-inline: auto;
   }
   /**
    * Additional styling for child content within site header.
@@ -115,20 +195,21 @@ nav ol::after,
    * 1. Prevent really, really long words in article from breaking layout.
    */
   .complementary-content {
-    margin: 2em -6% 0;
-    padding: 0 6%;
+    margin-block-start: 2em;
+    margin-inline: -6%;
+    padding-inline: 6%;
     /* 1 */
     overflow-wrap: anywhere;
-    border-top: 2px dashed #cccccc;
+    border-block-start: 2px dashed var(--color-border);
   }
   /**
    * Hide text but still allow screen reader access.
    *
    * Example HTML:
    *
-   * <p class="accessibility">
+   * <p class="visually-hidden">
    */
-  .accessibility {
+  .visually-hidden {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -163,7 +244,7 @@ nav ol::after,
    * </nav>
    */
   .site-navigation {
-    background-color: #dddddd;
+    background-color: var(--color-gradient-to);
   }
   .site-navigation > div {
     position: relative;
@@ -173,37 +254,37 @@ nav ol::after,
   .site-navigation ul {
     margin: 0;
     padding: 0;
-    border: solid #cccccc;
+    border: solid var(--color-gradient-border);
     border-width: 1px 0;
     list-style: none;
   }
   .site-navigation li {
-    border: solid #cccccc;
+    border: solid var(--color-gradient-border);
     border-width: 1px 0;
-    background-color: #eeeeee;
+    background-color: var(--color-gradient-from);
   }
   .site-navigation li:hover {
-    background-color: #f8f8f8;
+    background-color: var(--color-button-gradient-hover-from);
   }
   .site-navigation li:active {
-    background-color: #d4d4d4;
+    background-color: var(--color-gradient-to-darker);
     box-shadow: inset 0 0.2em 0.25em rgba(0, 0, 0, 0.15);
   }
   .site-navigation li.active {
-    background-color: #f8f8f8;
+    background-color: var(--color-button-gradient-hover-from);
     box-shadow: none;
   }
   .site-navigation a {
     display: block;
     padding: 0.5em 6%;
-    color: #333333;
+    color: var(--color-text);
   }
   .site-navigation a:hover, .site-navigation a:visited {
-    color: #333333;
+    color: var(--color-text);
     text-decoration: none;
   }
   .site-navigation a:active {
-    color: #222222;
+    color: var(--color-text-button-active);
     text-decoration: none;
   }
   /**
@@ -211,7 +292,7 @@ nav ol::after,
    */
   search {
     padding: 1em 6% 0.5em;
-    background: #ffffff;
+    background: var(--color-background);
   }
   search input[type=search] {
     width: 16em;
@@ -222,6 +303,13 @@ nav ol::after,
     background: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Cg fill=%27%23333%27%3E%3Cpath d=%27M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z%27/%3E%3Cpath d=%27M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z%27/%3E%3C/g%3E%3C/svg%3E") no-repeat left center;
     background-size: 2em 2em;
   }
+}
+@media screen and (prefers-color-scheme: dark) {
+  search input[type=search] {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2732%27 height=%2732%27 viewBox=%270 0 32 32%27%3E%3Cg fill=%27%23ccc%27%3E%3Cpath d=%27M4,13c0-5,4-9,9-9c5,0,9,4,9,9c0,5-4,9-9,9C8,22,4,18,4,13z M13,19c3.3,0,6-2.7,6-6s-2.7-6-6-6s-6,2.7-6,6S9.7,19,13,19z%27/%3E%3Cpath d=%27M17.5,19l1.5-1.5l4.5,3L28,25c0,0,0,1.5-0.75,2.25S25,28,25,28l-4.5-4.5L17.5,19z%27/%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+@media screen {
   /* Links
      ========================================================================== */
   /**
@@ -232,49 +320,36 @@ nav ol::after,
    */
   a {
     /* 1 */
-    color: #004cbf;
+    color: var(--color-link);
     /* 2 */
     text-decoration: none;
     /* 3 */
     -webkit-text-decoration-skip: ink;
             text-decoration-skip-ink: auto;
   }
-  a:hover, a:active {
-    color: #0066ff;
+  a:hover, a:active, a:focus-visible {
+    color: var(--color-link-hover);
     text-decoration: underline;
   }
-  a:focus-visible {
-    outline: 2px solid #0066ff;
+  /**
+   * Focus rings.
+   */
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-link-focus);
     outline-offset: 2px;
   }
-  /**
-   * Additional styling for `h1`-`h3` heading links.
-   *
-   * 1. Expanded CSS level 3 `text-decoration-color` property in supported
-   *    browsers, older browsers ignore this addition.
-   */
-  h1 a,
-  h2 a,
-  h3 a,
-  h4 a,
-  h5 a,
-  h6 a {
-    color: #000000;
+  :where(input, select, textarea):focus-visible {
+    border-color: var(--color-link-focus);
   }
-  h1 a:hover, h1 a:active,
-  h2 a:hover,
-  h2 a:active,
-  h3 a:hover,
-  h3 a:active,
-  h4 a:hover,
-  h4 a:active,
-  h5 a:hover,
-  h5 a:active,
-  h6 a:hover,
-  h6 a:active {
-    color: #000000;
-    /* 1 */
-    text-decoration-color: rgba(51, 51, 51, 0.5);
+  /**
+   * Additional styling for `h1`-`h6` heading links.
+   */
+  :is(h1, h2, h3, h4, h5, h6) a {
+    color: var(--color-text-heading);
+  }
+  :is(h1, h2, h3, h4, h5, h6) a:is(:hover, :active) {
+    color: var(--color-text-heading);
+    text-decoration-color: currentColor;
   }
   /**
    * Paginator (prev/next) navigation links on articles/article lists.
@@ -302,16 +377,16 @@ nav ol::after,
   .skip-link {
     position: absolute;
     z-index: 2;
-    top: 1px;
-    left: 1px;
+    inset-block-start: 1px;
+    inset-inline-start: 1px;
     padding: 0.25em 0.5em;
     transform: translateY(-5em);
     transition: transform 0.25s ease-in-out;
-    background-color: hsl(0, 0%, 101.3333333333%);
-    color: #333333;
+    background-color: var(--color-gradient-from-lighter);
+    color: var(--color-text);
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
-  .skip-link:focus, .skip-link:active {
+  .skip-link:active, .skip-link:focus-visible {
     transform: translateY(0);
   }
   /* Typography
@@ -327,7 +402,7 @@ nav ol::after,
    * Global font and text colour.
    */
   body {
-    color: #333333;
+    color: var(--color-text);
     font-family: "PT Serif", Constantia, "Lucida Bright", Lucidabright, "Lucida Serif", Lucida, "DejaVu Serif", "Bitstream Vera Serif", "Liberation Serif", Georgia, serif;
   }
   /**
@@ -347,7 +422,7 @@ nav ol::after,
   h5,
   h6 {
     clear: both;
-    color: #000000;
+    color: var(--color-text-heading);
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   }
   h1 {
@@ -424,8 +499,8 @@ nav ol::after,
   var {
     padding: 0 0.25em;
     border-radius: 0.25em;
-    background: #fff9e1;
-    color: #333333;
+    background: var(--color-highlight-box);
+    color: var(--color-text);
   }
   /**
    * Harmonize size and style of computer text.
@@ -434,10 +509,10 @@ nav ol::after,
   code,
   kbd,
   samp {
-    border: 1px solid #d4d4d4;
+    border: 1px solid var(--color-border-light);
     border-radius: 0.2857143em;
-    background-color: #f7f7f7;
-    color: #333333;
+    background-color: var(--color-background-box);
+    color: var(--color-text);
     font-family: Menlo, Consolas, Monaco, monospace;
     font-size: 0.875rem;
     line-height: 1.5;
@@ -507,7 +582,7 @@ nav ol::after,
   figcaption,
   tfoot,
   .footnote {
-    color: #585858;
+    color: var(--color-text-footnote);
   }
   figcaption {
     margin-top: 0.5em;
@@ -520,6 +595,13 @@ nav ol::after,
     background: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 240 24%27%3E%3Cpath fill=%27%23333%27 d=%27M0,0c1.742,13.61,54.74,20.912,119.995,15.279C184.922,9.679,238.594,13.024,240,24c-1.744-13.613-54.742-20.913-120.005-15.284C55.078,14.32,1.405,10.973,0,0z%27/%3E%3C/svg%3E") 50% 50% no-repeat;
     background-size: 240px 24px;
   }
+}
+@media screen and (prefers-color-scheme: dark) {
+  hr {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 240 24%27%3E%3Cpath fill=%27%23ccc%27 d=%27M0,0c1.742,13.61,54.74,20.912,119.995,15.279C184.922,9.679,238.594,13.024,240,24c-1.744-13.613-54.742-20.913-120.005-15.284C55.078,14.32,1.405,10.973,0,0z%27/%3E%3C/svg%3E");
+  }
+}
+@media screen {
   /* Support for non-latin languages (can be removed if not required)
      ========================================================================== */
   /**
@@ -560,92 +642,16 @@ nav ol::after,
     font-family: "PingFang TC", PMingLiU, sans-serif;
   }
   /**
-   * Suppress `text-decoration` in some RTL languages for better legibility.
-   */
-  [lang|=ar] a:hover,
-  [lang|=fa] a:hover,
-  [lang|=ur] a:hover {
-    text-decoration: none;
-  }
-  /**
    * Computer code should be LTR.
    */
   [dir=rtl] code {
     direction: ltr;
   }
   /**
-   * Swap image alignment right/left positions in RTL languages.
-   */
-  [dir=rtl] img.align-left {
-    margin: 1em 0 1em 1em;
-    float: right;
-  }
-  [dir=rtl] img.align-right {
-    margin: 1em 1em 1em 0;
-    float: left;
-  }
-  /**
-   * Swap table caption alignment in RTL languages.
-   */
-  [dir=rtl] caption {
-    text-align: right;
-  }
-  /**
-   * Swap table cell text alignments in RTL languages.
-   */
-  [dir=rtl] th,
-  [dir=rtl] td {
-    text-align: right;
-  }
-  /**
-   * Swap menu/list padding positions in RTL languages.
-   */
-  [dir=rtl] menu,
-  [dir=rtl] ol,
-  [dir=rtl] ul {
-    padding: 0 2em 0 0;
-  }
-  [dir=rtl] .site-navigation ul,
-  [dir=rtl] .article-list {
-    padding: 0;
-  }
-  /**
-   * Swap definition description margin positions in RTL languages.
-   */
-  [dir=rtl] dd {
-    margin: 0 2em 0 0;
-  }
-  /**
-   * Swap checkbox/radio margin positions in RTL languages.
-   */
-  [dir=rtl] input[type=checkbox] + label,
-  [dir=rtl] input[type=radio] + label {
-    margin: 0 0 0 0.5em;
-  }
-  [dir=rtl] input[type=checkbox] + label:last-of-type,
-  [dir=rtl] input[type=radio] + label:last-of-type {
-    margin: 0;
-  }
-  /**
    * Swap `select` icon position in RTL languages.
    */
   [dir=rtl] select {
-    padding-right: 0.1875em;
-    padding-left: 1.5em;
     background-position: 0.5em center;
-  }
-  /**
-   * Swap ‘skip links’ position in RTL languages.
-   */
-  [dir=rtl] .skip-link {
-    right: 1px;
-    left: auto;
-  }
-  /**
-   * Swap anchor float position on comments.
-   */
-  [dir=rtl] .comments h4 .comment-anchor {
-    float: left;
   }
   /* Embedded content
      ========================================================================== */
@@ -709,7 +715,7 @@ nav ol::after,
   caption {
     margin-bottom: 0.5em;
     font-style: italic;
-    text-align: left;
+    text-align: start;
   }
   /**
    * Make table cells align top and left by default.
@@ -717,25 +723,25 @@ nav ol::after,
   th,
   td {
     padding: 0.5em;
-    border: 1px solid #d4d4d4;
+    border: 1px solid var(--color-border-light);
     vertical-align: top;
-    text-align: left;
+    text-align: start;
   }
   /**
    * Emphasize table header.
    */
   thead tr {
-    background-color: #eeeeee;
+    background-color: var(--color-gradient-from);
   }
   thead th,
   thead td {
-    border: 1px solid #cccccc;
+    border: 1px solid var(--color-border);
   }
   /**
    * 'Zebra striping' of `tbody` rows.
    */
   tbody tr:nth-child(even) {
-    background-color: #f7f7f7;
+    background-color: var(--color-background-box);
   }
   /**
    * Adjust padding of table footer due to smaller font size.
@@ -747,7 +753,8 @@ nav ol::after,
   /**
    * Multi-row span vertical cell alignments.
    */
-  [rowspan] {
+  th[rowspan],
+  td[rowspan] {
     vertical-align: middle;
   }
   /* Lists
@@ -758,7 +765,8 @@ nav ol::after,
   menu,
   ol,
   ul {
-    padding: 0 0 0 2em;
+    padding-block: 0;
+    padding-inline: 2em 0;
   }
   /**
    * Remove margins from nested lists.
@@ -771,13 +779,14 @@ nav ol::after,
    * CSS Lists and Counters Module Level 3 list marker styling.
    */
   li::marker {
-    color: #000000;
+    color: var(--color-text-heading);
   }
   /**
    * Address margins set differently.
    */
   dd {
-    margin: 0 0 0 2em;
+    margin-block: 0;
+    margin-inline: 2em 0;
   }
   /**
    * Additional styling for article lists.
@@ -787,14 +796,15 @@ nav ol::after,
    * <ul class="article-list">
    */
   .article-list {
-    margin: 0 0 2em;
+    margin-block: 0 2em;
+    margin-inline: 0;
     padding: 0;
-    border-top: 1px solid #cccccc;
+    border-block-start: 1px solid var(--color-border);
     list-style: none;
   }
   .article-list li {
-    margin-bottom: 0;
-    border-bottom: 1px solid #cccccc;
+    margin-block-end: 0;
+    border-block-end: 1px solid var(--color-border);
   }
   /* Forms
      ========================================================================== */
@@ -808,7 +818,7 @@ nav ol::after,
     /* 2 */
     margin: 1em 0;
     padding: 1px 1em;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--color-border);
   }
   /**
    * Normalize styling of `legend`.
@@ -834,7 +844,7 @@ nav ol::after,
     max-width: 100%;
     /* 2 */
     margin: 0;
-    color: #000000;
+    color: var(--color-text-form);
     font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /* 3 */
     font-size: 1rem;
@@ -863,30 +873,11 @@ nav ol::after,
   textarea {
     height: 2em;
     padding: 0.25em 0.1875em;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--color-border);
     border-radius: 0;
-    background: #ffffff;
+    background: var(--color-background-form);
     /* 1 */
     appearance: none;
-  }
-  [type=color]:focus-visible,
-  [type=date]:focus-visible,
-  [type=datetime-local]:focus-visible,
-  [type=email]:focus-visible,
-  [type=month]:focus-visible,
-  [type=number]:focus-visible,
-  [type=password]:focus-visible,
-  [type=search]:focus-visible,
-  [type=tel]:focus-visible,
-  [type=text]:focus-visible,
-  [type=time]:focus-visible,
-  [type=url]:focus-visible,
-  [type=week]:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible {
-    border-color: #0066ff;
-    outline: 2px solid transparent;
-    outline-offset: 2px;
   }
   /**
    * 1. Remove any excess padding.
@@ -900,7 +891,7 @@ nav ol::after,
   [type=checkbox] + label,
   [type=radio] + label {
     /* 2 */
-    margin: 0 0.5em 0 0;
+    margin-inline: 0.5em 0;
   }
   [type=checkbox] + label:last-of-type,
   [type=radio] + label:last-of-type {
@@ -925,10 +916,17 @@ nav ol::after,
    * Use indicator icon to signify the drop-down ability of `select`.
    */
   select {
-    padding-right: 1.5em;
-    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2717%27 height=%275%27 viewBox=%270 0 17 5%27%3E%3Cpolygon fill=%27%23333%27 points=%270,0 5,5 10,0%27/%3E%3C/svg%3E") right center no-repeat;
+    padding-inline: 0 1.5em;
+    background: var(--color-background-form) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2717%27 height=%275%27 viewBox=%270 0 17 5%27%3E%3Cpolygon fill=%27%23333%27 points=%270,0 5,5 10,0%27/%3E%3C/svg%3E") right center no-repeat;
     background-size: 1.0625em 0.3125em;
   }
+}
+@media screen and (prefers-color-scheme: dark) {
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2717%27 height=%275%27 viewBox=%270 0 17 5%27%3E%3Cpolygon fill=%27%23ccc%27 points=%270,0 5,5 10,0%27/%3E%3C/svg%3E");
+  }
+}
+@media screen {
   /**
    * Override height and background set in a previous rule and allow auto height.
    */
@@ -969,21 +967,20 @@ nav ol::after,
    * Make sure disabled elements really are disabled and styled appropriately.
    *
    * 1. Override default iOS opacity setting.
-   * 2. Re-set default cursor for disabled elements.
    */
-  [disabled],
-  [disabled] option,
-  [disabled] optgroup,
-  span.disabled {
-    border-color: #d4d4d4 !important;
+  :where(input,
+  select,
+  textarea,
+  optgroup,
+  option):disabled {
+    border-color: var(--color-border-light);
     /* 1 */
     opacity: 1;
-    background: #eeeeee !important;
-    box-shadow: none !important;
-    color: #aaaaaa !important;
-    text-shadow: none !important;
-    /* 2 */
-    cursor: default !important;
+    background-color: var(--color-background-form-disabled);
+    box-shadow: none;
+    color: var(--color-text-form-disabled);
+    text-shadow: none;
+    cursor: not-allowed;
   }
   /**
    * Width display options for `input` fields. Height display options
@@ -1014,7 +1011,7 @@ nav ol::after,
   input:focus:invalid,
   select:focus:invalid,
   textarea:focus:invalid {
-    border-color: #9d261d;
+    border-color: var(--color-error-text);
     box-shadow: none;
   }
   /**
@@ -1023,7 +1020,7 @@ nav ol::after,
   input:-moz-ui-invalid,
   select:-moz-ui-invalid,
   textarea:-moz-ui-invalid {
-    border-color: #9d261d;
+    border-color: var(--color-error-text);
     box-shadow: none;
   }
   /**
@@ -1033,7 +1030,7 @@ nav ol::after,
    */
   ::placeholder {
     opacity: 1;
-    color: #999999;
+    color: var(--color-text-form-placeholder);
     /* 1 */
     font: inherit;
   }
@@ -1046,7 +1043,7 @@ nav ol::after,
    */
   .required {
     border: 0;
-    color: #9d261d;
+    color: var(--color-error-text);
   }
   /* Buttons
      ========================================================================== */
@@ -1059,16 +1056,16 @@ nav ol::after,
   [type=button],
   [type=reset],
   [type=submit] {
-    background-color: #dddddd;
-    background-image: linear-gradient(#eeeeee, #dddddd);
     display: inline-block;
     position: relative;
     height: 2em;
     padding: 0.25em 1em;
-    border: 1px solid #dddddd;
+    border: 1px solid var(--color-button-border);
     border-radius: 1em;
-    box-shadow: 0 2px 0 #aaaaaa;
-    color: #333333;
+    background-color: var(--color-button-gradient-hover-to);
+    background-image: linear-gradient(var(--color-button-gradient-hover-from), var(--color-button-gradient-hover-to));
+    box-shadow: 0 2px 0 var(--color-button-shadow);
+    color: var(--color-text-button);
     font-weight: normal;
     text-align: center;
     /* 1 */
@@ -1080,10 +1077,10 @@ nav ol::after,
   [type=button]:hover,
   [type=reset]:hover,
   [type=submit]:hover {
-    background-color: #e7e7e7;
-    background-image: linear-gradient(#f8f8f8, #e7e7e7);
-    border-color: #bcbcbc;
-    color: #333333;
+    border-color: var(--color-button-border-hover);
+    background-color: var(--color-button-gradient-hover-to);
+    background-image: linear-gradient(var(--color-button-gradient-hover-from), var(--color-button-gradient-hover-to));
+    color: var(--color-text-button-hover);
     text-decoration: none;
   }
   button:active,
@@ -1091,27 +1088,21 @@ nav ol::after,
   [type=reset]:active,
   [type=submit]:active {
     top: 2px;
-    border-color: #bcbcbc;
+    border-color: var(--color-button-border-active);
     box-shadow: none;
-    color: #222222;
+    color: var(--color-text-button-active);
     text-decoration: none;
-  }
-  button:focus-visible,
-  [type=button]:focus-visible,
-  [type=reset]:focus-visible,
-  [type=submit]:focus-visible {
-    border-color: #0066ff;
-    outline: 2px solid transparent;
-    outline-offset: 2px;
   }
   /**
    * Disbaled button additional styling.
    */
-  button[disabled],
-  [type=button][disabled],
-  [type=reset][disabled],
-  [type=submit][disabled] {
-    top: 2px !important;
+  button:disabled,
+  input[type=button]:disabled,
+  input[type=reset]:disabled,
+  input[type=submit]:disabled {
+    top: 0;
+    box-shadow: none;
+    cursor: not-allowed;
   }
   /* Comments
      ========================================================================== */
@@ -1127,13 +1118,13 @@ nav ol::after,
     padding: 1px 1em;
     overflow-wrap: anywhere;
     border-radius: 0.5em;
-    background: #f7f7f7;
+    background: var(--color-background-box);
   }
   .comments h4 .is-author {
     font-weight: normal;
   }
   .comments h4 .comment-anchor {
-    float: right;
+    float: inline-end;
     font-weight: normal;
   }
   /**
@@ -1144,7 +1135,7 @@ nav ol::after,
    * <article class="comments comments-author">
    */
   .comments-author {
-    background: #eeeeee;
+    background: var(--color-gradient-from);
   }
   /**
    * Styling for user comments preview.
@@ -1153,19 +1144,19 @@ nav ol::after,
     margin-bottom: 2px;
     padding: 1em;
     border-radius: 0.5em;
-    background-color: #fff9e1;
+    background-color: var(--color-highlight-box);
   }
   /**
    * Highlight text colour for comment errors.
    */
   .error_message li {
-    color: #9d261d;
+    color: var(--color-error-text);
   }
   /**
    * Highlighting for comment form errors.
    */
   .comments_error {
-    border-color: #9d261d;
+    border-color: var(--color-error-text);
   }
   /* Popup comments (can be removed if you don't use popups)
      ========================================================================== */
@@ -1201,8 +1192,8 @@ nav ol::after,
    * </nav>
    */
   .site-navigation {
-    border-top: 1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
   }
   .site-navigation > div {
     display: flex;
@@ -1230,16 +1221,16 @@ nav ol::after,
     width: 2.125em;
     padding-right: 0;
     transition: width 0.2s ease-in-out, border-color 0.2s ease-in-out;
-    background-color: #eeeeee;
+    background-color: var(--color-gradient-from);
     cursor: pointer;
   }
   search input[type=search]:hover {
-    background-color: #f8f8f8;
+    background-color: var(--color-button-gradient-hover-from);
   }
   search input[type=search]:focus {
     width: 16em;
     padding-right: 0.1875em;
-    background-color: #fafafa;
+    background-color: var(--color-gradient-from-lighter);
     cursor: auto;
   }
 }
@@ -1261,49 +1252,49 @@ nav ol::after,
   search input[type=search] {
     transition-duration: 0;
   }
+  .skip-link {
+    transition: none;
+  }
 }
 /* ==========================================================================
    Styling and layout for print media
    ========================================================================== */
 @media print {
+  /* stylelint-disable color-named */
   /**
-   * Remove unnecessary global styling from printed media.
+   * Control the page margins for printing and PDF output
    */
-  *,
-  *::before,
-  *::after {
-    background: transparent !important;
-    box-shadow: none !important;
-    color: #000000 !important;
-    text-shadow: none !important;
+  @page {
+    margin: 12mm;
   }
   /**
    * Use a print-friendly font size.
    */
   html {
-    font-size: 8pt;
+    font-size: 10pt;
     line-height: 1.5;
   }
   /**
    * Use a print-friendly font family.
    */
   body {
-    margin: 0.5cm;
-    padding: 2em 5em;
-    font-family: "Helvetica Neue", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   }
   /**
    * Visually separate header from body.
    */
   .site-header {
-    border-bottom: 1pt solid #000000;
+    border-bottom: 1pt solid black;
   }
   /**
    * Visually separate footer from body.
    */
   .site-footer {
     margin-top: 12pt;
-    border-top: 1pt solid #000000;
+    border-top: 1pt solid black;
   }
   /**
    * Hide unnecessary content from print.
@@ -1320,59 +1311,48 @@ nav ol::after,
     display: none;
   }
   /**
-   * Show long-form for abbreviations in print.
-   */
-  abbr[title]::after {
-    content: " (" attr(title) ")";
-  }
-  /**
    * Harmonize size, style and vertical margin of headings.
    */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    clear: both;
+    orphans: 2;
+    widows: 2;
+    break-after: avoid-page;
+  }
   h1 {
     margin: 16pt 0;
     font-size: 32pt;
-    font-weight: normal;
     line-height: 36pt;
   }
   h2 {
     margin: 14pt 0;
     font-size: 24pt;
     line-height: 28pt;
-    orphans: 2;
-    widows: 2;
-    break-after: avoid;
   }
   h3 {
     margin: 12pt 0;
     font-size: 18pt;
     line-height: 22pt;
-    orphans: 2;
-    widows: 2;
-    break-after: avoid;
   }
   h4 {
     margin: 11pt 0;
     font-size: 14pt;
     line-height: 18pt;
-    orphans: 2;
-    widows: 2;
-    break-after: avoid;
   }
   h5 {
     margin: 10pt 0;
     font-size: 12pt;
     line-height: 16pt;
-    orphans: 2;
-    widows: 2;
-    break-after: avoid;
   }
   h6 {
     margin: 9pt 0;
     font-size: 10pt;
     line-height: 14pt;
-    orphans: 2;
-    widows: 2;
-    break-after: avoid;
   }
   /**
    * Prevent widows (single final paragraph line on next page) and orphans (single
@@ -1398,16 +1378,11 @@ nav ol::after,
    * 1. Avoid blockquotes breaking across multiple pages.
    */
   blockquote {
-    padding: 0 0 0 8pt;
-    border-left: 3pt solid #000000;
+    padding-inline-start: 8pt;
+    border-inline-start: 3pt solid black;
     font-size: 16pt;
     /* 1 */
     break-inside: avoid;
-  }
-  [dir=rtl] blockquote {
-    padding: 0 8pt 0 0;
-    border-right: 3pt solid #000000;
-    border-left: 0;
   }
   /**
    * Simple preformatted text styling.
@@ -1415,26 +1390,26 @@ nav ol::after,
    * 1. Ensure pre blocks are wrapped when printed.
    */
   pre {
+    max-width: 100%;
     margin-bottom: 8pt;
     padding: 8pt;
-    border: 1pt solid #000000;
+    overflow-wrap: anywhere;
+    border: 1pt solid black;
     /* 1 */
     white-space: pre-wrap !important;
   }
   /**
    * Use a print-friendly monospaced font and size.
    */
-  pre,
   code,
   kbd,
+  pre,
   samp,
   var {
     font-family: "Courier New", Courier, monospace;
   }
   /**
    * Images.
-   *
-   * 1. Avoid images breaking across multiple pages.
    *
    * Image alignment (compatible with Textile markup syntax).
    *
@@ -1445,8 +1420,8 @@ nav ol::after,
    * <img class="align-center">
    */
   img {
-    /* 1 */
-    break-inside: avoid;
+    max-width: 100%;
+    height: auto;
   }
   img.align-left {
     margin: 1em 1em 1em 0;
@@ -1461,21 +1436,11 @@ nav ol::after,
     margin: 1em auto;
   }
   /**
-   * Swap image alignment right/left positions in RTL languages.
-   */
-  [dir=rtl] img.align-left {
-    margin: 1em 0 1em 1em;
-    float: right;
-  }
-  [dir=rtl] img.align-right {
-    margin: 1em 1em 1em 0;
-    float: left;
-  }
-  /**
    * Ensure margin below `figure`.
    */
   figure {
     margin-bottom: 8pt;
+    break-inside: avoid;
   }
   /**
    * Ensure margin above `figcaption`.
@@ -1484,50 +1449,33 @@ nav ol::after,
     margin-top: 4pt;
   }
   /**
-   * Simple bullet styling for `ul` unordered lists.
+   * Remove margins from nested lists.
    */
-  ul {
-    padding: 0 0 8pt 1.8em;
-    list-style: square;
-  }
-  [dir=rtl] ul {
-    padding: 0 1.8em 8pt 0;
-  }
-  /**
-   * Simple numerical styling for `ol` ordered lists.
-   */
-  ol {
-    padding: 0 0 8pt 1.8em;
-    list-style: decimal;
-  }
-  [dir=rtl] ol {
-    padding: 0 1.8em 8pt 0;
-  }
-  /**
-   * Normalize margins on `dl` definition lists.
-   */
-  dl {
-    padding: 0 0 8pt 1.8em;
-  }
-  [dir=rtl] dl {
-    padding: 0 1.8em 8pt 0;
+  li > ul,
+  li > ol {
+    margin: 0;
   }
   /**
    * 1. Make `table` span entire page width.
    * 2. Ensure margin below `table`.
+   * 3. Adjacent table borders can share a single border.
    */
   table {
     /* 1 */
     width: 100%;
     /* 2 */
     margin-bottom: 8pt;
+    /* 3 */
+    border-collapse: collapse;
   }
   /**
-   * Harmonize styling for `caption`.
+   * Display table head across multi-page tables.
    */
-  caption {
-    margin-bottom: 4pt;
-    font-weight: bold;
+  thead {
+    display: table-header-group;
+  }
+  thead th {
+    border-top: 1pt solid black;
   }
   /**
    * Avoid table rows breaking across multiple pages.
@@ -1541,16 +1489,9 @@ nav ol::after,
   th,
   td {
     padding: 4pt 8pt;
-    border-bottom: 1pt solid #000000;
-  }
-  /**
-   * Display table head across multi-page tables.
-   */
-  thead {
-    display: table-header-group;
-  }
-  thead th {
-    border-top: 1pt solid #000000;
+    overflow-wrap: anywhere;
+    border-bottom: 1pt solid black;
+    text-align: start;
   }
   /**
    * Avoid user comments breaking across multiple pages.
