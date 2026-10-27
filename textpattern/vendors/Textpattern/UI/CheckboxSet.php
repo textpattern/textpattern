@@ -56,6 +56,7 @@ class CheckboxSet extends TagCollection implements UICollectionInterface
             $box->setMultiple('name');
             $id = $box->getKey();
             $label = new \Textpattern\UI\Label($box.n.$lbl, $id);
+            $label->setAtt('class', 'txp-form-field-set');
 
             $this->add($label, $id);
         }
