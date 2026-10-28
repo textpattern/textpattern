@@ -2857,6 +2857,32 @@ textpattern.Route.add('', function () {
         }
     });
 
+    // Toggle-options.
+    $('.toggle-option').closest('.txp-form-field-value').find('input').click(function(ev) {
+        let on = $(this).closest('.txp-form-field-value').find('.toggle-option');
+        let tgt = on.data('target');
+        let block = $(tgt);
+        let off = on.siblings().not('.toggle-option');
+
+        if (block.length) {
+            if (off.prop("checked")) {
+                block.hide();
+            } else {
+                block.show();
+            }
+
+            off.click(function () {
+                block.hide();
+            });
+
+            on.click(function () {
+                block.show();
+            });
+        }
+    });
+
+    $('.toggle-option').closest('.txp-form-field-value').find('input:checked').click();
+
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');
 
