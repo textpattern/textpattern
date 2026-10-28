@@ -93,7 +93,7 @@ function author_save()
         return;
     }
 
-    $msg = array(gTxt('author_save_failed'), E_ERROR);
+    $msg = array(gTxt('author_save_failed', array('{name}' => $RealName)), E_ERROR);
     $admin = has_privs('admin.edit');
     $rs = $txp_user === $name || $admin ? update_user($name, $email, $RealName) : false;
 
