@@ -696,30 +696,14 @@ function smtp_handler($name, $val, $constraints = array())
 
 function enhanced_email($name, $val)
 {
-    $js = script_js(<<<EOS
-    var block = $(".mail_enhanced");
-    var smtpOn = $("#enhanced_email-1");
-    var smtpOff = $("#enhanced_email-0");
+    $out = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val);
+    $opt = $out->get($out->keys()[1]);
+    $opt->appendAtts(array(
+        'class' => 'toggle-option',
+        'data-target' => '.mail_enhanced',
+    ));
 
-    if (block.length) {
-        if (smtpOff.prop("checked")) {
-            block.hide();
-        } else {
-            block.show();
-        }
-
-        smtpOff.click(function () {
-            block.hide();
-        });
-
-        smtpOn.click(function () {
-            block.show();
-        });
-    }
-EOS
-    , false, true);
-
-    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val) . $js;
+    return $out;
 }
 
 /**
