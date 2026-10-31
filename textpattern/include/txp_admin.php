@@ -779,7 +779,7 @@ function author_edit($message = '', $fullEdit = false)
             'data-target' => '.edit-admin-new-password',
         ));
 
-        $out[] = $is_edit ? '' : inputLabel('notify', $ynr, 'resend_activation', '', array('id' => 'send_activation'));
+        $out[] = $is_edit ? '' : Txp::get('\Textpattern\UI\InputLabel', 'notify', $ynr, 'resend_activation')->setAtt('id', 'send_activation')->setProperty('raw_label', true);
         $out[] = inputLabel(
             'new_pass',
             fInput(
