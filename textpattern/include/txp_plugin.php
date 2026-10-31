@@ -653,7 +653,7 @@ function plugin_edit_form($name = '')
                             1 => gTxt('plugin_has_prefs'),
                             2 => gTxt('plugin_lifecycle_notify'),
                         ), $flagset)
-                    ) .
+                    )->setProperty('raw_label', true) .
                     eInput('plugin') .
                     sInput('plugin_save') .
                     hInput('help_hash', md5($plugin['help_raw'])) .

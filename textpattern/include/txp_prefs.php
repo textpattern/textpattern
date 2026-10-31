@@ -319,6 +319,11 @@ function prefs_list($message = '')
                     'id'    => 'prefs-' . $a['name'],
                 ))
                 ->setWrap('label', null, array('id' => 'prefs-'.$a['name'].'-label'));
+
+            if ($label === '') {
+                $control->setProperty('raw_label', true);
+            }
+
             $out[] = $control->render();
         }
     }
