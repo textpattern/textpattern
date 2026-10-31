@@ -49,14 +49,6 @@ class InputLabel extends Tag implements UICollectionInterface
     protected $for = '';
 
     /**
-     * Whether the class has been given a label (true) or was auto-assigned (false).
-     *
-     * @var bool
-     */
-
-    protected $hasLabel = false;
-
-    /**
      * The label replacement pairs.
      *
      * @var array
@@ -228,7 +220,7 @@ class InputLabel extends Tag implements UICollectionInterface
         }
 
         $this->label = $label[0];
-        $this->hasLabel = true;
+        $this->setProperty('raw_label', false);
         $this->for = empty($label[1]) ? $this->getKey() : $label[1];
 
         if ($reps) {
@@ -342,7 +334,7 @@ class InputLabel extends Tag implements UICollectionInterface
             'class' => $class,
         ));
 
-        if ($this->hasLabel === false) {
+        if ($this->getProperty('raw_label') === true) {
             $labelContent = gTxt($this->label, $this->labelReps).$help;
         } else {
             $labelContent = new \Textpattern\UI\Tag('label');
