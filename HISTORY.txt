@@ -8,17 +8,20 @@ Changes in 4.9.2 (upcoming)
 * Fixed: Recursive use of <txp:yield>.
 * Fixed: <txp:password_protect> container error (thanks, wet).
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
+* Fixed: Thumbnail generation paths on Windows (thanks, skewray);
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: Theme import with invalid JSON manifest.
 * Fixed: Improved Textile support for IETF BCP 47 language tags.
-* Fixed: Plugin compilation output: order not load_order.
+* Fixed: Plugin compilation output: order, not load_order.
 * Fixed: Default public theme CSS should not be minified.
 * Added: <txp:file_download_info /> tag.
 * Added: 'aspect' ratio output from <txp:image_info /> tag.
 * Added: 'download' attribute to <txp:file_download_link /> tag.
 * Added: 'version' attribute to <txp:css /> tag.
 * Added: Dark mode for default public theme.
+* Added: Publishers can set password for any user, and choose whether
+  invite link is sent.
 * Added: Clean URL test user agent ('Textpattern CMS clean URL test').
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
 * Added: Latest text translations. Thank you to all our translators.
@@ -28,6 +31,7 @@ Changes in 4.9.2 (upcoming)
 * Performance: Reduced query count if theme textpack is unchanged.
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
+* Developer: Exposed raw_label in UI\InputLabel.
 * Vendors: Textile 4.1.6. (thanks, gocom).
 * Vendors: DOMPurify 3.4.17.
 
