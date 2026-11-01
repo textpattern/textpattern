@@ -13,6 +13,7 @@ Changes in 4.9.2 (upcoming)
   (thanks, Maizeravla and MoltenGamaLC).
 * Security: Sanitize 'url_title' attribute consistently (thanks, Maizeravla
   and MoltenGamaLC).
+* Security: Theme import is now CSRF-aware (thanks, Bilguundalai).
 * Security: Validate administrative user status on Users panel updates
   (thanks, mansurmavlankulov).
 * Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage()
