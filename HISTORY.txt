@@ -13,6 +13,8 @@ Changes in 4.9.2 (upcoming)
   (thanks, Maizeravla and MoltenGamaLC).
 * Security: Sanitize 'url_title' attribute consistently (thanks, Maizeravla
   and MoltenGamaLC).
+* Security: CSP improvements to mitigate user privilege CSRF
+  (thanks, AnhNg1410).
 * Security: Theme import is now CSRF-aware (thanks, Bilguundalai).
 * Security: Validate administrative user status on Users panel updates
   (thanks, mansurmavlankulov).
