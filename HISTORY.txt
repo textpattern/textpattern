@@ -12,7 +12,7 @@ Changes in 4.9.2 (upcoming)
   (thanks, Maizeravla and MoltenGamaLC).
 * Security: Sanitize 'url_title' attribute consistently (thanks, Maizeravla
   and MoltenGamaLC).
-* Security: Validate admin user status on Users panel updates
+* Security: Validate administrative user status on Users panel updates
   (thanks, mansurmavlankulov).
 * Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage()
   (thanks, zsm-cry).
