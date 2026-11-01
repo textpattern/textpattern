@@ -37,7 +37,7 @@ $thisversion = '4.9.2-dev';
  * Set false for releases.
  */
 
-$txp_is_dev = true;
+$txp_is_dev = false;
 
 if (!defined('TXP_DEBUG')) {
     /**
