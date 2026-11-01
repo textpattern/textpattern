@@ -586,7 +586,7 @@ class SLIR
         $this->getRendered()->background();
 
         // Resample the original image into the resized canvas we set up earlier
-        if ($this->getSource()->getWidth() !== $this->getRendered()->getWidth() || 
+        if ($this->getSource()->getWidth() !== $this->getRendered()->getWidth() ||
                 $this->getSource()->getHeight() != $this->getRendered()->getHeight()) {
 
             $this->getSource()->resample($this->getRendered());
@@ -696,10 +696,10 @@ class SLIR
         if (strpos($this->getMimeType(), 'svg') !== false) {
             return true;
         } else {
-            if ($this->isWidthDifferent() || 
-                    $this->isHeightDifferent() || 
-                    $this->isBackgroundFillOn() || 
-                    $this->isQualityOn() || 
+            if ($this->isWidthDifferent() ||
+                    $this->isHeightDifferent() ||
+                    $this->isBackgroundFillOn() ||
+                    $this->isQualityOn() ||
                     $this->isCroppingNeeded()) {
                 return false;
             } else {

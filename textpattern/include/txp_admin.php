@@ -93,7 +93,7 @@ function author_save()
         return;
     }
 
-    $msg = array(gTxt('author_save_failed'), E_ERROR);
+    $msg = array(gTxt('author_save_failed', array('{name}' => $RealName)), E_ERROR);
     $admin = has_privs('admin.edit');
     $rs = $txp_user === $name || $admin ? update_user($name, $email, $RealName) : false;
 
@@ -779,7 +779,7 @@ function author_edit($message = '', $fullEdit = false)
             'data-target' => '.edit-admin-new-password',
         ));
 
-        $out[] = $is_edit ? '' : inputLabel('notify', $ynr, 'resend_activation', '', array('id' => 'send_activation'));
+        $out[] = $is_edit ? '' : Txp::get('\Textpattern\UI\InputLabel', 'notify', $ynr, 'resend_activation')->setAtt('id', 'send_activation')->setProperty('raw_label', true);
         $out[] = inputLabel(
             'new_pass',
             fInput(

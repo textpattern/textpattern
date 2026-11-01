@@ -1396,7 +1396,7 @@ textpattern.decodeHTML = function (string) {
     const template = document.createElement('template');
     template.remove();
     template.innerHTML = string;
-    
+
     return template.content;
 };
 
@@ -2159,7 +2159,7 @@ textpattern.Route.add('article', function () {
               click: function() {
                 $('#article_partial_article_preview').trigger('click');
               }
-         
+
               // Uncommenting the following line would hide the text,
               // resulting in the label being used as a tooltip
               //showText: false
@@ -2210,8 +2210,8 @@ textpattern.Route.add('article', function () {
             const inputid = $field.replace('_', '-');
             $input = $('#' + inputid);
 
-            const label = $('label[for="'+inputid+'"]').contents().filter(function () { 
-                return this.nodeType === Node.TEXT_NODE; 
+            const label = $('label[for="'+inputid+'"]').contents().filter(function () {
+                return this.nodeType === Node.TEXT_NODE;
             }).text();
             $pane.dialog('option', 'title', label);
         }
@@ -2237,7 +2237,7 @@ textpattern.Route.add('article', function () {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
-                const getMatchedCSSRules = (name, css = document.styleSheets) => 
+                const getMatchedCSSRules = (name, css = document.styleSheets) =>
                 [].concat(...[...css].map(s => [...s.cssRules||[]]))
                     .filter(r => r instanceof CSSLayerBlockRule && r.name == name);
 
@@ -2275,7 +2275,7 @@ textpattern.Route.add('article', function () {
                     }
                 });
                 if (fold) txp_fold_preview(node, true);
-            });    
+            });
 
             this.content.querySelectorAll('a, form, link').forEach(node => {
                 if ('target' in node && !node.getAttribute('target')) node.target = '_blank';
