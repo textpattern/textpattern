@@ -4,6 +4,17 @@ Changes in 4.9.2 (upcoming)
 
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
+* Security: Resolved skipping of authentication for concurrent logins via
+  cookie (thanks, MoltenGamaLC and Maizeravla).
+* Security: Always sandbox preview frames and introduce admin-side CSP layer
+  (thanks, Nguyen Trung Hoang).
+* Security: Sanitize sort attribute of <txp:file_download> tag
+  (thanks, Maizeravla and MoltenGamaLC).
+* Security: Sanitize url_title consistently (thanks, Maizeravla
+  and MoltenGamaLC).
+* Security: Validate admin user on Users panel updates
+  (thanks, mansurmavlankulov).
+* Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage() (thanks, zsm-cry).
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
 * Fixed: Thumbnail generation paths on Windows (thanks, skewray);
