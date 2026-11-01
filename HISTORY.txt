@@ -1,6 +1,6 @@
 Textpattern CMS
 
-Changes in 4.9.2 (upcoming)
+Changes in 4.9.2 (2 Nov 2026)
 
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
