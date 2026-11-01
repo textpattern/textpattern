@@ -8,11 +8,11 @@ Changes in 4.9.2 (upcoming)
   cookie (thanks, MoltenGamaLC and Maizeravla).
 * Security: Always sandbox preview frames and introduce admin-side CSP layer
   (thanks, Nguyen Trung Hoang).
-* Security: Sanitize sort attribute of <txp:file_download> tag
+* Security: Sanitize 'sort' attribute of <txp:file_download> tag
   (thanks, Maizeravla and MoltenGamaLC).
-* Security: Sanitize url_title consistently (thanks, Maizeravla
+* Security: Sanitize 'url_title' attribute consistently (thanks, Maizeravla
   and MoltenGamaLC).
-* Security: Validate admin user on Users panel updates
+* Security: Validate admin user status on Users panel updates
   (thanks, mansurmavlankulov).
 * Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage()
   (thanks, zsm-cry).
