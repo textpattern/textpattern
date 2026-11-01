@@ -17,7 +17,7 @@ Changes in 4.9.2 (upcoming)
 * Security: Validate administrative user status on Users panel updates
   (thanks, mansurmavlankulov).
 * Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage()
-  (thanks, zsm-cry).
+  (thanks, zsm-cry). Refer to CVE-2026-5344 for additional information.
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
 * Fixed: Thumbnail generation paths on Windows (thanks, skewray);
