@@ -980,7 +980,7 @@ class Skin extends CommonBase implements SkinInterface
                 'list'                  => false,
                 'edit'                  => false,
                 'save'                  => true,
-                'import'                => false,
+                'import'                => true,
                 'multi_edit'            => true,
             ));
 
@@ -1225,6 +1225,7 @@ class Skin extends CommonBase implements SkinInterface
                     .eInput($this->getEvent())
                     .sInput('import')
                     .fInput('submit', '', gTxt('import'))
+                    .tInput()
                     .n
                     .tag_end('form');
             }
