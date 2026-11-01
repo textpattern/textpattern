@@ -4,33 +4,33 @@ Changes in 4.9.2 (upcoming)
 
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
-* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
-* Fixed: Recursive use of <txp:yield>.
-* Fixed: <txp:password_protect> container error (thanks, wet).
+* Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
 * Fixed: Thumbnail generation paths on Windows (thanks, skewray);
-* Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
+* Fixed: <txp:password_protect> container error (thanks, wet).
+* Fixed: Recursive use of <txp:yield>.
+* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
 * Fixed: Theme import with invalid JSON manifest.
 * Fixed: Improved Textile support for IETF BCP 47 language tags.
 * Fixed: Plugin compilation output: order, not load_order.
 * Fixed: Default public theme CSS should not be minified.
 * Added: <txp:file_download_info /> tag.
-* Added: 'aspect' ratio output from <txp:image_info /> tag.
-* Added: 'download' attribute to <txp:file_download_link /> tag.
 * Added: 'version' attribute to <txp:css /> tag.
-* Added: Dark mode for default public theme.
+* Added: 'download' attribute to <txp:file_download_link /> tag.
+* Added: 'aspect' ratio output to <txp:image_info /> tag.
 * Added: Publishers can set password for any user, and choose whether
   invite link is sent.
-* Added: Clean URL test user agent ('Textpattern CMS clean URL test').
 * Added: Copy to clipboard feature for Diagnostics and Setup info.
+* Added: Dark mode for default public theme.
+* Added: Clean URL test user agent ('Textpattern CMS clean URL test').
 * Added: Latest text translations. Thank you to all our translators.
-* Changed: Article 'uid' uses Tiger-128,3 instead of MD5.
-* Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
 * Changed: Modernisation of default public theme CSS rules.
+* Changed: Article 'uid' uses Tiger-128,3 hash instead of MD5 hash.
+* Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
 * Performance: Reduced query count if theme textpack is unchanged.
-* Developer: Added 'uid' to global $thisarticle array.
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
+* Developer: Added 'uid' to global $thisarticle array.
 * Developer: Exposed raw_label in UI\InputLabel.
 * Vendors: Textile 4.1.6. (thanks, gocom).
 * Vendors: DOMPurify 3.4.17.
