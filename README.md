@@ -1,7 +1,6 @@
 # Textpattern CMS
 
 [![Crowdin](https://badges.crowdin.net/textpattern-cms-textpacks/localized.svg)](https://crowdin.com/project/textpattern-cms-textpacks)
-[![Known Vulnerabilities](https://snyk.io/test/github/textpattern/textpattern/badge.svg)](https://snyk.io/test/github/textpattern/textpattern/)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/textpattern)](https://github.com/sponsors/textpattern)
 
 <img src="https://textpattern.com/assets/img/branding/carver/carver.svg" alt="Textpattern Logo" width="128" height="128">
@@ -28,15 +27,15 @@ Ensure the server meets or exceeds the [system requirements](https://textpattern
 
 ## Download Textpattern
 
-The current production release is version 4.9.1. It can be downloaded from the Textpattern website or GitHub in .zip, .tar.gz, and .tar.xz varieties.
+The current production release is version 4.9.2. It can be downloaded from the Textpattern website or GitHub in .zip, .tar.gz, and .tar.xz varieties.
 
 If you want to use the multi-site functionality in Textpattern, get the .tar.gz or .tar.xz archive.
 
 |        |  textpattern.com  | GitHub |
 |--------|:-------:|:-----:|
-| .zip   | [Download](https://textpattern.com/file_download/127/textpattern-4.9.1.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.zip) |
-| .tar.gz | [Download](https://textpattern.com/file_download/128/textpattern-4.9.1.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.tar.gz) |
-| .tar.xz | [Download](https://textpattern.com/file_download/129/textpattern-4.9.1.tar.xz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.1/textpattern-4.9.1.tar.xz) |
+| .zip   | [Download](https://textpattern.com/file_download/130/textpattern-4.9.2.zip) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.2/textpattern-4.9.2.zip) |
+| .tar.gz | [Download](https://textpattern.com/file_download/131/textpattern-4.9.2.tar.gz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.2/textpattern-4.9.2.tar.gz) |
+| .tar.xz | [Download](https://textpattern.com/file_download/132/textpattern-4.9.2.tar.xz) | [Download](https://github.com/textpattern/textpattern/releases/download/4.9.2/textpattern-4.9.2.tar.xz) |
 
 
 ## Install Textpattern
@@ -78,7 +77,7 @@ Note that versions listed may change multiple times during the development proce
 
 ## Contributing
 
-Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development. 
+Please refer to the [contributing documentation](https://github.com/textpattern/textpattern/blob/dev/CONTRIBUTING.md) for more details of Textpattern development.
 
 ## Additional development tools
 

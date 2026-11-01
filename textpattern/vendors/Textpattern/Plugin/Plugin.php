@@ -120,9 +120,13 @@ class Plugin
                 'data'     => ''
             ));
 
+            if (isset($md5) && $md5 != md5($code)) {
+                return array(gTxt('bad_plugin_code'), E_ERROR);
+            }
+
             $name = sanitizeForFile($name);
             $exists = safe_row('name, version', 'txp_plugin', "name='".doSlash($name)."'");
-            isset($md5) or $md5 = md5($code);
+            $quode = doSlash($code);
 
             if (isset($help_raw) && empty($plugin['allow_html_help'])) {
                 // Default: help is in Textile format.
@@ -137,9 +141,8 @@ class Plugin
                     version      = '".doSlash($version)."',
                     description  = '".doSlash($description)."',
                     help         = '".doSlash($help)."',
-                    code         = '".doSlash($code)."',
-                    code_restore = '".doSlash($code)."',
-                    code_md5     = '".doSlash($md5)."',
+                    code         = '$quode',
+                    code_restore = '$quode',
                     textpack     = '".doSlash($textpack)."',
                     data         = '".doSlash($data)."',
                     flags        = $flags
@@ -309,11 +312,11 @@ class Plugin
 
         $keyFiles = array(
             'code'     => $filename.'.php',
-            'manifest' => 'manifest.json',
             'help'     => 'help.html',
             'help_raw' => 'help.textile',
             'textpack' => 'textpack.txp',
             'data'     => 'data.txp',
+            'manifest' => 'manifest.json',
         );
 
         $keyContent = array_fill_keys(array_keys($keyFiles), '');
@@ -733,7 +736,7 @@ class Plugin
             !empty($plugin['author']) or $plugin['author'] = '';
             !empty($plugin['author_uri']) or $plugin['author_uri'] = 'https://plugins.textpattern.com';
             !empty($plugin['code']) or $plugin['code'] = '';
-            !empty($plugin['load_order']) or $plugin['load_order'] = '5';
+            !empty($plugin['order']) or $plugin['order'] = '5';
 
             $plugin['md5'] = md5($plugin['code']);
             $fname = $name.'_v'.$plugin['version'].($compress ? '' : '_uncompressed').'.txt';
@@ -743,7 +746,7 @@ class Plugin
 # '.$plugin['description'].'
 # Author: '.$plugin['author'].'
 # URL: '.$plugin['author_uri'].'
-# Recommended load order: '.$plugin['load_order'].'
+# Recommended load order: '.$plugin['order'].'
 
 # .....................................................................
 # This is a plugin for Textpattern CMS - https://textpattern.com/
@@ -875,7 +878,7 @@ class Plugin
     protected function computeHash($src)
     {
         if (!$this->hash) {
-            if ($src && (is_readable($src) !== false)) {
+            if ($src && (strlen($src) <= PHP_MAXPATHLEN && is_readable($src) !== false)) {
                 $this->hash = sha1_file($src);
             } elseif ($src) {
                 $this->hash = sha1(preg_replace('/\s+/', '', $src));

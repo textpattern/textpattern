@@ -59,7 +59,20 @@ function doAuth()
             doLoginForm($message);
         }
     }
+    // Check that the request came from the same domain as the admin URL.
+/*
+    $dest = isset($_SERVER['HTTP_SEC_FETCH_DEST']) ? $_SERVER['HTTP_SEC_FETCH_DEST'] : '';
+    $mode = isset($_SERVER['HTTP_SEC_FETCH_MODE']) ? $_SERVER['HTTP_SEC_FETCH_MODE'] : '';
 
+    if ($dest !== 'document' || $mode !== 'navigate') {
+        $ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+
+        if (!$ref || strpos($ref, ahu) !== 0) {
+            http_response_code(403);
+            exit;
+        }
+    }
+*/
     ob_start();
 }
 
@@ -276,13 +289,26 @@ function doTxpValidate()
         // Cookie exists.
         // @todo Improve security by using a better nonce/salt mechanism. md5 and uniqid are bad.
         $r = safe_row(
-            "name, nonce",
+            "user_id, name, nonce",
             'txp_users',
             "name = '" . doSlash($c_userid) . "' AND last_access > DATE_SUB(NOW(), INTERVAL 30 DAY)"
         );
 
-        if ($r && $r['nonce'] && (in_array($c_userid, $conUsers) ? true : $r['nonce'] === md5($c_userid . pack('H*', $c_hash)))) {
+        if ($r && $r['nonce'] && $r['nonce'] === md5($c_userid . pack('H*', $c_hash))) {
             // Cookie is good.
+            if (in_array($r['name'], $conUsers)) {
+                $set = array(
+                    'reference_id' => $r['user_id'],
+                    'type' => 'shared_login',
+                    'selector' => substr($r['name'], 0, 12),
+                    'token' => $c_hash,
+                );
+
+                // Use a (potentially insecure) server-side, shared c_hash.
+                $inset = join_qs(quote_list($set), ',');
+                safe_query("INSERT IGNORE INTO " .PFX."txp_token SET $inset");
+            }
+
             if ($logout) {
                 $txp_user = $c_userid;
                 bouncer('logout', array('logout' => true));
@@ -295,6 +321,13 @@ function doTxpValidate()
                     "nonce = '" . doSlash(md5(uniqid(mt_rand(), true))) . "'",
                     "name = '" . doSlash($c_userid) . "'"
                 );
+
+                assert_int($r['user_id']);
+
+                safe_delete(
+                    'txp_token',
+                    "type = 'shared_login' AND reference_id = " . $r['user_id']
+                );
             } else {
                 // Create $txp_user.
                 $txp_user = $r['name'];
@@ -305,6 +338,9 @@ function doTxpValidate()
             txp_status_header('401 Your session has expired');
             set_cookie('txp_login', $c_userid, array('expires' => time() + 3600 * 24 * 30));
             set_cookie('txp_login_public', '', array('path' => $pub_path, 'domain' => $cookie_domain));
+            safe_delete(
+                'txp_token',
+                "type = 'shared_login' AND reference_id = " . $r['user_id']);
             $message = array(gTxt('bad_cookie'), E_ERROR);
         }
     } elseif ($p_userid && $p_password) {
@@ -314,6 +350,28 @@ function doTxpValidate()
         if ($name !== false) {
             $c_hash = md5(uniqid(mt_rand(), true));
             $nonce = md5($name . pack('H*', $c_hash));
+
+            if (in_array($name, $conUsers)) {
+                $row = safe_row('user_id, nonce', 'txp_users', "name = '" . doSlash($name) . "'");
+                assert_int($row['user_id']);
+                $stored_hash = safe_field('token', 'txp_token', "type='shared_login' AND reference_id = " . $row['user_id']);
+
+                if ($stored_hash) {
+                    $c_hash = $stored_hash;
+                    $nonce = $row['nonce'];
+                }
+
+                $set = array(
+                    'reference_id' => $row['user_id'],
+                    'type' => 'shared_login',
+                    'selector' => substr($name, 0, 12),
+                    'token' => $c_hash,
+                );
+
+                // Use a (potentially insecure) server-side, shared c_hash.
+                $inset = join_qs(quote_list($set), ',');
+                safe_query("INSERT IGNORE INTO " .PFX."txp_token SET $inset");
+            }
 
             safe_update(
                 'txp_users',

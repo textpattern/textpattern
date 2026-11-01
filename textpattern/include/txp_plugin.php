@@ -200,7 +200,7 @@ function plugin_list($message = '')
         }
     } else {
         $rs = safe_rows_start(
-            "name, status, author, author_uri, version, description, length(help) AS help, ABS(STRCMP(MD5(code), code_md5)) AS modified, load_order, flags, type",
+            "name, status, author, author_uri, version, description, length(help) AS help, code <> code_restore AS modified, load_order, flags, type",
             'txp_plugin',
             "$criteria ORDER BY $sort_sql LIMIT $offset, $limit"
         );
@@ -224,10 +224,7 @@ function plugin_list($message = '')
             n . tag_start('table', array('class' => 'txp-list')) .
             n . tag_start('thead') .
             tr(
-                hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                    '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                ) .
+                selectAllCheckbox() .
                 column_head(
                     'plugin', 'name', 'plugin', true, $switch_dir, '', '',
                     (('name' == $sort) ? "$dir " : '') . 'txp-list-col-name'
@@ -656,7 +653,7 @@ function plugin_edit_form($name = '')
                             1 => gTxt('plugin_has_prefs'),
                             2 => gTxt('plugin_lifecycle_notify'),
                         ), $flagset)
-                    ) .
+                    )->setProperty('raw_label', true) .
                     eInput('plugin') .
                     sInput('plugin_save') .
                     hInput('help_hash', md5($plugin['help_raw'])) .
@@ -1155,7 +1152,7 @@ function plugin_form($existing_files = array())
     form(
         tag(gTxt('install_plugin'), 'label', ' for="plugin-install"') . popHelp('install_plugin') .
         n . '<textarea class="code" id="plugin-install" name="plugin" cols="' . INPUT_LARGE . '" rows="' . TEXTAREA_HEIGHT_SMALL . '" dir="ltr" required="required"></textarea>' .
-        fInput('submit', 'install_new', gTxt('upload')) .
+        fInput('submit', 'install_new', gTxt('install')) .
         eInput('plugin') .
         sInput('plugin_verify'), '', '', 'post', 'plugin-data', '', 'plugin_install_form'
     );

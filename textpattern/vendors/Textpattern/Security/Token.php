@@ -63,7 +63,7 @@ class Token implements \Textpattern\Container\ReusableInterface
         }
 
         if (!isset($token[$salt])) {
-            $token[$salt] = sha1($nonce.$salt);
+            $token[$salt] = substr(hash(HASHING_ALGORITHM, $nonce.$salt), 0, SALT_LENGTH);
         }
 
         return $token[$salt];
@@ -124,7 +124,7 @@ class Token implements \Textpattern\Container\ReusableInterface
         }
 
         // Validate token.
-        if (gps('_txp_token') === $this->csrf()) {
+        if (hash_equals($this->csrf(), gps('_txp_token'))) {
             return true;
         }
 

@@ -239,7 +239,11 @@ class Skin extends CommonBase implements SkinInterface
     {
         $contents = json_decode(file_get_contents($this->getFilePath()), true);
 
-        $contents === null or $contents = $this->parseInfos($contents);
+        if ($contents === null) {
+            $contents = array();
+        } else {
+            $contents = $this->parseInfos($contents);
+        }
 
         return $contents;
     }
@@ -727,7 +731,7 @@ class Skin extends CommonBase implements SkinInterface
             } else {
                 $skinInfos = array_merge(array('name' => $name), $this->getFileContents());
 
-                if (!$skinInfos) {
+                if (count($skinInfos) == 1) {
                     $this->mergeResult('invalid_json', $filePath);
                 } else {
                     extract($skinInfos);
@@ -976,7 +980,7 @@ class Skin extends CommonBase implements SkinInterface
                 'list'                  => false,
                 'edit'                  => false,
                 'save'                  => true,
-                'import'                => false,
+                'import'                => true,
                 'multi_edit'            => true,
             ));
 
@@ -1221,6 +1225,7 @@ class Skin extends CommonBase implements SkinInterface
                     .eInput($this->getEvent())
                     .sInput('import')
                     .fInput('submit', '', gTxt('import'))
+                    .tInput()
                     .n
                     .tag_end('form');
             }
@@ -1325,11 +1330,7 @@ class Skin extends CommonBase implements SkinInterface
                     n.tag_start('table', array('class' => 'txp-list')).
                     n.tag_start('thead');
 
-            $ths = hCell(
-                fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                '',
-                ' class="txp-list-col-multi-edit" scope="col" title="'.gTxt('toggle_all_selected').'"'
-            );
+            $ths = selectAllCheckbox();
 
             $thIds = array(
                 'name'          => 'name',

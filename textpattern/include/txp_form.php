@@ -130,7 +130,7 @@ function form_list($current)
 
             if ($prev_type !== $type) {
                 if ($prev_type !== null) {
-                    $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list'));
+                    $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list', 'role' => 'list'));
 
                     $label = isset($form_types[$prev_type]) ? $form_types[$prev_type] : $prev_type;
                     $out[] = wrapRegion($prev_type . '_forms_group', $group_out, 'form_' . $prev_type, $label, 'form_' . $prev_type);
@@ -155,7 +155,7 @@ function form_list($current)
         }
 
         if ($prev_type !== null) {
-            $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list'));
+            $group_out = tag(n . join(n, $group_out) . n, 'ul', array('class' => 'switcher-list', 'role' => 'list'));
 
             $out[] = wrapRegion($prev_type . '_forms_group', $group_out, 'form_' . $prev_type, $form_types[$prev_type], 'form_' . $prev_type);
         }
@@ -750,7 +750,7 @@ function form_partial_name($rs)
             'maxlength' => $fieldSizes['name'],
         ));
 
-    if (in_array($name, $essential_forms) || $type && !isset($form_types[$type])) {
+    if (in_array($name, $essential_forms)) {
         $nameInput->setBool('disabled');
     } else {
         $nameInput->setBool('required');
@@ -791,16 +791,7 @@ function form_partial_type($rs)
     $type = $rs['type'];
     $type_widgets = '';
 
-    if ($type && !isset($form_types[$type])) {
-        $typeInput = tag_void('input', array(
-            'id'       => 'types',
-            'name'     => 'type',
-            'type'     => 'text',
-            'value'    => $type,
-            'disabled' => true
-        ));
-        $type_widgets .= hInput('type', $type);
-    } elseif (in_array($name, $essential_forms)) {
+    if (in_array($name, $essential_forms)) {
         $typeInput = formTypes($type, false, 'type', true);
         $type_widgets .= hInput('type', $type);
     } else {

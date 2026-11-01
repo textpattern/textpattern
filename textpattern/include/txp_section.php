@@ -254,10 +254,7 @@ function sec_section_list($message = '', $update = false)
                 )) .
                 n . tag_start('table', array('class' => 'txp-list')) .
                 n . tag_start('thead');
-                $thead = hCell(
-                    fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                    '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                );
+                $thead = selectAllCheckbox();
 
             foreach ($columns as $column => $label) {
                 $thead .= column_head(

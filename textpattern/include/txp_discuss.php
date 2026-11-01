@@ -290,7 +290,7 @@ function discuss_list($message = '')
                 txp_discuss.web,
                 txp_discuss.message,
                 txp_discuss.visible,
-                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_discuss.posted) AS posted,
+                " . txp_timestamp(array('txp_discuss.posted' => 'posted')) . ",
                 textpattern.ID AS thisid,
                 textpattern.Section AS section,
                 textpattern.url_title,
@@ -298,7 +298,7 @@ function discuss_list($message = '')
                 textpattern.Category1 AS category1,
                 textpattern.Category2 AS category2,
                 textpattern.Status,
-                TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), textpattern.Posted) AS uPosted,
+                " . txp_timestamp(array('textpattern.Posted' => 'uPosted')) . ",
                 (SELECT COUNT(*) FROM " . safe_pfx('txp_discuss') . " AS count WHERE $spamcrit AND txp_discuss.parentid = count.parentid) AS c
             FROM " . safe_pfx_j('txp_discuss') . "
                 LEFT JOIN " . safe_pfx_j('textpattern') . " ON txp_discuss.parentid = textpattern.ID
@@ -321,11 +321,7 @@ function discuss_list($message = '')
                 n . tag_start('table', array('class' => 'txp-list')) .
                 n . tag_start('thead') .
                 tr(
-                    hCell(
-                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col"'
-                    ) .
+                    selectAllCheckbox() .
                     column_head(
                         'ID', 'id', 'discuss', true, $switch_dir, $crit, $search_method,
                         (('id' == $sort) ? "$dir " : '') . 'txp-list-col-id'
@@ -492,7 +488,7 @@ function discuss_edit()
 
     $discussid = assert_int($discussid);
 
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), posted) AS uPosted", 'txp_discuss', "discussid = '$discussid'");
+    $rs = safe_row("*, " . txp_timestamp(array('posted' => 'uPosted')), 'txp_discuss', "discussid = '$discussid'");
 
     if ($rs) {
         extract($rs);

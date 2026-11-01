@@ -104,6 +104,12 @@ function prefs_save()
         }
     }
 
+    // Remove hashes from non-concurrent users.
+    // Note: if removing user from list, they need to logout to invalidate sessions on other devices.
+    $conUsers = isset($post['concurrent_logins']) ? do_list_unique($post['concurrent_logins']) : array();
+    $userIDs = safe_column('user_id', 'txp_users', "name NOT IN (". quote_list($conUsers, ',') .")");
+    safe_delete('txp_token', "type='shared_login' AND reference_id IN (" . implode(',', $userIDs) . ")");
+
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
     if (!empty($post['timezone_key'])) {
         $key = $post['timezone_key'];
@@ -313,6 +319,11 @@ function prefs_list($message = '')
                     'id'    => 'prefs-' . $a['name'],
                 ))
                 ->setWrap('label', null, array('id' => 'prefs-'.$a['name'].'-label'));
+
+            if ($label === '') {
+                $control->setProperty('raw_label', true);
+            }
+
             $out[] = $control->render();
         }
     }
@@ -690,30 +701,14 @@ function smtp_handler($name, $val, $constraints = array())
 
 function enhanced_email($name, $val)
 {
-    $js = script_js(<<<EOS
-    var block = $(".mail_enhanced");
-    var smtpOn = $("#enhanced_email-1");
-    var smtpOff = $("#enhanced_email-0");
+    $out = Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val);
+    $opt = $out->get($out->keys()[1]);
+    $opt->appendAtts(array(
+        'class' => 'toggle-option',
+        'data-target' => '.mail_enhanced',
+    ));
 
-    if (block.length) {
-        if (smtpOff.prop("checked")) {
-            block.hide();
-        } else {
-            block.show();
-        }
-
-        smtpOff.click(function () {
-            block.hide();
-        });
-
-        smtpOn.click(function () {
-            block.show();
-        });
-    }
-EOS
-    , false, true);
-
-    return Txp::get('\Textpattern\UI\YesNoRadioSet', $name, $val) . $js;
+    return $out;
 }
 
 /**

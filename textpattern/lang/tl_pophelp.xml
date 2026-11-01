@@ -1068,7 +1068,7 @@ If a form template needs processing (if it contains Textpattern tags), you must 
         ]]></item>
         <item id="section_default" title="Seksyon ng default na paglathala"><![CDATA[
 <h2>Seksyon ng default na paglathala</h2>
-<p>Pinamamahalaan ng opsyong ito kung aling seksyon ang pre-selected sa Section menu kapag lumilikha ng bagong artikulo sa panel na ‘Write’.</p>
+<p>Pinamamahalaan ng opsyong ito kung aling seksyon ang preselected sa Section menu kapag lumilikha ng bagong artikulo sa panel na ‘Write’.</p>
 <p>Kung karamihan sa iyong mga artikulo ay napupunta sa partikular na seksyon, piliin ito mula sa listahan dito. Agad na makikita ang mga pagbabago.</p>
 <p>Maaari mo itong i-override sa batayan ng bawat artikulo sa panel na ‘Write’ sa pamamagitan ng pagpili ng ibang seksyon sa pane na ‘Sort and display’.</p>
         ]]></item>

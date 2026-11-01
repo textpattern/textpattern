@@ -297,7 +297,7 @@ function page_list($current)
             $out[] = tag(n . $edit . n, 'li', array('class' => $active ? 'active' : ''));
         }
 
-        $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list'));
+        $out = tag(join(n, $out), 'ul', array('class' => 'switcher-list', 'role' => 'list'));
 
         return wrapGroup('all_pages', $out, 'all_pages');
     }

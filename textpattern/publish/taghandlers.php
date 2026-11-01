@@ -178,6 +178,7 @@ Txp::get('\Textpattern\Tag\Registry')
     ->register('if_plugin')
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_list'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download'))
+    ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_info'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_link'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_size'))
     ->register(array('\Textpattern\Tag\Syntax\File', 'file_download_id'))
@@ -246,13 +247,14 @@ function css($atts)
     static $stylebody = array();
 
     extract(lAtts(array(
-        'escape' => true,
-        'format' => 'url',
-        'media'  => 'screen',
-        'name'   => $css,
-        'rel'    => 'stylesheet',
-        'theme'  => $pretext['skin'],
-        'title'  => '',
+        'escape'  => true,
+        'format'  => 'url',
+        'media'   => 'screen',
+        'name'    => $css,
+        'rel'     => 'stylesheet',
+        'theme'   => $pretext['skin'],
+        'title'   => '',
+        'version' => false,
     ), $atts));
 
     if (empty($name)) {
@@ -263,19 +265,6 @@ function css($atts)
     $format = strtolower(preg_replace('/\s+/', '', $format));
     list($mode, $format) = explode('.', $format . '.' . $format);
 
-    if (has_handler('css.url')) {
-        $url = callback_event('css.url', '', false, compact('name', 'theme'));
-    } elseif ($mode === 'flat') {
-        $url = array();
-        $skin_dir = urlencode(get_pref('skin_dir'));
-
-        foreach (do_list_unique($name) as $n) {
-            $url[] = hu . $skin_dir . '/' . urlencode($theme) . '/' . TXP_THEME_TREE['styles'] . '/' . urlencode($n) . '.css';
-        }
-    } else {
-        $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme);
-    }
-
     if (empty($format) || $format === "inline") {
         $skinObj = Txp::get('Textpattern\Skin\Skin');
         $safeName = $skinObj->sanitize($name);
@@ -285,6 +274,28 @@ function css($atts)
             $safeName.'_'.$safeTheme => safe_field('css', 'txp_css', "name='".doSlash($safeName)."' AND skin='" . doSlash($safeTheme) . "'")
         );
         $content = ($escape === true) ? $stylebody[$safeName.'_'.$safeTheme] : txp_escape($escape, $stylebody[$safeName.'_'.$safeTheme]);
+    } elseif (has_handler('css.url')) {
+        $url = callback_event('css.url', '', false, compact('name', 'theme'));
+    } elseif ($mode === 'flat') {
+        $url = array();
+        $skin_dir = urlencode(get_pref('skin_dir'));
+        $names = do_list_unique($name);
+
+        if ($version === true) {
+            $versions = safe_column(array('name', 'UNIX_TIMESTAMP(lastmod)'), 'txp_css', "name IN(".quote_list($names, ',').") AND skin='" . doSlash($theme) . "'");
+            $version = false;
+        }
+
+        foreach ($names as $n) {
+            $v = isset($versions[$n]) ? $versions[$n] : $version;
+            $url[] = hu . $skin_dir . '/' . urlencode($theme) . '/' . TXP_THEME_TREE['styles'] . '/' . urlencode($n) . '.css' . (!empty($v) ? '?v=' . urlencode($v) : '');
+        }
+    } else {
+        if ($version === true) {
+            $v = safe_field('UNIX_TIMESTAMP(lastmod)', 'txp_css', "name='".doSlash($name)."' AND skin='" . doSlash($theme) . "'");
+        }
+
+        $url = hu . 'css.php?n=' . urlencode($name) . '&t=' . urlencode($theme) . (!empty($v) ? '&v=' . urlencode($v) : '');
     }
 
     switch ($format) {
@@ -341,8 +352,7 @@ function component($atts)
 
     if ($mode === 'flat') {
         if (!isset($mimetypes)) {
-            $null = null;
-            $mimetypes = get_mediatypes($null);
+            $mimetypes = get_mediatypes();
         }
 
         $url = array();
@@ -474,12 +484,12 @@ function txp_yield($atts, $thing = null)
     if (isset($item)) {
         $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
     } elseif ($name === '') {
-        $end = empty($yield) ? null : end($yield);
-
-        if (isset($end)) {
+        if (!empty($yield)) {
             $was_form = $is_form;
             $is_form--;
+            $end = array_pop($yield);
             $inner = parse($end, empty($else));
+            $yield[] = $end;
             $is_form = $was_form;
         }
     } elseif (!empty($txp_yield[$name])) {
@@ -513,10 +523,10 @@ function txp_if_yield($atts, $thing = null)
     if (isset($item)) {
         $inner = isset($txp_item[$item]) ? $txp_item[$item] : null;
     } elseif ($name === '') {
-        $end = empty($yield) ? null : end($yield);
-
-        if (isset($end)) {
+        if (!empty($yield)) {
+            $end = array_pop($yield);
             $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
+            $yield[] = $end;
         }
     } elseif (empty($txp_yield[$name])) {
         $inner = null;
@@ -1798,60 +1808,20 @@ function excerpt($atts = array())
 
 function article_category($atts, $thing = null)
 {
-    global $thisarticle, $s, $permlink_mode;
-
-    extract(lAtts(array(
-        'number'       => 1,
-        'class'        => '',
-        'link'         => 0,
-        'title'        => 0,
-        'escape'       => true,
-        'section'      => '',
-        'this_section' => 0,
-        'wraptag'      => '',
-    ), $atts));
+    global $thisarticle, $permlink_mode, $is_article_list;
 
     assert_article();
-
-    $cat = 'category' . intval($number);
+    $cat = 'category' . (isset($atts['number']) ? intval($atts['number']) : 1);
 
     if (!empty($thisarticle[$cat])) {
-        $section = ($this_section) ? ($s == 'default' ? '' : $s) : $section;
-        $category = $thisarticle[$cat];
+        unset($atts['number']);
+        $atts['name'] = $thisarticle[$cat];
+        $atts['type'] = 'article';
+        $atts += ($is_article_list || $permlink_mode == 'messy' ? array() : array('rel' => 'tag'));
 
-        $label = $title ? fetch_category_title($category) : $category;
-
-        if ($thing) {
-            $out = href(
-                parse($thing),
-                pagelinkurl(array(
-                    's' => $section,
-                    'c' => $category,
-                )),
-                (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
-                ($title ? ' title="' . txpspecialchars($label) . '"' : '') .
-                ($permlink_mode != 'messy' ? ' rel="tag"' : '')
-            );
-        } else {
-            if ($escape) {
-                $label = txp_escape($escape, $label);
-            }
-
-            if ($link) {
-                $out = href(
-                    $label,
-                    pagelinkurl(array(
-                        's' => $section,
-                        'c' => $category,
-                    )),
-                    ($permlink_mode != 'messy' ? ' rel="tag"' : '')
-                );
-            } else {
-                $out = $label;
-            }
-        }
-
-        return doTag($out, $wraptag, $class);
+        return category($atts, $thing);
+    } elseif ($thing) {
+        return parse($thing, false);
     }
 }
 
@@ -1863,26 +1833,28 @@ function category($atts, $thing = null)
 
     extract(lAtts(array(
         'class'        => '',
-        'link'         => 0,
+        'link'         => isset($thing),
         'name'         => '',
         'parent'       => 0,
-        'section'      => $s,
+        'section'      => null,
         'this_section' => 0,
         'title'        => 0,
         'type'         => 'article',
         'url'          => 0,
+        'rel'          => false,
+        'escape'       => true,
         'wraptag'      => '',
     ), $atts));
 
     if ($name) {
-        $category = $name;
-        $type = validContext($type);
-    } elseif (!empty($thiscategory['name'])) {
-        $category = $thiscategory['name'];
-        $type = $thiscategory['type'];
-    } else {
+        $category = $name === true ? $c : $name;
+        $type = $type === true ? $context : validContext($type);
+    } elseif (empty($thiscategory)) {
         $category = $c;
         $type = $context;
+    } else {
+        $category = $thiscategory['name'];
+        $type = $thiscategory['type'];
     }
 
     if ($category && ($parent = (int)$parent)) {
@@ -1891,42 +1863,56 @@ function category($atts, $thing = null)
         $category = isset($path[$parent]) ? $path[$parent] : false;
     }
 
+    $out = false;
+    $oldcategory = $thiscategory;
+
+    if ($category && (empty($thiscategory) || ($thiscategory['name'] !== $category || $thiscategory['type'] !== $type))) {
+        $thiscategory = ckCat($type, $category);
+        $category = $thiscategory ? $thiscategory['name'] : false;
+    }
+
     if ($category) {
-        if ($this_section) {
+        if ($this_section || $section === true) {
             $section = ($s == 'default' ? '' : $s);
-        } elseif (isset($thiscategory['section'])) {
-            $section = $thiscategory['section'];
+        } elseif (!isset($section)) {
+            $section = isset($thiscategory['section']) ? $thiscategory['section'] : false;
         }
 
-        $label = txpspecialchars(($title) ? fetch_category_title($category, $type) : $category);
+        $label = $title ? fetch_category_title($category, $type) : $category;
 
         $href = pagelinkurl(array(
-            's'       => $section,
+            's'       => $type === 'article' ? $section : false,
             'c'       => $category,
             'context' => $type,
         ));
 
         if ($thing) {
-            $out = href(
+            $out = $link ? href(
                 parse($thing),
                 $href,
-                (($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : '') .
-                ($title ? ' title="' . $label . '"' : '')
-            );
+                array('class' => (($class && !$wraptag) ? $class : false),
+                    'title' => ($title ? $label : false),
+                    'rel' => ($rel ?: false)
+                )
+            ) : parse($thing);
         } elseif ($link) {
             $out = href(
-                $label,
+                $escape ? txp_escape($escape, $label) : $label,
                 $href,
-                ($class && !$wraptag) ? ' class="' . txpspecialchars($class) . '"' : ''
+                array('class' => (($class && !$wraptag) ? $class : false),
+                    'rel' => ($rel ?: false)
+                )
             );
         } elseif ($url) {
             $out = $href;
         } else {
-            $out = $label;
+            $out = $escape ? txp_escape($escape, $label) : $label;
         }
-
-        return doTag($out, $wraptag, $class);
     }
+
+    $thiscategory = $oldcategory;
+
+    return $out !== false ? doTag($out, $wraptag, $class) : ($thing ? parse($thing, false) : null);
 }
 
 // -------------------------------------------------------------
@@ -1979,6 +1965,8 @@ function section($atts, $thing = null)
         }
 
         return doTag($out, $wraptag, $class);
+    } elseif ($thing) {
+        return parse($thing, false);
     }
 }
 
@@ -2960,7 +2948,7 @@ function page_url($atts, $thing = null)
         $out = '1';
     } elseif (isset($pretext[$type]) && is_bool($default)) {
         $out = $type == 's' && $pretext['s'] == 'default' ? '' : $pretext[$type];
-        $escape === null or $out = txpspecialchars($out);
+        $escape !== null or $out = txpspecialchars($out);
     } else {
         $out = gps($type, $default);
         !is_array($out) or $out = implode(',', $out);
@@ -3470,6 +3458,7 @@ function txp_escape($escape, $thing = '')
                 }
 
                 $thing = $textile->setBlockTags(!$tidy)->parse($thing);
+                !$tidy or $thing = trim($thing); //Textile bug?
                 break;
             case 'quote':
                 $thing = $quoted || strpos($thing, "'") === false ? "'$thing'" : "concat('" . strtr($thing, array("'" => "',\"'\",'")) . "')";
@@ -3516,8 +3505,6 @@ function txp_wraptag($atts, $thing = '')
         } else {
             $thing = $breakby === true ? do_list($thing) : explode($breakby, $thing);
         }
-
-        isset($trim) or !empty($escape) or $trim = true;
     }
 
     if (isset($trim) || isset($replace) || is_array($thing)) {

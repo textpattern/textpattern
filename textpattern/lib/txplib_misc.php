@@ -778,6 +778,7 @@ function imageFetchInfo($id = "", $name = "")
         } elseif (preg_match('/^\d+$/', trim($id))) {
             $where = 'id = '.intval($id).' LIMIT 1';
         } else {
+            // $id might be a direct URL.
             if (!isset($fields)) {
                 $fields = array_column(safe_show('columns', 'txp_image'), 'Default', 'Field');
                 $fields['date'] = date('c');
@@ -810,7 +811,7 @@ function imageFetchInfo($id = "", $name = "")
         return false;
     }
 
-    $rs = safe_row("*", 'txp_image', $where);
+    $rs = safe_row("*, " . txp_timestamp(array('date' => 'date')), 'txp_image', $where);
 
     if ($rs) {
         $id = (int) $rs['id'];
@@ -858,15 +859,14 @@ function image_format_info($image)
 {
     static $mimetypes;
 
-    if (($unix_ts = strtotime($image['date'])) > 0) {
-        $image['date'] = $unix_ts;
-    }
+    $image = format_date($image);
 
     if (!isset($mimetypes)) {
         $mimetypes = get_safe_image_types();
     }
 
     $image['mime'] = ($mime = array_search($image['ext'], $mimetypes)) !== false ? txp_image_type_to_mime_type($mime) : '';
+    $image['aspect'] = $image['w'] == $image['h'] ? 'square' : ($image['w'] > $image['h'] ? 'landscape' : 'portrait');
 
     return $image;
 }
@@ -882,11 +882,7 @@ function image_format_info($image)
 
 function link_format_info($link)
 {
-    if (($unix_ts = strtotime($link['date'])) > 0) {
-        $link['date'] = $unix_ts;
-    }
-
-    return $link;
+    return format_date($link);
 }
 
 /**
@@ -1997,7 +1993,11 @@ function sanitizeForPage($text)
 
 function sanitizeForSort($text)
 {
-    return trim(strtr($text, array('#' => ' ', '--' => ' ')));
+    if (preg_match('~--[\x00-\x20]|#|/\*|\*/|;~', $text)) {
+        $text = '1';
+    }
+
+    return trim($text);
 }
 
 /**
@@ -2215,14 +2215,10 @@ function is_blocklisted($ip, $checks = '')
 
 function is_logged_in($user = '')
 {
-    static $users = array(), $concurrentUsers = null;
-
-    if ($concurrentUsers === null) {
-        // Can't use get_pref() as they may not be loaded.
-        $concurrentUsers = do_list_unique(safe_field('val', 'txp_prefs', "name='concurrent_logins'"));
-    }
+    static $users = array();
 
     $name = substr(cs('txp_login_public'), 10);
+    $user = (string) $user;
 
     if (!strlen($name) || strlen($user) && $user !== $name) {
         return false;
@@ -2234,7 +2230,7 @@ function is_logged_in($user = '')
 
     $rs = $users[$name];
 
-    if ($rs && (in_array($rs['name'], $concurrentUsers) ? true : substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10))) {
+    if ($rs && substr(md5($rs['nonce']), -10) === substr(cs('txp_login_public'), 0, 10)) {
         unset($rs['nonce']);
 
         return $rs;
@@ -3046,15 +3042,15 @@ function make_download_link($id, $label = '', $filename = '')
 function set_error_level($level)
 {
     if ($level == 'debug') {
-        error_reporting(E_ALL);
+        return error_reporting(E_ALL);
     } elseif ($level == 'live') {
         // Don't show errors on screen.
         $suppress = E_NOTICE | E_USER_NOTICE | E_WARNING | E_STRICT | E_DEPRECATED;
-        error_reporting(E_ALL ^ $suppress);
         ini_set("display_errors", "1");
+        return error_reporting(E_ALL ^ $suppress);
     } else {
         // Default is 'testing': display everything except notices.
-        error_reporting((E_ALL) ^ (E_NOTICE | E_USER_NOTICE));
+        return error_reporting((E_ALL) ^ (E_NOTICE | E_USER_NOTICE));
     }
 }
 
@@ -3140,6 +3136,21 @@ function format_filesize($bytes, $decimals = 2, $format = '')
     return number_format($bytes, $decimals, $sep_dec, $sep_thous).sp.gTxt('units_'.$units[$pow]);
 }
 
+function format_date($file, $fields = array('date' => 'date'))
+{
+    foreach ($fields as $field => $ufield) {
+        if (isset($file[$field])) {
+            $file[$ufield] = is_numeric($file[$field]) || (($unix_ts = strtotime($file[$field])) === false) ?
+                $file[$field] :
+                $unix_ts;
+        } else {
+            $file[$field] = null;
+        }
+    }
+
+    return $file;
+}
+
 /**
  * Gets a file download as an array.
  *
@@ -3155,13 +3166,18 @@ function format_filesize($bytes, $decimals = 2, $format = '')
 
 function fileDownloadFetchInfo($where)
 {
-    $rs = safe_row("*", 'txp_file', $where);
+    $row = safe_row("*," . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', $where);
 
-    if ($rs) {
-        return file_download_format_info($rs);
+    if ($row) {
+        $fullpath = build_file_path(get_pref('file_base_path'), $row['filename']);
+        $row['mime'] = mime_content_type($fullpath);
+        $pathParts = pathinfo($fullpath);
+        $row['ext'] = $pathParts['extension'];
+
+        return $row;
+    } else {
+        return array();
     }
-
-    return false;
 }
 
 /**
@@ -3178,15 +3194,7 @@ function fileDownloadFetchInfo($where)
 
 function file_download_format_info($file)
 {
-    if (($unix_ts = strtotime($file['created'])) > 0) {
-        $file['created'] = $unix_ts;
-    }
-
-    if (($unix_ts = strtotime($file['modified'])) > 0) {
-        $file['modified'] = $unix_ts;
-    }
-
-    return $file;
+    return format_date($file, array('created' => 'created', 'modified' => 'modified'));
 }
 
 /**
@@ -3765,7 +3773,7 @@ function parse_form($name, $theme = null)
  * echo fetch_page('default');
  */
 
-function fetch_page($name, $theme)
+function fetch_page($name = 'default', $theme = null)
 {
     global $pretext, $trace;
 
@@ -3783,11 +3791,9 @@ function fetch_page($name, $theme)
         $page = safe_field('user_html', 'txp_page', "name = '".doSlash($name)."' AND skin = '".doSlash($theme)."'");
     }
 
-    if ($page === false) {
-        return false;
+    if ($page !== false) {
+        $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
     }
-
-    $trace->log("[Page: '$theme.$name']", array('Pages' => array($name)));
 
     return $page;
 }
@@ -3805,11 +3811,11 @@ function fetch_page($name, $theme)
  * echo parse_page('default');
  */
 
-function parse_page($name, $theme, $page = '')
+function parse_page($name, $theme, $page = null)
 {
     global $pretext, $trace, $is_form;
 
-    if (!$page) {
+    if (!isset($page)) {
         $page = fetch_page($name, $theme);
     }
 
@@ -4014,7 +4020,7 @@ function get_lastmod($unix_ts = null)
     }
 
     // Check for future articles that are now visible.
-    if (txpinterface === 'public' && $max_article = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted)", 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
+    if (txpinterface === 'public' && $max_article = safe_field(txp_timestamp('Posted'), 'textpattern', "Posted <= ".now('posted')." AND Status >= 4 ORDER BY Posted DESC LIMIT 1")) {
         $unix_ts = max($unix_ts, $max_article);
     }
 
@@ -4642,7 +4648,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
     } elseif ($time && strpos($time, '%') !== false) {
         $start = $month ? strtotime($month) : time() or $start = time();
         $offset = date('P', $start);
-        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."%'";
+        $timeq = ($offset ? "CONVERT_TZ($safe_field, @@session.time_zone, '$offset')" : $safe_field)." LIKE '".doSlash(safe_strftime($time, $start))."'";
     } else {
         $start = $month ? strtotime($month) : false;
 
@@ -4650,7 +4656,7 @@ function buildTimeSql($month, $time, $field = 'Posted')
             $from = $month ? "'".doSlash($month)."'" : now($field);
             $start = time();
         } else {
-            $from = "(COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)";
+            $from = txp_unixtime($start);
         }
 
         if ($time === 'since') {
@@ -4665,8 +4671,8 @@ function buildTimeSql($month, $time, $field = 'Posted')
             }
 
             $timeq = ($start == $stop ?
-                "$safe_field = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND)" :
-                "$safe_field BETWEEN (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $start SECOND) AND (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $stop SECOND)"
+                "$safe_field = ".txp_unixtime($start) :
+                "$safe_field BETWEEN ".txp_unixtime($start) ." AND ".txp_unixtime($stop)
             );
         }
     }
@@ -5060,7 +5066,7 @@ function permlinkurl_id($id)
     }
 
     $rs = empty($id) ? array() : safe_row(
-        "ID AS thisid, Section, Title, url_title, Category1, Category2, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS posted, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS expires",
+        "ID AS thisid, Section, Title, url_title, Category1, Category2," . txp_timestamp(array('Posted' => 'posted','Expires' => 'expires')),
         'textpattern',
         "ID = $id"
     );
@@ -5380,6 +5386,38 @@ function imageBuildURL($img = array(), $thumbnail = null)
     $secondBase = callback_event('txp.image', 'url', $thumbnail, compact('base', 'img', 'params', 'thumbnail'));
 
     return $secondBase ? $secondBase : $base;
+}
+
+/**
+ * Remove (automatic and manual) image thumbnails given the image ID
+ *
+ * @param int          $id    Image ID
+ * @param string|array $types Type of thumbnail to remove
+ * @since 4.9.2
+ */
+function deleteThumbnails($id, $types = array(THUMB_AUTO, THUMB_CUSTOM))
+{
+    assert_int($id);
+    $types = do_list($types);
+    $exts = implode('|', array_values(get_safe_image_types()));
+
+    // Remove automatic thumbs of any type.
+    if (in_array(THUMB_AUTO, $types)) {
+        $Directory = new RecursiveDirectoryIterator(IMPATH.TEXTPATTERN_THUMB_DIR);
+        $Directory->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
+        $Iterator = new RecursiveIteratorIterator($Directory);
+        $Regex = new RegexIterator($Iterator, '/'.$id.'('.$exts.')$/i', RecursiveRegexIterator::GET_MATCH);
+
+        foreach ($Regex as $name => $file) {
+            unlink(realpath($name));
+        }
+    }
+
+    // Remove custom thumb of current type.
+    if (in_array(THUMB_CUSTOM, $types)) {
+        $t = new txp_thumb($id);
+        $t->delete();
+    }
 }
 
 /**
@@ -6439,27 +6477,32 @@ function bombShelter()
  *
  * Discards formats with a quality factor below 0.1
  *
- * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss'
+ * @param   string  $format One of 'html', 'txt', 'js', 'css', 'json', 'xml', 'rdf', 'atom', 'rss', 'svg'
  * @return  boolean $format TRUE if accepted
  * @since   4.5.0
  * @package Network
  */
 
-function http_accept_format($format)
+function http_accept_format($format = null)
 {
     static $formats = array(
         'html' => array('text/html', 'application/xhtml+xml', '*/*'),
         'txt'  => array('text/plain', '*/*'),
-        'js'   => array('application/javascript', 'application/x-javascript', 'text/javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
+        'js'   => array('text/javascript', 'application/javascript', 'application/x-javascript', 'application/ecmascript', 'application/x-ecmascript', '*/*'),
         'css'  => array('text/css', '*/*'),
         'json' => array('application/json', 'application/x-json', '*/*'),
-        'xml'  => array('text/xml', 'application/xml', 'application/x-xml', '*/*'),
-        'rdf'  => array('application/rdf+xml', '*/*'),
+        'xml'  => array('application/xml', 'text/xml', 'application/x-xml', '*/*'),
         'atom' => array('application/atom+xml', '*/*'),
         'rss'  => array('application/rss+xml', '*/*'),
+        'rdf'  => array('application/rdf+xml', '*/*'),
+        'svg'  => array('image/svg+xml', '*/*'),
     );
     static $accepts = array();
     static $q = array();
+
+    if ($format === null || !isset($formats[$format])) {
+        return isset($format) ? false : $formats;
+    }
 
     if (empty($accepts)) {
         // Build cache of accepted formats.
@@ -6484,7 +6527,7 @@ function http_accept_format($format)
         }
     }
 
-    return isset($formats[$format]) && count(array_intersect($formats[$format], $accepts)) > 0;
+    return !empty(array_intersect($formats[$format], $accepts));
 }
 
 /**
@@ -6688,29 +6731,36 @@ function txp_match($atts, $what)
 
 // -------------------------------------
 
-function get_mediatypes(&$textarray)
+function get_mediatypes(&$textarray = null, $all = false)
 {
     global $lang_ui;
 
     $mimeTypes = array();
+    $custom_types = (parse_ini_string(get_pref('custom_form_types'), true) ?: array());
 
-    if ($custom_types = parse_ini_string(get_pref('custom_form_types'), true)) {
-        foreach ($custom_types as $type => $langpack) {
-            if (!empty($langpack['mediatype'])) {
-                $mimeTypes[$type] = $langpack['mediatype'];
-            }
+    while (isset($custom_types['*'])) {
+        $key = array_search('*', array_keys($custom_types));
+        $custom_types = array_slice($custom_types, 0, $key, true) +
+            http_accept_format() +
+            array_slice($custom_types, $key + 1, null, true);
+    }
 
-            if ($textarray !== null) {
-                $textarray[$type] = isset($langpack[$lang_ui]) ?
-                    $langpack[$lang_ui] :
-                    (isset($langpack['title']) ?
-                        $langpack['title'] :
-                        (isset($mimeTypes[$type]) ?
-                            strtoupper($type)." (".$mimeTypes[$type].")"
-                            : $type
-                        )
-                    );
-            }
+    foreach ($custom_types as $type => $langpack) {
+        if (!empty($langpack['mediatype'])) {
+            $mimeTypes[$type] = $langpack['mediatype'];
+        } elseif (!empty($langpack[0])) {
+            $mimeTypes[$type] = $langpack[0];
+        } elseif ($all) {
+            $mimeTypes[$type] = null;
+        }
+
+        if ($textarray !== null) {
+            $textarray[$type] = isset($lang_ui) && isset($langpack[$lang_ui]) ?
+                $langpack[$lang_ui] :
+                (isset($langpack['title']) ?
+                    $langpack['title'] :
+                    (isset($mimeTypes[$type]) ? strtoupper($type) : $type)
+                ) . (isset($mimeTypes[$type]) ? " (".$mimeTypes[$type].")" : '');
         }
     }
 

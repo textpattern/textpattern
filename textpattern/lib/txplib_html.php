@@ -1169,6 +1169,21 @@ function assHead()
 }
 
 /**
+ * Renders a 'Select All' checkbox.
+ *
+ * @return string HTML
+ */
+
+function selectAllCheckbox()
+{
+    return hCell(
+        fInput('checkbox', array('name' => 'select_all', 'id' => 'select_all', 'aria-label' => gTxt('toggle_all_selected')), 0),
+        '', ' class="txp-list-col-multi-edit" scope="col"'
+    );
+}
+
+
+/**
  * Renders the ubiquitous popup help button.
  *
  * The rendered link can be customised via a 'admin_help > {$help_var}'
@@ -1706,10 +1721,11 @@ function asyncHref($item, $parms, $atts = '')
     global $event, $step;
 
     $parms = lAtts(array(
-        'event'    => $event,
-        'step'     => $step,
-        'thing'    => '',
-        'property' => '',
+        'event'      => $event,
+        'step'       => $step,
+        'thing'      => '',
+        'property'   => '',
+        '_txp_token' => form_token(),
     ), $parms);
 
     $class = $parms['step'].' async';

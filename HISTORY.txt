@@ -1,11 +1,65 @@
+Textpattern CMS
+
+Changes in 4.9.2 (2 Nov 2026)
+
+* Maintenance release with security enhancements, general improvements and
+  bug fixes.
+* Security: Resolved skipping of authentication for concurrent logins via
+  cookie (thanks, MoltenGamaLC and Maizeravla).
+* Security: Always sandbox preview frames and introduce admin-side CSP layer
+  (thanks, Nguyen Trung Hoang).
+* Security: Sanitize 'sort' attribute of <txp:authors> tag (thanks, Neder).
+* Security: Sanitize 'sort' attribute of <txp:file_download> tag
+  (thanks, Maizeravla and MoltenGamaLC).
+* Security: Sanitize 'url_title' attribute consistently (thanks, Maizeravla
+  and MoltenGamaLC).
+* Security: CSP improvements to mitigate user privilege CSRF
+  (thanks, AnhNg1410).
+* Security: Theme import is now CSRF-aware (thanks, Bilguundalai).
+* Security: Validate administrative user status on Users panel updates
+  (thanks, mansurmavlankulov).
+* Security: Resolve sanitization of file paths in XML-RPC mt_uploadImage()
+  (thanks, zsm-cry). Refer to CVE-2026-5344 for additional information.
+* Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
+* Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
+* Fixed: Thumbnail generation paths on Windows (thanks, skewray);
+* Fixed: Improved exif_read_data() handling (thanks, towndock).
+* Fixed: <txp:password_protect> container error (thanks, wet).
+* Fixed: Recursive use of <txp:yield>.
+* Fixed: Allow upload of plugins where filename length exceeds PHP_MAXPATHLEN.
+* Fixed: Theme import with invalid JSON manifest.
+* Fixed: Improved Textile support for IETF BCP 47 language tags.
+* Fixed: Plugin compilation output: order, not load_order.
+* Fixed: Default public theme CSS should not be minified.
+* Added: <txp:file_download_info /> tag.
+* Added: 'version' attribute to <txp:css /> tag.
+* Added: 'download' attribute to <txp:file_download_link /> tag.
+* Added: 'aspect' ratio output to <txp:image_info /> tag.
+* Added: Publishers can set password for any user, and choose whether
+  invite link is sent.
+* Added: Copy to clipboard feature for Diagnostics and Setup info.
+* Added: Dark mode for default public theme.
+* Added: Clean URL test user agent ('Textpattern CMS clean URL test').
+* Added: Latest text translations. Thank you to all our translators.
+* Changed: Modernisation of default public theme CSS rules.
+* Changed: Article 'uid' uses Tiger-128,3 hash instead of MD5 hash.
+* Changed: Add TEXTPATTERN_DEFAULT_LANG to config.php during setup.
+* Performance: Reduced query count if theme textpack is unchanged.
+* Developer: Added 'ext' and 'mime' to global $thisfile array.
+* Developer: Added 'uid' to global $thisarticle array.
+* Developer: Exposed raw_label in UI\InputLabel.
+* Vendors: Textile 4.1.6. (thanks, gocom).
+* Vendors: DOMPurify 3.4.17.
+
 Changes in 4.9.1 (14 Feb 2026)
 
 * Maintenance release with security enhancements, general improvements and
   bug fixes.
 * Security: Resolved access control regression with articles. Many thanks to
-  Federico Frascino.
+  Federico Frascino. Refer to CVE-2026-30452 for additional information.
 * Security: Resolved admin-side XSS vulnerability. Many thanks to
-  Jan Jeffrie Galvez Salloman, aka '0xj4n'.
+  Jan Jeffrie Galvez Salloman, aka '0xj4n'. Refer to CVE-2026-29906 for
+  additional information.
 * Changed: (Article)Image tags only output dimensions on demand.
 * Changed: <txp:article_image> skips empty images/thumbnails.
 * Changed: Valueless width/height/crop behaviour in (Article)Image tags.
@@ -490,7 +544,7 @@ Changes in 4.8.0 (25 Feb 2020)
 * Developer: Multiple forms can be fetched at once.
 * Developer: txp.article > neighbour.criteria callback on Write panel.
 * Developer: Please register plugin tags or they will not work in future.
-* Performance optimizations via cacheing and preloading frequent content.
+* Performance optimizations via caching and preloading frequent content.
 * Textile 3.7.6. See https://github.com/textile/php-textile/releases/tag/v3.7.6
   for full list of changes in this release (thanks, gocom).
 * jQuery 3.4.1.
@@ -1166,7 +1220,7 @@ Changes in 4.2.0 (17 Sep 2009)
 * Fixed: Tag builders for <txp:category /> and <txp:section />.
 * Fixed: Bogus "Article tags cannot be used outside an article context" warning
   in <txp:else />-branch of <txp:if_keywords>.
-* Fixed: Removed superflous &amp; encoding for article titles in
+* Fixed: Removed superfluous &amp; encoding for article titles in
   <txp:recent_comments />.
 * Fixed: <txp:expires> uses "class" and "wraptag" attributes as intended.
 * New tag: <txp:link_id /> (thanks: Rick Silletti).

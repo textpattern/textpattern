@@ -81,6 +81,7 @@ function author_save()
         'RealName',
         'email',
         'language',
+        'new_pass',
     )));
 
     $privs = assert_int($privs);
@@ -92,36 +93,45 @@ function author_save()
         return;
     }
 
-    $rs = update_user($name, $email, $RealName);
+    $msg = array(gTxt('author_save_failed', array('{name}' => $RealName)), E_ERROR);
+    $admin = has_privs('admin.edit');
+    $rs = $txp_user === $name || $admin ? update_user($name, $email, $RealName) : false;
 
-    if ($rs && $language) {
-        safe_upsert(
-            'txp_prefs',
-            "val = '" . doSlash($language) . "',
-            event = 'admin',
-            html = 'text_input',
-            type = " . PREF_HIDDEN . ",
-            position = 0",
-            array(
-                'name'      => 'language_ui',
-                'user_name' => doSlash((string) $name)
-            )
-        );
+    $new_pass = trim($new_pass);
+    $result = true;
+
+    // Can't change your own password from this route - only via Change Your Password panel.
+    if ($new_pass !== '' && $admin && $txp_user !== $name) {
+        $result = change_user_password($name, $new_pass);
     }
 
-    if (has_privs('admin.edit') && $rs && ($txp_user === $name || change_user_group($name, $privs))) {
-        author_list(gTxt('author_updated', array('{name}' => $RealName)));
-
-        return;
-    } elseif ($rs && has_privs('admin.edit.own')) {
+    if ($rs && $result) {
         $msg = gTxt('author_updated', array('{name}' => $RealName));
-    } else {
-        $msg = array(gTxt('author_save_failed'), E_ERROR);
+
+        if ($language) {
+            safe_upsert(
+                'txp_prefs',
+                "val = '" . doSlash($language) . "',
+                event = 'admin',
+                html = 'text_input',
+                type = " . PREF_HIDDEN . ",
+                position = 0",
+                array(
+                    'name'      => 'language_ui',
+                    'user_name' => doSlash((string) $name)
+                )
+            );
+        }
+
+        // Can't change your own role.
+        if ($admin && $txp_user !== $name) {
+            change_user_group($name, $privs);
+        }
     }
 
-    if (has_privs('admin.edit')) {
+    if ($admin) {
         author_edit($msg);
-    } elseif (has_privs('admin.edit.own')) {
+    } else {
         author_list($msg);
     }
 }
@@ -168,6 +178,7 @@ function author_save_new()
         'email',
         'RealName',
         'language',
+        'new_pass',
         'notify',
     )));
 
@@ -180,7 +191,8 @@ function author_save_new()
             return;
         }
 
-        $password = Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH);
+        $new_pass = trim($new_pass);
+        $password = ($new_pass === '') ? Txp::get('\Textpattern\Password\Random')->generate(PASSWORD_LENGTH) : $new_pass;
 
         $rs = create_user($name, $email, $password, $RealName, $privs);
 
@@ -200,7 +212,7 @@ function author_save_new()
                 );
             }
 
-            if (strtolower($notify) !== 'skip') {
+            if ($notify) {
                 $message = send_account_activation($name);
             } else {
                 $message = gTxt('author_updated', array('{name}' => $name));
@@ -324,7 +336,7 @@ function author_list($message = '')
             'label' => 'privileges',
         ),
         'last_login' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), last_access)',
+            'column' => 'UNIX_TIMESTAMP(last_access)',
             'class'  => 'date',
         ),
         'article_count' => array(
@@ -532,10 +544,7 @@ function author_list($message = '')
 
                     $headings = array();
                     $headings[] = ($use_multi_edit)
-                        ? hCell(
-                            fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                            '', ' class="txp-list-col-multi-edit" scope="col" title="' . gTxt('toggle_all_selected') . '"'
-                        )
+                        ? selectAllCheckbox()
                         : hCell('', '', ' class="txp-list-col-multi-edit" scope="col"');
 
                 foreach ($fields as $col => $opts) {
@@ -761,6 +770,34 @@ function author_edit($message = '', $fullEdit = false)
     }
 
     $out[] = $langField;
+
+    if (has_privs('admin.edit') && $txp_user != $name) {
+        $ynr = Txp::get('\Textpattern\UI\YesNoRadioSet', 'notify', 1);
+        $opt = $ynr->get($ynr->keys()[0]);
+        $opt->appendAtts(array(
+            'class' => 'toggle-option',
+            'data-target' => '.edit-admin-new-password',
+        ));
+
+        $out[] = $is_edit ? '' : Txp::get('\Textpattern\UI\InputLabel', 'notify', $ynr, 'resend_activation')->setAtt('id', 'send_activation')->setProperty('raw_label', true);
+        $out[] = inputLabel(
+            'new_pass',
+            fInput(
+                'password',
+                array(
+                    'name'         => 'new_pass',
+                    'autocomplete' => 'new-password',
+                ), '', 'txp-maskable', '', '', INPUT_REGULAR, '', 'new_pass', false, false
+            ) .
+            n . tag(
+                checkbox('unmask', 1, false, 0, 'show_password') .
+                n . tag(gTxt('show_password'), 'label', array('for' => 'show_password')),
+                'div', array('class' => 'edit-admin-show-password')
+            ),
+            'new_password', '', array('class' => 'txp-form-field edit-admin-new-password')
+        );
+    }
+
     $out[] = pluggable_ui('author_ui', 'extend_detail_form', '', $rs) .
         graf(
             ($fullEdit ? '' : sLink('admin', '', gTxt('cancel'), 'txp-button')) .

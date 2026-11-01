@@ -145,10 +145,8 @@ function article_save($write = true)
 
     if ($incoming['ID']) {
         $oldArticle = safe_row(
-            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod, LastModID,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires",
+            "Status, AuthorID, url_title, Title, textile_body, textile_excerpt, LastModID, UNIX_TIMESTAMP(LastMod) AS sLastMod, ".
+            txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern', "ID = " . (int) $incoming['ID']
         );
 
@@ -218,7 +216,7 @@ function article_save($write = true)
             $uPosted = $ts - tz_offset($ts);
         }
 
-        $whenposted = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uPosted SECOND";
+        $whenposted = txp_unixtime($uPosted);
     }
 
     // Set and validate expiry timestamp.
@@ -264,7 +262,7 @@ function article_save($write = true)
     }
 
     if ($uExpires) {
-        $whenexpires = "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $uExpires SECOND";
+        $whenexpires = txp_unixtime($uExpires);
     } else {
         $whenexpires = "NULL";
     }
@@ -330,7 +328,7 @@ function article_save($write = true)
             "AnnotateInvite"  => $AnnotateInvite
         ) + (!empty($ID) ? array() : array(
             "AuthorID"        => $txp_user,
-            "uid"             => md5(uniqid(rand(), true)),
+            "uid"             => hash(UID_HASHING_ALGORITHM, uniqid(rand(), true)),
         )) + $cfq;
 
         if (!$write) {
@@ -352,12 +350,12 @@ function article_save($write = true)
                 );
             }
 
-            if ($Status >= STATUS_LIVE) {
+            if (max($Status, $oldArticle['Status']) >= STATUS_LIVE) {
                 if ($oldArticle['Status'] < STATUS_LIVE) {
                     do_pings();
-                } else {
-                    update_lastmod($ID ? 'article_saved' : 'article_posted', $rs);
                 }
+
+                update_lastmod($ID ? 'article_saved' : 'article_posted', $rs);
             }
 
             now('posted', true);
@@ -407,7 +405,7 @@ function article_preview($field = false)
 
         $preview = (isset($rs[$dbfield]) ? $rs[$dbfield] : '');
     } else {
-        return '<div id="pane-preview"></div>' . n .
+        return '<div id="pane-preview" tabindex="0"></div>' . n .
             '<template id="pane-template"></template>';
     }
 
@@ -702,9 +700,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $ID = assert_int($ID);
 
         $rs = safe_row(
-            "*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS sPosted,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS sExpires,
-            TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod",
+            "*, UNIX_TIMESTAMP(LastMod) AS sLastMod, " . txp_timestamp(array('Posted' => 'sPosted', 'Expires' => 'sExpires')),
             'textpattern',
             "ID = $ID"
         );
@@ -724,7 +720,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
         $store_out = array('ID' => $ID) + psa($vars);
 
         if ($concurrent) {
-            $store_out['sLastMod'] = safe_field("TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS sLastMod", 'textpattern', "ID = $ID");
+            $store_out['sLastMod'] = safe_field("UNIX_TIMESTAMP(LastMod) AS sLastMod", 'textpattern', "ID = $ID");
         }
 
         if (!has_privs('article.set_markup') && !empty($ID)) {
@@ -854,7 +850,7 @@ function article_edit($message = '', $concurrent = false, $refresh_partials = fa
     echo n . '</div>';// End of .txp-dialog.
 
     if (can_preview($rs)) {
-        echo '<iframe id="preview-frame" name="preview" tabindex="-1" sandbox="" class="txp-dialog"></iframe>';
+        echo '<iframe id="preview-frame" name="preview" sandbox="" class="txp-dialog"></iframe>';
     }
 
     echo n . '</div>' . // End of #main_content.
@@ -1164,7 +1160,7 @@ function checkIfNeighbour($whichway, $sPosted, $ID = 0)
 
     return safe_field(
         "ID", 'textpattern',
-        "(Posted $dir (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) OR Posted = (COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $sPosted SECOND) AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
+        "(Posted $dir ".txp_unixtime($sPosted)." OR Posted = ".txp_unixtime($sPosted)." AND ID $dir $ID) $crit ORDER BY Posted $ord, ID $ord LIMIT 1"
     );
 }
 
@@ -1323,6 +1319,7 @@ function check_url_title($url_title)
     if (strlen($url_title) === 0) {
         return gTxt('url_title_is_blank');
     } else {
+        $url_title = doSlash($url_title);
         $url_title_count = safe_count('textpattern', "url_title = '$url_title'");
 
         if ($url_title_count > 1) {
@@ -1534,6 +1531,7 @@ function article_partial_actions($rs)
     hInput('sLastMod', $rs['sLastMod']) .
     hInput('AuthorID', $rs['AuthorID']) .
     hInput('LastModID', $rs['LastModID']) . n .
+    hInput('_txp_token', form_token()) . n .
     $push_button .
     graf(article_partial_article_clone($rs) . article_partial_article_view($rs), array('class' => 'txp-actions')) . n .
     '</div>';

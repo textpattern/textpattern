@@ -27,7 +27,7 @@
  * Collection of client-side tools.
  */
 
-textpattern.version = '4.9.1';
+textpattern.version = '4.9.2';
 
 /**
  * Ascertain the page direction (LTR or RTL) as a variable.
@@ -602,14 +602,12 @@ function sendAsyncEvent(data, fn, format) {
 
     if (typeof(data) === 'string' && data.length > 0) {
         // Got serialized data.
-        data = data + '&' + $.param({app_mode: 'async', _txp_token: textpattern._txp_token});
+        data = data + '&' + $.param({app_mode: 'async'});
     } else if (data instanceof FormData) {
         formdata = true;
         data.append('app_mode', 'async');
-        data.append('_txp_token', textpattern._txp_token);
     } else {
         data.app_mode = 'async';
-        data._txp_token = textpattern._txp_token;
     }
 
     return formdata ? $.ajax({
@@ -1396,7 +1394,7 @@ textpattern.decodeHTML = function (string) {
     const template = document.createElement('template');
     template.remove();
     template.innerHTML = string;
-    
+
     return template.content;
 };
 
@@ -2119,7 +2117,10 @@ textpattern.Route.add('article', function () {
     });
 
     $('#clean-preview, #parse-preview').on('change', function () {
-        $viewMode.click();
+        let $this = $(this), mode = $viewMode[0].dataset.viewMode;
+        if (mode == 'html' || !$this.is('#clean-preview') || $this.is(':checked') || !DOMPurify.removed.length || confirm(textpattern.gTxt('are_you_sure'))) {
+            $viewMode.click();
+        } else $this.prop('checked', true);
     });
 
     textpattern.Relay.register('article.preview', function (e) {
@@ -2159,7 +2160,7 @@ textpattern.Route.add('article', function () {
               click: function() {
                 $('#article_partial_article_preview').trigger('click');
               }
-         
+
               // Uncommenting the following line would hide the text,
               // resulting in the label being used as a tooltip
               //showText: false
@@ -2172,15 +2173,15 @@ textpattern.Route.add('article', function () {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'submit');
     }).on('dialogclose', function (event, ui) {
         document.getElementById('article_partial_article_preview').setAttribute('type', 'button');
-    });
+    });/*
     $frame.dialog( "widget" ).find('.ui-dialog-buttonpane>.ui-dialog-buttonset').prepend(
         `<label><input class="checkbox" id="clean-view" type="checkbox" checked="" value="1">&nbsp;Sandbox</label>&nbsp;`
-    );
+    );*/
 
-    $(document).on('change', '#clean-view', function () {
+    $(document)/*.on('change', '#clean-view', function () {
         $frame.attr('sandbox', this.checked ? '' : null);
         $('#article_partial_article_preview').trigger('click');
-    }).on('click', '#article_partial_article_preview', function (e) {
+    })*/.on('click', '#article_partial_article_preview', function (e) {
         if (!$frame.length) return;
 
         e.preventDefault();
@@ -2210,8 +2211,8 @@ textpattern.Route.add('article', function () {
             const inputid = $field.replace('_', '-');
             $input = $('#' + inputid);
 
-            const label = $('label[for="'+inputid+'"]').contents().filter(function () { 
-                return this.nodeType === Node.TEXT_NODE; 
+            const label = $('label[for="'+inputid+'"]').contents().filter(function () {
+                return this.nodeType === Node.TEXT_NODE;
             }).text();
             $pane.dialog('option', 'title', label);
         }
@@ -2237,7 +2238,7 @@ textpattern.Route.add('article', function () {
             const shadow = pane.attachShadow({mode: 'open'});
 
             if (shadow.adoptedStyleSheets) {
-                const getMatchedCSSRules = (name, css = document.styleSheets) => 
+                const getMatchedCSSRules = (name, css = document.styleSheets) =>
                 [].concat(...[...css].map(s => [...s.cssRules||[]]))
                     .filter(r => r instanceof CSSLayerBlockRule && r.name == name);
 
@@ -2275,7 +2276,7 @@ textpattern.Route.add('article', function () {
                     }
                 });
                 if (fold) txp_fold_preview(node, true);
-            });    
+            });
 
             this.content.querySelectorAll('a, form, link').forEach(node => {
                 if ('target' in node && !node.getAttribute('target')) node.target = '_blank';
@@ -2302,8 +2303,8 @@ textpattern.Route.add('article', function () {
                 currentNode.parentNode.insertBefore(document.createComment(tagName.replace(/^\-/, '')), currentNode);
             } else {
                 const node = textpattern.wrapHTML(currentNode, 'code', {'class': 'txp-sanitized ' + tagName});
-                if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
-                else currentNode.parentNode.insertBefore(node, currentNode);
+                /*if (currentNode instanceof Element) currentNode.parentNode.replaceChild(node, currentNode);
+                else*/ currentNode.parentNode.insertBefore(node, currentNode);
             }
         }
     });
@@ -2842,6 +2843,45 @@ textpattern.Route.add('', function () {
             $(this).tooltip('destroy');
         }
     });
+
+    // Copy to clipboard.
+    $('.action-copy-clip').click(function(ev) {
+        ev.preventDefault();
+        let source = $(this).data('source');
+        let $source = $(source);
+
+        if ($source.length) {
+            navigator.clipboard.writeText($source.val());
+            console.log(ev);
+            ev.target.innerHTML = '<span class="ui-icon ui-icon-check"></span> ' + textpattern.gTxt('copied');
+        }
+    });
+
+    // Toggle-options.
+    $('.toggle-option').closest('.txp-form-field-value').find('input').click(function(ev) {
+        let on = $(this).closest('.txp-form-field-value').find('.toggle-option');
+        let tgt = on.data('target');
+        let block = $(tgt);
+        let off = on.siblings().not('.toggle-option');
+
+        if (block.length) {
+            if (off.prop("checked")) {
+                block.hide();
+            } else {
+                block.show();
+            }
+
+            off.click(function () {
+                block.hide();
+            });
+
+            on.click(function () {
+                block.show();
+            });
+        }
+    });
+
+    $('.toggle-option').closest('.txp-form-field-value').find('input:checked').click();
 
     // Pane states
     var hasTabs = $('.txp-layout:has(.switcher-list li a[data-txp-pane])');

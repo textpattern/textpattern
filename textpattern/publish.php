@@ -151,7 +151,7 @@ if (!defined('SITE_HOST')) {
      * @since   4.6.0
      */
 
-    define('SITE_HOST', (string) @parse_url(hu, PHP_URL_HOST));
+    define('SITE_HOST', (string) parse_url(hu, PHP_URL_HOST));
 }
 
 if (!defined('IMPATH')) {
@@ -304,7 +304,7 @@ function preText($store, $prefs = null)
         // Another IIS fix.
         if (!$out['request_uri'] and serverSet('argv')) {
             $argv = serverSet('argv');
-            $out['request_uri'] = @substr($argv[0], strpos($argv[0], ';') + 1);
+            $out['request_uri'] = substr($argv[0], strpos($argv[0], ';') + 1);
         }
 
         // Define the usable url, minus any subdirectories.
@@ -415,6 +415,8 @@ function preText($store, $prefs = null)
 
                 output_thumb(array('param' => $xform, 'img' => $imgfile));
                 exit;
+            } else {// should be an image URL.
+                $is_404 = true;
             }
         } elseif ($trailing_slash > 0 && $out[$out[0]] !== '' || $trailing_slash < 0 && $out[$out[0]] === '') {
             $is_404 = true;
@@ -479,9 +481,7 @@ function preText($store, $prefs = null)
                         $slash = $trailing_slash <= 0 ? '' : '/';
 
                         $guessarticles = safe_rows(
-                            '*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Posted) AS uPosted,'.
-                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), Expires) AS uExpires,'.
-                                'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), LastMod) AS uLastMod',
+                            '*, UNIX_TIMESTAMP(LastMod) AS uLastMod, '.txp_timestamp(array('Posted' => 'uPosted', 'Expires' => 'uExpires')),
                             'textpattern',
                             "(url_title='$safe_un'" . ($n < 3 && is_numeric($un) ? " OR ID='$safe_un')" : ')') . $status
                         );
@@ -526,7 +526,7 @@ function preText($store, $prefs = null)
                         }
 
                         // Then see if the prefs-defined permlink scheme is usable.
-                        switch ($permlink_guess ? $permlink_guess : $permlink_mode) {
+                        switch ($permlink_guess ?: $permlink_mode) {
                             case 'section_id_title':
                                 $out['s'] = $u1;
 
@@ -579,7 +579,7 @@ function preText($store, $prefs = null)
                                 break;
 
                             default:
-                                if (isset($u2) || $trailing_slash < 0 && isset($permlink_modes[$u1])) {
+                                if ((isset($u2) || $trailing_slash < 0) && isset($permlink_modes[$u1])) {
                                     $out['s'] = $u1;
                                     $title = empty($u2) ? null : $u2;
                                 } else {
@@ -641,9 +641,9 @@ function preText($store, $prefs = null)
             }
 
             $fn = empty($out['filename']) ? '' : " AND filename = '" . doSlash($out['filename']) . "'";
-            $rs = safe_row('*', 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
+            $rs = safe_row('*,' . txp_timestamp(array('created' => 'created', 'modified' => 'modified')), 'txp_file', "id = " . intval($out['id']) . " AND status = " . STATUS_LIVE . " AND created <= " . now('created') . $fn);
 
-            $thisfile = $rs ? file_download_format_info($rs) : null;
+            $thisfile = $rs ?: null;
         }
 
         $is_404 = $is_404 || empty($rs);
@@ -749,9 +749,13 @@ function textpattern()
 
     // Useful for clean URLs with error-handlers.
     txp_status_header('200 OK');
-
     set_error_handler('tagErrorHandler');
-    $html = parse_page($pretext['page'], $pretext['skin']);
+
+    if (empty($pretext['f'])) {
+        $html = parse_page($pretext['page'], $pretext['skin']);
+    } else {
+        $html = output_component($pretext['f']);
+    }
 
     if ($html === false) {
         txp_die(gTxt('unknown_section'), '404');
@@ -775,9 +779,8 @@ function output_component($n = '')
     }
 
     if (!isset($mimetypes)) {
-        $null = null;
-        $mimetypes = get_mediatypes($null);
-        $typequery = " AND type IN ('" . implode("','", doSlash(array_keys($mimetypes))) . "')";
+        $mimetypes = get_mediatypes();
+        $typequery = " AND type IN (" . quote_list(array_keys($mimetypes), ',') . ")";
     }
 
     $t = $pretext['skin'];
@@ -799,19 +802,19 @@ function output_component($n = '')
                 $mimetype = $mimetypes[$row['type']];
             }
         }
+    } else {
+        return false;
     }
 
-    set_error_handler('tagErrorHandler');
     header('Content-Type: ' . $mimetype . '; charset=utf-8');
-    echo ltrim(parse_page(null, null, implode(n, $assets)));
-    restore_error_handler();
+
+    return parse_page(null, null, implode(n, $assets));
 }
 
 // -------------------------------------------------------------
 function output_thumb($data = array())
 {
     try {
-        static $storedTokens = array();
         $sec_mode = get_pref('thumb_security', 'always');
 
         if ($sec_mode === 'always') {

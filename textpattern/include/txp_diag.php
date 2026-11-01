@@ -194,9 +194,20 @@ function doDiagnostics()
     $real_doc_root = (isset($_SERVER['DOCUMENT_ROOT'])) ? realpath($_SERVER['DOCUMENT_ROOT']) : '';
 
     $preflight = $notReadable = array();
-    $now = time();
     $heading = gTxt('tab_diagnostics');
     $isUpdate = defined('TXP_UPDATE_DONE');
+
+    echo pagetop(gTxt('tab_diagnostics'), '');
+
+    echo n . '<div class="txp-layout">' .
+        n . tag(
+            hed($heading, 1, array('class' => 'txp-heading')),
+            'div', array('class' => 'txp-layout-1col')
+        ) .
+        n . tag_start('div', array(
+            'class' => 'txp-layout-1col',
+            'id'    => $event . '_container',
+        ));
 
     $phpInPages = get_pref('allow_page_php_scripting');
     $phpInArticles = get_pref('allow_article_php_scripting');
@@ -205,7 +216,7 @@ function doDiagnostics()
         // Check for Textpattern updates, at most once every hour.
         $lastCheck = json_decode(get_pref('last_update_check', ''), true);
 
-        if (empty($lastCheck) || $now > ($lastCheck['when'] + (60 * 60))) {
+        if (empty($lastCheck) || time() > ($lastCheck['when'] + (60 * 60))) {
             $lastCheck = checkUpdates();
         }
 
@@ -379,15 +390,20 @@ function doDiagnostics()
     // Test clean URL server vars.
     if (hu) {
         if (ini_get('allow_url_fopen') && ($permlink_mode != 'messy')) {
-            $s = md5(uniqid(rand(), true));
+            $s = md5(uniqid(rand(), true)) . '/?txpcleantest=1';
             ini_set('default_socket_timeout', 10);
 
-            $pretext_data = file(hu . $s . '/?txpcleantest=1');
+            $context = stream_context_create(array(
+                'http' => array(
+                    'user_agent' => 'Textpattern CMS clean URL test',
+                ),
+            ));
+            $pretext_data = file(hu . $s, 0, $context);
 
             if ($pretext_data) {
-                $pretext_req = trim(@$pretext_data[0]);
+                $pretext_req = trim(empty($pretext_data[0]) ? '' : $pretext_data[0]);
 
-                if ($pretext_req != md5('/' . $s . '/?txpcleantest=1')) {
+                if ($pretext_req != md5('/' . $s)) {
                     $preflight['w'][] = array('clean_url_data_failed', null, array('{data}' => txpspecialchars($pretext_req)));
                 }
             } else {
@@ -420,11 +436,11 @@ function doDiagnostics()
         $showTypes = '0, 1, 2, 3, 4, 5';
     }
 
-    if ($rows = safe_rows("name, version, code_md5, MD5(code) AS md5", 'txp_plugin', "status > 0 AND type IN (" . $showTypes . ") ORDER BY name")) {
+    if ($rows = safe_rows("name, version, code <> code_restore AS modified", 'txp_plugin', "status > 0 AND type IN (" . $showTypes . ") ORDER BY name")) {
         foreach ($rows as $row) {
             $n = $row['name'] . '-' . $row['version'];
 
-            if (strtolower($row['md5']) != strtolower($row['code_md5'])) {
+            if (!empty($row['modified'])) {
                 $n .= ' (' . gTxt('diag_modified') . ')';
             }
 
@@ -501,20 +517,8 @@ function doDiagnostics()
     }
 
     // Database server time.
-    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), NOW()) AS db_server_timestamp")));
-    $db_server_timeoffset = $db_server_timestamp - $now;
-
-    echo pagetop(gTxt('tab_diagnostics'), '');
-
-    echo n . '<div class="txp-layout">' .
-        n . tag(
-            hed($heading, 1, array('class' => 'txp-heading')),
-            'div', array('class' => 'txp-layout-1col')
-        ) .
-        n . tag_start('div', array(
-            'class' => 'txp-layout-1col',
-            'id'    => $event . '_container',
-        ));
+    extract(doSpecial(getRow("SELECT @@global.time_zone AS db_global_timezone, @@session.time_zone AS db_session_timezone, NOW() AS db_server_time, UNIX_TIMESTAMP(NOW()) AS db_server_timestamp")));
+    $db_server_timeoffset = $db_server_timestamp - time();
 
     $thisLang = get_pref('language_ui', TEXTPATTERN_DEFAULT_LANG);
     $siteLang = get_pref('language', TEXTPATTERN_DEFAULT_LANG);
@@ -646,7 +650,9 @@ function doDiagnostics()
             ) .
             inputLabel(
                 'diag_clear_private',
-                checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private'),
+                checkbox('diag_clear_private', 1, false, 0, 'diag_clear_private').'<span class="txp-textarea-options">
+                        <button class="action-copy-clip txp-reduced-ui-button" data-source="#diagnostics-detail"><span class="ui-icon ui-icon-clipboard"></span> ' . gTxt('copy_to_clipboard') . '</button>
+                    </span>',
                 'diag_clear_private', 'diag_clear_private', array('class' => 'txp-form-field'),
                 ''
             )

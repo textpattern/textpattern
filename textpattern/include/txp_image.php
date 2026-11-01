@@ -99,7 +99,7 @@ function image_list($message = '')
             'class' => 'name',
         ),
         'uDate' => array(
-            'column' => 'TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), txp_image.date)',
+            'column' => txp_timestamp('txp_image.date'),
             'label' => 'date',
             'class'  => 'date',
         ),
@@ -281,14 +281,6 @@ function image_list($message = '')
             )
         );
 
-    $buttons = array();
-
-    if (has_privs('article.edit.own')) {
-        $buttons[] = sLink('article', '', gTxt('create_article'), 'txp-button');
-    }
-
-    callback_event_ref($event, 'controls', 'panel', $buttons);
-
     $createBlock = array();
 
     if (!is_dir(IMPATH) or !is_writeable(IMPATH)) {
@@ -369,11 +361,7 @@ function image_list($message = '')
                 n . tag_start('thead');
 
                 $headings = array();
-                $headings[] = hCell(
-                        '<label for="select_all" class="txp-accessibility">' . gTxt('toggle_all_selected') . '</label>'.
-                        fInput('checkbox', 'select_all', 0, '', '', '', '', '', 'select_all'),
-                        '', ' class="txp-list-col-multi-edit" scope="col"'
-                );
+                $headings[] = selectAllCheckbox();
 
                 foreach ($fields as $col => $opts) {
                     if (isset($opts['visible']) && empty($opts['visible'])) {
@@ -690,7 +678,7 @@ function image_edit($message = '', $id = '')
     }
 
     $id = assert_int($id);
-    $rs = safe_row("*, TIMESTAMPDIFF(SECOND, COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)), date) AS uDate", 'txp_image', "id = '$id'");
+    $rs = safe_row("*, " . txp_timestamp(array('date' => 'uDate')), 'txp_image', "id = '$id'");
 
     if ($rs) {
         extract($rs);
@@ -1082,8 +1070,6 @@ function image_replace()
         }
     }
 
-//    $img_result = image_data($_FILES['thefile'], $meta, $id);
-
     if (is_array($img_result)) {
         list($message, $id) = $img_result;
 
@@ -1208,7 +1194,7 @@ function image_save()
         $created = "NOW()";
     } else {
         $created_ts = safe_strtotime($year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second);
-        $created = $created_ts === false ? false : "COALESCE(FROM_UNIXTIME(0), FROM_UNIXTIME(1)) + INTERVAL $created_ts SECOND";
+        $created = $created_ts === false ? false : txp_unixtime($created_ts);
     }
 
     $constraints = array('category' => new CategoryConstraint(gps('category'), array('type' => 'image')));
@@ -1278,9 +1264,7 @@ function image_delete($ids = array())
                     $ul = unlink(realpath(IMPATH . $id . $ext));
                 }
 
-                if (is_file(IMPATH . $id . 't' . $ext)) {
-                    $ult = unlink(realpath(IMPATH . $id . 't' . $ext));
-                }
+                deleteThumbnails($id);
 
                 if (!$rsd or !$ul) {
                     $fail[] = $id;
@@ -1390,11 +1374,10 @@ function thumbnail_delete()
         return;
     }
 
-    $rs = safe_row("id, ext", 'txp_image', "id = $id");
+    $rs = safe_row("id, ext, thumbnail", 'txp_image', "id = $id");
 
-    $t = new txp_thumb($id);
+    deleteThumbnails($id, $rs['thumbnail']);
 
-    $t->delete();
     safe_update('txp_image', 'thumbnail = 0', "id = $id");
     update_lastmod('thumbnail_deleted', compact('id'));
     callback_event('thumbnail_deleted', '', false, $id);
