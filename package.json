@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "eslint": "^4.0.0",
-    "phplint": "^0.1.1",
+    "phplint": "^2.0.5",
     "uglify-js": "3.19.3"
   },
   "dependencies": {
