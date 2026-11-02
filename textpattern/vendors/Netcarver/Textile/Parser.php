@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.6';
+    protected $ver = '4.1.7';
 
     /**
      * Regular expression snippets.
@@ -3158,7 +3158,10 @@ class Parser
     protected function doTagBr($tag, $in)
     {
         return (string)preg_replace_callback(
-            '@<(?P<tag>'.preg_quote($tag).')(?P<atts>[^>]*?)>(?P<content>.*)(?P<closetag></\1>)@s',
+            '@<(?P<tag>'.preg_quote($tag).')'.
+            '(?P<atts>\s+[^>]*?|)>'.
+            '(?P<content>(?:(?!</\1>|<\1(?:\s+[^>]*?|)>).)*?)'.
+            '(?P<closetag></\1>)@s',
             array($this, 'fBr'),
             $in
         );
@@ -3173,7 +3176,10 @@ class Parser
     protected function doPBr($in)
     {
         return (string)preg_replace_callback(
-            '@<(?P<tag>p|h[1-6])(?P<atts>[^>]*?)>(?P<content>.*)(?P<closetag></\1>)@s',
+            '@<(?P<tag>p|h[1-6])'.
+            '(?P<atts>\s+[^>]*?|)>'.
+            '(?P<content>(?:(?!</\1>|<\1(?:\s+[^>]*?|)>).)*?)'.
+            '(?P<closetag></\1>)@s',
             array($this, 'fPBr'),
             $in
         );
