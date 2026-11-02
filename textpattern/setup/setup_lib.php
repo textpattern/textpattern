@@ -54,7 +54,7 @@ function setup_db($cfg = array())
             'user_agent' => 'Textpattern CMS clean URL test',
         ),
     ));
-    $pretext_data = file("{$siteurl}/{$s}/?txpcleantest=1", 0, $context);
+    $pretext_data = @file("{$siteurl}/{$s}/?txpcleantest=1", 0, $context);
 
     if (!empty($pretext_data[0]) && trim($pretext_data[0]) == md5("/{$s}/?txpcleantest=1")) {
         $permlink_mode = 'section_title';
