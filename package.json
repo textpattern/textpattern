@@ -22,8 +22,8 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "eslint": "~9",
-    "phplint": "~2",
+    "eslint": "^10.14.0",
+    "phplint": "^2.0.5",
     "uglify-js": "3.19.3"
   },
   "dependencies": {
