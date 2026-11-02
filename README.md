@@ -97,7 +97,7 @@ If you use GitHub for Textpattern-related development please consider adding som
 
 Thank you to our [GitHub sponsors](https://github.com/sponsors/textpattern). Your continued support is greatly appreciated!
 
-We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
+We are grateful to [DigitalOcean](https://www.digitalocean.com/?utm_source=opensource&utm_campaign=textpattern), [Instatus](https://instatus.com), [BrowserStack](https://www.browserstack.com) and [1Password](https://1password.com) for their kind considerations in supporting Textpattern CMS development by way of web hosting infrastructure (DigitalOcean), uptime monitoring & incident management (Instatus) cross-browser testing platform (BrowserStack) and secure password management (1Password). Thank you!
 
 This project is supported by:
 
