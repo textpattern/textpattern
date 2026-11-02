@@ -5,6 +5,10 @@ Changes in 5.0.0 (upcoming)
 * Vendors: jQuery 4.0.0.
 * Vendors: jQuery Migrate 4.0.2.
 
+Changes in 4.9.3 (upcoming)
+
+* Vendors: Textile 4.1.7 (thanks, gocom).
+
 Changes in 4.9.2 (2 Nov 2026)
 
 * Maintenance release with security enhancements, general improvements and
@@ -53,7 +57,7 @@ Changes in 4.9.2 (2 Nov 2026)
 * Developer: Added 'ext' and 'mime' to global $thisfile array.
 * Developer: Added 'uid' to global $thisarticle array.
 * Developer: Exposed raw_label in UI\InputLabel.
-* Vendors: Textile 4.1.6. (thanks, gocom).
+* Vendors: Textile 4.1.6 (thanks, gocom).
 * Vendors: DOMPurify 3.4.17.
 
 Changes in 4.9.1 (14 Feb 2026)
