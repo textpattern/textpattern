@@ -26,7 +26,7 @@ Changes in 4.9.2 (2 Nov 2026)
   (thanks, zsm-cry). Refer to CVE-2026-5344 for additional information.
 * Fixed: FROM_UNIXTIME(0) timestamp handling on some MySQL/MariaDB versions.
 * Fixed: Deleting image(s) deletes corresponding thumbnails (thanks, wet).
-* Fixed: Thumbnail generation paths on Windows (thanks, skewray);
+* Fixed: Thumbnail generation paths on Windows (thanks, skewray).
 * Fixed: Improved exif_read_data() handling (thanks, towndock).
 * Fixed: <txp:password_protect> container error (thanks, wet).
 * Fixed: Recursive use of <txp:yield>.
