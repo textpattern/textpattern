@@ -55,6 +55,7 @@ Changes in 4.9.2 (2 Nov 2026)
 * Developer: Exposed raw_label in UI\InputLabel.
 * Vendors: Textile 4.1.6. (thanks, gocom).
 * Vendors: DOMPurify 3.4.17.
+
 Changes in 4.9.1 (14 Feb 2026)
 
 * Maintenance release with security enhancements, general improvements and
