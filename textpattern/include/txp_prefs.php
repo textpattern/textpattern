@@ -106,9 +106,13 @@ function prefs_save()
 
     // Remove hashes from non-concurrent users.
     // Note: if removing user from list, they need to logout to invalidate sessions on other devices.
-    $conUsers = isset($post['concurrent_logins']) ? do_list_unique($post['concurrent_logins']) : array();
-    $userIDs = safe_column('user_id', 'txp_users', "name NOT IN (". quote_list($conUsers, ',') .")");
-    safe_delete('txp_token', "type='shared_login' AND reference_id IN (" . implode(',', $userIDs) . ")");
+    $conUsers = do_list_unique(isset($post['concurrent_logins']) ? $post['concurrent_logins'] : get_pref('concurrent_logins'));
+    $userIDs = safe_column('user_id', 'txp_users', $conUsers ? "name NOT IN (". quote_list($conUsers, ',') .")" : '1');
+    $userIDs = array_map('intval', $userIDs); // Could use assert_int but it may throw an uncatchable error and prevent save.
+
+    if ($userIDs) {
+        safe_delete('txp_token', "type='shared_login' AND reference_id IN (" . implode(',', $userIDs) . ")");
+    }
 
     // Forge $gmtoffset and $is_dst from $timezone_key if present.
     if (!empty($post['timezone_key'])) {
