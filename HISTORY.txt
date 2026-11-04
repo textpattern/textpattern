@@ -3,6 +3,7 @@ Textpattern CMS
 Changes in 4.9.3 (upcoming)
 
 * Vendors: Textile 4.1.7 (thanks, gocom).
+* Fixed: A regression in 4.9.2 concerning single <txp:output_form /> tag.
 
 Changes in 4.9.2 (2 Nov 2026)
 
