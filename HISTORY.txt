@@ -225,7 +225,7 @@ Changes in 4.9.0 (21 Dec 2025)
 * Developer: Can add &checksums=1 on Diagnostics panel URL to verify checksums.
 * Vendors: Textile 4.1.4 (thanks, gocom).
 * Vendors: DOMPurify 3.3.1.
-* Vendors: jQuery 3.7.1.f
+* Vendors: jQuery 3.7.1.
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.12.0.
 * Vendors: PrismJS 1.30.0.
