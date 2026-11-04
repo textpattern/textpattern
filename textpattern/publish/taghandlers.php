@@ -489,7 +489,7 @@ function txp_yield($atts, $thing = null)
             $was_form = $is_form;
             $is_form--;
             $end = array_pop($yield);
-            $inner = parse($end, empty($else));
+            $inner = isset($end) ? parse($end, empty($else)) : null;
             $yield[] = $end;
             $is_form = $was_form;
         }
@@ -526,7 +526,12 @@ function txp_if_yield($atts, $thing = null)
     } elseif ($name === '') {
         if (!empty($yield)) {
             $end = array_pop($yield);
-            $inner = $value === null ? ($else ? getIfElse($end, false) : true) : parse($end, empty($else));
+            $inner = isset($end) ? (
+                $value === null ?
+                    ($else ? getIfElse($end, false) : true) :
+                    parse($end, empty($else))
+                ) :
+                null;
             $yield[] = $end;
         }
     } elseif (empty($txp_yield[$name])) {

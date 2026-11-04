@@ -8,6 +8,7 @@ Changes in 5.0.0 (upcoming)
 Changes in 4.9.3 (upcoming)
 
 * Vendors: Textile 4.1.7 (thanks, gocom).
+* Fixed: A regression in 4.9.2 concerning single <txp:output_form /> tag.
 
 Changes in 4.9.2 (2 Nov 2026)
 
@@ -229,7 +230,7 @@ Changes in 4.9.0 (21 Dec 2025)
 * Developer: Can add &checksums=1 on Diagnostics panel URL to verify checksums.
 * Vendors: Textile 4.1.4 (thanks, gocom).
 * Vendors: DOMPurify 3.3.1.
-* Vendors: jQuery 3.7.1.
+* Vendors: jQuery 3.7.1.f
 * Vendors: jQuery UI 1.14.1.
 * Vendors: PHPMailer 6.12.0.
 * Vendors: PrismJS 1.30.0.
