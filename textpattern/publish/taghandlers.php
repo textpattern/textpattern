@@ -1746,7 +1746,7 @@ function txp_sandbox($atts = array(), $thing = null, $raw = false)
     $is_form = 0;
 
     $thing = isset($thing) ?
-        parse($thing) :
+        (is_array($thing) ? array_map('parse', $thing) : parse($thing)) :
         (isset($field) && isset($thisarticle[$field]) ? parse($thisarticle[$field]) : '');
 
     $is_article_body = $was_article_body;

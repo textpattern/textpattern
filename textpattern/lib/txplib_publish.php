@@ -952,7 +952,7 @@ function filterAtts($atts = null, $iscustom = null)
         'posted'   => txp_timestamp(array('Posted' => 'uPosted')),
         'expires'  => txp_timestamp(array('Expires' => 'uExpires')),
         'modified' => 'UNIX_TIMESTAMP(LastMod) AS uLastMod',
-    ) + article_column_map();
+    ) + article_column_map(false);
 
     foreach ($windowed + $coreColumns as $field => $val) {
         if (isset($atts['$'.$field])) {
