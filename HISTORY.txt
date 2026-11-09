@@ -1,4 +1,4 @@
-Textpattern CMS
+Textpattern CMS Release Notes
 
 Changes in 4.9.3 (upcoming)
 
