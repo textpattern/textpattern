@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.7';
+    protected $ver = '4.1.8';
 
     /**
      * Regular expression snippets.
@@ -4956,6 +4956,10 @@ class Parser
     protected function fTextile($m)
     {
         $m = $this->getSpecialOptions($m);
+
+        if ($this->isRestrictedModeEnabled()) {
+            $m['content'] = str_replace('"', '&quot;', $m['content']);
+        }
 
         return $m['before'].$this->shelve($m['content']).$m['after'];
     }
