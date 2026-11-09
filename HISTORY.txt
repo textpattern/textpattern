@@ -1,4 +1,4 @@
-Textpattern CMS
+Textpattern CMS Release Notes
 
 Changes in 5.0.0 (upcoming)
 
