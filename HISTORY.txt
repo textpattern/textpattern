@@ -9,7 +9,7 @@ Changes in 4.9.3 (upcoming)
 
 * Fixed: Single <txp:output_form /> tag regression in 4.9.2.
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
-* Vendors: Textile 4.1.7 (thanks, gocom).
+* Vendors: Textile 4.1.8 (thanks, gocom).
 
 Changes in 4.9.2 (2 Nov 2026)
 
