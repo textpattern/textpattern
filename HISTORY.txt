@@ -2,6 +2,8 @@ Textpattern CMS
 
 Changes in 4.9.3 (upcoming)
 
+* Maintenance release with security enhancements, general improvements and
+  bug fixes.
 * Fixed: Single <txp:output_form /> tag regression in 4.9.2.
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
 * Vendors: Textile 4.1.8 (thanks, gocom).
