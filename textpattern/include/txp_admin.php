@@ -101,8 +101,17 @@ function author_save()
     $result = true;
 
     // Can't change your own password from this route - only via Change Your Password panel.
+    // Changing password invalidates all current open sessions.
     if ($new_pass !== '' && $admin && $txp_user !== $name) {
         $result = change_user_password($name, $new_pass);
+
+        if ($result) {
+            safe_update(
+                'txp_users',
+                "nonce = '" . doSlash(md5(uniqid(mt_rand(), true))) . "'",
+                "name = '" . doSlash($name) . "'"
+            );
+        }
     }
 
     if ($rs && $result) {
