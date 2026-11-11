@@ -1755,16 +1755,9 @@ function txp_sandbox($atts = array(), $thing = null, $raw = false)
 
     $field and $stack[$id]--;
 
-    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) || !preg_match('@<(?:' . TXP_PATTERN . '):@', $thing)) {
-        return $thing;
-    }
-
-    $is_article_body = $was_article_body;
-    $is_form = $was_form;
-    $thisarticle = $oldarticle;
-    $field and $stack[$id]--;
-
-    if ($clean || $pretext['secondpass'] >= (int)get_pref('secondpass', 1)) {
+    if ($pretext['secondpass'] >= (int)get_pref('secondpass', 1) ||
+        !preg_match('@<(?:' . TXP_PATTERN . '):@', is_array($thing) ? implode('', $thing) : $thing)
+    ) {
         return $thing;
     }
 

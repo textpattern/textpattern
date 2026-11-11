@@ -2053,14 +2053,17 @@ textpattern.Route.add('article', function () {
     document.addEventListener('change', function (e) {
         if (e.target.id === 'meta-select') {
             Array.from(e.target.options).forEach(option => {
-                let cf = document.getElementById('custom-'+option.value);
-                if (cf) {
-                    cf.disabled = !option.selected;
-                    cf.parentNode.parentNode.classList.toggle('hidden', !option.selected);
+                let ct = document.getElementById('custom-container-'+option.value);
+                if (ct) {
+                    ct.querySelectorAll('input, select, textarea').forEach(child => {
+                        child.disabled = !option.selected;
+                    });
+                    ct.classList.toggle('hidden', !option.selected);
                 }
             });
         }
     }, true);
+    document.querySelector('#meta-select')?.dispatchEvent(new Event('change', { bubbles: true }));
     // Assume users would not change the timestamp if they wanted to
     // 'publish now'/'reset time'.
     $(document).on('change',

@@ -902,6 +902,7 @@ class Field
 
         $name = 'custom_' . $num;
         $label = $this->get('name');
+        $labelAtts += array('id' => 'custom-container-' . $num);
         $id = 'custom-' . $num;
         $class = 'custom-field ' . $id;
         $fieldCol = $this->getValueField();
