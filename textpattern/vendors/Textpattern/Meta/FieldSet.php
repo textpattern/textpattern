@@ -230,7 +230,8 @@ class FieldSet implements \IteratorAggregate
                 );
 
                 $out[$cf_name][] = $cooked;
-                $cfq[$cf_type][$id][] = "value_raw = '" . doSlash($rawVal) . "', value = '" . doSlash($cooked) . "'";
+                $cfq[$cf_type][$id][] = "value = '" . doSlash($cooked) . "'" .
+                    ($filter === null ? "" : ", value_raw = '" . doSlash($rawVal) . "'");
             }
 
             $out[$cf_name] = implode((string)$cf_delimiter, $out[$cf_name]);
