@@ -164,11 +164,10 @@ class FieldSet implements \IteratorAggregate
 
         if (isset($this->filterCollection)) {
             foreach ($this->filterCollection as $idx => $def) {
-                $createStamp = safe_strtotime($def->get('created'));
+                $created = $def->get('created');
                 $expires = $def->get('expires');
-                $expireStamp = empty($expires) ? 0 : safe_strtotime($expires);
 
-                if ($when < $createStamp || (!empty($expireStamp) && $when > $expireStamp)) {
+                if (isset($created) && $when < safe_strtotime($created) || isset($expires) && $when > safe_strtotime($expires)) {
                     unset($this->filterCollection[$idx]);
                 }
             }
@@ -262,7 +261,7 @@ class FieldSet implements \IteratorAggregate
 
                     if ($all || isset($this->filterCollection[$metaId])) {
                         foreach ($content as $valueId => $set) {
-                            $set .= ", table_id = $table_id, meta_id = $metaId, content_id = $contentId, value_id = '" . doSlash($valueId) . "'";
+                            $set .= ", table_id = $table_id, meta_id = $metaId, content_id = $contentId, value_id = $valueId";
                             safe_insert($tableName, $set);
                         }
                     }
