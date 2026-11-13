@@ -590,6 +590,38 @@ EOJS
 }
 
 /**
+ * Validates section data.
+ */
+
+function section_validate($data = array(), $skip = array())
+{
+    global $all_skins, $all_pages, $all_styles;
+
+    $skip += array('permlink_mode' => '', 'section_page' => '', 'css' => '');
+
+    if (isset($data['permlink_mode']) && $data['permlink_mode'] !== $skip['permlink_mode']) {
+        $permlink_modes = permlinkmodes();
+
+        if (!isset($permlink_modes[$data['permlink_mode']])) {
+            return false;
+        }
+    }
+
+    if (isset($data['skin'])) {
+        if (!isset($all_skins[$data['skin']]) ||
+            isset($data['section_page']) && $data['section_page'] !== $skip['section_page'] && !in_array($data['section_page'], $all_pages[$data['skin']]) ||
+            isset($data['css']) && $data['css'] !== $skip['css'] && !in_array($data['css'], $all_styles[$data['skin']])
+        ) {
+            return false;
+        }
+    } elseif (isset($data['section_page']) || isset($data['css'])) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * Saves a section.
  */
 
@@ -606,6 +638,12 @@ function section_save()
         'permlink_mode',
     )));
 
+    if (!section_validate($in)) {
+        sec_section_list(array(gTxt('section_save_failed'), E_ERROR));
+
+        return;
+    }
+
     if (empty($in['title'])) {
         $in['title'] = $in['name'];
     }
@@ -617,9 +655,8 @@ function section_save()
         strtolower(sanitizeForUrl($in['name']));
 
     extract($in);
+    extract(doSlash($in), EXTR_PREFIX_ALL, 'safe');
 
-    $in = doSlash($in);
-    extract($in, EXTR_PREFIX_ALL, 'safe');
     $lower_name = $mbstrings ?
         mb_strtolower($old_name, 'UTF-8') :
         strtolower($old_name);
@@ -989,26 +1026,32 @@ function section_multi_edit()
     }
 
     $nameVal = array();
+    $message = array(gTxt('section_save_failed'), E_ERROR);
 
     switch ($edit_method) {
         case 'delete':
             return section_delete();
             break;
         case 'changepagestyle':
-            if (ps('live_theme')) {
-                $nameVal += array(
-                    'skin' => ps('skin'),
-                    'page' => ps('section_page'),
-                    'css'  => ps('css'),
-                );
-            }
+            if (section_validate(
+                $data = psa(array('skin', 'section_page', 'css')),
+                array('section_page' => '*', 'css' => '*')
+            )) {
+                if (ps('live_theme')) {
+                    $nameVal += array(
+                        'skin' => $data['skin'],
+                        'page' => $data['section_page'],
+                        'css'  => $data['css'],
+                    );
+                }
 
-            if (ps('dev_theme')) {
-                $nameVal += array(
-                    'dev_skin' => ps('skin'),
-                    'dev_page' => ps('section_page'),
-                    'dev_css'  => ps('css'),
-                );
+                if (ps('dev_theme')) {
+                    $nameVal += array(
+                        'dev_skin' => $data['skin'],
+                        'dev_page' => $data['section_page'],
+                        'dev_css'  => $data['css'],
+                    );
+                }
             }
 
             break;
@@ -1016,7 +1059,9 @@ function section_multi_edit()
             $nameVal['switch_dev_live'] = (int) ps('switch_dev_live');
             break;
         case 'permlinkmode':
-            $nameVal['permlink_mode'] = (string) ps('permlink_mode');
+            if (section_validate($data = psa(array('permlink_mode')))) {
+                $nameVal['permlink_mode'] = $data['permlink_mode'];
+            }
             break;
         case 'changeonfrontpage':
             $nameVal['on_frontpage'] = (int) ps('on_frontpage');
@@ -1029,92 +1074,91 @@ function section_multi_edit()
             break;
     }
 
-    $setskin = "IF(dev_skin > '', dev_skin, skin)";
-    $setpage = "IF(dev_page > '', dev_page, page)";
-    $setcss = "IF(dev_css > '', dev_css, css)";
+    if ($nameVal) {
+        $setskin = "IF(dev_skin > '', dev_skin, skin)";
+        $setpage = "IF(dev_page > '', dev_page, page)";
+        $setcss = "IF(dev_css > '', dev_css, css)";
 
-    $filter = array("name IN (" . join(',', quote_list($selected)) . ")");
-    $message = '';
+        $filter = array("name IN (" . join(',', quote_list($selected)) . ")");
 
-    if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
-        $skin = $nameVal['skin'];
+        if ($edit_method === 'changepagestyle' && !empty($nameVal['skin'])) {
+            $skin = $nameVal['skin'];
 
-        if (empty($nameVal['page'])) {
-            $filter[] = empty($all_pages[$skin]) ?
-                '0' :
-                "page IN (" . join(',', quote_list($all_pages[$skin])) . ")";
-        }
-
-        if (empty($nameVal['css'])) {
-            $filter[] = empty($all_styles[$skin]) ?
-                '0' :
-                "css IN (" . join(',', quote_list($all_styles[$skin])) . ")";
-        }
-    } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
-        $skinset = array();
-
-        foreach ($all_skins as $skin => $title) {
-            $skinset[] = "$setskin = '" . doSlash($skin) . "' AND ($setpage = '' OR " .
-            (empty($all_pages[$skin]) ?
-                '0' :
-                "$setpage IN (" . join(',', quote_list($all_pages[$skin])) . "))"
-            ) . " AND ($setcss = '' OR " .
-            (empty($all_styles[$skin]) ?
-                '0' :
-                "$setcss IN (" . join(',', quote_list($all_styles[$skin])) . "))"
-            );
-        }
-
-        $filter[] = '(' . implode(' OR ', $skinset) . ')';
-    }
-
-    $sections = safe_column(
-        "name",
-        'txp_section',
-        implode(' AND ', $filter)
-    );
-
-    if ($nameVal && $sections) {
-        if ($edit_method == 'switchdevlive') {
-            $set = ($nameVal['switch_dev_live'] ? '' :
-                "skin = $setskin,
-                page = $setpage,
-                css = $setcss, "
-            ) . "dev_skin = '', dev_page = '', dev_css = ''";
-        } elseif ($edit_method == 'permlinkmode') {
-            $set = "permlink_mode = IF(name='default', '', '" . doSlash($nameVal['permlink_mode']) . "')";
-
-            if ($nameVal['permlink_mode'] && in_array('default', $sections)) {
-                set_pref('permlink_mode', $nameVal['permlink_mode']);
+            if (empty($nameVal['page'])) {
+                $filter[] = empty($all_pages[$skin]) ?
+                    '0' :
+                    "page IN (" . join(',', quote_list($all_pages[$skin])) . ")";
             }
-        } else {
-            $in = array();
 
-            foreach ($nameVal as $key => $val) {
-                if ((string)$val != '*') {
-                    $in[] = "{$key} = '" . doSlash($val) . "'";
+            if (empty($nameVal['css'])) {
+                $filter[] = empty($all_styles[$skin]) ?
+                    '0' :
+                    "css IN (" . join(',', quote_list($all_styles[$skin])) . ")";
+            }
+        } elseif ($edit_method === 'switchdevlive' && empty($nameVal['switch_dev_live'])) {
+            $skinset = array();
+
+            foreach ($all_skins as $skin => $title) {
+                $skinset[] = "$setskin = '" . doSlash($skin) . "' AND ($setpage = '' OR " .
+                (empty($all_pages[$skin]) ?
+                    '0' :
+                    "$setpage IN (" . join(',', quote_list($all_pages[$skin])) . "))"
+                ) . " AND ($setcss = '' OR " .
+                (empty($all_styles[$skin]) ?
+                    '0' :
+                    "$setcss IN (" . join(',', quote_list($all_styles[$skin])) . "))"
+                );
+            }
+
+            $filter[] = '(' . implode(' OR ', $skinset) . ')';
+        }
+
+        $sections = safe_column(
+            "name",
+            'txp_section',
+            implode(' AND ', $filter)
+        );
+
+        if ($sections) {
+            if ($edit_method == 'switchdevlive') {
+                $set = ($nameVal['switch_dev_live'] ? '' :
+                    "skin = $setskin,
+                    page = $setpage,
+                    css = $setcss, "
+                ) . "dev_skin = '', dev_page = '', dev_css = ''";
+            } elseif ($edit_method == 'permlinkmode') {
+                $set = "permlink_mode = IF(name='default', '', '" . doSlash($nameVal['permlink_mode']) . "')";
+
+                if ($nameVal['permlink_mode'] && in_array('default', $sections)) {
+                    set_pref('permlink_mode', $nameVal['permlink_mode']);
+                }
+            } else {
+                $in = array();
+
+                foreach ($nameVal as $key => $val) {
+                    if ((string)$val != '*') {
+                        $in[] = "{$key} = '" . doSlash($val) . "'";
+                    }
+                }
+
+                $set = implode(',', $in);
+            }
+
+            if ($set &&
+                safe_update(
+                    'txp_section',
+                    $set,
+                    "name IN (" . join(',', quote_list($sections)) . ")"
+                )
+            ) {
+                $message = gTxt('section_updated', array('{name}' => join(', ', $sections)));
+
+                if ($edit_method === 'changepagestyle') {
+                    Txp::get('Textpattern\Skin\Skin')->setEditing(doSlash($nameVal['skin']));
                 }
             }
-
-            $set = implode(',', $in);
         }
-
-        if ($set &&
-            safe_update(
-                'txp_section',
-                $set,
-                "name IN (" . join(',', quote_list($sections)) . ")"
-            )
-        ) {
-            $message = gTxt('section_updated', array('{name}' => join(', ', $sections)));
-
-            if ($edit_method === 'changepagestyle') {
-                Txp::get('Textpattern\Skin\Skin')->setEditing(doSlash($nameVal['skin']));
-            }
-        }
-    } else {
-        $message = array(gTxt('section_save_failed'), E_ERROR);
     }
 
-    sec_section_list($message, $nameVal && $sections);
+    sec_section_list($message, $nameVal && !empty($sections));
 }
