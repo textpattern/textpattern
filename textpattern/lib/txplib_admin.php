@@ -738,7 +738,7 @@ function get_essential_forms()
  * @return string HTML
  */
 
-function permlinkmodes($name, $val, $blank = false)
+function permlinkmodes($name = null, $val = null, $blank = false)
 {
     $vals = array(
         'messy'                  => gTxt('messy'),
@@ -751,7 +751,7 @@ function permlinkmodes($name, $val, $blank = false)
         'title_only'             => gTxt('title_only')
     );
 
-    return selectInput($name, $vals, $val, $blank, '', $name);
+    return isset($name) ? selectInput($name, $vals, $val, $blank, '', $name) : $vals;
 }
 
 /**
