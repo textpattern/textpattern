@@ -99,7 +99,7 @@ function link_list($message = '')
     if ($sort === '') {
         $sort = get_pref('link_sort_column', 'name');
     } else {
-        if (!in_array($sort, array('id', 'description', 'url', 'category', 'date', 'author'))) {
+        if (!in_array($sort, array('id', 'description', 'url', 'category', 'date', 'author', 'linksort'))) {
             $sort = 'name';
         }
 
@@ -132,9 +132,12 @@ function link_list($message = '')
         case 'author':
             $sort_sql = "txp_users.RealName $dir, txp_link.id ASC";
             break;
+        case 'linksort':
+            $sort_sql = "txp_link.linksort $dir, txp_link.id ASC";
+            break;
         default:
             $sort = 'name';
-            $sort_sql = "txp_link.linksort $dir, txp_link.id ASC";
+            $sort_sql = "txp_link.linkname $dir, txp_link.id ASC";
             break;
     }
 
@@ -231,6 +234,7 @@ function link_list($message = '')
                 txp_link.category,
                 txp_link.url,
                 txp_link.linkname,
+                txp_link.linksort,
                 txp_link.description,
                 txp_link.author,
                 txp_users.RealName AS realname,
@@ -288,6 +292,10 @@ function link_list($message = '')
                             (('author' == $sort) ? "$dir " : '') . 'txp-list-col-author name'
                         )
                         : ''
+                    ) .
+                    column_head(
+                        'sort_value', 'linksort', 'link', true, $switch_dir, $crit, $search_method,
+                        (('linksort' == $sort) ? "$dir " : '') . 'txp-list-col-linksort'
                     )
                 ) .
                 n . tag_end('thead') .
@@ -350,6 +358,9 @@ function link_list($message = '')
                         $show_authors
                         ? td(span(txpspecialchars($link_realname), array('title' => $link_author)), '', 'txp-list-col-author name')
                         : ''
+                    ) .
+                    td(
+                        txpspecialchars($link_linksort), '', 'txp-list-col-linksort'
                     )
                 );
             }
