@@ -12,6 +12,7 @@ Changes in 4.9.3 (upcoming)
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Vendors: Textile 4.1.9 (thanks, gocom).
+* Vendors: DOMPurify 3.4.18.
 
 Changes in 4.9.2 (2 Nov 2026)
 
