@@ -189,7 +189,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
     {
         $out = array();
 
-        $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : '';
+        $break = (array_key_exists('break', $this->properties)) ? $this->properties['break'] : n;
 
         foreach ($this->items as $item) {
             if (is_object($item)) {
@@ -199,7 +199,7 @@ class TagCollection implements \IteratorAggregate, UICollectionInterface
             }
         }
 
-        return join(n, $out).$break;
+        return join($break, $out);
     }
 
     /**

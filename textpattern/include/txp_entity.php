@@ -457,31 +457,6 @@ function entity_edit($message = '')
 //    $families = do_list_unique(safe_field('GROUP_CONCAT(family)', 'txp_meta', "family > '' ORDER BY family"));
     $all_metas = safe_column(array('id', 'name'), 'txp_meta', "1 ORDER BY name");
     $metas = $id ? safe_column('meta_id', 'txp_meta_fieldsets', "type_id = $id") : array();
-    $selectedMetas = array_map('intval', $metas);
-    $metaInput = '';
-
-    if ($all_metas) {
-        $metaOptions = array();
-
-        foreach ($all_metas as $meta_id => $meta_name) {
-            $meta_id = (int) $meta_id;
-            $input_id = $metaOptions ? 'meta' : 'meta_' . $meta_id;
-            $metaOptions[] = tag(
-                checkbox('meta', $meta_id, in_array($meta_id, $selectedMetas, true), 0, $input_id, false, true) .
-                sp . txpspecialchars($meta_name),
-                'label',
-                array('for' => $input_id)
-            );
-        }
-
-        $metaInput = inputLabel(
-            'meta',
-            implode(br, $metaOptions),
-            'meta',
-            '',
-            array('class' => 'txp-form-field edit-meta-field')
-        );
-    }
 
     echo form(
         hed($caption, 2).
@@ -499,7 +474,11 @@ function entity_edit($message = '')
             'table',
             selectInput(array('name' =>'table_id', 'disabled' => !empty($id)), $txp_tables, $table_id, false, '', 'table'),
             'type', '', array('class' => 'txp-form-field edit-meta-content-type')
-        ). $metaInput . /*($families ?
+        ). ($all_metas ? inputLabel(
+            'meta',
+            Txp::get('\Textpattern\UI\CheckboxSet', 'meta', $all_metas, $metas)->setBreak(),
+            'meta', '', array('class' => 'txp-form-field edit-meta-fieldset')
+        ) : '') . /*($families ?
         inputLabel(
             'family',
             selectInput(array('name' =>false), $families, array(), false, '', 'family'),
