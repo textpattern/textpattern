@@ -22,15 +22,15 @@
     "url": "https://github.com/textpattern/textpattern/issues"
   },
   "devDependencies": {
-    "eslint": "10.14.0",
+    "eslint": "^10.15.0",
     "phplint": "2.0.5",
-    "rimraf": "6.1.3",
+    "rimraf": "^6.1.4",
     "uglify-js": "3.19.3"
   },
   "dependencies": {
     "blueimp-file-upload": "10.32.0",
     "dompurify": "3.4.18",
-    "jquery": "3.7.1",
+    "jquery": "3.8.0",
     "jquery-ui": "1.14.2",
     "prismjs": "1.30.0"
   },
