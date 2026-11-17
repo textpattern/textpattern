@@ -5,6 +5,7 @@ Changes in 4.9.3 (upcoming)
 * Maintenance release with security enhancements and bug fixes.
 * Fixed: Single <txp:output_form /> tag regression in 4.9.2.
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
+* Added: dir="LTR" to Sections panel permlink scheme column (thanks, phiw13).
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Vendors: Textile 4.1.9 (thanks, gocom).
 * Vendors: DOMPurify 3.4.18.
