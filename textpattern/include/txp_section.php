@@ -381,8 +381,8 @@ function sec_section_list($message = '', $update = false)
                     td(
                         $sec_css, '', 'txp-list-col-style'
                     ) .
-                    td(
-                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">' . gTxt(get_pref('permlink_mode')) . '</span>', '', 'txp-list-col-permlink_mode'
+                    tag(
+                        $sec_permlink_mode ? gTxt($sec_permlink_mode) : '<span class="secondary-text">' . gTxt(get_pref('permlink_mode')) . '</span>', 'td', array('class' => 'txp-list-col-permlink_mode', 'dir' => 'LTR')
                     ) .
                     td(
                         $sec_on_frontpage, '', 'txp-list-col-on_frontpage'
