@@ -416,6 +416,7 @@ function article_preview($field = false)
     if (ps('_txp_parse') && (!$field || preg_match('@<(?:' . TXP_PATTERN . '):@', $preview))) {
         $token = Txp::get('\Textpattern\Security\Token');
         $id = intval(ps('ID'));
+        unset($rs['Posted'], $rs['Expires'], $rs['LastMod'], $rs['feed_time']);// Hello, mod_security!
         $data = array_map('strval', array('id' => $id) + $rs) + array('field' => $field);//$_POST!!!
         ksort($data);
         $data['id'] = $id . '.' . $token->csrf($txp_user) . $token->csrf(json_encode($data));
