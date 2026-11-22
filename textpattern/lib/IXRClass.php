@@ -257,7 +257,6 @@ class IXR_Message
                 break;
             }
         } while (true);
-        xml_parser_free($this->_parser);
 
         // Grab the error messages, if any
         if ($this->messageType == 'fault') {
