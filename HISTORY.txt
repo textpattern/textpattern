@@ -9,7 +9,7 @@ Changes in 4.9.3 (upcoming)
 * Added: dir="LTR" to Sections panel permlink scheme column (thanks, phiw13).
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Vendors: Textile 4.1.9 (thanks, gocom).
-* Vendors: DOMPurify 3.4.18.
+* Vendors: DOMPurify 3.5.0.
 * Vendors: jQuery 3.8.0.
 
 Changes in 4.9.2 (2 Nov 2026)
