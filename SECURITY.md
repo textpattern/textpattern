@@ -10,7 +10,7 @@ We follow Full Disclosure Policy (RFPolicy) v2.0, and expect you to in return. T
 
   https://wiretrip.net/rfp/policy.html
 
-Please ensure that you have considered the following security precautions prior to reporting a security issue:
+Please ensure that you have considered the following prior to reporting a security issue:
 
 * Ensure any vulnerability or issue is not due to a third party script, malfunctioning server, or insufficient security precautions.
 * Report any and all security vulnerabilities to us first. Do not publicly disclose information about potential security bugs.
