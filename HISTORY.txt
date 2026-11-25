@@ -9,7 +9,7 @@ Changes in 4.9.3 (upcoming)
 * Fixed: ModSecurity false positive affecting article view and preview.
 * Added: dir="LTR" to Sections panel permlink scheme column (thanks, phiw13).
 * Changed: Setting a new password for a user invalidates all their sessions.
-* Housekeeping: PHP 8.* deprecations and removals (thanks, MikeFTV).
+* Housekeeping: PHP deprecations (thanks, MikeFTV).
 * Vendors: Textile 4.1.9 (thanks, gocom).
 * Vendors: DOMPurify 3.5.0.
 * Vendors: jQuery 3.8.0.
