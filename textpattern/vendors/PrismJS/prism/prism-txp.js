@@ -1,5 +1,5 @@
 (() => {
-    const txpattr = '(?<d>"+)(?:[^"]|\\k<d>{2})*\\k<d>|(?<s>\'+)(?:[^\']|\\k<s>{2})*\\k<s>|[^\\s\'"\\/>]+';
+    const txpattr = '(?<d>"+?)(?:[^"]|\\k<d>{2})*\\k<d>|(?<s>\'+?)(?:[^\']|\\k<s>{2})*\\k<s>|[^\\s\'"\\/>]+';
     const txptail = `(?:\\[-?\\d+\\])?(?:\\s+\\$?[\\w\\-\\x80-\\xffff]+(?:\\s*=\\s*(?:${txpattr}))?)*\\s*\\/?(?<!\\-\\-)`;
     const txptag = `<\\/?(?:txp|[a-z]+:):[\\w\\-\\x80-\\xffff]+${txptail}\\>`;
     Prism.languages.markup.tag.addInlined('txp:php', 'php');
