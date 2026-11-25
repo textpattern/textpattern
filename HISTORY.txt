@@ -2,7 +2,8 @@ Textpattern CMS Release Notes
 
 Changes in 4.9.3 (upcoming)
 
-* Maintenance release with security enhancements and bug fixes.
+* Maintenance release with support for PHP 8.6, security enhancements and
+  bug fixes.
 * Security: Vendor libraries include security updates.
 * Fixed: Single <txp:output_form /> tag regression in 4.9.2.
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
