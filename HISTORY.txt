@@ -14,6 +14,7 @@ Changes in 4.9.3 (upcoming)
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
 * Fixed: ModSecurity false positive affecting article view and preview.
 * Added: dir="LTR" to Sections panel permlink scheme column (thanks, phiw13).
+* Changed: Persist username and 'stay' checkbox on failed login.
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Housekeeping: PHP deprecations (thanks, MikeFTV).
 * Vendors: Textile 4.1.9 (thanks, gocom).
