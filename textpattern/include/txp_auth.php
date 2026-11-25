@@ -93,7 +93,7 @@ function doLoginForm($message)
 
     $event = 'login';
 
-    $stay = (cs('txp_login') && !gps('logout') ? 1 : 0);
+    $stay = (cs('txp_login') || ps('stay')) && !gps('logout') ? 1 : 0;
     $lang = sanitizeForUrl(gps('lang'));
     $reset = gps('reset');
     $confirm = gps('confirm');
@@ -176,6 +176,7 @@ function doLoginForm($message)
             hInput(($confirm ? 'p_alter' : 'p_set'), 1);
     } else {
         $pageTitle = gTxt('login');
+        $name = empty($name) ? ps('p_userid') : $name;
         $out[] = hed(gTxt('login_to_textpattern'), 1, array('id' => 'txp-login-heading')) .
             (count($langList) > 1
                 ? graf(
