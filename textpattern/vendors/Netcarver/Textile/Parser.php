@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.9';
+    protected $ver = '4.1.11-dev';
 
     /**
      * Regular expression snippets.
@@ -3633,11 +3633,11 @@ class Parser
                 $text = (string)preg_replace_callback(
                     "/
                     (?P<before>^|(?<=[\s>$pnct\(])|[{[])
-                    (?P<tag>$tag)(?!$tag)
+                    (?P<tag>$tag)(?!$tag|{$this->regex_snippets['space']})
                     (?P<atts>{$this->cls})
                     (?!$tag)
                     (?::(?P<cite>\S+[^$tag]{$this->regex_snippets['space']}))?
-                    (?P<content>[^{$this->regex_snippets['space']}$tag]+|\S.*?[^\s$tag\n])
+                    (?P<content>(?:(?!$tag{$this->regex_snippets['space']}|{$tag}[}\]]).)+)
                     (?P<end>[$pnct]*)
                     $tag
                     (?P<after>$|[\[\]}<]|(?=[$pnct]{1,2}[^0-9]|\s|\)))
