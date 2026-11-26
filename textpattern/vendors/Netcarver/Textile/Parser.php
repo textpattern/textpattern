@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.11-dev';
+    protected $ver = '4.1.12-dev';
 
     /**
      * Regular expression snippets.
@@ -1980,7 +1980,6 @@ class Parser
         }
 
         $text = $this->retrieve($text);
-        $text = $this->replaceGlyphs($text);
         $text = $this->retrieveTags($text);
         $text = $this->retrieveURLs($text);
 
@@ -2204,36 +2203,13 @@ class Parser
             $this->glyph_replace[] = $this->symbols['quote_double_open'];
         }
 
+        // 3+ uppercase acronym symbol template
         if ($this->symbols['acronym'] === null) {
             if ($this->getDocumentType() === 'html5') {
-                $acronym = '<abbr title="{title}">{content}</abbr>';
+                $this->symbols['acronym'] = '<abbr title="{title}">{content}</abbr>';
             } else {
-                $acronym = '<acronym title="{title}">{content}</acronym>';
+                $this->symbols['acronym'] = '<acronym title="{title}">{content}</acronym>';
             }
-        } else {
-            $acronym = $this->symbols['acronym'];
-        }
-
-        // 3+ uppercase acronym
-        if ($acronym !== false) {
-            $this->glyph_search[] = '/\b(['.$this->regex_snippets['abr'].']['.
-                $this->regex_snippets['acr'].']{2,})\b(?:[(]([^)]*)[)])/'.$this->regex_snippets['mod'];
-            $this->glyph_replace[] = $this->replaceMarkers((string) $acronym, array(
-                'title' => '$2',
-                'content' => '$1',
-            ));
-        }
-
-        // 3+ uppercase
-        if ($this->symbols['caps'] !== false) {
-            $this->glyph_search[] = '/('.$this->regex_snippets['space'].'|^|[>(;-])'.
-                '(['.$this->regex_snippets['abr'].']{3,})'.
-                '(['.$this->regex_snippets['nab'].']*)(?='.
-                $this->regex_snippets['space'].'|'.$pnc.'|<|$)'.
-                '(?=[^">]*?(<|$))/'.$this->regex_snippets['mod'];
-            $this->glyph_replace[] = $this->replaceMarkers('$1'.$this->symbols['caps'].'$3', array(
-                'content' => $this->uid.':glyph:$2',
-            ));
         }
 
         // Ellipsis
@@ -5121,7 +5097,9 @@ class Parser
                     $line = str_replace(array('<', '>'), array('&lt;', '&gt;'), (string)$line);
                 }
 
-                $line = preg_replace($this->glyph_search, $this->glyph_replace, $line);
+                $line = (string) preg_replace($this->glyph_search, $this->glyph_replace, $line);
+                $line = $this->acronyms($line);
+                $line = $this->caps($line);
             }
 
             $glyph_out[] = $line;
@@ -5131,17 +5109,85 @@ class Parser
     }
 
     /**
-     * Replaces glyph references in the given input.
+     * Replaces acronym instances.
      *
-     * This method removes temporary glyph: instances
-     * from the input.
+     * Wraps uppercase acronym instances in the acronym symbol template.
      *
-     * @param  string $text The input
-     * @return string Processed input
+     * @param string $line
+     * @return string
+     * @since 4.1.11
      */
-    protected function replaceGlyphs($text)
+    protected function acronyms($line)
     {
-        return str_replace($this->uid.':glyph:', '', $text);
+        if ($this->symbols['acronym'] !== false) {
+            $line = (string) preg_replace_callback(
+                '/\b(['.$this->regex_snippets['abr'].']['.
+                $this->regex_snippets['acr'].']{2,})\b(?:[(]([^)]*)[)])/'.$this->regex_snippets['mod'],
+                array($this, 'fAcronym'),
+                $line
+            );
+        }
+
+        return $line;
+    }
+
+    /**
+     * Formats matched acronym instance.
+     *
+     * @param array<int, string> $m Capture groups
+     * @return string
+     * @since 4.1.11
+     */
+    protected function fAcronym($m)
+    {
+        $replacement = $this->replaceMarkers((string) $this->symbols['acronym'], array(
+            'title' => $this->encodeQuotes($m[2]),
+            'content' => $this->glyphs($m[1]),
+        ));
+
+        return $this->shelve($replacement);
+    }
+
+    /**
+     * Replaces three uppercase letter instances.
+     *
+     * Wraps uppercase acronym instances in the caps symbol template.
+     *
+     * @param string $line
+     * @return string
+     * @since 4.1.11
+     */
+    protected function caps($line)
+    {
+        if ($this->symbols['caps'] !== false) {
+            $line = (string) preg_replace_callback(
+                '/('.$this->regex_snippets['space'].'|^|[>(;-])'.
+                '(['.$this->regex_snippets['abr'].']{3,})'.
+                '(['.$this->regex_snippets['nab'].']*)(?='.
+                $this->regex_snippets['space'].'|[[:punct:]]|<|$)'.
+                '/'.$this->regex_snippets['mod'],
+                array($this, 'fCaps'),
+                $line
+            );
+        }
+
+        return $line;
+    }
+
+    /**
+     * Formats matched three uppercase letter instance.
+     *
+     * @param array<int, string> $m Capture groups
+     * @return string
+     * @since 4.1.11
+     */
+    protected function fCaps($m)
+    {
+        $replacement = $this->replaceMarkers((string) $this->symbols['caps'], array(
+            'content' => $m[2],
+        ));
+
+        return $this->shelve($m[1] . $replacement . $m[3]);
     }
 
     /**
@@ -5238,14 +5284,31 @@ class Parser
             '>' => '&gt;',
         );
 
+        $str = str_replace(array_keys($a), $a, $str);
+
         if ($quotes) {
-            $a = $a + array(
-                "'" => '&#39;', // Numeric, as in htmlspecialchars
-                '"' => '&quot;',
-            );
+            $str = $this->encodeQuotes($str);
         }
 
-        return str_replace(array_keys($a), $a, $str);
+        return $str;
+    }
+
+    /**
+     * Converts quotes into HTML entities.
+     *
+     * @param string $str The string to encode
+     * @return string Encoded string
+     * @see Parser::encodeHTML()
+     * @since 4.1.11
+     */
+    protected function encodeQuotes($str)
+    {
+        $quotes = array(
+            "'" => '&#39;',
+            '"' => '&quot;',
+        );
+
+        return str_replace(array_keys($quotes), $quotes, $str);
     }
 
     /**
