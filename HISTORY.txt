@@ -12,7 +12,7 @@ Changes in 4.9.3 (upcoming)
 * Security: Vendor libraries include security updates.
 * Fixed: Single <txp:output_form /> tag regression in 4.9.2.
 * Fixed: Concurrent users token regression in 4.9.2 (thanks, giz).
-* Fixed: ModSecurity false positive affecting article view and preview.
+* Fixed: ModSecurity rule(s) affecting article view and preview.
 * Added: dir="LTR" to Sections panel permlink scheme column (thanks, phiw13).
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Changed: Persist username and 'stay' checkbox on failed login.
