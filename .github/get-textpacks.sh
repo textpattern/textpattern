@@ -6,7 +6,7 @@ REPO="textpacks";
 EXTRACT="textpattern/lang";
 
 
-TAG="main";
+TAG="4.9.x";
 if [ ! -z "$1" ]; then
     TAG="$1";
 fi
@@ -15,9 +15,11 @@ echo "Get repo: $REPO :: $TAG";
 echo "-------------------------------------------------------------------------------";
 rm -rf $EXTRACT/*.ini;
 curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/lang
+rm -f $EXTRACT/*.txt;
 
 
 EXTRACT="textpattern/setup/lang";
 echo "-------------------------------------------------------------------------------";
 rm -rf $EXTRACT/*.ini;
 curl $URL/$AUTHOR/$REPO/tar.gz/$TAG | tar xz --strip=2 --directory=$EXTRACT $REPO-$TAG/lang-setup
+rm -f $EXTRACT/*.txt;
