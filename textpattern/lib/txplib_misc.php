@@ -3466,6 +3466,13 @@ function txp_tokenize($thing, $hash = null, $transform = null)
     $t = '@^</?('.TXP_PATTERN.'):('.TXP_TAG.')(?:\[(-?\d+)\])?(.*)\>$@s';
 
     $parsed = preg_split($f, $thing, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+    if ($parsed === false) {
+        trigger_error(preg_last_error_msg());
+
+        return false;
+    }
+
     $last = count($parsed);
 
     if (isset($transform) && (is_bool($transform) || is_callable($transform))) {
