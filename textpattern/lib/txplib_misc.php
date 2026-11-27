@@ -4680,7 +4680,7 @@ function buildWhereSql($val, $field = 'value')
 
 function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = array())
 {
-    static $delimited = null, $aggregate = array(
+    static $delimited = null, $virtuals = array(), $aggregate = array(
         'avg' => 'AVG(value)',
         'sum' => 'SUM(value)',
         'max' => 'MAX(value)',
@@ -4688,6 +4688,8 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
     );
 
     if ($delimited === null) {
+        $virtuals = getRows("SELECT id, `value` FROM ".PFX."txp_meta JOIN ".PFX."txp_meta_value_varchar ON id = meta_id AND render = 'virtual'") ?: array();
+        empty($virtuals) or $virtuals = array_column($virtuals, 'value', 'id');
         $dataTypeMap = \Txp::get('\Textpattern\Meta\DataType')->get();
 
         foreach ($dataTypeMap as $k => $def) {
@@ -4707,49 +4709,23 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
     $pairs += array_fill_keys(getCustomFields(), null);
 
     $table_id = 1; // 'textpattern' table atm
+    $table = Txp::get('\Textpattern\Meta\ContentType')->getTableColumnMap($table_id);
+    $idColumn = isset($table['column']) ? $table['column'] : false;
+
     $columns = $where = array();
 
-    if ($pairs && isset($custom['by_name'])) {
+    if ($idColumn && $pairs && isset($custom['by_name'])) {
         foreach ($pairs as $k => $val) {
             if (isset($custom['by_name'][$k])) {
                 $no = $custom['by_name'][$k];
                 $unique = !in_array($custom['by_callback'][$no], $delimited);
                 $dlm = $custom['by_delimiter'][$no];
                 $tableName = PFX.'txp_meta_value_' . $custom['by_type'][$no];
-                $idColumn = $custom['by_column'][$no];
+//                $idColumn = $custom['by_column'][$no];
                 $virtual = $custom['by_callback'][$no] == 'virtual';
 
-                if (isset($val)) {
-                    if ($virtual) {
-                        $query = getThing("SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = -1 LIMIT 1");
-                        $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $query);
-                        $field = '('.$query.')';
-                    } else {
-                        $field = 'value';
-                    }
-
-                    $not = $exclude === true || isset($exclude[$k]) ? 'NOT ' : '';
-                    $val === true or (string)$dlm === '' or $val = do_list_unique($val, $dlm, TEXTPATTERN_STRIP_NONE);
-                    $parts = buildWhereSql($val, $field);
-
-                    if ($parts) {
-                        $mode = empty($modes[$k]) ? 'any' : $modes[$k];
-
-                        if ($unique || $val === true || $mode == 'any') {
-//                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts))";
-                            $where[$k] = $virtual ?
-                                "$not($parts)" :
-                                "$not$idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND ($parts))";
-                        } else {
-                            $cmp = $mode == 'exact' ? '=' : '>=';
-                            $where[$k] = "$not(SELECT COUNT(*) FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts)) $cmp ".count($val);
-                        }
-                    }
-                }
-
                 if ($virtual) {
-                    $query = getThing("SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = -1 LIMIT 1");
-                    $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $query);
+                    $query = preg_replace('/\{\s*(\w+)\s*\}/' , PFX.'\1 AS _\1', $virtuals[$no]);
                     $columns[$k] = '('.$query.')';
                 } elseif ($unique) {
                     $columns[$k] = "(SELECT value FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id LIMIT 1)";
@@ -4762,6 +4738,31 @@ function buildCustomSql($custom, $pairs = null, $exclude = array(), $modes = arr
                     }
 
                     $columns[$k] = "(SELECT $column FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id GROUP BY content_id)";
+                }
+
+                if (isset($val)) {
+                    $field = $virtual ? '('.$query.')' : 'value';
+                    $not = $exclude === true || isset($exclude[$k]) ? 'NOT ' : '';
+                    $val === true or (string)$dlm === '' or $val = do_list_unique($val, $dlm, TEXTPATTERN_STRIP_NONE);
+                    $parts = buildWhereSql($val, $field);
+
+                    if ($parts) {
+                        $mode = empty($modes[$k]) ? 'any' : $modes[$k];
+
+                        if ($unique || $val === true || $mode == 'any') {
+//                            $where[$k] = "$not EXISTS(SELECT * FROM `$tableName` WHERE meta_id = '$no' AND content_id = $idColumn AND table_id = $table_id AND ($parts))";
+                            $where[$k] = $virtual ?
+                                "$not($parts)" :
+//                                "$not$idColumn IN(SELECT content_id FROM `$tableName` WHERE meta_id = '$no' AND table_id = $table_id AND ($parts))";
+                                "$not$idColumn IN(".// faster?
+                                    implode(',', getThings(
+                                        "SELECT content_id FROM `$tableName` WHERE meta_id = $no AND table_id = $table_id AND ($parts)")
+                                    ).")";
+                        } else {
+                            $cmp = $mode == 'exact' ? '=' : '>=';
+                            $where[$k] = "$not(SELECT COUNT(*) FROM `$tableName` WHERE meta_id = $no AND content_id = $idColumn AND table_id = $table_id AND ($parts)) $cmp ".count($val);
+                        }
+                    }
                 }
             }
         }
