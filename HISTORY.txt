@@ -17,7 +17,7 @@ Changes in 4.9.3 (upcoming)
 * Changed: Setting a new password for a user invalidates all their sessions.
 * Changed: Persist username and 'stay' checkbox on failed login.
 * Housekeeping: PHP deprecations (thanks, MikeFTV).
-* Vendors: Textile 4.1.11 (thanks, gocom).
+* Vendors: Textile 4.1.12 (thanks, gocom).
 * Vendors: DOMPurify 3.5.0.
 * Vendors: jQuery 3.8.0.
 

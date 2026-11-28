@@ -384,7 +384,7 @@ class Parser
      *
      * @var string
      */
-    protected $ver = '4.1.12-dev';
+    protected $ver = '4.1.13-dev';
 
     /**
      * Regular expression snippets.
@@ -4313,6 +4313,12 @@ class Parser
             $m = array();
         }
 
+        $urlLength = strlen($url);
+
+        // Whether the link is wrapped in brackets.
+        $bracketed = 1 === preg_match('/\[$/', $pre)
+            && 1 === preg_match('/\][!?:.,<\-+_*]*$/', $url);
+
         // Does this need to be mb_ enabled? We are only searching for text in the ASCII charset anyway
         // Create an array of (possibly) multi-byte characters.
         // This is going to allow us to pop off any non-matched or nonsense chars from the url
@@ -4337,7 +4343,18 @@ class Parser
                     $pop = $c . $pop;
                     $popped = true;
                     break;
+                case '-':
+                case '+':
+                case '_':
+                case '*':
+                    if ($bracketed || $urlLength < 2) {
+                        $url_chars[] = $c;
+                    } else {
+                        $pop = $c . $pop;
+                        $popped = true;
+                    }
 
+                    break;
                 case '>':
                 case ';':
                     $urlLeft = implode('', $url_chars);
